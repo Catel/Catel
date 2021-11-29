@@ -29,7 +29,9 @@
             private void TestSerializationWithExpectedFormat(ISerializer serializer, string name, object obj)
             {
                 // Note: not in using since we need the file to be available for comparison
+#pragma warning disable IDISP001 // Dispose created.
                 var context = new TemporaryFilesContext(name);
+#pragma warning restore IDISP001 // Dispose created.
                 var fileName = context.GetFile($"{serializer.GetType().Name}.dat", true);
 
                 using (var fileStream = File.Create(fileName))

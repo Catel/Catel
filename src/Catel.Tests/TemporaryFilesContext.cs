@@ -4,7 +4,7 @@
     using System.IO;
     using Catel.Logging;
 
-    public class TemporaryFilesContext : IDisposable
+    public sealed class TemporaryFilesContext : IDisposable
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();

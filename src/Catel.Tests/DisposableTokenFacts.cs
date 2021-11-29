@@ -55,7 +55,11 @@ namespace Catel.Tests
             Assert.IsFalse(container.IsDisposed);
             Assert.IsTrue(ReferenceEquals(container, ((DisposableToken<DisposableTokenTestContainer>)token).Instance));
 
+#pragma warning disable IDISP017 // Prefer using.
+#pragma warning disable IDISP016 // Don't use disposed instance.
             token.Dispose();
+#pragma warning restore IDISP016 // Don't use disposed instance.
+#pragma warning restore IDISP017 // Prefer using.
 
             Assert.IsTrue(container.IsSuspended);
             Assert.IsTrue(container.IsDisposed);

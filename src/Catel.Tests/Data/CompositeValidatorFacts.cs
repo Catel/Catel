@@ -45,55 +45,63 @@ namespace Catel.Tests.Data
 
                 var compositeValidator = new CompositeValidator();
 
-                var startEvent = new AutoResetEvent(false);
-                var alterEvent = new AutoResetEvent(false);
-                var syncEvents = new[] { new AutoResetEvent(false), new AutoResetEvent(false) };
-
-                // Validation loop thread
-                ThreadPool.QueueUserWorkItem(
-                    delegate
+                using (var startEvent = new AutoResetEvent(false))
+                {
+                    using (var alterEvent = new AutoResetEvent(false))
                     {
-                        startEvent.WaitOne();
+                        var syncEvents = new[]
+                        {
+                            new AutoResetEvent(false),
+                            new AutoResetEvent(false)
+                        };
 
-                        compositeValidator.BeforeValidation(null, null, null);
+                        // Validation loop thread
+                        ThreadPool.QueueUserWorkItem(
+                            delegate
+                            {
+                                startEvent.WaitOne();
 
-                        alterEvent.Set();
-                        ThreadHelper.Sleep(1000);
+                                compositeValidator.BeforeValidation(null, null, null);
 
-                        compositeValidator.AfterValidation(null, null, null);
-                        syncEvents[0].Set();
-                    });
+                                alterEvent.Set();
+                                ThreadHelper.Sleep(1000);
 
-                // Alter validator composition thread.
-                ThreadPool.QueueUserWorkItem(
-                    delegate
-                    {
+                                compositeValidator.AfterValidation(null, null, null);
+                                syncEvents[0].Set();
+                            });
 
-                        compositeValidator.Add(validatorMock.Object);
+                        // Alter validator composition thread.
+                        ThreadPool.QueueUserWorkItem(
+                            delegate
+                            {
 
-                        compositeValidator.Add(validatorMock1.Object);
+                                compositeValidator.Add(validatorMock.Object);
 
-                        startEvent.Set();
-                        alterEvent.WaitOne();
+                                compositeValidator.Add(validatorMock1.Object);
 
-                        // Try add a validator during a validation loop execution to the composition.
+                                startEvent.Set();
+                                alterEvent.WaitOne();
 
-                        compositeValidator.Add(validatorMock2.Object);
+                            // Try add a validator during a validation loop execution to the composition.
 
-                        syncEvents[1].Set();
-                    });
-                
-                syncEvents[0].WaitOne(TimeSpan.FromSeconds(10));
-                syncEvents[1].WaitOne(TimeSpan.FromSeconds(10));
+                            compositeValidator.Add(validatorMock2.Object);
 
-                validatorMock.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
-                validatorMock.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
+                                syncEvents[1].Set();
+                            });
 
-                validatorMock1.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
-                validatorMock1.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
+                        syncEvents[0].WaitOne(TimeSpan.FromSeconds(10));
+                        syncEvents[1].WaitOne(TimeSpan.FromSeconds(10));
 
-                validatorMock2.Verify(validator => validator.BeforeValidation(null, null, null), Times.Never());
-                validatorMock2.Verify(validator => validator.AfterValidation(null, null, null), Times.Never());
+                        validatorMock.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
+                        validatorMock.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
+
+                        validatorMock1.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
+                        validatorMock1.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
+
+                        validatorMock2.Verify(validator => validator.BeforeValidation(null, null, null), Times.Never());
+                        validatorMock2.Verify(validator => validator.AfterValidation(null, null, null), Times.Never());
+                    }
+                }
             }
         }
 #endif
@@ -411,7 +419,7 @@ namespace Catel.Tests.Data
             validator2Mock.Verify(expression, Times.Once());
         }
 
-        private static void TestCompositeRethrowException<TException>(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute) 
+        private static void TestCompositeRethrowException<TException>(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute)
             where TException : Exception, new()
         {
             var validator1Mock = new Mock<IValidator>();

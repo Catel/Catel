@@ -44,44 +44,45 @@ namespace Catel.Tests.MVVM.ViewModels
         public async Task RegisterChildViewModel_RemovedViaClosingChildViewModelAsync()
         {
             bool validationTriggered = false;
-            var validatedEvent = new ManualResetEvent(false);
-
-            var person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
-
-            var viewModel = new TestViewModel();
-            var childViewModel = new TestViewModel(person);
-
-            Assert.IsFalse(childViewModel.HasErrors);
-
-            ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            ((IValidatable)viewModel).Validating += delegate
+            using (var validatedEvent = new ManualResetEvent(false))
             {
-                validationTriggered = true;
-                validatedEvent.Set();
-            };
+                var person = new Person();
+                person.FirstName = "first name";
+                person.LastName = "last name";
 
-            childViewModel.FirstName = string.Empty;
+                var viewModel = new TestViewModel();
+                var childViewModel = new TestViewModel(person);
+
+                Assert.IsFalse(childViewModel.HasErrors);
+
+                ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
+                ((IValidatable)viewModel).Validating += delegate
+                {
+                    validationTriggered = true;
+                    validatedEvent.Set();
+                };
+
+                childViewModel.FirstName = string.Empty;
 
 #if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
+                validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);
 #endif
-            Assert.IsTrue(validationTriggered, "Validating event is not triggered");
+                Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
-            await childViewModel.CloseViewModelAsync(null);
+                await childViewModel.CloseViewModelAsync(null);
 
-            validationTriggered = false;
-            validatedEvent.Reset();
+                validationTriggered = false;
+                validatedEvent.Reset();
 
 #if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
+                validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);
 #endif
-            Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
+                Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
+            }
         }
 
         /// <summary>
@@ -92,44 +93,45 @@ namespace Catel.Tests.MVVM.ViewModels
         public void RegisterChildViewModel_RemovedViaUnregisterChildViewModel()
         {
             bool validationTriggered = false;
-            ManualResetEvent validatedEvent = new ManualResetEvent(false);
-
-            Person person = new Person();
-            person.FirstName = "first_name";
-            person.LastName = "last_name";
-
-            var viewModel = new TestViewModel();
-            var childViewModel = new TestViewModel(person);
-
-            Assert.IsFalse(childViewModel.HasErrors);
-
-            ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            ((IValidatable)viewModel).Validating += delegate
+            using (ManualResetEvent validatedEvent = new ManualResetEvent(false))
             {
-                validationTriggered = true;
-                validatedEvent.Set();
-            };
+                Person person = new Person();
+                person.FirstName = "first_name";
+                person.LastName = "last_name";
 
-            childViewModel.FirstName = string.Empty;
+                var viewModel = new TestViewModel();
+                var childViewModel = new TestViewModel(person);
+
+                Assert.IsFalse(childViewModel.HasErrors);
+
+                ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
+                ((IValidatable)viewModel).Validating += delegate
+                {
+                    validationTriggered = true;
+                    validatedEvent.Set();
+                };
+
+                childViewModel.FirstName = string.Empty;
 
 #if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
+                validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);
 #endif
-            Assert.IsTrue(validationTriggered, "Validating event is not triggered");
+                Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
-            ((IRelationalViewModel)viewModel).UnregisterChildViewModel(childViewModel);
+                ((IRelationalViewModel)viewModel).UnregisterChildViewModel(childViewModel);
 
-            validationTriggered = false;
-            validatedEvent.Reset();
+                validationTriggered = false;
+                validatedEvent.Reset();
 
 #if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
+                validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);
 #endif
-            Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
+                Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
+            }
         }
 
         [TestCase]

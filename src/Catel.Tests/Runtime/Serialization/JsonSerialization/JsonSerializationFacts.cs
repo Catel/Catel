@@ -41,11 +41,13 @@ namespace Catel.Tests.Runtime.Serialization
 
                     memoryStream.Position = 0L;
 
-                    var streamReader = new StreamReader(memoryStream);
-                    var streamAsText = streamReader.ReadToEnd();
+                    using (var streamReader = new StreamReader(memoryStream))
+                    {
+                        var streamAsText = streamReader.ReadToEnd();
 
-                    Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"));
-                    Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"));
+                        Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"));
+                        Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"));
+                    }
                 }
             }
 

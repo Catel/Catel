@@ -24,9 +24,10 @@ namespace Catel.Tests.MVVM.ViewModels
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 var model = new Person();
-                var vmManager = new ViewModelManager();
-
-                Assert.Throws<ArgumentNullException>(() => vmManager.RegisterModel(null, model));
+                using (var vmManager = new ViewModelManager())
+                {
+                    Assert.Throws<ArgumentNullException>(() => vmManager.RegisterModel(null, model));
+                }
             }
 
             [TestCase]
@@ -34,9 +35,10 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var model = new Person();
                 var vm = new TestViewModel(model);
-                var vmManager = new ViewModelManager();
-
-                Assert.Throws<ArgumentNullException>(() => vmManager.RegisterModel(vm, null));
+                using (var vmManager = new ViewModelManager())
+                {
+                    Assert.Throws<ArgumentNullException>(() => vmManager.RegisterModel(vm, null));
+                }
             }
 
             [TestCase]
@@ -44,14 +46,15 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var model = new Person();
                 var vm = new TestViewModel(model);
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(vm);
+                    vmManager.RegisterModel(vm, model);
 
-                vmManager.RegisterViewModelInstance(vm);
-                vmManager.RegisterModel(vm, model);
+                    var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                var foundVm = vmManager.GetViewModelsOfModel(model).First();
-
-                Assert.AreEqual(vm, foundVm);
+                    Assert.AreEqual(vm, foundVm);
+                }
             }
         }
 
@@ -62,9 +65,10 @@ namespace Catel.Tests.MVVM.ViewModels
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 var model = new Person();
-                var vmManager = new ViewModelManager();
-
-                Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterModel(null, model));
+                using (var vmManager = new ViewModelManager())
+                {
+                    Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterModel(null, model));
+                }
             }
 
             [TestCase]
@@ -72,9 +76,10 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var model = new Person();
                 var vm = new TestViewModel(model);
-                var vmManager = new ViewModelManager();
-
-                Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterModel(vm, null));
+                using (var vmManager = new ViewModelManager())
+                {
+                    Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterModel(vm, null));
+                }
             }
 
             [TestCase]
@@ -82,20 +87,21 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var model = new Person();
                 var vm = new TestViewModel(model);
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(vm);
+                    vmManager.RegisterModel(vm, model);
 
-                vmManager.RegisterViewModelInstance(vm);
-                vmManager.RegisterModel(vm, model);
+                    var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                var foundVm = vmManager.GetViewModelsOfModel(model).First();
+                    Assert.AreEqual(vm, foundVm);
 
-                Assert.AreEqual(vm, foundVm);
+                    vmManager.UnregisterModel(vm, model);
 
-                vmManager.UnregisterModel(vm, model);
+                    foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
 
-                foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
-
-                Assert.IsNull(foundVm);
+                    Assert.IsNull(foundVm);
+                }
             }
         }
 
@@ -105,9 +111,10 @@ namespace Catel.Tests.MVVM.ViewModels
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
-                var vmManager = new ViewModelManager();
-
-                Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterAllModels(null));
+                using (var vmManager = new ViewModelManager())
+                {
+                    Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterAllModels(null));
+                }
             }
 
             [TestCase]
@@ -115,20 +122,21 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var model = new Person();
                 var vm = new TestViewModel(model);
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(vm);
+                    vmManager.RegisterModel(vm, model);
 
-                vmManager.RegisterViewModelInstance(vm);
-                vmManager.RegisterModel(vm, model);
-                
-                var foundVm = vmManager.GetViewModelsOfModel(model).First();
+                    var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                Assert.AreEqual(vm, foundVm);
+                    Assert.AreEqual(vm, foundVm);
 
-                vmManager.UnregisterAllModels(vm);
+                    vmManager.UnregisterAllModels(vm);
 
-                foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
+                    foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
 
-                Assert.IsNull(foundVm);
+                    Assert.IsNull(foundVm);
+                }
             }
         }
 
@@ -139,11 +147,12 @@ namespace Catel.Tests.MVVM.ViewModels
             public void ReturnsNullForUnregisteredModel()
             {
                 var model = new Person();
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    var foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
 
-                var foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
-
-                Assert.IsNull(foundVm);
+                    Assert.IsNull(foundVm);
+                }
             }
 
             [TestCase]
@@ -151,14 +160,15 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var model = new Person();
                 var vm = new TestViewModel(model);
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(vm);
+                    vmManager.RegisterModel(vm, model);
 
-                vmManager.RegisterViewModelInstance(vm);
-                vmManager.RegisterModel(vm, model);
+                    var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                var foundVm = vmManager.GetViewModelsOfModel(model).First();
-
-                Assert.AreEqual(vm, foundVm);
+                    Assert.AreEqual(vm, foundVm);
+                }
             }
         }
 
@@ -168,23 +178,25 @@ namespace Catel.Tests.MVVM.ViewModels
             [TestCase]
             public void ReturnsNullForUnregisteredViewModel()
             {
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    var foundvm = vmManager.GetViewModel(42);
 
-                var foundvm = vmManager.GetViewModel(42);
-
-                Assert.IsNull(foundvm);
+                    Assert.IsNull(foundvm);
+                }
             }
 
             [TestCase]
             public void ReturnsViewModelForRegisteredViewModel()
             {
                 var vm = new TestViewModel();
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(vm);
+                    var foundvm = vmManager.GetViewModel(vm.UniqueIdentifier);
 
-                vmManager.RegisterViewModelInstance(vm);
-                var foundvm = vmManager.GetViewModel(vm.UniqueIdentifier);
-
-                Assert.AreEqual(vm, foundvm);
+                    Assert.AreEqual(vm, foundvm);
+                }
             }
         }
 
@@ -194,11 +206,12 @@ namespace Catel.Tests.MVVM.ViewModels
             [TestCase]
             public void ReturnsNullForUnregisteredChildViewModels()
             {
-                var viewModelManager = new ViewModelManager();
+                using (var viewModelManager = new ViewModelManager())
+                {
+                    var foundViewModels = viewModelManager.GetChildViewModels(42);
 
-                var foundViewModels = viewModelManager.GetChildViewModels(42);
-
-                Assert.AreEqual(0, foundViewModels.Count());
+                    Assert.AreEqual(0, foundViewModels.Count());
+                }
             }
 
             [TestCase]
@@ -206,18 +219,19 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var parentViewModel = new TestViewModel() as IRelationalViewModel;
                 var childViewModel = new TestViewModel() as IRelationalViewModel;
-                var viewModelManager = new ViewModelManager();
+                using (var viewModelManager = new ViewModelManager())
+                {
+                    parentViewModel.RegisterChildViewModel(childViewModel as IViewModel);
+                    childViewModel.SetParentViewModel(parentViewModel as IViewModel);
 
-                parentViewModel.RegisterChildViewModel(childViewModel as IViewModel);
-                childViewModel.SetParentViewModel(parentViewModel as IViewModel);
+                    viewModelManager.RegisterViewModelInstance(parentViewModel as IViewModel);
+                    viewModelManager.RegisterViewModelInstance(childViewModel as IViewModel);
 
-                viewModelManager.RegisterViewModelInstance(parentViewModel as IViewModel);
-                viewModelManager.RegisterViewModelInstance(childViewModel as IViewModel);
+                    var foundViewModels = viewModelManager.GetChildViewModels(parentViewModel as IViewModel);
 
-                var foundViewModels = viewModelManager.GetChildViewModels(parentViewModel as IViewModel);
-
-                Assert.IsNotNull(foundViewModels);
-                Assert.IsTrue(foundViewModels.Contains(childViewModel));
+                    Assert.IsNotNull(foundViewModels);
+                    Assert.IsTrue(foundViewModels.Contains(childViewModel));
+                }
             }
         }
 
@@ -227,45 +241,55 @@ namespace Catel.Tests.MVVM.ViewModels
             [TestCase]
             public void ReturnsNullForUnregisteredViewModel()
             {
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
 
-                var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
-
-                Assert.IsNull(foundvm);
+                    Assert.IsNull(foundvm);
+                }
             }
 
             [TestCase]
             public void ReturnsViewModelForRegisteredViewModel()
             {
                 var vm = new TestViewModel();
-                var vmManager = new ViewModelManager();
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(vm);
+                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
 
-                vmManager.RegisterViewModelInstance(vm);
-                var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
-
-                Assert.AreEqual(vm, foundvm);
+                    Assert.AreEqual(vm, foundvm);
+                }
             }
 
             [TestCase]
             public void ReturnsViewModelForMultiRegisteredViewModel()
             {
-                var firstvm = new TestViewModel(){FirstName = "Rajiv", LastName = "Mounguengue"};
+                var firstvm = new TestViewModel()
+                {
+                    FirstName = "John",
+                    LastName = "Doe"
+                };
+
                 var secondvm = new TestViewModel();
-                var vmManager = new ViewModelManager();
 
-                vmManager.RegisterViewModelInstance(firstvm);
-                vmManager.RegisterViewModelInstance(secondvm);
-                var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(firstvm);
+                    vmManager.RegisterViewModelInstance(secondvm);
+                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
 
-                Assert.AreEqual(firstvm, foundvm);
+                    Assert.AreEqual(firstvm, foundvm);
+                }
             }
 
             [TestCase]
             public void ShouldFailsDueToANonIViewModelType()
             {
-                var viewModelManager = new ViewModelManager();
-
-                Assert.Throws<ArgumentException>(() => viewModelManager.GetFirstOrDefaultInstance(typeof(Type)));
+                using (var viewModelManager = new ViewModelManager())
+                {
+                    Assert.Throws<ArgumentException>(() => viewModelManager.GetFirstOrDefaultInstance(typeof(Type)));
+                }
             }
         }
 
@@ -275,9 +299,10 @@ namespace Catel.Tests.MVVM.ViewModels
             [TestCase]
             public void MustBeNotNullAfterConstructed()
             {
-                var vmManager = new ViewModelManager();
-
-                Assert.IsNotNull(vmManager.ActiveViewModels);
+                using (var vmManager = new ViewModelManager())
+                {
+                    Assert.IsNotNull(vmManager.ActiveViewModels);
+                }
             }
 
             [TestCase]
@@ -285,56 +310,66 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 var firstvm = new TestViewModel();
                 var secondvm = new TestViewModel();
-                var vmManager = new ViewModelManager();
 
-                vmManager.RegisterViewModelInstance(firstvm);
-                vmManager.RegisterViewModelInstance(secondvm);
+                using (var vmManager = new ViewModelManager())
+                {
+                    vmManager.RegisterViewModelInstance(firstvm);
+                    vmManager.RegisterViewModelInstance(secondvm);
 
-                var vmList = vmManager.ActiveViewModels.ToList();
+                    var vmList = vmManager.ActiveViewModels.ToList();
 
-                Assert.IsTrue(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, firstvm.UniqueIdentifier)));
-                Assert.IsTrue(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, secondvm.UniqueIdentifier)));
+                    Assert.IsTrue(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, firstvm.UniqueIdentifier)));
+                    Assert.IsTrue(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, secondvm.UniqueIdentifier)));
+                }
             }
         }
 
         [TestCase]
         public void RegisterViewModelInstance_Null()
         {
-            var manager = new ViewModelManager();
-
-            Assert.Throws<ArgumentNullException>(() => manager.RegisterViewModelInstance(null));
+            using (var manager = new ViewModelManager())
+            {
+                Assert.Throws<ArgumentNullException>(() => manager.RegisterViewModelInstance(null));
+            }
         }
 
         [TestCase]
         public void RegisterViewModelInstance_ViewModel()
         {
-            var manager = new ViewModelManager();
-            manager.RegisterViewModelInstance(new TestViewModel());
+            using (var manager = new ViewModelManager())
+            {
+                manager.RegisterViewModelInstance(new TestViewModel());
+            }
         }
 
         [TestCase]
         public void UnregisterViewModelInstance_Null()
         {
-            var manager = new ViewModelManager();
-
-            Assert.Throws<ArgumentNullException>(() => manager.UnregisterViewModelInstance(null));
+            using (var manager = new ViewModelManager())
+            {
+                Assert.Throws<ArgumentNullException>(() => manager.UnregisterViewModelInstance(null));
+            }
         }
 
         [TestCase]
         public void UnregisterViewModelInstance_ExistingViewModel()
         {
-            var manager = new ViewModelManager();
-            var viewModel = new TestViewModel();
+            using (var manager = new ViewModelManager())
+            {
+                var viewModel = new TestViewModel();
 
-            manager.RegisterViewModelInstance(viewModel);
-            manager.UnregisterViewModelInstance(viewModel);
+                manager.RegisterViewModelInstance(viewModel);
+                manager.UnregisterViewModelInstance(viewModel);
+            }
         }
 
         [TestCase]
         public void UnregisterViewModelInstance_NotExistingViewModel()
         {
-            var manager = new ViewModelManager();
-            manager.UnregisterViewModelInstance(new TestViewModel());
+            using (var manager = new ViewModelManager())
+            {
+                manager.UnregisterViewModelInstance(new TestViewModel());
+            }
         }
     }
 }

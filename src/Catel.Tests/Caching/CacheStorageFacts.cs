@@ -528,7 +528,7 @@ namespace Catel.Tests.Caching
         [TestFixture]
         public class TheDisposeItemsOnRemovalFunctionality
         {
-            private class CustomDisposable : IDisposable
+            private sealed class CustomDisposable : IDisposable
             {
                 public CustomDisposable()
                 {
@@ -546,137 +546,153 @@ namespace Catel.Tests.Caching
             [TestCase]
             public void DisposesExpiredItemsWhenDisposingEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.IsTrue(disposable.IsDiposed);
+                }
             }
 
             [TestCase]
             public void DisposesItemOnRemoveWhenDisposingEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
 
-                cache.Remove("disposable");
+                    cache.Remove("disposable");
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.IsTrue(disposable.IsDiposed);
+                }
             }
 
             [TestCase]
             public void DisposesItemsOnClearWhenDisposingEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
 
-                cache.Clear();
+                    cache.Clear();
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.IsTrue(disposable.IsDiposed);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeExpiredItemWhenDisposingEnabledButCanceledByEventArgs()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
-                cache.Expired += (sender, e) =>
+                using (var disposable = new CustomDisposable())
                 {
-                    e.Dispose = false;
-                };
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                    cache.Expired += (sender, e) =>
+                    {
+                        e.Dispose = false;
+                    };
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeExpiredItemWhenDisposingNotEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeItemOnRemoveWhenDisposingNotEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
 
-                cache.Remove("disposable");
+                    cache.Remove("disposable");
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeItemsOnClearWhenDisposingNotEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
 
-                cache.Clear();
+                    cache.Clear();
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.IsFalse(disposable.IsDiposed);
+                }
             }
 
             [TestCase]
             public void DisposesExpiredItemWhenDisposingNotEnabledButForcedByEventArgs()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
-                cache.Expired += (sender, e) =>
+                using (var disposable = new CustomDisposable())
                 {
-                    e.Dispose = true;
-                };
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                    cache.Expired += (sender, e) =>
+                    {
+                        e.Dispose = true;
+                    };
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.IsTrue(disposable.IsDiposed);
+                }
             }
         }
     }

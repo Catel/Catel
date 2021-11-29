@@ -260,90 +260,102 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ResolvesTypeUsingDependencyInjectionFallBackToDefaultConstructor()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
+                    var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                Assert.IsTrue(instance.UsedDefaultConstructor);
+                    Assert.IsTrue(instance.UsedDefaultConstructor);
+                }
             }
 
             [TestCase]
             public void ResolvesTypeUsingDependencyInjectionFallBackToFirstConstructor()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
-                serviceLocator.RegisterInstance(iniEntry);
+                    var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
+                    serviceLocator.RegisterInstance(iniEntry);
 
-                var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
+                    var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                Assert.IsFalse(instance.UsedDefaultConstructor);
-                Assert.AreEqual(iniEntry, instance.IniEntry);
-                Assert.AreEqual(0, instance.IntValue);
-                Assert.AreEqual(null, instance.StringValue);
+                    Assert.IsFalse(instance.UsedDefaultConstructor);
+                    Assert.AreEqual(iniEntry, instance.IniEntry);
+                    Assert.AreEqual(0, instance.IntValue);
+                    Assert.AreEqual(null, instance.StringValue);
+                }
             }
 
             [TestCase]
             public void ResolvesTypeUsingDependencyInjectionFallBackToSecondConstructor()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
-                serviceLocator.RegisterInstance(iniEntry);
-                serviceLocator.RegisterInstance(42);
+                    var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
+                    serviceLocator.RegisterInstance(iniEntry);
+                    serviceLocator.RegisterInstance(42);
 
-                var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
+                    var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                Assert.IsFalse(instance.UsedDefaultConstructor);
-                Assert.AreEqual(iniEntry, instance.IniEntry);
-                Assert.AreEqual(42, instance.IntValue);
-                Assert.AreEqual(null, instance.StringValue);
+                    Assert.IsFalse(instance.UsedDefaultConstructor);
+                    Assert.AreEqual(iniEntry, instance.IniEntry);
+                    Assert.AreEqual(42, instance.IntValue);
+                    Assert.AreEqual(null, instance.StringValue);
+                }
             }
 
             [TestCase]
             public void ResolvesTypeUsingDependencyInjectionUsesConstructorWithMostParametersFirst()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
-                serviceLocator.RegisterInstance(iniEntry);
-                serviceLocator.RegisterInstance(42);
-                serviceLocator.RegisterInstance("hi there");
+                    var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
+                    serviceLocator.RegisterInstance(iniEntry);
+                    serviceLocator.RegisterInstance(42);
+                    serviceLocator.RegisterInstance("hi there");
 
-                var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
+                    var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                Assert.IsFalse(instance.UsedDefaultConstructor);
-                Assert.AreEqual(iniEntry, instance.IniEntry);
-                Assert.AreEqual(42, instance.IntValue);
-                Assert.AreEqual("hi there", instance.StringValue);
+                    Assert.IsFalse(instance.UsedDefaultConstructor);
+                    Assert.AreEqual(iniEntry, instance.IniEntry);
+                    Assert.AreEqual(42, instance.IntValue);
+                    Assert.AreEqual("hi there", instance.StringValue);
+                }
             }
 
             [TestCase]
             public void CallsCustomInitializationWhenNeeded()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
-                Assert.IsTrue(instance.HasCalledCustomInitialization);
+                    var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
+                    Assert.IsTrue(instance.HasCalledCustomInitialization);
+                }
             }
 
             [TestCase]
             public void AutomaticallyRegistersDependencyResolverInDependencyResolverManager()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
-                var dependencyResolverManager = DependencyResolverManager.Default;
-                var actualDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(instance);
+                    var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
+                    var dependencyResolverManager = DependencyResolverManager.Default;
+                    var actualDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(instance);
 
-                Assert.AreEqual(dependencyResolver, actualDependencyResolver);
+                    Assert.AreEqual(dependencyResolver, actualDependencyResolver);
+                }
             }
 
             public class X
@@ -364,18 +376,20 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsCircularDependencyExceptionForInvalidTypeRequestPath()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                serviceLocator.RegisterType<X>();
-                serviceLocator.RegisterType<Y>();
-                serviceLocator.RegisterType<Z>();
+                    serviceLocator.RegisterType<X>();
+                    serviceLocator.RegisterType<Y>();
+                    serviceLocator.RegisterType<Z>();
 
-                var ex = Assert.Throws<CircularDependencyException>(() => typeFactory.CreateInstance<X>());
+                    var ex = Assert.Throws<CircularDependencyException>(() => typeFactory.CreateInstance<X>());
 
-                Assert.AreEqual(3, ex.TypePath.AllTypes.Count());
-                Assert.AreEqual(typeof(X), ex.TypePath.FirstType.Type);
-                Assert.AreEqual(typeof(X), ex.DuplicateRequestInfo.Type);
+                    Assert.AreEqual(3, ex.TypePath.AllTypes.Count());
+                    Assert.AreEqual(typeof(X), ex.TypePath.FirstType.Type);
+                    Assert.AreEqual(typeof(X), ex.DuplicateRequestInfo.Type);
+                }
             }
         }
 
@@ -536,35 +550,37 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void CreatesTypeWhenDynamicConstructorIsAvailable()
             {
-                var serviceLocator = new ServiceLocator();
-                var noTagDependency = new DummyDependency
+                using (var serviceLocator = new ServiceLocator())
                 {
-                    Value = "no tag"
-                };
+                    var noTagDependency = new DummyDependency
+                    {
+                        Value = "no tag"
+                    };
 
-                var tagDependency = new DummyDependency
-                {
-                    Value = "tag"
-                };
+                    var tagDependency = new DummyDependency
+                    {
+                        Value = "tag"
+                    };
 
-                serviceLocator.RegisterType<IDispatcherProviderService, DispatcherProviderService>();
-                serviceLocator.RegisterType<IDispatcherService, DispatcherService>();
-                serviceLocator.RegisterType<IMessageService, MessageService>();
-                serviceLocator.RegisterType<INavigationService, NavigationService>();
-                serviceLocator.RegisterType<INavigationRootService, NavigationRootService>();
-                serviceLocator.RegisterType<ILanguageService, LanguageService>();
-                serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
-                serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
+                    serviceLocator.RegisterType<IDispatcherProviderService, DispatcherProviderService>();
+                    serviceLocator.RegisterType<IDispatcherService, DispatcherService>();
+                    serviceLocator.RegisterType<IMessageService, MessageService>();
+                    serviceLocator.RegisterType<INavigationService, NavigationService>();
+                    serviceLocator.RegisterType<INavigationRootService, NavigationRootService>();
+                    serviceLocator.RegisterType<ILanguageService, LanguageService>();
+                    serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
+                    serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
 
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
-                var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<AdvancedDependencyInjectionTestClass>("tag", "string", 42, 42L);
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<AdvancedDependencyInjectionTestClass>("tag", "string", 42, 42L);
 
-                Assert.IsNotNull(instance);
-                Assert.AreEqual("string", instance.StringValue);
-                Assert.AreEqual(42, instance.IntValue);
-                Assert.AreEqual(42L, instance.LongValue);
+                    Assert.IsNotNull(instance);
+                    Assert.AreEqual("string", instance.StringValue);
+                    Assert.AreEqual(42, instance.IntValue);
+                    Assert.AreEqual(42L, instance.LongValue);
 
-                Assert.IsTrue(ReferenceEquals(tagDependency, instance.Dependency));
+                    Assert.IsTrue(ReferenceEquals(tagDependency, instance.Dependency));
+                }
             }
         }
     }

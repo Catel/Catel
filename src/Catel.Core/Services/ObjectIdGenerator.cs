@@ -18,11 +18,11 @@ namespace Catel.Services
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType : class
     {
-        private static Queue<TUniqueIdentifier> _releasedUniqueIdentifiers;
+        private static Queue<TUniqueIdentifier> ReleasedUniqueIdentifiers;
 
-        private static readonly object _syncObj = new object();
+        private static readonly object SyncObj = new object();
 
-        private static readonly ConditionalWeakTable<TObjectType, InstanceWrapper> _allocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, InstanceWrapper>();
+        private static readonly ConditionalWeakTable<TObjectType, InstanceWrapper> AllocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, InstanceWrapper>();
 
         protected readonly object _lock = new object();
 
@@ -31,11 +31,11 @@ namespace Catel.Services
         {
             if (reuse)
             {
-                lock (_syncObj)
+                lock (SyncObj)
                 {
-                    if (_releasedUniqueIdentifiers is not null && _releasedUniqueIdentifiers.Count > 0)
+                    if (ReleasedUniqueIdentifiers is not null && ReleasedUniqueIdentifiers.Count > 0)
                     {
-                        return _releasedUniqueIdentifiers.Dequeue();
+                        return ReleasedUniqueIdentifiers.Dequeue();
                     }
                 }
             }
@@ -46,14 +46,14 @@ namespace Catel.Services
         /// <inheritdoc />
         public void ReleaseIdentifier(TUniqueIdentifier identifier)
         {
-            lock (_syncObj)
+            lock (SyncObj)
             {
-                if (_releasedUniqueIdentifiers is null)
+                if (ReleasedUniqueIdentifiers is null)
                 {
-                    _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
+                    ReleasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
                 }
 
-                _releasedUniqueIdentifiers.Enqueue(identifier);
+                ReleasedUniqueIdentifiers.Enqueue(identifier);
             }
         }
 
@@ -62,16 +62,16 @@ namespace Catel.Services
         {
             Argument.IsNotNull("instance", instance);
 
-            lock (_syncObj)
+            lock (SyncObj)
             {
-                if (_allocatedUniqueIdentifierPerInstances.TryGetValue(instance, out var wrapper))
+                if (AllocatedUniqueIdentifierPerInstances.TryGetValue(instance, out var wrapper))
                 {
                     return wrapper.UniqueIdentifier;
                 }
 
                 wrapper = new InstanceWrapper(this, GetUniqueIdentifier(reuse));
 
-                _allocatedUniqueIdentifierPerInstances.Add(instance, wrapper);
+                AllocatedUniqueIdentifierPerInstances.Add(instance, wrapper);
 
                 return wrapper.UniqueIdentifier;
             }

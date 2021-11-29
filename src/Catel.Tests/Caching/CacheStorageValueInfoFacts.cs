@@ -92,7 +92,7 @@ namespace Catel.Tests.Caching
         [TestFixture]
         public class TheDisposeValueMethod
         {
-            private class CustomDisposable : IDisposable
+            private sealed class CustomDisposable : IDisposable
             {
                 public CustomDisposable()
                 {
@@ -110,21 +110,25 @@ namespace Catel.Tests.Caching
             [TestCase]
             public void ValueIsNotDisposedBeforeCall()
             {
-                var disposable = new CustomDisposable();
-                var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
+                using (var disposable = new CustomDisposable())
+                {
+                    var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
 
-                Assert.That(disposable.IsDiposed, Is.False);
+                    Assert.That(disposable.IsDiposed, Is.False);
+                }
             }
 
             [TestCase]
             public void ValueIsDisposedAfterCall()
             {
-                var disposable = new CustomDisposable();
-                var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
+                using (var disposable = new CustomDisposable())
+                {
+                    var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
 
-                valueInfo.DisposeValue();
+                    valueInfo.DisposeValue();
 
-                Assert.That(disposable.IsDiposed, Is.True);
+                    Assert.That(disposable.IsDiposed, Is.True);
+                }
             }
         }
     }

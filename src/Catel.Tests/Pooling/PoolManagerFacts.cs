@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable IDISP001 // Dispose created.
+#pragma warning disable IDISP017 // Prefer using.
 
 namespace Catel.Tests.Pooling
 {
@@ -31,7 +33,9 @@ namespace Catel.Tests.Pooling
             Assert.AreEqual(1, poolManager.Count);
             Assert.AreEqual(BufferSize * 1, poolManager.CurrentSize);
 
+#pragma warning disable IDISP016 // Don't use disposed instance.
             poolable2.Dispose();
+#pragma warning restore IDISP016 // Don't use disposed instance.
 
             Assert.AreEqual(2, poolManager.Count);
             Assert.AreEqual(BufferSize * 2, poolManager.CurrentSize);

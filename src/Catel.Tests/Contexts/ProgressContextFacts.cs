@@ -25,12 +25,14 @@ namespace Catel.Tests.Contexts
         [TestCase(2, 2, 75, 100)]
         public void CorrectlyCalculatesPercentage(int totalCount, int currentCount, int numberOfRefreshes, double expectedPercentage)
         {
-            var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
-            progressContext.CurrentCount = currentCount;
+            using (var progressContext = new ProgressContext(totalCount, numberOfRefreshes))
+            {
+                progressContext.CurrentCount = currentCount;
 
-            var percentage = progressContext.Percentage;
+                var percentage = progressContext.Percentage;
 
-            Assert.AreEqual(expectedPercentage, percentage);
+                Assert.AreEqual(expectedPercentage, percentage);
+            }
         }
 
         [TestCase(10, 0, 10, 0)]
@@ -47,12 +49,14 @@ namespace Catel.Tests.Contexts
         [TestCase(2, 2, 75, 75)]
         public void CorrectlyCalculatesCurrentRefreshNumber(int totalCount, int currentCount, int numberOfRefreshes, int expectedRefreshNumber)
         {
-            var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
-            progressContext.CurrentCount = currentCount;
+            using (var progressContext = new ProgressContext(totalCount, numberOfRefreshes))
+            {
+                progressContext.CurrentCount = currentCount;
 
-            var currentRefreshNumber = progressContext.CurrentRefreshNumber;
+                var currentRefreshNumber = progressContext.CurrentRefreshNumber;
 
-            Assert.AreEqual(expectedRefreshNumber, currentRefreshNumber);
+                Assert.AreEqual(expectedRefreshNumber, currentRefreshNumber);
+            }
         }
 
         [TestCase(10, 0, 10, true)]
@@ -69,12 +73,14 @@ namespace Catel.Tests.Contexts
         [TestCase(2, 2, 75, true)]
         public void CorrectlyCalculatesIsRefreshRequired(int totalCount, int currentCount, int numberOfRefreshes, bool expectedIsRefreshRequired)
         {
-            var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
-            progressContext.CurrentCount = currentCount;
+            using (var progressContext = new ProgressContext(totalCount, numberOfRefreshes))
+            {
+                progressContext.CurrentCount = currentCount;
 
-            var isRefreshRequired = progressContext.IsRefreshRequired;
+                var isRefreshRequired = progressContext.IsRefreshRequired;
 
-            Assert.AreEqual(expectedIsRefreshRequired, isRefreshRequired);
+                Assert.AreEqual(expectedIsRefreshRequired, isRefreshRequired);
+            }
         }
     }
 }

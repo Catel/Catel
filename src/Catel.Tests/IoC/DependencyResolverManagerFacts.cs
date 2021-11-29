@@ -19,10 +19,13 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                var dependencyResolverManager = new DependencyResolverManager();
-                var dependencyResolver = new CatelDependencyResolver(new ServiceLocator());
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    var dependencyResolverManager = new DependencyResolverManager();
+                    var dependencyResolver = new CatelDependencyResolver(serviceLocator);
 
-                Assert.Throws<ArgumentNullException>(() => dependencyResolverManager.RegisterDependencyResolverForInstance(null, dependencyResolver));
+                    Assert.Throws<ArgumentNullException>(() => dependencyResolverManager.RegisterDependencyResolverForInstance(null, dependencyResolver));
+                }
             }
 
             [TestCase]
@@ -48,29 +51,35 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsRegisteredDependencyResolverForRegisteredInstance()
             {
-                var dependencyResolverManager = new DependencyResolverManager();
-                var dependencyResolver = new CatelDependencyResolver(new ServiceLocator());
-                var myObject = new object();
-                
-                dependencyResolverManager.RegisterDependencyResolverForInstance(myObject, dependencyResolver);
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    var dependencyResolverManager = new DependencyResolverManager();
+                    var dependencyResolver = new CatelDependencyResolver(serviceLocator);
+                    var myObject = new object();
 
-                var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(myObject);
+                    dependencyResolverManager.RegisterDependencyResolverForInstance(myObject, dependencyResolver);
 
-                Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                    var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(myObject);
+
+                    Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                }
             }
 
             [TestCase]
             public void ReturnsRegisteredDependencyResolverForRegisteredType()
             {
-                var dependencyResolverManager = new DependencyResolverManager();
-                var dependencyResolver = new CatelDependencyResolver(new ServiceLocator());
-                var myObject = new object();
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    var dependencyResolverManager = new DependencyResolverManager();
+                    var dependencyResolver = new CatelDependencyResolver(serviceLocator);
+                    var myObject = new object();
 
-                dependencyResolverManager.RegisterDependencyResolverForType(typeof(object), dependencyResolver);
+                    dependencyResolverManager.RegisterDependencyResolverForType(typeof(object), dependencyResolver);
 
-                var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(myObject);
+                    var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(myObject);
 
-                Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                    Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                }
             }
 
             [TestCase]
@@ -91,10 +100,13 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                var dependencyResolverManager = new DependencyResolverManager();
-                var dependencyResolver = new CatelDependencyResolver(new ServiceLocator());
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    var dependencyResolverManager = new DependencyResolverManager();
+                    var dependencyResolver = new CatelDependencyResolver(serviceLocator);
 
-                Assert.Throws<ArgumentNullException>(() => dependencyResolverManager.RegisterDependencyResolverForType(null, dependencyResolver));
+                    Assert.Throws<ArgumentNullException>(() => dependencyResolverManager.RegisterDependencyResolverForType(null, dependencyResolver));
+                }
             }
 
             [TestCase]
@@ -120,14 +132,17 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsRegisteredDependencyResolverForRegisteredType()
             {
-                var dependencyResolverManager = new DependencyResolverManager();
-                var dependencyResolver = new CatelDependencyResolver(new ServiceLocator());
-                
-                dependencyResolverManager.RegisterDependencyResolverForType(typeof(object), dependencyResolver);
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    var dependencyResolverManager = new DependencyResolverManager();
+                    var dependencyResolver = new CatelDependencyResolver(serviceLocator);
 
-                var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
+                    dependencyResolverManager.RegisterDependencyResolverForType(typeof(object), dependencyResolver);
 
-                Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                    var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
+
+                    Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                }
             }
 
             [TestCase]
@@ -143,10 +158,11 @@ namespace Catel.Tests.IoC
             [TestFixture]
             public class TheResolveMissingType
             {
-                interface IDummy
+                private interface IDummy
                 {
 
                 }
+
                 [TestCase]
                 public void ThrowsTypeNotRegisteredException()
                 {

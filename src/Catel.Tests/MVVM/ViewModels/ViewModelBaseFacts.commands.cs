@@ -18,60 +18,62 @@ namespace Catel.Tests.MVVM.ViewModels
         public void InvalidateCommands_Manual()
         {
             bool canExecuteChangedTriggered = false;
-            var canExecuteChangedEvent = new ManualResetEvent(false);
-
-            var viewModel = new TestViewModel();
-            viewModel.SetInvalidateCommandsOnPropertyChanged(false);
-
-            ICatelCommand command = viewModel.GenerateData;
-            command.CanExecuteChanged += delegate
+            using (var canExecuteChangedEvent = new ManualResetEvent(false))
             {
-                canExecuteChangedTriggered = true;
-                canExecuteChangedEvent.Set();
-            };
+                var viewModel = new TestViewModel();
+                viewModel.SetInvalidateCommandsOnPropertyChanged(false);
 
-            // By default, command can be executed
-            Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
+                ICatelCommand command = viewModel.GenerateData;
+                command.CanExecuteChanged += delegate
+                {
+                    canExecuteChangedTriggered = true;
+                    canExecuteChangedEvent.Set();
+                };
 
-            viewModel.FirstName = "first name";
+                // By default, command can be executed
+                Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
 
-            Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
+                viewModel.FirstName = "first name";
+
+                Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
 #if NET || NETCORE
-            canExecuteChangedEvent.WaitOne(1000, false);
+                canExecuteChangedEvent.WaitOne(1000, false);
 #else
-            canExecuteChangedEvent.WaitOne(1000);
+                canExecuteChangedEvent.WaitOne(1000);
 #endif
-            Assert.IsFalse(canExecuteChangedTriggered);
+                Assert.IsFalse(canExecuteChangedTriggered);
+            }
         }
 
         [TestCase]
         public void InvalidateCommands_AutomaticByPropertyChange()
         {
             bool canExecuteChangedTriggered = false;
-            var canExecuteChangedEvent = new ManualResetEvent(false);
-
-            var viewModel = new TestViewModel();
-            viewModel.SetInvalidateCommandsOnPropertyChanged(true);
-
-            ICatelCommand command = viewModel.GenerateData;
-            command.CanExecuteChanged += delegate
+            using (var canExecuteChangedEvent = new ManualResetEvent(false))
             {
-                canExecuteChangedTriggered = true;
-                canExecuteChangedEvent.Set();
-            };
+                var viewModel = new TestViewModel();
+                viewModel.SetInvalidateCommandsOnPropertyChanged(true);
 
-            // By default, command can be executed
-            Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
+                ICatelCommand command = viewModel.GenerateData;
+                command.CanExecuteChanged += delegate
+                {
+                    canExecuteChangedTriggered = true;
+                    canExecuteChangedEvent.Set();
+                };
 
-            viewModel.FirstName = "first name";
+                // By default, command can be executed
+                Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
 
-            Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
+                viewModel.FirstName = "first name";
+
+                Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
 #if NET || NETCORE
-            canExecuteChangedEvent.WaitOne(1000, false);
+                canExecuteChangedEvent.WaitOne(1000, false);
 #else
-            canExecuteChangedEvent.WaitOne(1000);
+                canExecuteChangedEvent.WaitOne(1000);
 #endif
-            Assert.IsTrue(canExecuteChangedTriggered);
+                Assert.IsTrue(canExecuteChangedTriggered);
+            }
         }
     }
 }

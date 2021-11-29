@@ -62,7 +62,9 @@ namespace Catel.Tests.Runtime.Serialization
 
                 if (Debugger.IsAttached)
                 {
+#pragma warning disable IDISP001 // Dispose created.
                     var streamReader = new StreamReader(memoryStream);
+#pragma warning restore IDISP001 // Dispose created.
                     var streamAsText = streamReader.ReadToEnd();
 
                     Console.WriteLine(streamAsText);

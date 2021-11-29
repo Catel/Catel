@@ -70,8 +70,10 @@ namespace Catel.Tests.Collections
                 var firstToken = fastCollection.SuspendChangeNotifications();
                 var secondToken = fastCollection.SuspendChangeNotifications();
 
+#pragma warning disable IDISP017 // Prefer using.
                 firstToken.Dispose();
                 secondToken.Dispose();
+#pragma warning restore IDISP017 // Prefer using.
 
                 Assert.IsFalse(fastCollection.NotificationsSuspended);
             }
@@ -270,17 +272,18 @@ namespace Catel.Tests.Collections
                     eventArgs = e as NotifyRangedListChangedEventArgs;
                 };
 
-                var token = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-                fastCollection.Add(1);
-                fastCollection.Add(2);
+                using (var token = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    fastCollection.Add(1);
+                    fastCollection.Add(2);
 
-                fastCollection.Reset();
-                Assert.AreEqual(0, counter);
+                    fastCollection.Reset();
+                    Assert.AreEqual(0, counter);
 
-                fastCollection.Add(3);
-                fastCollection.Add(4);
-                fastCollection.Add(5);
-                token.Dispose();
+                    fastCollection.Add(3);
+                    fastCollection.Add(4);
+                    fastCollection.Add(5);
+                }
 
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
@@ -573,20 +576,21 @@ namespace Catel.Tests.Collections
                     eventArgs = e as NotifyRangedListChangedEventArgs;
                 };
 
-                var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-                var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+                using (var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    using (var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                    {
+                        fastCollection.Add(1);
+                        fastCollection.Add(2);
+                        fastCollection.Add(3);
+                        fastCollection.Add(4);
+                        fastCollection.Add(5);
+                    }
 
-                fastCollection.Add(1);
-                fastCollection.Add(2);
-                fastCollection.Add(3);
-                fastCollection.Add(4);
-                fastCollection.Add(5);
+                    Assert.AreEqual(0, counter);
+                    Assert.IsNull(eventArgs);
+                }
 
-                secondToken.Dispose();
-                Assert.AreEqual(0, counter);
-                Assert.IsNull(eventArgs);
-
-                firstToken.Dispose();
                 Assert.AreEqual(1, counter);
                 // ReSharper disable PossibleNullReferenceException
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
@@ -611,21 +615,22 @@ namespace Catel.Tests.Collections
                     eventArgs = e as NotifyRangedListChangedEventArgs;
                 };
 
-                var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-                var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+                using (var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    using (var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                    {
+                        fastCollection.Add(1);
+                        fastCollection.Add(2);
+                    }
 
-                fastCollection.Add(1);
-                fastCollection.Add(2);
+                    Assert.AreEqual(0, counter);
+                    Assert.IsNull(eventArgs);
 
-                secondToken.Dispose();
-                Assert.AreEqual(0, counter);
-                Assert.IsNull(eventArgs);
+                    fastCollection.Add(3);
+                    fastCollection.Add(4);
+                    fastCollection.Add(5);
+                }
 
-                fastCollection.Add(3);
-                fastCollection.Add(4);
-                fastCollection.Add(5);
-
-                firstToken.Dispose();
                 Assert.AreEqual(1, counter);
                 // ReSharper disable PossibleNullReferenceException
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);

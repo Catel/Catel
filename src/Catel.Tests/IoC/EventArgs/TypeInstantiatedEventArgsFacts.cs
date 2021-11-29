@@ -18,13 +18,15 @@ namespace Catel.Tests.IoC.EventArgs
             public void TypeInstantiatedEventArgsHasValidInstance()
             {
                 object instance = null;
-                var serviceLocator = new ServiceLocator();
-                serviceLocator.TypeInstantiated += (s, e) => instance = e.Instance;
-                serviceLocator.RegisterType<IInterfaceA, ClassA>();
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    serviceLocator.TypeInstantiated += (s, e) => instance = e.Instance;
+                    serviceLocator.RegisterType<IInterfaceA, ClassA>();
 
-                var resolved = serviceLocator.ResolveType<IInterfaceA>();
+                    var resolved = serviceLocator.ResolveType<IInterfaceA>();
 
-                Assert.IsTrue(ReferenceEquals(resolved, instance));
+                    Assert.IsTrue(ReferenceEquals(resolved, instance));
+                }
             }
 
             [TestCase]
@@ -32,22 +34,24 @@ namespace Catel.Tests.IoC.EventArgs
             {
                 int numCalls = 0;
                 bool typeInstantiatedCalled = false;
-                var serviceLocator = new ServiceLocator();
-                serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
+
+                    serviceLocator.RegisterType<IInterfaceA>(createServiceFunc, RegistrationType.Singleton);
+
+                    var resolved = serviceLocator.ResolveType<IInterfaceA>();
+
+                    Assert.IsTrue(typeInstantiatedCalled);
+                    Assert.AreEqual(1, numCalls);
+                    Assert.IsInstanceOf(typeof(ClassA), resolved);
+                }
 
                 IInterfaceA createServiceFunc(ITypeFactory tf, ServiceLocatorRegistration reg)
                 {
                     numCalls++;
                     return new ClassA();
                 }
-
-                serviceLocator.RegisterType<IInterfaceA>(createServiceFunc, RegistrationType.Singleton);
-
-                var resolved = serviceLocator.ResolveType<IInterfaceA>();
-
-                Assert.IsTrue(typeInstantiatedCalled);
-                Assert.AreEqual(1, numCalls);
-                Assert.IsInstanceOf(typeof(ClassA), resolved);
             }
 
             [TestCase]
@@ -55,38 +59,42 @@ namespace Catel.Tests.IoC.EventArgs
             {
                 int numCalls = 0;
                 bool typeInstantiatedCalled = false;
-                var serviceLocator = new ServiceLocator();
-                serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
+
+                    serviceLocator.RegisterType<IInterfaceA>(createServiceFunc, RegistrationType.Transient);
+
+                    var resolved = serviceLocator.ResolveType<IInterfaceA>();
+                    var resolved1 = serviceLocator.ResolveType<IInterfaceA>();
+
+                    Assert.IsTrue(typeInstantiatedCalled);
+                    Assert.AreEqual(2, numCalls);
+                    Assert.IsInstanceOf(typeof(ClassA), resolved);
+                }
 
                 IInterfaceA createServiceFunc(ITypeFactory tf, ServiceLocatorRegistration reg)
                 {
                     numCalls++;
                     return new ClassA();
                 }
-
-                serviceLocator.RegisterType<IInterfaceA>(createServiceFunc, RegistrationType.Transient);
-
-                var resolved = serviceLocator.ResolveType<IInterfaceA>();
-                var resolved1 = serviceLocator.ResolveType<IInterfaceA>();
-
-                Assert.IsTrue(typeInstantiatedCalled);
-                Assert.AreEqual(2, numCalls);
-                Assert.IsInstanceOf(typeof(ClassA), resolved);
             }
 
             [TestCase]
             public void TypeInstantiatedEventIsRaisedWhenRegisteringWithoutCreateServiceFunc()
             {
-                var serviceLocator = new ServiceLocator();
-                bool typeInstantiatedCalled = false;
-                serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    bool typeInstantiatedCalled = false;
+                    serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
 
-                serviceLocator.RegisterType<IInterfaceA, ClassA>();
+                    serviceLocator.RegisterType<IInterfaceA, ClassA>();
 
-                var resolved = serviceLocator.ResolveType<IInterfaceA>();
+                    var resolved = serviceLocator.ResolveType<IInterfaceA>();
 
-                Assert.IsTrue(typeInstantiatedCalled);
-                Assert.IsInstanceOf(typeof(ClassA), resolved);
+                    Assert.IsTrue(typeInstantiatedCalled);
+                    Assert.IsInstanceOf(typeof(ClassA), resolved);
+                }
             }
 
             public interface IInterfaceA

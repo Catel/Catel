@@ -63,53 +63,55 @@ namespace Catel.Tests.MVVM.ViewModels
             [TestCase]
             public void ResolvesUsingPreferredTag()
             {
-                var serviceLocator = new ServiceLocator();
-
-                var noTagDependency = new DummyDependency
+                using (var serviceLocator = new ServiceLocator())
                 {
-                    Value = "no tag"
-                };
+                    var noTagDependency = new DummyDependency
+                    {
+                        Value = "no tag"
+                    };
 
-                var tagDependency = new DummyDependency
-                {
-                    Value = "tag"
-                };
+                    var tagDependency = new DummyDependency
+                    {
+                        Value = "tag"
+                    };
 
-                serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
-                serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
+                    serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
+                    serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
 
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
-                var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(null, "tag");
+                    var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
+                    var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(null, "tag");
 
-                Assert.IsTrue(ReferenceEquals(tagDependency, viewModel.Dependency));
+                    Assert.IsTrue(ReferenceEquals(tagDependency, viewModel.Dependency));
+                }
             }
 
             [TestCase]
             public void ResolvesUsingPreferredTagAndDataContext()
             {
-                var serviceLocator = new ServiceLocator();
-
-                var noTagDependency = new DummyDependency
+                using (var serviceLocator = new ServiceLocator())
                 {
-                    Value = "no tag"
-                };
+                    var noTagDependency = new DummyDependency
+                    {
+                        Value = "no tag"
+                    };
 
-                var tagDependency = new DummyDependency
-                {
-                    Value = "tag"
-                };
+                    var tagDependency = new DummyDependency
+                    {
+                        Value = "tag"
+                    };
 
-                serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
-                serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
+                    serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
+                    serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
 
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
-                var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
-                var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(5, "tag");
+                    var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
+                    var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(5, "tag");
 
-                Assert.IsTrue(ReferenceEquals(tagDependency, viewModel.Dependency));
+                    Assert.IsTrue(ReferenceEquals(tagDependency, viewModel.Dependency));
+                }
             }
         }
     }

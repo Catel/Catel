@@ -454,7 +454,7 @@ namespace Catel.MVVM
         {
             return managedViewModels.SelectMany(row => row.Value.ViewModels).ToList();
         }
-        
+
         /// <summary>
         /// Gets the managed view model for a specific view model type.
         /// </summary>

@@ -53,8 +53,8 @@ namespace Catel.Tests.Runtime.Serialization
                 [Key]
                 public Guid Id
                 {
-                    get { return this.GetValue<Guid>(IdProperty); }
-                    set { this.SetValue(IdProperty, value); }
+                    get { return GetValue<Guid>(IdProperty); }
+                    set { SetValue(IdProperty, value); }
                 }
 
                 public static readonly IPropertyData IdProperty = RegisterProperty<Country, Guid>(o => o.Id, Guid.NewGuid);
@@ -62,8 +62,8 @@ namespace Catel.Tests.Runtime.Serialization
                 [StringLength(256)]
                 public string IsoCode
                 {
-                    get { return this.GetValue<string>(IsoCodeProperty); }
-                    set { this.SetValue(IsoCodeProperty, value); }
+                    get { return GetValue<string>(IsoCodeProperty); }
+                    set { SetValue(IsoCodeProperty, value); }
                 }
 
                 public static readonly IPropertyData IsoCodeProperty = RegisterProperty<Country, string>(o => o.IsoCode);
@@ -71,91 +71,91 @@ namespace Catel.Tests.Runtime.Serialization
                 [StringLength(400)]
                 public string Description
                 {
-                    get { return this.GetValue<string>(DescriptionProperty); }
-                    set { this.SetValue(DescriptionProperty, value); }
+                    get { return GetValue<string>(DescriptionProperty); }
+                    set { SetValue(DescriptionProperty, value); }
                 }
 
                 public static readonly IPropertyData DescriptionProperty = RegisterProperty<Country, string>(o => o.Description);
 
                 public DateTime CreateDate
                 {
-                    get { return this.GetValue<DateTime>(CreateDateProperty); }
-                    set { this.SetValue(CreateDateProperty, value); }
+                    get { return GetValue<DateTime>(CreateDateProperty); }
+                    set { SetValue(CreateDateProperty, value); }
                 }
 
                 public static readonly IPropertyData CreateDateProperty = RegisterProperty<Country, DateTime>(o => o.CreateDate);
 
                 public Guid CreateUserId
                 {
-                    get { return this.GetValue<Guid>(CreateUserIdProperty); }
-                    set { this.SetValue(CreateUserIdProperty, value); }
+                    get { return GetValue<Guid>(CreateUserIdProperty); }
+                    set { SetValue(CreateUserIdProperty, value); }
                 }
 
                 public static readonly IPropertyData CreateUserIdProperty = RegisterProperty<Country, Guid>(o => o.CreateUserId);
 
                 public DateTime? DeleteDate
                 {
-                    get { return this.GetValue<DateTime?>(DeleteDateProperty); }
-                    set { this.SetValue(DeleteDateProperty, value); }
+                    get { return GetValue<DateTime?>(DeleteDateProperty); }
+                    set { SetValue(DeleteDateProperty, value); }
                 }
 
                 public static readonly IPropertyData DeleteDateProperty = RegisterProperty<Country, DateTime?>(o => o.DeleteDate);
 
                 public Guid? DeleteUserId
                 {
-                    get { return this.GetValue<Guid?>(DeleteUserIdProperty); }
-                    set { this.SetValue(DeleteUserIdProperty, value); }
+                    get { return GetValue<Guid?>(DeleteUserIdProperty); }
+                    set { SetValue(DeleteUserIdProperty, value); }
                 }
 
                 public static readonly IPropertyData DeleteUserIdProperty = RegisterProperty<Country, Guid?>(o => o.DeleteUserId);
 
                 public bool IsDeleted
                 {
-                    get { return this.GetValue<bool>(IsDeletedProperty); }
-                    set { this.SetValue(IsDeletedProperty, value); }
+                    get { return GetValue<bool>(IsDeletedProperty); }
+                    set { SetValue(IsDeletedProperty, value); }
                 }
 
                 public static readonly IPropertyData IsDeletedProperty = RegisterProperty<Country, bool>(o => o.IsDeleted);
 
                 public byte[] TimeStamp
                 {
-                    get { return this.GetValue<byte[]>(TimeStampProperty); }
-                    set { this.SetValue(TimeStampProperty, value); }
+                    get { return GetValue<byte[]>(TimeStampProperty); }
+                    set { SetValue(TimeStampProperty, value); }
                 }
 
                 public static readonly IPropertyData TimeStampProperty = RegisterProperty<Country, byte[]>(o => o.TimeStamp);
 
                 public DateTime UpdateDate
                 {
-                    get { return this.GetValue<DateTime>(UpdateDateProperty); }
-                    set { this.SetValue(UpdateDateProperty, value); }
+                    get { return GetValue<DateTime>(UpdateDateProperty); }
+                    set { SetValue(UpdateDateProperty, value); }
                 }
 
                 public static readonly IPropertyData UpdateDateProperty = RegisterProperty<Country, DateTime>(o => o.UpdateDate);
 
                 public Guid UpdateUserId
                 {
-                    get { return this.GetValue<Guid>(UpdateUserIdProperty); }
-                    set { this.SetValue(UpdateUserIdProperty, value); }
+                    get { return GetValue<Guid>(UpdateUserIdProperty); }
+                    set { SetValue(UpdateUserIdProperty, value); }
                 }
 
                 public static readonly IPropertyData UpdateUserIdProperty = RegisterProperty<Country, Guid>(o => o.UpdateUserId);
 
-                private static IEnumerable<Type> countryTypes;
+                private static IEnumerable<Type> CountryTypes;
 
                 private static IEnumerable<Type> GetKnownTypes()
                 {
                     Contract.Ensures(Contract.Result<IEnumerable<Type>>() is not null);
 
-                    if (countryTypes is null)
+                    if (CountryTypes is null)
                     {
-                        countryTypes = AssemblyHelper.GetLoadedAssemblies(AppDomain.CurrentDomain, true)
+                        CountryTypes = AssemblyHelper.GetLoadedAssemblies(AppDomain.CurrentDomain, true)
                                 .SelectMany(a => a.GetTypes())
                                 .Where(t => typeof(Country).IsAssignableFrom(t))
                                 .ToList();
                     }
 
-                    return countryTypes;
+                    return CountryTypes;
                 }
             }
 
@@ -251,7 +251,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     if (enumeration is not null)
                     {
-                        ((ICollection<T>)this.Items).AddRange(enumeration);
+                        ((ICollection<T>)Items).AddRange(enumeration);
                     }
                 }
 
@@ -273,7 +273,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public FastObservableCollection<T> Items
                 {
-                    get { return this.GetValue<FastObservableCollection<T>>(ItemsProperty); }
+                    get { return GetValue<FastObservableCollection<T>>(ItemsProperty); }
                     set { SetValue(ItemsProperty, value); }
                 }
 
@@ -285,7 +285,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     get
                     {
-                        return ((IList)this.Items).IsFixedSize;
+                        return ((IList)Items).IsFixedSize;
                     }
                 }
 
@@ -293,7 +293,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     get
                     {
-                        return ((IList)this.Items).IsReadOnly;
+                        return ((IList)Items).IsReadOnly;
                     }
                 }
 
@@ -301,7 +301,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     get
                     {
-                        return ((ICollection)this.Items).IsSynchronized;
+                        return ((ICollection)Items).IsSynchronized;
                     }
                 }
 
@@ -309,7 +309,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     get
                     {
-                        return ((ICollection)this.Items).SyncRoot;
+                        return ((ICollection)Items).SyncRoot;
                     }
                 }
 
@@ -317,7 +317,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     get
                     {
-                        return ((ICollection<T>)this.Items).IsReadOnly;
+                        return ((ICollection<T>)Items).IsReadOnly;
                     }
                 }
 
@@ -329,12 +329,12 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     get
                     {
-                        return this.Items[index];
+                        return Items[index];
                     }
 
                     set
                     {
-                        this.Items[index] = value;
+                        Items[index] = value;
                     }
                 }
 
@@ -346,12 +346,12 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     get
                     {
-                        return ((IList)this.Items)[index];
+                        return ((IList)Items)[index];
                     }
 
                     set
                     {
-                        ((IList)this.Items)[index] = value;
+                        ((IList)Items)[index] = value;
                     }
                 }
 
@@ -361,67 +361,67 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public void Add(T item)
                 {
-                    this.Items.Add(item);
+                    Items.Add(item);
                 }
 
                 public void AddItems(IEnumerable<T> collection)
                 {
-                    this.Items.AddItems(collection);
+                    Items.AddItems(collection);
                 }
 
                 public void AddItems(IEnumerable collection)
                 {
-                    this.Items.AddItems(collection);
+                    Items.AddItems(collection);
                 }
 
                 public void Clear()
                 {
-                    this.Items.Clear();
+                    Items.Clear();
                 }
 
                 public bool Contains(T item)
                 {
-                    return this.Items.Contains(item);
+                    return Items.Contains(item);
                 }
 
                 public void CopyTo(T[] array, int index)
                 {
-                    this.Items.CopyTo(array, index);
+                    Items.CopyTo(array, index);
                 }
 
                 public IEnumerator<T> GetEnumerator()
                 {
-                    return this.Items.GetEnumerator();
+                    return Items.GetEnumerator();
                 }
 
                 public int IndexOf(T item)
                 {
-                    return this.Items.IndexOf(item);
+                    return Items.IndexOf(item);
                 }
 
                 public void Insert(int index, T item)
                 {
-                    this.Items.Insert(index, item);
+                    Items.Insert(index, item);
                 }
 
                 public bool Remove(T item)
                 {
-                    return this.Items.Remove(item);
+                    return Items.Remove(item);
                 }
 
                 public void RemoveAt(int index)
                 {
-                    this.Items.RemoveAt(index);
+                    Items.RemoveAt(index);
                 }
 
                 public void RemoveItems(IEnumerable<T> collection)
                 {
-                    this.Items.RemoveItems(collection);
+                    Items.RemoveItems(collection);
                 }
 
                 public void RemoveItems(IEnumerable collection)
                 {
-                    this.Items.RemoveItems(collection);
+                    Items.RemoveItems(collection);
                 }
 
                 #endregion
@@ -430,42 +430,42 @@ namespace Catel.Tests.Runtime.Serialization
 
                 int IList.Add(object value)
                 {
-                    return ((IList)this.Items).Add(value);
+                    return ((IList)Items).Add(value);
                 }
 
                 bool IList.Contains(object value)
                 {
-                    return ((IList)this.Items).Contains(value);
+                    return ((IList)Items).Contains(value);
                 }
 
                 void ICollection.CopyTo(Array array, int index)
                 {
-                    ((ICollection)this.Items).CopyTo(array, index);
+                    ((ICollection)Items).CopyTo(array, index);
                 }
 
                 int IList.IndexOf(object value)
                 {
-                    return ((IList)this.Items).IndexOf(value);
+                    return ((IList)Items).IndexOf(value);
                 }
 
                 void IList.Insert(int index, object value)
                 {
-                    ((IList)this.Items).Insert(index, value);
+                    ((IList)Items).Insert(index, value);
                 }
 
                 void IList.Remove(object value)
                 {
-                    ((IList)this.Items).Remove(value);
+                    ((IList)Items).Remove(value);
                 }
 
                 void IList.RemoveAt(int index)
                 {
-                    this.RemoveAt(index);
+                    RemoveAt(index);
                 }
 
                 IEnumerator IEnumerable.GetEnumerator()
                 {
-                    return this.Items.GetEnumerator();
+                    return Items.GetEnumerator();
                 }
 
                 #endregion
@@ -515,8 +515,8 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public string Name
                 {
-                    get { return this.GetValue<string>(NameProperty); }
-                    set { this.SetValue(NameProperty, value); }
+                    get { return GetValue<string>(NameProperty); }
+                    set { SetValue(NameProperty, value); }
                 }
 
                 public static readonly IPropertyData NameProperty = RegisterProperty<Floor, string>(o => o.Name);
@@ -553,8 +553,8 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public string Name
                 {
-                    get { return this.GetValue<string>(NameProperty); }
-                    set { this.SetValue(NameProperty, value); }
+                    get { return GetValue<string>(NameProperty); }
+                    set { SetValue(NameProperty, value); }
                 }
 
                 public static readonly IPropertyData NameProperty = RegisterProperty<Building, string>(o => o.Name);
@@ -562,8 +562,8 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public IFloorCollection Floors
                 {
-                    get { return this.GetValue<IFloorCollection>(FloorsProperty); }
-                    set { this.SetValue(FloorsProperty, value); }
+                    get { return GetValue<IFloorCollection>(FloorsProperty); }
+                    set { SetValue(FloorsProperty, value); }
                 }
 
                 public static readonly IPropertyData FloorsProperty = RegisterProperty<Building, IFloorCollection>(o => o.Floors, () => (IFloorCollection)new FloorCollection());
@@ -578,8 +578,8 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public string Name
                 {
-                    get { return this.GetValue<string>(NameProperty); }
-                    set { this.SetValue(NameProperty, value); }
+                    get { return GetValue<string>(NameProperty); }
+                    set { SetValue(NameProperty, value); }
                 }
 
                 public static readonly IPropertyData NameProperty = RegisterProperty<BuildingAsCollection, string>(o => o.Name);
@@ -587,8 +587,8 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public IFloorCollection Floors
                 {
-                    get { return this.GetValue<IFloorCollection>(FloorsProperty); }
-                    set { this.SetValue(FloorsProperty, value); }
+                    get { return GetValue<IFloorCollection>(FloorsProperty); }
+                    set { SetValue(FloorsProperty, value); }
                 }
 
                 public static readonly IPropertyData FloorsProperty = RegisterProperty<BuildingAsCollection, IFloorCollection>(o => o.Floors, () => (IFloorCollection)new FloorCollectionAsCollection());
@@ -841,13 +841,18 @@ namespace Catel.Tests.Runtime.Serialization
 
                 using (var memoryStream = new MemoryStream())
                 {
+#pragma warning disable IDISP001 // Dispose created.
                     var writer = new StreamWriter(memoryStream);
+#pragma warning restore IDISP001 // Dispose created.
                     writer.Write(json);
                     writer.Flush();
 
                     memoryStream.Position = 0L;
 
+#pragma warning disable IDISP001 // Dispose created.
                     var reader = new StreamReader(memoryStream);
+#pragma warning restore IDISP001 // Dispose created.
+
                     using (var jsonReader = new JsonTextReader(reader))
                     {
                         jsonReader.Read();

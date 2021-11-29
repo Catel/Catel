@@ -21,7 +21,10 @@ namespace Catel.Tests.IoC
             {
                 var obj = new object();
                 var defaultTypeFactory = TypeFactory.Default;
+
+#pragma warning disable IDISP001 // Dispose created.
                 var usedTypeFactory = obj.GetTypeFactory();
+#pragma warning restore IDISP001 // Dispose created.
 
                 Assert.IsTrue(ReferenceEquals(defaultTypeFactory, usedTypeFactory));
             }
@@ -29,13 +32,17 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsTypeFactoryUsedToCreateObject()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
-                var obj = typeFactory.CreateInstance<object>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var obj = typeFactory.CreateInstance<object>();
 
-                var usedTypeFactory = obj.GetTypeFactory();
+#pragma warning disable IDISP001 // Dispose created.
+                    var usedTypeFactory = obj.GetTypeFactory();
+#pragma warning restore IDISP001 // Dispose created.
 
-                Assert.IsTrue(ReferenceEquals(typeFactory, usedTypeFactory));
+                    Assert.IsTrue(ReferenceEquals(typeFactory, usedTypeFactory));
+                }
             }
         }
 
@@ -55,14 +62,16 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsDependencyResolverUsedToCreateObject()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-                var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
-                var obj = typeFactory.CreateInstance<object>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
+                    var obj = typeFactory.CreateInstance<object>();
 
-                var usedDependencyResolver = obj.GetDependencyResolver();
+                    var usedDependencyResolver = obj.GetDependencyResolver();
 
-                Assert.IsTrue(ReferenceEquals(dependencyResolver, usedDependencyResolver));
+                    Assert.IsTrue(ReferenceEquals(dependencyResolver, usedDependencyResolver));
+                }
             }
         }
     }
