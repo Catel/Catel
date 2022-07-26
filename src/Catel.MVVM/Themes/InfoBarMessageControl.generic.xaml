@@ -12,6 +12,7 @@
 	<SolidColorBrush x:Key="InfoBarMessageErrorTextBackgroundBrush" Color="LightYellow" />
 	<SolidColorBrush x:Key="InfoBarMessageErrorTextColorBrush" Color="Red" />
 	<SolidColorBrush x:Key="InfoBarMessageWarningTextColorBrush" Color="Orange" />
+	<SolidColorBrush x:Key="InfoBarMessageHeaderTextColorBrush" Color="Black" />
 
 	<!-- Style -->
     <Style x:Key="{x:Type local:InfoBarMessageControl}" TargetType="local:InfoBarMessageControl">
@@ -41,7 +42,10 @@
                                     <!-- Internal StackPanel, otherwise the whole control will have the background brush -->
                                     <StackPanel Background="{StaticResource InfoBarMessageBackgroundBrush}">
                                         <!-- Actual text -->
-                                        <TextBlock Padding="4,2,4,2" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:InfoBarMessageControl}}, Path=InfoMessage}" />
+                                    <TextBlock Padding="4,2,4,2" 
+					                    Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:InfoBarMessageControl}}, Path=InfoMessage}"
+					                    Foreground="{StaticResource InfoBarMessageHeaderTextColorBrush}">
+                                    </TextBlock>
 
                                         <!-- Line -->
                                         <Line Name="infoBarSeparator" Margin="0" Stroke="{StaticResource InfoBarMessageSeparatorBrush}" 
