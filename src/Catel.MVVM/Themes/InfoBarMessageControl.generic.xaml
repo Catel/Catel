@@ -42,10 +42,10 @@
                                     <!-- Internal StackPanel, otherwise the whole control will have the background brush -->
                                     <StackPanel Background="{StaticResource InfoBarMessageBackgroundBrush}">
                                         <!-- Actual text -->
-                                    <TextBlock Padding="4,2,4,2" 
+                                    <TextBlock 
+                                        Padding="4,2,4,2" 
 					                    Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:InfoBarMessageControl}}, Path=InfoMessage}"
-					                    Foreground="{StaticResource InfoBarMessageHeaderTextColorBrush}">
-                                    </TextBlock>
+					                    Foreground="{StaticResource InfoBarMessageHeaderTextColorBrush}"/>
 
                                         <!-- Line -->
                                         <Line Name="infoBarSeparator" Margin="0" Stroke="{StaticResource InfoBarMessageSeparatorBrush}" 
