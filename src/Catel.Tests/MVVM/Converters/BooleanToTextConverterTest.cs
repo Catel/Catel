@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanToTextConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -14,7 +8,6 @@ namespace Catel.Tests.MVVM.Converters
     [TestFixture]
     public class BooleanToTextConverterTest
     {
-        #region Properties
         private static IEnumerable<TestCaseData> TestCases
         {
             get
@@ -33,10 +26,7 @@ namespace Catel.Tests.MVVM.Converters
                 yield return new TestCaseData(false, BooleanToTextConverterMode.X).Returns(string.Empty).SetName("Convert_False_XAsValue");
             }
         }
-        #endregion
 
-        #region Methods
-        [Test]
         [TestCaseSource(nameof(TestCases))]
         public object Convert(object value, object parameter)
         {
@@ -50,7 +40,6 @@ namespace Catel.Tests.MVVM.Converters
             var converter = new BooleanToTextConverter();
             Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (bool), null, (CultureInfo)null));
         }
-        #endregion
 
         //[Test]
         //public void ConvertBack_Null()
