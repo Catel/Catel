@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.relations.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using System.Threading;
@@ -64,11 +57,8 @@ namespace Catel.Tests.MVVM.ViewModels
 
                 childViewModel.FirstName = string.Empty;
 
-#if NET || NETCORE
                 validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
+
                 Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
                 await childViewModel.CloseViewModelAsync(null);
@@ -76,11 +66,8 @@ namespace Catel.Tests.MVVM.ViewModels
                 validationTriggered = false;
                 validatedEvent.Reset();
 
-#if NET || NETCORE
                 validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
+
                 Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
             }
         }
@@ -113,11 +100,8 @@ namespace Catel.Tests.MVVM.ViewModels
 
                 childViewModel.FirstName = string.Empty;
 
-#if NET || NETCORE
                 validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
+
                 Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
                 ((IRelationalViewModel)viewModel).UnregisterChildViewModel(childViewModel);
@@ -125,11 +109,8 @@ namespace Catel.Tests.MVVM.ViewModels
                 validationTriggered = false;
                 validatedEvent.Reset();
 
-#if NET || NETCORE
                 validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
+
                 Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
             }
         }

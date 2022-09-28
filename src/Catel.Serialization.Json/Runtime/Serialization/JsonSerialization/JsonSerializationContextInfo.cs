@@ -1,27 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonSerializationContextInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization.Json
+﻿namespace Catel.Runtime.Serialization.Json
 {
     using System;
     using System.Collections.Generic;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
-#if NET || NETCORE
-    using System.Runtime.Serialization;
-#endif
-
     /// <summary>
     /// Class containing all information about the Json serialization context.
     /// </summary>
     public class JsonSerializationContextInfo : SerializationContextInfoBase<JsonSerializationContextInfo>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonSerializationContextInfo" /> class.
         /// </summary>
@@ -37,9 +25,7 @@ namespace Catel.Runtime.Serialization.Json
             JsonReader = jsonReader;
             JsonWriter = jsonWriter;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the serialization info.
         /// </summary>
@@ -69,6 +55,5 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <value>The json object.</value>
         public Dictionary<string, JProperty> JsonProperties { get; set; }
-        #endregion
     }
 }

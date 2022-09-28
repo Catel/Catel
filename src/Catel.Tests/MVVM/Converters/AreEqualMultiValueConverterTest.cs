@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AreEqualMultiValueConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using Catel.MVVM.Converters;
 
@@ -15,7 +7,6 @@ namespace Catel.Tests.MVVM.Converters
     [TestFixture]
     public class AreEqualMultiValueConverterTest
     {
-        #region Methods
         [TestCase]
         public void Convert_NotEnoughValues()
         {
@@ -57,8 +48,5 @@ namespace Catel.Tests.MVVM.Converters
             var converter = new AreEqualMultiValueConverter();
             Assert.AreEqual(null, converter.ConvertBack(null, new[] {typeof (object)}, null, null));
         }
-        #endregion
     }
 }
-
-#endif

@@ -10,12 +10,9 @@
     /// IniEntry Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class IniEntry : ComparableModelBase
     {
-        #region Serialization test code
         [ExcludeFromSerialization]
         public int _onSerializingCalls;
         [ExcludeFromSerialization]
@@ -60,21 +57,14 @@
 
             base.OnDeserialized();
         }
-        #endregion
 
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
         public IniEntry()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         ///   Gets or sets the group.
         /// </summary>
@@ -130,9 +120,7 @@
         /// Register the IniEntryType property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData IniEntryTypeProperty = RegisterProperty("IniEntryType", IniEntryType.Public);
-        #endregion
 
-        #region Methods
         /// <summary>
         ///   Allows a test to invoke the Notify Property Changed on an object.
         /// </summary>
@@ -170,6 +158,5 @@
         {
             return base.GetValue<TValue>(propertyName);
         }
-        #endregion
     }
 }

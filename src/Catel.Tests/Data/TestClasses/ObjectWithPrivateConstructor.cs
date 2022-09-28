@@ -1,15 +1,11 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ObjectWithPrivateConstructor : SavableModelBase<ObjectWithPrivateConstructor>
     {
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -26,9 +22,7 @@
             // Store values
             MyValue = myValue;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         ///   Gets or sets my value.
         /// </summary>
@@ -42,6 +36,5 @@
         ///   Register the property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData MyValueProperty = RegisterProperty("MyValue", string.Empty);
-        #endregion
     }
 }

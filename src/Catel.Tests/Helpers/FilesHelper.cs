@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FilesHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -17,14 +9,11 @@ namespace Catel.Tests
     /// </summary>
     internal class FilesHelper
     {
-        #region Fields
         /// <summary>
         ///   List of files to delete at cleanup.
         /// </summary>
         private readonly List<string> _fileNamesToDelete = new List<string>();
-        #endregion
 
-        #region Methods
         /// <summary>
         ///   Cleans up all the mess caused by this class.
         /// </summary>
@@ -53,8 +42,5 @@ namespace Catel.Tests
             _fileNamesToDelete.Add(fileName);
             return fileName;
         }
-        #endregion
     }
 }
-
-#endif

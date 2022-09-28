@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GetFirstValidationErrorConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using Catel.MVVM.Converters;
 
@@ -15,7 +7,6 @@ namespace Catel.Tests.MVVM.Converters
     [TestFixture]
     public class GetFirstValidationErrorConverterTest
     {
-        #region Methods
         [TestCase]
         public void Convert_Null()
         {
@@ -45,8 +36,5 @@ namespace Catel.Tests.MVVM.Converters
             var converter = new GetFirstValidationErrorConverter();
             Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (object), null, null));
         }
-        #endregion
     }
 }
-
-#endif

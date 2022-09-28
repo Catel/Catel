@@ -230,9 +230,7 @@ namespace Catel.Tests.Data
         #endregion
     }
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class GridSettings : ComparableModelBase
     {
         public GridSettings()
@@ -295,9 +293,7 @@ namespace Catel.Tests.Data
         #endregion
     }
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class SortSetting
     {
         protected bool Equals(SortSetting other)
@@ -334,9 +330,7 @@ namespace Catel.Tests.Data
         }
     }
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ColumnSettings
     {
         protected bool Equals(ColumnSettings other)
@@ -376,5 +370,4 @@ namespace Catel.Tests.Data
             return Equals((ColumnSettings)obj);
         }
     }
-
 }

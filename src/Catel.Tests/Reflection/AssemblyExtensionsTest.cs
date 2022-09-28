@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyExtensionsTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using System.Reflection;
@@ -24,7 +18,6 @@ namespace Catel.Tests.Reflection
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
-        #region Methods
         [TestCase]
         public void TitleAutomatic()
         {
@@ -115,14 +108,11 @@ namespace Catel.Tests.Reflection
             Assert.AreEqual(expected, result);
         }
 
-#if NET || NETCORE
         [TestCase]
         public void TheGetBuildDateTimeMethod()
         {
             // Just check if the call works
             var dateTime = Assembly.GetBuildDateTime();
         }
-#endif
-        #endregion
     }
 }

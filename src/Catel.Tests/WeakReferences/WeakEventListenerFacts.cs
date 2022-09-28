@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakEventListenerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -15,10 +9,7 @@ namespace Catel.Tests
     using Catel.MVVM;
     using MVVM.Auditing;
 
-#if NET || NETCORE
     using System.Windows.Data;
-#endif
-
     using NUnit.Framework;
 
     public class WeakEventListenerFacts
@@ -436,7 +427,6 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-#if NET || NETCORE
             [TestCase]
             public void SupportsExplicitlyImplementedEvents()
             {
@@ -451,7 +441,6 @@ namespace Catel.Tests
 
                 Assert.AreEqual(1, listener.CollectionChangedEventCount);
             }
-#endif
 
             [TestCase, Explicit]
             public void DoesNotLeakWithCollectionChangedEvent()
@@ -755,7 +744,6 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-#if NET || NETCORE
             [TestCase, Explicit]
             public void DoesNotLeakWithPrivateEventHandlerSubscribedFromClassItself()
             {
@@ -781,7 +769,6 @@ namespace Catel.Tests
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
             }
-#endif
         }
     }
 }

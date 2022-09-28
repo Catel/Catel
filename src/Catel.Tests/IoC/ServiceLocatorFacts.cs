@@ -173,7 +173,9 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void DeadlockIsNotCausedByMultipleInheritedResolving()
             {
+#pragma warning disable IDISP007 // Don't dispose injected
                 _serviceLocator?.Dispose();
+#pragma warning restore IDISP007 // Don't dispose injected
                 _serviceLocator = IoCFactory.CreateServiceLocator();
 
                 var serviceLocator = _serviceLocator;

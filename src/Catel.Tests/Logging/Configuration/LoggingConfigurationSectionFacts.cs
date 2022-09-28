@@ -1,18 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IoCConfigurationSectionTests.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.Logging.Configuration
+﻿namespace Catel.Tests.Logging.Configuration
 {
     using System.Configuration;
-    using System.IO;
     using System.Linq;
     using Catel.Configuration;
-    using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
     using NUnit.Framework;
@@ -20,7 +10,6 @@ namespace Catel.Tests.Logging.Configuration
     [TestFixture, Explicit]
     public class IoLoggingConfigurationSectionFacts
     {
-        #region Methods
         [TestCase]
         public void LoadSectionFromConfigurationFileTest()
         {
@@ -53,8 +42,5 @@ namespace Catel.Tests.Logging.Configuration
             var appDataDirectory = Catel.IO.Path.GetApplicationDataDirectory(assembly.Company(), assembly.Product());
             //Assert.AreEqual(fileLogListener.FilePath, Path.Combine(appDataDirectory, "CatelLogging.txt.log"));
         }
-        #endregion
     }
 }
-
-#endif

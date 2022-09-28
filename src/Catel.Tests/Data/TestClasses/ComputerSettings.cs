@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
@@ -10,9 +9,7 @@
     /// ComputerSettings Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ComputerSettings : ComparableModelBase
     {
         #region Serialization test code
@@ -62,7 +59,6 @@
         }
         #endregion
 
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -70,9 +66,7 @@
         {
             IniFileCollection = InitializeDefaultIniFileCollection();
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         ///   Gets or sets the computer name.
         /// </summary>
@@ -103,9 +97,7 @@
         ///   Register the property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData IniFileCollectionProperty = RegisterProperty<ObservableCollection<IniFile>>("IniFileCollection");
-        #endregion
 
-        #region Methods
         /// <summary>
         ///   Initializes the default ini file collection.
         /// </summary>
@@ -121,6 +113,5 @@
 
             return result;
         }
-        #endregion
     }
 }

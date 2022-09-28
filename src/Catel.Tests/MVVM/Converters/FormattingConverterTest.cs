@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FormattingConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System;
     using System.Globalization;
@@ -15,7 +9,6 @@ namespace Catel.Tests.MVVM.Converters
     [TestFixture]
     public class FormattingConverterTest
     {
-        #region Methods
         [TestCase]
         public void Convert_Null_NoFormatting()
         {
@@ -49,11 +42,7 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new FormattingConverter();
 
-#if NETFX_CORE
-            var value = converter.Convert(new DateTime(2010, 12, 15), typeof (string), null, "nl-NL");
-#else
             var value = converter.Convert(new DateTime(2010, 12, 15), typeof(string), null, new CultureInfo("nl-NL"));
-#endif
 
             var firstExpectedValue = "15-12-2010 00:00:00";
             var secondExpectedValue = "15-12-2010 0:00:00";
@@ -69,11 +58,7 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new FormattingConverter();
 
-#if NETFX_CORE
-            var value = converter.Convert(new DateTime(2010, 12, 15), typeof (string), "d", "nl-NL");
-#else
             var value = converter.Convert(new DateTime(2010, 12, 15), typeof(string), "d", new CultureInfo("nl-NL"));
-#endif
 
             var firstExpectedValue = "15-12-2010";
             var secondExpectedValue = "15-12-2010";
@@ -90,6 +75,5 @@ namespace Catel.Tests.MVVM.Converters
             var converter = new FormattingConverter();
             Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (object), null, (CultureInfo)null));
         }
-        #endregion
     }
 }

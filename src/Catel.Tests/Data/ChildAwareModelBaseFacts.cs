@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChildAwareModelBaseFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -27,14 +20,12 @@ namespace Catel.Tests.Data
             Assert.IsTrue(model.HasCollectionChanged);
         }
 
-#if NET || NETCORE
         [TestCase]
         public void AllowsRegistrationOfCollectionViewSource()
         {
             var model = new ModelWithCollectionViewSource();
             model.Collection = new CollectionView(new List<int>() { 1, 2, 3 });
         }
-#endif
 
         [TestCase]
         public void RegistersChangeNotificationsOfDefaultValues()

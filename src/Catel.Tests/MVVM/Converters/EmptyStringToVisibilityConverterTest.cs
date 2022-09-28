@@ -1,26 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EmptyStringToVisibilityConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System.Globalization;
     using Catel.MVVM.Converters;
 
     using NUnit.Framework;
-
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     [TestFixture]
     public class EmptyStringToVisibilityConverterTest
     {
-        #region Methods
         [TestCase]
         public void Convert_Null()
         {
@@ -76,6 +64,5 @@ namespace Catel.Tests.MVVM.Converters
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (object), null, (CultureInfo)null));
         }
-        #endregion
     }
 }

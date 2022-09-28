@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -25,10 +18,7 @@ namespace Catel.Tests.Runtime.Serialization
 
     public class XmlSerializerFacts
     {
-
-#if NET || NETCORE
         [Serializable]
-#endif
         public class XmlModelWithAttributesOnly : ModelBase
         {
             [XmlAttribute]
@@ -41,9 +31,7 @@ namespace Catel.Tests.Runtime.Serialization
             public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
         }
 
-#if NET || NETCORE
         [Serializable]
-#endif
         public class XmlFamily : ModelBase
         {
             public XmlFamily()
@@ -79,9 +67,7 @@ namespace Catel.Tests.Runtime.Serialization
             public static readonly IPropertyData ModelsWithAttributesOnlyProperty = RegisterProperty("ModelsWithAttributesOnly", () => new ObservableCollection<XmlModelWithAttributesOnly>());
         }
 
-#if NET || NETCORE
         [Serializable]
-#endif
         public class XmlPerson : ModelBase
         {
             public Gender Gender

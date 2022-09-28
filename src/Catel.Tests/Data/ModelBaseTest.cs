@@ -4,22 +4,14 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.IO;
     using Catel.Data;
-    using Catel.Runtime.Serialization;
     using NUnit.Framework;
 
     [TestFixture]
     public class ModelBaseTest
-    {
-        #region Fields
-#if !UWP
+    {       
         private FilesHelper _filesHelper;
-#endif
-        #endregion
 
-        #region Initialization and cleanup
-#if !UWP
         [SetUp]
         public void Initialize()
         {
@@ -38,8 +30,6 @@
                 _filesHelper = null;
             }
         }
-#endif
-        #endregion
 
         #region Multiple inheritance tests
         /// <summary>
@@ -359,7 +349,6 @@
         #endregion
 
         #region Non magic string property registration overload
-#if !NETFX_CORE
         [TestCase]
         public void PropertiesAreActuallyRegistered()
         {
@@ -456,7 +445,6 @@
             Assert.IsTrue(model.IsPropertyRegistered("ReferenceType"));
             Assert.IsTrue(model.IsPropertyRegistered("ReferenceTypeWithDefaultValue"));
         }
-#endif
         #endregion
     }
 }

@@ -8,21 +8,14 @@
     /// ModelC Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     [KnownType(typeof(ModelA)), KnownType(typeof(ModelB))]
     public class ModelC : ComparableModelBase
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
         public ModelC() { }
-        #endregion
 
         /// <summary>
         /// Gets or sets the D property.

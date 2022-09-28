@@ -715,9 +715,7 @@
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is not of type <see cref="PropertyChangedEventHandler" />,
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
         public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
-#if !NETFX_CORE
- where TEventArgs : EventArgsBase
-#endif
+            where TEventArgs : EventArgsBase
         {
             return SubscribeToWeakEvent(target, source, eventName, handler, throwWhenSubscriptionFails);
         }

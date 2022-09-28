@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArgumentFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using System.Collections;
@@ -17,10 +11,7 @@ namespace Catel.Tests
     using ViewModels;
 
     using NUnit.Framework;
-
-#if !NETFX_CORE
     using Moq;
-#endif
 
     public partial class ArgumentFacts
     {
@@ -181,7 +172,6 @@ namespace Catel.Tests
                 Argument.IsNotOutOfRange("param", 3, 1, 3);
             }
 
-#if NET || NETCORE
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallDoubleParamValue()
             {
@@ -201,7 +191,6 @@ namespace Catel.Tests
                 Argument.IsNotOutOfRange("param", 2d, 1d, 3d);
                 Argument.IsNotOutOfRange("param", 3d, 1d, 3d);
             }
-#endif
         }
 
         [TestFixture]
@@ -220,7 +209,6 @@ namespace Catel.Tests
                 Argument.IsMinimal("param", 3, 3);
             }
 
-#if NET || NETCORE
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallDoubleParamValue()
             {
@@ -233,7 +221,6 @@ namespace Catel.Tests
                 Argument.IsMinimal("param", 3d, 2d);
                 Argument.IsMinimal("param", 3d, 3d);
             }
-#endif
         }
 
         [TestFixture]
@@ -252,7 +239,6 @@ namespace Catel.Tests
                 Argument.IsMaximum("param", 3, 3);
             }
 
-#if NET || NETCORE
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooLargeDoubleParamValue()
             {
@@ -265,7 +251,6 @@ namespace Catel.Tests
                 Argument.IsMaximum("param", 2d, 3d);
                 Argument.IsMaximum("param", 3d, 3d);
             }
-#endif
         }
 
         [TestFixture]
@@ -528,8 +513,7 @@ namespace Catel.Tests
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", "value", false));
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", (string)null, false));
             }            
-            
-#if !NETFX_CORE
+
             [TestCase]
             public void ThrowsArgumentExceptionForNotValidValidator()
             {
@@ -538,8 +522,7 @@ namespace Catel.Tests
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", "value", validatorMock.Object));
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", (string)null, validatorMock.Object));
             }  
-#endif
-            
+
             [TestCase]
             public void ThrowsArgumentExceptionForNotValidFunc()
             {
@@ -569,7 +552,6 @@ namespace Catel.Tests
                 Argument.IsValid("myParam", (string)null, true);
             }       
             
-#if !NETFX_CORE
             [TestCase]
             public void SucceedsForValid_Validator()
             {
@@ -578,7 +560,6 @@ namespace Catel.Tests
                 Argument.IsValid("myParam", "value", validatorMock.Object);
                 Argument.IsValid("myParam", (string)null, validatorMock.Object);
             }
-#endif
 
             [TestCase]
             public void SucceedsForValid_Func()

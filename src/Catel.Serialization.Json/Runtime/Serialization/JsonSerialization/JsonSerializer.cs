@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonSerializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#define SUPPORT_BSON
+﻿#define SUPPORT_BSON
 
 namespace Catel.Runtime.Serialization.Json
 {
@@ -33,7 +27,6 @@ namespace Catel.Runtime.Serialization.Json
     /// </summary>
     public class JsonSerializer : SerializerBase<JsonSerializationContextInfo>, IJsonSerializer
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -53,9 +46,7 @@ namespace Catel.Runtime.Serialization.Json
         /// The type name.
         /// </summary>
         public const string TypeName = "$typename";
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonSerializer" /> class.
         /// </summary>
@@ -69,9 +60,7 @@ namespace Catel.Runtime.Serialization.Json
             PreserveReferences = true;
             WriteTypeInfo = true;
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         /// Gets or sets a value indicating whether references should be preserved.
         /// <para />
@@ -85,9 +74,7 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <value><c>true</c> if type info should be written; otherwise, <c>false</c>.</value>
         public bool WriteTypeInfo { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Serializes the specified model.
         /// </summary>
@@ -968,6 +955,5 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.Flush();
             }
         }
-#endregion
     }
 }

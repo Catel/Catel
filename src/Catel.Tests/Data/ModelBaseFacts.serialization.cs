@@ -1,25 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.serialization.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.ObjectModel;
     using System.Xml;
     using System.Xml.Serialization;
     using Catel.Data;
     using Newtonsoft.Json;
-
-#if NET || NETCORE
     using System;
-#endif
-
     using NUnit.Framework;
-
-#if !UWP
-#endif
 
     public partial class ModelBaseFacts
     {
@@ -176,9 +163,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Customer
         /// </summary>
-#if NET || NETCORE
         [Serializable]
-#endif
         public partial class Customer : ComparableModelBase
         {
             #region Constructors
@@ -249,9 +234,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Project
         /// </summary>
-#if NET || NETCORE
         [Serializable]
-#endif
         public class Project : ComparableModelBase
         {
             #region Constructors
@@ -339,9 +322,7 @@ namespace Catel.Tests.Data
         [TestFixture]
         public class TheJsonSerialization
         {
-#if NET || NETCORE
             [Serializable]
-#endif
             [JsonObject(MemberSerialization.OptIn)]
             public class JsonInnerModel : ModelBase
             {
@@ -371,9 +352,7 @@ namespace Catel.Tests.Data
                 #endregion
             }
 
-#if NET || NETCORE
             [Serializable]
-#endif
             [JsonObject(MemberSerialization.OptIn)]
             public class JsonExampleModel : ModelBase
             {

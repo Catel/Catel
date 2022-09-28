@@ -1,27 +1,18 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ObjectWithCustomType : ComparableModelBase
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
         public ObjectWithCustomType()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         ///   Gets or sets the first name.
         /// </summary>
@@ -49,9 +40,5 @@
         ///   Register the Gender property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData GenderProperty = RegisterProperty("Gender", Gender.Male);
-        #endregion
-
-        #region Methods
-        #endregion
     }
 }

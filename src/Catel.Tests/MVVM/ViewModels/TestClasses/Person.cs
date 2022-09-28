@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Person.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using System;
     using System.Collections.Generic;
@@ -14,7 +7,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
 
     public interface IPerson
     {
-        #region Properties
         string FirstName { get; set; }
         string MiddleName { get; set; }
         string LastName { get; set; }
@@ -22,40 +14,29 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         uint Age { get; set; }
 
         IContactInfo ContactInfo { get; set; }
-        #endregion
     }
 
     public interface IContactInfo
     {
-        #region Properties
         string Street { get; set; }
         string City { get; set; }
         string Email { get; set; }
-        #endregion
     }
 
     /// <summary>
     /// Person Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class Person : ValidatableModelBase, IPerson
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
         public Person()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the FirstName.
         /// </summary>
@@ -134,9 +115,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData ContactInfoProperty = RegisterProperty<IContactInfo>("ContactInfo", () => new ContactInfo());
-        #endregion
 
-        #region Methods
         public void ClearIsDirty()
         {
             IsDirty = false;
@@ -172,28 +151,22 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
                 validationResults.Add(BusinessRuleValidationResult.CreateWarning("No middle name"));
             }
         }
-        #endregion
     }
 
     /// <summary>
     /// PersonWithDataAnnotations Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class PersonWithDataAnnotations : ValidatableModelBase, IPerson
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
         public PersonWithDataAnnotations()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the FirstName.
         /// </summary>
@@ -260,31 +233,22 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData ContactInfoProperty = RegisterProperty<IContactInfo>("ContactInfo", () => new ContactInfo());
-        #endregion
     }
 
     /// <summary>
     /// ContactInfo Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ContactInfo : ModelBase, IContactInfo
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
         public ContactInfo()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the street.
         /// </summary>
@@ -326,9 +290,5 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// Register the Email property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData EmailProperty = RegisterProperty("Email", string.Empty);
-        #endregion
-
-        #region Methods
-        #endregion
     }
 }

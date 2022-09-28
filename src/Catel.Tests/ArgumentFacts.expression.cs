@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArgumentTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
 
@@ -18,10 +12,7 @@ namespace Catel.Tests
     using Catel.Tests.ViewModels;
 
     using NUnit.Framework;
-
-#if !NETFX_CORE
     using Moq;
-#endif
 
     public partial class ArgumentFacts
     {
@@ -422,7 +413,6 @@ namespace Catel.Tests
                 this.IsValidInvokation((string)null, true);
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void SucceedsForIsValidInvokation4()
             {
@@ -431,7 +421,6 @@ namespace Catel.Tests
                 this.IsValidInvokation("myValue", mock.Object);
                 this.IsValidInvokation((string)null, mock.Object);
             }
-#endif
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation1()
@@ -454,7 +443,6 @@ namespace Catel.Tests
                 Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, false));
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation4()
             {
@@ -463,7 +451,6 @@ namespace Catel.Tests
                 Assert.Throws<ArgumentException>(() => this.IsValidInvokation("myValue", mock.Object));
                 Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, mock.Object));
             }
-#endif
 
             public void IsValidInvokation<T>(T value, Func<T, bool> validation)
             {

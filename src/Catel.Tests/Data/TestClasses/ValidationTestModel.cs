@@ -9,15 +9,9 @@
     /// ValidationTest Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ValidationTestModel : ValidatableModelBase
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -28,9 +22,7 @@
             BusinessRuleErrorWhenEmpty = "noerror";
             BusinessRuleWarningWhenEmpty = "noerror";
         }
-        #endregion
 
-        #region Properties
         public new bool AutomaticallyValidateOnPropertyChanged
         {
             get { return base.AutomaticallyValidateOnPropertyChanged; }
@@ -98,9 +90,7 @@
             get { return base.HideValidationResults; }
             set { base.HideValidationResults = value; }
         }
-        #endregion
 
-        #region Methods
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
             if (string.IsNullOrEmpty(ErrorWhenEmpty))
@@ -126,6 +116,5 @@
                 validationResults.Add(BusinessRuleValidationResult.CreateWarning("BusinessRuleWarningWhenEmpty should not be empty"));
             }
         }
-        #endregion
     }
 }
