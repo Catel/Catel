@@ -25,7 +25,7 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2021/xx/xx
+2022/xx/xx
 
 Added/fixed
 ===========
@@ -62,8 +62,7 @@ Added/fixed
 
 Platform support changes
 ========================
-(+) #1505 Add support for .NET 4.8
-(-) #1285 Remove support for .NET 4.5
+(-) #1285 Remove support for all frameworks except .NET 6.0
 
 ===========================================================
 * #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')

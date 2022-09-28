@@ -6,19 +6,7 @@
 
 namespace Catel.Data
 {
-    using Logging;
-
     using ISerializable = Catel.Runtime.Serialization.ISerializable;
-
-#if !NET && !NETCORE && !NETSTANDARD
-    using System.Reflection;
-#endif
-
-#if UWP
-    using Windows.Storage.Streams;
-#else
-    using System.IO.IsolatedStorage;
-#endif
 
     public partial class ModelBase
     {

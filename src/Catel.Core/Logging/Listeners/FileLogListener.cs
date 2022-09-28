@@ -171,19 +171,15 @@ namespace Catel.Logging
                 filePath = filePath.Replace(FilePathKeyword.AutoLogFileName, AutoLogFileNameReplacement);
             }
 
-            var isWebApp = HttpContextHelper.HasHttpContext();
-
             string dataDirectory;
 
             if (_assembly is not null)
             {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product())
-                                         : IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
+                dataDirectory = IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
             }
             else
             {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers()
-                                         : IO.Path.GetApplicationDataDirectory();
+                dataDirectory = IO.Path.GetApplicationDataDirectory();
             }
 
             if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyName))

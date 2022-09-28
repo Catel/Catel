@@ -49,7 +49,7 @@ namespace Catel.Services
 
             if (source is string)
             {
-                return ArrayShim.Empty<string>();
+                return Array.Empty<string>();
             }
 
             var propertyValues = new List<string>();

@@ -8,7 +8,6 @@ namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -17,14 +16,7 @@ namespace Catel.Reflection
     using IoC;
     using Logging;
     using MethodTimer;
-
-#if NET || NETCORE
     using System.Runtime.InteropServices;
-#endif
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// Assembly helper class.
@@ -57,65 +49,16 @@ namespace Catel.Reflection
                     var entryAssemblyResolver = serviceLocator.ResolveType<IEntryAssemblyResolver>();
                     assembly = entryAssemblyResolver.Resolve();
 
-/* Unmerged change from project 'Catel.Core (netcoreapp3.1)'
-Before:
-                    if (assembly is not null)
-After:
-                    if (assembly is not null)
-*/
-
-/* Unmerged change from project 'Catel.Core (net5.0)'
-Before:
-                    if (assembly is not null)
-After:
-                    if (assembly is not null)
-*/
                     if (assembly is not null)
                     {
                         return assembly;
                     }
                 }
 
-                // Note: web should only be checked in .NET
-#if NET
-                var httpApplication = HttpContextHelper.GetHttpApplicationInstance();
-                if (httpApplication is not null)
-                {
-                    // Special treatment for ASP.NET
-                    var type = httpApplication.GetType();
-                    while ((type is not null) && (type != typeof(object)) && (string.Equals(type.Namespace, "ASP", StringComparison.Ordinal)))
-                    {
-                        type = type.BaseType;
-                    }
-
-                    if (type is not null)
-                    {
-                        assembly = type.Assembly;
-                    }
-                }
-#endif
-
-#if NET || NETCORE
                 if (assembly is null)
                 {
                     assembly = Assembly.GetEntryAssembly();
                 }
-#elif UWP
-                assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
-#endif
-
-#if NET
-                if (assembly is null)
-                {
-                    var appDomain = AppDomain.CurrentDomain;
-                    var setupInfo = appDomain.SetupInformation;
-                    var assemblyPath = Path.Combine(setupInfo.ApplicationBase, setupInfo.ApplicationName);
-
-                    assembly = (from x in appDomain.GetLoadedAssemblies(true)
-                                where !x.IsDynamicAssembly() && string.Equals(x.Location, assemblyPath)
-                                select x).FirstOrDefault();
-                }
-#endif
             }
             catch (Exception ex)
             {
@@ -206,7 +149,7 @@ After:
             {
                 Log.Error(ex, "Failed to get types from assembly '{0}'", assembly.FullName);
 
-                foundAssemblyTypes = ArrayShim.Empty<Type>();
+                foundAssemblyTypes = Array.Empty<Type>();
             }
 
             return foundAssemblyTypes;
@@ -278,17 +221,10 @@ After:
             }
 
             var isDynamicAssembly =
-#if NET || NETCORE
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&
-#endif
                 string.Equals(assembly.GetType().FullName, "System.Reflection.Emit.InternalAssemblyBuilder", StringComparison.Ordinal)
-#if NET
-                && !assembly.GlobalAssemblyCache
-#endif
-#if NET || NETCORE
                 && ((Assembly.GetExecutingAssembly() is not null)
                 && !string.Equals(assembly.Location, Assembly.GetExecutingAssembly().Location, StringComparison.OrdinalIgnoreCase))
-#endif
                 // Note: to make it the same for all platforms
                 && true;
 
@@ -346,7 +282,6 @@ After:
             public string NameWithoutVersion { get; set; }
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets the linker timestamp.
         /// </summary>
@@ -415,6 +350,5 @@ After:
         };
 #pragma warning restore 169
 #pragma warning restore 649
-#endif
     }
 }

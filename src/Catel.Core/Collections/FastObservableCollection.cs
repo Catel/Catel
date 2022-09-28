@@ -22,9 +22,7 @@ namespace Catel.Collections
     /// can be suspended.
     /// </summary>
     /// <typeparam name="T">Type of the elements contained by this collection.</typeparam>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
         #region Constants

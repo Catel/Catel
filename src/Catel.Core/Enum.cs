@@ -252,7 +252,6 @@ namespace Catel
 
         #region Nested type: DataBinding
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// DataBinding class.
         /// </summary>
@@ -380,7 +379,6 @@ namespace Catel
             }
             #endregion
         }
-#endif
         #endregion
 
         #region Nested type: Flags

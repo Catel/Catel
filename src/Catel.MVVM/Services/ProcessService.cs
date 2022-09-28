@@ -50,9 +50,6 @@ namespace Catel.Services
 
             try
             {
-#if UWP
-                await Launcher.LaunchUriAsync(new Uri(fileName));
-#else
                 var processStartInfo = new ProcessStartInfo(fileName, arguments)
                 {
                     Verb = processContext.Verb,
@@ -77,7 +74,9 @@ namespace Catel.Services
                     processStartInfo.WorkingDirectory = processContext.WorkingDirectory;
                 }
 
+#pragma warning disable IDISP001 // Dispose created
                 var process = Process.Start(processStartInfo);
+#pragma warning restore IDISP001 // Dispose created
                 if (process is null)
                 {
                     Log.Debug($"Process is already completed, cannot wait for it to complete");
@@ -89,7 +88,6 @@ namespace Catel.Services
                     process.EnableRaisingEvents = true;
                     process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
                 }
-#endif
             }
             catch (Exception ex)
             {

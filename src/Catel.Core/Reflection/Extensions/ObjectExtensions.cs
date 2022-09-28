@@ -25,7 +25,7 @@ namespace Catel.Reflection
         {
             if (objects is null)
             {
-                return ArrayShim.Empty<Attribute>();
+                return Array.Empty<Attribute>();
             }
 
             return objects.Cast<Attribute>().ToArray();

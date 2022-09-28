@@ -45,13 +45,13 @@ namespace Catel.MVVM.Converters
             }
 
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
-            var methodInfo = value.GetType().GetMethodEx(methodName, ArrayShim.Empty<Type>(), bindingFlags);
+            var methodInfo = value.GetType().GetMethodEx(methodName, Array.Empty<Type>(), bindingFlags);
             if (methodInfo is null)
             {
                 return value;
             }
 
-            return methodInfo.Invoke(value, ArrayShim.Empty<object>());
+            return methodInfo.Invoke(value, Array.Empty<object>());
         }
 
         /// <summary>

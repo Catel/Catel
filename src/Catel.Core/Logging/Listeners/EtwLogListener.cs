@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN
-
 namespace Catel.Logging
 {
     using System;
@@ -82,5 +80,3 @@ namespace Catel.Logging
         }
     }
 }
-
-#endif

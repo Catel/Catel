@@ -38,7 +38,6 @@ namespace Catel.Data
             serializer.Serialize(model, stream, null);
         }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Saves the specified model to the file as xml.
         /// </summary>
@@ -64,6 +63,5 @@ namespace Catel.Data
                 Save(model, fileStream, serializer);
             }
         }
-#endif
     }
 }

@@ -92,7 +92,7 @@ namespace Catel
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return ArrayShim.Empty<byte>();
+                return Array.Empty<byte>();
             }
 
             var encoding = UTF8Encoding.UTF8;

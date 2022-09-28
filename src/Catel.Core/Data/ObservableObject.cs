@@ -9,20 +9,11 @@ namespace Catel.Data
     using System;
     using System.ComponentModel;
     using System.Linq.Expressions;
-    using System.Xml.Schema;
-
-#if !NET && !NETCORE && !NETSTANDARD
-    using System.Runtime.Serialization;
-#endif
 
     /// <summary>
     /// Very basic class implementing the <see cref="INotifyPropertyChanged"/> interfaces.
     /// </summary>
-#if NET || NETCORE || NETSTANDARD
     [Serializable]
-#else
-    [DataContract]
-#endif
     public class ObservableObject : INotifyPropertyChanged
     {
         #region Events

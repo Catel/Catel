@@ -710,16 +710,16 @@ namespace Catel.Windows.Controls
         private void RaiseEventsForDifferences(object value, ValidationData oldValidationData, ValidationData newValidationData)
         {
             // Warnings - fields
-            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldWarnings ?? (IEnumerable<FieldWarningOrErrorInfo>)ArrayShim.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldWarnings, ValidationType.Warning);
+            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldWarnings ?? (IEnumerable<FieldWarningOrErrorInfo>)Array.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldWarnings, ValidationType.Warning);
 
             // Warnings - business
-            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessWarnings ?? (IEnumerable<BusinessWarningOrErrorInfo>)ArrayShim.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessWarnings, ValidationType.Warning);
+            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessWarnings ?? (IEnumerable<BusinessWarningOrErrorInfo>)Array.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessWarnings, ValidationType.Warning);
 
             // Errors - fields
-            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldErrors ?? (IEnumerable<FieldWarningOrErrorInfo>)ArrayShim.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldErrors, ValidationType.Error);
+            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldErrors ?? (IEnumerable<FieldWarningOrErrorInfo>)Array.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldErrors, ValidationType.Error);
 
             // Errors - business
-            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessErrors ?? (IEnumerable<BusinessWarningOrErrorInfo>)ArrayShim.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessErrors, ValidationType.Error);
+            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessErrors ?? (IEnumerable<BusinessWarningOrErrorInfo>)Array.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessErrors, ValidationType.Error);
         }
 
         /// <summary>

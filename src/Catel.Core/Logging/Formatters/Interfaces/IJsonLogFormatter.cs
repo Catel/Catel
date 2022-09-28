@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
-
 namespace Catel.Logging
 {
     using System;
@@ -15,7 +13,6 @@ namespace Catel.Logging
     /// </summary>
     public interface IJsonLogFormatter
     {
-        #region Methods
         /// <summary>
         /// Formats the log infos.
         /// </summary>
@@ -28,8 +25,5 @@ namespace Catel.Logging
         /// <exception cref="ArgumentException">The <paramref name="message" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="logEvent"/> is <c>null</c>.</exception>
         string FormatLogEvent(ILog log, string message, LogEvent logEvent, DateTime time);
-        #endregion
     }
 }
-
-#endif

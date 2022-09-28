@@ -177,7 +177,7 @@ namespace Catel.Tests.Runtime.Serialization
                 }
 
                 var methodInfo = obj.GetType().GetMethodEx("ClearSerializationCounters");
-                methodInfo.Invoke(obj, ArrayShim.Empty<object>());
+                methodInfo.Invoke(obj, Array.Empty<object>());
 
                 if (obj is ComputerSettings computerSettings)
                 {

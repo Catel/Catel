@@ -97,7 +97,7 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ReturnsEmptyStringForEmptyArray()
             {
-                Assert.AreEqual(string.Empty, TypeHelper.FormatInnerTypes((IEnumerable<string>)ArrayShim.Empty<string>()));
+                Assert.AreEqual(string.Empty, TypeHelper.FormatInnerTypes((IEnumerable<string>)Array.Empty<string>()));
             }
 
             [TestCase]

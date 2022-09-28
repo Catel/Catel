@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
-
 namespace Catel.Configuration
 {
     using System.Configuration;
@@ -46,5 +44,3 @@ namespace Catel.Configuration
         }
     }
 }
-
-#endif

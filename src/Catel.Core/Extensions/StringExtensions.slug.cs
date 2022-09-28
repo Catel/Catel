@@ -43,9 +43,7 @@ namespace Catel
             Argument.IsNotNull("spaceReplacement", spaceReplacement);
             Argument.IsNotNull("dotReplacement", dotReplacement);
 
-#if NET || NETCORE
             input = input.RemoveDiacritics();
-#endif
 
             var output = WhiteSpaceRegex.Replace(input, spaceReplacement);
             output = SlugRegex.Replace(output, string.Empty);
@@ -60,7 +58,6 @@ namespace Catel
             return output;
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Removes the diacritics (special characters) from the string.
         /// </summary>
@@ -81,7 +78,6 @@ namespace Catel
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
-#endif
         #endregion
     }
 }

@@ -18,10 +18,6 @@ namespace Catel.Data
     using Logging;
     using Reflection;
 
-#if NET || NETCORE || NETSTANDARD
-    using System.Runtime.Serialization;
-#endif
-
     /// <summary>
     /// ModelBase implementation that supports validation.
     /// </summary>
@@ -81,7 +77,6 @@ namespace Catel.Data
 
         private IObjectAdapter _objectAdapter;
 
-#if !UWP
         private bool _firstAnnotationValidation = true;
 
         /// <summary>
@@ -90,7 +85,6 @@ namespace Catel.Data
         private readonly Dictionary<string, string> _dataAnnotationValidationResults = new Dictionary<string, string>();
 
         private readonly Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext> _dataAnnotationsValidationContext = new Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext>();
-#endif
 
         private event EventHandler<DataErrorsChangedEventArgs> _errorsChanged;
         private event EventHandler<DataErrorsChangedEventArgs> _warningsChanged;
@@ -123,18 +117,14 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if the object is validating; otherwise, <c>false</c>.
         /// </value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         protected bool IsValidating { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this object is validated or not.
         /// </summary>
-#if !UWP
         [Browsable(false)]
-#endif
         [XmlIgnore]
         bool IValidatable.IsValidated { get { return _isValidated; } }
 
@@ -144,9 +134,7 @@ namespace Catel.Data
         /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
         /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
-#if !UWP
         [Browsable(false)]
-#endif
         [XmlIgnore]
         IValidator IValidatable.Validator
         {
@@ -158,9 +146,7 @@ namespace Catel.Data
         /// Gets the validation context which contains all information about the validation.
         /// </summary>
         /// <value>The validation context.</value>
-#if !UWP
         [Browsable(false)]
-#endif
         [XmlIgnore]
         IValidationContext IValidatable.ValidationContext
         {
@@ -200,9 +186,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
         /// has changed.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         protected bool AutomaticallyValidateOnPropertyChanged { get; set; }
 
         /// <summary>
@@ -220,9 +204,7 @@ namespace Catel.Data
         /// Unlike the <see cref="SuspendValidations"/> method, this property will not prevent validation. It will only
         /// prevent the error interfaces to not expose them.
         /// </remarks>
-#if !UWP
         [Browsable(false)]
-#endif
         protected bool HideValidationResults { get; set; }
 
         /// <summary>
@@ -533,7 +515,6 @@ namespace Catel.Data
                 return true;
             }
 
-#if !UWP
             var type = GetType();
 
             try
@@ -616,7 +597,6 @@ namespace Catel.Data
 
                 Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
             }
-#endif
 
             return true;
         }
@@ -780,7 +760,6 @@ namespace Catel.Data
                     ValidatePropertyUsingAnnotations(propertyData.Key);
                 }
 
-#if !UWP
                 // Validate non-catel properties as well for attribute validation
                 foreach (var propertyInfo in catelTypeInfo.GetNonCatelProperties())
                 {
@@ -817,7 +796,6 @@ namespace Catel.Data
                 }
 
                 _firstAnnotationValidation = false;
-#endif
             }
 
             if (!_isValidated || force)
@@ -840,12 +818,10 @@ namespace Catel.Data
                         validator.ValidateFields(this, fieldValidationResults);
                     }
 
-#if !UWP
                     // Support annotation validation
                     fieldValidationResults.AddRange(from fieldAnnotationValidation in _dataAnnotationValidationResults
                                                     where !string.IsNullOrEmpty(fieldAnnotationValidation.Value)
                                                     select (IFieldValidationResult)FieldValidationResult.CreateError(fieldAnnotationValidation.Key, fieldAnnotationValidation.Value));
-#endif
 
                     ValidateFields(fieldValidationResults);
 
@@ -1203,9 +1179,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
-#if !UWP
         [Browsable(false)]
-#endif
         [XmlIgnore]
         public virtual bool HasErrors
         {
@@ -1280,9 +1254,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
         /// </value>
-#if !UWP
         [Browsable(false)]
-#endif
         [XmlIgnore]
         public virtual bool HasWarnings
         {

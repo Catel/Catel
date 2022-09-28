@@ -9,36 +9,11 @@ namespace Catel.Data
     using System.IO;
     using Runtime.Serialization;
 
-#if UWP
-    using Windows.Storage.Streams;
-#endif
-
     /// <summary>
     /// ISavableDataObjectBase that defines the additional methods to save a <see cref="IModel" /> object.
     /// </summary>
     public interface ISavableModel : IModel
     {
-        #region Methods
-#if NET || NETCORE || NETSTANDARD || XAMARIN
-        // No overloads required
-#elif UWP
-        /// <summary>
-        /// Saves the object to an isolated storage file stream using the default formatting.
-        /// </summary>
-        /// <param name="fileStream">Stream that will contain the serialized data of this object.</param>
-        /// <param name="serializer">The serializer to use.</param>
-        /// <param name="configuration">The configuration.</param>
-        void Save(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null);
-#else
-        /// <summary>
-        /// Saves the object to an isolated storage file stream using the default formatting.
-        /// </summary>
-        /// <param name="fileStream">Stream that will contain the serialized data of this object.</param>
-        /// <param name="serializer">The serializer to use.</param>
-        /// <param name="configuration">The configuration.</param>
-        void Save(IsolatedStorageFileStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null);
-#endif
-
         /// <summary>
         /// Saves the object to a stream using a specific formatting.
         /// </summary>
@@ -46,6 +21,5 @@ namespace Catel.Data
         /// <param name="serializer">The serializer to use.</param>
         /// <param name="configuration">The configuration.</param>
         void Save(Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null);
-        #endregion
     }
 }

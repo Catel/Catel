@@ -31,9 +31,7 @@
         /// <summary>
         /// The current suspension context.
         /// </summary>
-#if NET || NETCORE
         [field: NonSerialized]
-#endif
         private SuspensionContext<KeyValuePair<TKey, TValue>> _suspensionContext;
 
         /// <summary>
@@ -53,9 +51,7 @@
         /// </summary>
         private readonly List<TKey> _list;
 
-#if NET || NETCORE
         [field: NonSerialized]
-#endif
         private readonly SerializationInfo _serializationInfo;
 
         /// <summary>

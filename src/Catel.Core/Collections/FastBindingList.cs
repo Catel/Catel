@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
-
 namespace Catel.Collections
 {
     using System;
@@ -742,5 +740,3 @@ namespace Catel.Collections
         #endregion
     }
 }
-
-#endif

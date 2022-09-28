@@ -76,7 +76,7 @@ namespace Catel.Services
         /// </remarks>
         public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl parentContentControl = null)
         {
-            return Wrap(frameworkElement, wrapOptions, ArrayShim.Empty<DataWindowButton>(), parentContentControl);
+            return Wrap(frameworkElement, wrapOptions, Array.Empty<DataWindowButton>(), parentContentControl);
         }
 
         /// <summary>

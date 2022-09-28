@@ -7,17 +7,14 @@
 
 namespace Catel.Data
 {
-#if NET || NETCORE || NETSTANDARD
     using System.IO;
     using Runtime.Serialization;
-#endif
 
     /// <summary>
     /// ISaveable model extensions.
     /// </summary>
     public static class ISavableModelExtensions
     {
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Saves the object to a file using a specific formatting.
         /// </summary>
@@ -38,6 +35,5 @@ namespace Catel.Data
                 model.Save(stream, serializer, configuration);
             }
         }
-#endif
     }
 }

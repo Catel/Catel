@@ -58,12 +58,10 @@ namespace Catel
                 return "null";
             }
 
-#if !NETFX_CORE
             if (instance == DBNull.Value)
             {
                 return "dbnull";
             }
-#endif
 
             var instanceType = instance.GetType();
             if (instanceType == typeof (DateTime) || instanceType == typeof (DateTime?))
@@ -71,7 +69,6 @@ namespace Catel
                 return ((DateTime) instance).ToString(cultureInfo);
             }
 
-#if !NETFX_CORE
 			// Note: Not supported on NETFX_CORE, don't enable, really doesn't work. If you need a ToString
 			// for a specific string, use a cast like the DateTime about
 
@@ -81,7 +78,6 @@ namespace Catel
             {
                 return (string)toStringMethod.Invoke(instance, new object[] { cultureInfo });
             }
-#endif
 
             return instance.ToString();
         }

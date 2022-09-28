@@ -12,10 +12,7 @@ namespace Catel.Data
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
-
-#if NET || NETCORE || NETSTANDARD
     using System.Runtime.Serialization;
-#endif
 
     /// <summary>
     /// Class that is aware of changes of child objects by using the <see cref="ChangeNotificationWrapper"/>.
@@ -60,9 +57,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object should handle (thus invoke the specific events) when
         /// a property or collection value has changed.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         protected bool HandlePropertyAndCollectionChanges { get; set; }
 
         /// <summary>

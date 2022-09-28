@@ -579,7 +579,7 @@ namespace Catel.Reflection
 
             if (typeSource is null)
             {
-                return ArrayShim.Empty<Type>();
+                return Array.Empty<Type>();
             }
 
             var retryCount = 3;
@@ -608,7 +608,7 @@ namespace Catel.Reflection
                 }
             }
 
-            return ArrayShim.Empty<Type>();
+            return Array.Empty<Type>();
 
             // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }

@@ -30,15 +30,12 @@ namespace Catel
             while (ex is not null)
             {
                 if (ex is OutOfMemoryException ||
-                    ex is BadImageFormatException
-
-#if NET || NETCORE || NETSTANDARD || XAMARIN
-                    || ex is AppDomainUnloadedException ||
+                    ex is BadImageFormatException || 
+                    ex is AppDomainUnloadedException ||
                     ex is CannotUnloadAppDomainException ||
                     ex is InvalidProgramException ||
                     ex is ThreadAbortException ||
                     ex is StackOverflowException
-#endif
                     )
                 {
                     return true;

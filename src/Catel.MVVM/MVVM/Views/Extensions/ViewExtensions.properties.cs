@@ -37,7 +37,7 @@ namespace Catel.MVVM.Views
             var viewProperties = ((FrameworkElement)view).GetDependencyProperties();
             return viewProperties.Select(x => x.PropertyName).ToArray();
 #else
-            return ArrayShim.Empty<string>();
+            return Array.Empty<string>();
 #endif
         }
 

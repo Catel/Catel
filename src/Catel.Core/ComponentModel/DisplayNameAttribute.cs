@@ -14,12 +14,7 @@ namespace Catel.ComponentModel
     /// A custom implementation of the display name attribute that uses the <see cref="ILanguageService"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Field)]
-    public class DisplayNameAttribute :
-#if NET || NETCORE || NETSTANDARD
-        System.ComponentModel.DisplayNameAttribute
-#else
-        System.Attribute
-#endif
+    public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
     {
         private static readonly Lazy<ILanguageService> DefaultLanguageService = new Lazy<ILanguageService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<ILanguageService>());
 
@@ -30,9 +25,7 @@ namespace Catel.ComponentModel
         /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
         /// </summary>
         public DisplayNameAttribute(string resourceName)
-#if NET || NETCORE || NETSTANDARD
             : base(string.Empty)
-#endif
         {
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
 
@@ -65,11 +58,7 @@ namespace Catel.ComponentModel
         /// Gets the display name.
         /// </summary>
         /// <value>The display name.</value>
-#if NET || NETCORE || NETSTANDARD
         public override string DisplayName
-#else
-        public string DisplayName
-#endif
         {
             get
             {

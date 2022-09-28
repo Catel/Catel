@@ -12,10 +12,6 @@ namespace Catel.Data
     using System.Text;
     using Text;
 
-#if NETFX_CORE
-    using Catel.Collections;
-#endif
-
     /// <summary>
     /// The validation summary that contains a momentum of the <see cref="IValidationContext"/>.
     /// </summary>
