@@ -13,7 +13,7 @@
       1. Resolve project references (but with properties of the *resolving* project)
       2. Determine the output directory of the current project
 
-      In rare cases, need to be able to use the MsBuildProjectName. This allows us 
+      In rare cases, need to be able to use the MSBuildProjectName. This allows us 
       to use the same assembly name for different versions, e.g.:
       
       Orc.EntityFramework5 => Orc.EntityFramework.dll
@@ -33,10 +33,14 @@
 
         If the specific property is set, we then update it once again to its final version.
      -->
-    <OverridableOutputPath>$(OverridableOutputRootPath)\$(MsBuildProjectName)\</OverridableOutputPath>
+    <OverridableOutputPath>$(OverridableOutputRootPath)\$(MSBuildProjectName)\</OverridableOutputPath>
     <OverridableOutputPath Condition=" '$(OutputTargetAssemblyDirectory)' != '' ">$(OverridableOutputRootPath)\$(OutputTargetAssemblyDirectory)\</OverridableOutputPath>
 
-    <OutputPath>$(OverridableOutputPath)</OutputPath>
+    <!-- 
+        Overridable output path can be set for a project, but directly referenced projects
+        need a way to use this correctly. Therefore this property uses the output path plus project name
+    -->
+    <OutputPath>$(OverridableOutputPath)\..\..\$(MSBuildProjectName)\$(TargetFramework)\$(MSBuildProjectName)</OutputPath>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   
