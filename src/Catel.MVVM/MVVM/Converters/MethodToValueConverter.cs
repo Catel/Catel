@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MethodToValueConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using Collections;
@@ -22,9 +16,7 @@ namespace Catel.MVVM.Converters
     /// <para />
     /// Original license: CC BY-SA 2.5, compatible with the MIT license.
     /// </remarks>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
-#endif
     public class MethodToValueConverter : ValueConverterBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -45,13 +37,13 @@ namespace Catel.MVVM.Converters
             }
 
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
-            var methodInfo = value.GetType().GetMethodEx(methodName, ArrayShim.Empty<Type>(), bindingFlags);
+            var methodInfo = value.GetType().GetMethodEx(methodName, Array.Empty<Type>(), bindingFlags);
             if (methodInfo is null)
             {
                 return value;
             }
 
-            return methodInfo.Invoke(value, ArrayShim.Empty<object>());
+            return methodInfo.Invoke(value, Array.Empty<object>());
         }
 
         /// <summary>

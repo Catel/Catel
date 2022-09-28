@@ -6,23 +6,15 @@
     using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ObjectWithValidation : ValidatableModelBase
     {
-        #region Constants
         public const string ValueThatHasNoWarningsOrErrors = "NoWarningsOrErrors";
         public const string ValueThatCausesFieldWarning = "FieldWarning";
         public const string ValueThatCausesBusinessWarning = "BusinessWarning";
         public const string ValueThatCausesFieldError = "FieldError";
         public const string ValueThatCausesBusinessError = "BusinessError";
-        #endregion
 
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -30,9 +22,7 @@
         {
             NonCatelPropertyWithAnnotations = "default value";
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         ///   Gets or sets the value to validate.
         /// </summary>
@@ -67,9 +57,7 @@
         /// Register the ValueWithAnnotations property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", "value");
-        #endregion
 
-        #region Methods
         /// <summary>
         ///   Validates the fields.
         /// </summary>
@@ -101,6 +89,5 @@
                 validationResults.Add(BusinessRuleValidationResult.CreateError("Business rule error"));
             }
         }
-        #endregion
     }
 }

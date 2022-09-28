@@ -1,23 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Authentication.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
     using System.Windows.Controls;
-    using UIEventArgs = System.EventArgs;
-#endif
-
     using System;
     using IoC;
     using Logging;
@@ -28,12 +12,10 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public enum AuthenticationAction
     {
-#if NET || NETCORE
         /// <summary>
         /// Hides the associated control.
         /// </summary>
         Hide,
-#endif
 
         /// <summary>
         /// Collapses the associated control.
@@ -51,7 +33,6 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class Authentication : BehaviorBase<FrameworkElement>
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -61,9 +42,7 @@ namespace Catel.Windows.Interactivity
         /// The authentication provider.
         /// </summary>
         private static IAuthenticationProvider _authenticationProvider;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Authentication"/> class.
         /// </summary>
@@ -85,9 +64,7 @@ namespace Catel.Windows.Interactivity
                 throw Log.ErrorAndCreateException<NotSupportedException>("No IAuthenticationProvider is registered, cannot use the Authentication behavior without an IAuthenticationProvider");
             }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the action to execute when the user has no access to the specified UI element.
         /// </summary>
@@ -119,9 +96,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty AuthenticationTagProperty =
             DependencyProperty.Register(nameof(AuthenticationTag), typeof(object), typeof(Authentication), new PropertyMetadata(null));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the associated object has been loaded.
         /// </summary>
@@ -136,27 +111,16 @@ namespace Catel.Windows.Interactivity
 
                 switch (Action)
                 {
-#if NET || NETCORE
                     case AuthenticationAction.Hide:
                         AssociatedObject.Visibility = Visibility.Hidden;
                         break;
-#endif
 
                     case AuthenticationAction.Collapse:
                         AssociatedObject.Visibility = Visibility.Collapsed;
                         break;
 
                     case AuthenticationAction.Disable:
-#if NETFX_CORE
-                        if (!(AssociatedObject is Control))
-                        {
-                            throw new InvalidOperationException("The AssociatedObject is not a Control instance, only AuthenticationAction.Collapse is allowed in SL, Windows Phone and WinRT");
-                        }
-
-                        ((Control)AssociatedObject).IsEnabled = false;
-#else
                         AssociatedObject.IsEnabled = false;
-#endif
                         break;
 
                     default:
@@ -164,8 +128,5 @@ namespace Catel.Windows.Interactivity
                 }
             }
         }
-        #endregion
     }
 }
-
-#endif

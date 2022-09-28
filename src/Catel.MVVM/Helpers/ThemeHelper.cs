@@ -1,26 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ThemeHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using Caching;
     using Catel.Logging;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
-
-#if XAMARIN_FORMS
-    using Xamarin.Forms;
-#endif
 
     /// <summary>
     /// Theme helper to ensure themes are loaded upon usage.
@@ -119,5 +102,3 @@ namespace Catel
         }
     }
 }
-
-#endif

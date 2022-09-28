@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensions.assembly.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#pragma warning disable 1591
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using MethodTimer;
     using System;
     using System.Reflection;
-
-#if NETFX_CORE || NET || NETSTANDARD
-    using System.Linq;
-#endif
 
     /// <summary>
     /// Reflection extension class.
@@ -25,14 +13,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-            Type[] results = null;
-
-#if NETFX_CORE
-            results = assembly.ExportedTypes.ToArray();
-#else
-            results = assembly.GetExportedTypes();
-#endif
-
+            var results = assembly.GetExportedTypes();
             return results;
         }
 
@@ -43,15 +24,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-            Type[] results = null;
-
-#if NETFX_CORE
-            results = (from type in assembly.DefinedTypes
-                       select type.AsType()).ToArray();
-#else
-            results = assembly.GetTypes();
-#endif
-
+            var results = assembly.GetTypes();
             return results;
         }
 
@@ -66,11 +39,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("assembly", assembly);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE
-            return assembly.GetCustomAttributes(attributeType).ToArray();
-#else
             return assembly.GetCustomAttributes(attributeType, true).ToAttributeArray();
-#endif
         }
     }
 }

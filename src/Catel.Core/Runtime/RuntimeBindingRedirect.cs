@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
-
 namespace Catel.Runtime
 {
     using System;
@@ -71,5 +69,3 @@ namespace Catel.Runtime
         }
     }
 }
-
-#endif

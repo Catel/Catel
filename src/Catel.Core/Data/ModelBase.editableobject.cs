@@ -16,10 +16,6 @@ namespace Catel.Data
     using Logging;
     using Runtime.Serialization;
 
-#if !NET && !NETCORE && !NETSTANDARD
-    using System.Runtime.Serialization;
-#endif
-
     public partial class ModelBase
     {
         internal ISerializer _editableObjectSerializer;
@@ -28,9 +24,6 @@ namespace Catel.Data
         /// <summary>
         /// Class containing backup information.
         /// </summary>
-#if !NET && !NETCORE && !NETSTANDARD
-        [DataContract]
-#endif
         private class BackupData
         {
             #region Fields

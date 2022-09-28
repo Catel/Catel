@@ -31,7 +31,7 @@ namespace Catel.Collections
             // Fast return for no items in not None modes
             if (mode != SuspensionMode.None && suspensionContext?.ChangedItems.Count == 0)
             {
-                return ArrayShim.Empty<NotifyRangedCollectionChangedEventArgs>();
+                return Array.Empty<NotifyRangedCollectionChangedEventArgs>();
             }
 
             if (!SuspensionContext<T>.EventsGeneratorsRegistry.Value.TryGetValue(mode, out var createEvents))
@@ -162,7 +162,7 @@ namespace Catel.Collections
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Silent);
 
-            return ArrayShim.Empty<NotifyRangedCollectionChangedEventArgs>();
+            return Array.Empty<NotifyRangedCollectionChangedEventArgs>();
         }
 
         /// <summary>

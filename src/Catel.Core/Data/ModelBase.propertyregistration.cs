@@ -38,12 +38,10 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
             }
-#endif
 
             var propertyName = memberExpression.Member.Name;
             return RegisterProperty<TValue>(propertyName, defaultValue, (sender, args) =>
@@ -78,12 +76,10 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
             }
-#endif
 
             if (createDefaultValue is null)
             {
@@ -203,9 +199,7 @@ namespace Catel.Data
 
             var isSerializable = true;
 
-#if NET || NETCORE || NETSTANDARD
             isSerializable = typeof(TValue).IsInterfaceEx() || typeof(TValue).IsSerializableEx();
-#endif
 
             var property = new PropertyData<TValue>(name, typedDefaultValueCallback, propertyChangedEventHandler, isSerializable,
                 includeInSerialization, includeInBackup, isModelBaseProperty, false);
@@ -237,9 +231,7 @@ namespace Catel.Data
 
             var isSerializable = true;
 
-#if NET || NETCORE || NETSTANDARD
             isSerializable = typeof(TValue).IsInterfaceEx() || typeof(TValue).IsSerializableEx();
-#endif
 
             var property = new PropertyData<TValue>(name, createDefaultValue, propertyChangedEventHandler, isSerializable,
                 includeInSerialization, includeInBackup, isModelBaseProperty, false);

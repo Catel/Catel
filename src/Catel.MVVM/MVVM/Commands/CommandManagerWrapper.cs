@@ -1,28 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManagerWrapper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using Catel.IoC;
     using Logging;
-
-#if !XAMARIN && !XAMARIN_FORMS
-    using InputGesture = Catel.Windows.Input.InputGesture;
-#if UWP
-    using global::Windows.UI.Xaml;
-    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
     using System.Windows;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using System;
-#endif
-
-#endif
 
     /// <summary>
     /// Wrapper class to support key down events and automatically invoke commands on the <see cref="ICommandManager" />.
@@ -78,11 +59,7 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET || NETCORE
             View.PreviewKeyDown += OnKeyDown;
-#else
-            View.KeyDown += OnKeyDown;
-#endif
 
             _subscribed = true;
         }
@@ -94,11 +71,7 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET || NETCORE
             View.PreviewKeyDown -= OnKeyDown;
-#else
-            View.KeyDown -= OnKeyDown;
-#endif
 
             _subscribed = false;
         }
@@ -145,5 +118,3 @@ namespace Catel.MVVM
         }
     }
 }
-
-#endif

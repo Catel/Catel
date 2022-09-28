@@ -1,10 +1,7 @@
-﻿#if !XAMARIN
-
-namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing
 {
     using System;
     using System.Threading;
-    using Catel.MVVM.Auditing;
     using Catel.Services;
 
     public class InvalidateCommandManagerOnViewModelInitializationAuditor : AuditorBase
@@ -47,5 +44,3 @@ namespace Catel.MVVM.Auditing
         }
     }
 }
-
-#endif

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataWindowButton.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Threading.Tasks;
@@ -19,7 +11,6 @@ namespace Catel.Windows
     /// </summary>
     public class DataWindowButton
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
         /// </summary>
@@ -145,9 +136,7 @@ namespace Catel.Windows
             VisibilityBindingPath = visibilityBindingPath;
             VisibilityValueConverter = visibilityValueConverter;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the text as it is displayed on the button.
         /// </summary>
@@ -205,8 +194,5 @@ namespace Catel.Windows
         /// <c>true</c> if this button is the cancel button; otherwise, <c>false</c>.
         /// </value>
         public bool IsCancel { get; set; }
-        #endregion
     }
 }
-
-#endif

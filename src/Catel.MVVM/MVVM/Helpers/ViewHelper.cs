@@ -1,22 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Windows;
-    using Collections;
     using Logging;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// View helper class for MVVM scenarios.
@@ -85,7 +72,7 @@ namespace Catel.MVVM
             Log.Debug("No constructor with data (of type '{0}') injection found, trying default constructor", ObjectToStringHelper.ToTypeString(dataContext));
 
             // Try default constructor
-            var defaultConstructor = viewType.GetConstructorEx(ArrayShim.Empty<Type>());
+            var defaultConstructor = viewType.GetConstructorEx(Array.Empty<Type>());
             if (defaultConstructor is null)
             {
                 Log.Error("View '{0}' does not have an injection or default constructor thus cannot be constructed", viewType.Name);
@@ -109,5 +96,3 @@ namespace Catel.MVVM
         }
     }
 }
-
-#endif

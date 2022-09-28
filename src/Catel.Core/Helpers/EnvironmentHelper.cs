@@ -7,12 +7,7 @@
 namespace Catel
 {
     using System;
-
-#if NET || NETCORE || NETSTANDARD
     using System.Diagnostics;
-#else
-    using System.ComponentModel;
-#endif
 
     /// <summary>
     /// Helper class for environment information.
@@ -96,15 +91,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by visual studio; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByVisualStudio(bool checkParentProcesses = false)
         {
-#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("devenv", checkParentProcesses);
-#elif XAMARIN
-            return false;
-#elif UWP
-            return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#else
-            return DesignerProperties.IsInDesignTool;
-#endif
         }
 
         /// <summary>
@@ -117,15 +104,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by sharp develop; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedBySharpDevelop(bool checkParentProcesses = false)
         {
-#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("sharpdevelop", checkParentProcesses);
-#elif XAMARIN
-            return false;
-#elif UWP
-            return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#else
-            return DesignerProperties.IsInDesignTool;
-#endif
         }
 
         /// <summary>
@@ -138,15 +117,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by expression blend; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByExpressionBlend(bool checkParentProcesses = false)
         {
-#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("blend", checkParentProcesses);
-#elif XAMARIN
-            return false;
-#elif UWP
-            return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#else
-            return DesignerProperties.IsInDesignTool;
-#endif
         }
 
         /// <summary>
@@ -177,7 +148,6 @@ namespace Catel
             return false;
         }
 
-#if NET || NETCORE || NETSTANDARD
         private static bool IsHostedByProcess(string processName, bool supportParentProcesses = false)
         {
             try
@@ -191,17 +161,7 @@ namespace Catel
                 var currentProcessName = currentProcess.ProcessName;
                 if (supportParentProcesses && currentProcessName.ContainsIgnoreCase("vshost"))
                 {
-#if NET
-                    currentProcess = currentProcess.GetParent();
-                    if (currentProcess is null)
-                    {
-                        return false;
-                    }
-
-                    currentProcessName = currentProcess.ProcessName;
-#else
                     return false;
-#endif
                 }
 
                 var isHosted = currentProcessName.StartsWithIgnoreCase(processName);
@@ -213,6 +173,5 @@ namespace Catel
                 return false;
             }
         }
-#endif
     }
 }

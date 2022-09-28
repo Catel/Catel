@@ -1,22 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MouseInfo.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Trigger that enables a property to bind the several mouse events for the associated object.
@@ -80,5 +66,3 @@ namespace Catel.Windows.Interactivity
         }
     }
 }
-
-#endif

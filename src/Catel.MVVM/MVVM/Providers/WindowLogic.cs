@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WindowLogic.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
     using System.Threading.Tasks;
@@ -23,7 +15,6 @@ namespace Catel.MVVM.Providers
     /// </summary>
     public class WindowLogic : LogicBase
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -34,9 +25,7 @@ namespace Catel.MVVM.Providers
 
         private readonly string _targetWindowClosedEventName;
         private readonly Catel.IWeakEventListener _targetWindowClosedWeakEventListener;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowLogic"/> class.
         /// </summary>
@@ -58,9 +47,7 @@ namespace Catel.MVVM.Providers
 
             Log.Debug("Using '{0}.{1}' event to determine window closing", targetWindowType.FullName, eventName);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the logic should call <c>Close</c> immediately when
         /// the <c>DialogResult</c> is set.
@@ -83,9 +70,7 @@ namespace Catel.MVVM.Providers
         {
             get { return (FrameworkElement)TargetView; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Sets the data context of the target control.
         /// <para />
@@ -226,8 +211,5 @@ namespace Catel.MVVM.Providers
 
             closeMethod.Invoke(TargetWindow, null);
         }
-        #endregion
     }
 }
-
-#endif

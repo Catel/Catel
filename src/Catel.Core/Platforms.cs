@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SupportedPlatforms.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
-    using Catel.Reflection;
 
     /// <summary>
     /// Information about the platforms.
@@ -53,44 +45,18 @@ namespace Catel
                     return false;
 
                 case KnownPlatforms.NET:
-                    return currentPlatform == SupportedPlatforms.NET45 ||
-                           currentPlatform == SupportedPlatforms.NET46 ||
-                           currentPlatform == SupportedPlatforms.NET47 ||
-                           currentPlatform == SupportedPlatforms.NET50;
+                    return currentPlatform == SupportedPlatforms.NET6 ||
+                           currentPlatform == SupportedPlatforms.NET7 ||
+                           currentPlatform == SupportedPlatforms.NET8;
 
-                case KnownPlatforms.NET45:
-                    return currentPlatform == SupportedPlatforms.NET45;
+                case KnownPlatforms.NET6:
+                    return currentPlatform == SupportedPlatforms.NET6;
 
-                case KnownPlatforms.NET46:
-                    return currentPlatform == SupportedPlatforms.NET46;
+                case KnownPlatforms.NET7:
+                    return currentPlatform == SupportedPlatforms.NET7;
 
-                case KnownPlatforms.NET47:
-                    return currentPlatform == SupportedPlatforms.NET47;
-
-                case KnownPlatforms.NET50:
-                    return currentPlatform == SupportedPlatforms.NET50;
-
-                case KnownPlatforms.NetStandard:
-                    return currentPlatform == SupportedPlatforms.NetStandard20;
-
-                case KnownPlatforms.NetStandard20:
-                    return currentPlatform == SupportedPlatforms.NetStandard20;
-
-                case KnownPlatforms.WindowsUniversal:
-                    return currentPlatform == SupportedPlatforms.WindowsUniversal;
-
-                case KnownPlatforms.Xamarin:
-                    return currentPlatform == SupportedPlatforms.Android ||
-                           currentPlatform == SupportedPlatforms.iOS;
-
-                case KnownPlatforms.XamarinAndroid:
-                    return currentPlatform == SupportedPlatforms.Android;
-
-                case KnownPlatforms.XamariniOS:
-                    return currentPlatform == SupportedPlatforms.iOS;
-
-                case KnownPlatforms.XamarinForms:
-                    return currentPlatform == SupportedPlatforms.NetStandard20;
+                case KnownPlatforms.NET8:
+                    return currentPlatform == SupportedPlatforms.NET8;
 
                 default:
                     throw new ArgumentOutOfRangeException("platformToCheck");
@@ -99,31 +65,12 @@ namespace Catel
 
         private static SupportedPlatforms DeterminePlatform()
         {
-            // Note: don't use cache service, it forces the initialization of the AppDomain which
-            // might be too early
-            if (Type.GetType("Xamarin.Forms.Device") is not null)
-            {
-                return SupportedPlatforms.XamarinForms;
-            }
-
-#if NET45
-            return SupportedPlatforms.NET45;
-#elif NET46
-            return SupportedPlatforms.NET46;
-#elif NET47
-            return SupportedPlatforms.NET47;
-#elif NET50
-            return SupportedPlatforms.NET50;
-#elif NS20
-            return SupportedPlatforms.NetStandard20;
-#elif UWP
-            return SupportedPlatforms.WindowsUniversal;
-#elif ANDROID
-            return SupportedPlatforms.Android;
-#elif IOS
-            return SupportedPlatforms.iOS;
-#elif XAMARIN_FORMS
-            return SupportedPlatforms.XamarinForms;
+#if NET6
+            return SupportedPlatforms.NET6;
+#elif NET7
+            return SupportedPlatforms.NET7;
+#elif NET8
+            return SupportedPlatforms.NET8;
 #else
             throw new System.NotSupportedException("Unknown platform is not supported");
 #endif
@@ -136,49 +83,19 @@ namespace Catel
     public enum SupportedPlatforms
     {
         /// <summary>
-        /// .NET framework 4.5.
+        /// .NET 6
         /// </summary>
-        NET45,
+        NET6,
 
         /// <summary>
-        /// .NET framework 4.6.
+        /// .NET 7
         /// </summary>
-        NET46,
+        NET7,
 
         /// <summary>
-        /// .NET framework 4.7.
+        /// .NET 8
         /// </summary>
-        NET47,
-
-        /// <summary>
-        /// .NET framework 5.0.
-        /// </summary>
-        NET50,
-
-        /// <summary>
-        /// .NET Standard 2.0.
-        /// </summary>
-        NetStandard20,
-
-        /// <summary>
-        /// Windows Universal 10.0.
-        /// </summary>
-        WindowsUniversal,
-
-        /// <summary>
-        /// The Android platform.
-        /// </summary>
-        Android,
-
-        /// <summary>
-        /// The iOS platform.
-        /// </summary>
-        iOS,
-
-        /// <summary>
-        /// Xamarin.Forms platform.
-        /// </summary>
-        XamarinForms,
+        NET8
     }
 
     /// <summary>
@@ -197,58 +114,18 @@ namespace Catel
         NET,
 
         /// <summary>
-        /// .NET framework 4.5.
+        /// .NET 6.
         /// </summary>
-        NET45,
+        NET6,
 
         /// <summary>
-        /// .NET framework 4.6.
+        /// .NET 7.
         /// </summary>
-        NET46,
+        NET7,
 
         /// <summary>
-        /// .NET framework 4.7.
+        /// .NET 8.
         /// </summary>
-        NET47,
-
-        /// <summary>
-        /// .NET framework 5.0.
-        /// </summary>
-        NET50,
-
-        /// <summary>
-        /// Any .NET Standard platform.
-        /// </summary>
-        NetStandard,
-
-        /// <summary>
-        /// .NET Standard 2.0.
-        /// </summary>
-        NetStandard20,
-
-        /// <summary>
-        /// Any Windows Universal platform.
-        /// </summary>
-        WindowsUniversal,
-
-        /// <summary>
-        /// Any Xamarin platform.
-        /// </summary>
-        Xamarin,
-
-        /// <summary>
-        /// The Xamarin Android platform.
-        /// </summary>
-        XamarinAndroid,
-
-        /// <summary>
-        /// The Xamarin iOS platform.
-        /// </summary>
-        XamariniOS,
-
-        /// <summary>
-        /// The xamarin forms platform.
-        /// </summary>
-        XamarinForms,
+        NET8,
     }
 }

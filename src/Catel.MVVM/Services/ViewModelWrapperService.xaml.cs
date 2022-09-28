@@ -1,34 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelWrapperService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
-    using System;
-    using System.Runtime.CompilerServices;
     using Catel.Logging;
     using Catel.MVVM.Views;
     using Catel.Reflection;
-    using Catel.Windows;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Data;
-    using Page = global::Windows.UI.Xaml.Controls.Page;
-    using UserControl = global::Windows.UI.Xaml.Controls.UserControl;
-#else
     using Catel.Windows.Controls;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using Page = System.Windows.Controls.Page;
     using UserControl = System.Windows.Controls.UserControl;
-#endif
 
     public partial class ViewModelWrapperService
     {
@@ -89,7 +69,6 @@ namespace Catel.Services
                 vmGrid = new Grid();
                 vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
-#if NET || NETCORE
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
                 {
                     var warningAndErrorValidator = new WarningAndErrorValidator();
@@ -97,7 +76,6 @@ namespace Catel.Services
 
                     vmGrid.Children.Add(warningAndErrorValidator);
                 }
-#endif
 
                 SetContent(view, null);
 
@@ -179,5 +157,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

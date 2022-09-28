@@ -10,14 +10,6 @@
         /// </summary>
         public bool Result { get; set; }
 
-#if UWP
-        /// <summary>
-        /// Gets the directory name.
-        /// </summary>
-        /// <value>The name of the directory.</value>
-        public StorageFolder Directory { get; set; }
-#endif
-
         /// <summary>
         /// Gets the directory name.
         /// </summary>

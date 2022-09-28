@@ -8,25 +8,14 @@ namespace Catel.Data
 {
     using System;
     using System.IO;
-    using System.Xml.Linq;
     using Logging;
     using Catel.Runtime.Serialization;
-
-#if NET || NETCORE || NETSTANDARD
-    using System.Runtime.Serialization;
-#elif UWP
-    using Windows.Storage.Streams;
-#else
-    using System.IO.IsolatedStorage;
-#endif
 
     /// <summary>
     /// Abstract class that makes the <see cref="ModelBase" /> serializable.
     /// </summary>
     /// <typeparam name="T">Type that the class should hold (same as the defined type).</typeparam>
-#if NET || NETCORE || NETSTANDARD
     [Serializable]
-#endif
     public abstract class SavableModelBase<T> : ModelBase, ISavableModel
         where T : class
     {
@@ -51,32 +40,6 @@ namespace Catel.Data
 
         #region Methods
         #region Saving
-#if NET || NETCORE || NETSTANDARD || XAMARIN
-        // No overloads required
-#elif UWP
-        /// <summary>
-        /// Saves the object to an isolated storage file stream using the default formatting.
-        /// </summary>
-        /// <param name="fileStream">Stream that will contain the serialized data of this object.</param>
-        /// <param name="serializer">The serializer to use.</param>
-        /// <param name="configuration">The configuration.</param>
-        public void Save(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
-        {
-            Save(fileStream.AsStreamForWrite(), serializer, configuration);
-        }
-#else
-        /// <summary>
-        /// Saves the object to an isolated storage file stream using the default formatting.
-        /// </summary>
-        /// <param name="fileStream">Stream that will contain the serialized data of this object.</param>
-        /// <param name="serializer">The serializer to use.</param>
-        /// <param name="configuration">The configuration.</param>
-        public void Save(IsolatedStorageFileStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
-        {
-            Save((Stream)fileStream, serializer, configuration);
-        }
-#endif
-
         /// <summary>
         /// Saves the object to a stream using a specific formatting.
         /// </summary>
@@ -95,24 +58,6 @@ namespace Catel.Data
         #endregion
 
         #region Loading
-#if UWP
-        /// <summary>
-        /// Loads the object from a file using a specific formatting.
-        /// </summary>
-        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
-        /// <param name="serializer">The serializer.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        public static T Load(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
-        {
-            return Load(fileStream.AsStreamForRead(), serializer, configuration);
-        }
-#endif
-
         /// <summary>
         /// Loads the object from a stream using a specific formatting.
         /// </summary>

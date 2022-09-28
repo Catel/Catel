@@ -715,7 +715,6 @@ namespace Catel.Tests.Data
             }
         }
 
-#if NET || NETCORE
         // Test case for https://catelproject.atlassian.net/browse/CTL-246
         [TestFixture]
         public class ValidationOfNonCatelProperties
@@ -886,6 +885,5 @@ namespace Catel.Tests.Data
                 }
             }
         }
-#endif
     }
 }

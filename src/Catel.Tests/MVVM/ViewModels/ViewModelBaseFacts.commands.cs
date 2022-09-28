@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.commands.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System.Threading;
     using Catel.MVVM;
@@ -36,11 +29,9 @@ namespace Catel.Tests.MVVM.ViewModels
                 viewModel.FirstName = "first name";
 
                 Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
-#if NET || NETCORE
+
                 canExecuteChangedEvent.WaitOne(1000, false);
-#else
-                canExecuteChangedEvent.WaitOne(1000);
-#endif
+
                 Assert.IsFalse(canExecuteChangedTriggered);
             }
         }
@@ -67,11 +58,9 @@ namespace Catel.Tests.MVVM.ViewModels
                 viewModel.FirstName = "first name";
 
                 Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
-#if NET || NETCORE
+
                 canExecuteChangedEvent.WaitOne(1000, false);
-#else
-                canExecuteChangedEvent.WaitOne(1000);
-#endif
+
                 Assert.IsTrue(canExecuteChangedTriggered);
             }
         }

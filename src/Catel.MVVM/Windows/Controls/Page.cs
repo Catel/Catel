@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Page.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || UWP
-
-namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls
 {
     using System;
     using System.ComponentModel;
@@ -14,33 +6,20 @@ namespace Catel.Windows.Controls
     using MVVM.Views;
     using MVVM;
     using Catel.Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// <see cref="Page"/> class that supports MVVM with Catel.
     /// </summary>
-#if UWP
-    public class Page : global::Windows.UI.Xaml.Controls.Page, IPage
-#else
     public class Page : System.Windows.Controls.Page, IPage
-#endif
     {
-        #region Fields
         private readonly PageLogic _logic;
 
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
         private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Page"/> class.
         /// </summary>
@@ -55,12 +34,6 @@ namespace Catel.Windows.Controls
             _logic = new PageLogic(this);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET && !NETCORE
-                // WPF already calls this method automatically
-                OnPropertyChanged(e);
-
-                PropertyChanged?.Invoke(this, e);
-#else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
@@ -68,7 +41,6 @@ namespace Catel.Windows.Controls
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
-#endif
             };
 
             _logic.ViewModelChanged += (sender, e) =>
@@ -99,9 +71,7 @@ namespace Catel.Windows.Controls
 
             this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
@@ -132,9 +102,7 @@ namespace Catel.Windows.Controls
             get { return _logic.GetValue<PageLogic, ViewModelLifetimeManagement>(x => x.ViewModelLifetimeManagement); }
             set { _logic.SetValue<PageLogic>(x => x.ViewModelLifetimeManagement = value); }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a property on the container has changed.
         /// </summary>
@@ -180,9 +148,7 @@ namespace Catel.Windows.Controls
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
         }
-        #endregion
 
-        #region Methods
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
@@ -247,8 +213,5 @@ namespace Catel.Windows.Controls
         protected virtual void OnViewModelChanged()
         {
         }
-        #endregion
     }
 }
-
-#endif

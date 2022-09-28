@@ -1,26 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FocusOnKeyPress.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-    using Key = global::Windows.System.VirtualKey;
-    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
-    using KeyDownEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
     using System.Windows;
     using System.Windows.Input;
     using Microsoft.Xaml.Behaviors;
     using KeyDownEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
-
     using Input;
     using Logging;
     using Reflection;
@@ -42,7 +25,6 @@ namespace Catel.Windows.Interactivity
             
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the modifiers to check for.
         /// </summary>
@@ -74,9 +56,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(nameof(Key), typeof(Key), 
             typeof(FocusOnKeyPress), new PropertyMetadata(Key.None));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
@@ -146,8 +126,6 @@ namespace Catel.Windows.Interactivity
                 }
             }
         }
-        #endregion
     }
 }
 
-#endif

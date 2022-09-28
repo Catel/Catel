@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanToGrayscaleConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using Catel.Data;
@@ -13,9 +7,7 @@ namespace Catel.MVVM.Converters
     /// Converts a boolean to a grayscale saturation value. If the input is <c>false</c>, this converter will
     /// return <c>0</c>, otherwise <c>1</c>.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(double))]
-#endif
     public class BooleanToGrayscaleConverter : ValueConverterBase
     {
         /// <summary>

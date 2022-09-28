@@ -10,17 +10,12 @@ namespace Catel.Data
     using System.ComponentModel;
     using System.Xml.Serialization;
     using Logging;
-
-#if NET || NETCORE || NETSTANDARD
     using System.Runtime.Serialization;
-#endif
 
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
     /// </summary>
-#if NET || NETCORE || NETSTANDARD
     [Serializable]
-#endif
     public abstract partial class ModelBase : ObservableObject, IModel
     {
         #region Fields
@@ -67,20 +62,15 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
         /// <value><c>true</c> if property change notifications should be disabled for all instances; otherwise, <c>false</c>.</value>
-        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
-        public static bool DisablePropertyChangeNotifications { get; set; }
+        internal static bool DisablePropertyChangeNotifications { get; set; }
 
         /// <summary>
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         internal static PropertyDataManager PropertyDataManager { get; private set; }
 
@@ -93,18 +83,14 @@ namespace Catel.Data
         /// <remarks>
         /// By default, this property is <c>false</c>.
         /// </remarks>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         protected bool AlwaysInvokeNotifyChanged { get; set; }
 
         /// <summary>
         /// Gets the name of the object. By default, this is the hash code of all the properties combined.
         /// </summary>
         /// <value>The name of the key.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         string IModel.KeyName
         {
@@ -126,9 +112,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object is dirty (contains unsaved data).
         /// </summary>
         /// <value><c>true</c> if this instance is dirty; otherwise, <c>false</c>.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         public bool IsDirty
         {
@@ -145,9 +129,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         public bool IsReadOnly
         {

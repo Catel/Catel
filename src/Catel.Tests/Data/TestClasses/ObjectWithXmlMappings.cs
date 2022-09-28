@@ -5,24 +5,16 @@
     using System.Xml.Serialization;
     using Catel.Data;
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ObjectWithXmlMappings : SavableModelBase<ObjectWithXmlMappings>
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
         public ObjectWithXmlMappings()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         ///   Gets or sets the property without an xml mapping.
         /// </summary>
@@ -66,6 +58,5 @@
         ///   Register the PropertyWithMapping property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData PropertyWithMappingProperty = RegisterProperty("PropertyWithMapping", "withMapping");
-        #endregion
     }
 }

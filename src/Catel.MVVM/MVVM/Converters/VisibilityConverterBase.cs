@@ -1,29 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VisibilityConverterBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS || ANDROID
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using Catel.Data;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// A base class that makes it easier to create values to visibility converters.
     /// </summary>
     public abstract class VisibilityConverterBase : ValueConverterBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="VisibilityConverterBase"/> class.
         /// </summary>
@@ -38,17 +23,13 @@ namespace Catel.MVVM.Converters
 
             NotVisibleVisibility = notVisibleVisibility;
         }
-        #endregion
 
-        #region
         /// <summary>
         /// Gets the <see cref="Visibility"/> state when not visibible should be returned.
         /// </summary>
         /// <value>The not visible visibility.</value>
         public Visibility NotVisibleVisibility { get; private set; }
-        #endregion
-
-        #region Methods
+        
         /// <summary>
         /// Determines what value this converter should return.
         /// </summary>
@@ -76,7 +57,6 @@ namespace Catel.MVVM.Converters
 
             return BoxingCache.GetBoxedValue(isVisible ? Visibility.Visible : NotVisibleVisibility);
         }
-        #endregion
     }
 
     /// <summary>
@@ -95,7 +75,6 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET || NETCORE
     /// <summary>
     /// A base class that makes it easier to create values to visibility converters.
     /// <para />
@@ -111,7 +90,4 @@ namespace Catel.MVVM.Converters
         {
         }
     }
-#endif
 }
-
-#endif

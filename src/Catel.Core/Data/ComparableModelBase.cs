@@ -11,11 +11,8 @@ namespace Catel.Data
     using System.Collections.Generic;
     using System.Xml.Serialization;
     using IoC;
-
-#if NET || NETCORE || NETSTANDARD
     using System.ComponentModel;
     using System.Runtime.Serialization;
-#endif
 
     /// <summary>
     /// Comparable model base.
@@ -69,9 +66,7 @@ namespace Catel.Data
         /// Gets or sets the equality comparer used to compare model bases with each other.
         /// </summary>
         /// <value>The equality comparer.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         protected IModelEqualityComparer EqualityComparer
         {

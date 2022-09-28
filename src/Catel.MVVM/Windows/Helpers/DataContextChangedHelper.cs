@@ -1,23 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataContextChangedHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Windows;
     using Data;
     using IoC;
     using MVVM;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#endif
 
     /// <summary>
     /// Helper class to subscribe to the <c>DataContextChanged</c> event of UI elements.
@@ -61,5 +48,3 @@ namespace Catel.Windows
         }
     }
 }
-
-#endif

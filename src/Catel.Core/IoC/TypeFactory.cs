@@ -261,7 +261,7 @@ namespace Catel.IoC
 
             if (parameters is null)
             {
-                parameters = ArrayShim.Empty<object>();
+                parameters = Array.Empty<object>();
             }
 
             var previousRequestPath = _currentTypeRequestPath.Value;
@@ -579,12 +579,10 @@ namespace Catel.IoC
 
                 return instance;
             }
-#if NET || NETCORE || NETSTANDARD
             catch (MissingMethodException)
             {
                 // Ignore, we accept this
             }
-#endif
             catch (TargetParameterCountException)
             {
                 // Ignore, we accept this
@@ -938,7 +936,6 @@ namespace Catel.IoC
                     continue;
                 }
 
-#if !XAMARIN
                 // Because we check on string, we don't need a dependency
                 //if (parameterType.FullName == typeof(DynamicObject))
                 if (parameterType.FullName == "System.Dynamic.DynamicObject")
@@ -946,7 +943,6 @@ namespace Catel.IoC
                     counter++;
                     continue;
                 }
-#endif
             }
 
             return counter;

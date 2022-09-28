@@ -1,20 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConverterHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
-    using System;
     using Reflection;
-
-#if XAMARIN
-#elif UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Converter helper class.
@@ -24,12 +11,7 @@ namespace Catel.MVVM.Converters
         /// <summary>
         /// The generic <c>UnSet</c> value, compatible with all platforms.
         /// </summary>
-        public static readonly object UnsetValue = 
-#if XAMARIN || XAMARIN_FORMS
-            new UnsetBindingValue();
-#else
-            DependencyProperty.UnsetValue;
-#endif
+        public static readonly object UnsetValue =  DependencyProperty.UnsetValue;
 
         /// <summary>
         /// Checks whether the converted must be inverted. This checks the parameter input and checks whether
@@ -52,13 +34,4 @@ namespace Catel.MVVM.Converters
             return invert;
         }
     }
-
-#if XAMARIN || XAMARIN_FORMS
-    /// <summary>
-    /// Unset binding value class.
-    /// </summary>
-    public class UnsetBindingValue
-    {
-    }
-#endif
 }

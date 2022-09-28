@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakEventListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Collections.Generic;
@@ -15,15 +9,7 @@ namespace Catel
     using Caching;
     using Logging;
     using Reflection;
-
-#if UWP
-    using EventArgsBase = System.Object;
-    using System.Runtime.InteropServices.WindowsRuntime;
-#elif NETFX_CORE
-    using EventArgsBase = System.Object;
-#else
     using EventArgsBase = System.EventArgs;
-#endif
 
     /// <summary>
     /// Open instance delegate which allows the creation of an instance method without an actual reference
@@ -93,13 +79,6 @@ namespace Catel
         /// The type for event subscriptions. This can differ from TSource for explicitly implemented events.
         /// </summary>
         private readonly Type _typeForEventSubscriptions;
-
-#if UWP
-        /// <summary>
-        /// The event registration token that is required to remove the event handler in WinRT.
-        /// </summary>
-        private EventRegistrationToken _eventRegistrationToken;
-#endif
         #endregion
 
         #region Constructors
@@ -481,12 +460,7 @@ namespace Catel
                 }
             }
 
-#if NETFX_CORE
-            var addMethod = eventInfo.AddMethod;
-#else
             var addMethod = eventInfo.GetAddMethod();
-#endif
-
             if (addMethod is null)
             {
                 return false;
@@ -511,18 +485,8 @@ namespace Catel
 
             _internalEventDelegate = DelegateHelper.CreateDelegate(handlerType, this, "OnEvent");
 
-#if NETFX_CORE
-            if (methodInfo.ReturnType == typeof(void))
-            {
-                methodInfo.Invoke(source, new object[] { _internalEventDelegate });
-            }
-            else
-            {
-                _eventRegistrationToken = (EventRegistrationToken)methodInfo.Invoke(source, new object[] { _internalEventDelegate });
-            }
-#else
             methodInfo.Invoke(source, new object[] { _internalEventDelegate });
-#endif
+
             return true;
         }
 
@@ -550,13 +514,11 @@ namespace Catel
                     return;
                 }
 
-#if NET || NETCORE || NETSTANDARD
                 // Second, try explicit interface implementations
                 if (UnsubscribeFromEventUsingExplicitInterfaceImplementation(source, eventName))
                 {
                     return;
                 }
-#endif
 
                 Log.Warning("Failed to unsubscribe from event '{0}'", eventName);
             }
@@ -592,12 +554,7 @@ namespace Catel
                 }
             }
 
-#if NETFX_CORE
-            var removeMethod = eventInfo.RemoveMethod;
-#else
             var removeMethod = eventInfo.GetRemoveMethod();
-#endif
-
             if (removeMethod is null)
             {
                 return false;
@@ -758,9 +715,7 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is not of type <see cref="PropertyChangedEventHandler" />,
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
         public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
-#if !NETFX_CORE
- where TEventArgs : EventArgsBase
-#endif
+            where TEventArgs : EventArgsBase
         {
             return SubscribeToWeakEvent(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -985,9 +940,7 @@ namespace Catel
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
-#if !NETFX_CORE
- where TEventArgs : EventArgsBase
-#endif
+            where TEventArgs : EventArgsBase
         {
             return SubscribeToWeakEvent(target, source, eventName, handler, throwWhenSubscriptionFails);
         }

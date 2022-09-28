@@ -42,8 +42,6 @@ namespace Catel.Tests.Caching.Policies
                 Assert.IsFalse(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).CanReset);
             }
 
-#if NET || NETCORE
-
             [TestCase]
             public void DoesNotCauseDeathLock()
             {
@@ -67,9 +65,6 @@ namespace Catel.Tests.Caching.Policies
                 events[0].WaitOne(TimeSpan.FromSeconds(10));
                 events[1].WaitOne(TimeSpan.FromSeconds(10));
             }
-            
-#endif
-
             #endregion
         }
         #endregion
@@ -146,8 +141,6 @@ namespace Catel.Tests.Caching.Policies
                 Assert.IsTrue(actionInvoked2);
             }
 
-#if NET || NETCORE
-
             [TestCase]
             public void DoesNotCauseDeathLockIfPolicyCanNotBeResetAndThrowsInvalidOperationException()
             {
@@ -171,9 +164,6 @@ namespace Catel.Tests.Caching.Policies
                 events[0].WaitOne(TimeSpan.FromSeconds(10));
                 events[1].WaitOne(TimeSpan.FromSeconds(10));
             }
-            
-#endif
-
             #endregion
         }
         #endregion

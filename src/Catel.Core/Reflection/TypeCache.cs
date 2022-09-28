@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeCache.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -30,7 +24,6 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETCORE || NETSTANDARD
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
 
         /// <summary>
@@ -42,7 +35,6 @@ namespace Catel.Reflection
         /// The boolean specifying whether the type cache is already loading assemblies via the loaded event.
         /// </summary>
         private static bool _isAlreadyInLoadingEvent = false;
-#endif
 
         /// <summary>
         /// Cache containing all the types implementing a specific interface.
@@ -99,9 +91,7 @@ namespace Catel.Reflection
 
         static TypeCache()
         {
-#if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
-#endif
         }
 
         #region Properties
@@ -123,7 +113,6 @@ namespace Catel.Reflection
         }
         #endregion
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.
         /// </summary>
@@ -209,7 +198,6 @@ namespace Catel.Reflection
                 // is actually loaded, fixed for https://github.com/Catel/Catel/issues/1120
             }
         }
-#endif
 
         /// <summary>
         /// Gets the evaluators used to determine whether a specific assembly should be ignored.
@@ -378,23 +366,17 @@ namespace Catel.Reflection
                 // Fallback to GetType
                 try
                 {
-#if NETFX_CORE
-                    var type = Type.GetType(typeNameWithAssembly, false);
-#else
                     var type = Type.GetType(typeNameWithAssembly, false, ignoreCase);
-#endif
                     if (type is not null)
                     {
                         typesWithAssembly[typeNameWithAssembly] = type;
                         return type;
                     }
                 }
-#if !NETFX_CORE
                 catch (System.IO.FileLoadException fle)
                 {
                     Log.Debug(fle, "Failed to load type '{0}' using Type.GetType(), failed to load file", typeNameWithAssembly);
                 }
-#endif
                 catch (Exception ex)
                 {
                     Log.Debug(ex, "Failed to load type '{0}' using Type.GetType()", typeNameWithAssembly);
@@ -579,7 +561,7 @@ namespace Catel.Reflection
 
             if (typeSource is null)
             {
-                return ArrayShim.Empty<Type>();
+                return Array.Empty<Type>();
             }
 
             var retryCount = 3;
@@ -608,7 +590,7 @@ namespace Catel.Reflection
                 }
             }
 
-            return ArrayShim.Empty<Type>();
+            return Array.Empty<Type>();
 
             // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }
@@ -757,7 +739,6 @@ namespace Catel.Reflection
                     }
                 }
 
-#if NET || NETCORE || NETSTANDARD
                 var lateLoadedAssemblies = new List<Assembly>();
 
                 lock (_threadSafeAssemblyQueue)
@@ -775,7 +756,6 @@ namespace Catel.Reflection
                     var tuple = Tuple.Create(lateLoadedAssembly, GetTypesOfAssembly(lateLoadedAssembly));
                     listForLoadedEvent.Add(tuple);
                 }
-#endif
             }
 
             // Calling out of lock statement, but still may happens that would be called inside of it 
@@ -935,12 +915,10 @@ namespace Catel.Reflection
             }
 
             // Note: don't check with .NET Standard / .NET Core, it's "not implemented by design"
-#if NET
             if (assembly.ReflectionOnly)
             {
                 return true;
             }
-#endif
 
             var assemblyFullName = assembly.FullName;
             if (assemblyFullName.Contains("Anonymously Hosted DynamicMethods Assembly"))

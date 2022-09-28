@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WarningAndErrorValidator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls
 {
     using System;
     using System.Collections;
@@ -14,66 +6,14 @@ namespace Catel.Windows.Controls
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.Globalization;
     using System.Linq;
     using System.Windows;
     using Catel.Data;
-    using Collections;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows.Controls;
     using UIEventArgs = System.EventArgs;
-#endif
-
-    #region Enum
-    /// <summary>
-    /// Business validation type.
-    /// </summary>
-    public enum ValidationType
-    {
-        /// <summary>
-        /// Warning.
-        /// </summary>
-        Warning,
-
-        /// <summary>
-        /// Error.
-        /// </summary>
-        Error
-    }
-
-    /// <summary>
-    /// Validation event action.
-    /// </summary>
-    public enum ValidationEventAction
-    {
-        /// <summary>
-        /// Added.
-        /// </summary>
-        Added,
-
-        /// <summary>
-        /// Removed.
-        /// </summary>
-        Removed,
-
-        /// <summary>
-        /// Refresh the validation, don't add or remove.
-        /// </summary>
-        Refresh,
-
-        /// <summary>
-        /// All validation info of the specified object should be cleared.
-        /// </summary>
-        ClearAll
-    }
-    #endregion
+    using Catel;
+    using Catel.Windows;
 
     /// <summary>
     /// Control for adding business rule validation to the form. Assign a value or binding to source for the business object or 
@@ -81,7 +21,6 @@ namespace Catel.Windows.Controls
     /// </summary>
     public class WarningAndErrorValidator : Control, IUniqueIdentifyable
     {
-        #region Fields
         /// <summary>
         /// List of objects that are currently being validated. 
         /// </summary>
@@ -89,36 +28,26 @@ namespace Catel.Windows.Controls
         private readonly object _objectValidationLock = new object();
 
         private bool _isLoaded;
-
-#if NET || NETCORE
         private InfoBarMessageControl _infoBarMessageControl;
-#endif
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WarningAndErrorValidator"/> class.
         /// </summary>
         public WarningAndErrorValidator()
         {
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WarningAndErrorValidator>();
-
-#if NET || NETCORE
             Focusable = false;
-#endif
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
             this.HideValidationAdorner();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Source for validation. This can be an business object which implements <see cref="IDataErrorInfo"/> 
         /// and <see cref="INotifyPropertyChanged"/> or an <see cref="IEnumerable"/> containing bussiness objects.
-        /// In case of a <see cref="IEnumerable"/> then the content should be static or the interface <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/>.
+        /// In case of a <see cref="IEnumerable"/> then the content should be static or the interface <see cref="ObservableCollection{T}"/>.
         /// </summary>
         /// <remarks>
         /// Wrapper for the Source dependency property.
@@ -135,7 +64,6 @@ namespace Catel.Windows.Controls
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(object), typeof(WarningAndErrorValidator),
             new PropertyMetadata(null, (sender, e) => ((WarningAndErrorValidator)sender).UpdateSource(e.OldValue, e.NewValue)));
 
-#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether this warning and error validator should automatically register to the first <see cref="InfoBarMessageControl"/> it can find.
         /// </summary>
@@ -151,28 +79,23 @@ namespace Catel.Windows.Controls
         /// </summary>
         public static readonly DependencyProperty AutomaticallyRegisterToInfoBarMessageControlProperty = DependencyProperty.Register(nameof(AutomaticallyRegisterToInfoBarMessageControl),
             typeof(bool), typeof(WarningAndErrorValidator), new PropertyMetadata(true));
-#endif
 
         /// <summary>
         /// Gets the unique identifier.
         /// </summary>
         /// <value>The unique identifier.</value>
         public int UniqueIdentifier { get; private set; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when validation is triggered.
         /// </summary>
         public event EventHandler<ValidationEventArgs> Validation;
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the control is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="UIEventArgs"/> instance containing the event data.</param>
         private void OnLoaded(object sender, UIEventArgs e)
         {
             if (_isLoaded)
@@ -183,17 +106,13 @@ namespace Catel.Windows.Controls
             _isLoaded = true;
 
             Initialize();
-
-#if !NET && !NETCORE
-            RaiseEventsForAllErrorsAndWarnings();
-#endif
         }
 
         /// <summary>
         /// Called when the control is unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="UIEventArgs"/> instance containing the event data.</param>
         private void OnUnloaded(object sender, UIEventArgs e)
         {
             _isLoaded = false;
@@ -206,7 +125,6 @@ namespace Catel.Windows.Controls
         /// </summary>
         private void Initialize()
         {
-#if NET || NETCORE
             if (AutomaticallyRegisterToInfoBarMessageControl)
             {
                 //_infoBarMessageControl = this.FindLogicalAncestorByType<InfoBarMessageControl>();
@@ -216,7 +134,6 @@ namespace Catel.Windows.Controls
                     _infoBarMessageControl.SubscribeWarningAndErrorValidator(this);
                 }
             }
-#endif
 
             var source = Source;
             if (source is not null)
@@ -240,7 +157,7 @@ namespace Catel.Windows.Controls
                 objects.AddRange(_objectValidation.Keys);
             }
 
-            foreach (object obj in objects)
+            foreach (var obj in objects)
             {
                 if (obj is IEnumerable)
                 {
@@ -254,13 +171,11 @@ namespace Catel.Windows.Controls
 
             _objectValidation.Clear();
 
-#if NET || NETCORE
             if (_infoBarMessageControl is not null)
             {
                 _infoBarMessageControl.UnsubscribeWarningAndErrorValidator(this);
                 _infoBarMessageControl = null;
             }
-#endif
         }
 
         /// <summary>
@@ -280,12 +195,10 @@ namespace Catel.Windows.Controls
                 RemoveObjectFromWatchList(oldValue);
             }
 
-#if NET || NETCORE
             if (!IsLoaded)
             {
                 return;
             }
-#endif
 
             var newValueAsIEnumerable = newValue as IEnumerable;
             if (newValueAsIEnumerable is not null)
@@ -356,7 +269,7 @@ namespace Catel.Windows.Controls
         /// <param name="values">The values to remove from the watch list.</param>
         private void RemoveObjectsFromWatchList(IEnumerable values)
         {
-            foreach (object value in values)
+            foreach (var value in values)
             {
                 RemoveObjectFromWatchList(value);
             }
@@ -511,7 +424,7 @@ namespace Catel.Windows.Controls
             }
             else
             {
-                for (int i = 0; i < infoList.Count; i++)
+                for (var i = 0; i < infoList.Count; i++)
                 {
                     if (string.Compare(infoList[i].Field, propertyChanged) == 0)
                     {
@@ -577,13 +490,13 @@ namespace Catel.Windows.Controls
             }
 
             var iDataWarningInfo = value as IDataWarningInfo;
-            if ((validationType == ValidationType.Warning) && (iDataWarningInfo is null))
+            if (validationType == ValidationType.Warning && iDataWarningInfo is null)
             {
                 return warningsOrErrors;
             }
 
             var iDataErrorInfo = value as IDataErrorInfo;
-            if ((validationType == ValidationType.Error) && (iDataErrorInfo is null))
+            if (validationType == ValidationType.Error && iDataErrorInfo is null)
             {
                 return warningsOrErrors;
             }
@@ -603,9 +516,9 @@ namespace Catel.Windows.Controls
                 }
             }
 
-            foreach (string property in propertiesToCheck)
+            foreach (var property in propertiesToCheck)
             {
-                string warningOrError = string.Empty;
+                var warningOrError = string.Empty;
                 switch (validationType)
                 {
                     case ValidationType.Warning:
@@ -664,43 +577,6 @@ namespace Catel.Windows.Controls
             return !string.IsNullOrEmpty(message) ? message : null;
         }
 
-#if !NET && !NETCORE
-        /// <summary>
-        /// Raises the events for all errors and warnings.
-        /// </summary>
-        private void RaiseEventsForAllErrorsAndWarnings()
-        {
-            lock (_objectValidationLock)
-            {
-                foreach (var objectValidationKeyValue in _objectValidation)
-                {
-                    var obj = objectValidationKeyValue.Key;
-                    var validation = objectValidationKeyValue.Value;
-
-                    foreach (var fieldWarning in validation.FieldWarnings)
-                    {
-                        RaiseBusinessValidationWarningOrError(obj, fieldWarning.Message, ValidationEventAction.Refresh, ValidationType.Warning);
-                    }
-
-                    foreach (var businessWarning in validation.BusinessWarnings)
-                    {
-                        RaiseBusinessValidationWarningOrError(obj, businessWarning.Message, ValidationEventAction.Refresh, ValidationType.Warning);
-                    }
-
-                    foreach (var fieldError in validation.FieldErrors)
-                    {
-                        RaiseBusinessValidationWarningOrError(obj, fieldError.Message, ValidationEventAction.Refresh, ValidationType.Error);
-                    }
-
-                    foreach (var businessError in validation.BusinessErrors)
-                    {
-                        RaiseBusinessValidationWarningOrError(obj, businessError.Message, ValidationEventAction.Refresh, ValidationType.Error);
-                    }
-                }
-            }
-        }
-#endif
-
         /// <summary>
         /// Raises the events for differences.
         /// </summary>
@@ -710,16 +586,16 @@ namespace Catel.Windows.Controls
         private void RaiseEventsForDifferences(object value, ValidationData oldValidationData, ValidationData newValidationData)
         {
             // Warnings - fields
-            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldWarnings ?? (IEnumerable<FieldWarningOrErrorInfo>)ArrayShim.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldWarnings, ValidationType.Warning);
+            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldWarnings ?? (IEnumerable<FieldWarningOrErrorInfo>)Array.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldWarnings, ValidationType.Warning);
 
             // Warnings - business
-            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessWarnings ?? (IEnumerable<BusinessWarningOrErrorInfo>)ArrayShim.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessWarnings, ValidationType.Warning);
+            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessWarnings ?? (IEnumerable<BusinessWarningOrErrorInfo>)Array.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessWarnings, ValidationType.Warning);
 
             // Errors - fields
-            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldErrors ?? (IEnumerable<FieldWarningOrErrorInfo>)ArrayShim.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldErrors, ValidationType.Error);
+            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldErrors ?? (IEnumerable<FieldWarningOrErrorInfo>)Array.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldErrors, ValidationType.Error);
 
             // Errors - business
-            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessErrors ?? (IEnumerable<BusinessWarningOrErrorInfo>)ArrayShim.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessErrors, ValidationType.Error);
+            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessErrors ?? (IEnumerable<BusinessWarningOrErrorInfo>)Array.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessErrors, ValidationType.Error);
         }
 
         /// <summary>
@@ -811,7 +687,7 @@ namespace Catel.Windows.Controls
                 var itemsToRemove = new Collection<object>();
                 lock (_objectValidationLock)
                 {
-                    foreach (KeyValuePair<object, ValidationData> validationData in _objectValidation)
+                    foreach (var validationData in _objectValidation)
                     {
                         if (validationData.Value.ParentEnumerable == sender)
                         {
@@ -821,7 +697,7 @@ namespace Catel.Windows.Controls
                 }
 
                 // Remove the items that should be removed (outside the lock)
-                foreach (object itemToRemove in itemsToRemove)
+                foreach (var itemToRemove in itemsToRemove)
                 {
                     RemoveObjectFromWatchList(itemToRemove);
                 }
@@ -842,292 +718,5 @@ namespace Catel.Windows.Controls
                 AddObjectsToWatchList(newItems, sender as IEnumerable);
             }
         }
-        #endregion
     }
-
-    #region Data classes
-    /// <summary>
-    /// Class containing all validation info (thus warnings and errors) about a specific object.
-    /// </summary>
-    internal class ValidationData
-    {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationData"/> class.
-        /// </summary>
-        /// <param name="parentEnumerable">The parent ParentEnumerable. <c>Null</c> if the object does not belong to an enumerable.</param>
-        public ValidationData(IEnumerable parentEnumerable)
-        {
-            FieldWarnings = new List<FieldWarningOrErrorInfo>();
-            BusinessWarnings = new List<BusinessWarningOrErrorInfo>();
-            FieldErrors = new List<FieldWarningOrErrorInfo>();
-            BusinessErrors = new List<BusinessWarningOrErrorInfo>();
-
-            ParentEnumerable = parentEnumerable;
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets the parent enumerable.
-        /// </summary>
-        /// <value>The parent enumerable.</value>
-        public IEnumerable ParentEnumerable { get; private set; }
-
-        /// <summary>
-        /// Gets the field warnings.
-        /// </summary>
-        /// <value>The field warnings.</value>
-        public List<FieldWarningOrErrorInfo> FieldWarnings { get; private set; }
-
-        /// <summary>
-        /// Gets the business warnings.
-        /// </summary>
-        /// <value>The business warnings.</value>
-        public List<BusinessWarningOrErrorInfo> BusinessWarnings { get; private set; }
-
-        /// <summary>
-        /// Gets the field errors.
-        /// </summary>
-        /// <value>The field errors.</value>
-        public List<FieldWarningOrErrorInfo> FieldErrors { get; private set; }
-
-        /// <summary>
-        /// Gets the business errors.
-        /// </summary>
-        /// <value>The business errors.</value>
-        public List<BusinessWarningOrErrorInfo> BusinessErrors { get; private set; }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Clears the warnings and errors.
-        /// </summary>
-        public void ClearWarningsAndErrors()
-        {
-            BusinessWarnings.Clear();
-            FieldWarnings.Clear();
-            BusinessErrors.Clear();
-            FieldErrors.Clear();
-        }
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            var validationData = new ValidationData(ParentEnumerable);
-
-            validationData.FieldWarnings = new List<FieldWarningOrErrorInfo>();
-            ((ICollection<FieldWarningOrErrorInfo>)validationData.FieldWarnings).AddRange(FieldWarnings);
-
-            validationData.BusinessWarnings = new List<BusinessWarningOrErrorInfo>();
-            ((ICollection<BusinessWarningOrErrorInfo>)validationData.BusinessWarnings).AddRange(BusinessWarnings);
-
-            validationData.FieldErrors = new List<FieldWarningOrErrorInfo>();
-            ((ICollection<FieldWarningOrErrorInfo>)validationData.FieldErrors).AddRange(FieldErrors);
-
-            validationData.BusinessErrors = new List<BusinessWarningOrErrorInfo>();
-            ((ICollection<BusinessWarningOrErrorInfo>)validationData.BusinessErrors).AddRange(BusinessErrors);
-
-            return validationData;
-        }
-        #endregion
-    }
-
-    /// <summary>
-    /// Information class about business warnings and errors.
-    /// </summary>
-    internal class BusinessWarningOrErrorInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BusinessWarningOrErrorInfo"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public BusinessWarningOrErrorInfo(string message)
-        {
-            Message = message;
-        }
-
-        #region Properties
-        /// <summary>
-        /// Gets the message.
-        /// </summary>
-        /// <value>The message.</value>
-        public string Message { get; private set; }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-        /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="T:System.NullReferenceException">
-        /// The <paramref name="obj"/> parameter is null.
-        /// </exception>
-        public override bool Equals(object obj)
-        {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            if (obj.GetHashCode() != GetHashCode())
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-        /// </returns>
-        public override int GetHashCode()
-        {
-            return string.Format(CultureInfo.InvariantCulture, "{0}", Message).GetHashCode();
-        }
-        #endregion
-    }
-
-    /// <summary>
-    /// Information class about field warnings and errors.
-    /// </summary>
-    internal class FieldWarningOrErrorInfo
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FieldWarningOrErrorInfo"/> class.
-        /// </summary>
-        /// <param name="field">The field.</param>
-        /// <param name="message">The message.</param>
-        public FieldWarningOrErrorInfo(string field, string message)
-        {
-            Field = field;
-            Message = message;
-        }
-
-        #region Properties
-        /// <summary>
-        /// Gets the field.
-        /// </summary>
-        /// <value>The field.</value>
-        public string Field { get; private set; }
-
-        /// <summary>
-        /// Gets the message.
-        /// </summary>
-        /// <value>The message.</value>
-        public string Message { get; private set; }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-        /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="T:System.NullReferenceException">
-        /// The <paramref name="obj"/> parameter is null.
-        /// </exception>
-        public override bool Equals(object obj)
-        {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            if (obj.GetHashCode() != GetHashCode())
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-        /// </returns>
-        public override int GetHashCode()
-        {
-            return string.Format(CultureInfo.InvariantCulture, "{0}|{1}", Field, Message).GetHashCode();
-        }
-        #endregion
-    }
-    #endregion
-
-    #region Event args
-    /// <summary>
-    /// Event arguments for event <see cref="WarningAndErrorValidator"/> Validation.
-    /// </summary>
-    public class ValidationEventArgs : EventArgs
-    {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationEventArgs"/> class.
-        /// </summary>
-        /// <param name="value">The value that contains the warning or error.</param>
-        /// <param name="message">The actual warning or error message.</param>
-        /// <param name="action">The action of the validation event.</param>
-        /// <param name="type">The type of validation.</param>
-        internal ValidationEventArgs(object value, string message, ValidationEventAction action, ValidationType type)
-        {
-            Value = value;
-            Message = message;
-            Action = action;
-            Type = type;
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets the value that contains the warning or error.
-        /// </summary>
-        /// <value>The value that contains the warning or error.</value>
-        public object Value { get; private set; }
-
-        /// <summary>
-        /// Gets the actual warning or error message.
-        /// </summary>
-        /// <value>The message.</value>
-        public string Message { get; private set; }
-
-        /// <summary>
-        /// A action for handling event.
-        /// </summary>
-        public ValidationEventAction Action { get; private set; }
-
-        /// <summary>
-        /// Gets the type of the validation.
-        /// </summary>
-        /// <value>The type of the validation.</value>
-        public ValidationType Type { get; private set; }
-        #endregion
-    }
-    #endregion
 }
-
-#endif

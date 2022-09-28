@@ -1,18 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelWrapper.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
-#if UWP
-    using global::Windows.UI.Xaml.Controls;
-#else
     using System.Windows.Controls;
-#endif
 
     public partial class ViewModelWrapper
     {
@@ -29,5 +17,3 @@ namespace Catel.MVVM.Views
         }
     }
 }
-
-#endif

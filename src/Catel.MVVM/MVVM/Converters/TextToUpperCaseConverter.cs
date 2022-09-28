@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TextToUpperCaseConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
@@ -21,7 +14,6 @@ namespace Catel.MVVM.Converters
         /// </summary>
         private readonly ICacheStorage<string, string> _cacheStorage = new CacheStorage<string, string>();
 
-        #region Methods
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
         /// </summary>
@@ -36,16 +28,11 @@ namespace Catel.MVVM.Converters
             {
                 return _cacheStorage.GetFromCacheOrFetch(stringValue, () =>
                 {
-#if NETFX_CORE || XAMARIN_FORMS
-                    return stringValue.ToUpper();
-#else
                     return stringValue.ToUpper(CurrentCulture ?? CultureInfo.CurrentCulture);
-#endif
                 });
             }
 
             return value;
         }
-        #endregion
     }
 }

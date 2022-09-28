@@ -50,11 +50,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
-            var getMethod = propertyInfo.GetMethod;
-#else
             var getMethod = propertyInfo.GetGetMethod();
-#endif
             if (getMethod is null)
             {
                 return false;
@@ -224,10 +220,6 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
-            value = (TValue)propertyInfo.GetValue(obj, null);
-            return true;
-#else
             try
             {
                 value = (TValue)propertyInfo.GetValue(obj, null);
@@ -243,7 +235,6 @@ namespace Catel.Reflection
 
                 return false;
             }
-#endif
         }
 
         /// <summary>
@@ -306,15 +297,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
-            propertyInfo.SetValue(obj, value, null);
-#else
-
-#if NET || NETCORE
             var setMethod = propertyInfo.GetSetMethod(true);
-#else
-            var setMethod = propertyInfo.GetSetMethod();
-#endif
             if (setMethod is null)
             {
                 if (throwOnError)
@@ -327,12 +310,10 @@ namespace Catel.Reflection
             }
 
             setMethod.Invoke(obj, new[] { value });
-#endif
 
             return true;
         }
 
-#if !NETFX_CORE
         /// <summary>
         /// Gets hidden property value.
         /// </summary>
@@ -361,9 +342,8 @@ namespace Catel.Reflection
                     "Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
             }
 
-            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, ArrayShim.Empty<object>(), CultureInfo.InvariantCulture);
+            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, Array.Empty<object>(), CultureInfo.InvariantCulture);
         }
-#endif
 
         /// <summary>
         /// Gets the property info from the cache.
@@ -374,7 +354,7 @@ namespace Catel.Reflection
         /// <returns>PropertyInfo.</returns>
         public static PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase = false)
         {
-            string cacheKey = $"{obj.GetType().FullName}_{property}_{BoxingCache.GetBoxedValue(ignoreCase)}";
+            var cacheKey = $"{obj.GetType().FullName}_{property}_{BoxingCache.GetBoxedValue(ignoreCase)}";
             return _availableProperties.GetFromCacheOrFetch(cacheKey, () =>
             {
                 var objectType = obj.GetType();

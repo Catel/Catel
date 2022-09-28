@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -13,9 +7,6 @@ namespace Catel.Tests.Data
     using Catel.Data;
 
     using NUnit.Framework;
-
-#if !UWP
-#endif
 
     public partial class ModelBaseFacts
     {
@@ -55,7 +46,6 @@ namespace Catel.Tests.Data
             }
         }
 
-#if NET || NETCORE
         [TestFixture]
         public class TheCalculatedPropertiesChecks
         {
@@ -153,7 +143,6 @@ namespace Catel.Tests.Data
                 Assert.IsTrue(propertyValue);
             }
         }
-#endif
 
         [TestFixture]
         public class TheEqualsChecks

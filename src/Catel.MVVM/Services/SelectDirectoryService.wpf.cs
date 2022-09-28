@@ -1,6 +1,4 @@
-﻿#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System.Threading.Tasks;
     using System.Windows.Forms;
@@ -42,5 +40,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

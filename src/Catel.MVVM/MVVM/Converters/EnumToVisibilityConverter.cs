@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumToVisibilityConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS || ANDROID
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Reflection;
     using System.Windows;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// Convert from an enum value to <see cref="Visibility"/>. The allowed values must be defined inside the <c>ConverterParameter</c> property.
@@ -26,7 +14,6 @@ namespace Catel.MVVM.Converters
     {
         private readonly char[] SplitChars = new[] { '|', ',' };
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -45,7 +32,6 @@ namespace Catel.MVVM.Converters
         {
             SupportInversionUsingCommandParameter = false;
         }
-        #endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -112,7 +98,6 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET || NETCORE
     /// <summary>
     /// Convert from an enum value to <see cref="Visibility"/>. The allowed values must be defined inside the <c>ConverterParameter</c> property.
     /// <para />
@@ -128,7 +113,4 @@ namespace Catel.MVVM.Converters
         {
         }
     }
-#endif
 }
-
-#endif

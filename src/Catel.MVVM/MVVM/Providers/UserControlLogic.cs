@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserControlLogic.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
     using System.ComponentModel;
@@ -15,24 +9,14 @@ namespace Catel.MVVM.Providers
     using Logging;
     using MVVM;
     using Reflection;
-
-#if XAMARIN || XAMARIN_FORMS
-    // TODO
-#elif UWP
-    using global::Windows.UI;
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
     using Windows.Controls;
-#endif
 
     /// <summary>
     /// MVVM Provider behavior implementation for a user control.
     /// </summary>
     public class UserControlLogic : LogicBase
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -40,13 +24,8 @@ namespace Catel.MVVM.Providers
 
         private IViewModelContainer _parentViewModelContainer;
         private IViewModel _parentViewModel;
-
-#if NET || NETCORE
         private InfoBarMessageControl _infoBarMessageControl;
-#endif
-        #endregion
-
-        #region Constructors
+        
         /// <summary>
         /// Initializes static members of the <see cref="UserControlLogic" /> class.
         /// </summary>
@@ -54,10 +33,7 @@ namespace Catel.MVVM.Providers
         {
             DefaultSupportParentViewModelContainersValue = true;
             DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
-
-#if NET || NETCORE
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
-#endif
         }
 
         /// <summary>
@@ -77,27 +53,13 @@ namespace Catel.MVVM.Providers
 
             SupportParentViewModelContainers = DefaultSupportParentViewModelContainersValue;
             UnloadBehavior = DefaultUnloadBehaviorValue;
-
-#if NET || NETCORE
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
             CreateWarningAndErrorValidatorForViewModel = DefaultCreateWarningAndErrorValidatorForViewModelValue;
-#endif
 
-#if XAMARIN
-            CreateViewModelWrapper();
-#elif !UWP
             // For non-UWP, we *cannot* use the ContentChanged event (it doesn't have the x:Name available)
             this.SubscribeToWeakGenericEvent<EventArgs>(targetView, nameof(FrameworkElement.Initialized), OnTargetViewInitialized, false);
-#else
-            // For UWP, we *can* use the ContentChanged event (it does have x:Name available)
-            // NOTE: There is NO unsubscription for this subscription.
-            // Hence target control content wrapper grid will be recreated each time content changes.
-            targetView.SubscribeToPropertyChanged(nameof(global::Windows.UI.Xaml.Controls.UserControl.Content), OnTargetViewContentChanged);
-#endif
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether parent view model containers are supported. If supported,
         /// the user control will search for the <see cref="IViewModelContainer"/> interface. During this search, the user control 
@@ -136,7 +98,6 @@ namespace Catel.MVVM.Providers
         /// <value>The unload behavior.</value>
         public static UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -182,7 +143,6 @@ namespace Catel.MVVM.Providers
         /// The default value is <c>true</c>.
         /// </summary>
         public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
-#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether the user control should automatically be disabled when there is no
@@ -226,9 +186,7 @@ namespace Catel.MVVM.Providers
         {
             get { return (_parentViewModel is not null); }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Sets the data context of the target control.
         /// <para />
@@ -257,12 +215,10 @@ namespace Catel.MVVM.Providers
             {
                 var wrapOptions = WrapOptions.None;
 
-#if NET || NETCORE
                 if (CreateWarningAndErrorValidatorForViewModel)
                 {
                     wrapOptions |= WrapOptions.CreateWarningAndErrorValidatorForViewModel;
                 }
-#endif
 
                 if (force)
                 {
@@ -286,24 +242,12 @@ namespace Catel.MVVM.Providers
             return viewModelWrapperService.GetWrapper(TargetView);
         }
 
-#if !UWP
         private void OnTargetViewInitialized(object sender, EventArgs e)
         {
             // Note: we can't use Content changed property notification (x:Name is not yet set), but Loaded event is too late,
             // this event should be in-between: https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/object-lifetime-events
             CreateViewModelWrapper();
         }
-#else  
-        /// <summary>
-        /// Called when the content of the target control has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewContentChanged(object sender, PropertyChangedEventArgs e)
-        {
-            CreateViewModelWrapper();
-        }
-#endif
 
         /// <summary>
         /// Called when the <c>TargetView</c> has just been loaded.
@@ -322,7 +266,6 @@ namespace Catel.MVVM.Providers
             // even if the Content property was changed while InitializeComponents() running there is no triggering of a binding update.
             CreateViewModelWrapper();
 
-#if NET || NETCORE
             if (!SkipSearchingForInfoBarMessageControl)
             {
                 Log.Debug("Searching for an instance of the InfoBarMessageControl");
@@ -340,7 +283,6 @@ namespace Catel.MVVM.Providers
             {
                 Log.Debug("Skipping the search for an instance of the InfoBarMessageControl");
             }
-#endif
 
             if (ViewModel is null)
             {
@@ -908,15 +850,12 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-#if NET || NETCORE
             if (_infoBarMessageControl is not null)
             {
                 _infoBarMessageControl.ClearObjectMessages(obj);
 
                 Log.Debug("Cleared all warnings and errors caused by '{0}' since this is caused by a DataContext issue in the .NET Framework", obj);
             }
-#endif
         }
-        #endregion
     }
 }

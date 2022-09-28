@@ -1,20 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyPropertyValueChangedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Provides data for a <see cref="DependencyPropertyChangedHelper"/> implementation.
@@ -32,13 +19,8 @@ namespace Catel.Windows.Data
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("e", e);
-
-#if NET || NETCORE
+            
             FxEventArgs = e;
-#else
-            FxEventArgs = this;
-#endif
-
             PropertyName = propertyName;
             DependencyProperty = e.Property;
             OldValue = e.OldValue;
@@ -57,12 +39,7 @@ namespace Catel.Windows.Data
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("dependencyProperty", dependencyProperty);
 
-#if NET || NETCORE
             FxEventArgs = new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue);
-#else
-            FxEventArgs = this;
-#endif
-
             PropertyName = propertyName;
             DependencyProperty = dependencyProperty;
             OldValue = oldValue;
@@ -73,11 +50,7 @@ namespace Catel.Windows.Data
         /// Gets the framework event args.
         /// </summary>
         /// <value>The framework event args.</value>
-#if NET || NETCORE
         public DependencyPropertyChangedEventArgs FxEventArgs { get; private set; }
-#else
-        public DependencyPropertyValueChangedEventArgs FxEventArgs { get; private set; }
-#endif
 
         /// <summary>
         /// Gets the name of the property.
@@ -101,5 +74,3 @@ namespace Catel.Windows.Data
         public object NewValue { get; private set; }
     }
 }
-
-#endif

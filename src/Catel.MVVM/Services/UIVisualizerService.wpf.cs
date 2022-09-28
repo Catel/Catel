@@ -1,20 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UIVisualizerService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Threading;
-    using Catel.Windows.Threading;
     using Logging;
     using MVVM;
     using Reflection;
@@ -267,5 +256,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

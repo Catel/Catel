@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DynamicConfigurationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.Configuration
+﻿namespace Catel.Tests.Configuration
 {
     using System.IO;
     using System.Runtime.Serialization;
@@ -187,4 +179,3 @@ namespace Catel.Tests.Configuration
     }
 }
 
-#endif

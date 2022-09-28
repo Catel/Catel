@@ -1,15 +1,10 @@
-﻿#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Markup
+﻿namespace Catel.Windows.Markup
 {
     using System;
     using Catel.MVVM;
     using IoC;
-
-#if !UWP
     using System.Windows.Data;
     using System.Windows.Markup;
-#endif
 
     /// <summary>
     /// Binds commands to the command manager.
@@ -41,9 +36,7 @@ namespace Catel.Windows.Markup
         /// Gets or sets the name of the command.
         /// </summary>
         /// <value>The name of the command.</value>
-#if NET || NETCORE
         [ConstructorArgument("commandName")]
-#endif
         public string CommandName { get; set; }
 
         /// <summary>
@@ -99,5 +92,3 @@ namespace Catel.Windows.Markup
         }
     }
 }
-
-#endif

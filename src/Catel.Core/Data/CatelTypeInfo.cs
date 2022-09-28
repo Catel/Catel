@@ -230,7 +230,7 @@ namespace Catel.Data
             // CTL-212: Generic types are not supported for FieldInfo.GetValue
             if (type.ContainsGenericParametersEx())
             {
-                return ArrayShim.Empty<IPropertyData>();
+                return Array.Empty<IPropertyData>();
             }
 
             PreventWrongDeclaredProperties(type);
@@ -279,7 +279,7 @@ namespace Catel.Data
             // CTL-212: Generic types are not supported for FieldInfo.GetValue
             if (type.ContainsGenericParametersEx())
             {
-                return ArrayShim.Empty<IPropertyData>();
+                return Array.Empty<IPropertyData>();
             }
 
             PreventWrongDeclaredFields(type);

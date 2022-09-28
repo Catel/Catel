@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2018 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Threading
+﻿namespace Catel.Windows.Threading
 {
     using System;
     using System.Threading.Tasks;
 
     // Required for DispatcherOperation on all platforms
     using System.Windows.Threading;
-
-#if UWP
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#endif
 
     /// <summary>
     /// Extension methods for the dispatcher.
@@ -66,5 +54,3 @@ namespace Catel.Windows.Threading
         }
     }
 }
-
-#endif

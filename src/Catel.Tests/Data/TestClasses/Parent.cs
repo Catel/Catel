@@ -5,12 +5,9 @@
     using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class Parent : SavableModelBase<Parent>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
@@ -26,9 +23,7 @@
             // Store values
             Name = name;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         ///   Gets or sets the name of the parent.
         /// </summary>
@@ -56,9 +51,7 @@
         ///   Register the property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData ChildrenProperty = RegisterProperty("Children", () => new Collection<Child>());
-        #endregion
 
-        #region Methods
         /// <summary>
         ///   Creates a new child object.
         /// </summary>
@@ -70,6 +63,5 @@
             Children.Add(child);
             return child;
         }
-        #endregion
     }
 }

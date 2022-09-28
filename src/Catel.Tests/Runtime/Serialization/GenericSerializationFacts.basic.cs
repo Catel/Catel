@@ -1,15 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenericSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
-    using System.Collections.Generic;
-    using System.Reflection;
-    using Catel.Collections;
+    using System;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
     using Data;
@@ -88,7 +79,6 @@ namespace Catel.Tests.Runtime.Serialization
                 });
             }
 
-#if NET || NETCORE
             [TestCase]
             public void SerializationWithPrivateMembers()
             {
@@ -102,7 +92,6 @@ namespace Catel.Tests.Runtime.Serialization
                     Assert.AreEqual(originalObject, clonedObject, description);
                 });
             }
-#endif
 
             [TestCase]
             public void CanSerializeAndDeserializeComplexHierarchies()
@@ -177,7 +166,7 @@ namespace Catel.Tests.Runtime.Serialization
                 }
 
                 var methodInfo = obj.GetType().GetMethodEx("ClearSerializationCounters");
-                methodInfo.Invoke(obj, ArrayShim.Empty<object>());
+                methodInfo.Invoke(obj, Array.Empty<object>());
 
                 if (obj is ComputerSettings computerSettings)
                 {

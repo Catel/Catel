@@ -1,28 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionToVisibilityConverter.cs" company="Orcomp development team">
-//   Copyright (c) 2008 - 2014 Orcomp development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS || ANDROID
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Collections;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Converts the count of a collection to the visibility.
     /// </summary>
     public class CollectionToCollapsingVisibilityConverter : VisibilityConverterBase
     {
-#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -39,7 +25,6 @@ namespace Catel.MVVM.Converters
             : base(visibility)
         {
         }
-#endregion
 
         /// <summary>
         /// Determines whether the specified value is visible.
@@ -84,7 +69,6 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET || NETCORE
     /// <summary>
     /// Convert from bool to <see cref="T:System.Windows.Visibility" /> and back.
     /// The bool value true will be converted to Visibility.Visible.
@@ -101,7 +85,4 @@ namespace Catel.MVVM.Converters
         {
         }
     }
-#endif
 }
-
-#endif

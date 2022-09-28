@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using Data;
@@ -39,11 +33,6 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-#if !NET && !NETCORE
-            // Only full .NET supports a reliable stopwatch. The other target frameworks don't have a reliable tick count
-            // so always assume invalidated
-            return true;
-#else
             if (((IValidatable)viewModel).ValidationContext.LastModifiedTicks > lastUpdated)
             {
                 return true;
@@ -65,7 +54,6 @@ namespace Catel.MVVM
             }
 
             return false;
-#endif
         }
 
         /// <summary>

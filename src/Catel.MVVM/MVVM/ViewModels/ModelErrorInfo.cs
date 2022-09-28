@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelErrorInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-
-#if !XAMARIN_FORMS
     using System.Linq;
     using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
-#endif
 
     /// <summary>
     /// Class containing all the errors and warnings retrieved via <see cref="INotifyDataErrorInfo"/> and
@@ -22,7 +13,6 @@ namespace Catel.MVVM
     /// </summary>
     internal class ModelErrorInfo
     {
-        #region Fields
         private readonly object _model;
 
         /// <summary>
@@ -49,9 +39,7 @@ namespace Catel.MVVM
         /// List of field that were initialized with an error.
         /// </summary>
         private readonly HashSet<string> _initialErrorFields = new HashSet<string>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelErrorInfo"/> class.
         /// </summary>
@@ -81,16 +69,12 @@ namespace Catel.MVVM
                 modelAsINotifyDataWarningInfo.WarningsChanged += OnModelWarningsChanged;
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Raised when the errors or warnings are updated.
         /// </summary>
         public event EventHandler Updated;
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Synchronizes the validation state of the specified properties.
         /// </summary>
@@ -392,18 +376,15 @@ namespace Catel.MVVM
                 return objAsString;
             }
 
-#if !XAMARIN_FORMS
             var objAsValidationResult = obj as ValidationResult;
             if (objAsValidationResult is not null)
             {
                 return objAsValidationResult.ErrorMessage;
             }
-#endif
 
             return null;
         }
 
-#if !XAMARIN_FORMS
         /// <summary>
         /// Initializes the default errors.
         /// </summary>
@@ -467,7 +448,5 @@ namespace Catel.MVVM
                 }
             }
         }
-#endif
-        #endregion
     }
 }

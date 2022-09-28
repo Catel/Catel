@@ -1,31 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Windows;
     using System.Windows.Input;
     using Catel.Logging;
-
-#if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
-
-#if UWP
-    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-    using global::Windows.UI.Xaml;
-#else 
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
-
-#endif
 
     /// <summary>
     /// Manager that takes care of application-wide commands and can dynamically forward
@@ -37,13 +17,10 @@ namespace Catel.MVVM
 
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
-
-#if !XAMARIN && !XAMARIN_FORMS
         private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
         private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
 
         private bool _suspendedKeyboardEvents;
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManager"/> class.
@@ -53,7 +30,6 @@ namespace Catel.MVVM
         }
 
         #region Properties
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets or sets a value indicating whether the keyboard events are suspended.
         /// </summary>
@@ -80,7 +56,6 @@ namespace Catel.MVVM
                 }
             }
         }
-#endif
         #endregion
 
         #region Events
@@ -90,7 +65,6 @@ namespace Catel.MVVM
         public event EventHandler<CommandCreatedEventArgs> CommandCreated;
         #endregion
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -138,50 +112,6 @@ namespace Catel.MVVM
                 CommandCreated?.Invoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
-#else
-        /// <summary>
-        /// Creates the command inside the command manager.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="compositeCommand">The composite command. If <c>null</c>, this will default to a new instance of <see cref="CompositeCommand"/>.</param>
-        /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
-        /// <exception cref="ArgumentException">The <paramref name="commandName" /> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand" /> method.</exception>
-        public void CreateCommand(string commandName, ICompositeCommand compositeCommand = null,
-            bool throwExceptionWhenCommandIsAlreadyCreated = true)
-        {
-            Argument.IsNotNullOrWhitespace("commandName", commandName);
-
-            lock (_lockObject)
-            {
-                Log.Debug("Creating command '{0}'", commandName);
-
-                if (_commands.ContainsKey(commandName))
-                {
-                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
-                    Log.Error(error);
-
-                    if (throwExceptionWhenCommandIsAlreadyCreated)
-                    {
-                        throw new InvalidOperationException(error);
-                    }
-
-                    return;
-                }
-
-                if (compositeCommand is null)
-                {
-                    compositeCommand = new CompositeCommand();
-                }
-
-                _commands.Add(commandName, compositeCommand);
-
-                InvalidateCommands();
-
-                CommandCreated?.Invoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
-            }
-        }
-#endif
 
         /// <summary>
         /// Invalidates the all the currently registered commands.
@@ -472,7 +402,6 @@ namespace Catel.MVVM
             }
         }
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>
@@ -566,6 +495,5 @@ namespace Catel.MVVM
         }
 
         partial void SubscribeToKeyboardEventsInternal();
-#endif
     }
 }

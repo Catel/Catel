@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensions.propertyinfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#pragma warning disable 1591
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Reflection;
-
-#if UAP_DEFAULT
-    using System.Linq;
-#endif
 
     /// <summary>
     /// Reflection extension class.
@@ -37,11 +25,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("propertyInfo", propertyInfo);
 
-#if UAP_DEFAULT
-            return propertyInfo.GetCustomAttributes(inherit).ToArray();
-#else
             return propertyInfo.GetCustomAttributes(inherit).ToAttributeArray();
-#endif
         }
 
         public static Attribute[] GetCustomAttributesEx(this PropertyInfo propertyInfo, Type attributeType, bool inherit)
@@ -49,11 +33,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("propertyInfo", propertyInfo);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if UAP_DEFAULT
-            return propertyInfo.GetCustomAttributes(attributeType, inherit).ToArray();
-#else
             return propertyInfo.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
-#endif
         }
     }
 }

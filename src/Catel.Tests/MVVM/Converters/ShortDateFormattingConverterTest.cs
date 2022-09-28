@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ShortDateFormattingConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System;
     using System.Globalization;
@@ -19,7 +13,6 @@ namespace Catel.Tests.MVVM.Converters
     [TestFixture]
     public class ShortDateFormattingConverterTest
     {
-        #region Methods
         [TestCase]
         public void Convert_Null_NoFormatting()
         {
@@ -46,11 +39,7 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new ShortDateFormattingConverter();
 
-#if NETFX_CORE
-            var value = converter.Convert(new DateTime(2010, 12, 15), typeof (string), "G", "nl-NL");
-#else
             var value = converter.Convert(new DateTime(2010, 12, 15), typeof(string), "G", new CultureInfo("nl-NL"));
-#endif
 
             var firstExpectedValue = "15-12-2010 00:00:00";
             var secondExpectedValue = "15-12-2010 0:00:00";
@@ -88,6 +77,5 @@ namespace Catel.Tests.MVVM.Converters
             var converter = new ShortDateFormattingConverter();
             Assert.AreEqual(new DateTime(2010, 12, 16), converter.ConvertBack("16-12-2010 0:00:00", typeof (DateTime), "G", new CultureInfo("nl-NL")));
         }
-        #endregion
     }
 }

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IUIVisualizerServiceExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
@@ -158,7 +150,6 @@ namespace Catel.Services
             return viewModelFactory;
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
         /// </summary>
@@ -250,8 +241,5 @@ namespace Catel.Services
                 await uiVisualizerService.ShowAsync(vm);
             }
         }
-#endif
     }
 }
-
-#endif

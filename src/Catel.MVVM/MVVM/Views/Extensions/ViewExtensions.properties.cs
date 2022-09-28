@@ -1,26 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewExtensions.properties.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.ComponentModel;
     using System.Linq;
-    
-#if XAMARIN || XAMARIN_FORMS
-    // nothing
-    using Catel.Collections;
-#elif UWP
-    using Catel.Windows.Data;
-    using global::Windows.UI.Xaml;
-#else
     using Catel.Windows.Data;
     using System.Windows;
-#endif
 
     public static partial class ViewExtensions
     {
@@ -33,12 +17,8 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("view", view);
 
-#if !XAMARIN && !XAMARIN_FORMS
             var viewProperties = ((FrameworkElement)view).GetDependencyProperties();
             return viewProperties.Select(x => x.PropertyName).ToArray();
-#else
-            return ArrayShim.Empty<string>();
-#endif
         }
 
         /// <summary>
@@ -53,7 +33,6 @@ namespace Catel.MVVM.Views
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("handler", handler);
 
-#if !XAMARIN && !XAMARIN_FORMS
             ((FrameworkElement)view).SubscribeToDependencyProperty(propertyName, (sender, e) =>
             {
                 if (!((FrameworkElement)sender).IsRealDependencyProperty(e.PropertyName))
@@ -64,9 +43,6 @@ namespace Catel.MVVM.Views
 
                 handler(sender, new PropertyChangedEventArgs(e.PropertyName));
             });
-#else
-
-#endif
         }
     }
 }

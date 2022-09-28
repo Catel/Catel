@@ -1,15 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TextToLowerCaseConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
-    using Caching;
 
     /// <summary>
     /// Converts string values to lower case.
@@ -29,11 +21,7 @@ namespace Catel.MVVM.Converters
             if (stringValue is not null)
             {
                 // Note: caching is not needed
-#if NETFX_CORE || XAMARIN_FORMS
-                return stringValue.ToLower();
-#else
                 return stringValue.ToLower(CurrentCulture ?? CultureInfo.CurrentCulture);
-#endif
             }
 
             return value;

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IDataContractFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections.Generic;
@@ -42,15 +36,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
         DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null);
 
-#if NET
-        /// <summary>
-        /// Gets or sets the <see cref="IDataContractSurrogate"/> passed in constructor to <see cref="DataContractSerializer"/>.
-        /// <para />
-        /// The default value is <null/>.
-        /// </summary>
-        /// <value>The <see cref="IDataContractSurrogate"/>.</value>
-        IDataContractSurrogate DataContractSurrogate { get; set; }
-
         /// <summary>
         /// Gets or sets the <see cref="DataContractResolver"/> passed in constructor to <see cref="DataContractSerializer"/>.
         /// <para />
@@ -58,7 +43,5 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
         DataContractResolver DataContractResolver { get; set; }
-#endif
-
     }
 }

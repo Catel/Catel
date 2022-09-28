@@ -1,27 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICommandManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
     using System.Windows.Input;
-
-#if NET || NETCORE
     using System.Windows;
-#endif
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
-
-#if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
-#endif
 
     /// <summary>
     /// Manager that takes care of application-wide commands and can dynamically forward
@@ -29,15 +12,12 @@ namespace Catel.MVVM
     /// </summary>
     public interface ICommandManager
     {
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets or sets a value indicating whether the keyboard events are suspended.
         /// </summary>
         /// <value><c>true</c> if the keyboard events are suspended; otherwise, <c>false</c>.</value>
         bool IsKeyboardEventsSuspended { get; set; }
-#endif
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -52,18 +32,6 @@ namespace Catel.MVVM
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
         void CreateCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand compositeCommand = null,
             bool throwExceptionWhenCommandIsAlreadyCreated = true);
-#else
-        /// <summary>
-        /// Creates the command inside the command manager.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="compositeCommand">The composite command. If <c>null</c>, this will default to a new instance of <see cref="CompositeCommand"/>.</param>
-        /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
-        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName, ICompositeCommand compositeCommand = null,
-            bool throwExceptionWhenCommandIsAlreadyCreated = true);
-#endif
 
         /// <summary>
         /// Determines whether the specified command name is created.
@@ -116,7 +84,6 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         ICommand GetCommand(string commandName);
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>
@@ -152,15 +119,12 @@ namespace Catel.MVVM
         /// </summary>
         void SubscribeToKeyboardEvents();
 
-#if NET || NETCORE || UWP
         /// <summary>
         /// Subscribes to keyboard events.
         /// </summary>
         /// <param name="view">The view.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         void SubscribeToKeyboardEvents(FrameworkElement view);
-#endif
-#endif
 
         /// <summary>
         /// Registers the action with the specified command name.

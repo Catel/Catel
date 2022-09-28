@@ -1,28 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ColorToBrushConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
-
-#if UWP
-    using global::Windows.UI;
-    using global::Windows.UI.Xaml.Media;
-#else
     using System.Windows.Media;
-#endif
 
     /// <summary>
     /// ColorToBrushConverter
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(Color), typeof(Brush))]
-#endif
     public class ColorToBrushConverter : ValueConverterBase<Color, Brush>
     {
         /// <summary>
@@ -63,5 +47,3 @@ namespace Catel.MVVM.Converters
         }
     }
 }
-
-#endif

@@ -1,25 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
-    using IoC;
-
-#if ANDROID
-    using Android.App;
-#elif IOS
-
-#elif NETFX_CORE
-    using global::Windows.UI.Popups;
-#else
     using System.Windows;
-    using Windows;
-#endif
 
     /// <summary>
     /// Message service that implements the <see cref="IMessageService"/>.
@@ -47,14 +30,7 @@ namespace Catel.Services
             Initialize();
         }
 
-        #region Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
         partial void Initialize();
-
-#if !XAMARIN && !XAMARIN_FORMS
 
         /// <summary>
         /// Translates the message box result.
@@ -86,10 +62,7 @@ namespace Catel.Services
                 throw new NotSupportedInPlatformException($"MessageBox class does not support MessageButton '{Enum<MessageButton>.ToString(button)}'");
             }
         }
-#endif
-        #endregion
 
-        #region IMessageService Members
         /// <summary>
         /// Shows an error message to the user and allows a callback operation when the message is completed.
         /// </summary>
@@ -172,6 +145,5 @@ namespace Catel.Services
         {
             return ShowMessageBoxAsync(message, caption, button, icon);
         }
-        #endregion
     }
 }

@@ -1,30 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CatelEnvironment.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System.Windows;
     using Data;
     using System;
     using System.ComponentModel;
     using IoC;
-    using Logging;
     using MVVM;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
-
-#if NET || NETCORE
-    using System.Diagnostics;
-#endif
-
-#if XAMARIN_FORMS
-    using Xamarin.Forms;
-#endif
 
     /// <summary>
     /// Class containing environment information.
@@ -100,7 +81,6 @@ namespace Catel
             ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
         }
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the main window of the application.
         /// </summary>
@@ -108,9 +88,6 @@ namespace Catel
         {
             get
             {
-#if UWP
-                return Window.Current;
-#else
                 var application = Application.Current;
                 if (application is null)
                 {
@@ -126,10 +103,8 @@ namespace Catel
                     //Log.Warning(ex, "Failed to retrieve the application MainWindow, returning null");
                     return null;
                 }
-#endif
             }
         }
-#endif
 
         /// <summary>
         /// Gets whether the software is currently in design mode.
@@ -142,7 +117,6 @@ namespace Catel
         {
             bool? isInDesignMode = null;
 
-#if NET || NETCORE
             var prop = DesignerProperties.IsInDesignModeProperty;
             isInDesignMode = (bool)DependencyPropertyDescriptor.FromProperty(prop, typeof(FrameworkElement)).Metadata.DefaultValue;
 
@@ -155,13 +129,6 @@ namespace Catel
             {
                 isInDesignMode = true;
             }
-#elif UWP
-            isInDesignMode = global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#elif XAMARIN || XAMARIN_FORMS
-            isInDesignMode = false;
-#else
-            isInDesignMode = DesignerProperties.IsInDesignTool;
-#endif
 
             if (initializeDesignTime && isInDesignMode.Value)
             {

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CacheStorageFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Caching
+﻿namespace Catel.Tests.Caching
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +12,6 @@ namespace Catel.Tests.Caching
 
     public class CacheStorageFacts
     {
-#if NET || NETCORE
         [TestFixture]
         public class TheThreadSafeFunctionality
         {
@@ -109,7 +102,6 @@ namespace Catel.Tests.Caching
                 }
             }
         }
-#endif
 
         [TestFixture]
         public class TheIndexerProperty

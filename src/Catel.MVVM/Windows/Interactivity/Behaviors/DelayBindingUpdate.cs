@@ -1,31 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DelayBindingUpdate.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using TimerTickEventArgs = System.Object;
-#else
     using System.Windows;
     using System.Windows.Data;
     using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
-    using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;
-#endif
-
     using System;
     using Data;
     using Logging;
@@ -37,7 +19,6 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class DelayBindingUpdate : BehaviorBase<FrameworkElement>
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -50,9 +31,7 @@ namespace Catel.Windows.Interactivity
         private Binding _originalBinding;
 
         private DependencyProperty _dependencyPropertyCache;
-        #endregion
 
-        #region Constructors
         static DelayBindingUpdate()
         {
             BindingProperties = new List<PropertyInfo>(from property in typeof(Binding).GetPropertiesEx()
@@ -69,9 +48,7 @@ namespace Catel.Windows.Interactivity
 
             _timer = new DispatcherTimer();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the update delay. 
         /// <para />
@@ -140,9 +117,7 @@ namespace Catel.Windows.Interactivity
                 return null;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Validates the required properties.
         /// </summary>
@@ -382,8 +357,5 @@ namespace Catel.Windows.Interactivity
 
             return newBinding;
         }
-        #endregion
     }
 }
-
-#endif

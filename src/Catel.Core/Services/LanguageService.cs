@@ -33,16 +33,12 @@ namespace Catel.Services
         /// </summary>
         public LanguageService()
         {
-            // Note: UWP doesn't support resx (requires resw), so registering them here would only cause
-            // exceptions and thus slowing things down
-#if !UAP
             // Note: we don't have resources in Catel.Core at the moment
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
 
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Resources"));
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Exceptions"));
-#endif
 
             FallbackCulture = CultureInfo.CurrentUICulture;
             PreferredCulture = CultureInfo.CurrentUICulture;

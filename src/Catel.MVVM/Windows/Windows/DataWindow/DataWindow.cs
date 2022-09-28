@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataWindow.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -26,83 +18,7 @@ namespace Catel.Windows
     using Exceptions = MVVM.Properties.Exceptions;
     using MVVM.Providers;
     using Catel.Services;
-    using Catel.Threading;
-    using Threading;
     using IoC;
-    using Catel.Reflection;
-
-    /// <summary>
-    /// Mode of the <see cref="DataWindow"/>.
-    /// </summary>
-    public enum DataWindowMode
-    {
-        /// <summary>
-        /// Window contains OK and Cancel buttons.
-        /// </summary>
-        OkCancel,
-
-        /// <summary>
-        /// Window contains OK, Cancel and Apply buttons.
-        /// </summary>
-        OkCancelApply,
-
-        /// <summary>
-        /// Window contains Close button.
-        /// </summary>
-        Close,
-
-        /// <summary>
-        /// Window contains custom buttons.
-        /// </summary>
-        Custom
-    }
-
-    /// <summary>
-    /// Available default buttons on the data window mode.
-    /// </summary>
-    public enum DataWindowDefaultButton
-    {
-        /// <summary>
-        /// OK button.
-        /// </summary>
-        OK,
-
-        /// <summary>
-        /// Apply button.
-        /// </summary>
-        Apply,
-
-        /// <summary>
-        /// Close button.
-        /// </summary>
-        Close,
-
-        /// <summary>
-        /// No button.
-        /// </summary>
-        None
-    }
-
-    /// <summary>
-    /// Defines the way the <see cref="InfoBarMessageControl"/> is included in the <see cref="DataWindow"/>.
-    /// </summary>
-    public enum InfoBarMessageControlGenerationMode
-    {
-        /// <summary>
-        /// No <see cref="InfoBarMessageControl"/> is generated.
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// Generate the <see cref="InfoBarMessageControl"/> as inline.
-        /// </summary>
-        Inline,
-
-        /// <summary>
-        /// Generate the <see cref="InfoBarMessageControl"/> as overlay.
-        /// </summary>
-        Overlay
-    }
 
     /// <summary>
     /// <see cref="Window"/> class that implements the <see cref="InfoBarMessageControl"/> and
@@ -110,7 +26,6 @@ namespace Catel.Windows
     /// </summary>
     public class DataWindow : System.Windows.Window, IDataWindow
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
 
@@ -131,9 +46,7 @@ namespace Catel.Windows
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
         private event EventHandler<DataContextChangedEventArgs> _viewDataContextChanged;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Windows.FrameworkElement"/> class.
         /// </summary>
@@ -280,9 +193,7 @@ namespace Catel.Windows
                 this.FocusFirstControl();
             }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
@@ -431,9 +342,7 @@ namespace Catel.Windows
         /// </summary>
         /// <value>The internal grid.</value>
         internal Grid InternalGrid { get; private set; }
-        #endregion
-
-        #region Commands
+        
         /// <summary>
         /// Executes the OK command.
         /// </summary>
@@ -566,9 +475,7 @@ namespace Catel.Windows
         {
             Close();
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a property on the container has changed.
         /// </summary>
@@ -614,9 +521,7 @@ namespace Catel.Windows
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
         }
-        #endregion
 
-        #region Methods
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
@@ -1064,8 +969,5 @@ namespace Catel.Windows
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
         }
-        #endregion
     }
 }
-
-#endif

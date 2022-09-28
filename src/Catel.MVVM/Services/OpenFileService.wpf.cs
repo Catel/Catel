@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OpenFileService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System.Threading.Tasks;
     using Microsoft.Win32;
@@ -22,7 +14,8 @@ namespace Catel.Services
             Argument.IsNotNull("context", context);
 
             var fileDialog = new OpenFileDialog();
-            ConfigureFileDialog(fileDialog, context);
+
+            await ConfigureFileDialogAsync(fileDialog, context);
 
             fileDialog.Multiselect = context.IsMultiSelect;
 
@@ -37,5 +30,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

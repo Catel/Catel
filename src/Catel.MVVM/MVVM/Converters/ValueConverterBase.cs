@@ -1,26 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValueConverterBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
     using Logging;
     using Reflection;
-
-#if XAMARIN
-
-#elif NETFX_CORE
-#else
     using System.ComponentModel;
-#endif
-
-#if NET || NETCORE
     using System.Windows.Markup;
-#endif
 
     /// <summary>
     /// Base class for value converters which makes it compatible between .NET and WinRT.
@@ -42,11 +27,7 @@ namespace Catel.MVVM.Converters
     /// </summary>
     /// <typeparam name="TConvert">The type of the convert input.</typeparam>
     /// <typeparam name="TConvertBack">The type of the convert back input.</typeparam>
-#if NET || NETCORE
     public abstract class ValueConverterBase<TConvert, TConvertBack> : MarkupExtension, IValueConverter
-#else
-    public abstract class ValueConverterBase<TConvert, TConvertBack> : IValueConverter
-#endif
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -85,9 +66,7 @@ namespace Catel.MVVM.Converters
         /// <remarks>
         /// Normally this value is ignored as it is in most implementations of <c>Convert</c>.
         /// </remarks>
-#if NET || NETCORE
         [TypeConverter(typeof(StringToTypeConverter))]
-#endif
         public Type OverrideType { get; set; }
 
         /// <summary>
@@ -97,54 +76,8 @@ namespace Catel.MVVM.Converters
         /// <remarks>
         /// Normally this value is ignored as it is in most implementations of <c>ConvertBack</c>.
         /// </remarks>
-#if NET || NETCORE
         [TypeConverter(typeof(StringToTypeConverter))]
-#endif
         public Type BackOverrideType { get; set; }
-
-#if NETFX_CORE
-        /// <summary>
-        /// Modifies the source data before passing it to the target for display in the UI.
-        /// </summary>
-        /// <param name="value">The source data being passed to the target.</param>
-        /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
-        /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
-        /// <param name="language">The language.</param>
-        /// <returns>The value to be passed to the target dependency property.</returns>
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return Convert(value, targetType, parameter, GetCulture(language));
-        }
-
-        /// <summary>
-        /// Modifies the target data before passing it to the source object.
-        /// </summary>
-        /// <param name="value">The target data being passed to the source.</param>
-        /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the source object.</param>
-        /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
-        /// <param name="language">The language.</param>
-        /// <returns>The value to be passed to the source object.</returns>
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            return ConvertBack(value, targetType, parameter, GetCulture(language));
-        }
-
-        /// <summary>
-        /// Gets the current culture for the specified language. If the language is <c>null</c>, this method returns the <c>CurrentCulture</c>.
-        /// </summary>
-        /// <param name="language">The language.</param>
-        /// <returns>The culture info.</returns>
-        protected static CultureInfo GetCulture(string language)
-        {
-            var culture = CultureInfo.CurrentCulture;
-            if (!string.IsNullOrWhiteSpace(language))
-            {
-                culture = new CultureInfo(language);
-            }
-
-            return culture;
-        }
-#endif
 
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -162,11 +95,7 @@ namespace Catel.MVVM.Converters
 
             if (Link is not null)
             {
-#if NETFX_CORE
-                var cultureToUse = culture.Name;
-#else
                 var cultureToUse = culture;
-#endif
 
                 // Linked converter is set, this is not the last in the chain
                 // call the linked converter, i.e. the next in the chain
@@ -213,11 +142,7 @@ namespace Catel.MVVM.Converters
 
             if (Link is not null)
             {
-#if NETFX_CORE
-                var cultureToUse = culture.Name;
-#else
                 var cultureToUse = culture;
-#endif
 
                 returnValue = Link.ConvertBack(returnValue, BackOverrideType ?? targetType, parameter, cultureToUse);
             }
@@ -274,7 +199,6 @@ namespace Catel.MVVM.Converters
             return ConverterHelper.UnsetValue;
         }
 
-#if NET || NETCORE
         /// <summary>
         /// When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension.
         /// </summary>
@@ -284,6 +208,5 @@ namespace Catel.MVVM.Converters
         {
             return this;
         }
-#endif
     }
 }

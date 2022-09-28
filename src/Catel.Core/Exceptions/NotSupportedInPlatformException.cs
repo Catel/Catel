@@ -33,7 +33,7 @@ namespace Catel
         /// </summary>
         /// <param name="message">The message.</param>
         public NotSupportedInPlatformException(string message)
-            : this(message, ArrayShim.Empty<object>())
+            : this(message, Array.Empty<object>())
         {
         }
 

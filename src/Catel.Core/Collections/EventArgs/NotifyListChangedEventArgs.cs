@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
-
 namespace Catel.Collections
 {
     using System.ComponentModel;
@@ -122,5 +120,3 @@ namespace Catel.Collections
         public object OldItem { get; private set; }
     }
 }
-
-#endif

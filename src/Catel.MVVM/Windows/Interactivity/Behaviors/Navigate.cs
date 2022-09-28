@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Navigate.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System.Windows.Documents;
     using IoC;
@@ -21,7 +13,6 @@ namespace Catel.Windows.Interactivity
     {
         private static readonly IProcessService _processService;
 
-        #region Methods
         /// <summary>
         /// Initializes static members of the <see cref="Navigate"/> class.
         /// </summary>
@@ -60,8 +51,5 @@ namespace Catel.Windows.Interactivity
                 _processService.StartProcess(uri.ToString());
             }
         }
-        #endregion
     }
 }
-
-#endif

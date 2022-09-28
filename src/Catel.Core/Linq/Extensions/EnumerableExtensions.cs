@@ -97,7 +97,7 @@ namespace Catel.Linq
         {
             var list = instance.ToList(type);
             var methodInfo = AsReadOnlyGenericMethodInfoCache.GetFromCacheOrFetch(type, () => list.GetType().GetMethodEx("AsReadOnly"));
-            return (IEnumerable)methodInfo.Invoke(list, ArrayShim.Empty<object>());
+            return (IEnumerable)methodInfo.Invoke(list, Array.Empty<object>());
         }
     }
 }

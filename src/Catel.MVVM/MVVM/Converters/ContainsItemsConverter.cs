@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ContainsItemsConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Collections;
@@ -13,9 +7,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Converter that converts whether a collection contains items or not.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(IEnumerable), typeof(bool))]
-#endif
     public class ContainsItemsConverter : ValueConverterBase
     {
         /// <summary>

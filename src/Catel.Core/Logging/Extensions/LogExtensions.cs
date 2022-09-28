@@ -37,19 +37,6 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "PRODUCT INFO");
             Write(log, LogEvent.Info, string.Empty);
 
-#if UWP
-            var appPackage = Windows.ApplicationModel.Package.Current;
-            var packageId = appPackage.Id;
-
-            Write(log, LogEvent.Info, "Package full name:     {0}", packageId.FullName);
-            Write(log, LogEvent.Info, "Package name:          {0}", packageId.Name);
-            Write(log, LogEvent.Info, "Package family name:   {0}", packageId.FamilyName);
-            Write(log, LogEvent.Info, "Publisher:             {0}", packageId.Publisher);
-            Write(log, LogEvent.Info, "Publisher Id:          {0}", packageId.PublisherId);
-#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-            Write(log, LogEvent.Info, "Version:               {0}", packageId.Version);
-#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
-#else
             var assembly = AssemblyHelper.GetEntryAssembly();
             Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title());
             Write(log, LogEvent.Info, "Version:               {0}", assembly.Version());
@@ -66,7 +53,7 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "Company:               {0}", assembly.Company());
             Write(log, LogEvent.Info, "Copyright:             {0}", assembly.Copyright());
-#endif
+
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "**************************************************************************");
             Write(log, LogEvent.Info, string.Empty);
@@ -89,28 +76,15 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "DEVICE INFO");
             Write(log, LogEvent.Info, string.Empty);
 
-#if !NETFX_CORE
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             Write(log, LogEvent.Info, "Platform:              {0}", Environment.OSVersion.Platform);
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
             Write(log, LogEvent.Info, "OS Version:            {0}", Environment.OSVersion.Version);
-#endif
 
-#if NET || NETCORE || NETSTANDARD
             Write(log, LogEvent.Info, "64-bit OS:             {0}", Environment.Is64BitOperatingSystem.ToString());
             Write(log, LogEvent.Info, "64-bit process:        {0}", Environment.Is64BitProcess.ToString());
             Write(log, LogEvent.Info, "Processor count:       {0}", Environment.ProcessorCount.ToString());
             Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize.ToString());
-#endif
-
-#if UWP
-            var appPackage = Windows.ApplicationModel.Package.Current;
-            var packageId = appPackage.Id;
-
-#pragma warning disable HAA0102 // Non-overridden virtual method call on value type
-            Write(log, LogEvent.Info, "Architecture:          {0}", packageId.Architecture.ToString());
-#pragma warning restore HAA0102 // Non-overridden virtual method call on value type
-#endif
 
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "**************************************************************************");

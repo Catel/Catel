@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
-
 namespace Catel.Collections
 {
     /// <summary>
@@ -29,5 +27,3 @@ namespace Catel.Collections
         Reset
     }
 }
-
-#endif

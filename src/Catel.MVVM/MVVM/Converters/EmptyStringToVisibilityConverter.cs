@@ -1,28 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EmptyStringToVisibilityConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS || ANDROID
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Windows;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// Convert from string to <see cref="Visibility"/>. 
     /// If the string is not null or empty, Visibility.Visible will be returned. 
     /// If the string is null or empty, Visibility.Collapsed will be returned.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(string), typeof(Visibility))]
-#endif
     public class EmptyStringToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         #region Constructors
@@ -66,7 +52,6 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET || NETCORE
     /// <summary>
     /// Convert from string to <see cref="System.Windows.Visibility"/>. 
     /// If the string is not null or empty, Visibility.Visible will be returned. 
@@ -83,7 +68,4 @@ namespace Catel.MVVM.Converters
         {
         }
     }
-#endif
 }
-
-#endif

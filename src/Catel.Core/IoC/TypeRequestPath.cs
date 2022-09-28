@@ -42,7 +42,7 @@ namespace Catel.IoC
         /// <returns></returns>
         public static TypeRequestPath Root(string name = null)
         {
-            return new TypeRequestPath(ArrayShim.Empty<TypeRequestInfo>(), name);
+            return new TypeRequestPath(Array.Empty<TypeRequestInfo>(), name);
         }
 
         /// <summary>

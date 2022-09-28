@@ -1,23 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWrapControlService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-#else
     using System.Windows;
     using System.Windows.Controls;
-#endif
-
     using Catel.Windows;
     using Catel.Windows.Controls;
 
@@ -202,5 +187,3 @@ namespace Catel.Services
         FrameworkElement GetWrappedElement(Grid wrappedGrid, string controlName);
     }
 }
-
-#endif

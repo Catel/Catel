@@ -1,18 +1,11 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ObjectWithPrivateMembers : ComparableModelBase
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -28,9 +21,7 @@
             // Store values
             PrivateMember = privateMemberValue;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         ///   Gets or sets the public member.
         /// </summary>
@@ -58,6 +49,5 @@
         ///   Register the property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData PrivateMemberProperty = RegisterProperty("PrivateMember", "Private member");
-        #endregion
     }
 }

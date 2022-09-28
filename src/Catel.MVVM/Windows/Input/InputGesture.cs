@@ -1,31 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputGesture.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Input
+﻿namespace Catel.Windows.Input
 {
     using Catel.Data;
-
-#if UWP
-    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
-    using Key = global::Windows.System.VirtualKey;
-    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
     using System.Windows.Input;
     using ModifierKeys = System.Windows.Input.ModifierKeys;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
 
     /// <summary>
     /// Input gesture class.
     /// </summary>
     public class InputGesture : ModelBase
     {
-
         /// <summary>
         /// <see cref="ToString"/> method result cache.
         /// </summary>
@@ -199,5 +183,3 @@ namespace Catel.Windows.Input
         }
     }
 }
-
-#endif

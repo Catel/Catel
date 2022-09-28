@@ -1,35 +1,17 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventToCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
     using MVVM.Converters;
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
     using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Class to convert a routed event to a command.
     /// </summary>
     public class EventToCommand : CommandTriggerActionBase<FrameworkElement>
     {
-        #region Fields
         private bool? _disableAssociatedObjectOnCannotExecute;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EventToCommand"/> class.
         /// </summary>
@@ -39,9 +21,7 @@ namespace Catel.Windows.Interactivity
 
             PreventInvocationIfAssociatedObjectIsDisabled = true;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="EventArgs"/> passed to the event handler
         /// should be passed to the command as well.
@@ -91,9 +71,7 @@ namespace Catel.Windows.Interactivity
         public static readonly DependencyProperty DisableAssociatedObjectOnCannotExecuteProperty =
             DependencyProperty.Register(nameof(DisableAssociatedObjectOnCannotExecute), typeof(bool), typeof(EventToCommand), new PropertyMetadata(true,
                 (sender, e) => ((EventToCommand)sender).OnDisableAssociatedObjectOnCannotExecuteChanged((bool)e.NewValue)));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="DisableAssociatedObjectOnCannotExecute"/> property has changed.
         /// </summary>
@@ -179,8 +157,5 @@ namespace Catel.Windows.Interactivity
 
             UpdateElementState();
         }
-        #endregion
     }
 }
-
-#endif

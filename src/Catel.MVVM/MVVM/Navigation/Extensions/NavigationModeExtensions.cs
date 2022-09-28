@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationModeExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-namespace Catel.MVVM.Navigation
+﻿namespace Catel.MVVM.Navigation
 {
     using System;
-
-#if UWP
-    using FrameworkNavigationMode = global::Windows.UI.Xaml.Navigation.NavigationMode;
-#else
     using FrameworkNavigationMode = System.Windows.Navigation.NavigationMode;
-#endif
 
     /// <summary>
     /// Extension methods for navigation mode.
@@ -47,4 +35,3 @@ namespace Catel.MVVM.Navigation
         }
     }
 }
-#endif

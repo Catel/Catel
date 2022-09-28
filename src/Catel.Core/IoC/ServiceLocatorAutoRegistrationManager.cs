@@ -76,29 +76,6 @@ namespace Catel.IoC
 
             TypeCache.AssemblyLoaded += (sender, args) =>
             {
-
-#if NETSTANDARD
-                var dependencyServiceType = Type.GetType("Xamarin.Forms.DependencyService, Xamarin.Forms.Core");
-                if (dependencyServiceType is not null)
-                {
-                    var dependencyServiceGetMethodInfo = dependencyServiceType.GetMethodEx("Get", BindingFlags.Static | BindingFlags.Public);
-                    var dependencyAttributeType = Type.GetType("Xamarin.Forms.DependencyAttribute, Xamarin.Forms.Core");
-                    var propertyInfo = dependencyAttributeType.GetPropertyEx("Implementor", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    foreach (var dependencyAttribute in args.Assembly.GetCustomAttributes(dependencyAttributeType))
-                    {
-                        var serviceType = (Type)propertyInfo.GetValue(dependencyAttribute);
-                        var interfaceType = serviceType.GetInterfaces().FirstOrDefault() ?? serviceType;
-                        _serviceLocator.RegisterType(interfaceType, (tf, reg) =>
-                        {
-#pragma warning disable HAA0101 // Array allocation for params parameter
-                            return dependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(dependencyServiceType, SingleNullElementArrayOfObjects);
-#pragma warning restore HAA0101 // Array allocation for params parameter
-                        });
-                    }
-                }
-#endif
-
                 if (_autoRegisterTypesViaAttributes)
                 {
                     if (_hasInspectedTypesAtLeastOnce)

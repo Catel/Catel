@@ -435,12 +435,8 @@ namespace Catel.Messaging
             Argument.IsNotNull("handler", handler);
             Argument.IsNotNull("weakAction", weakAction);
 
-#if NETFX_CORE
-            return weakAction.Action == (Delegate)handler;
-#else
             var handlerMethod = handler.Method.ToString();
             return string.CompareOrdinal(weakAction.MethodName, handlerMethod) == 0;
-#endif
         }
 
         /// <summary>

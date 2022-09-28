@@ -95,7 +95,7 @@ namespace Catel.IoC
 
             if (types.Length == 0)
             {
-                return ArrayShim.Empty<object>();
+                return Array.Empty<object>();
             }
 
             int typeCount = types.Length;

@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileServiceBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.IO;
-
-#if NET || NETCORE
+    using System.Threading.Tasks;
     using Microsoft.Win32;
-#endif
 
     /// <summary>
     /// Base class for file services.
@@ -51,14 +42,13 @@ namespace Catel.Services
             return initialDirectory;
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Configures the file dialog.
         /// </summary>
         /// <param name="fileDialog">The file dialog.</param>
         /// <param name="context">The determine file context.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="fileDialog"/> is <c>null</c>.</exception>
-        protected virtual void ConfigureFileDialog(FileDialog fileDialog, DetermineFileContext context)
+        protected virtual async Task ConfigureFileDialogAsync(FileDialog fileDialog, DetermineFileContext context)
         {
             Argument.IsNotNull("fileDialog", fileDialog);
             Argument.IsNotNull("context", context);
@@ -74,6 +64,5 @@ namespace Catel.Services
             fileDialog.Title = context.Title;
             fileDialog.ValidateNames = context.ValidateNames;
         }
-#endif
     }
 }

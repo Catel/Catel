@@ -1,30 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewExtensions.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Windows.Data;
-    using Windows.Threading;
     using Windows;
     using IoC;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Media;
-#else
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Media;
-#endif
 
     public static partial class ViewExtensions
     {
@@ -95,13 +78,11 @@ namespace Catel.MVVM.Views
                 parents.Add(elementParent);
             }
 
-#if NET || NETCORE
             var templatedParent = element.TemplatedParent as FrameworkElement;
             if (templatedParent is not null)
             {
                 parents.Add(templatedParent);
             }
-#endif
 
             var visualTreeParent = VisualTreeHelper.GetParent(element) as FrameworkElement;
             if (visualTreeParent is not null)
@@ -172,5 +153,3 @@ namespace Catel.MVVM.Views
         }
     }
 }
-
-#endif

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeValidatorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Linq.Expressions;
@@ -16,14 +8,10 @@ namespace Catel.Tests.Data
     using NUnit.Framework;
 
     using Moq;
-
-#if NET || NETCORE
     using System.Threading;
-#endif
 
     public class CompositeValidatorFacts
     {
-#if NET || NETCORE
         [TestFixture]
         public class TheValidationSequenceIsThreadSafe
         {
@@ -104,7 +92,6 @@ namespace Catel.Tests.Data
                 }
             }
         }
-#endif
 
         [TestFixture]
         public class TheAddMethod
@@ -440,5 +427,3 @@ namespace Catel.Tests.Data
         }
     }
 }
-
-#endif

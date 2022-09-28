@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelToViewConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using IoC;
@@ -16,9 +8,7 @@ namespace Catel.MVVM.Converters
     /// Converts a view model to a view. This converter is very useful to dynamically load 
     /// view content.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
-#endif
     public class ViewModelToViewConverter : ValueConverterBase
     {
         private static readonly IViewLocator _viewLocator;
@@ -52,5 +42,3 @@ namespace Catel.MVVM.Converters
         }
     }
 }
-
-#endif

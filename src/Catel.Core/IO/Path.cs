@@ -11,10 +11,6 @@ namespace Catel.IO
     using System.Reflection;
     using Reflection;
 
-#if UWP
-    using Windows.Storage;
-#endif
-
     /// <summary>
     /// Gets the application data target.
     /// </summary>
@@ -131,12 +127,10 @@ namespace Catel.IO
         {
             var assembly = AssemblyHelper.GetEntryAssembly();
 
-#if !NETFX_CORE
             if (assembly is null)
             {
                 assembly = Assembly.GetCallingAssembly();
             }
-#endif
 
             return GetApplicationDataDirectory(applicationDataTarget, assembly.Company(), assembly.Product());
         }
@@ -168,25 +162,6 @@ namespace Catel.IO
         {
             var rootDirectory = string.Empty;
 
-#if NETFX_CORE
-            switch (applicationDataTarget)
-            {
-                case ApplicationDataTarget.UserLocal:
-                    rootDirectory = ApplicationData.Current.LocalFolder.Path;
-                    break;
-
-                case ApplicationDataTarget.UserRoaming:
-                    rootDirectory = ApplicationData.Current.RoamingFolder.Path;
-                    break;
-
-                case ApplicationDataTarget.Machine:
-                    rootDirectory = ApplicationData.Current.SharedLocalFolder.Path;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException("applicationDataTarget");
-            }
-#else
             switch (applicationDataTarget)
             {
                 case ApplicationDataTarget.UserLocal:
@@ -204,7 +179,6 @@ namespace Catel.IO
                 default:
                     throw new ArgumentOutOfRangeException("applicationDataTarget");
             }
-#endif
 
             var path = System.IO.Path.Combine(rootDirectory, companyName, productName);
 
@@ -299,12 +273,10 @@ namespace Catel.IO
         {
             Argument.IsNotNullOrWhitespace("fullPath", fullPath);
 
-#if !NETFX_CORE
             if (string.IsNullOrEmpty(basePath))
             {
                 basePath = Environment.CurrentDirectory;
             }
-#endif
 
             fullPath = RemoveTrailingSlashes(fullPath);
             basePath = RemoveTrailingSlashes(basePath);
@@ -356,7 +328,6 @@ namespace Catel.IO
             return fullPath;
         }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Returns the full path for a relative path.
         /// </summary>
@@ -383,7 +354,6 @@ namespace Catel.IO
 
             return path;
         }
-#endif
 
         /// <summary>
         /// Appends a trailing backslash (\) to the path.

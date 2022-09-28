@@ -12,20 +12,11 @@ namespace Catel.Configuration
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Runtime.Serialization;
     using Data;
     using Catel.Logging;
     using Runtime.Serialization.Xml;
-
-#if UWP
-    using Windows.Storage;
-#else
-    using System.Configuration;
-    using System.Linq;
-    using Path = IO.Path;
     using System.Timers;
     using System.Diagnostics;
-#endif
 
     /// <summary>
     /// Configuration service implementation that allows customization how configuration values
@@ -42,7 +33,6 @@ namespace Catel.Configuration
         private readonly ISerializer _serializer;
         private readonly IAppDataService _appDataService;
 
-#if NET || NETCORE || NETSTANDARD
         private DynamicConfiguration _localConfiguration;
         private DynamicConfiguration _roamingConfiguration;
 
@@ -56,10 +46,6 @@ namespace Catel.Configuration
 
         private string _localConfigFilePath;
         private string _roamingConfigFilePath;
-#elif ANDROID
-        private readonly global::Android.Content.ISharedPreferences _preferences =
-            global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(global::Android.App.Application.Context);
-#endif
 
         private bool _suspendNotifications = false;
         private bool _hasPendingNotifications = false;
@@ -98,13 +84,11 @@ namespace Catel.Configuration
             _serializer = serializer;
             _appDataService = appDataService;
 
-#if NET || NETCORE || NETSTANDARD
             _localSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _localSaveConfigurationTimer.Elapsed += OnLocalSaveConfigurationTimerElapsed;
 
             _roamingSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _roamingSaveConfigurationTimer.Elapsed += OnRoamingSaveConfigurationTimerElapsed;
-#endif
         }
 
         #region Events
@@ -270,7 +254,6 @@ namespace Catel.Configuration
             }
         }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Sets the roaming config file path.
         /// </summary>
@@ -339,7 +322,6 @@ namespace Catel.Configuration
 
             throw Log.ErrorAndCreateException<InvalidOperationException>($"File '{fileName}' could not be used to load the configuration, it was locked for too long");
         }
-#endif
 
         /// <summary>
         /// Determines whether the specified key value exists in the configuration.
@@ -351,17 +333,8 @@ namespace Catel.Configuration
         {
             lock (GetLockObject(container))
             {
-#if (XAMARIN && !ANDROID)
-                throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
-#elif ANDROID
-                return _preferences.Contains(key);
-#elif UWP
-                var settings = GetSettingsContainer(container);
-                return settings.Values.ContainsKey(key);
-#else
                 var settings = GetSettingsContainer(container);
                 return settings.IsConfigurationValueSet(key);
-#endif
             }
         }
 
@@ -375,17 +348,8 @@ namespace Catel.Configuration
         {
             lock (GetLockObject(container))
             {
-#if (XAMARIN && !ANDROID)
-                throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
-#elif ANDROID
-                return _preferences.GetString(key, null);
-#elif UWP
-                var settings = GetSettingsContainer(container);
-                return (string)settings.Values[key];
-#else
                 var settings = GetSettingsContainer(container);
                 return settings.GetConfigurationValue<string>(key, string.Empty);
-#endif
             }
         }
 
@@ -399,16 +363,6 @@ namespace Catel.Configuration
         {
             lock (GetLockObject(container))
             {
-#if (XAMARIN && !ANDROID)
-                throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
-#elif ANDROID
-                _preferences.Edit()
-                        .PutString(key, value)
-                        .Apply();
-#elif UWP
-                var settings = GetSettingsContainer(container);
-                settings.Values[key] = value;
-#else
                 var settings = GetSettingsContainer(container);
 
                 if (!settings.IsConfigurationValueSet(key))
@@ -419,7 +373,6 @@ namespace Catel.Configuration
                 settings.SetConfigurationValue(key, value);
 
                 ScheduleSaveConfiguration(container);
-#endif
             }
         }
 

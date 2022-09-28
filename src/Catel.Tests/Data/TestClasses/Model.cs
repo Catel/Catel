@@ -8,20 +8,13 @@
     /// ModelBase Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [KnownType(typeof(ModelA)), KnownType(typeof(ModelB)), Serializable]
-#endif
     public class Model : ComparableModelBase
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
         public Model() { }
-        #endregion
 
         /// <summary>
         /// Gets or sets the A property.

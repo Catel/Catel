@@ -3,20 +3,17 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel.Logging
 {
     using System;
-
-#if NET || NETCORE || NETSTANDARD
     using System.Collections.Generic;
-#endif
 
     /// <summary>
     /// Log listener that writes to the console.
     /// </summary>
     public class ConsoleLogListener : LogListenerBase
     {
-#if NET || NETCORE || NETSTANDARD
         private class ConsoleColorSet
         {
             public ConsoleColorSet(ConsoleColor background, ConsoleColor foreground)
@@ -38,7 +35,6 @@ namespace Catel.Logging
             ColorSets[LogEvent.Warning] = new ConsoleColorSet(ConsoleColor.Black, ConsoleColor.Yellow);
             ColorSets[LogEvent.Error] = new ConsoleColorSet(ConsoleColor.Black, ConsoleColor.Red);
         }
-#endif
 
         /// <summary>
         /// Called when any message is written to the log.
@@ -53,26 +49,16 @@ namespace Catel.Logging
         {
             string consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
 
-#if NET || NETCORE || NETSTANDARD
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;
 
             UpdateConsoleColors(logEvent);
-#endif
 
-#if NETFX_CORE
-            System.Diagnostics.Debug.WriteLine(consoleMessage);
-#else
             Console.WriteLine(consoleMessage);
-#endif
-
-#if NET || NETCORE || NETSTANDARD
             Console.BackgroundColor = oldConsoleBackgroundColor;
             Console.ForegroundColor = oldConsoleForegroundColor;
-#endif
         }
 
-#if NET || NETCORE || NETSTANDARD
         private static void UpdateConsoleColors(LogEvent logEvent)
         {
             var colorSet = ColorSets[logEvent];
@@ -80,6 +66,5 @@ namespace Catel.Logging
             Console.BackgroundColor = colorSet.Background;
             Console.ForegroundColor = colorSet.Foreground;
         }
-#endif
     }
 }

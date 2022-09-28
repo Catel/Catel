@@ -18,12 +18,10 @@ namespace Catel.Reflection
     /// </summary>
     public static class AppDomainExtensions
     {
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-#endif
 
         /// <summary>
         /// Gets a list of all types inside the <see cref="AppDomain"/>.
@@ -41,7 +39,6 @@ namespace Catel.Reflection
             return TypeCache.GetTypes();
         }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Preloads all the assemblies inside the specified directory into the specified <see cref="AppDomain" />.
         /// <para />
@@ -228,7 +225,6 @@ namespace Catel.Reflection
             }
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Creates the instance in the specified <see cref="AppDomain" /> and unwraps it.
         /// </summary>
@@ -245,7 +241,5 @@ namespace Catel.Reflection
 
             return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
         }
-#endif
-#endif
     }
 }

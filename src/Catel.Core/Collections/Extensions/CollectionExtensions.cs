@@ -335,7 +335,6 @@ namespace Catel.Collections
             }
         }
 
-#if NETFX_CORE
         /// <summary>
         /// Converts the dictionary to a readonly collection.
         /// </summary>
@@ -349,7 +348,6 @@ namespace Catel.Collections
 
             return new ReadOnlyCollection<T>(collection);
         }
-#endif
 
         /// <summary>
         /// Converts the collection to an array.
@@ -361,7 +359,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("elementType", elementType);
 
-            var internalList = new List<object>(collection is not null ? collection.Cast<object>() : ArrayShim.Empty<object>());
+            var internalList = new List<object>(collection is not null ? collection.Cast<object>() : Array.Empty<object>());
             var array = Array.CreateInstance(elementType, internalList.Count);
 
             var index = 0;

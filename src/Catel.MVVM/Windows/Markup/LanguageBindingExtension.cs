@@ -1,6 +1,4 @@
-﻿#if NET || NETCORE
-
-namespace Catel.Windows.Markup
+﻿namespace Catel.Windows.Markup
 {
     using System;
     using System.Globalization;
@@ -8,10 +6,7 @@ namespace Catel.Windows.Markup
     using System.Windows.Threading;
     using Catel.IoC;
     using Catel.Services;
-
-#if !UWP
     using System.Windows.Markup;
-#endif
 
     /// <summary>
     /// Binding that uses the <see cref="ILanguageService" /> to retrieve the binding values.
@@ -21,7 +16,6 @@ namespace Catel.Windows.Markup
         private readonly ILanguageService _languageService;
         private Catel.IWeakEventListener _onLanguageUpdatedWeakListener;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageBindingExtension"/> class.
         /// </summary>
@@ -40,16 +34,12 @@ namespace Catel.Windows.Markup
         {
             ResourceName = resourceName;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the resource name.
         /// </summary>
         /// <value>The resource name.</value>
-#if NET || NETCORE
         [ConstructorArgument("resourceName")]
-#endif
         public string ResourceName { get; set; }
 
         /// <summary>
@@ -63,7 +53,6 @@ namespace Catel.Windows.Markup
         /// </summary>
         /// <value>The culture.</value>
         public CultureInfo Culture { get; set; }
-        #endregion
 
         /// <summary>
         /// The language updated event.
@@ -177,5 +166,3 @@ namespace Catel.Windows.Markup
         }
     }
 }
-
-#endif

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectToStringHelperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
 
@@ -22,13 +16,11 @@ namespace Catel.Tests
                 Assert.AreEqual("null", ObjectToStringHelper.ToString(null));
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void ReturnsDbNullStringForDbNullInstance()
             {
                 Assert.AreEqual("dbnull", ObjectToStringHelper.ToString(DBNull.Value));
             }
-#endif
 
             [TestCase]
             public void ReturnsValueForInt()
@@ -55,13 +47,11 @@ namespace Catel.Tests
                 Assert.AreEqual("null", ObjectToStringHelper.ToTypeString(null));
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void ReturnsDbNullStringForDbNullInstance()
             {
                 Assert.AreEqual("DBNull", ObjectToStringHelper.ToTypeString(DBNull.Value));
             }
-#endif
 
             [TestCase]
             public void ReturnsTypeNameForInt()
@@ -79,13 +69,11 @@ namespace Catel.Tests
                 Assert.AreEqual("null", ObjectToStringHelper.ToFullTypeString(null));
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void ReturnsDbNullStringForDbNullInstance()
             {
                 Assert.AreEqual("System.DBNull", ObjectToStringHelper.ToFullTypeString(DBNull.Value));
             }
-#endif
 
             [TestCase]
             public void ReturnsTypeNameForInt()

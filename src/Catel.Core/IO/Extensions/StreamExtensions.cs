@@ -32,7 +32,7 @@ namespace Catel.IO
             var length = (int)stream.Length;
             if (length == 0)
             {
-                return ArrayShim.Empty<byte>();
+                return Array.Empty<byte>();
             }
 
             var buffer = new byte[length];

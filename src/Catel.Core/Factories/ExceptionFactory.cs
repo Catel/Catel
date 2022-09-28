@@ -59,7 +59,7 @@ namespace Catel
             }
 
             // try 3: without anything
-            exception = CreateException(exceptionType, ArrayShim.Empty<object>());
+            exception = CreateException(exceptionType, Array.Empty<object>());
             if (exception is not null)
             {
                 return exception;
@@ -92,11 +92,7 @@ namespace Catel
             {
                 return (Exception)Activator.CreateInstance(exceptionType, args);
             }
-#if !NETFX_CORE
-            catch (MissingMethodException)
-#else
             catch (Exception)
-#endif
             {
                 // Ignore
             }

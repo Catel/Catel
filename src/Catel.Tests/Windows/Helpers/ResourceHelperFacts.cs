@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResourceHelperTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Windows
+﻿namespace Catel.Tests.Windows
 {
     using System;
     using Catel.Windows;
@@ -33,11 +27,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml");
 
-#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
-#else
-                Assert.AreEqual("/App.xaml", packUri);
-#endif
             }
 
             [TestCase]
@@ -45,11 +35,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", null);
 
-#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
-#else
-                Assert.AreEqual("/App.xaml", packUri);
-#endif
             }
 
             [TestCase]
@@ -57,11 +43,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", null);
 
-#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
-#else
-                Assert.AreEqual("/App.xaml", packUri);
-#endif
             }
 
             [TestCase]
@@ -69,11 +51,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", "Catel.MVVM");
 
-#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/Catel.MVVM;component/App.xaml", packUri);
-#else
-                Assert.AreEqual("/Catel.MVVM;component/App.xaml", packUri);
-#endif
             }
 
             [TestCase]
@@ -81,11 +59,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", "Catel.MVVM");
 
-#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/Catel.MVVM;component/App.xaml", packUri);
-#else
-                Assert.AreEqual("/Catel.MVVM;component/App.xaml", packUri);
-#endif
             }
         }
 
@@ -104,13 +78,11 @@ namespace Catel.Tests.Windows
                 Assert.Throws<ArgumentException>(() => ResourceHelper.XamlPageExists(string.Empty));
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void ThrowsUriFormatExceptionForInvalidUriString()
             {
                 Assert.Throws<UriFormatException>(() => ResourceHelper.XamlPageExists("pac://,test[]df`"));
             }
-#endif
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullUri()

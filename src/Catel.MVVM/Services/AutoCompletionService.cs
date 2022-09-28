@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoCompletionService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections;
@@ -22,7 +15,6 @@ namespace Catel.Services
     {
         private readonly IObjectAdapter _objectAdapter;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoCompletionService"/> class.
         /// </summary>
@@ -32,9 +24,7 @@ namespace Catel.Services
 
             _objectAdapter = objectAdapter;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the auto complete values.
         /// </summary>
@@ -49,7 +39,7 @@ namespace Catel.Services
 
             if (source is string)
             {
-                return ArrayShim.Empty<string>();
+                return Array.Empty<string>();
             }
 
             var propertyValues = new List<string>();
@@ -97,6 +87,5 @@ namespace Catel.Services
 
             return ObjectToStringHelper.ToString(value);
         }
-        #endregion
     }
 }

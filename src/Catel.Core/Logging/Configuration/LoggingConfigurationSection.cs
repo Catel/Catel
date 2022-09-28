@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
-
 namespace Catel.Logging
 {
     using System.Collections.Generic;
@@ -91,5 +89,3 @@ namespace Catel.Logging
         #endregion
     }
 }
-
-#endif

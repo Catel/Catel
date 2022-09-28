@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE || NETSTANDARD
-
 namespace Catel.Configuration
 {
     using System;
@@ -170,5 +168,3 @@ namespace Catel.Configuration
         }
     }
 }
-
-#endif

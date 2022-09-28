@@ -1,20 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationEventArgsExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Navigation
+﻿namespace Catel.MVVM.Navigation
 {
     using System;
-
-#if !XAMARIN && !XAMARIN_FORMS
-#if UWP
-    using global::Windows.UI.Xaml.Navigation;
-#else
     using System.Windows.Navigation;
-#endif
-#endif
 
     /// <summary>
     /// Navigation event args extensions.
@@ -47,7 +34,6 @@ namespace Catel.MVVM.Navigation
             return uriString.Contains("app://external");
         }
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Determines whether the navigation is for the specified view.
         /// </summary>
@@ -81,7 +67,6 @@ namespace Catel.MVVM.Navigation
             var uriString = GetUriWithoutQueryInfo(e);
             return IsNavigationForView(uriString, viewType);
         }
-#endif
 
         /// <summary>
         /// Determines whether the navigation is for the specified view model.
@@ -96,15 +81,9 @@ namespace Catel.MVVM.Navigation
             Argument.IsNotNullOrWhitespace("uriString", uriString);
             Argument.IsNotNull("viewType", viewType);
 
-#if NETFX_CORE
-            return string.Equals(uriString, viewType.FullName, StringComparison.OrdinalIgnoreCase);
-#else
-
             return uriString.ContainsIgnoreCase(viewType.Name + ".xaml");
-#endif
         }
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the URI from the navigating context.
         /// </summary>
@@ -115,12 +94,7 @@ namespace Catel.MVVM.Navigation
         {
             Argument.IsNotNull("e", e);
 
-#if NETFX_CORE
-            string uriString = e.SourcePageType.FullName;
-#else
-            string uriString = UriExtensions.GetSafeUriString(e.Uri);
-#endif
-
+            var uriString = UriExtensions.GetSafeUriString(e.Uri);
             return uriString;
         }
 
@@ -134,15 +108,9 @@ namespace Catel.MVVM.Navigation
         {
             Argument.IsNotNull("e", e);
 
-#if NETFX_CORE
-            string uriString = e.SourcePageType.FullName;
-#else
-            string uriString = UriExtensions.GetSafeUriString(e.Uri);
-#endif
-
+            var uriString = UriExtensions.GetSafeUriString(e.Uri);
             return uriString;
         }
-#endif
 
         /// <summary>
         /// Gets the URI from the navigated context.
@@ -154,8 +122,7 @@ namespace Catel.MVVM.Navigation
         {
             Argument.IsNotNull("uri", uri);
 
-            string uriString = uri;
-
+            var uriString = uri;
             return uriString;
         }
     }

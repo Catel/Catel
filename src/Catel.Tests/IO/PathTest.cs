@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PathTest.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.IO
+﻿namespace Catel.Tests.IO
 {
     using System;
     using System.IO;
@@ -22,14 +16,8 @@ namespace Catel.Tests.IO
     [TestFixture]
     public class PathTest
     {
-        #region Fields
-#if NET || NETCORE
         private string _testDirectory;
-#endif
-        #endregion
 
-        #region Initialization & cleanup
-#if NET || NETCORE
         [SetUp]
         public void Initialize()
         {
@@ -54,11 +42,7 @@ namespace Catel.Tests.IO
                 Directory.Delete(_testDirectory, true);
             }
         }
-#endif
-        #endregion
 
-        #region GetApplicationDataDirectory
-#if NET || NETCORE
         //[TestCase]
         //public void GetApplicationData_EntryAssembly()
         //{
@@ -149,8 +133,6 @@ namespace Catel.Tests.IO
             Assert.AreEqual(directory, result);
             Assert.IsTrue(Directory.Exists(result));
         }
-#endif
-        #endregion
 
         #region GetDirectoryName
         [TestCase]
@@ -350,7 +332,6 @@ namespace Catel.Tests.IO
             Assert.AreEqual(@"..\MyTest\MyFile.exe".ToLower(), relative.ToLower());
         }
 
-#if NET || NETCORE
         [TestCase]
         public void GetRelativePath_EmptyBasePath()
         {
@@ -370,7 +351,6 @@ namespace Catel.Tests.IO
             // Restore current working directory
             Environment.CurrentDirectory = currentWorkingDirectory;
         }
-#endif
 
         [TestCase]
         public void GetRelativePath_DeepTree()
@@ -436,7 +416,6 @@ namespace Catel.Tests.IO
         #endregion
 
         #region GetFullPath
-#if NET || NETCORE
         [TestCase]
         public void GetFullPath_FromRootDirectory()
         {
@@ -520,7 +499,6 @@ namespace Catel.Tests.IO
 
             Assert.Throws<ArgumentException>(() => Path.GetFullPath(file, path));
         }
-#endif
         #endregion
 
         #region AppendTrailing

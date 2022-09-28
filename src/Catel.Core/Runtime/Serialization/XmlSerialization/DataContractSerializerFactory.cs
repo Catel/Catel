@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataContractSerializerFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-//#define ENABLE_DETAILED_LOGGING
+﻿//#define ENABLE_DETAILED_LOGGING
 
 namespace Catel.Runtime.Serialization.Xml
 {
@@ -43,15 +37,6 @@ namespace Catel.Runtime.Serialization.Xml
         }
         #endregion
 
-#if NET
-        /// <summary>
-        /// Gets or sets the <see cref="IDataContractSurrogate"/> passed in constructor to <see cref="DataContractSerializer"/>.
-        /// <para />
-        /// The default value is <null/>.
-        /// </summary>
-        /// <value>The <see cref="IDataContractSurrogate"/>.</value>
-        public IDataContractSurrogate DataContractSurrogate { get; set; }
-
         /// <summary>
         /// Gets or sets the <see cref="DataContractResolver"/> passed in constructor to <see cref="DataContractSerializer"/>.
         /// <para />
@@ -59,7 +44,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
         public DataContractResolver DataContractResolver { get; set; }
-#endif
 
         #region IDataContractSerializerFactory Members
         /// <summary>
@@ -383,13 +367,11 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-#if NET || NETCORE || NETSTANDARD
             // Implements ISerializable
             if (type.ImplementsInterfaceEx<ISerializable>())
             {
                 return true;
             }
-#endif
 
             // Implements IXmlSerializer
             if (type.ImplementsInterfaceEx<System.Xml.Serialization.IXmlSerializable>())
@@ -467,7 +449,7 @@ namespace Catel.Runtime.Serialization.Xml
             string typeName = type.AssemblyQualifiedName;
             if (string.IsNullOrWhiteSpace(typeName))
             {
-                return ArrayShim.Empty<Type>();
+                return Array.Empty<Type>();
             }
 
             return _knownTypesByAttributesCache.GetFromCacheOrFetch(typeName, () =>
@@ -546,11 +528,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><c>true</c> if non-public reflection is allowed, <c>false</c> otherwise.</returns>
         protected virtual bool AllowNonPublicReflection(Type type)
         {
-#if NET || NETCORE
             var allowNonPublicReflection = type.IsModelBase();
-#else
-            var allowNonPublicReflection = false;
-#endif
 
             return allowNonPublicReflection;
         }
@@ -797,7 +775,7 @@ namespace Catel.Runtime.Serialization.Xml
                     }
 
                     // Should have an empty constructor
-                    if (type.GetConstructorEx(ArrayShim.Empty<Type>()) is null)
+                    if (type.GetConstructorEx(Array.Empty<Type>()) is null)
                     {
                         return false;
                     }

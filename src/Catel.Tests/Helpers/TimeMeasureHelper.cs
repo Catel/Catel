@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TimeMeasureHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using System.Diagnostics;
@@ -23,10 +16,8 @@ namespace Catel.Tests
                 initializationAction();
             }
 
-#if NET || NETCORE
             var oldMode = GCSettings.LatencyMode;
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
-#endif
 
             var totalMs = 0d;
 
@@ -45,9 +36,7 @@ namespace Catel.Tests
                 //ConsoleHelper.Write("{0} => run {1} took {2} ms", description, i + 1, elapsed);
             }
 
-#if NET || NETCORE
             GCSettings.LatencyMode = oldMode;
-#endif
 
             var averageMs = (totalMs / timesToInvoke);
 

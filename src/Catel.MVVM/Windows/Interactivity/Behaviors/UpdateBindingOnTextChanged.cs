@@ -1,27 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdateBindingOnTextChanged.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using TimerTickEventArgs = System.Object;
-#else
     using System.Windows.Controls;
     using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
     using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// This behavior automatically updates the binding of a <see cref="TextBox"/> when the
@@ -29,11 +13,8 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class UpdateBindingOnTextChanged : UpdateBindingBehaviorBase<TextBox>
     {
-        #region Fields
         private readonly DispatcherTimer _timer;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateBindingOnTextChanged"/> class.
         /// </summary>
@@ -44,9 +25,7 @@ namespace Catel.Windows.Interactivity
 
             _timer = new DispatcherTimer();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the update delay.
         /// <para/>
@@ -59,9 +38,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <value>The update delay.</value>
         public int UpdateDelay { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
@@ -126,8 +103,5 @@ namespace Catel.Windows.Interactivity
 
             UpdateBinding();
         }
-        #endregion
     }
 }
-
-#endif
