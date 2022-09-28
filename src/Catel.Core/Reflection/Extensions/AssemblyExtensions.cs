@@ -15,7 +15,6 @@ namespace Catel.Reflection
     /// </summary>
     public static class AssemblyExtensions
     {
-#if NET || NETCORE
         /// <summary>
         /// Gets the build date time of the assembly.
         /// </summary>
@@ -27,7 +26,6 @@ namespace Catel.Reflection
 
             return AssemblyHelper.GetLinkerTimestamp(assembly.Location);
         }
-#endif
 
         /// <summary>
         /// Gets the title of a specific assembly.
@@ -42,11 +40,7 @@ namespace Catel.Reflection
                 return title;
             }
 
-#if NET || NETCORE || NETSTANDARD
             return System.IO.Path.GetFileNameWithoutExtension(assembly.Location);
-#else
-            throw new NotSupportedInPlatformException();
-#endif
         }
 
         /// <summary>
@@ -145,12 +139,8 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-#if NET || NETCORE || NETSTANDARD
-            string location = assembly.Location;
+            var location = assembly.Location;
             return location.Substring(0, location.LastIndexOf('\\'));
-#else
-            throw new NotSupportedInPlatformException("Directories are protected");
-#endif
         }
 
         /// <summary>

@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE || NETSTANDARD
-
 namespace Catel.Logging
 {
     using System;
@@ -336,5 +334,3 @@ namespace Catel.Logging
         #endregion
     }
 }
-
-#endif

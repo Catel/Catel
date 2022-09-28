@@ -1,13 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindingFlagsHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Reflection;
 
@@ -18,17 +11,10 @@ namespace Catel.Reflection
     {
         private static readonly ConcurrentDictionary<string, BindingFlags> _cache = new ConcurrentDictionary<string, BindingFlags>();
 
-#if NET || NETCORE
         /// <summary>
         /// The default binding flags.
         /// </summary>
         public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-#else
-        /// <summary>
-        /// The default binding flags.
-        /// </summary>
-        public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
-#endif
 
         /// <summary>
         /// Gets final binding flags and respects the <see cref="DefaultBindingFlags"/> as defined in Catel.

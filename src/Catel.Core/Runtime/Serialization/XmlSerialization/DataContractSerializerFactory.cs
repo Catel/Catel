@@ -37,7 +37,6 @@ namespace Catel.Runtime.Serialization.Xml
         }
         #endregion
 
-#if NET
         /// <summary>
         /// Gets or sets the <see cref="DataContractResolver"/> passed in constructor to <see cref="DataContractSerializer"/>.
         /// <para />
@@ -45,7 +44,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
         public DataContractResolver DataContractResolver { get; set; }
-#endif
 
         #region IDataContractSerializerFactory Members
         /// <summary>
@@ -369,13 +367,11 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-#if NET || NETCORE || NETSTANDARD
             // Implements ISerializable
             if (type.ImplementsInterfaceEx<ISerializable>())
             {
                 return true;
             }
-#endif
 
             // Implements IXmlSerializer
             if (type.ImplementsInterfaceEx<System.Xml.Serialization.IXmlSerializable>())
@@ -532,11 +528,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><c>true</c> if non-public reflection is allowed, <c>false</c> otherwise.</returns>
         protected virtual bool AllowNonPublicReflection(Type type)
         {
-#if NET || NETCORE
             var allowNonPublicReflection = type.IsModelBase();
-#else
-            var allowNonPublicReflection = false;
-#endif
 
             return allowNonPublicReflection;
         }

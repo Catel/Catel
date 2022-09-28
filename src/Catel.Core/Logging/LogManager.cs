@@ -13,11 +13,8 @@ namespace Catel.Logging
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using Reflection;
-
-#if NET || NETCORE
     using System.Configuration;
     using Catel.Configuration;
-#endif
 
     /// <summary>
     /// Log manager that allows external libraries to subscribe to logging of Catel.
@@ -261,13 +258,8 @@ namespace Catel.Logging
         /// </summary>
         static LogManager()
         {
-#if NET
             AppDomain.CurrentDomain.DomainUnload += async (sender, e) => await FlushAllAsync();
             AppDomain.CurrentDomain.UnhandledException += async (sender, e) => await FlushAllAsync();
-#elif NETCORE
-            AppDomain.CurrentDomain.ProcessExit += async (sender, e) => await FlushAllAsync();
-            AppDomain.CurrentDomain.UnhandledException += async (sender, e) => await FlushAllAsync();
-#endif
         }
         #endregion
 
@@ -410,7 +402,6 @@ namespace Catel.Logging
             return GetLogger(callingType);
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Loads the listeners from the specified configuration file.
         /// </summary>
@@ -470,7 +461,6 @@ namespace Catel.Logging
                 // Swallow
             }
         }
-#endif
 
         /// <summary>
         /// Registers the default debug listener. Starting with Catel 2.4, the debug listener is no longer

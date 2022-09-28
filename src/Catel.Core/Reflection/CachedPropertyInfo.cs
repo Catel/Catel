@@ -107,11 +107,7 @@ namespace Catel.Reflection
         {
             var propertyInfo = PropertyInfo;
 
-#if NETFX_CORE
-            var getMethod = propertyInfo.GetMethod;
-#else
             var getMethod = propertyInfo.GetGetMethod(false);
-#endif
 
             return getMethod is not null && getMethod.IsPublic;
         }
@@ -120,11 +116,7 @@ namespace Catel.Reflection
         {
             var propertyInfo = PropertyInfo;
 
-#if NETFX_CORE
-            var setMethod = propertyInfo.SetMethod;
-#else
             var setMethod = propertyInfo.GetSetMethod(false);
-#endif
 
             return setMethod is not null && setMethod.IsPublic;
         }

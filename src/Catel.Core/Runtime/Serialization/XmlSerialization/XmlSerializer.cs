@@ -1042,20 +1042,11 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var namespacePrefix = GetNamespacePrefix();
 
-#if XAMARIN
-            var defaultNamespace = "http://www.w3.org/2000/xmlns/";
-#endif
-
             var xmlWriter = context.Context.XmlWriter;
 
             if (memberValue.Value is null)
             {
                 xmlWriter.WriteStartElement(elementName);
-
-#if XAMARIN
-                xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://schemas.catelproject.com");
-#endif
-
                 xmlWriter.WriteAttributeString(namespacePrefix, XmlIsNull, null, "true");
                 xmlWriter.WriteEndElement();
             }

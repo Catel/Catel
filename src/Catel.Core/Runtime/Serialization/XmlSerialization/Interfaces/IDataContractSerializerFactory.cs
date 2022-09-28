@@ -36,7 +36,6 @@
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
         DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null);
 
-#if NET
         /// <summary>
         /// Gets or sets the <see cref="DataContractResolver"/> passed in constructor to <see cref="DataContractSerializer"/>.
         /// <para />
@@ -44,7 +43,5 @@
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
         DataContractResolver DataContractResolver { get; set; }
-#endif
-
     }
 }

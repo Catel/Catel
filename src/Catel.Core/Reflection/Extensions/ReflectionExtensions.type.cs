@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensions.type.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#pragma warning disable 1591
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -182,11 +174,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().GetCustomAttributes(inherit).ToArray();
-#else
             return type.GetCustomAttributes(inherit).ToAttributeArray();
-#endif
         }
 
         /// <summary>
@@ -203,11 +191,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).ToArray();
-#else
             return type.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
-#endif
         }
 
         /// <summary>
@@ -220,11 +204,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().ContainsGenericParameters;
-#else
             return type.ContainsGenericParameters;
-#endif
         }
 
         /// <summary>
@@ -237,11 +217,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().Assembly;
-#else
             return type.Assembly;
-#endif
         }
 
         /// <summary>
@@ -254,11 +230,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetAssemblyEx().FullName;
-#else
             return type.Assembly.FullName;
-#endif
         }
 
         /// <summary>
@@ -274,11 +246,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("typeToCheck", typeToCheck);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().BaseType == typeToCheck;
-#else
             return type.BaseType == typeToCheck;
-#endif
         }
 
         /// <summary>
@@ -291,13 +259,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsSerializable;
-#elif NET || NETCORE || NETSTANDARD
             return type.IsSerializable;
-#else
-            return true;
-#endif
         }
 
         /// <summary>
@@ -310,11 +272,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsPublic;
-#else
             return type.IsPublic;
-#endif
         }
 
         /// <summary>
@@ -327,11 +285,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsNestedPublic;
-#else
             return type.IsNestedPublic;
-#endif
         }
 
         /// <summary>
@@ -344,11 +298,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsInterface;
-#else
             return type.IsInterface;
-#endif
         }
 
         /// <summary>
@@ -360,11 +310,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsAbstract;
-#else
             return type.IsAbstract;
-#endif
         }
 
         /// <summary>
@@ -376,11 +322,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsArray;
-#else
             return type.IsArray;
-#endif
         }
 
         /// <summary>
@@ -392,11 +334,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsClass;
-#else
             return type.IsClass;
-#endif
         }
 
         /// <summary>
@@ -409,12 +347,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            //return (type is IConvertible); // Note: don't use, breaks UAP version
-            return type.GetTypeInfo().IsValueType;
-#else
             return type.IsValueType;
-#endif
         }
 
         /// <summary>
@@ -427,11 +360,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsGenericType;
-#else
             return type.IsGenericType;
-#endif
         }
 
         /// <summary>
@@ -444,11 +373,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsGenericTypeDefinition;
-#else
             return type.IsGenericTypeDefinition;
-#endif
         }
 
         /// <summary>
@@ -491,11 +416,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsPrimitive;
-#else
             return type.IsPrimitive;
-#endif
         }
 
         /// <summary>
@@ -508,11 +429,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsEnum;
-#else
             return type.IsEnum;
-#endif
         }
 
         /// <summary>
@@ -524,11 +441,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return false;
-#else
             return type.IsCOMObject;
-#endif
         }
 
         /// <summary>
@@ -547,11 +460,7 @@ namespace Catel.Reflection
                 throw new NotSupportedException(string.Format("The type '{0}' is not generic, cannot get generic type", type.FullName));
             }
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().GetGenericTypeDefinition();
-#else
             return type.GetGenericTypeDefinition();
-#endif
         }
 
         /// <summary>
@@ -564,11 +473,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().GenericTypeArguments;
-#else
             return type.GetGenericArguments();
-#endif
         }
 
         /// <summary>
@@ -581,11 +486,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().GetElementType();
-#else
             return type.GetElementType();
-#endif
         }
 
         /// <summary>
@@ -602,20 +503,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            var interfaces = type.GetInterfacesEx();
-            foreach (var iface in interfaces)
-            {
-                if (string.Equals(iface.FullName, name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
-                {
-                    return iface;
-                }
-            }
-
-            return null;
-#else
             return type.GetInterface(name, ignoreCase);
-#endif
         }
 
         /// <summary>
@@ -628,11 +516,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().ImplementedInterfaces.ToArray();
-#else
             return type.GetInterfaces();
-#endif
         }
 
         /// <summary>
@@ -685,11 +569,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().BaseType;
-#else
             return type.BaseType;
-#endif
         }
 
         /// <summary>
@@ -795,11 +675,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("types", types);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false));
-#else
             return type.GetConstructor(types);
-#endif
         }
 
         /// <summary>
@@ -812,11 +688,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().DeclaredConstructors.ToArray();
-#else
             return type.GetConstructors();
-#endif
         }
 
         /// <summary>
@@ -1193,13 +1065,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
-#if NET || NETCORE || NETSTANDARD
             return type.GetMethod(name, bindingFlags, null, types, null);
-#elif XAMARIN
-            return type.GetTypeInfo().GetMethod(name, types);
-#else
-            return type.GetTypeInfo().GetMethod(name, types, bindingFlags);
-#endif
         }
 
         /// <summary>

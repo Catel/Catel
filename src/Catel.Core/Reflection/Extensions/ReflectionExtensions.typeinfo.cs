@@ -1,14 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensions.typeinfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if UAP || NET || NETSTANDARD
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
-    using System.Collections.Generic;
     using System;
     using System.Linq;
     using System.Reflection;
@@ -22,7 +13,6 @@ namespace Catel.Reflection
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        #region Methods
         /// <summary>
         /// Determines whether the hierarchy should be flattened based on the specified binding flags.
         /// </summary>
@@ -144,11 +134,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("typeInfo", typeInfo);
 
-#if UAP_DEFAULT
-            var source = typeInfo.DeclaredConstructors.ToArray();
-#else
             var source = typeInfo.GetConstructors(bindingFlags);
-#endif
 
             var includeStatics = Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static);
             if (!includeStatics)
@@ -347,8 +333,5 @@ namespace Catel.Reflection
                                                                               select parameterInfo.ParameterType)
                     select x).FirstOrDefault();
         }
-        #endregion
     }
 }
-
-#endif
