@@ -1,10 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeExpirationPolicy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Caching.Policies
+﻿namespace Catel.Caching.Policies
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -15,8 +9,6 @@ namespace Catel.Caching.Policies
     /// </summary>
     public sealed class CompositeExpirationPolicy : ExpirationPolicy
     {
-        #region Fields
-
         /// <summary>
         /// The expiration policies.
         /// </summary>
@@ -31,10 +23,6 @@ namespace Catel.Caching.Policies
         /// otherwise the cache will expires if <b>Any</b> policy does.
         private readonly bool _expiresOnlyIfAllPoliciesExpires;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositeExpirationPolicy"/> class.
         /// </summary>
@@ -46,10 +34,6 @@ namespace Catel.Caching.Policies
         {
             _expiresOnlyIfAllPoliciesExpires = expiresOnlyIfAllPoliciesExpires;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether can reset.
@@ -81,9 +65,6 @@ namespace Catel.Caching.Policies
                 return _expiresOnlyIfAllPoliciesExpires ? _synchronizationContext.Execute(() => _expirationPolicies.All(policy => policy.IsExpired)) : _synchronizationContext.Execute(() => _expirationPolicies.Any(policy => policy.IsExpired));
             }
         }
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Called when the policy is resetting.
@@ -121,7 +102,5 @@ namespace Catel.Caching.Policies
 
             return this;
         }
-
-        #endregion
     }
 }

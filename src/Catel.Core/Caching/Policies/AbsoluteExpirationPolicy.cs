@@ -1,9 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbsoluteExpirationPolicy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Caching.Policies
+﻿namespace Catel.Caching.Policies
 {
     using System;
 
@@ -12,8 +7,6 @@ namespace Catel.Caching.Policies
     /// </summary>
     public class AbsoluteExpirationPolicy : ExpirationPolicy
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AbsoluteExpirationPolicy"/> class.
         /// </summary>
@@ -40,10 +33,6 @@ namespace Catel.Caching.Policies
             AbsoluteExpirationDateTime = absoluteExpirationDateTime;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets the expiration date time.
         /// </summary>
@@ -59,6 +48,5 @@ namespace Catel.Caching.Policies
                 return FastDateTime.Now > AbsoluteExpirationDateTime;
             }
         }
-        #endregion
     }
 }
