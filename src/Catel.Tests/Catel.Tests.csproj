@@ -36,10 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
     <ProjectReference Include="..\Catel.MVVM\Catel.MVVM.csproj" />
     <ProjectReference Include="..\Catel.Serialization.Json\Catel.Serialization.Json.csproj" />
