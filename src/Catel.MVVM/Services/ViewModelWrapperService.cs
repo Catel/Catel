@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelWrapperService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Runtime.CompilerServices;
@@ -56,11 +49,7 @@ namespace Catel.Services
                     // creating the wrapper, so need to skip *while* we are creating it
                     _wrappers.Add(view, _tempObject);
 
-#if XAMARIN || XAMARIN_FORMS
-                    wrapper = new ViewModelWrapper(view);
-#else
                     wrapper = CreateViewModelGrid(view, viewModelSource, wrapOptions);
-#endif
                 }
                 finally
                 {

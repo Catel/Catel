@@ -1,26 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdateBindingOnTextChanged.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
     using Data;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
-    using System.Windows.Controls;
-    using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Behavior base for all behaviors that should update a binding.
@@ -28,7 +10,6 @@ namespace Catel.Windows.Interactivity
     public class UpdateBindingBehaviorBase<T> : BehaviorBase<T>
         where T : FrameworkElement
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateBindingOnTextChanged"/> class.
         /// </summary>
@@ -40,9 +21,7 @@ namespace Catel.Windows.Interactivity
 
             DependencyPropertyName = dependencyPropertyName;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the dependency property.
         /// </summary>
@@ -55,9 +34,7 @@ namespace Catel.Windows.Interactivity
         /// This property can only be used when the associated object is attached.
         /// </summary>
         protected DependencyProperty DependencyProperty { get { return AssociatedObject.GetDependencyPropertyByName(DependencyPropertyName); } }
-        #endregion
 
-        #region Methods
         /// <summary>
         ///   Updates the binding value.
         /// </summary>
@@ -74,8 +51,5 @@ namespace Catel.Windows.Interactivity
                 binding.UpdateSource();
             }
         }
-        #endregion
     }
 }
-
-#endif

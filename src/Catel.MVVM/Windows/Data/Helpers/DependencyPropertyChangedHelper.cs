@@ -1,24 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyPropertyChangedHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System;
     using System.Collections.Generic;
     using Logging;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#else
     using System.Windows;
     using System.Windows.Data;
-#endif
 
     /// <summary>
     /// Dependency property changed helper. This helper class allows to subscribe to any dependency property
@@ -315,5 +301,3 @@ namespace Catel.Windows.Data
         }
     }
 }
-
-#endif

@@ -1,22 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindingHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System;
     using System.Windows;
-
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#else
     using System.Windows.Data;
-#endif
 
     /// <summary>
     /// Binding helper class.
@@ -51,14 +37,7 @@ namespace Catel.Windows.Data
         /// <param name="dependencyProperty">The dependency property.</param>
         public static void ClearBinding(DependencyObject dependencyObject, DependencyProperty dependencyProperty)
         {
-#if NET || NETCORE
             BindingOperations.ClearBinding(dependencyObject, dependencyProperty);
-#else
-            // Other platforms do not support ClearBinding, then we use ClearValue
-            dependencyObject.ClearValue(dependencyProperty);
-#endif
         }
     }
 }
-
-#endif

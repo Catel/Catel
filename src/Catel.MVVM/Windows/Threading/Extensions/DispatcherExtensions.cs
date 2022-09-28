@@ -1,24 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Threading
+﻿namespace Catel.Windows.Threading
 {
-#if NET || NETCORE
     using System;
     using System.Windows.Threading;
-#endif
 
     /// <summary>
     /// Extension methods for the dispatcher.
     /// </summary>
     public static partial class DispatcherExtensions
     {
-#if NET || NETCORE
         /// <summary>
         /// Gets the managed thread identifier for the specified dispatcher.
         /// </summary>
@@ -31,8 +20,5 @@ namespace Catel.Windows.Threading
 
             return dispatcher.Thread.ManagedThreadId;
         }
-#endif
     }
 }
-
-#endif

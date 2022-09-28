@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScrollToBottom.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
     using System.Collections.Specialized;
@@ -40,7 +32,6 @@ namespace Catel.Windows.Interactivity
         private ScrollViewer _scrollViewer;
         private INotifyCollectionChanged _collection;
 
-        #region Properties
         /// <summary>
         /// A boolean that determines whether the behavior should automatically scroll as soon as the 
         /// control is loaded.
@@ -92,7 +83,6 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty ScrollTresholdProperty =
             DependencyProperty.Register(nameof(ScrollTreshold), typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
-        #endregion
 
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
@@ -209,5 +199,3 @@ namespace Catel.Windows.Interactivity
         }
     }
 }
-
-#endif

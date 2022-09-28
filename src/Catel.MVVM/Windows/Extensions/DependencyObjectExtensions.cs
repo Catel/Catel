@@ -1,31 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyObjectExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using Catel.Logging;
-
-#if UWP
-    using global::Windows.UI;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Media;
-#else
     using System.Windows.Controls;
     using System.Windows;
-    using System.Windows.Data;
     using System.Windows.Media;
-
-    using Catel.Windows.Data;
-#endif
 
     /// <summary>
     /// Extension methods for the <see cref="DependencyObject"/> class.
@@ -43,14 +22,12 @@ namespace Catel.Windows
         {
             // Try to be super fast, simple mode (just 1 level)
 
-#if NET || NETCORE
             // Try to find logical ancestor one level up
             var logicalAncestor = FindLogicalAncestor(startElement, condition, 1);
             if (logicalAncestor is not null)
             {
                 return logicalAncestor;
             }
-#endif
 
             // Try to find visual ancestor one level up
             var visualAncestor = FindVisualAncestor(startElement, condition, 1);
@@ -61,14 +38,12 @@ namespace Catel.Windows
 
             // Go into "expensive mode" (search all levels)
 
-#if NET || NETCORE
             // Try to find logical ancestor at any level
             logicalAncestor = FindLogicalAncestor(startElement, condition, maxDepth);
             if (logicalAncestor is not null)
             {
                 return logicalAncestor;
             }
-#endif
 
             // Try to find visual ancestor at any level
             visualAncestor = FindVisualAncestor(startElement, condition, maxDepth);
@@ -263,11 +238,7 @@ namespace Catel.Windows
 
             try
             {
-#if NET || NETCORE
                 return LogicalTreeHelper.GetParent(element);
-#else
-                return VisualTreeHelper.GetParent(element);
-#endif
             }
             catch (Exception)
             {
@@ -328,13 +299,11 @@ namespace Catel.Windows
                     return FindVisualDescendant(startElementAsBorder.Child, condition);
                 }
 
-#if NET || NETCORE
                 var startElementAsDecorator = startElement as Decorator;
                 if (startElementAsDecorator is not null)
                 {
                     return FindVisualDescendant(startElementAsDecorator.Child, condition);
                 }
-#endif
 
                 // If the element has children, loop the children
                 var children = new List<DependencyObject>();
@@ -431,5 +400,3 @@ namespace Catel.Windows
         }
     }
 }
-
-#endif

@@ -1,28 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandBehaviorBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System.Windows.Input;
     using Catel.Windows.Input;
-
-#if UWP
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-    using Key = global::Windows.System.VirtualKey;
-    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System;
     using System.Windows;
     using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Behavior base class that handles a safe unsubscribe and clean up because the default
@@ -34,13 +17,10 @@ namespace Catel.Windows.Interactivity
     public abstract class CommandBehaviorBase<T> : BehaviorBase<T> 
         where T : FrameworkElement
     {
-        #region Fields
         private ICommand _command;
         private object _commandParameter;
         private bool _isSubscribed;
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the modifiers to check for.
         /// </summary>
@@ -88,9 +68,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(CommandBehaviorBase<T>), 
             new PropertyMetadata(null, (sender, e) => ((CommandBehaviorBase<T>)sender).OnCommandParameterChangedInternal(e.NewValue)));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="ICommand.CanExecute"/> state has changed.
         /// </summary>
@@ -285,8 +263,5 @@ namespace Catel.Windows.Interactivity
                 _command.Execute(parameter);
             }
         }
-        #endregion
     }
 }
-
-#endif

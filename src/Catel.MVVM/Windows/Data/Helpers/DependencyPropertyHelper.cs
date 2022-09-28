@@ -1,28 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyPropertyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Reflection;
 
     using Catel.Caching;
     using Catel.Logging;
 
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Helper class for dependency properties.
@@ -221,13 +207,8 @@ namespace Catel.Windows.Data
                     }
                     else if (propertyInfo is not null)
                     {
-#if UWP
-                        var propertyValue = propertyInfo.GetValue(null);
-                        dependencyProperty = propertyValue as DependencyProperty;
-#else
                         var propertyValue = propertyInfo.GetValue(null, null);
                         dependencyProperty = propertyValue as DependencyProperty;
-#endif
                     }
                     else
                     {
@@ -255,5 +236,3 @@ namespace Catel.Windows.Data
         }
     }
 }
-
-#endif

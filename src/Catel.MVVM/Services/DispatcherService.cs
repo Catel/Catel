@@ -1,32 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Logging;
-
-#if ANDROID
-    using global::Android.App;
-    using global::Android.OS;
-#elif IOS
-    using global::CoreFoundation;
-#elif UWP
-    using Windows.Threading;
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#elif !XAMARIN_FORMS
-    using Catel.Windows.Threading;
     using System.Windows.Threading;
     using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
-#else
-    using Xamarin.Forms;
-#endif
 
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
@@ -35,11 +14,8 @@ namespace Catel.Services
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !XAMARIN && !XAMARIN_FORMS
         private readonly IDispatcherProviderService _dispatcherProviderService;
-#endif
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Initializes a new instance of the <see cref="DispatcherService"/> class.
         /// </summary>
@@ -49,9 +25,7 @@ namespace Catel.Services
 
             _dispatcherProviderService = dispatcherProviderService;
         }
-#endif
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the current dispatcher.
         /// </summary>
@@ -62,9 +36,7 @@ namespace Catel.Services
                 return _dispatcherProviderService.GetApplicationDispatcher() as Dispatcher;
             }
         }
-#endif
 
-#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -72,11 +44,7 @@ namespace Catel.Services
         /// <returns>The task representing the action.</returns>
         public virtual Task InvokeAsync(Action action)
         {
-#if NET || NETCORE
             return CurrentDispatcher.InvokeAsync(action).Task;
-#else
-            return dispatcher.InvokeAsync(action);
-#endif
         }
 
         /// <summary>
@@ -155,7 +123,6 @@ namespace Catel.Services
 
             return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
         }
-#endif
 
         /// <summary>
         /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.
@@ -167,24 +134,9 @@ namespace Catel.Services
         public virtual void Invoke(Action action, bool onlyInvokeWhenNoAccess = true)
         {
             Argument.IsNotNull("action", action);
-#if XAMARIN_FORMS
-            var synchronizationContext = SynchronizationContext.Current;
-            if (synchronizationContext is not null)
-            {
-                synchronizationContext.Post(state => action(), null);
-            }
-            else
-            {
-                action();
-            }
-#elif ANDROID
-            _handler.Post(action);
-#elif IOS
-            DispatchQueue.MainQueue.DispatchSync(() => action());
-#else
+
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.Invoke(dispatcher, action, onlyInvokeWhenNoAccess);
-#endif
         }
 
         /// <summary>
@@ -196,24 +148,9 @@ namespace Catel.Services
         public virtual void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess = true)
         {
             Argument.IsNotNull("action", action);
-#if XAMARIN_FORMS
-            var synchronizationContext = SynchronizationContext.Current;
-            if (synchronizationContext is not null)
-            {
-                synchronizationContext.Post(state => action(), null);
-            }
-            else
-            {
-                action();
-            }
-#elif ANDROID
-            _handler.Post(action);
-#elif IOS
-            DispatchQueue.MainQueue.DispatchAsync(() => action());
-#else
+
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.BeginInvoke(dispatcher, action, onlyBeginInvokeWhenNoAccess);
-#endif
         }
     }
 }

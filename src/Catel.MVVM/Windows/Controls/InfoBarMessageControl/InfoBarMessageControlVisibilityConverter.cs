@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InfoBarMessageControlVisibilityConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls
 {
     using System;
     using System.Windows;
@@ -17,9 +9,7 @@ namespace Catel.Windows.Controls
     /// Converter for the <see cref="InfoBarMessageControl"/> to determine whether the control
     /// should be visible for the current mode and
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(InfoBarMessageControlMode), typeof(object), ParameterType = typeof(InfoBarMessageControlMode))]
-#endif
     public class InfoBarMessageControlVisibilityConverter : IValueConverter
     {
 
@@ -66,5 +56,3 @@ namespace Catel.Windows.Controls
         }
     }
 }
-
-#endif

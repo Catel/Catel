@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewStack.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Class containing a view stack and whether the stack is currently loaded.

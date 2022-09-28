@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakViewInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using Logging;
-
-#if UWP
-    using LoadedEventArgs = System.Object;
-    using LayoutUpdatedEventArgs = System.Object;
-#else
     using LoadedEventArgs = System.EventArgs;
     using LayoutUpdatedEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Class containing weak events for a <see cref="IView"/>. This way it is safe to subscribe
@@ -23,16 +11,12 @@ namespace Catel.MVVM.Views
     /// </summary>
     public class WeakViewInfo
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private WeakReference _view;
 
         private bool _isViewLoadState;
-        #endregion
 
-
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakViewInfo"/> class.
         /// </summary>
@@ -58,9 +42,7 @@ namespace Catel.MVVM.Views
 
             Initialize(viewLoadState, isViewLoaded);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether the link to the <see cref="IView"/> is alive.
         /// </summary>
@@ -98,9 +80,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <value><c>true</c> if the <see cref="View"/> is loaded; otherwise, <c>false</c>.</value>
         public bool IsLoaded { get; private set; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
@@ -110,9 +90,7 @@ namespace Catel.MVVM.Views
         /// Occurs when the view is unloaded.
         /// </summary>
         public event EventHandler<EventArgs> Unloaded;
-        #endregion
 
-        #region Methods
         private void Initialize(object viewObject, bool isViewLoaded)
         {
             _view = new WeakReference(viewObject);
@@ -207,6 +185,5 @@ namespace Catel.MVVM.Views
                 unloaded(this, EventArgs.Empty);
             }
         }
-        #endregion
     }
 }

@@ -1,22 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationRootService.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || UWP
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Navigation;
-#else
     using System.Windows;
     using System.Windows.Controls;
     using Windows;
-#endif
 
     public partial class NavigationRootService
     {
@@ -31,23 +17,6 @@ namespace Catel.Services
             return GetApplicationRootFrame();
         }
 
-#if UWP
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        protected virtual Frame GetApplicationRootFrame()
-        {
-            if (_rootFrame is null)
-            {
-                if (Window.Current is not null)
-                {
-                    _rootFrame = Window.Current.Content as Frame;
-                }
-            }
-
-            return _rootFrame as Frame;
-        }
-#else
         /// <summary>
         /// Gets the application root frame.
         /// </summary>
@@ -68,8 +37,5 @@ namespace Catel.Services
 
             return _rootFrame as Frame;
         }
-#endif
     }
 }
-
-#endif

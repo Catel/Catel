@@ -10,7 +10,6 @@
 
 namespace Catel.MVVM.Properties {
     using System;
-    using Catel.Reflection;
     
     
     /// <summary>
@@ -20,7 +19,7 @@ namespace Catel.MVVM.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Exceptions {
@@ -40,7 +39,7 @@ namespace Catel.MVVM.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Catel.MVVM.Properties.Exceptions", typeof(Exceptions).GetAssemblyEx());
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Catel.MVVM.Properties.Exceptions", typeof(Exceptions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

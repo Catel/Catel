@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResourceHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Windows;
@@ -28,14 +20,12 @@ namespace Catel.Windows
         /// </summary>
         public static void EnsurePackUriIsAllowed()
         {
-#if !UWP
             if (!UriParser.IsKnownScheme("pack"))
             {
                 Log.Debug("Pack uri is not yet allowed, adding it as known scheme");
 
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
             }
-#endif
         }
 
         /// <summary>
@@ -67,18 +57,10 @@ namespace Catel.Windows
             if (string.IsNullOrEmpty(shortAssemblyName))
             {
                 // Current app resource
-#if NET || NETCORE
                 return string.Format("pack://application:,,,/{0}", resourceUri);
-#else
-                return string.Format("/{0}", resourceUri);
-#endif
             }
 
-#if NET || NETCORE
             return string.Format("pack://application:,,,/{0};component/{1}", shortAssemblyName, resourceUri);
-#else
-            return string.Format("/{0};component/{1}", shortAssemblyName, resourceUri);
-#endif
         }
 
         /// <summary>
@@ -112,9 +94,6 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("uri", uri);
 
-#if UWP
-            return false;
-#else
             try
             {
                 return Application.GetResourceStream(uri) is not null;
@@ -123,9 +102,6 @@ namespace Catel.Windows
             {
                 return false;
             }
-#endif
         }
     }
 }
-
-#endif

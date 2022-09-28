@@ -1,24 +1,16 @@
 ﻿namespace Catel.Services
 {
-#if !XAMARIN
     using System.Windows.Threading;
-#endif
-
     using Catel.Logging;
 
     public class DispatcherProviderService : IDispatcherProviderService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !XAMARIN
         private object _appDispatcher;
-#endif
 
         public virtual object GetApplicationDispatcher()
         {
-#if XAMARIN
-            throw new NotSupportedInPlatformException();
-#else
             var dispatcher = _appDispatcher;
             if (dispatcher is null)
             {
@@ -36,16 +28,11 @@
             }
 
             return dispatcher;
-#endif
         }
 
         public virtual object GetCurrentDispatcher()
         {
-#if XAMARIN
-            throw new NotSupportedInPlatformException();
-#else
             return Dispatcher.CurrentDispatcher;
-#endif
         }
     }
 }

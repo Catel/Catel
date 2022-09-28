@@ -1,26 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventTriggerBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
     using System.Windows;
     using System.Windows.Input;
     using Catel.Windows.Input;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using Key = global::Windows.System.VirtualKey;
-    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
-
-#endif
 
     /// <summary>
     /// Trigger base class that handles a safe unsubscribe and clean up because the default
@@ -32,13 +15,10 @@ namespace Catel.Windows.Interactivity
     public abstract class CommandTriggerActionBase<T> : TriggerActionBase<T>
         where T : FrameworkElement
     {        
-        #region Fields
         private ICommand _command;
         private object _commandParameter;
         private bool _isSubscribed;
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the modifiers to check for.
         /// </summary>
@@ -86,9 +66,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(CommandTriggerActionBase<T>), 
             new PropertyMetadata(null, (sender, e) => ((CommandTriggerActionBase<T>)sender).OnCommandParameterChangedInternal(e.NewValue)));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="ICommand.CanExecute"/> state has changed.
         /// </summary>
@@ -283,8 +261,5 @@ namespace Catel.Windows.Interactivity
                 _command.Execute(parameter);
             }
         }
-        #endregion
     }
 }
-
-#endif

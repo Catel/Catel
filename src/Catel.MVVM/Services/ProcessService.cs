@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProcessService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || UWP
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Threading.Tasks;
     using Catel.Logging;
-
-#if UWP
-    using global::Windows.System;
-#endif
 
     /// <summary>
     /// Process service to run files or start processes from a view model.
@@ -139,5 +127,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

@@ -1,29 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DoubleClickToCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Logging;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using TimerTickEventArgs = System.Object;
-#else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Threading;
     using TimerTickEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// This behavior allows any element that supports a double click to command for every element
@@ -31,7 +17,6 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class DoubleClickToCommand : CommandBehaviorBase<FrameworkElement>
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -40,9 +25,7 @@ namespace Catel.Windows.Interactivity
         private readonly DispatcherTimer _timer;
 
         private readonly Action _action;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DoubleClickToCommand"/> class.
         /// </summary>
@@ -71,9 +54,7 @@ namespace Catel.Windows.Interactivity
 
             _action = action;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether to automatically fix the ItemTemplate in a ListBox.
         /// </summary>
@@ -91,9 +72,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty AutoFixListBoxItemTemplateProperty =
             DependencyProperty.Register(nameof(AutoFixListBoxItemTemplate), typeof(bool), typeof(DoubleClickToCommand), new PropertyMetadata(true));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the hit elements.
         /// </summary>
@@ -223,8 +202,5 @@ namespace Catel.Windows.Interactivity
         {
             _timer.Stop();
         }
-        #endregion
     }
 }
-
-#endif

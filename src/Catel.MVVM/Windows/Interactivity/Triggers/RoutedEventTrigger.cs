@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RoutedEventTrigger.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
     using System.Windows;
@@ -16,7 +8,6 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class RoutedEventTrigger : EventTriggerBase<FrameworkElement>
     {
-        #region Properties
         /// <summary>
         /// Gets or sets the routed event.
         /// </summary>
@@ -24,9 +15,7 @@ namespace Catel.Windows.Interactivity
 #pragma warning disable WPF0107
         public RoutedEvent RoutedEvent { get; set; }
 #pragma warning restore WPF0107
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Validates the required properties.
         /// </summary>
@@ -79,8 +68,5 @@ namespace Catel.Windows.Interactivity
         {
             return RoutedEvent.Name;
         }
-        #endregion
     }
 }
-
-#endif

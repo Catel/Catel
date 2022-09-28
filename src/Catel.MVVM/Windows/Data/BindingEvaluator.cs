@@ -1,18 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindingEvaluator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Class to help evaluate bindings at runtime.
@@ -43,5 +31,3 @@ namespace Catel.Windows.Data
             DependencyProperty.Register(nameof(Value), typeof(object), typeof(BindingEvaluator), new PropertyMetadata(null));
     }
 }
-
-#endif

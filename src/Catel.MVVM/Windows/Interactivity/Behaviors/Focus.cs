@@ -1,20 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Focus.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
     using Microsoft.Xaml.Behaviors;
-#endif
-
     using System;
     using System.ComponentModel;
     using Logging;
@@ -46,14 +33,12 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class Focus : FocusBehaviorBase
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private Catel.IWeakEventListener _weakEventListener;
-        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Focus"/> class.
@@ -62,7 +47,6 @@ namespace Catel.Windows.Interactivity
         {
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the focus moment.
         /// <para />
@@ -137,9 +121,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty EventNameProperty =
             DependencyProperty.Register(nameof(EventName), typeof(string), typeof(Focus), new PropertyMetadata(null));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
@@ -231,8 +213,5 @@ namespace Catel.Windows.Interactivity
                 }
             }
         }
-        #endregion
     }
 }
-
-#endif

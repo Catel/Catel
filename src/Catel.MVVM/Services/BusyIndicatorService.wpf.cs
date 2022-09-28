@@ -1,6 +1,4 @@
-﻿#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System.Windows.Input;
     using Catel.Windows;
@@ -50,5 +48,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

@@ -23,7 +23,6 @@
         /// </value>
         public abstract bool CanGoForward { get; }
 
-        #region Methods
         /// <summary>
         /// Resolves the navigation target.
         /// </summary>
@@ -45,6 +44,5 @@
         /// Removes all the back entries from the navigation history.
         /// </summary>
         public abstract void RemoveAllBackEntries();
-        #endregion
     }
 }

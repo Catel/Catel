@@ -1,6 +1,4 @@
-﻿#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
@@ -13,12 +11,7 @@ namespace Catel.Services
     using Reflection;
     using Catel.Windows.Threading;
     using Threading;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows.Controls;
-#endif
 
     /// <summary>
     /// Service to show modal or non-modal popup windows.
@@ -27,14 +20,12 @@ namespace Catel.Services
     /// </summary>
     public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
 
         private readonly IViewLocator _viewLocator;
         private readonly IDispatcherService _dispatcherService;
-        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
@@ -52,7 +43,6 @@ namespace Catel.Services
             _dispatcherService = dispatcherService;
         }
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified name is registered.
         /// </summary>
@@ -191,8 +181,5 @@ namespace Catel.Services
                 }
             }
         }
-        #endregion
     }
 }
-
-#endif

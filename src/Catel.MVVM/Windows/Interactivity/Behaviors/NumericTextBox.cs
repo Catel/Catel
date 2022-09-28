@@ -1,29 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumbericTextBox.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-
-#if UWP
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using Key = global::Windows.System.VirtualKey;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using UIKeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
     using UIEventArgs = System.EventArgs;
     using UIKeyEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
-
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -48,21 +29,9 @@ namespace Catel.Windows.Interactivity
         private static readonly HashSet<Key> AllowedKeys = new HashSet<Key>
         {
             Key.Back,
-
-#if UWP
-            Key.CapitalLock,
-#else
             Key.CapsLock,
-#endif
-            
-#if UWP
-            Key.LeftControl,
-            Key.RightControl,
-            Key.Control,
-#else
             Key.LeftCtrl,
             Key.RightCtrl,
-#endif
             Key.Down,
             Key.End,
             Key.Enter,
@@ -86,9 +55,7 @@ namespace Catel.Windows.Interactivity
         {
             base.Initialize();
 
-#if NET || NETCORE
             DataObject.AddPastingHandler(AssociatedObject, OnPaste);
-#endif
 
             AssociatedObject.KeyDown += OnAssociatedObjectKeyDown;
             AssociatedObject.TextChanged += OnAssociatedObjectTextChanged;
@@ -99,9 +66,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void Uninitialize()
         {
-#if NET || NETCORE
             DataObject.RemovePastingHandler(AssociatedObject, OnPaste);
-#endif
 
             AssociatedObject.KeyDown -= OnAssociatedObjectKeyDown;
             AssociatedObject.TextChanged -= OnAssociatedObjectTextChanged;
@@ -121,7 +86,6 @@ namespace Catel.Windows.Interactivity
             set
             {
 #pragma warning disable WPF0036
-#if NET || NETCORE
                 if (value)
                 {
                     AllowedKeys.Add(Key.OemMinus);
@@ -133,7 +97,6 @@ namespace Catel.Windows.Interactivity
                         AllowedKeys.Remove(Key.OemMinus);
                     }
                 }
-#endif
 #pragma warning restore WPF0036
 
                 SetValue(IsNegativeAllowedProperty, value);
@@ -279,7 +242,6 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Called when text is pasted into the TextBox.
         /// </summary>
@@ -316,7 +278,6 @@ namespace Catel.Windows.Interactivity
                 e.CancelCommand();
             }
         }
-#endif
 
         /// <summary>
         /// Gets the decimal separator.
@@ -379,9 +340,8 @@ namespace Catel.Windows.Interactivity
         /// <returns></returns>
         private string GetKeyValue(UIKeyEventArgs e)
         {
-            string keyValue = string.Empty;
+            var keyValue = string.Empty;
 
-#if NET || NETCORE
             if (e.Key == Key.Decimal)
             {
                 keyValue = GetDecimalSeparator();
@@ -398,41 +358,8 @@ namespace Catel.Windows.Interactivity
             {
                 keyValue = PeriodCharacter;
             }
-#elif UWP
-            if (e.VirtualKey == Key.Subtract)
-            {
-                keyValue = MinusCharacter;
-            }
-            //else if (e.VirtualKey == Key.)
-            //{
-            //    keyValue = CommaCharacter;
-            //}
-            //else if (e.VirtualKey == Key.Pe)
-            //{
-            //    keyValue = PeriodCharacter;
-            //}
-#else
-            if (e.PlatformKeyCode == 190 || e.PlatformKeyCode == 110)
-            {
-                keyValue = PeriodCharacter;
-            }
-            else if (e.PlatformKeyCode == 188)
-            {
-                keyValue = CommaCharacter;
-            }
-            else if (e.PlatformKeyCode == 189)
-            {
-                keyValue = MinusCharacter;
-            }
-            else
-            {
-                keyValue = e.Key.ToString().Replace("D", string.Empty).Replace("NumPad", string.Empty);
-            }
-#endif
 
             return keyValue;
         }
     }
 }
-
-#endif

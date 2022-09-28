@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +11,6 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationService : NavigationServiceBase, INavigationService
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -28,17 +21,11 @@ namespace Catel.Services
         /// </summary>
         private static readonly Dictionary<string, string> RegisteredUris = new Dictionary<string, string>();
 
-#if !XAMARIN_FORMS
         /// <summary>
         /// The navigation root service.
         /// </summary>
         protected readonly INavigationRootService NavigationRootService;
-#endif
-        #endregion
-
-#if !XAMARIN_FORMS
-        #region Constructors
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService" /> class.
         /// </summary>
@@ -53,10 +40,6 @@ namespace Catel.Services
             Initialize();
         }
 
-        #endregion
-#endif
-
-        #region Events
         /// <summary>
         /// Occurs when the application is about to be closed.
         /// </summary>
@@ -66,9 +49,7 @@ namespace Catel.Services
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed.
         /// </summary>
         public event EventHandler<EventArgs> ApplicationClosed;
-        #endregion
 
-        #region Methods
         partial void Initialize();
 
         /// <summary>
@@ -246,6 +227,5 @@ namespace Catel.Services
                 return result;
             }
         }
-        #endregion
     }
 }

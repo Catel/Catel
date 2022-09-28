@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtensionsControlsModule.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using MVVM;
     using MVVM.Views;
@@ -33,14 +26,10 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
-
-#if NET || NETCORE
             serviceLocator.RegisterTypeIfNotYetRegistered<IWrapControlService, WrapControlService>();
-#endif
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 
-#if !XAMARIN
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
             var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
@@ -48,7 +37,6 @@ namespace Catel
 
             var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
             AuditingManager.RegisterAuditor(subscribeKeyboardEventsOnViewModelCreationAuditor);
-#endif
 
             DesignTimeHelper.InitializeDesignTime();
         }

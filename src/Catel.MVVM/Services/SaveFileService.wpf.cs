@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SaveFileService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System.Threading.Tasks;
     using Microsoft.Win32;
@@ -22,7 +14,8 @@ namespace Catel.Services
             Argument.IsNotNull("context", context);
 
             var fileDialog = new SaveFileDialog();
-            ConfigureFileDialog(fileDialog, context);
+
+            await ConfigureFileDialogAsync(fileDialog, context);
 
             var result = new DetermineSaveFileResult
             {
@@ -34,5 +27,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

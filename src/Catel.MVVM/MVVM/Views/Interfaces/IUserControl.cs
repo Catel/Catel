@@ -1,22 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IUserControl.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using MVVM;
-
-#if XAMARIN || XAMARIN_FORMS
-    using ViewType = System.Object;
-#elif UWP
-    using ViewType = global::Windows.UI.Xaml.DependencyObject;
-#else
     using ViewType = System.Windows.DependencyObject;
 
     using Windows.Controls;
-#endif
 
     /// <summary>
     /// Interface defining functionality for user controls.
@@ -49,7 +36,6 @@ namespace Catel.MVVM.Views
         /// </value>
         bool SupportParentViewModelContainers { get; set; }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -65,7 +51,6 @@ namespace Catel.MVVM.Views
         /// 	<c>true</c> if the search for an info bar message control should be skipped; otherwise, <c>false</c>.
         /// </value>
         bool SkipSearchingForInfoBarMessageControl { get; set; }
-#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether the user control should automatically be disabled when there is no

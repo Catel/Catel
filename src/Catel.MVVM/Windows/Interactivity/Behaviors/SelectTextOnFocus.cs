@@ -1,24 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SelectTextOnFocus.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System;
     using System.Windows;
     using System.Windows.Controls;
     using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Selects all the text when the <see cref="TextBox"/> or <see cref="PasswordBox"/> is focused.
@@ -31,12 +17,9 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectLoaded()
         {
             AssociatedObject.GotFocus += OnGotFocus;
-
-#if NET || NETCORE
             AssociatedObject.PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
             AssociatedObject.GotMouseCapture += OnGotMouseCapture;
             AssociatedObject.GotKeyboardFocus += OnGotKeyboardFocus;
-#endif
         }
 
         /// <summary>
@@ -45,12 +28,9 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectUnloaded()
         {
             AssociatedObject.GotFocus -= OnGotFocus;
-
-#if NET || NETCORE
             AssociatedObject.PreviewMouseLeftButtonDown -= OnPreviewMouseLeftButtonDown;
             AssociatedObject.GotMouseCapture -= OnGotMouseCapture;
             AssociatedObject.GotKeyboardFocus -= OnGotKeyboardFocus;
-#endif
         }
 
         /// <summary>
@@ -63,7 +43,6 @@ namespace Catel.Windows.Interactivity
             SelectAllText();
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Called when the <see cref="UIElement.PreviewMouseLeftButtonDown"/> event occurs.
         /// </summary>
@@ -98,7 +77,6 @@ namespace Catel.Windows.Interactivity
         {
             SelectAllText();
         }
-#endif
 
         /// <summary>
         /// Selects all the text in the associated object.
@@ -124,5 +102,3 @@ namespace Catel.Windows.Interactivity
         } 
     }
 }
-
-#endif

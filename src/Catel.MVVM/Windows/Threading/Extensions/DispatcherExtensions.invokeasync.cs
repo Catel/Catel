@@ -1,25 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Threading
+﻿namespace Catel.Windows.Threading
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Logging;
     using Catel.Threading;
-
-#if UWP
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
     using System.Windows.Threading;
-#else
-    using System.Windows.Threading;
-#endif
 
     /// <summary>
     /// Extension methods for the dispatcher.
@@ -28,7 +14,6 @@ namespace Catel.Windows.Threading
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -145,10 +130,6 @@ namespace Catel.Windows.Threading
 
         private static Task RunAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
         {
-#if UWP
-            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
-#endif
-
             // Only invoke if we really have to
             if (dispatcher.CheckAccess())
             {
@@ -203,10 +184,6 @@ namespace Catel.Windows.Threading
         {
             var result = default(T);
 
-#if UWP
-            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
-#endif
-
             // Only invoke if we really have to
             if (dispatcher.CheckAccess())
             {
@@ -249,10 +226,6 @@ namespace Catel.Windows.Threading
             CancellationToken cancellationToken, DispatcherPriority priority)
         {
             var tcs = new TaskCompletionSource<T>();
-
-#if UWP
-            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
-#endif
 
             // Only invoke if we really have to
             if (dispatcher.CheckAccess())
@@ -329,8 +302,5 @@ namespace Catel.Windows.Threading
 
             return true;
         }
-#endif
     }
 }
-
-#endif

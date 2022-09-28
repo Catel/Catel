@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WrapControlService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Windows;
@@ -15,18 +7,10 @@ namespace Catel.Services
     using Catel.Windows.Controls;
     using Collections;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Controls.Primitives;
-    using global::Windows.UI.Xaml.Data;
-#else
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Documents;
-#endif
 
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.
@@ -128,7 +112,6 @@ namespace Catel.Services
             }
 
             #region Generate buttons
-#if !NETFX_CORE
             if (buttons.Length > 0)
             {
                 // Add wrappanel containing the buttons
@@ -174,13 +157,10 @@ namespace Catel.Services
                         }
                         button.SetBinding(ButtonBase.VisibilityProperty, visibilityBinding);
                     }
-#if NET || NETCORE
+
                     button.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonStyle");
                     button.IsDefault = dataWindowButton.IsDefault;
                     button.IsCancel = dataWindowButton.IsCancel;
-#else
-                    button.Style = Application.Current.Resources["DataWindowButtonStyle"] as Style;
-#endif
 
                     if (dataWindowButton.IsDefault)
                     {
@@ -208,7 +188,6 @@ namespace Catel.Services
                 // The dockpanel is now the main content
                 mainContent = subDockPanel;
             }
-#endif
             #endregion
 
             #region Generate internal grid
@@ -250,7 +229,6 @@ namespace Catel.Services
             #endregion
 
             #region Generate InfoBarMessageControl
-#if !NETFX_CORE
             if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
             {
@@ -269,7 +247,6 @@ namespace Catel.Services
                 // This is now the main content
                 mainContent = infoBarMessageControl;
             }
-#endif
             #endregion
 
             // Set content of the outside grid
@@ -391,5 +368,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

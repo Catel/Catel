@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NamingConvention.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
@@ -76,7 +70,6 @@ namespace Catel.Services
         /// </summary>
         public const string Current = "[CURRENT]";
 
-        #region Methods
         /// <summary>
         /// Resolves the convention by using the view model name.
         /// <para/>
@@ -315,6 +308,5 @@ namespace Catel.Services
 
             return value;
         }
-        #endregion
     }
 }

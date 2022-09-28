@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindingWithValidation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System.Windows.Data;
 
@@ -33,5 +25,3 @@ namespace Catel.Windows.Data
         }
     }
 }
-
-#endif

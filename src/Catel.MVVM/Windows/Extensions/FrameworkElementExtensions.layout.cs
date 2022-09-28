@@ -1,23 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UIElementExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
-#if UWP
-    using global::Windows.Foundation;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Media;
-#else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
-#endif
 
     /// <summary>
     /// Extensions for <see cref="FrameworkElement"/>.
@@ -33,10 +18,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-#if NET || NETCORE
             element.SnapsToDevicePixels = true;
-#endif
-
             element.UseLayoutRounding = true;
         }
 
@@ -49,11 +31,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-#if UWP
-            return element.Visibility == Visibility.Visible;
-#else
             return element.IsVisible;
-#endif
         }
 
         /// <summary>
@@ -93,22 +71,11 @@ namespace Catel.Windows
                 return false;
             }
 
-#if UWP
-            var transform = element.TransformToVisual(container);
-#else
             var transform = element.TransformToAncestor(container);
-#endif
-
             var bounds = transform.TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
             var rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
-
-#if UWP
-            var topLeft = new Point(bounds.Left, bounds.Top);
-            var bottomRight = new Point(bounds.Right, bounds.Bottom);
-#else
             var topLeft = bounds.TopLeft;
             var bottomRight = bounds.BottomRight;
-#endif
 
             return rect.Contains(topLeft) || rect.Contains(bottomRight);
         }
@@ -145,5 +112,3 @@ namespace Catel.Windows
         }
     }
 }
-
-#endif
