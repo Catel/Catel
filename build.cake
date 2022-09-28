@@ -24,6 +24,22 @@ Parameters["UseVisualStudioPrerelease"] = "true";
 // DEFINE COMPONENTS TO BUILD / PACKAGE
 //=======================================================
 
+// Catel.Core is a dependency of the test references
+Dependencies.Add("Catel.Core");
+
+Dependencies.Add("Catel.Tests.TestReferenceB", new [] 
+{
+    "Catel.Tests.TestReferenceA"
+});
+Dependencies.Add("Catel.Tests.TestReferenceC", new [] 
+{
+    "Catel.Tests.TestReferenceA"
+});
+Dependencies.Add("Catel.Tests.TestReferenceA", new [] 
+{
+    "Catel.Tests"
+});
+
 Components.Add("Catel.Core");
 Components.Add("Catel.MVVM");
 Components.Add("Catel.Serialization.Json");
