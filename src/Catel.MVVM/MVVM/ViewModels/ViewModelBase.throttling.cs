@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.throttling.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -14,16 +6,10 @@ namespace Catel.MVVM
     using Catel.Data;
     using Catel.Logging;
     using Catel.Services;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows.Threading;
-#endif
 
     public partial class ViewModelBase
     {
-        #region Fields
         /// <summary>
         /// The throttling timer.
         /// </summary>
@@ -53,9 +39,7 @@ namespace Catel.MVVM
         /// The properties queue used when throttling is enabled.
         /// </summary>
         private Dictionary<string, DateTime> _throttlingQueue = new Dictionary<string, DateTime>();
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="RaisePropertyChanged"/> will be dispatched using
         /// the <see cref="IDispatcherService"/>.
@@ -104,9 +88,7 @@ namespace Catel.MVVM
                 }
             }
         }
-        #endregion
 
-        #region Methods
         partial void InitializeThrottling()
         {
             _throttlingTimer.Tick += (sender, e) => OnThrottlingTimerTick();
@@ -175,8 +157,5 @@ namespace Catel.MVVM
                 base.RaisePropertyChanged(sender, e);
             }
         }
-        #endregion
     }
 }
-
-#endif

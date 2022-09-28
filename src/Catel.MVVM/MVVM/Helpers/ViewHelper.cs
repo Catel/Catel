@@ -1,22 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Windows;
-    using Collections;
     using Logging;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// View helper class for MVVM scenarios.
@@ -109,5 +96,3 @@ namespace Catel.MVVM
         }
     }
 }
-
-#endif

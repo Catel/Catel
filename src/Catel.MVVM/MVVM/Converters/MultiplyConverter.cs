@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MultiplyConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using Catel.Data;
@@ -12,9 +6,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Calculate the product of given value and factor in parameter.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(int), typeof(int))]
-#endif
     public class MultiplyConverter : ValueConverterBase
     {
         /// <summary>

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using Catel.IoC;
 
@@ -25,11 +19,6 @@ namespace Catel.MVVM
 
             var module = new MVVMModule();
             module.Initialize(serviceLocator);
-
-#if XAMARIN_FORMS
-            var manager = new ServiceLocatorDependencyRegistrationManager(serviceLocator);
-            manager.Initialize();
-#endif
         }
     }
 }

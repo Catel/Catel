@@ -1,19 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelServiceHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using Catel.MVVM.Views;
     using Catel.Services;
-
-#if !XAMARIN && !XAMARIN_FORMS
-    using Catel.Windows;
-#endif
-
     using IoC;
     using Logging;
     using Messaging;
@@ -64,19 +53,11 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationRootService, NavigationRootService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewContextService, ViewContextService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
-
-#if !XAMARIN && !XAMARIN_FORMS
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISelectDirectoryService, SelectDirectoryService>();
-#endif
-
                 serviceLocator.RegisterTypeIfNotYetRegistered<IBusyIndicatorService, BusyIndicatorService>();
-
-#if NET || NETCORE || UWP
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
-#endif
 
                 Log.Debug("Registered default service implementations for IoC container");
             }

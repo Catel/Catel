@@ -1,27 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAuthenticationProvider.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#pragma warning disable 3021 // 'type' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
+﻿#pragma warning disable CS3021 // Type or member does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 
 namespace Catel.MVVM
 {
     using System;
-    using Catel.MVVM.Views;
-
-#if UWP
-    using View = global::Windows.UI.Xaml.FrameworkElement;
-#elif ANDROID
-    using View = global::Android.Views.View;
-#elif IOS
-    using View = UIKit.UIView;
-#elif XAMARIN_FORMS
-    using View = global::Xamarin.Forms.VisualElement;
-#else
     using View = System.Windows.FrameworkElement;
-#endif
 
     /// <summary>
     /// Interface to allow an authentication mechanism to control the CanExecute state of a command.

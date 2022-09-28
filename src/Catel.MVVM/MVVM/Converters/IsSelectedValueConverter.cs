@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IsSelectedValueConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using Catel.Data;
@@ -16,9 +10,7 @@ namespace Catel.MVVM.Converters
     /// This converter is very usefull when a mutual exclusive selection must be made
     /// Original code found at http://geekswithblogs.net/claraoscura/archive/2008/10/17/125901.aspx
     /// </remarks>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(int?), typeof(bool))]
-#endif
     public class IsSelectedValueConverter : ValueConverterBase
     {
         /// <summary>

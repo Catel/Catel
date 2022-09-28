@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Concurrent;
@@ -21,9 +14,7 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
     using Services;
-    using Threading;
 
-    #region Enums
     /// <summary>
     /// Available clean up models for a model.
     /// </summary>
@@ -39,8 +30,7 @@ namespace Catel.MVVM
         /// </summary>
         EndEdit
     }
-    #endregion
-
+    
     /// <summary>
     /// View model base for MVVM implementations. This class is based on the <see cref="ModelBase" />, and supports all
     /// common interfaces used by WPF.
@@ -64,12 +54,10 @@ namespace Catel.MVVM
         /// </summary>
         protected readonly IObjectAdapter _objectAdapter;
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// The dispatcher service used to dispatch all calls.
         /// </summary>
         private readonly IDispatcherService _dispatcherService;
-#endif
 
         /// <summary>
         /// Value indicating whether the multiple modules warning should be ignored.
@@ -195,10 +183,8 @@ namespace Catel.MVVM
 
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _objectAdapter = DependencyResolver.Resolve<IObjectAdapter>();
-
-#if !XAMARIN && !XAMARIN_FORMS
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
-#endif
+
             var type = GetType();
 
             // Note: we get the type *every time*, but it should be cheaper than checking the existance of the type in the 
@@ -953,12 +939,10 @@ namespace Catel.MVVM
                                 var viewModelValue = GetValue<object>(e.PropertyName);
                                 var propertiesToSet = mapping.ValueProperties;
 
-#if !XAMARIN_FORMS
                                 if (_modelErrorInfo.TryGetValue(mapping.ModelProperty, out var modelErrorInfo))
                                 {
                                     mapping.ValueProperties.ForEach(modelErrorInfo.ClearDefaultErrors);
                                 }
-#endif
 
                                 // Only TwoWay, OneWayToSource mappings should be mapped
                                 if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
@@ -1125,7 +1109,6 @@ namespace Catel.MVVM
 
             _modelErrorInfo[modelProperty] = modelErrorInfo;
 
-#if NET || NETCORE
             if (ValidateModelsOnInitialization)
             {
                 if (modelInfo.SupportValidation)
@@ -1137,7 +1120,6 @@ namespace Catel.MVVM
                     modelErrorInfo.InitializeDefaultErrors(validationResults);
                 }
             }
-#endif
 
             if (SupportIEditableObject)
             {

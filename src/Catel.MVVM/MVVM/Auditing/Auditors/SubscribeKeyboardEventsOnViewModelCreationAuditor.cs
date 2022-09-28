@@ -1,6 +1,4 @@
-﻿#if !XAMARIN
-
-namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing
 {
     using Catel.Services;
 
@@ -29,5 +27,3 @@ namespace Catel.MVVM.Auditing
         }
     }
 }
-
-#endif
