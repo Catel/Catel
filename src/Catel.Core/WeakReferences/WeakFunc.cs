@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakFunc.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Reflection;
@@ -44,8 +38,6 @@ namespace Catel
         public WeakFunc(object target, Func<TResult> func)
             : base(target)
         {
-            Argument.IsNotNull("action", func);
-
             var methodInfo = func.GetMethodInfoEx();
             MethodName = methodInfo.ToString();
 
@@ -149,8 +141,6 @@ namespace Catel
         public WeakFunc(object target, Func<TParameter, TResult> func)
             : base(target)
         {
-            Argument.IsNotNull("func", func);
-
             var methodInfo = func.GetMethodInfoEx();
             MethodName = methodInfo.ToString();
 

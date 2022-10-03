@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UriExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -22,8 +15,6 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="uri" /> is <c>null</c>.</exception>
         public static string GetSafeUriString(this Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
-
             var safeUri = uri.ToString();
             while (safeUri.StartsWith("//"))
             {
@@ -42,10 +33,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="url"/> is <c>null</c>.</exception>
         public static bool IsAbsoluteUrl(this string url)
         {
-            Argument.IsNotNull("url", url);
-
-            Uri result;
-            return Uri.TryCreate(url, UriKind.Absolute, out result);
+            return Uri.TryCreate(url, UriKind.Absolute, out var result);
         }
     }
 }

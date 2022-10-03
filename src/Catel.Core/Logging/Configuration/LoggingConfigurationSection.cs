@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LoggingConfigurationSection.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System.Collections.Generic;
     using System.Configuration;
@@ -40,21 +34,16 @@ namespace Catel.Logging
     /// </example>
     public sealed class LoggingConfigurationSection : ConfigurationSection
     {
-        #region Constants
         /// <summary>
         /// The logging configuration collection property name.
         /// </summary>
         private const string LoggingConfigurationCollectionPropertyName = "listeners";
-        #endregion
 
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the logging configuration collection.
         /// </summary>
@@ -63,9 +52,7 @@ namespace Catel.Logging
         {
             get { return (LogListenerConfigurationCollection)base[LoggingConfigurationCollectionPropertyName]; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the log listeners.
         /// </summary>
@@ -86,6 +73,5 @@ namespace Catel.Logging
 
             return logListeners;
         }
-        #endregion
     }
 }

@@ -30,8 +30,6 @@
 
         public static Expression<Func<T, TField>> CreateFieldGetter<T, TField>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return CreateFieldGetterExpression<T, TField>(fieldInfo);
         }
 
@@ -45,8 +43,6 @@
 
         public static Expression<Func<T, object>> CreateFieldGetter<T>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return fieldInfo is null ? null : CreateFieldGetterExpression<T, object>(fieldInfo);
         }
 

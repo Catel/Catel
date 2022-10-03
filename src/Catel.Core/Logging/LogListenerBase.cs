@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogListenerBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -15,19 +8,14 @@ namespace Catel.Logging
     /// </summary>
     public abstract class LogListenerBase : ILogListener
     {
-        #region Constants
         /// <summary>
         /// The log event strings.
         /// </summary>
         protected static readonly Dictionary<LogEvent, string> LogEventStrings;
-        #endregion
 
-        #region Fields
         private TimeDisplay _timeDisplay;
         private string _timeFormat;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="LogListenerBase"/> class.
         /// </summary>
@@ -56,16 +44,12 @@ namespace Catel.Logging
 
             TimeDisplay = TimeDisplay.Time;
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a log message is written to one of the logs.
         /// </summary>
         public event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
 
-        #region ILogListener Members
         /// <summary>
         /// Gets or sets a value indicating whether to ignore Catel logging.
         /// </summary>
@@ -261,9 +245,7 @@ namespace Catel.Logging
 
             Status(log, message, extraData, logData, time);
         }
-        #endregion
 
-        #region Methods
         private bool ShouldIgnoreLogging(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             if (IgnoreCatelLogging && log.IsCatelLoggingAndCanBeIgnored())
@@ -406,6 +388,5 @@ namespace Catel.Logging
         {
             // Empty by default
         }
-        #endregion
     }
 }

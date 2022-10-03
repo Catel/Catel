@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpressionHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Linq.Expressions;
@@ -58,8 +52,6 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         public static object GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
-
             var expressionToHandle = GetExpressionToHandle(propertyExpression);
 
             var body = expressionToHandle as MemberExpression;

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogListenerConfigurationCollection.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Configuration;
@@ -14,16 +8,10 @@ namespace Catel.Logging
     /// </summary>
     public sealed class LogListenerConfigurationCollection : ConfigurationElementCollection
     {
-        #region Constants
-
         /// <summary>
         /// The item element name.
         /// </summary>
         private const string ItemElementName = "listener";
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The collection type.
@@ -37,9 +25,6 @@ namespace Catel.Logging
                 return ConfigurationElementCollectionType.BasicMapAlternate;
             }
         }
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Creates a new ConfigurationElement.
@@ -69,7 +54,5 @@ namespace Catel.Logging
         {
             return string.Equals(elementName, ItemElementName, StringComparison.Ordinal);
         }
-
-        #endregion
     }
 }

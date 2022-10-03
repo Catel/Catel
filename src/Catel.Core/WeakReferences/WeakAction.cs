@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakAction.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using Catel.Data;
@@ -16,14 +10,10 @@ namespace Catel
     /// </summary>
     public abstract class WeakActionBase : IWeakReference
     {
-        #region Fields
         /// <summary>
         /// WeakReference to the target listening for the event.
         /// </summary>
         private readonly WeakReference _weakTarget;
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakActionBase"/> class.
@@ -37,9 +27,7 @@ namespace Catel
                 _weakTarget = new WeakReference(target);
             }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the target or <c>null</c> if the target is garbage collected.
         /// </summary>
@@ -56,10 +44,6 @@ namespace Catel
         /// In case of static event handlers, this property always returns <c>false</c>.
         /// </remarks>
         public bool IsTargetAlive { get { return (_weakTarget is not null) && _weakTarget.IsAlive; } }
-        #endregion
-
-        #region Methods
-        #endregion
     }
 
     /// <summary>
@@ -82,7 +66,7 @@ namespace Catel
         /// <summary>
         /// The action that must be invoked on the action.
         /// </summary>
-        private Delegate _action;
+        private Delegate? _action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakAction"/> class.
@@ -94,8 +78,6 @@ namespace Catel
         public WeakAction(object target, Action action)
             : base(target)
         {
-            Argument.IsNotNull("action", action);
-
             var methodInfo = action.GetMethodInfoEx();
             MethodName = methodInfo.ToString();
 
@@ -172,7 +154,7 @@ namespace Catel
         /// <summary>
         /// The action that must be invoked on the action.
         /// </summary>
-        private Delegate _action;
+        private Delegate? _action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakAction"/> class.
@@ -184,8 +166,6 @@ namespace Catel
         public WeakAction(object target, Action<TParameter> action)
             : base(target)
         {
-            Argument.IsNotNull("action", action);
-
             var methodInfo = action.GetMethodInfoEx();
             MethodName = methodInfo.ToString();
 

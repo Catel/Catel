@@ -30,8 +30,6 @@
 
         public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return CreateFieldSetterExpression<T, TField>(fieldInfo);
         }
 
@@ -45,8 +43,6 @@
 
         public static Expression<Action<T, object>> CreateFieldSetter<T>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return CreateFieldSetterExpression<T, object>(fieldInfo);
         }
 

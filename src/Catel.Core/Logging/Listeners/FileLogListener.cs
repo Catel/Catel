@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Diagnostics;
@@ -103,7 +97,6 @@ namespace Catel.Logging
         private Assembly _assembly;
         private string _filePath;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogListener" /> class.
         /// </summary>
@@ -131,9 +124,7 @@ namespace Catel.Logging
             FilePath = filePath;
             MaxSizeInKiloBytes = maxSizeInKiloBytes;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the file path.
         /// </summary>
@@ -149,9 +140,7 @@ namespace Catel.Logging
         /// </summary>
         /// <value>The maximum size information kilo bytes.</value>
         public int MaxSizeInKiloBytes { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines the real file path.
         /// </summary>
@@ -331,6 +320,5 @@ namespace Catel.Logging
                 }
             }
         }
-        #endregion
     }
 }

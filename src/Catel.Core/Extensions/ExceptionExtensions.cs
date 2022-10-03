@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExceptionExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Collections;
@@ -47,7 +40,6 @@ namespace Catel
             return false;
         }
 
-        #region Methods
         /// <summary>
         /// Flattens the specified exception and inner exception data.
         /// </summary>
@@ -58,8 +50,6 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <param ref="exception"> is <c>null</c>.</param></exception>
         public static string Flatten(this Exception exception, string message = "", bool includeStackTrace = false)
         {
-            Argument.IsNotNull("exception", exception);
-
             var stringBuilder = new StringBuilder(message);
 
             var currentException = exception;
@@ -89,8 +79,6 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <param ref="exception"> is <c>null</c>.</param></exception>
         public static IEnumerable<Exception> GetAllInnerExceptions(this Exception exception)
         {
-            Argument.IsNotNull("exception", exception);
-
             var exceptions = new List<Exception>();
 
             while (!ObjectHelper.IsNull((exception = exception.InnerException)))
@@ -111,8 +99,6 @@ namespace Catel
         public static TException Find<TException>(this Exception exception)
             where TException : Exception
         {
-            Argument.IsNotNull("exception", exception);
-
             while (!ObjectHelper.IsNull(exception) && !(exception is TException))
             {
                 exception = exception.InnerException;
@@ -129,8 +115,6 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <param ref="exception"> is <c>null</c>.</param></exception>
         public static XDocument ToXml(this Exception exception)
         {
-            Argument.IsNotNull("exception", exception);
-
             var root = new XElement(exception.GetType().ToString());
 
             if (!string.IsNullOrEmpty(exception.Message))
@@ -171,6 +155,5 @@ namespace Catel
 
             return new XDocument(root);
         }
-        #endregion
     }
 }

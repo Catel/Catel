@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Enum.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +17,6 @@ namespace Catel
     {
         private static readonly Dictionary<TEnum, string> StringCache = new Dictionary<TEnum, string>();
 
-        #region Static Methods
         /// <summary>
         /// Gets the string representation of the enum value.
         /// </summary>
@@ -67,8 +60,6 @@ namespace Catel
         public static TEnum ConvertFromOtherEnumValue<TOtherEnum>(TOtherEnum inputEnumValue)
             where TOtherEnum : struct, IComparable, IFormattable
         {
-            Argument.IsNotNull("inputEnumValue", inputEnumValue);
-
             var value = Enum<TOtherEnum>.ToString(inputEnumValue);
 
             return (TEnum)Enum.Parse(typeof(TEnum), value, true);
@@ -89,7 +80,6 @@ namespace Catel
         /// <exception cref="ArgumentException">The value of <paramref name="inputEnumValue"/> cannot be converted to a value of <typeparamref name="TEnum"/>.</exception>
         public static TEnum ConvertFromOtherEnumValue(object inputEnumValue)
         {
-            Argument.IsNotNull("inputEnumValue", inputEnumValue);
             Argument.IsOfType("inputEnumValue", inputEnumValue, typeof(Enum));
 
             var value = inputEnumValue.ToString();
@@ -248,9 +238,6 @@ namespace Catel
         {
             return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
         }
-        #endregion
-
-        #region Nested type: DataBinding
 
         /// <summary>
         /// DataBinding class.
@@ -275,7 +262,7 @@ namespace Catel
             /// <returns>List containing bindable enums based on the format name.</returns>
             public static IList<IBindableEnum<TEnum>> CreateList(FormatEnumName formatName = null)
             {
-                Array values = Enum.GetValues(typeof(TEnum));
+                var values = Enum.GetValues(typeof(TEnum));
 
                 return (from TEnum value in values
                         select formatName is not null ? new InternalBindableEnum(value, formatName(value)) : new InternalBindableEnum(value)).Cast<IBindableEnum<TEnum>>().ToList();
@@ -362,11 +349,11 @@ namespace Catel
                 }
 
                 /// <summary>
-                /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+                /// Determines whether the specified <see cref="object"/> is equal to this instance.
                 /// </summary>
-                /// <param name="other">The <see cref="System.Object"/> to compare with this instance.</param>
+                /// <param name="other">The <see cref="object"/> to compare with this instance.</param>
                 /// <returns>
-                /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+                /// 	<c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
                 /// </returns>
                 /// <exception cref="T:System.NullReferenceException">
                 /// The <paramref name="other"/> parameter is null.
@@ -379,9 +366,7 @@ namespace Catel
             }
             #endregion
         }
-        #endregion
 
-        #region Nested type: Flags
         /// <summary>
         /// Flags class.
         /// </summary>
@@ -667,26 +652,5 @@ namespace Catel
             }
             #endregion
         }
-        #endregion
-    }
-
-    /// <summary>
-    /// Bindable enumeration.
-    /// </summary>
-    /// <typeparam name="TEnum">The type of the enum.</typeparam>
-    public interface IBindableEnum<TEnum> : IComparable<IBindableEnum<TEnum>>, IEquatable<IBindableEnum<TEnum>>
-        where TEnum : struct, IComparable, IFormattable
-    {
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        /// <value>The name of the bindable enum.</value>
-        string Name { get; }
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <value>The value of the bindable enum.</value>
-        TEnum Value { get; }
     }
 }

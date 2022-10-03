@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DebugLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-// Define debug so this code doesn't get stripped out
+﻿// Define debug so this code doesn't get stripped out
 #define DEBUG
 
 namespace Catel.Logging

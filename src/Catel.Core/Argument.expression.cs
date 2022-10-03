@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Argument.expression.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Diagnostics;
@@ -19,8 +13,6 @@ namespace Catel
     /// </summary>
     public static partial class Argument
     {
-        #region Methods
-
         /// <summary>
         /// The get parameter info.
         /// </summary>
@@ -31,8 +23,6 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         private static ParameterInfo<T> GetParameterInfo<T>(Expression<Func<T>> expression)
         {
-            IsNotNull("expression", expression);
-
             var parameterExpression = (MemberExpression)expression.Body;
             var parameterInfo = new ParameterInfo<T>(parameterExpression.Member.Name, expression.Compile().Invoke());
 
@@ -469,10 +459,6 @@ namespace Catel
             IsValid(parameterInfo.Name, (T)parameterInfo.Value, validator);
         }
 
-        #endregion
-
-        #region Nested type: ParameterInfo
-
         /// <summary>
         /// The parameter info.
         /// </summary>
@@ -503,6 +489,5 @@ namespace Catel
             public string Name { get; private set; }
             #endregion
         }
-        #endregion
     }
 }

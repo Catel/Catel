@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StreamExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IO
+﻿namespace Catel.IO
 {
     using System;
     using System.IO;
     using System.Text;
-    using System.Threading.Tasks;
-    using Collections;
 
     /// <summary>
     /// Extensions for the <see cref="Stream"/> class.
@@ -25,8 +17,6 @@ namespace Catel.IO
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
         public static byte[] ToByteArray(this Stream stream)
         {
-            Argument.IsNotNull("stream", stream);
-
             stream.Position = 0L;
 
             var length = (int)stream.Length;
@@ -60,9 +50,6 @@ namespace Catel.IO
         /// <returns>System.String.</returns>
         public static string GetString(this Stream stream, Encoding encoding)
         {
-            Argument.IsNotNull("stream", stream);
-            Argument.IsNotNull("encoding", encoding);
-
             stream.Position = 0;
 
             using var reader = new StreamReader(stream, encoding);

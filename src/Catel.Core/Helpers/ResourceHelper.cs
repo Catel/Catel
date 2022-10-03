@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResourceHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.IO;
@@ -100,9 +93,7 @@ namespace Catel
         /// <param name="targetStream">The target stream to write the resource to.</param>
         public static void ExtractEmbeddedResource(this Assembly assembly, string assemblyName, string relativeResourceName, Stream targetStream)
         {
-            Argument.IsNotNull(nameof(assembly), assembly);
-
-            Log.Debug("Extracting embedded resource '{0}' from assembly '{1}'", relativeResourceName, assembly.FullName);
+            Log.Debug($"Extracting embedded resource '{relativeResourceName}' from assembly '{assembly.FullName}'");
 
             var finalResourceName = relativeResourceName;
             if (!string.IsNullOrWhiteSpace(assemblyName))

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IBatchLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System.Threading.Tasks;
 
@@ -14,12 +7,10 @@ namespace Catel.Logging
     /// </summary>
     public interface IBatchLogListener
     {
-        #region Methods
         /// <summary>
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
         Task FlushAsync();
-        #endregion
     }
 }

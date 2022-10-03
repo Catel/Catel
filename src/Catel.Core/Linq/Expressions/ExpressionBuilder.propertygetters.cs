@@ -6,8 +6,6 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Reflection;
 
     public static partial class ExpressionBuilder
@@ -30,8 +28,6 @@
 
         public static Expression<Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(PropertyInfo propertyInfo)
         {
-            Argument.IsNotNull(nameof(propertyInfo), propertyInfo);
-
             return propertyInfo.GetMethod is null ? null : CreatePropertyGetterExpression<T, TProperty>(propertyInfo);
         }
 
@@ -45,8 +41,6 @@
 
         public static Expression<Func<T, object>> CreatePropertyGetter<T>(PropertyInfo propertyInfo)
         {
-            Argument.IsNotNull(nameof(propertyInfo), propertyInfo);
-
             return propertyInfo.GetMethod is null ? null : CreatePropertyGetterExpression<T, object>(propertyInfo);
         }
 

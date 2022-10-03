@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -25,7 +19,6 @@ namespace Catel.Logging
     /// </summary>
     public static class LogManager
     {
-        #region Classes
         /// <summary>
         /// Class containing log info.
         /// </summary>
@@ -224,9 +217,7 @@ namespace Catel.Logging
             }
             #endregion
         }
-        #endregion
 
-        #region Constants
         /// <summary>
         /// List of all registered <see cref="ILogListener"/> instances.
         /// </summary>
@@ -250,9 +241,6 @@ namespace Catel.Logging
         private static bool? _isErrorEnabled;
         private static bool? _isStatusEnabled;
 
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="LogManager" /> class.
         /// </summary>
@@ -261,9 +249,7 @@ namespace Catel.Logging
             AppDomain.CurrentDomain.DomainUnload += async (sender, e) => await FlushAllAsync();
             AppDomain.CurrentDomain.UnhandledException += async (sender, e) => await FlushAllAsync();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether the global IgnoreCatelLogging should be overriden.
         /// <para />
@@ -380,16 +366,12 @@ namespace Catel.Logging
                 LogInfo.UpdateLogInfo();
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a log message is written to one of the logs.
         /// </summary>
-        public static event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
+        public static event EventHandler<LogMessageEventArgs>? LogMessage;
 
-        #region Methods
         /// <summary>
         /// Gets the current class logger.
         /// </summary>
@@ -832,7 +814,5 @@ namespace Catel.Logging
 
             return false;
         }
-
-        #endregion
     }
 }

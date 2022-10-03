@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Log.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using Reflection;
@@ -14,13 +8,10 @@ namespace Catel.Logging
     /// </summary>
     public class Log : ILog
     {
-        #region Fields
         private int _indentSize = 2;
         private int _indentLevel = 0;
         private readonly Lazy<bool> _shouldIgnoreIfCatelLoggingIsDisabled;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Log"/> class.
         /// </summary>
@@ -57,9 +48,7 @@ namespace Catel.Logging
             IsCatelLogging = targetType?.IsCatelType() ?? false;
             _shouldIgnoreIfCatelLoggingIsDisabled = new Lazy<bool>(ShouldIgnoreIfCatelLoggingIsDisabled);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the logger.
         /// </summary>
@@ -130,16 +119,12 @@ namespace Catel.Logging
                 _indentLevel = value;
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         ///   Occurs when a message is written to the log.
         /// </summary>
         public event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Writes the specified message as specified log event with extra data.
         /// </summary>
@@ -227,6 +212,5 @@ namespace Catel.Logging
                 IndentLevel--;
             }
         }
-        #endregion
     }
 }

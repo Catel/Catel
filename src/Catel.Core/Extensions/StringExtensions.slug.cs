@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringExtensions.slug.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System.Globalization;
     using System.Text;
@@ -13,7 +6,6 @@ namespace Catel
 
     public static partial class StringExtensions
     {
-        #region Constants
         /// <summary>
         /// The slug regex.
         /// </summary>
@@ -23,9 +15,7 @@ namespace Catel
         /// The white space regex.
         /// </summary>
         public static readonly Regex WhiteSpaceRegex = new Regex(@"[\s]+");
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the slug of the specific input string.
         /// </summary>
@@ -40,8 +30,6 @@ namespace Catel
             bool makeLowercase = true)
         {
             Argument.IsNotNullOrWhitespace("input", input);
-            Argument.IsNotNull("spaceReplacement", spaceReplacement);
-            Argument.IsNotNull("dotReplacement", dotReplacement);
 
             input = input.RemoveDiacritics();
 
@@ -78,6 +66,5 @@ namespace Catel
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
-        #endregion
     }
 }

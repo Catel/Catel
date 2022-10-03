@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CoreModule.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using Configuration;
     using Data;
-    using ExceptionHandling;
     using IoC;
     using Messaging;
     using Runtime.Serialization;
@@ -35,7 +27,6 @@ namespace Catel
 
             serviceLocator.RegisterType<ILanguageService, LanguageService>();
             serviceLocator.RegisterType<IAppDataService, AppDataService>();
-            serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
             serviceLocator.RegisterType<IDispatcherService, ShimDispatcherService>();
 

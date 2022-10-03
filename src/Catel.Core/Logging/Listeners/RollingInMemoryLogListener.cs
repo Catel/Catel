@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RollingInMemoryLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -16,15 +9,12 @@ namespace Catel.Logging
     /// </summary>
     public class RollingInMemoryLogListener : LogListenerBase
     {
-        #region Fields
         private readonly object _lock = new object();
 
         private readonly List<LogEntry> _lastLogEntries = new List<LogEntry>();
         private readonly List<LogEntry> _lastWarningLogEntries = new List<LogEntry>();
         private readonly List<LogEntry> _lastErrorLogEntries = new List<LogEntry>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="RollingInMemoryLogListener"/> class.
         /// </summary>
@@ -34,9 +24,7 @@ namespace Catel.Logging
             MaximumNumberOfWarningLogEntries = 50;
             MaximumNumberOfErrorLogEntries = 50;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the maximum number of log entries to keep.
         /// <para />
@@ -60,9 +48,7 @@ namespace Catel.Logging
         /// </summary>
         /// <value>The maximum number of log entries.</value>
         public int MaximumNumberOfErrorLogEntries { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when any message is written to the log.
         /// </summary>
@@ -140,6 +126,5 @@ namespace Catel.Logging
                 return _lastErrorLogEntries.ToArray();
             }
         }
-        #endregion
     }
 }

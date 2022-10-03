@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogEntry.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -19,7 +13,6 @@ namespace Catel.Logging
 
         private static readonly Dictionary<LogEvent, string> LogEventCache = new Dictionary<LogEvent, string>();
 
-        #region Constructors
         static LogEntry()
         {
             foreach (var value in Enum<LogEvent>.GetValues())
@@ -56,9 +49,7 @@ namespace Catel.Logging
 
             _logData = logData;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the time.
         /// </summary>
@@ -120,8 +111,7 @@ namespace Catel.Logging
         /// <returns>String value.</returns>
         public override string ToString()
         {
-            return $"[{Time.ToString()}] [{LogEventCache[LogEvent]}] {Message}";
+            return $"[{Time}] [{LogEventCache[LogEvent]}] {Message}";
         }
-        #endregion
     }
 }

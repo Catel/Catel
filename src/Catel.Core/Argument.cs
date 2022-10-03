@@ -23,14 +23,11 @@ namespace Catel
     /// </summary>
     public static partial class Argument
     {
-        #region Fields
         /// <summary>
         /// The <see cref="ILog">log</see> object.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCatelLogger(typeof(Argument), true);
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c>.
         /// </summary>
@@ -171,8 +168,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOutOfRange<T>(string paramName, T paramValue, T minimumValue, T maximumValue, Func<T, T, T, bool> validation)
         {
-            IsNotNull("validation", validation);
-
             if (!validation(paramValue, minimumValue, maximumValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' should be between {minimumValue} and {maximumValue}";
@@ -212,8 +207,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMinimal<T>(string paramName, T paramValue, T minimumValue, Func<T, T, bool> validation)
         {
-            IsNotNull("validation", validation);
-
             if (!validation(paramValue, minimumValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' should be minimal {minimumValue}";
@@ -289,9 +282,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void InheritsFrom(string paramName, Type type, Type baseType)
         {
-            IsNotNull("type", type);
-            IsNotNull("baseType", baseType);
-
             var runtimeBaseType = type.GetBaseTypeEx();
 
             do
@@ -327,7 +317,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void InheritsFrom(string paramName, object instance, Type baseType)
         {
-            IsNotNull("instance", instance);
 
             InheritsFrom(paramName, instance.GetType(), baseType);
         }
@@ -360,8 +349,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsInterface(string paramName, object instance, Type interfaceType)
         {
-            Argument.IsNotNull("instance", instance);
-
             ImplementsInterface(paramName, instance.GetType(), interfaceType);
         }
 
@@ -395,9 +382,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsInterface(string paramName, Type type, Type interfaceType)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("interfaceType", interfaceType);
-
             if (type.GetInterfacesEx().Any(iType => iType == interfaceType))
             {
                 return;
@@ -420,8 +404,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsOneOfTheInterfaces(string paramName, object instance, Type[] interfaceTypes)
         {
-            Argument.IsNotNull("instance", instance);
-
             ImplementsOneOfTheInterfaces(paramName, instance.GetType(), interfaceTypes);
         }
 
@@ -438,7 +420,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsOneOfTheInterfaces(string paramName, Type type, Type[] interfaceTypes)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrEmptyArray("interfaceTypes", interfaceTypes);
 
             foreach (var interfaceType in interfaceTypes)
@@ -473,8 +454,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfType(string paramName, object instance, Type requiredType)
         {
-            Argument.IsNotNull("instance", instance);
-
             IsOfType(paramName, instance.GetType(), requiredType);
         }
 
@@ -491,9 +470,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfType(string paramName, Type type, Type requiredType)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("requiredType", requiredType);
-
             if (type.IsCOMObjectEx())
             {
                 return;
@@ -521,8 +497,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfOneOfTheTypes(string paramName, object instance, Type[] requiredTypes)
         {
-            Argument.IsNotNull("instance", instance);
-
             IsOfOneOfTheTypes(paramName, instance.GetType(), requiredTypes);
         }
 
@@ -539,7 +513,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfOneOfTheTypes(string paramName, Type type, Type[] requiredTypes)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrEmptyArray("requiredTypes", requiredTypes);
 
             if (type.IsCOMObjectEx())
@@ -579,8 +552,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfType(string paramName, object instance, Type notRequiredType)
         {
-            Argument.IsNotNull("instance", instance);
-
             IsNotOfType(paramName, instance.GetType(), notRequiredType);
         }
 
@@ -597,9 +568,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfType(string paramName, Type type, Type notRequiredType)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("notRequiredType", notRequiredType);
-
             if (type.IsCOMObjectEx())
             {
                 return;
@@ -627,8 +595,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfOneOfTheTypes(string paramName, object instance, Type[] notRequiredTypes)
         {
-            Argument.IsNotNull("instance", instance);
-
             IsNotOfOneOfTheTypes(paramName, instance.GetType(), notRequiredTypes);
         }
 
@@ -645,7 +611,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfOneOfTheTypes(string paramName, Type type, Type[] notRequiredTypes)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrEmptyArray("notRequiredTypes", notRequiredTypes);
 
             if (type.IsCOMObjectEx())
@@ -677,9 +642,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotMatch(string paramName, string paramValue, string pattern, RegexOptions regexOptions = RegexOptions.None)
         {
-            Argument.IsNotNull("paramValue", paramValue);
-            Argument.IsNotNull("pattern", pattern);
-
             if (Regex.IsMatch(paramValue, pattern, regexOptions))
             {
                 var error = $"Argument '{paramName}' matches with pattern '{pattern}'";
@@ -701,9 +663,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMatch(string paramName, string paramValue, string pattern, RegexOptions regexOptions = RegexOptions.None)
         {
-            Argument.IsNotNull("paramValue", paramValue);
-            Argument.IsNotNull("pattern", pattern);
-
             if (!Regex.IsMatch(paramValue, pattern, regexOptions))
             {
                 var error = $"Argument '{paramName}' doesn't match with pattern '{pattern}'";
@@ -724,8 +683,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, Func<bool> validation)
         {
-            Argument.IsNotNull("validation", validation);
-
             IsValid(paramName, paramValue, validation.Invoke());
         }
 
@@ -742,8 +699,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, Func<T, bool> validation)
         {
-            Argument.IsNotNull("validation", validation);
-
             IsValid(paramName, paramValue, validation.Invoke(paramValue));
         }
 
@@ -760,8 +715,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, IValueValidator<T> validator)
         {
-            Argument.IsNotNull("validator", validator);
-
             IsValid(paramName, paramValue, validator.IsValid(paramValue));
         }
 
@@ -795,8 +748,6 @@ namespace Catel
         /// <exception cref="ArgumentException">The <paramref name="errorFormat" /> is <c>null</c> or whitespace.</exception>
         public static void IsSupported(bool isSupported, string errorFormat, params object[] args)
         {
-            Argument.IsNotNullOrWhitespace("errorFormat", errorFormat);
-
             if (!isSupported)
             {
                 var error = string.Format(errorFormat, args);
@@ -804,6 +755,5 @@ namespace Catel
                 throw new NotSupportedException(error);
             }
         }
-#endregion
     }
 }

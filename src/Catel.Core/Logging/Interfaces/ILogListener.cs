@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ILogListener.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
 
@@ -79,7 +73,7 @@ namespace Catel.Logging
         /// <summary>
         /// Occurs when a log message is written to one of the logs.
         /// </summary>
-        event EventHandler<LogMessageEventArgs> LogMessage;
+        event EventHandler<LogMessageEventArgs>? LogMessage;
 
         /// <summary>
         /// Called when any message is written to the log.
