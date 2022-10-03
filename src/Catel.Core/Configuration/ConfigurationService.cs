@@ -69,11 +69,6 @@
             IObjectConverterService objectConverterService, ISerializer serializer,
             IAppDataService appDataService)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-            Argument.IsNotNull("objectConverterService", objectConverterService);
-            Argument.IsNotNull("serializer", serializer);
-            Argument.IsNotNull("appDataService", appDataService);
-
             _serializationManager = serializationManager;
             _objectConverterService = objectConverterService;
             _serializer = serializer;

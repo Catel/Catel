@@ -19,8 +19,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="eventArgs"/> is <c>null</c>.</exception>
         public static bool IsConfigurationKey(this ConfigurationChangedEventArgs eventArgs, string expectedKey)
         {
-            Argument.IsNotNull("eventArgs", eventArgs);
-
             return IsConfigurationKey(eventArgs.Key, expectedKey);
         }
 

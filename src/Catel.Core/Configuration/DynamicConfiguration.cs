@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DynamicConfiguration.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
     using System.Collections.Generic;
@@ -28,7 +22,6 @@ namespace Catel.Configuration
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
         private IXmlSerializer _xmlSerializer;
 
-        #region Methods
         protected override IPropertyBag CreatePropertyBag()
         {
             // Fix for https://github.com/Catel/Catel/issues/1517 since values
@@ -114,7 +107,6 @@ namespace Catel.Configuration
                 _propertiesSetAtLeastOnce.Add(name);
             }
         }
-        #endregion
 
         protected virtual IXmlSerializer GetXmlSerializer()
         {

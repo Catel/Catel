@@ -18,8 +18,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task<bool> IsLocalValueAvailableAsync(this IConfigurationService configurationService, string key)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.IsValueAvailableAsync(ConfigurationContainer.Local, key);
         }
 
@@ -33,8 +31,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task<bool> IsRoamingValueAvailableAsync(this IConfigurationService configurationService, string key)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.IsValueAvailableAsync(ConfigurationContainer.Roaming, key);
         }
 
@@ -48,8 +44,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task InitializeLocalValueAsync(this IConfigurationService configurationService, string key, object defaultValue)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.InitializeValueAsync(ConfigurationContainer.Local, key, defaultValue);
         }
 
@@ -63,8 +57,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task InitializeRoamingValueAsync(this IConfigurationService configurationService, string key, object defaultValue)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.InitializeValueAsync(ConfigurationContainer.Roaming, key, defaultValue);
         }
 
@@ -80,8 +72,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task<T> GetLocalValueAsync<T>(this IConfigurationService configurationService, string key, T defaultValue = default(T))
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.GetValueAsync(ConfigurationContainer.Local, key, defaultValue);
         }
 
@@ -97,8 +87,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task<T> GetRoamingValueAsync<T>(this IConfigurationService configurationService, string key, T defaultValue = default(T))
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.GetValueAsync(ConfigurationContainer.Roaming, key, defaultValue);
         }
          
@@ -113,8 +101,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task SetLocalValueAsync(this IConfigurationService configurationService, string key, object value)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.SetValueAsync(ConfigurationContainer.Local, key, value);
         }
 
@@ -128,8 +114,6 @@
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static Task SetRoamingValueAsync(this IConfigurationService configurationService, string key, object value)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.SetValueAsync(ConfigurationContainer.Roaming, key, value);
         }
     }

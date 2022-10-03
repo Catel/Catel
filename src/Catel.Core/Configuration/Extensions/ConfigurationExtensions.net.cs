@@ -17,7 +17,6 @@
         public static TSection GetSection<TSection>(this Configuration @this, string sectionName, string sectionGroupName = null)
             where TSection : ConfigurationSection
         {
-            Argument.IsNotNull("@this", @this);
             Argument.IsNotNullOrEmpty("sectionName", sectionName);
 
             TSection section = null;
