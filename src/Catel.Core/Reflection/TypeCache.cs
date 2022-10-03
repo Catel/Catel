@@ -223,14 +223,12 @@
             }
         }
 
-        #region Events
         /// <summary>
         /// Occurs when an assembly is loaded into the currently <see cref="AppDomain"/>.
         /// </summary>
 #pragma warning disable 67
-        public static event EventHandler<AssemblyLoadedEventArgs> AssemblyLoaded;
+        public static event EventHandler<AssemblyLoadedEventArgs>? AssemblyLoaded;
 #pragma warning restore 67
-        #endregion
 
         /// <summary>
         /// Clears the cache causing automatic re-initialization.
@@ -474,8 +472,6 @@
         /// <returns>Type[].</returns>
         public static Type[] GetTypesImplementingInterface(Type interfaceType)
         {
-            Argument.IsNotNull("interfaceType", interfaceType);
-
             lock (_lockObject)
             {
                 if (!_typesByInterface.TryGetValue(interfaceType, out var typesByInterface))
@@ -508,8 +504,6 @@
 #endif
         public static Type[] GetTypesOfAssembly(Assembly assembly, Func<Type, bool> predicate = null)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             return GetTypesPrefilteredByAssembly(assembly, predicate, true);
         }
 

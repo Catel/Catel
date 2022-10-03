@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AppDomainExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -34,8 +28,6 @@ namespace Catel.Reflection
         /// </remarks>
         internal static Type[] GetTypes(this AppDomain appDomain)
         {
-            Argument.IsNotNull("appDomain", appDomain);
-
             return TypeCache.GetTypes();
         }
 
@@ -49,8 +41,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
         public static void PreloadAssemblies(this AppDomain appDomain, string directory = null)
         {
-            Argument.IsNotNull("appDomain", appDomain);
-
             Log.Info("Preloading assemblies from AppDomain");
             Log.Indent();
 
@@ -108,7 +98,6 @@ namespace Catel.Reflection
         private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies,
             HashSet<string> alreadyLoadedAssemblies)
         {
-            Argument.IsNotNull("appDomain", appDomain);
             Argument.IsNotNullOrWhitespace("assemblyFilename", assemblyFilename);
 
             if (!File.Exists(assemblyFilename))
@@ -181,9 +170,6 @@ namespace Catel.Reflection
         private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies,
             HashSet<string> alreadyLoadedAssemblies)
         {
-            Argument.IsNotNull("appDomain", appDomain);
-            Argument.IsNotNull("assemblyName", assemblyName);
-
             try
             {
                 if (alreadyLoadedAssemblies.Contains(assemblyName.FullName))
@@ -235,8 +221,6 @@ namespace Catel.Reflection
         public static T CreateInstanceAndUnwrap<T>(this AppDomain appDomain)
             where T : new()
         {
-            Argument.IsNotNull("appDomain", appDomain);
-
             Log.Debug("Creating instance of '{0}'", typeof(T).FullName);
 
             return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);

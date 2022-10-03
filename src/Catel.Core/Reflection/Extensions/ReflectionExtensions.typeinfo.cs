@@ -32,8 +32,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static MemberInfo[] GetMembers(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = typeInfo.DeclaredMembers.ToList();
 
@@ -63,7 +61,6 @@
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static MemberInfo[] GetMember(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetMembers(typeInfo, bindingFlags)
@@ -80,8 +77,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static FieldInfo[] GetFields(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = flattenHierarchy ? typeInfo.AsType().GetRuntimeFields().ToList() : typeInfo.DeclaredFields.ToList();
 
@@ -115,7 +110,6 @@
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static FieldInfo GetField(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
             
             return (from x in GetFields(typeInfo, bindingFlags)
@@ -132,8 +126,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static ConstructorInfo[] GetConstructors(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var source = typeInfo.GetConstructors(bindingFlags);
 
             var includeStatics = Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static);
@@ -158,8 +150,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static ConstructorInfo GetConstructor(this TypeInfo typeInfo, Type[] types, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             return (from x in GetConstructors(typeInfo, bindingFlags)
                     where CollectionHelper.IsEqualTo(types, from parameterInfo in x.GetParameters()
                                                             select parameterInfo.ParameterType)
@@ -175,8 +165,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo" /> is <c>null</c>.</exception>
         public static PropertyInfo[] GetProperties(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = (flattenHierarchy ? typeInfo.AsType().GetRuntimeProperties() : typeInfo.DeclaredProperties).ToList();
 
@@ -210,7 +198,6 @@
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static PropertyInfo GetProperty(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetProperties(typeInfo, bindingFlags)
@@ -227,8 +214,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static EventInfo[] GetEvents(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var eventsSource = flattenHierarchy ? typeInfo.AsType().GetRuntimeEvents() : typeInfo.DeclaredEvents;
 
@@ -247,7 +232,6 @@
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static EventInfo GetEvent(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetEvents(typeInfo, bindingFlags)
@@ -264,8 +248,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static MethodInfo[] GetMethods(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = flattenHierarchy ? typeInfo.AsType().GetRuntimeMethods().ToList() : typeInfo.DeclaredMethods.ToList();
 
@@ -305,7 +287,6 @@
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static MethodInfo GetMethod(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetMethods(typeInfo, bindingFlags)
@@ -325,7 +306,6 @@
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static MethodInfo GetMethod(this TypeInfo typeInfo, string name, Type[] types, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetMethods(typeInfo, bindingFlags)

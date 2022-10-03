@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MemberInfoExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +16,6 @@ namespace Catel.Reflection
         private static readonly ICacheStorage<ConstructorInfo, string> _constructorSignatureCache = new CacheStorage<ConstructorInfo, string>();
         private static readonly ICacheStorage<MethodInfo, string> _methodSignatureCache = new CacheStorage<MethodInfo, string>();
 
-        #region Methods
         /// <summary>
         /// Gets the signature of a method.
         /// </summary>
@@ -31,8 +24,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="constructorInfo"/> is <c>null</c>.</exception>
         public static string GetSignature(this ConstructorInfo constructorInfo)
         {
-            Argument.IsNotNull("constructorInfo", constructorInfo);
-
             return _constructorSignatureCache.GetFromCacheOrFetch(constructorInfo, () =>
             {
                 var stringBuilder = new StringBuilder();
@@ -84,8 +75,6 @@ namespace Catel.Reflection
         /// <returns><c>true</c> whether the constructor match with the parameters and distance can be computed; otherwise <c>false</c></returns>
         public static bool TryGetConstructorDistanceByParametersMatch(this ConstructorInfo constructor, object[] parameters, out int distance)
         {
-            Argument.IsNotNull("constructor", constructor);
-
             distance = 0;
             var constructorParameters = constructor.GetParameters();
             for (int i = 0; i < parameters.Length; i++)
@@ -128,8 +117,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="methodInfo"/> is <c>null</c>.</exception>
         public static string GetSignature(this MethodInfo methodInfo)
         {
-            Argument.IsNotNull("methodInfo", methodInfo);
-
             return _methodSignatureCache.GetFromCacheOrFetch(methodInfo, () =>
             {
                 var stringBuilder = new StringBuilder();
@@ -193,7 +180,6 @@ namespace Catel.Reflection
 
             return true;
         }
-        #endregion
 
         /// <summary>
         /// Constructor distance tuple.

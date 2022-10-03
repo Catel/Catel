@@ -11,8 +11,6 @@
     {
         public static Type[] GetExportedTypesEx(this Assembly assembly)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             var results = assembly.GetExportedTypes();
             return results;
         }
@@ -22,8 +20,6 @@
 #endif
         public static Type[] GetTypesEx(this Assembly assembly)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             var results = assembly.GetTypes();
             return results;
         }
@@ -36,9 +32,6 @@
 
         public static Attribute[] GetCustomAttributesEx(this Assembly assembly, Type attributeType)
         {
-            Argument.IsNotNull("assembly", assembly);
-            Argument.IsNotNull("attributeType", attributeType);
-
             return assembly.GetCustomAttributes(attributeType, true).ToAttributeArray();
         }
     }

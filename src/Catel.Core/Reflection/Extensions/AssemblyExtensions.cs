@@ -1,12 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
-    using Catel;
     using System;
     using System.Reflection;
 
@@ -22,8 +15,6 @@ namespace Catel.Reflection
         /// <returns>DateTime.</returns>
         public static DateTime GetBuildDateTime(this Assembly assembly)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             return AssemblyHelper.GetLinkerTimestamp(assembly.Location);
         }
 
@@ -137,8 +128,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
         public static string GetDirectory(this Assembly assembly)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             var location = assembly.Location;
             return location.Substring(0, location.LastIndexOf('\\'));
         }

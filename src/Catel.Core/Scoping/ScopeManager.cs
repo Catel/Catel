@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScopeManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-//#define EXTREME_LOGGING
+﻿//#define EXTREME_LOGGING
 
 namespace Catel.Scoping
 {
@@ -104,7 +98,6 @@ namespace Catel.Scoping
             DeRef();
         }
 
-        #region Methods
         private void AddRef()
         {
             lock (_lock)
@@ -158,8 +151,6 @@ namespace Catel.Scoping
         /// <exception cref="ArgumentException">The <paramref name="scopeName"/> is <c>null</c>.</exception>
         public static bool ScopeExists(string scopeName = "")
         {
-            Argument.IsNotNull("scopeName", scopeName);
-
             lock (_lock)
             {
                 return _instances.ContainsKey(scopeName);
@@ -175,8 +166,6 @@ namespace Catel.Scoping
         /// <exception cref="ArgumentException">The <paramref name="scopeName"/> is <c>null</c>.</exception>
         public static ScopeManager<T> GetScopeManager(string scopeName = "", Func<T> createScopeFunction = null)
         {
-            Argument.IsNotNull("scopeName", scopeName);
-
             lock (_lock)
             {
                 ScopeManager<T> scopeManager;
@@ -204,6 +193,5 @@ namespace Catel.Scoping
                 return scopeManager;
             }
         }
-        #endregion
     }
 }

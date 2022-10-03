@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InMemoryLogService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
@@ -42,7 +35,6 @@ namespace Catel.Services
             _rollingInMemoryLogListener.LogMessage += OnLogListenerLogMessage;
         }
 
-        #region Properties
         /// <summary>
         /// Gets the log listener.
         /// </summary>
@@ -84,16 +76,12 @@ namespace Catel.Services
             get { return _rollingInMemoryLogListener.MaximumNumberOfErrorLogEntries; }
             set { _rollingInMemoryLogListener.MaximumNumberOfErrorLogEntries = value; }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a log message is written.
         /// </summary>
-        public event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
+        public event EventHandler<LogMessageEventArgs>? LogMessage;
 
-        #region Methods
         /// <summary>
         /// Gets the log entries.
         /// </summary>
@@ -125,6 +113,5 @@ namespace Catel.Services
         {
             LogMessage?.Invoke(this, e);
         }
-        #endregion
     }
 }

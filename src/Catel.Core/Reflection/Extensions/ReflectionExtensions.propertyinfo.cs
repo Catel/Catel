@@ -23,16 +23,11 @@
 
         public static Attribute[] GetCustomAttributesEx(this PropertyInfo propertyInfo, bool inherit)
         {
-            Argument.IsNotNull("propertyInfo", propertyInfo);
-
             return propertyInfo.GetCustomAttributes(inherit).ToAttributeArray();
         }
 
         public static Attribute[] GetCustomAttributesEx(this PropertyInfo propertyInfo, Type attributeType, bool inherit)
         {
-            Argument.IsNotNull("propertyInfo", propertyInfo);
-            Argument.IsNotNull("attributeType", attributeType);
-
             return propertyInfo.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
         }
     }

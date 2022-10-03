@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DelegateHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Reflection;
@@ -24,9 +18,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="methodInfo"/> is <c>null</c>.</exception>
         public static Delegate CreateDelegate(Type delegateType, MethodInfo methodInfo)
         {
-            Argument.IsNotNull("delegateType", delegateType);
-            Argument.IsNotNull("methodInfo", methodInfo);
-
             return CreateDelegate(delegateType, null, methodInfo);
         }
 
@@ -43,8 +34,6 @@ namespace Catel.Reflection
         /// <remarks></remarks>
         public static Delegate CreateDelegate(Type delegateType, Type targetType, string methodName)
         {
-            Argument.IsNotNull("delegateType", delegateType);
-            Argument.IsNotNull("targetType", targetType);
             Argument.IsNotNullOrWhitespace("methodName", methodName);
 
             var methodInfo = targetType.GetMethodEx(methodName, BindingFlagsHelper.GetFinalBindingFlags(true, true));
@@ -63,8 +52,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="methodName"/> is <c>null</c> or whitespace.</exception>
         public static Delegate CreateDelegate(Type delegateType, object target, string methodName)
         {
-            Argument.IsNotNull("delegateType", delegateType);
-            Argument.IsNotNull("target", target);
             Argument.IsNotNullOrWhitespace("methodName", methodName);
 
             var methodInfo = target.GetType().GetMethodEx(methodName, BindingFlagsHelper.GetFinalBindingFlags(true, true));
@@ -82,9 +69,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="methodInfo"/> is <c>null</c>.</exception>
         public static Delegate CreateDelegate(Type delegateType, object target, MethodInfo methodInfo)
         {
-            Argument.IsNotNull("delegateType", delegateType);
-            Argument.IsNotNull("methodInfo", methodInfo);
-
             return Delegate.CreateDelegate(delegateType, target, methodInfo);
         }
     }

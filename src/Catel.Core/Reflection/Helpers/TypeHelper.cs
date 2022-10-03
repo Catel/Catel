@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +11,6 @@ namespace Catel.Reflection
     /// </summary>
     public static class TypeHelper
     {
-        #region Fields
         /// <summary>
         ///   The <see cref = "ILog">log</see> object.
         /// </summary>
@@ -35,22 +28,20 @@ namespace Catel.Reflection
         private const char SingleTypeStart = '[';
         private const char SingleTypeEnd = ']';
         private static readonly char[] InnerTypeCountEnd = new[] { '[', '+' };
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
         static TypeHelper()
         {
-            _microsoftPublicKeyTokens = new HashSet<string>();
-            _microsoftPublicKeyTokens.Add("b77a5c561934e089");
-            _microsoftPublicKeyTokens.Add("b03f5f7f11d50a3a");
-            _microsoftPublicKeyTokens.Add("31bf3856ad364e35");
+            _microsoftPublicKeyTokens = new HashSet<string>
+            {
+                "b77a5c561934e089",
+                "b03f5f7f11d50a3a",
+                "31bf3856ad364e35"
+            };
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the Microsoft public key tokens.
         /// </summary>
@@ -59,9 +50,7 @@ namespace Catel.Reflection
         {
             get { return _microsoftPublicKeyTokens; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the typed instance based on the specified instance.
         /// </summary>
@@ -98,9 +87,6 @@ namespace Catel.Reflection
         /// <exception cref = "ArgumentNullException">The <paramref name = "toCheck" /> is <c>null</c>.</exception>
         public static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
         {
-            Argument.IsNotNull("generic", generic);
-            Argument.IsNotNull("toCheck", toCheck);
-
             while ((toCheck is not null) && (toCheck != typeof(object)))
             {
                 var cur = toCheck.IsGenericTypeEx() ? toCheck.GetGenericTypeDefinition() : toCheck;
@@ -408,9 +394,7 @@ namespace Catel.Reflection
 
             return innerTypes.ToArray();
         }
-        #endregion
 
-        #region Powercast
         /// <summary>
         ///   Tries to Generic cast of a value.
         /// </summary>
@@ -525,6 +509,5 @@ namespace Catel.Reflection
 
             return output;
         }
-        #endregion
     }
 }

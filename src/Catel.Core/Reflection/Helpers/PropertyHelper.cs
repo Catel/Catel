@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Globalization;
@@ -20,16 +14,13 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class PropertyHelper
     {
-        #region Constants
         /// <summary>
         /// The <see cref="ILog">log</see> object.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly ICacheStorage<string, PropertyInfo> _availableProperties = new CacheStorage<string, PropertyInfo>();
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified property is a public property on the specified object.
         /// </summary>
@@ -41,7 +32,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool IsPublicProperty(object obj, string property, bool ignoreCase = false)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
@@ -70,7 +60,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool IsPropertyAvailable(object obj, string property, bool ignoreCase = false)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return GetPropertyInfo(obj, property, ignoreCase) is not null;
@@ -88,7 +77,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue(object obj, string property, out object value)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue<object>(obj, property, out value);
@@ -107,7 +95,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue(object obj, string property, bool ignoreCase, out object value)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue<object>(obj, property, ignoreCase, out value);
@@ -126,7 +113,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue<TValue>(object obj, string property, out TValue value)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue(obj, property, false, out value);
@@ -146,7 +132,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue<TValue>(object obj, string property, bool ignoreCase, out TValue value)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue(obj, property, ignoreCase, false, out value);
@@ -182,19 +167,16 @@ namespace Catel.Reflection
         /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
         public static TValue GetPropertyValue<TValue>(object obj, string property, bool ignoreCase = false)
         {
-            TValue returnValue;
-
-            TryGetPropertyValue(obj, property, ignoreCase, true, out returnValue);
+            TryGetPropertyValue(obj, property, ignoreCase, true, out TValue returnValue);
 
             return returnValue;
         }
 
         private static bool TryGetPropertyValue<TValue>(object obj, string property, bool ignoreCase, bool throwOnException, out TValue value)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            value = default(TValue);
+            value = default;
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
             if (propertyInfo is null)
@@ -271,7 +253,6 @@ namespace Catel.Reflection
 
         private static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase, bool throwOnError)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
@@ -329,9 +310,7 @@ namespace Catel.Reflection
         /// <exception cref="System.ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         public static TValue GetHiddenPropertyValue<TValue>(object obj, string property, Type baseType)
         {
-            Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
-            Argument.IsNotNull("baseType", baseType);
             Argument.IsOfType("obj", obj, baseType);
 
             var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -378,6 +357,5 @@ namespace Catel.Reflection
                 return null;
             });
         }
-        #endregion
     }
 }

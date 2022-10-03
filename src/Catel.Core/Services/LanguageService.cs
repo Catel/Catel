@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
@@ -45,7 +38,6 @@ namespace Catel.Services
             CacheResults = true;
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the fallback culture.
         /// </summary>
@@ -81,15 +73,12 @@ namespace Catel.Services
         /// </summary>
         /// <value><c>true</c> if the results should be cached; otherwise, <c>false</c>.</value>
         public bool CacheResults { get; set; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
         /// </summary>
-        public event EventHandler<EventArgs> LanguageUpdated;
-        #endregion
-
+        public event EventHandler<EventArgs>? LanguageUpdated;
+        
         /// <summary>
         /// Preloads the language sources to provide optimal performance.
         /// </summary>
@@ -115,8 +104,6 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c> or whitespace.</exception>
         public void RegisterLanguageSource(ILanguageSource languageSource)
         {
-            Argument.IsNotNull("languageSource", languageSource);
-
             lock (_languageSources)
             {
                 _languageSources.Insert(0, languageSource);
@@ -164,7 +151,6 @@ namespace Catel.Services
         public string GetString(string resourceName, CultureInfo cultureInfo)
         {
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
-            Argument.IsNotNull("cultureInfo", cultureInfo);
 
             if (CacheResults)
             {

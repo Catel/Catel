@@ -1,10 +1,4 @@
-﻿// ------------------------------------------------------------------------------------------------- -------------------
-// <copyright file="AssemblyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -113,8 +107,6 @@ namespace Catel.Reflection
 #endif
         public static Type[] GetAllTypesSafely(this Assembly assembly, bool logLoaderExceptions = true)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             Type[] foundAssemblyTypes;
 
             RegisterAssemblyWithVersionInfo(assembly);
@@ -260,11 +252,6 @@ namespace Catel.Reflection
 
         private static bool ShouldIgnoreAssembly(Assembly assembly, bool ignoreDynamicAssemblies)
         {
-            if (assembly is null)
-            {
-                return true;
-            }
-
             if (ignoreDynamicAssemblies)
             {
                 if (assembly.IsDynamicAssembly())

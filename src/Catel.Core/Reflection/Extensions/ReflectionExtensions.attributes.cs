@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensions.attributes.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Reflection;
@@ -25,8 +18,7 @@ namespace Catel.Reflection
         public static TAttribute GetAttribute<TAttribute>(this MemberInfo memberInfo)
             where TAttribute : Attribute
         {
-            Attribute tempAttribute;
-            TryGetAttribute(memberInfo, typeof(TAttribute), out tempAttribute);
+            TryGetAttribute(memberInfo, typeof(TAttribute), out var tempAttribute);
 
             return tempAttribute as TAttribute;
         }
@@ -41,8 +33,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
         public static Attribute GetAttribute(this MemberInfo memberInfo, Type attributeType)
         {
-            Attribute attribute;
-            TryGetAttribute(memberInfo, attributeType, out attribute);
+            TryGetAttribute(memberInfo, attributeType, out var attribute);
 
             return attribute;
         }
@@ -57,8 +48,7 @@ namespace Catel.Reflection
         public static TAttribute GetAttribute<TAttribute>(this Type type)
             where TAttribute : Attribute
         {
-            Attribute tempAttribute;
-            TryGetAttribute(type, typeof(TAttribute), out tempAttribute);
+            TryGetAttribute(type, typeof(TAttribute), out var tempAttribute);
 
             return tempAttribute as TAttribute;
         }
@@ -73,8 +63,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
         public static Attribute GetAttribute(this Type type, Type attributeType)
         {
-            Attribute attribute;
-            TryGetAttribute(type, attributeType, out attribute);
+            TryGetAttribute(type, attributeType, out var attribute);
 
             return attribute;
         }
@@ -92,8 +81,7 @@ namespace Catel.Reflection
         public static bool TryGetAttribute<TAttribute>(this MemberInfo memberInfo, out TAttribute attribute)
             where TAttribute : Attribute
         {
-            Attribute tempAttribute;
-            var result = TryGetAttribute(memberInfo, typeof(TAttribute), out tempAttribute);
+            var result = TryGetAttribute(memberInfo, typeof(TAttribute), out var tempAttribute);
 
             attribute = tempAttribute as TAttribute;
             return result;
@@ -112,9 +100,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType"/> is <c>null</c>.</exception>
         public static bool TryGetAttribute(this MemberInfo memberInfo, Type attributeType, out Attribute attribute)
         {
-            Argument.IsNotNull("memberInfo", memberInfo);
-            Argument.IsNotNull("attributeType", attributeType);
-
             attribute = null;
             var attributes = memberInfo.GetCustomAttributes(attributeType, false) as Attribute[];
 
@@ -138,8 +123,7 @@ namespace Catel.Reflection
         public static bool TryGetAttribute<TAttribute>(this Type type, out TAttribute attribute)
             where TAttribute : Attribute
         {
-            Attribute tempAttribute;
-            var result = TryGetAttribute(type, typeof(TAttribute), out tempAttribute);
+            var result = TryGetAttribute(type, typeof(TAttribute), out var tempAttribute);
 
             attribute = tempAttribute as TAttribute;
             return result;
@@ -156,9 +140,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
         public static bool TryGetAttribute(this Type type, Type attributeType, out Attribute attribute)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("attributeType", attributeType);
-
             attribute = null;
             var attributes = type.GetCustomAttributesEx(attributeType, false) as Attribute[];
 
@@ -197,11 +178,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType"/> is <c>null</c>.</exception>
         public static bool IsDecoratedWithAttribute(this MemberInfo memberInfo, Type attributeType)
         {
-            Argument.IsNotNull("memberInfo", memberInfo);
-            Argument.IsNotNull("attributeType", attributeType);
-
-            Attribute tempAttribute;
-            return TryGetAttribute(memberInfo, attributeType, out tempAttribute);
+            return TryGetAttribute(memberInfo, attributeType, out var tempAttribute);
         }
 
         /// <summary>
@@ -226,11 +203,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
         public static bool IsDecoratedWithAttribute(this Type type, Type attributeType)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("attributeType", attributeType);
-
-            Attribute tempAttribute;
-            return TryGetAttribute(type, attributeType, out tempAttribute);
+            return TryGetAttribute(type, attributeType, out var tempAttribute);
         }
     }
 }

@@ -16,16 +16,11 @@
 
         public static Attribute[] GetCustomAttributesEx(this MethodInfo methodInfo, bool inherit)
         {
-            Argument.IsNotNull("methodInfo", methodInfo);
-
             return methodInfo.GetCustomAttributes(inherit).ToAttributeArray();
         }
 
         public static Attribute[] GetCustomAttributesEx(this MethodInfo methodInfo, Type attributeType, bool inherit)
         {
-            Argument.IsNotNull("methodInfo", methodInfo);
-            Argument.IsNotNull("attributeType", attributeType);
-
             return methodInfo.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
         }
     }

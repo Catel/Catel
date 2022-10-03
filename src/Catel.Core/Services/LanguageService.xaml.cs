@@ -33,10 +33,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
         public override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
         {
-            Argument.IsNotNull("languageSource", languageSource);
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
-            Argument.IsNotNull("cultureInfo", cultureInfo);
-            
+               
             string value = null;
             var source = languageSource.GetSource();
             var resourceLoader = GetResourceManager(source);
