@@ -7,10 +7,11 @@ using System;
 /// </summary>
 internal static class MethodTimeLogger
 {
-    #region Methods
+    private static readonly Type FallbackType = typeof(object);
+
     public static void Log(MethodBase methodBase, long milliseconds, string message)
     {
-        Log(methodBase.DeclaringType, methodBase.Name, milliseconds, message);
+        Log(methodBase.DeclaringType ?? FallbackType, methodBase.Name, milliseconds, message);
     }
 
     public static void Log(Type type, string methodName, long milliseconds, string message)
@@ -36,5 +37,4 @@ internal static class MethodTimeLogger
         var logger = LogManager.GetLogger(type);
         logger.Debug(finalMessage);
     }
-    #endregion
 }

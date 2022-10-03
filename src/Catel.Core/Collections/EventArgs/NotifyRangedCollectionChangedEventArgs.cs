@@ -1,22 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotifyRangedCollectionChangedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
 
-  /// <summary>
+    /// <summary>
     /// The ranged notify collection changed event args.
     /// </summary>
     public class NotifyRangedCollectionChangedEventArgs : NotifyCollectionChangedEventArgs
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
         /// </summary>
@@ -35,10 +28,8 @@ namespace Catel.Collections
         /// <param name="mode">The suspension mode.</param>
         /// <remarks>This only for use of <see cref="Catel.Collections.SuspensionMode.Adding"/> and <see cref="Catel.Collections.SuspensionMode.Removing"/>.</remarks>
         public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, SuspensionMode mode)
-            : base(ModeToAction(mode), changedItems, (indices is not null && indices.Count != 0) ? indices[0] : -1)
+            : base(ModeToAction(mode), changedItems, indices.Count != 0 ? indices[0] : -1)
         {
-            Argument.IsNotNull(nameof(changedItems), changedItems);
-            Argument.IsNotNull(nameof(indices), indices);
             // ReSharper disable once PossibleNullReferenceException
             Argument.IsNotOutOfRange(nameof(indices), indices.Count, changedItems.Count, changedItems.Count);
 
@@ -56,10 +47,8 @@ namespace Catel.Collections
         /// <param name="action">The action.</param>
         /// <remarks>This is only for use of <see cref="Catel.Collections.SuspensionMode.MixedBash"/>.</remarks>
         public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, SuspensionMode mode, NotifyCollectionChangedAction action)
-            : base(EnsureModeAndAction(mode, action), changedItems, (indices is not null && indices.Count != 0) ? indices[0] : -1)
+            : base(EnsureModeAndAction(mode, action), changedItems, indices.Count != 0 ? indices[0] : -1)
         {
-            Argument.IsNotNull(nameof(changedItems), changedItems);
-            Argument.IsNotNull(nameof(indices), indices);
             // ReSharper disable once PossibleNullReferenceException
             Argument.IsNotOutOfRange(nameof(indices), indices.Count, changedItems.Count, changedItems.Count);
 
@@ -78,40 +67,32 @@ namespace Catel.Collections
         public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, IList<NotifyCollectionChangedAction> mixedActions)
             : base(NotifyCollectionChangedAction.Reset)
         {
-            Argument.IsNotNull(nameof(changedItems), changedItems);
-            Argument.IsNotNull(nameof(indices), indices);
-            Argument.IsNotNull(nameof(mixedActions), mixedActions);
-
             SuspensionMode = SuspensionMode.Mixed;
             ChangedItems = changedItems;
             Indices = indices;
             MixedActions = mixedActions;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the indices.
         /// </summary>
-        public IList<int> Indices { get; }
+        public IList<int>? Indices { get; }
 
         /// <summary>
         /// Gets the changed items.
         /// </summary>
-        public IList ChangedItems { get; }
+        public IList? ChangedItems { get; }
 
         /// <summary>
         /// Gets the mixed actions.
         /// </summary>
-        public IList<NotifyCollectionChangedAction> MixedActions { get; }
+        public IList<NotifyCollectionChangedAction>? MixedActions { get; }
 
         /// <summary>
         /// Gets the suspension mode.
         /// </summary>
         public SuspensionMode SuspensionMode { get; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// The ensure mode and action.
         /// </summary>
@@ -130,8 +111,11 @@ namespace Catel.Collections
             switch (action)
             {
                 case NotifyCollectionChangedAction.Add:
-                case NotifyCollectionChangedAction.Remove: return action;
-                default: throw new ArgumentException($"Wrong action '{Enum<NotifyCollectionChangedAction>.ToString(action)}' for constructor.");
+                case NotifyCollectionChangedAction.Remove: 
+                    return action;
+                
+                default: 
+                    throw new ArgumentException($"Wrong action '{Enum<NotifyCollectionChangedAction>.ToString(action)}' for constructor.");
             }
         }
 
@@ -145,11 +129,15 @@ namespace Catel.Collections
             // Only transform modes Adding and Removing, others fail
             switch (mode)
             {
-                case SuspensionMode.Adding: return NotifyCollectionChangedAction.Add;
-                case SuspensionMode.Removing: return NotifyCollectionChangedAction.Remove;
-                default: throw new ArgumentException($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
+                case SuspensionMode.Adding: 
+                    return NotifyCollectionChangedAction.Add;
+
+                case SuspensionMode.Removing: 
+                    return NotifyCollectionChangedAction.Remove;
+
+                default: 
+                    throw new ArgumentException($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
             }
         }
-        #endregion
-  }
+    }
 }

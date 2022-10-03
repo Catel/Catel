@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotifyListChangedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System.ComponentModel;
 
@@ -39,7 +33,7 @@ namespace Catel.Collections
         /// </summary>
         /// <param name="listChangedType">Type of change.</param>
         /// <param name="propDesc">The <see cref="PropertyDescriptor"/> that was added, removed, or changed.</param>
-        public NotifyListChangedEventArgs(ListChangedType listChangedType, PropertyDescriptor propDesc)
+        public NotifyListChangedEventArgs(ListChangedType listChangedType, PropertyDescriptor? propDesc)
             : base(listChangedType, propDesc)
         {
 
@@ -51,7 +45,7 @@ namespace Catel.Collections
         /// <param name="listChangedType">Type of change.</param>
         /// <param name="newIndex">The index of the item that was added, changed, or removed.</param>
         /// <param name="newItem">The item that was added, changed, or removed.</param>
-        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, object newItem)
+        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, object? newItem)
             : base(listChangedType, newIndex)
         {
             NewItem = newItem;
@@ -63,7 +57,7 @@ namespace Catel.Collections
         /// <param name="listChangedType">Type of change.</param>
         /// <param name="newIndex">The index of the item that was added or changed.</param>
         /// <param name="propDesc">The <see cref="PropertyDescriptor"/> describing the item.</param>
-        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, PropertyDescriptor propDesc)
+        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, PropertyDescriptor? propDesc)
             : base(listChangedType, newIndex, propDesc)
         {
 
@@ -76,7 +70,7 @@ namespace Catel.Collections
         /// <param name="newIndex">The index of the item that was added or changed.</param>
         /// <param name="newItem">The item that was added, changed, or removed.</param>
         /// <param name="propDesc">The <see cref="PropertyDescriptor"/> describing the item.</param>
-        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, object newItem, PropertyDescriptor propDesc)
+        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, object? newItem, PropertyDescriptor? propDesc)
             : base(listChangedType, newIndex, propDesc)
         {
             NewItem = newItem;
@@ -102,7 +96,7 @@ namespace Catel.Collections
         /// <param name="newItem">The new item that was moved.</param>
         /// <param name="oldIndex">The old index of the item that was moved.</param>
         /// <param name="oldItem">The old item that was moved.</param>
-        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, object newItem, int oldIndex, object oldItem)
+        public NotifyListChangedEventArgs(ListChangedType listChangedType, int newIndex, object? newItem, int oldIndex, object? oldItem)
             : base(listChangedType, newIndex, oldIndex)
         {
             NewItem = newItem;
@@ -112,11 +106,11 @@ namespace Catel.Collections
         /// <summary>
         /// The new item.
         /// </summary>
-        public object NewItem { get; private set; }
+        public object? NewItem { get; private set; }
 
         /// <summary>
         /// The old item.
         /// </summary>
-        public object OldItem { get; private set; }
+        public object? OldItem { get; private set; }
     }
 }

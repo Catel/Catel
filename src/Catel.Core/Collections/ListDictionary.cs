@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ListDictionary.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -18,18 +11,16 @@ namespace Catel.Collections
     /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
     public class ListDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        #region Fields
         private readonly IList<KeyValuePair<TKey, TValue>> _list;
         private readonly IEqualityComparer<TKey> _comparer;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ListDictionary{TKey, TValue}"/> class.
         /// </summary>
         public ListDictionary()
+            : this(EqualityComparer<TKey>.Default)
         {
-            _list = new List<KeyValuePair<TKey, TValue>>();
+            // Leave empty
         }
 
         /// <summary>
@@ -37,13 +28,11 @@ namespace Catel.Collections
         /// </summary>
         /// <param name="comparer">The equality comparer for the key comparison.</param>
         public ListDictionary(IEqualityComparer<TKey> comparer)
-            : this()
         {
             _comparer = comparer;
+            _list = new List<KeyValuePair<TKey, TValue>>();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the count.
         /// </summary>
@@ -120,9 +109,7 @@ namespace Catel.Collections
         {
             get { return _list.Select(item => item.Value).ToList(); }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         ///  Returns an enumerator that iterates through the collection.
         /// </summary>
@@ -231,7 +218,7 @@ namespace Catel.Collections
             var index = GetIndex(key);
             if (index < 0)
             {
-                value = default(TValue);
+                value = default!;
                 return false;
             }
 
@@ -246,12 +233,14 @@ namespace Catel.Collections
             {
                 _list.RemoveAt(index);
             }
+
             return index;
         }
 
         private int GetIndex(TKey key)
         {
             var index = 0;
+
             while (index >= 0 && index < _list.Count)
             {
                 var keyValuePair = _list[index];
@@ -267,8 +256,8 @@ namespace Catel.Collections
 
                 index++;
             }
+
             return -1;
         }
-        #endregion
     }
 }

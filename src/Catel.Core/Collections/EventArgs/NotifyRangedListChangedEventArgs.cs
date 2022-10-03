@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotifyRangedListChangedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -39,7 +33,7 @@ namespace Catel.Collections
         {
             Action = action;
 
-            var startingIndex = indices is not null && indices.Count != 0 ? indices[0] : -1;
+            var startingIndex = indices.Count != 0 ? indices[0] : -1;
             if (action == NotifyRangedListChangedAction.Add)
             {
                 NewItems = changedItems;
@@ -64,7 +58,7 @@ namespace Catel.Collections
         /// <summary>
         /// Gets the new items.
         /// </summary>
-        public IList NewItems { get; private set; }
+        public IList? NewItems { get; private set; }
 
         /// <summary>
         /// Gets the new starting index.
@@ -74,7 +68,7 @@ namespace Catel.Collections
         /// <summary>
         /// Gets the old items.
         /// </summary>
-        public IList OldItems { get; private set; }
+        public IList? OldItems { get; private set; }
 
         /// <summary>
         /// Gets the old starting index.
@@ -84,6 +78,6 @@ namespace Catel.Collections
         /// <summary>
         /// Gets the indices.
         /// </summary>
-        public IList<int> Indices { get; private set; }
+        public IList<int>? Indices { get; private set; }
     }
 }
