@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConfigurationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using Runtime.Serialization;
     using Services;
@@ -17,6 +10,8 @@ namespace Catel.Configuration
     using Runtime.Serialization.Xml;
     using System.Timers;
     using System.Diagnostics;
+    using System.Threading.Tasks;
+    using Catel.Threading;
 
     /// <summary>
     /// Configuration service implementation that allows customization how configuration values
@@ -36,11 +31,11 @@ namespace Catel.Configuration
         private DynamicConfiguration _localConfiguration;
         private DynamicConfiguration _roamingConfiguration;
 
-        private readonly object _localConfigurationLock = new ();
-        private readonly object _roamingConfigurationLock = new ();
+        private readonly AsyncLock _localConfigurationLock = new();
+        private readonly AsyncLock _roamingConfigurationLock = new();
 
-        private readonly Timer _localSaveConfigurationTimer = new ();
-        private readonly Timer _roamingSaveConfigurationTimer = new ();
+        private readonly Timer _localSaveConfigurationTimer = new();
+        private readonly Timer _roamingSaveConfigurationTimer = new();
 
         private IXmlSerializer _xmlSerializer;
 
@@ -91,14 +86,11 @@ namespace Catel.Configuration
             _roamingSaveConfigurationTimer.Elapsed += OnRoamingSaveConfigurationTimerElapsed;
         }
 
-        #region Events
         /// <summary>
         /// Occurs when the configuration has changed.
         /// </summary>
         public event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the configuration file name for the specified application data target.
         /// </summary>
@@ -146,22 +138,23 @@ namespace Catel.Configuration
         /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual T GetValue<T>(ConfigurationContainer container, string key, T defaultValue = default(T))
+        public virtual async Task<T> GetValueAsync<T>(ConfigurationContainer container, string key, T defaultValue = default(T))
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             key = GetFinalKey(key);
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
                 try
                 {
-                    if (!ValueExists(container, key))
+                    if (!await ValueExistsAsync(container, key))
                     {
                         return defaultValue;
                     }
 
-                    var value = GetValueFromStore(container, key);
+                    var value = await GetValueFromStoreAsync(container, key);
                     if (value is null)
                     {
                         return defaultValue;
@@ -177,7 +170,7 @@ namespace Catel.Configuration
                 }
                 catch (Exception ex)
                 {
-                	Log.Warning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
+                    Log.Warning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
 
                     return defaultValue;
                 }
@@ -191,7 +184,7 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual void SetValue(ConfigurationContainer container, string key, object value)
+        public virtual async Task SetValueAsync(ConfigurationContainer container, string key, object value)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
@@ -199,12 +192,13 @@ namespace Catel.Configuration
             key = GetFinalKey(key);
             var raiseEvent = false;
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
                 var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
-                var existingValue = GetValueFromStore(container, key);
+                var existingValue = await GetValueFromStoreAsync(container, key);
 
-                SetValueToStore(container, key, stringValue);
+                await SetValueToStoreAsync(container, key, stringValue);
 
                 if (!string.Equals(stringValue, existingValue))
                 {
@@ -225,13 +219,13 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual bool IsValueAvailable(ConfigurationContainer container, string key)
+        public virtual async Task<bool> IsValueAvailableAsync(ConfigurationContainer container, string key)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             key = GetFinalKey(key);
 
-            return ValueExists(container, key);
+            return await ValueExistsAsync(container, key);
         }
 
         /// <summary>
@@ -241,15 +235,16 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual void InitializeValue(ConfigurationContainer container, string key, object defaultValue)
+        public virtual async Task InitializeValueAsync(ConfigurationContainer container, string key, object defaultValue)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
-                if (!IsValueAvailable(container, key))
+                if (!await IsValueAvailableAsync(container, key))
                 {
-                    SetValue(container, key, defaultValue);
+                    await SetValueAsync(container, key, defaultValue);
                 }
             }
         }
@@ -258,16 +253,17 @@ namespace Catel.Configuration
         /// Sets the roaming config file path.
         /// </summary>
         /// <param name="filePath">The file path. </param>
-        public virtual void SetRoamingConfigFilePath(string filePath)
+        public virtual async Task SetRoamingConfigFilePathAsync(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting roaming config file path to '{filePath}'");
 
-            lock (GetLockObject(ConfigurationContainer.Roaming))
+            var lockObject = GetLockObject(ConfigurationContainer.Roaming);
+            using (await lockObject.LockAsync())
             {
                 _roamingConfigFilePath = filePath;
-                _roamingConfiguration = LoadConfiguration(filePath);
+                _roamingConfiguration = await LoadConfigurationAsync(filePath);
             }
         }
 
@@ -275,20 +271,21 @@ namespace Catel.Configuration
         /// Sets the roaming config file path.
         /// </summary>
         /// <param name="filePath">The file path. </param>
-        public virtual void SetLocalConfigFilePath(string filePath)
+        public virtual async Task SetLocalConfigFilePathAsync(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting local config file path to '{filePath}'");
 
-            lock (GetLockObject(ConfigurationContainer.Local))
+            var lockObject = GetLockObject(ConfigurationContainer.Local);
+            using (await lockObject.LockAsync())
             {
                 _localConfigFilePath = filePath;
-                _localConfiguration = LoadConfiguration(filePath);
+                _localConfiguration = await LoadConfigurationAsync(filePath);
             }
         }
 
-        protected virtual DynamicConfiguration LoadConfiguration(string fileName)
+        protected virtual async Task<DynamicConfiguration> LoadConfigurationAsync(string fileName)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -329,11 +326,12 @@ namespace Catel.Configuration
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
-        protected virtual bool ValueExists(ConfigurationContainer container, string key)
+        protected virtual async Task<bool> ValueExistsAsync(ConfigurationContainer container, string key)
         {
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
-                var settings = GetSettingsContainer(container);
+                var settings = await GetSettingsContainerAsync(container);
                 return settings.IsConfigurationValueSet(key);
             }
         }
@@ -344,11 +342,12 @@ namespace Catel.Configuration
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns>The value.</returns>
-        protected virtual string GetValueFromStore(ConfigurationContainer container, string key)
+        protected virtual async Task<string> GetValueFromStoreAsync(ConfigurationContainer container, string key)
         {
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
-                var settings = GetSettingsContainer(container);
+                var settings = await GetSettingsContainerAsync(container);
                 return settings.GetConfigurationValue<string>(key, string.Empty);
             }
         }
@@ -359,11 +358,12 @@ namespace Catel.Configuration
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        protected virtual void SetValueToStore(ConfigurationContainer container, string key, string value)
+        protected virtual async Task SetValueToStoreAsync(ConfigurationContainer container, string key, string value)
         {
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
-                var settings = GetSettingsContainer(container);
+                var settings = await GetSettingsContainerAsync(container);
 
                 if (!settings.IsConfigurationValueSet(key))
                 {
@@ -388,7 +388,7 @@ namespace Catel.Configuration
             return key;
         }
 
-        protected object GetLockObject(ConfigurationContainer container)
+        protected AsyncLock GetLockObject(ConfigurationContainer container)
         {
             switch (container)
             {
@@ -412,6 +412,5 @@ namespace Catel.Configuration
 
             ConfigurationChanged?.Invoke(this, new ConfigurationChangedEventArgs(container, key, value));
         }
-        #endregion
     }
 }

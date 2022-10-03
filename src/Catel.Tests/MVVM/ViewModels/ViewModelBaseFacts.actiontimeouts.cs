@@ -48,7 +48,7 @@ namespace Catel.Tests.MVVM.ViewModels
             await vm.InitializeViewModelAsync();
 
             vm.ViewModelActionAwaitTimeoutInMilliseconds = 70;
-            vm.ActionDuration = 50;
+            vm.ActionDuration = 40;
 
             // Need duplicate call
             _ = vm.SaveAndCloseViewModelAsync();

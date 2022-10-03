@@ -6,7 +6,7 @@
 var Parameters = new Dictionary<string, object>();
 Parameters["SolutionName"] = "Catel";
 Parameters["Company"] = "CatenaLogic";
-Parameters["RepositoryUrl"] = string.Format("https://github.com/{0}/{1}", GetBuildServerVariable("SolutionName"), GetBuildServerVariable("SolutionName"));
+Parameters["RepositoryUrl"] = "https://github.com/catel/catel";
 Parameters["StartYear"] = "2010";
 Parameters["UseVisualStudioPrerelease"] = "true";
 
@@ -24,11 +24,27 @@ Parameters["UseVisualStudioPrerelease"] = "true";
 // DEFINE COMPONENTS TO BUILD / PACKAGE
 //=======================================================
 
+// Catel.Core is a dependency of the test references
+Dependencies.Add("Catel.Core");
+
+Dependencies.Add("Catel.Tests.TestReferenceB", new [] 
+{
+    "Catel.Tests.TestReferenceA"
+});
+Dependencies.Add("Catel.Tests.TestReferenceC", new [] 
+{
+    "Catel.Tests.TestReferenceA"
+});
+Dependencies.Add("Catel.Tests.TestReferenceA", new [] 
+{
+    "Catel.Tests"
+});
+
 Components.Add("Catel.Core");
 Components.Add("Catel.MVVM");
 Components.Add("Catel.Serialization.Json");
 
-TestProjects.Add(string.Format("{0}.Tests", GetBuildServerVariable("SolutionName")));
+TestProjects.Add("Catel.Tests");
 
 //=======================================================
 // REQUIRED INITIALIZATION, DO NOT CHANGE

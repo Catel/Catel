@@ -1,15 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConfigurationService.netfxcore.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
     using System.Timers;
     using Catel.Data;
+    using Catel.Logging;
     using Catel.Runtime.Serialization;
 
     public partial class ConfigurationService
@@ -19,7 +15,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="container">The settings container.</param>
         /// <returns>The settings container.</returns>
-        protected virtual DynamicConfiguration GetSettingsContainer(ConfigurationContainer container)
+        protected virtual async Task<DynamicConfiguration> GetSettingsContainerAsync(ConfigurationContainer container)
         {
             DynamicConfiguration settings = null;
 
@@ -43,17 +39,17 @@ namespace Catel.Configuration
                 {
                     case ConfigurationContainer.Local:
                         var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-                        SetLocalConfigFilePath(defaultLocalConfigFilePath);
+                        await SetLocalConfigFilePathAsync(defaultLocalConfigFilePath);
                         break;
 
                     case ConfigurationContainer.Roaming:
                         var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-                        SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
+                        await SetRoamingConfigFilePathAsync(defaultRoamingConfigFilePath);
                         break;
                 }
 
                 // Let's try again
-                settings = GetSettingsContainer(container);
+                settings = await GetSettingsContainerAsync(container);
 
                 if (settings is not null)
                 {
@@ -64,11 +60,11 @@ namespace Catel.Configuration
                     switch (container)
                     {
                         case ConfigurationContainer.Local:
-                            SaveLocalConfiguration();
+                            await SaveLocalConfigurationAsync();
                             break;
 
                         case ConfigurationContainer.Roaming:
-                            SaveRoamingConfiguration();
+                            await SaveRoamingConfigurationAsync();
                             break;
                     }
                 }
@@ -77,18 +73,18 @@ namespace Catel.Configuration
             return settings;
         }
 
-        private void OnLocalSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnLocalSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _localSaveConfigurationTimer.Stop();
 
-            SaveLocalConfiguration();
+            await SaveLocalConfigurationAsync();
         }
 
-        private void OnRoamingSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnRoamingSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _roamingSaveConfigurationTimer.Stop();
 
-            SaveRoamingConfiguration();
+            await SaveRoamingConfigurationAsync();
         }
 
         protected virtual void ScheduleSaveConfiguration(ConfigurationContainer container)
@@ -105,7 +101,7 @@ namespace Catel.Configuration
             }
         }
 
-        protected void ScheduleLocalConfigurationSave()
+        protected async void ScheduleLocalConfigurationSave()
         {
             _localSaveConfigurationTimer.Stop();
 
@@ -115,11 +111,11 @@ namespace Catel.Configuration
             }
             else
             {
-                SaveLocalConfiguration();
+                await SaveLocalConfigurationAsync();
             }
         }
 
-        protected void ScheduleRoamingConfigurationSave()
+        protected async void ScheduleRoamingConfigurationSave()
         {
             _roamingSaveConfigurationTimer.Stop();
 
@@ -129,37 +125,53 @@ namespace Catel.Configuration
             }
             else
             {
-                SaveRoamingConfiguration();
+                await SaveRoamingConfigurationAsync();
             }
         }
 
-        private void SaveLocalConfiguration()
+        private async Task SaveLocalConfigurationAsync()
         {
             var container = ConfigurationContainer.Local;
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
-                var settings = GetSettingsContainer(container);
+                var settings = await GetSettingsContainerAsync(container);
                 var fileName = _localConfigFilePath;
 
-                SaveConfiguration(container, settings, fileName);
+                try
+                {
+                    await SaveConfigurationAsync(container, settings, fileName);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to save local configuration");
+                }
             }
         }
 
-        private void SaveRoamingConfiguration()
+        private async Task SaveRoamingConfigurationAsync()
         {
             var container = ConfigurationContainer.Roaming;
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
-                var settings = GetSettingsContainer(container);
+                var settings = await GetSettingsContainerAsync(container);
                 var fileName = _roamingConfigFilePath;
 
-                SaveConfiguration(container, settings, fileName);
+                try
+                {
+                    await SaveConfigurationAsync(container, settings, fileName);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to save roaming configuration");
+                }
             }
         }
 
-        protected virtual void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+        protected virtual async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
         {
             using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {

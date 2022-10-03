@@ -24,7 +24,7 @@ namespace Catel
         public static bool GetIsInDesignMode(bool initializeDesignTime) { }
         public static void RegisterDefaultViewModelServices() { }
     }
-    [System.AttributeUsage(System.AttributeTargets.Assembly | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple=true)]
     public class DesignTimeCodeAttribute : System.Attribute
     {
         public DesignTimeCodeAttribute(System.Type typeToConstruct) { }
@@ -784,7 +784,7 @@ namespace Catel.MVVM
     {
         public static void RegisterDefaultViewModelServices(Catel.IoC.IServiceLocator serviceLocator) { }
     }
-    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All)]
+    [System.AttributeUsage(System.AttributeTargets.Property)]
     public class ViewModelToModelAttribute : System.Attribute
     {
         public ViewModelToModelAttribute(string model = "", string property = "") { }
@@ -1084,6 +1084,15 @@ namespace Catel.MVVM.Converters
         public virtual object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
         protected virtual bool IsConvertable<T>(object value) { }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
+    }
+    [System.Windows.Markup.ContentProperty("Converters")]
+    public class ValueConverterGroup : Catel.MVVM.Converters.IValueConverter, System.Windows.Data.IValueConverter
+    {
+        public ValueConverterGroup() { }
+        public System.Collections.ObjectModel.ObservableCollection<System.Windows.Data.IValueConverter> Converters { get; }
+        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
+        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
+        protected virtual System.Type GetTargetType(int converterIndex, System.Type finalTargetType, bool convert) { }
     }
     [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
     public class ViewModelToViewConverter : Catel.MVVM.Converters.ValueConverterBase
@@ -1471,7 +1480,7 @@ namespace Catel.MVVM.Views
         public ViewStackPartEventArgs(Catel.MVVM.Views.IView view) { }
         public Catel.MVVM.Views.IView View { get; }
     }
-    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
     public class ViewToViewModelAttribute : System.Attribute
     {
         public ViewToViewModelAttribute(string viewModelPropertyName = "") { }
@@ -1608,7 +1617,7 @@ namespace Catel.Services
     public abstract class FileServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.IFileSupport
     {
         protected FileServiceBase() { }
-        protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog, Catel.Services.DetermineFileContext context) { }
+        protected virtual System.Threading.Tasks.Task ConfigureFileDialogAsync(Microsoft.Win32.FileDialog fileDialog, Catel.Services.DetermineFileContext context) { }
         protected virtual string GetInitialDirectory(Catel.Services.DetermineFileContext context) { }
     }
     public interface IAutoCompletionService

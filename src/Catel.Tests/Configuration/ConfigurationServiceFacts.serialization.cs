@@ -18,9 +18,9 @@
                 {
                 }
 
-                protected override void SetValueToStore(ConfigurationContainer container, string key, string value)
+                protected override async Task SetValueToStoreAsync(ConfigurationContainer container, string key, string value)
                 {
-                    base.SetValueToStore(container, key, value);
+                    await base.SetValueToStoreAsync(container, key, value);
 
                     switch (container)
                     {
@@ -34,7 +34,7 @@
                     }
                 }
 
-                protected override void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+                protected override async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
                 {
                     switch (container)
                     {
@@ -67,7 +67,7 @@
                 // 3. Process C is launched, but B reset the configuration and configuration has been reset to default values
                 var configServiceA = GetConfigurationService("GH1840");
                 configServiceA.CreateDelayDuringSave = true;
-                configServiceA.SetRoamingValue("NAME", "A");
+                await configServiceA.SetRoamingValueAsync("NAME", "A");
 
                 // The save should be ready, but the additional delay will lock the file and mimic process A from locking the file
                 // and thus not allowing process B to correctly load the config
@@ -76,13 +76,13 @@
                 // This code must be called *while service A is writing* so we added a delay. It should have waited until
                 // the config value of A was released, then set value and overwrite the file instead of resetting it
                 var configServiceB = GetConfigurationService("GH1840");
-                configServiceB.SetRoamingValue("ANOTHER VALUE", "B");
+                await configServiceB.SetRoamingValueAsync("ANOTHER VALUE", "B");
 
                 // Close both files, wait long enough (longer than 5 seconds)
                 await Task.Delay(7000);
 
                 var configServiceC = GetConfigurationService("GH1840");
-                var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);
+                var value = await configServiceC.GetRoamingValueAsync<string>("NAME", string.Empty);
 
                 Assert.AreEqual("A", value);
             }
@@ -94,7 +94,7 @@
 
                 for (int j = 0; j < 50; j++)
                 {
-                    configurationService.SetRoamingValue($"{j:D2}", j);
+                    await configurationService.SetRoamingValueAsync($"Key_{j:D2}", j);
 
                     await Task.Delay(10);
                 }
@@ -102,11 +102,10 @@
                 for (int i = 0; i < 10; i++)
                 {
                     await Task.Delay(200);
-
-                    Assert.AreEqual(1, configurationService.RoamingSaveCount);
                 }
 
-                Assert.AreEqual(1, configurationService.RoamingSaveCount);
+                // Note: we expect +1 because an initial write is done when initializing the configuration
+                Assert.AreEqual(2, configurationService.RoamingSaveCount);
             }
 
             [Test]
@@ -118,7 +117,7 @@
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        configurationService.SetLocalValue($"{i:D2}_{j:D2}", i + j);
+                        await configurationService.SetLocalValueAsync($"Key_{i:D2}_{j:D2}", i + j);
 
                         await Task.Delay(25);
                     }
@@ -129,8 +128,9 @@
                 Assert.AreEqual(0, configurationService.RoamingChangeCount);
                 Assert.AreEqual(0, configurationService.RoamingSaveCount);
 
+                // Note: we expect +1 because an initial write is done when initializing the configuration
                 Assert.AreEqual(5 * 50, configurationService.LocalChangeCount);
-                Assert.AreEqual(5, configurationService.LocalSaveCount);
+                Assert.AreEqual(6, configurationService.LocalSaveCount);
             }
 
             [Test]
@@ -142,7 +142,7 @@
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        configurationService.SetRoamingValue($"{i:D2}_{j:D2}", i + j);
+                        await configurationService.SetRoamingValueAsync($"Key_{i:D2}_{j:D2}", i + j);
 
                         await Task.Delay(25);
                     }
@@ -153,8 +153,9 @@
                 Assert.AreEqual(0, configurationService.LocalChangeCount);
                 Assert.AreEqual(0, configurationService.LocalSaveCount);
 
+                // Note: we expect +1 because an initial write is done when initializing the configuration
                 Assert.AreEqual(5 * 50, configurationService.RoamingChangeCount);
-                Assert.AreEqual(5, configurationService.RoamingSaveCount);
+                Assert.AreEqual(6, configurationService.RoamingSaveCount);
             }
         }
     }

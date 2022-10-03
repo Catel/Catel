@@ -663,9 +663,6 @@ namespace Catel.IoC
         /// This call is normally not necessary since the type factory should keep an eye on the 
         /// <see cref="IServiceLocator.TypeRegistered"/> event to invalidate the cache.
         /// </summary>
-#if DEBUG
-        [Time]
-#endif
         public void ClearCache()
         {
             // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an

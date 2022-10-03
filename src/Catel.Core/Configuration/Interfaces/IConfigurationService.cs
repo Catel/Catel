@@ -1,13 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IConfigurationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Configuration service implementation that allows customization how configuration values
@@ -35,7 +29,7 @@ namespace Catel.Configuration
         /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        T GetValue<T>(ConfigurationContainer container, string key, T defaultValue = default(T));
+        Task<T> GetValueAsync<T>(ConfigurationContainer container, string key, T defaultValue = default(T));
 
         /// <summary>
         /// Sets the configuration value.
@@ -44,7 +38,7 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        void SetValue(ConfigurationContainer container, string key, object value);
+        Task SetValueAsync(ConfigurationContainer container, string key, object value);
 
         /// <summary>
         /// Determines whether the specified value is available.
@@ -53,7 +47,7 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        bool IsValueAvailable(ConfigurationContainer container, string key);
+        Task<bool> IsValueAvailableAsync(ConfigurationContainer container, string key);
 
         /// <summary>
         /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
@@ -62,18 +56,18 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        void InitializeValue(ConfigurationContainer container, string key, object defaultValue);
+        Task InitializeValueAsync(ConfigurationContainer container, string key, object defaultValue);
 
         /// <summary>
         /// Sets the roaming config file path.
         /// </summary>
         /// <param name="filePath">The file path. </param>
-        void SetRoamingConfigFilePath(string filePath);
+        Task SetRoamingConfigFilePathAsync(string filePath);
 
         /// <summary>
         /// Sets the local config file path.
         /// </summary>
         /// <param name="filePath">The file path. </param>
-        void SetLocalConfigFilePath(string filePath);
+        Task SetLocalConfigFilePathAsync(string filePath);
     }
 }
