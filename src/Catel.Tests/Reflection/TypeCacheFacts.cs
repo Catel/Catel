@@ -138,8 +138,3 @@ namespace Catel.Tests.Reflection
         }
     }
 }
-
-
-
-
-
