@@ -1,14 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EditEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace System.ComponentModel
+﻿namespace System.ComponentModel
 {
     using System;
-    using System.ComponentModel;
     using Catel;
+    using Catel.ComponentModel.Interfaces;
 
     /// <summary>
     /// Event args class containing information about events that occur in the <see cref="IAdvancedEditableObject"/>
@@ -16,7 +10,6 @@ namespace System.ComponentModel
     /// </summary>
     public class EditEventArgs : EventArgs
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EditEventArgs"/> class.
         /// </summary>
@@ -28,9 +21,7 @@ namespace System.ComponentModel
 
             EditableObject = editableObject;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the editable object.
         /// </summary>
@@ -42,6 +33,5 @@ namespace System.ComponentModel
         /// </summary>
         /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
         public bool Cancel { get; set; }
-        #endregion
     }
 }

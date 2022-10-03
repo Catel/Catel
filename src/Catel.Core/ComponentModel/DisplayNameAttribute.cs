@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DisplayNameAttribute.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.ComponentModel
+﻿namespace Catel.ComponentModel
 {
     using System;
     using IoC;
@@ -19,7 +13,7 @@ namespace Catel.ComponentModel
         private static readonly Lazy<ILanguageService> DefaultLanguageService = new Lazy<ILanguageService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<ILanguageService>());
 
         private readonly string _resourceName;
-        private ILanguageService _languageService;
+        private ILanguageService? _languageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.

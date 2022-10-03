@@ -1,12 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAdvancedEditableObject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace System.ComponentModel
+﻿namespace Catel.ComponentModel
 {
     using System;
+    using System.ComponentModel;
 
     /// <summary>
     /// Interface extending the <see cref="IEditableObject"/> interface with events which allows preventing the

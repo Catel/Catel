@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BeginEditEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace System.ComponentModel
+﻿namespace System.ComponentModel
 {
     /// <summary>
     /// Event args implementation called when the object is about to call <see cref="IEditableObject.BeginEdit"/>. This way,

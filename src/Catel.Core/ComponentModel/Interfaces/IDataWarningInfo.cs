@@ -1,11 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="INotifyDataWarningInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace System.ComponentModel
+﻿namespace Catel.ComponentModel
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// Interface that is based on the <see cref="IDataErrorInfo"/> interface, but supports warnings instead of errors.
     /// </summary>
