@@ -107,7 +107,7 @@ namespace Catel.Tests.Reflection
             }
         }
 
-        [Test]
+        [Test, Explicit]
         public void Does_Not_Enter_In_A_Deadlock()
         {
             TypeCache.InitializeTypes();
