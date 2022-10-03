@@ -10,7 +10,7 @@
     {
         private class AsyncLockTestClass
         {
-            private readonly AsyncLock _asyncLock = new AsyncLock();
+            public readonly AsyncLock _asyncLock = new AsyncLock();
 
             public bool ExecutedSuccessfully { get; private set; }
 
@@ -54,7 +54,7 @@
         }
 
         [Test]
-        public async Task Does_Not_Allow_Multitask_Locks_Async()
+        public async Task Does_Not_Allow_Multitask_Locks_Simple_Async()
         {
             var testClass = new AsyncLockTestClass();
 
@@ -69,6 +69,58 @@
 
             Assert.IsTrue(testClass.ExecutedSuccessfully);
             Assert.AreEqual(1, testClass.ExecutionCount);
+        }
+
+        [Test]
+        public async Task Does_Not_Allow_Multitask_Locks_Complex_Async()
+        {
+            var testClass = new AsyncLockTestClass();
+
+            var tasksList = new List<Task>();
+
+            for (int i = 0; i < 50; i++)
+            {
+                tasksList.Add(Task.Run(async () => await testClass.MethodAAsync()));
+            }
+
+            Task.WaitAll(tasksList.ToArray(), 60 * 1000);
+
+            Assert.IsTrue(testClass.ExecutedSuccessfully);
+            Assert.AreEqual(50, testClass.ExecutionCount);
+        }
+
+        [Test]
+        public async Task Does_Allow_Multitask_Locks_Queued_Async()
+        {
+            var testClass = new AsyncLockTestClass();
+
+            var tasksList = new List<Task>(new[]
+            {
+                Task.Run(async () => await testClass.MethodAAsync()),
+                Task.Run(async () => await testClass.MethodAAsync()),
+                Task.Run(async () => await testClass.MethodAAsync())
+            });
+
+            Task.WaitAll(tasksList.ToArray(), 10 * 5000);
+
+            Assert.IsTrue(testClass.ExecutedSuccessfully);
+            Assert.AreEqual(3, testClass.ExecutionCount);
+        }
+
+        [Test]
+        public async Task Releases_Is_Taken_Property_Async()
+        {
+            var testClass = new AsyncLockTestClass();
+
+            var tasksList = new List<Task>(new[]
+            {
+                Task.Run(async () => await testClass.MethodAAsync())
+            });
+
+            Task.WaitAll(tasksList.ToArray(), 500);
+
+            Assert.IsTrue(testClass.ExecutedSuccessfully);
+            Assert.IsFalse(testClass._asyncLock.IsTaken);
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AsyncWaitQueueExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
     using System.Threading;
@@ -24,9 +17,10 @@ namespace Catel.Threading
         /// </summary>
         /// <param name="this">The wait queue.</param>
         /// <param name="syncObject">A synchronization object taken while cancelling the entry.</param>
+        /// <param name="continueWith">A method to exceute once the item is dequeued.</param>
         /// <param name="token">The token used to cancel the wait.</param>
         /// <returns>The queued task.</returns>
-        public static Task<T> EnqueueAsync<T>(this IAsyncWaitQueue<T> @this, object syncObject, CancellationToken token)
+        public static Task<T> EnqueueAsync<T>(this IAsyncWaitQueue<T> @this, object syncObject, Action continueWith, CancellationToken token)
         {
             if (token.IsCancellationRequested)
             {
@@ -34,6 +28,9 @@ namespace Catel.Threading
             }
 
             var ret = @this.EnqueueAsync();
+
+            ret.ContinueWith(_ => { continueWith(); }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+
             if (!token.CanBeCanceled)
             {
                 return ret;
@@ -51,7 +48,7 @@ namespace Catel.Threading
                 finish.Dispose();
             }, useSynchronizationContext: false);
 
-            ret.ContinueWith(_ => registration.Dispose(), CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+            ret.ContinueWith(_ => { registration.Dispose(); }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
 
             return ret;
         }

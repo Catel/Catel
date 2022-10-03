@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// A mutual exclusion lock that is compatible with async. Note that this lock is <b>not</b> recursive!
+    /// A mutual exclusion lock that is compatible with async.
     /// </summary>
     /// <remarks>
     /// This code originally comes from AsyncEx: https://github.com/StephenCleary/AsyncEx
@@ -16,10 +16,8 @@
     [DebuggerTypeProxy(typeof (DebugView))]
     public sealed class AsyncLock
     {
-        /// <summary>
-        /// A task that is completed with the key object for this lock.
-        /// </summary>
         private readonly Stack<Task<IDisposable>> _cachedKeyTasks;
+        private readonly Task<IDisposable> _cacheKeyReleaseTask;
 
         /// <summary>
         /// The object used for mutual exclusion.
@@ -36,12 +34,10 @@
         /// </summary>
         private readonly int _id = UniqueIdentifierHelper.GetUniqueIdentifier<AsyncLock>();
 
-        /// <summary>
-        /// Whether the lock is taken by a task.
-        /// </summary>
-        private bool _taken;
-
         private readonly AsyncLocal<bool> _takenByCurrentTask = new AsyncLocal<bool>();
+
+        private bool _taken;
+        private bool _allowTakeoverByTask;
 
         /// <summary>
         /// Creates a new async-compatible mutual exclusion lock.
@@ -59,6 +55,7 @@
         {
             _queue = queue;
             _cachedKeyTasks = new Stack<Task<IDisposable>>();
+            _cacheKeyReleaseTask = Task.FromResult<IDisposable>(new Key(this));
             _mutex = new object();
         }
 
@@ -112,20 +109,20 @@
 
             lock (_mutex)
             {
-                if (!_taken || _takenByCurrentTask.Value)
+                if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
                 {
                     // If the lock is available, take it immediately.
                     _taken = true;
                     _takenByCurrentTask.Value = true;
+                    _allowTakeoverByTask = false;
 
-                    var item = Task.FromResult<IDisposable>(new Key(this));
-                    _cachedKeyTasks.Push(item);
-                    ret = item;
+                    _cachedKeyTasks.Push(_cacheKeyReleaseTask);
+                    ret = _cacheKeyReleaseTask;
                 }
                 else
                 {
                     // Wait for the lock to become available or cancellation.
-                    ret = _queue.EnqueueAsync(_mutex, cancellationToken);
+                    ret = _queue.EnqueueAsync(_mutex, () => _allowTakeoverByTask = true, cancellationToken);
                 }
             }
 
@@ -142,17 +139,17 @@
 
             lock (_mutex)
             {
-                if (!_taken || _takenByCurrentTask.Value)
+                if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
                 {
                     _taken = true;
                     _takenByCurrentTask.Value = true;
+                    _allowTakeoverByTask = false;
 
-                    var item = Task.FromResult<IDisposable>(new Key(this));
-                    _cachedKeyTasks.Push(item);
-                    return item;
+                    _cachedKeyTasks.Push(_cacheKeyReleaseTask);
+                    return _cacheKeyReleaseTask;
                 }
 
-                enqueuedTask = _queue.EnqueueAsync(_mutex, cancellationToken);
+                enqueuedTask = _queue.EnqueueAsync(_mutex, () => _allowTakeoverByTask = true, cancellationToken);
             }
 
             return enqueuedTask.WaitAndUnwrapException();
@@ -182,26 +179,37 @@
         /// </summary>
         internal void ReleaseLock()
         {
-            IDisposable finish = null;
+            IDisposable queuedLocker = null;
 
             lock (_mutex)
             {
                 // Step 1: clear current task locks
                 if (_cachedKeyTasks.Count > 0)
                 {
-#pragma warning disable IDISP001 // Dispose created
-                    finish = _cachedKeyTasks.Pop();
-#pragma warning restore IDISP001 // Dispose created
+                    var finish = _cachedKeyTasks.Pop();
+                    finish?.Dispose();
                 }
-                else if (_queue.IsEmpty)
+
+                // Step 2: check if there are pending locks left
+                if (_cachedKeyTasks.Count == 0)
                 {
-                    _taken = false;
+                    _takenByCurrentTask.Value = false;
+
+                    if (!_queue.IsEmpty)
+                    {
+                        queuedLocker = _queue.Dequeue(_cacheKeyReleaseTask);
+                    }
+                    else
+                    {
+                        // No lock and no queue, fully free
+                        _taken = false;
+                    }
                 }
             }
 
-            if (finish is not null)
+            if (queuedLocker is not null)
             {
-                finish.Dispose();
+                queuedLocker.Dispose();
             }
         }
 
