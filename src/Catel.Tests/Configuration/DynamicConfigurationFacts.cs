@@ -155,9 +155,9 @@
 
             var complexSetting = new ComplexSetting
             {
-                FirstName = "Geert",
-                MiddleName = "van",
-                LastName = "Horrik"
+                FirstName = "John",
+                MiddleName = "",
+                LastName = "Doe"
             };
 
             dynamicConfiguration.SetConfigurationValue("ComplexSetting", complexSetting);
