@@ -131,7 +131,7 @@ namespace Catel.Data
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true)
         {
-            return RegisterProperty<TValue>(name, createDefaultValue, propertyChangedEventHandler, 
+            return RegisterProperty<TValue>(name, createDefaultValue, propertyChangedEventHandler,
                 includeInSerialization, includeInBackup, false);
         }
 
@@ -285,16 +285,12 @@ namespace Catel.Data
         {
             Argument.IsNotNull("property", property);
 
-            bool isCalculatedProperty = false;
+            var isCalculatedProperty = false;
 
             var type = GetType();
 
             var reflectedProperty = type.GetPropertyEx(property.Name, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            if (reflectedProperty is null)
-            {
-                Log.Warning("Property '{0}' is registered after construction of type '{1}', but could not be found using reflection", property.Name, type.FullName);
-            }
-            else
+            if (reflectedProperty is not null)
             {
                 isCalculatedProperty = !reflectedProperty.CanWrite;
             }
