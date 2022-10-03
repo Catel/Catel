@@ -515,7 +515,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The <see cref="SerializationObject"/> representing the deserialized value or result.</returns>
-        protected override SerializationObject DeserializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
+        protected override SerializationObject? DeserializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
 
@@ -561,7 +561,7 @@ namespace Catel.Runtime.Serialization.Json
                     {
                         var jsonProperty = jsonPropertyKeyValuePair.Value;
 
-                        object deserializedItem = null;
+                        object? deserializedItem = null;
 
                         object key = jsonProperty.Name;
                         if (keyType != typeof(object))
@@ -637,7 +637,7 @@ namespace Catel.Runtime.Serialization.Json
                     var jsonValue = jsonMemberProperty.Value;
                     if (jsonValue is not null)
                     {
-                        object finalMemberValue = null;
+                        object? finalMemberValue = null;
                         var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
@@ -751,7 +751,7 @@ namespace Catel.Runtime.Serialization.Json
             var shouldSerializeAsCollection = ShouldSerializeAsCollection(memberValue);
             if (shouldSerializeAsCollection)
             {
-                var collection = new List<object>();
+                var collection = new List<object?>();
 
                 var jArray = context.Context.JsonArray;
                 if (jArray is not null)
@@ -763,7 +763,7 @@ namespace Catel.Runtime.Serialization.Json
 
                     foreach (var item in jArray.Children())
                     {
-                        object deserializedItem = null;
+                        object? deserializedItem = null;
 
                         if (shouldBeHandledByExternalSerializer)
                         {
@@ -801,8 +801,8 @@ namespace Catel.Runtime.Serialization.Json
         protected override ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
-            JsonReader jsonReader = null;
-            JsonWriter jsonWriter = null;
+            JsonReader? jsonReader = null;
+            JsonWriter? jsonWriter = null;
 
             var useBson = false;
             var dateTimeKind = DateTimeKind.Unspecified;
@@ -920,8 +920,8 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContext&lt;JsonSerializationContextInfo&gt;.
         /// </returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter,
-            SerializationContextMode contextMode, Dictionary<string, JProperty> jsonProperties, JArray jsonArray, ISerializationConfiguration configuration)
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, JsonReader? jsonReader, JsonWriter? jsonWriter,
+            SerializationContextMode contextMode, Dictionary<string, JProperty>? jsonProperties, JArray? jsonArray, ISerializationConfiguration configuration)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
             jsonSerializer.ContractResolver = new CatelJsonContractResolver();
