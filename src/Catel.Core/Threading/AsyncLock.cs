@@ -1,13 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AsyncLock.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
@@ -25,7 +19,7 @@ namespace Catel.Threading
         /// <summary>
         /// A task that is completed with the key object for this lock.
         /// </summary>
-        private readonly Task<IDisposable> _cachedKeyTask;
+        private readonly Stack<Task<IDisposable>> _cachedKeyTasks;
 
         /// <summary>
         /// The object used for mutual exclusion.
@@ -47,6 +41,8 @@ namespace Catel.Threading
         /// </summary>
         private bool _taken;
 
+        private readonly AsyncLocal<bool> _takenByCurrentTask = new AsyncLocal<bool>();
+
         /// <summary>
         /// Creates a new async-compatible mutual exclusion lock.
         /// </summary>
@@ -62,7 +58,7 @@ namespace Catel.Threading
         public AsyncLock(IAsyncWaitQueue<IDisposable> queue)
         {
             _queue = queue;
-            _cachedKeyTask = Task.FromResult<IDisposable>(new Key(this));
+            _cachedKeyTasks = new Stack<Task<IDisposable>>();
             _mutex = new object();
         }
 
@@ -90,6 +86,20 @@ namespace Catel.Threading
         }
 
         /// <summary>
+        /// Gets a value indicating whether the current task has taken this lock.
+        /// </summary>
+        public bool IsTakenByCurrentTask
+        {
+            get
+            {
+                lock (_mutex)
+                {
+                    return _takenByCurrentTask.Value;
+                }
+            }
+        }
+
+        /// <summary>
         /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>
@@ -102,19 +112,21 @@ namespace Catel.Threading
 
             lock (_mutex)
             {
-                if (!_taken)
+                if (!_taken || _takenByCurrentTask.Value)
                 {
                     // If the lock is available, take it immediately.
                     _taken = true;
-                    ret = _cachedKeyTask;
+                    _takenByCurrentTask.Value = true;
+
+                    var item = Task.FromResult<IDisposable>(new Key(this));
+                    _cachedKeyTasks.Push(item);
+                    ret = item;
                 }
                 else
                 {
                     // Wait for the lock to become available or cancellation.
                     ret = _queue.EnqueueAsync(_mutex, cancellationToken);
                 }
-
-                //Enlightenment.Trace.AsyncLock_TrackLock(this, ret);
             }
 
             return new AwaitableDisposable<IDisposable>(ret);
@@ -130,10 +142,14 @@ namespace Catel.Threading
 
             lock (_mutex)
             {
-                if (!_taken)
+                if (!_taken || _takenByCurrentTask.Value)
                 {
                     _taken = true;
-                    return _cachedKeyTask.Result;
+                    _takenByCurrentTask.Value = true;
+
+                    var item = Task.FromResult<IDisposable>(new Key(this));
+                    _cachedKeyTasks.Push(item);
+                    return item;
                 }
 
                 enqueuedTask = _queue.EnqueueAsync(_mutex, cancellationToken);
@@ -170,16 +186,19 @@ namespace Catel.Threading
 
             lock (_mutex)
             {
-                //Enlightenment.Trace.AsyncLock_Unlocked(this);
-                if (_queue.IsEmpty)
+                // Step 1: clear current task locks
+                if (_cachedKeyTasks.Count > 0)
+                {
+#pragma warning disable IDISP001 // Dispose created
+                    finish = _cachedKeyTasks.Pop();
+#pragma warning restore IDISP001 // Dispose created
+                }
+                else if (_queue.IsEmpty)
                 {
                     _taken = false;
                 }
-                else
-                {
-                    finish = _queue.Dequeue(_cachedKeyTask.Result);
-                }
             }
+
             if (finish is not null)
             {
                 finish.Dispose();
