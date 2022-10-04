@@ -31,11 +31,11 @@
         /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
-        public override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
+        public override string? GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
         {
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
                
-            string value = null;
+            string? value = null;
             var source = languageSource.GetSource();
             var resourceLoader = GetResourceManager(source);
 
@@ -51,7 +51,7 @@
         /// Gets the resource manager.
         /// </summary>
         /// <param name="source">The source.</param>
-        private ResourceManager GetResourceManager(string source)
+        private ResourceManager? GetResourceManager(string source)
         {
             Func<ResourceManager> retrievalFunc = () =>
             {

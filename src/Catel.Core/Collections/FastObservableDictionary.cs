@@ -26,7 +26,12 @@
         #region Fields & Properties
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
+        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var dispatcherService = dependencyResolver.ResolveRequiredType<IDispatcherService>();
+            return dispatcherService;
+        });
 
         /// <summary>
         /// The current suspension context.

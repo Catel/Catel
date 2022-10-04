@@ -31,7 +31,7 @@
         /// <summary>
         /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
         /// </summary>
-        event EventHandler<EventArgs> LanguageUpdated;
+        event EventHandler<EventArgs>? LanguageUpdated;
         
         /// <summary>
         /// Registers the language source.
@@ -48,7 +48,7 @@
         /// <param name="resourceName">Name of the resource.</param>
         /// <returns>The string or <c>null</c> if the resource cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
-        string GetString(string resourceName);
+        string? GetString(string resourceName);
 
         /// <summary>
         /// Gets the string with the specified culture.
@@ -58,7 +58,7 @@
         /// <returns>The string or <c>null</c> if the resource cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
-        string GetString(string resourceName, CultureInfo cultureInfo);
+        string? GetString(string resourceName, CultureInfo cultureInfo);
 
         /// <summary>
         /// Gets the string with the specified language source and culture.
@@ -70,7 +70,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
-        string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo);
+        string? GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo);
 
         /// <summary>
         /// Preloads the language sources to provide optimal performance.

@@ -50,7 +50,7 @@
         /// <param name="propertyExpression">The property expression.</param>
         /// <returns>The owner of the expression or <c>null</c> if the owner cannot be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        public static object GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
+        public static object? GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
             var expressionToHandle = GetExpressionToHandle(propertyExpression);
 
@@ -77,7 +77,7 @@
             return null;
         }
 
-        private static object ResolveMemberExpression(MemberExpression memberExpression)
+        private static object? ResolveMemberExpression(MemberExpression memberExpression)
         {
             var fieldInfo = memberExpression.Member as FieldInfo;
             if (fieldInfo is not null)

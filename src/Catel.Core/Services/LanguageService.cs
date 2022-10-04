@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Globalization;
     using Caching;
-    using Catel.Linq;
     using Logging;
 
     /// <summary>
@@ -16,7 +15,7 @@
 
         private readonly List<ILanguageSource> _languageSources = new List<ILanguageSource>();
 
-        private readonly ICacheStorage<LanguageResourceKey, string> _stringCache = new CacheStorage<LanguageResourceKey, string>();
+        private readonly ICacheStorage<LanguageResourceKey, string?> _stringCache = new CacheStorage<LanguageResourceKey, string?>();
 
         private CultureInfo _fallbackCulture;
         private CultureInfo _preferredCulture;
@@ -33,8 +32,8 @@
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Resources"));
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Exceptions"));
 
-            FallbackCulture = CultureInfo.CurrentUICulture;
-            PreferredCulture = CultureInfo.CurrentUICulture;
+            _fallbackCulture = CultureInfo.CurrentUICulture;
+            _preferredCulture = CultureInfo.CurrentUICulture;
             CacheResults = true;
         }
 
@@ -129,7 +128,7 @@
         /// <param name="resourceName">Name of the resource.</param>
         /// <returns>The string or <c>null</c> if the resource cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
-        public string GetString(string resourceName)
+        public string? GetString(string resourceName)
         {
             var preferredString = GetString(resourceName, PreferredCulture);
             if (string.IsNullOrWhiteSpace(preferredString))
@@ -148,7 +147,7 @@
         /// <returns>The string or <c>null</c> if the resource cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
-        public string GetString(string resourceName, CultureInfo cultureInfo)
+        public string? GetString(string resourceName, CultureInfo cultureInfo)
         {
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
 
@@ -161,7 +160,7 @@
             return GetStringInternal(resourceName, cultureInfo);
         }
 
-        private string GetStringInternal(string resourceName, CultureInfo cultureInfo)
+        private string? GetStringInternal(string resourceName, CultureInfo cultureInfo)
         {
             lock (_languageSources)
             {

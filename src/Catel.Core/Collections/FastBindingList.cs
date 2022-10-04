@@ -18,7 +18,13 @@
     public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCollection
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private static readonly IDispatcherService _dispatcherService;
+
+        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var dispatcherService = dependencyResolver.ResolveRequiredType<IDispatcherService>();
+            return dispatcherService;
+        });
 
         private bool _sorted;
         private ListSortDirection _sortDirection = ListSortDirection.Ascending;
@@ -28,15 +34,6 @@
         /// The current suspension context.
         /// </summary>
         private ExtendedSuspensionContext<T>? _suspensionContext;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="FastBindingList{T}"/> class.
-        /// </summary>
-        static FastBindingList()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastBindingList{T}" /> class.

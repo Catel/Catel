@@ -65,7 +65,7 @@
         /// </summary>
         /// <param name="id">The unique identifier.</param>
         /// <param name="instance">The instance.</param>
-        public void RegisterManually(int id, object instance)
+        public void RegisterManually(int id, object? instance)
         {
             if (instance is null)
             {
@@ -86,7 +86,7 @@
         /// <param name="instance">The instance.</param>
         /// <param name="autoAssignId">If set to <c>true</c>, a unique graph id will automatically be reserved for this object. Note that it's recommended to set this to <c>false</c> during deserialization.</param>
         /// <returns>The <see cref="ReferenceInfo" /> or <c>null</c> if <paramref name="instance" /> is <c>null</c>.</returns>
-        public ReferenceInfo GetInfo(object instance, bool autoAssignId = true)
+        public ReferenceInfo? GetInfo(object instance, bool autoAssignId = true)
         {
             if (instance is null)
             {
@@ -135,7 +135,7 @@
         /// </summary>
         /// <param name="id">The unique identifier.</param>
         /// <returns>The <see cref="ReferenceInfo" /> or <c>null</c> if the id is not found.</returns>
-        public ReferenceInfo GetInfoById(int id)
+        public ReferenceInfo? GetInfoById(int id)
         {
             lock (_lock)
             {

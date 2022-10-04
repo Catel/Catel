@@ -11,37 +11,37 @@
         /// Gets the type of the target.
         /// </summary>
         /// <value>The type of the target.</value>
-        Type TargetType { get; }
+        Type? TargetType { get; }
 
         /// <summary>
         /// Gets the actual target object. This property returns <c>null</c> if the handler is static or
         /// the target is no longer alive.
         /// </summary>
-        object Target { get; }
+        object? Target { get; }
 
         /// <summary>
         /// Gets the target weak reference.
         /// </summary>
         /// <value>The target weak reference.</value>
-        WeakReference TargetWeakReference { get; }
+        WeakReference? TargetWeakReference { get; }
 
         /// <summary>
         /// Gets the type of the source.
         /// </summary>
         /// <value>The type of the source.</value>
-        Type SourceType { get; }
+        Type? SourceType { get; }
 
         /// <summary>
         /// Gets the actual source object. This property returns <c>null</c> if the event is static or
         /// the source is no longer alive.
         /// </summary>
-        object Source { get; }
+        object? Source { get; }
 
         /// <summary>
         /// Gets the source weak reference.
         /// </summary>
         /// <value>The source weak reference.</value>
-        WeakReference SourceWeakReference { get; }
+        WeakReference? SourceWeakReference { get; }
 
         /// <summary>
         /// Gets the type of the event args.

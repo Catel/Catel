@@ -1,6 +1,7 @@
 ﻿namespace Catel.ComponentModel
 {
     using System;
+    using Catel.Logging;
     using IoC;
     using Services;
 
@@ -10,7 +11,14 @@
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Field)]
     public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
     {
-        private static readonly Lazy<ILanguageService> DefaultLanguageService = new Lazy<ILanguageService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<ILanguageService>());
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly Lazy<ILanguageService> DefaultLanguageService = new Lazy<ILanguageService>(() =>
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var languageService = dependencyResolver.ResolveRequiredType<ILanguageService>();
+            return languageService;
+        });
 
         private readonly string _resourceName;
         private ILanguageService? _languageService;

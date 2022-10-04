@@ -103,7 +103,7 @@ namespace Catel.IoC
         /// <param name="typeToConstruct">The type to construct.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
-        public object CreateInstance(Type typeToConstruct)
+        public object? CreateInstance(Type typeToConstruct)
         {
             return CreateInstanceWithTag(typeToConstruct, null);
         }
@@ -115,7 +115,7 @@ namespace Catel.IoC
         /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        public object CreateInstanceWithTag(Type typeToConstruct, object tag)
+        public object? CreateInstanceWithTag(Type typeToConstruct, object? tag)
         {
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, null, true);
         }
@@ -140,7 +140,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        public object CreateInstanceWithParametersWithTag(Type typeToConstruct, object tag, params object[] parameters)
+        public object? CreateInstanceWithParametersWithTag(Type typeToConstruct, object? tag, params object[] parameters)
         {
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, false);
         }
@@ -154,7 +154,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
-        public object CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object[] parameters)
+        public object? CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object[] parameters)
         {
             return CreateInstanceWithParametersAndAutoCompletionWithTag(typeToConstruct, null, parameters);
         }
@@ -169,7 +169,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        public object CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object tag, params object[] parameters)
+        public object? CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object? tag, params object[] parameters)
         {
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
@@ -462,7 +462,7 @@ namespace Catel.IoC
         /// <remarks>Note that this method does not require an implementation of
         /// <see cref="TypeRequestPath" /> because this already has the parameter values
         /// and thus cannot lead to invalid circular dependencies.</remarks>
-        private object TryCreateToConstruct(Type typeToConstruct, ConstructorInfo constructor, object tag, object[] parameters,
+        private object? TryCreateToConstruct(Type typeToConstruct, ConstructorInfo constructor, object tag, object[] parameters,
             bool checkConstructor, bool hasMoreConstructorsLeft, TypeMetaData typeMetaData)
         {
             // Check if this constructor is even possible
@@ -648,7 +648,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The <see cref="TypeRegisteredEventArgs" /> instance containing the event data.</param>
-        private void OnServiceLocatorTypeRegistered(object sender, TypeRegisteredEventArgs eventArgs)
+        private void OnServiceLocatorTypeRegistered(object? sender, TypeRegisteredEventArgs eventArgs)
         {
             ClearCache();
         }
@@ -658,7 +658,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="AssemblyLoadedEventArgs"/> instance containing the event data.</param>
-        private void OnAssemblyLoaded(object sender, AssemblyLoadedEventArgs e)
+        private void OnAssemblyLoaded(object? sender, AssemblyLoadedEventArgs e)
         {
             ClearCache();
         }
@@ -684,7 +684,7 @@ namespace Catel.IoC
 
             public bool AutoCompleteDependecies { get; private set; }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 var cacheKey = obj as ConstructorCacheKey;
                 if (cacheKey is null)
@@ -730,7 +730,7 @@ namespace Catel.IoC
             /// <param name="previousValue">Previously used constructor.</param>
             /// <param name="constructorInfo">Creates first entry in cache for key.</param>
             /// <returns></returns>
-            public static ConstructorCacheValue Next(ConstructorCacheValue previousValue, ConstructorInfo constructorInfo)
+            public static ConstructorCacheValue Next(ConstructorCacheValue previousValue, ConstructorInfo? constructorInfo)
             {
                 return new ConstructorCacheValue(constructorInfo, previousValue.Version + 1);
             }
@@ -740,14 +740,14 @@ namespace Catel.IoC
             /// </summary>
             /// <param name="constructorInfo">Constructor info used to creating new instances</param>
             /// <param name="version">Flag used for detecting race-conditions</param>
-            private ConstructorCacheValue(ConstructorInfo constructorInfo, uint version)
+            private ConstructorCacheValue(ConstructorInfo? constructorInfo, uint version)
             {
                 // TODO: Think about using Func<object> it should work faster than calling reflection
                 ConstructorInfo = constructorInfo;
                 Version = version;
             }
 
-            public ConstructorInfo ConstructorInfo { get; private set; }
+            public ConstructorInfo? ConstructorInfo { get; private set; }
 
             public uint Version { get; private set; }
             

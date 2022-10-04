@@ -7,6 +7,7 @@
     using System.Globalization;
     using System.IO;
     using System.Reflection;
+    using System.Xml;
     using Catel.Caching;
     using Catel.IoC;
     using Catel.Logging;
@@ -47,7 +48,7 @@
         /// The dictionary name.
         /// </summary>
         protected const string DictionaryName = "Pairs";
-        
+
         private readonly CacheStorage<Type, SerializationModelInfo> _serializationModelCache = new CacheStorage<Type, SerializationModelInfo>();
 
         private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>();
@@ -55,8 +56,8 @@
         private readonly CacheStorage<Type, bool> _shouldSerializeByExternalSerializerCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<string, bool> _shouldSerializeUsingParseCache = new CacheStorage<string, bool>();
 
-        private readonly CacheStorage<Type, MethodInfo> _parseMethodCache = new CacheStorage<Type, MethodInfo>();
-        private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
+        private readonly CacheStorage<Type, MethodInfo?> _parseMethodCache = new CacheStorage<Type, MethodInfo?>();
+        private readonly CacheStorage<Type, MethodInfo?> _toStringMethodCache = new CacheStorage<Type, MethodInfo?>();
 
         private readonly CacheStorage<string, bool> _shouldSerializeEnumAsStringCache = new CacheStorage<string, bool>();
 
@@ -189,7 +190,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="CacheInvalidatedEventArgs"/> instance containing the event data.</param>
-        private void OnSerializationManagerCacheInvalidated(object sender, CacheInvalidatedEventArgs e)
+        private void OnSerializationManagerCacheInvalidated(object? sender, CacheInvalidatedEventArgs e)
         {
             _serializationModelCache.Remove(e.Type);
         }
@@ -203,7 +204,7 @@
         /// </summary>
         /// <param name="types">The types to warmp up. If <c>null</c>, all types will be initialized.</param>
         /// <param name="typesPerThread">The types per thread. If <c>-1</c>, all types will be initialized on the same thread.</param>
-        public void Warmup(IEnumerable<Type> types, int typesPerThread = 1000)
+        public void Warmup(IEnumerable<Type>? types = null, int typesPerThread = 1000)
         {
             if (types is null)
             {
@@ -295,6 +296,11 @@
             SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
             var model = CreateModelInstance(modelType);
+            if (model is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot get context of null model");
+            }
+
             return GetContext(model, modelType, context, contextMode, configuration);
         }
 
@@ -315,6 +321,11 @@
             SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
             var model = CreateModelInstance(modelType);
+            if (model is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot get context of null model");
+            }
+
             return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
         }
 
@@ -379,7 +390,8 @@
                 if (firstMember.MemberGroup == SerializationMemberGroup.SimpleRootObject)
                 {
                     // Completely replace root object (this is a basic (non-reference) type)
-                    context.Model = firstMember.Value;
+                    // CHECK IF WE SHOULD ALLOW NULL HERE
+                    context.Model = firstMember.Value!;
                 }
                 else if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
@@ -405,7 +417,8 @@
                 {
                     if (context.ModelType.IsArrayEx())
                     {
-                        context.Model = firstMember.Value;
+                        // CHECK IF WE SHOULD ALLOW NULL HERE
+                        context.Model = firstMember.Value!;
                     }
                     else
                     {
@@ -812,14 +825,14 @@
         /// </summary>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The list of serializable key value pairs.</returns>
-        protected List<SerializableKeyValuePair> ConvertDictionaryToCollection(object memberValue)
+        protected List<SerializableKeyValuePair> ConvertDictionaryToCollection(object? memberValue)
         {
             var collection = new List<SerializableKeyValuePair>();
 
             var dictionary = memberValue as IDictionary;
             if (dictionary is not null)
             {
-                var genericArguments = memberValue.GetType().GetGenericArgumentsEx();
+                var genericArguments = memberValue!.GetType().GetGenericArgumentsEx();
                 var keyType = genericArguments[0];
                 var valueType = genericArguments[1];
 
@@ -934,6 +947,11 @@
             if (type.IsArrayEx())
             {
                 elementType = type.GetElementTypeEx();
+                if (elementType is null)
+                {
+                    elementType = typeof(object);
+                }
+
                 return Array.CreateInstance(elementType, 0);
             }
 

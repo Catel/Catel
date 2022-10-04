@@ -40,7 +40,7 @@
             {
                 if (propertyChangedEventHandler is not null)
                 {
-                    propertyChangedEventHandler.Invoke((TModel)sender, args);
+                    propertyChangedEventHandler.Invoke((TModel)sender!, args);
                 }
             }, includeInSerialization, includeInBackup);
         }
@@ -217,7 +217,7 @@
         {
             if (createDefaultValue is null)
             {
-                createDefaultValue = () => default;
+                createDefaultValue = () => default!;
             }
 
             var isSerializable = true;

@@ -423,7 +423,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The Uri value of the string.</returns>
-        public static Uri ToUri(string value)
+        public static Uri? ToUri(string value)
         {
             value = CleanString(value);
 
@@ -440,13 +440,13 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The Type value of the string.</returns>
-        public static Type ToType(string value)
+        public static Type? ToType(string value)
         {
             value = CleanString(value);
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                return default(Type);
+                return default;
             }
 
             return Type.GetType(value);
@@ -457,7 +457,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The string value of the string.</returns>
-        public static string ToString(string value)
+        public static string? ToString(string value)
         {
             return value;
         }
@@ -469,7 +469,7 @@
         /// <param name="value">The value to convert to the specified target type.</param>
         /// <returns>The converted value. If the <paramref name="value"/> is <c>null</c>, this method will return <c>null</c>.</returns>
         /// <exception cref="NotSupportedException">The specified <paramref name="targetType"/> is not supported.</exception>
-        public static object ToRightType(Type targetType, string value)
+        public static object? ToRightType(Type targetType, string value)
         {
             return ToRightType(targetType, value, DefaultCulture);
         }
@@ -482,7 +482,7 @@
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The converted value. If the <paramref name="value" /> is <c>null</c>, this method will return <c>null</c>.</returns>
         /// <exception cref="NotSupportedException">The specified <paramref name="targetType" /> is not supported.</exception>
-        public static object ToRightType(Type targetType, string value, CultureInfo cultureInfo)
+        public static object? ToRightType(Type targetType, string value, CultureInfo cultureInfo)
         {
             if (value is null)
             {

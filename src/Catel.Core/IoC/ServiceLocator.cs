@@ -358,7 +358,7 @@
                         return _parentServiceLocator.ResolveTypeUsingFactory(typeFactory, serviceType, tag);
                     }
 
-                    throw CreateTypeNotRegisteredException(serviceType);
+                    return null;
                 }
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
@@ -725,7 +725,16 @@
                 Log.Debug("Registering type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
 
                 registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType,
-                    (tf, reg) => CreateServiceInstanceWrapper(tf, createServiceFunc ?? DefaultCreateServiceFunc, reg));
+                    (tf, reg) =>
+                    {
+                        var instance = CreateServiceInstanceWrapper(tf, createServiceFunc ?? DefaultCreateServiceFunc, reg);
+                        if (instance is null)
+                        {
+                            throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(serviceType, msg), $"Type '{serviceType.GetSafeFullName(true)}' is not registered");
+                        }
+
+                        return instance;
+                    });
 
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
@@ -759,7 +768,7 @@
 
                     if (instance is null)
                     {
-                        throw CreateTypeNotRegisteredException(serviceType);
+                        return null;
                     }
 
                     if (IsTypeRegisteredAsSingleton(serviceType, tag))
@@ -782,12 +791,12 @@
             return instance;
         }
 
-        private object CreateServiceInstanceWrapper(ITypeFactory typeFactory, Func<ITypeFactory, ServiceLocatorRegistration, object?> createServiceFunc, ServiceLocatorRegistration registration)
+        private object? CreateServiceInstanceWrapper(ITypeFactory typeFactory, Func<ITypeFactory, ServiceLocatorRegistration, object?> createServiceFunc, ServiceLocatorRegistration registration)
         {
             var instance = createServiceFunc(typeFactory, registration);
             if (instance is null)
             {
-                throw CreateTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");
+                return null;
             }
 
             var handler = TypeInstantiated;
@@ -798,17 +807,6 @@
             }
 
             return instance;
-        }
-
-        /// <summary>
-        /// Throws the <see cref="TypeNotRegisteredException" /> but will also reset the current type request path.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="message">The message.</param>
-        private Exception CreateTypeNotRegisteredException(Type type, string? message = null)
-        {
-            throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(type, msg),
-                "The type '{0}' is not registered", type.GetSafeFullName(true));
         }
 
         /// <summary>

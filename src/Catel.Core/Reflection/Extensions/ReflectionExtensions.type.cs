@@ -37,6 +37,10 @@
         public static bool IsCatelType(this Type type)
         {
             var assemblyName = type.GetAssemblyFullNameEx();
+            if (string.IsNullOrWhiteSpace(assemblyName))
+            {
+                return false;
+            }
 
             return assemblyName.StartsWith("Catel.Core") ||
                 assemblyName.StartsWith("Catel.MVVM") ||
@@ -120,7 +124,7 @@
         /// <returns>The get custom attribute ex.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static Attribute GetCustomAttributeEx(this Type type, Type attributeType, bool inherit)
+        public static Attribute? GetCustomAttributeEx(this Type type, Type attributeType, bool inherit)
         {
             var attributes = GetCustomAttributesEx(type, attributeType, inherit);
             return (attributes.Length > 0) ? attributes[0] : null;
@@ -208,7 +212,7 @@
         /// <param name="type">The type.</param>
         /// <returns>The get assembly full name ex.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static string GetAssemblyFullNameEx(this Type type)
+        public static string? GetAssemblyFullNameEx(this Type type)
         {
             return type.Assembly.FullName;
         }
@@ -424,7 +428,7 @@
         /// <param name="type">The type.</param>
         /// <returns>Type.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static Type GetElementTypeEx(this Type type)
+        public static Type? GetElementTypeEx(this Type type)
         {
             return type.GetElementType();
         }
@@ -439,7 +443,7 @@
         /// Type.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static Type GetInterfaceEx(this Type type, string name, bool ignoreCase)
+        public static Type? GetInterfaceEx(this Type type, string name, bool ignoreCase)
         {
             return type.GetInterface(name, ignoreCase);
         }
@@ -482,10 +486,14 @@
                 return -1;
             }
 
+            Type? typeToProcess = fromType;
+
             var distance = 0;
-            while (fromType != toType && !(toType.IsInterfaceEx() && !fromType.ImplementsInterfaceEx(toType)))
+            while (typeToProcess is not null &&
+                   typeToProcess != toType && 
+                   !(toType.IsInterfaceEx() && !typeToProcess.ImplementsInterfaceEx(toType)))
             {
-                fromType = fromType.GetBaseTypeEx();
+                typeToProcess = typeToProcess.GetBaseTypeEx();
                 distance++;
             }
 
@@ -498,7 +506,7 @@
         /// <param name="type">The type.</param>
         /// <returns>Type.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static Type GetBaseTypeEx(this Type type)
+        public static Type? GetBaseTypeEx(this Type type)
         {
             return type.BaseType;
         }
@@ -526,6 +534,11 @@
         /// <exception cref="System.ArgumentNullException">The <paramref name="objectToCheck" /> is <c>null</c>.</exception>
         public static bool IsInstanceOfTypeEx<T>(this Type type, T objectToCheck)
         {
+            if (objectToCheck is null)
+            {
+                return false;
+            }
+
             var instanceType = objectToCheck.GetType();
 
             if (ConvertableDictionary.TryGetValue(type, out var convertableHashSet))
@@ -592,7 +605,7 @@
         /// <returns>ConstructorInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="types" /> is <c>null</c>.</exception>
-        public static ConstructorInfo GetConstructorEx(this Type type, Type[] types)
+        public static ConstructorInfo? GetConstructorEx(this Type type, Type[] types)
         {
             return type.GetConstructor(types);
         }
@@ -647,7 +660,7 @@
         /// <returns>FieldInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static FieldInfo GetFieldEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
+        public static FieldInfo? GetFieldEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetFieldEx(type, name, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
         }
@@ -661,7 +674,7 @@
         /// <returns>FieldInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static FieldInfo GetFieldEx(this Type type, string name, BindingFlags bindingFlags)
+        public static FieldInfo? GetFieldEx(this Type type, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -743,7 +756,7 @@
         /// <returns>PropertyInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static PropertyInfo GetPropertyEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false,
+        public static PropertyInfo? GetPropertyEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false,
             bool allowExplicitInterfaceProperties = true)
         {
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
@@ -760,11 +773,11 @@
         /// <returns>PropertyInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static PropertyInfo GetPropertyEx(this Type type, string name, BindingFlags bindingFlags, bool allowExplicitInterfaceProperties = true)
+        public static PropertyInfo? GetPropertyEx(this Type type, string name, BindingFlags bindingFlags, bool allowExplicitInterfaceProperties = true)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
-            PropertyInfo propertyInfo = null;
+            PropertyInfo? propertyInfo = null;
 
             try
             {
@@ -861,7 +874,7 @@
         /// <returns>EventInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static EventInfo GetEventEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
+        public static EventInfo? GetEventEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetEventEx(type, name, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
         }
@@ -875,7 +888,7 @@
         /// <returns>EventInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static EventInfo GetEventEx(this Type type, string name, BindingFlags bindingFlags)
+        public static EventInfo? GetEventEx(this Type type, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -916,7 +929,7 @@
         /// <returns>MethodInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethodEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
+        public static MethodInfo? GetMethodEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetMethodEx(type, name, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
         }
@@ -930,7 +943,7 @@
         /// <returns>MethodInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethodEx(this Type type, string name, BindingFlags bindingFlags)
+        public static MethodInfo? GetMethodEx(this Type type, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -950,7 +963,7 @@
         /// <returns>MethodInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethodEx(this Type type, string name, Type[] types, bool flattenHierarchy = true, bool allowStaticMembers = false)
+        public static MethodInfo? GetMethodEx(this Type type, string name, Type[] types, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetMethodEx(type, name, types, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
         }
@@ -965,7 +978,7 @@
         /// <returns>MethodInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethodEx(this Type type, string name, Type[] types, BindingFlags bindingFlags)
+        public static MethodInfo? GetMethodEx(this Type type, string name, Type[] types, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 

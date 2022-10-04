@@ -459,6 +459,11 @@
                     if (member.MemberType.IsArrayEx())
                     {
                         var elementType = member.MemberType.GetElementTypeEx();
+                        if (elementType is null)
+                        {
+                            elementType = typeof(object);
+                        }
+
                         member.Value = sourceCollection.ToArray(elementType);
                     }
                     else

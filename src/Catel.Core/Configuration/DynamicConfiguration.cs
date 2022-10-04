@@ -20,7 +20,7 @@
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
-        private IXmlSerializer _xmlSerializer;
+        private IXmlSerializer? _xmlSerializer;
 
         protected override IPropertyBag CreatePropertyBag()
         {
@@ -108,7 +108,7 @@
         {
             if (_xmlSerializer is null)
             {
-                _xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+                _xmlSerializer = ServiceLocator.Default.ResolveRequiredType<IXmlSerializer>();
             }
 
             return _xmlSerializer;
@@ -147,7 +147,7 @@
                 while (xmlReader.MoveToNextContentElement(parentNode))
                 {
                     var valueRead = false;
-                    object value = null;
+                    object? value = null;
 
                     var elementName = xmlReader.LocalName;
 
@@ -167,11 +167,13 @@
                             if (elementType != typeof(string) && !elementType.IsValueTypeEx())
                             {
                                 var instance = Activator.CreateInstance(elementType);
-
-                                // Complex object, use xml serializer
-                                var xmlSerializer = GetXmlSerializer();
-                                value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
-                                valueRead = true;
+                                if (instance is not null)
+                                {
+                                    // Complex object, use xml serializer
+                                    var xmlSerializer = GetXmlSerializer();
+                                    value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
+                                    valueRead = true;
+                                }
                             }
                         }
                     }

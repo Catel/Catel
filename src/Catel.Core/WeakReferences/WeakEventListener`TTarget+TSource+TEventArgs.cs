@@ -40,24 +40,24 @@
         /// <summary>
         /// WeakReference to the target listening for the event.
         /// </summary>
-        private readonly WeakReference _weakTarget;
+        private readonly WeakReference? _weakTarget;
 
         /// <summary>
         /// To hold a reference to source object. With this instance the WeakEventListener 
         /// can guarantee that the handler get unregistered when listener is released.
         /// </summary>
-        private readonly WeakReference _weakSource;
+        private readonly WeakReference? _weakSource;
 
         /// <summary>
         /// The event name this listener is automatically subscribed to. If this value is <c>null</c>, the
         /// listener is not automatically registered to any event.
         /// </summary>
-        private string _automaticallySubscribedEventName;
+        private string? _automaticallySubscribedEventName;
 
         /// <summary>
         /// Delegate that needs to be unsubscribed when registered automatically.
         /// </summary>
-        private Delegate _internalEventDelegate;
+        private Delegate? _internalEventDelegate;
 
         /// <summary>
         /// The type for event subscriptions. This can differ from TSource for explicitly implemented events.
@@ -70,7 +70,7 @@
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="typeForEventSubscriptions">The type for event subscriptions.</param>
-        private WeakEventListener(object target, TSource source, Type typeForEventSubscriptions)
+        private WeakEventListener(object? target, TSource? source, Type typeForEventSubscriptions)
         {
             _typeForEventSubscriptions = typeForEventSubscriptions;
 
@@ -90,60 +90,60 @@
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        internal Delegate OnEventHandler { get; set; }
+        internal Delegate? OnEventHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        internal Delegate OnEventAction { get; set; }
+        internal Delegate? OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when the static event fires.
         /// </summary>
         /// <value>The on static event action.</value>
-        internal EventHandler<TEventArgs> OnStaticEventHandler { get; set; }
+        internal EventHandler<TEventArgs>? OnStaticEventHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when the static event fires.
         /// </summary>
         /// <value>The on static event action.</value>
-        internal Action OnStaticEventAction { get; set; }
+        internal Action? OnStaticEventAction { get; set; }
 
         /// <summary>
         /// Gets the target or <c>null</c> if there is no target.
         /// </summary>
         /// <value>The target.</value>
-        public object Target { get { return (_weakTarget is not null) ? _weakTarget.Target : null; } }
+        public object? Target { get { return (_weakTarget is not null) ? _weakTarget.Target : null; } }
 
         /// <summary>
         /// Gets the target weak reference.
         /// </summary>
         /// <value>The target weak reference.</value>
-        public WeakReference TargetWeakReference { get { return _weakTarget; } }
+        public WeakReference? TargetWeakReference { get { return _weakTarget; } }
 
         /// <summary>
         /// Gets the source or <c>null</c> if there is no source.
         /// </summary>
         /// <value>The target.</value>
-        public object Source { get { return (_weakSource is not null) ? _weakSource.Target : null; } }
+        public object? Source { get { return (_weakSource is not null) ? _weakSource.Target : null; } }
 
         /// <summary>
         /// Gets the source weak reference.
         /// </summary>
         /// <value>The source weak reference.</value>
-        public WeakReference SourceWeakReference { get { return _weakSource; } }
+        public WeakReference? SourceWeakReference { get { return _weakSource; } }
 
         /// <summary>
         /// Gets the type of the target.
         /// </summary>
         /// <value>The type of the target.</value>
-        public Type TargetType { get { return typeof(TTarget); } }
+        public Type? TargetType { get { return typeof(TTarget); } }
 
         /// <summary>
         /// Gets the type of the source.
         /// </summary>
         /// <value>The type of the source.</value>
-        public Type SourceType { get { return typeof(TSource); } }
+        public Type? SourceType { get { return typeof(TSource); } }
 
         /// <summary>
         /// Gets the type of the event args.
@@ -206,7 +206,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakGenericEvent(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
+        public static IWeakEventListener? SubscribeToWeakGenericEvent(TTarget? target, TSource? source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
         {
             return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -230,7 +230,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged")
+        public static IWeakEventListener? SubscribeToWeakPropertyChangedEvent(TTarget? target, TSource? source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged")
         {
             return SubscribeToWeakEventWithExplicitSourceType<INotifyPropertyChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -254,7 +254,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged")
+        public static IWeakEventListener? SubscribeToWeakCollectionChangedEvent(TTarget? target, TSource? source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged")
         {
             return SubscribeToWeakEventWithExplicitSourceType<INotifyCollectionChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -276,7 +276,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
+        public static IWeakEventListener? SubscribeToWeakEvent(TTarget? target, TSource? source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
         {
             return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -299,7 +299,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="source" /> and <paramref name="target" /> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName" /> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
+        public static IWeakEventListener? SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget? target, TSource? source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
             where TExplicitSourceType : class
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
@@ -309,12 +309,17 @@
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Both the source and target are null, which means that a static event handler subscribes to a static event. In such cases, there are no memory leaks, so there is no reason to use this class");
             }
 
-            object finalTarget = target;
+            object? finalTarget = target;
 
             var methodInfo = handler.GetMethodInfoEx();
-            if ((methodInfo.Name.Contains("_AnonymousDelegate>")) || (methodInfo.DeclaringType.FullName.Contains("__DisplayClass")))
+            if (methodInfo is null)
             {
-                if (finalTarget.GetType() != methodInfo.DeclaringType)
+                throw Log.ErrorAndCreateException<CatelException>("Failed to find the method info of the handler");
+            }
+
+            if ((methodInfo.Name.Contains("_AnonymousDelegate>")) || (methodInfo.DeclaringType?.FullName?.Contains("__DisplayClass") ?? false))
+            {
+                if (finalTarget?.GetType() != methodInfo.DeclaringType)
                 {
                     finalTarget = handler.Target ?? finalTarget;
                 }
@@ -349,7 +354,7 @@
                     weakListener.OnStaticEventHandler = (EventHandler<TEventArgs>)del;
                 }
             }
-            else
+            else if (finalTarget is not null)
             {
                 if (isAction)
                 {
@@ -380,7 +385,7 @@
         /// <param name="throwOnError">if set to <c>true</c>, throw an exception when an error occurs.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentException">The <paramref name="eventName" /> is <c>null</c> or whitespace.</exception>
-        private bool SubscribeToEvent(object source, string eventName, bool throwOnError = true)
+        private bool SubscribeToEvent(object? source, string eventName, bool throwOnError = true)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
@@ -410,7 +415,7 @@
         /// <param name="eventName">Name of the event.</param>
         /// <returns><c>true</c> if subscribed successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentException">The <paramref name="eventName" /> is <c>null</c> or whitespace.</exception>
-        private bool SubscribeToEventUsingNormalImplementation(object source, string eventName)
+        private bool SubscribeToEventUsingNormalImplementation(object? source, string eventName)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
@@ -445,7 +450,7 @@
         /// <param name="methodInfo">The method info.</param>
         /// <returns><c>true</c> if subscribed successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="methodInfo" /> is <c>null</c>.</exception>
-        private bool SubscribeToEventUsingMethodInfo(object source, MethodInfo methodInfo)
+        private bool SubscribeToEventUsingMethodInfo(object? source, MethodInfo methodInfo)
         {
             //var handlerType = eventInfo.EventHandlerType;
             var handlerType = methodInfo.GetParameters()[0].ParameterType;
@@ -464,7 +469,7 @@
         /// <param name="eventName">Name of the event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        private void UnsubscribeFromEvent(object source, string eventName)
+        private void UnsubscribeFromEvent(object? source, string eventName)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
@@ -502,7 +507,7 @@
         /// <param name="eventName">Name of the event.</param>
         /// <returns><c>true</c> if subscribed successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentException">The <paramref name="eventName" /> is <c>null</c> or whitespace.</exception>
-        private bool UnsubscribeFromEventUsingNormalImplementation(object source, string eventName)
+        private bool UnsubscribeFromEventUsingNormalImplementation(object? source, string eventName)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
@@ -537,7 +542,7 @@
         /// <param name="eventName">Name of the event.</param>
         /// <returns><c>true</c> if subscribed successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentException">The <paramref name="eventName" /> is <c>null</c> or whitespace.</exception>
-        private bool UnsubscribeFromEventUsingExplicitInterfaceImplementation(object source, string eventName)
+        private bool UnsubscribeFromEventUsingExplicitInterfaceImplementation(object? source, string eventName)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
@@ -564,9 +569,14 @@
         /// <param name="methodInfo">The method info.</param>
         /// <returns><c>true</c> if subscribed successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="methodInfo" /> is <c>null</c>.</exception>
-        private bool UnsubscribeFromEventUsingMethodInfo(object source, MethodInfo methodInfo)
+        private bool UnsubscribeFromEventUsingMethodInfo(object? source, MethodInfo methodInfo)
         {
-            methodInfo.Invoke(source, new object[] { _internalEventDelegate });
+            if (_internalEventDelegate is not null)
+            {
+                methodInfo.Invoke(source, new object[] { _internalEventDelegate });
+
+                _internalEventDelegate = null;
+            }
 
             return true;
         }
@@ -577,7 +587,7 @@
         /// <param name="source">Event source.</param>
         /// <param name="eventArgs">Event arguments.</param>
         // ReSharper disable UnusedMember.Global
-        public void OnEvent(object source, TEventArgs eventArgs)
+        public void OnEvent(object? source, TEventArgs eventArgs)
         // ReSharper restore UnusedMember.Global
         {
             if (!IsStaticEventHandler && (Target is null))

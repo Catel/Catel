@@ -11,13 +11,13 @@
     {
         private readonly object _lockObject = new object();
 
-        private readonly IDictionary<string, object> _properties;
+        private readonly IDictionary<string, object?> _properties;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyBag"/> class.
         /// </summary>
         public PropertyBag()
-            : this(new Dictionary<string, object>())
+            : this(new Dictionary<string, object?>())
         {
         }
 
@@ -25,7 +25,7 @@
         /// Initializes a new instance of the <see cref="PropertyBag"/> class.
         /// </summary>
         /// <param name="propertyDictionary">The property dictionary.</param>
-        public PropertyBag(IDictionary<string, object> propertyDictionary)
+        public PropertyBag(IDictionary<string, object?> propertyDictionary)
         {
             _properties = propertyDictionary;
         }
@@ -68,7 +68,7 @@
         /// Gets all the currently available properties in the property bag.
         /// </summary>
         /// <returns>A list of all property names and values.</returns>
-        public override Dictionary<string, object> GetAllProperties()
+        public override Dictionary<string, object?> GetAllProperties()
         {
             lock (_lockObject)
             {
@@ -84,7 +84,7 @@
             }
         }
 
-        public override TValue GetValue<TValue>(string name, TValue defaultValue = default)
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = default!)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -92,7 +92,7 @@
             {
                 if (_properties.TryGetValue(name, out var propertyValue))
                 {
-                    return (TValue)propertyValue;
+                    return (TValue)propertyValue!;
 
                     //// Safe-guard null values for value types
                     //if (!(propertyValue is null) || typeof(TValue).IsNullableType())
@@ -144,7 +144,7 @@
                     return;
                 }
 
-                var value = (TValue) propertyValue;
+                var value = (TValue) propertyValue!;
                 var updatedValue = update(value);
 
                 SetValue(propertyName, updatedValue);

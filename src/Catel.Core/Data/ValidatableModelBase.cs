@@ -374,14 +374,14 @@
         /// Gets the validator. If the field is <c>null</c>, it will query the service locator.
         /// </summary>
         /// <returns>IValidator.</returns>
-        private IValidator GetValidator()
+        private IValidator? GetValidator()
         {
             if (_validator is null)
             {
                 if (!_hasRetrievedValidatorOnce)
                 {
                     var dependencyResolver = this.GetDependencyResolver();
-                    var validatorProvider = dependencyResolver.TryResolve<IValidatorProvider>();
+                    var validatorProvider = dependencyResolver.Resolve<IValidatorProvider>();
                     if (validatorProvider is not null)
                     {
                         _validator = validatorProvider.GetValidator(GetType());

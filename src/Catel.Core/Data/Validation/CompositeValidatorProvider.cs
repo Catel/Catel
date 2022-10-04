@@ -57,13 +57,16 @@
         /// <returns>The <see cref="IValidator" /> for the specified type or <c>null</c> if no validator is available for the specified type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="targetType" /> is <c>null</c>.</exception>
         /// <remarks>If there are more than once validator provider and they retrieve more than once validator all of these will be aggregated into a single <see cref="CompositeValidator" />.</remarks>
-        protected override IValidator GetValidator(Type targetType)
+        protected override IValidator? GetValidator(Type targetType)
         {
-            IValidator validator; 
+            IValidator? validator; 
 
             lock (_syncObj)
             {
-                IList<IValidator> discoveredValidators = _validatorProviders.Select(validatorProvider => validatorProvider.GetValidator(targetType)).Where(discoveredValidator => discoveredValidator is not null).ToList();
+                IList<IValidator> discoveredValidators = (from x in _validatorProviders
+                                                          let y = x.GetValidator(targetType)
+                                                          where y is not null
+                                                          select y).ToList();
                 if (discoveredValidators.Count > 1)
                 {
                     var composite = new CompositeValidator();

@@ -8,7 +8,7 @@
     /// </summary>
     public class SerializationObject
     {
-        private readonly object _memberValue;
+        private readonly object? _memberValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationObject" /> class.
@@ -17,7 +17,7 @@
         /// <param name="memberGroup">Group of the member.</param>
         /// <param name="memberName">Name of the member.</param>
         /// <param name="memberValue">The member value.</param>
-        private SerializationObject(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
+        private SerializationObject(Type modelType, SerializationMemberGroup memberGroup, string memberName, object? memberValue)
         {
             ModelType = modelType;
             MemberGroup = memberGroup;
@@ -48,7 +48,7 @@
         /// </summary>
         /// <value>The member value.</value>
         /// <exception cref="InvalidOperationException">The <see cref="IsSuccessful"/> is false and this member cannot be used.</exception>
-        public object MemberValue
+        public object? MemberValue
         {
             get
             {
@@ -96,7 +96,7 @@
         /// <returns>SerializationObject.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
-        public static SerializationObject SucceededToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
+        public static SerializationObject SucceededToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName, object? memberValue)
         {
             Argument.IsNotNullOrWhitespace("memberName", memberName);
 

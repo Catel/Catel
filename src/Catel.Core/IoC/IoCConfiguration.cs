@@ -29,7 +29,7 @@
                         UpdateDefaultComponents();
                     }
 
-                    return _defaultServiceLocator;
+                    return _defaultServiceLocator!;
                 }
             }
             private set
@@ -53,7 +53,7 @@
                         UpdateDefaultComponents();
                     }
 
-                    return _defaultDependencyResolver;
+                    return _defaultDependencyResolver!;
                 }
             }
             private set
@@ -77,7 +77,7 @@
                         UpdateDefaultComponents();
                     }
 
-                    return _defaultTypeFactory;
+                    return _defaultTypeFactory!;
                 }
             }
             private set
@@ -97,14 +97,14 @@
             Log.Info("Updating default components");
 
             // Don't initialize the first service locator (we are still loading assemblies at that time)
-            bool initializeServiceLocator = (_defaultServiceLocator is not null);
+            var initializeServiceLocator = (_defaultServiceLocator is not null);
             var serviceLocator = IoCFactory.CreateServiceLocator(initializeServiceLocator);
 
             lock (_lockObject)
             {
                 DefaultServiceLocator = serviceLocator;
-                DefaultDependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-                DefaultTypeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                DefaultDependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
+                DefaultTypeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
             }
         }
     }

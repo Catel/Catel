@@ -65,7 +65,7 @@
                 {
                     var dependencyResolver = this.GetDependencyResolver();
 
-                    _equalityComparer = dependencyResolver.Resolve<IModelEqualityComparer>();
+                    _equalityComparer = dependencyResolver.ResolveRequired<IModelEqualityComparer>();
                 }
 
                 return _equalityComparer;
@@ -86,7 +86,7 @@
         /// <exception cref="T:System.NullReferenceException">
         /// The <paramref name="obj"/> parameter is null.
         /// </exception>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Note: at first we only implemented the EqualityComparer, but the IEqualityComparer of Microsoft
             // throws an exception when the 2 types are not the same. Although MS does recommend not to throw exceptions,

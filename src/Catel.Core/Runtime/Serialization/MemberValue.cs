@@ -10,7 +10,7 @@
     [DebuggerDisplay("{Name} => {Value} ({ActualMemberType})")]
     public class MemberValue
     {
-        private object _value;
+        private object? _value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberValue" /> class.
@@ -21,7 +21,7 @@
         /// <param name="name">The name.</param>
         /// <param name="nameForSerialization">The name for serialization.</param>
         /// <param name="value">The value.</param>
-        public MemberValue(SerializationMemberGroup memberGroup, Type modelType, Type memberType, string name, string nameForSerialization, object value)
+        public MemberValue(SerializationMemberGroup memberGroup, Type modelType, Type memberType, string name, string nameForSerialization, object? value)
         {
             MemberGroup = memberGroup;
             ModelType = modelType;
@@ -89,7 +89,7 @@
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public object Value
+        public object? Value
         {
             get { return _value; }
             set

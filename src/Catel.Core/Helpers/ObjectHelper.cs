@@ -48,7 +48,7 @@
                 return true;
             }
 
-            if (object1.Equals(object2))
+            if (object1!.Equals(object2))
             {
                 return true;
             }

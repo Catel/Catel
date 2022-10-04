@@ -1,7 +1,5 @@
 ﻿namespace Catel.IoC
 {
-    using System;
-
     /// <summary>
     /// IoC extensions for all objects.
     /// </summary>
@@ -25,7 +23,7 @@
         public static IServiceLocator GetServiceLocator(this object obj)
         {
             var dependencyResolver = GetDependencyResolver(obj);
-            var serviceLocator = dependencyResolver.Resolve<IServiceLocator>();
+            var serviceLocator = dependencyResolver.ResolveRequired<IServiceLocator>();
 
             return serviceLocator;
         }
@@ -48,7 +46,7 @@
         public static ITypeFactory GetTypeFactory(this object obj)
         {
             var dependencyResolver = GetDependencyResolver(obj);
-            var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
+            var typeFactory = dependencyResolver.ResolveRequired<ITypeFactory>();
 
             return typeFactory;
         }

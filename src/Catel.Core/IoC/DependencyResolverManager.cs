@@ -29,7 +29,7 @@
         /// </summary>
         public DependencyResolverManager()
         {
-            DefaultDependencyResolver = ServiceLocator.Default.ResolveType<IDependencyResolver>();
+            _defaultDependencyResolver = ServiceLocator.Default.ResolveRequiredType<IDependencyResolver>();
         }
 
         /// <summary>

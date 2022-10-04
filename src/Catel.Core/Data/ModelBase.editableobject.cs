@@ -203,7 +203,7 @@
 
             var dependencyResolver = this.GetDependencyResolver();
 
-            var serializer = dependencyResolver.Resolve<ISerializer>();
+            var serializer = dependencyResolver.ResolveRequired<ISerializer>();
             return serializer;
         }
 
