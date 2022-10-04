@@ -22,7 +22,7 @@
         private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dispatcherService = dependencyResolver.ResolveRequiredType<IDispatcherService>();
+            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
             return dispatcherService;
         });
 

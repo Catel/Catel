@@ -108,7 +108,9 @@
 
             if (!serviceLocator.IsTypeRegistered(commandContainerType))
             {
+#pragma warning disable IDISP001
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+#pragma warning restore IDISP001
                 var commandContainer = typeFactory.CreateInstance(commandContainerType);
                 if (commandContainer is not null)
                 {

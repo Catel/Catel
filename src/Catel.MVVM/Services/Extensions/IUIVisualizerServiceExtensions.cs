@@ -169,7 +169,9 @@
 
             var dependencyResolver = uiVisualizerService.GetDependencyResolver();
 
+#pragma warning disable IDISP001
             var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
+#pragma warning restore IDISP001
             var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
             if (viewModel is null)
             {
@@ -227,8 +229,8 @@
             where TViewModel : IViewModel
         {
             var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
-            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
+            var viewModelManager = dependencyResolver.ResolveRequired<IViewModelManager>();
+            var viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
 
             var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
             if (existingViewModel is not null)

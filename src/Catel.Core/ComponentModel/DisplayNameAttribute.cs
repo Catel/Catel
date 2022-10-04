@@ -16,7 +16,7 @@
         private static readonly Lazy<ILanguageService> DefaultLanguageService = new Lazy<ILanguageService>(() =>
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var languageService = dependencyResolver.ResolveRequiredType<ILanguageService>();
+            var languageService = dependencyResolver.ResolveRequired<ILanguageService>();
             return languageService;
         });
 

@@ -11,14 +11,12 @@
 namespace Catel.MVVM
 {
     using System;
-    using System.Threading.Tasks;
     using System.Windows.Input;
 
     using Services;
 
     using IoC;
     using Logging;
-    using Threading;
 
     /// <summary>
     /// Base class for generic command classes. Contains protected static services for using in derived classes.
@@ -43,8 +41,8 @@ namespace Catel.MVVM
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            AuthenticationProvider = dependencyResolver.TryResolve<IAuthenticationProvider>();
-            DispatcherService = dependencyResolver.TryResolve<IDispatcherService>();
+            AuthenticationProvider = dependencyResolver.ResolveRequired<IAuthenticationProvider>();
+            DispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
         }
     }
 

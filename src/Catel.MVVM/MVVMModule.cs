@@ -30,7 +30,9 @@
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 
+#pragma warning disable IDISP001
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+#pragma warning restore IDISP001
 
             var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
             AuditingManager.RegisterAuditor(invalidateCommandManagerOnViewModelInitializationAuditor);

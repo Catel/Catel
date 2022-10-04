@@ -83,7 +83,7 @@
         /// <param name="batchName">Name of the type group.</param>
         /// <param name="items">The items.</param>
         /// <param name="actionToInvoke">The action to invoke.</param>
-        private static void ExecuteBatch<T>(string taskName, string batchName, List<T> items, Action<T> actionToInvoke)
+        private static void ExecuteBatch<T>(string? taskName, string batchName, List<T> items, Action<T> actionToInvoke)
         {
             var finalName = string.Format("[{0} | {1}]", taskName, batchName);
 
