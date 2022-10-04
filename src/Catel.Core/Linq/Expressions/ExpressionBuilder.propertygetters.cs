@@ -10,7 +10,7 @@
 
     public static partial class ExpressionBuilder
     {
-        public static Expression<Func<object, TProperty>> CreatePropertyGetter<TProperty>(Type modelType, string propertyName)
+        public static Expression<Func<object, TProperty>>? CreatePropertyGetter<TProperty>(Type modelType, string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -18,7 +18,7 @@
             return property?.GetMethod is null ? null : CreatePropertyGetter<object, TProperty>(property);
         }
 
-        public static Expression<Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(string propertyName)
+        public static Expression<Func<T, TProperty>>? CreatePropertyGetter<T, TProperty>(string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -26,12 +26,12 @@
             return property?.GetMethod is null ? null : CreatePropertyGetter<T, TProperty>(property);
         }
 
-        public static Expression<Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(PropertyInfo propertyInfo)
+        public static Expression<Func<T, TProperty>>? CreatePropertyGetter<T, TProperty>(PropertyInfo propertyInfo)
         {
             return propertyInfo.GetMethod is null ? null : CreatePropertyGetterExpression<T, TProperty>(propertyInfo);
         }
 
-        public static Expression<Func<T, object>> CreatePropertyGetter<T>(string propertyName)
+        public static Expression<Func<T, object>>? CreatePropertyGetter<T>(string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -39,7 +39,7 @@
             return property?.GetMethod is null ? null : CreatePropertyGetter<T>(property);
         }
 
-        public static Expression<Func<T, object>> CreatePropertyGetter<T>(PropertyInfo propertyInfo)
+        public static Expression<Func<T, object>>? CreatePropertyGetter<T>(PropertyInfo propertyInfo)
         {
             return propertyInfo.GetMethod is null ? null : CreatePropertyGetterExpression<T, object>(propertyInfo);
         }
@@ -82,7 +82,7 @@
             return new ReadOnlyDictionary<string, Expression<Func<T, object>>>(propertyGetters);
         }
 
-        private static Expression<Func<T, TProperty>> CreatePropertyGetterExpression<T, TProperty>(PropertyInfo propertyInfo)
+        private static Expression<Func<T, TProperty>>? CreatePropertyGetterExpression<T, TProperty>(PropertyInfo propertyInfo)
         {
             var targetType = propertyInfo.DeclaringType;
             var methodInfo = propertyInfo.GetMethod;

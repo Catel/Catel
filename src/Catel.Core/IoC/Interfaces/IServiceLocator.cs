@@ -57,7 +57,7 @@
         /// <param name="tag">The tag the service is registered with. The default value is <c>null</c>.</param>
         /// <returns>The <see cref="RegistrationInfo" /> or <c>null</c> if the type is not registered.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        RegistrationInfo GetRegistrationInfo(Type serviceType, object tag = null);
+        RegistrationInfo? GetRegistrationInfo(Type serviceType, object? tag = null);
 
         /// <summary>
         /// Determines whether the specified service type is registered.
@@ -67,7 +67,7 @@
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        bool IsTypeRegistered(Type serviceType, object tag = null);
+        bool IsTypeRegistered(Type serviceType, object? tag = null);
 
         /// <summary>
         /// Determines whether the specified service type is registered as singleton.
@@ -75,7 +75,7 @@
         /// <param name="serviceType">The service type.</param>
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns><c>true</c> if the <paramref name="serviceType" /> type is registered as singleton, otherwise <c>false</c>.</returns>
-        bool IsTypeRegisteredAsSingleton(Type serviceType, object tag = null);
+        bool IsTypeRegisteredAsSingleton(Type serviceType, object? tag = null);
 
         /// <summary>
         /// Determines whether the specified service type is registered with or without tag.
@@ -95,7 +95,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance"/> is not of the right type.</exception>
-        void RegisterInstance(Type serviceType, object instance, object tag = null);
+        void RegisterInstance(Type serviceType, object instance, object? tag = null);
 
         /// <summary>
         /// Registers an implementation of a service, but only if the type is not yet registered.
@@ -108,7 +108,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true);
+        void RegisterType(Type serviceType, Type serviceImplementationType, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true);
 
         /// <summary>
         /// Registers an implementation of a service using a create type callback, but only if the type is not yet registered.
@@ -121,7 +121,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        void RegisterType(Type serviceType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true);
+        void RegisterType(Type serviceType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true);
 
         /// <summary>
         /// Resolves an instance of the type registered on the service.
@@ -134,7 +134,7 @@
         /// <remarks>
         /// Note that the actual implementation lays in the hands of the IoC technique being used.
         /// </remarks>
-        object ResolveType(Type serviceType, object tag = null);
+        object? ResolveType(Type serviceType, object? tag = null);
 
         /// <summary>
         /// Resolves the type but forces the use of a specific type factory, which is required for nested service locators.
@@ -146,7 +146,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        object ResolveTypeUsingFactory(ITypeFactory typeFactory, Type serviceType, object tag = null);
+        object? ResolveTypeUsingFactory(ITypeFactory typeFactory, Type serviceType, object? tag = null);
 
         /// <summary>
         /// Resolves all instances of the type registered on the service.
@@ -204,7 +204,7 @@
         /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
         /// <returns><c>true</c> if the type was removed; otherwise <c>false</c>.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        bool RemoveType(Type serviceType, object tag = null);
+        bool RemoveType(Type serviceType, object? tag = null);
 
         /// <summary>
         /// Removes all registered types of a certain service type.

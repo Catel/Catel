@@ -26,13 +26,14 @@
         {
             if (!StringCache.TryGetValue(value, out var stringValue))
             {
-#pragma warning disable HAA0102 // Non-overridden virtual method call on value type
                 stringValue = value.ToString();
-#pragma warning restore HAA0102 // Non-overridden virtual method call on value type
-                StringCache[value] = stringValue;
+                if (stringValue is not null)
+                {
+                    StringCache[value] = stringValue;
+                }
             }
 
-            return stringValue;
+            return stringValue ?? string.Empty;
         }
 
         /// <summary>
@@ -83,6 +84,10 @@
             Argument.IsOfType("inputEnumValue", inputEnumValue, typeof(Enum));
 
             var value = inputEnumValue.ToString();
+            if (value is null)
+            {
+                throw new InvalidOperationException("Cannot convert enums that don't implement ToString() correctly");
+            }
 
             return (TEnum)Enum.Parse(typeof(TEnum), value, true);
         }
@@ -92,7 +97,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The name of the value.</returns>
-        public static string GetName(int value)
+        public static string? GetName(int value)
         {
             return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
         }
@@ -102,7 +107,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The name of the value.</returns>
-        public static string GetName(long value)
+        public static string? GetName(long value)
         {
             return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
         }
@@ -218,14 +223,11 @@
             TEnum? temp;
             if (!TryParse(input, ignoreCase, out temp))
             {
-                // input not found in the Enum, fill the out parameter with the first item from the enum
-                var values = GetValues().ToArray();
-
-                result = (TEnum)values.GetValue(values.GetLowerBound(0));
+                result = default;
                 return false;
             }
 
-            result = temp.Value;
+            result = temp!.Value;
             return true;
         }
 
@@ -234,7 +236,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The name of the value.</returns>
-        private static string GetName(TEnum value)
+        private static string? GetName(TEnum value)
         {
             return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
         }
@@ -260,7 +262,7 @@
             /// </summary>
             /// <param name="formatName">Name of the format.</param>
             /// <returns>List containing bindable enums based on the format name.</returns>
-            public static IList<IBindableEnum<TEnum>> CreateList(FormatEnumName formatName = null)
+            public static IList<IBindableEnum<TEnum>> CreateList(FormatEnumName? formatName = null)
             {
                 var values = Enum.GetValues(typeof(TEnum));
 
@@ -297,7 +299,7 @@
                 public InternalBindableEnum(TEnum value)
                 {
                     _value = value;
-                    _name = Enum<TEnum>.GetName(value);
+                    _name = Enum<TEnum>.GetName(value) ?? string.Empty;
                 }
 
                 /// <summary>
@@ -343,7 +345,7 @@
                 /// than the other parameter.  Zero This object is equal to other. Greater than zero This object is
                 /// greater than other.
                 /// </returns>
-                public int CompareTo(IBindableEnum<TEnum> other)
+                public int CompareTo(IBindableEnum<TEnum>? other)
                 {
                     return _value.CompareTo(other);
                 }
@@ -358,9 +360,9 @@
                 /// <exception cref="T:System.NullReferenceException">
                 /// The <paramref name="other"/> parameter is null.
                 /// </exception>
-                public bool Equals(IBindableEnum<TEnum> other)
+                public bool Equals(IBindableEnum<TEnum>? other)
                 {
-                    return EqualityComparer<TEnum>.Default.Equals(_value, other.Value);
+                    return EqualityComparer<TEnum?>.Default.Equals(_value, other?.Value);
                 }
                 #endregion
             }

@@ -23,13 +23,12 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly ISerializationManager _serializationManager;
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
         private readonly IAppDataService _appDataService;
 
-        private DynamicConfiguration _localConfiguration;
-        private DynamicConfiguration _roamingConfiguration;
+        private DynamicConfiguration? _localConfiguration;
+        private DynamicConfiguration? _roamingConfiguration;
 
         private readonly AsyncLock _localConfigurationLock = new();
         private readonly AsyncLock _roamingConfigurationLock = new();
@@ -37,10 +36,8 @@
         private readonly Timer _localSaveConfigurationTimer = new();
         private readonly Timer _roamingSaveConfigurationTimer = new();
 
-        private IXmlSerializer _xmlSerializer;
-
-        private string _localConfigFilePath;
-        private string _roamingConfigFilePath;
+        private string? _localConfigFilePath;
+        private string? _roamingConfigFilePath;
 
         private bool _suspendNotifications = false;
         private bool _hasPendingNotifications = false;
@@ -48,28 +45,23 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
-        /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
-        public ConfigurationService(ISerializationManager serializationManager,
-            IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
-            : this(serializationManager, objectConverterService, (ISerializer)serializer, appDataService)
+        public ConfigurationService(IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
+            : this(objectConverterService, (ISerializer)serializer, appDataService)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
-        /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
-        public ConfigurationService(ISerializationManager serializationManager,
-            IObjectConverterService objectConverterService, ISerializer serializer,
+        public ConfigurationService(IObjectConverterService objectConverterService, ISerializer serializer,
             IAppDataService appDataService)
         {
-            _serializationManager = serializationManager;
             _objectConverterService = objectConverterService;
             _serializer = serializer;
             _appDataService = appDataService;
@@ -84,7 +76,7 @@
         /// <summary>
         /// Occurs when the configuration has changed.
         /// </summary>
-        public event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
+        public event EventHandler<ConfigurationChangedEventArgs>? ConfigurationChanged;
 
         /// <summary>
         /// Gets the configuration file name for the specified application data target.
@@ -133,7 +125,7 @@
         /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual async Task<T> GetValueAsync<T>(ConfigurationContainer container, string key, T defaultValue = default(T))
+        public virtual async Task<T> GetValueAsync<T>(ConfigurationContainer container, string key, T defaultValue = default!)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
@@ -179,7 +171,7 @@
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual async Task SetValueAsync(ConfigurationContainer container, string key, object value)
+        public virtual async Task SetValueAsync(ConfigurationContainer container, string key, object? value)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
@@ -230,7 +222,7 @@
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual async Task InitializeValueAsync(ConfigurationContainer container, string key, object defaultValue)
+        public virtual async Task InitializeValueAsync(ConfigurationContainer container, string key, object? defaultValue)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
@@ -327,6 +319,11 @@
             using (await lockObject.LockAsync())
             {
                 var settings = await GetSettingsContainerAsync(container);
+                if (settings is null)
+                {
+                    return false;
+                }
+
                 return settings.IsConfigurationValueSet(key);
             }
         }
@@ -342,7 +339,12 @@
             var lockObject = GetLockObject(container);
             using (await lockObject.LockAsync())
             {
-                var settings = await GetSettingsContainerAsync(container);
+                var settings = await GetSettingsContainerAsync(container); 
+                if (settings is null)
+                {
+                    return string.Empty;
+                }
+
                 return settings.GetConfigurationValue<string>(key, string.Empty);
             }
         }
@@ -359,6 +361,10 @@
             using (await lockObject.LockAsync())
             {
                 var settings = await GetSettingsContainerAsync(container);
+                if (settings is null)
+                {
+                    return;
+                }
 
                 if (!settings.IsConfigurationValueSet(key))
                 {
@@ -397,7 +403,7 @@
             throw Log.ErrorAndCreateException<InvalidOperationException>($"Container type '{container}' has no lock object");
         }
 
-        protected void RaiseConfigurationChanged(ConfigurationContainer container, string key, object value)
+        protected void RaiseConfigurationChanged(ConfigurationContainer container, string key, object? value)
         {
             if (_suspendNotifications)
             {

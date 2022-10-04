@@ -33,16 +33,11 @@
     public class PropertyData<T> : IPropertyData
     {
         /// <summary>
-        /// Type of the property.
-        /// </summary>
-        private Type _type;
-
-        /// <summary>
         /// Callback to use to create the default value.
         /// </summary>
         private readonly Func<T> _createDefaultValue;
 
-        private CachedPropertyInfo _cachedPropertyInfo;
+        private CachedPropertyInfo? _cachedPropertyInfo;
 
         private bool _updatedCachedPropertyInfo;
 
@@ -58,7 +53,7 @@
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase" />.</param>
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        internal PropertyData(string name, T defaultValue, EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, T defaultValue, EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
             : this(name, () => defaultValue, propertyChangedEventHandler, isSerializable,
                    includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty) { }
@@ -77,7 +72,7 @@
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="createDefaultValue"/> is <c>null</c>.</exception>
-        internal PropertyData(string name, Func<T> createDefaultValue, EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, Func<T> createDefaultValue, EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
         {
             Argument.IsNotNullOrWhitespace("name", name);
@@ -103,11 +98,7 @@
         /// Gets the type of the property.
         /// </summary>
         [XmlIgnore]
-        public Type Type
-        {
-            get { return _type ?? typeof(object); }
-            private set { _type = value; }
-        }
+        public Type Type { get; private set; }
 
         /// <summary>
         /// Gets the default value of the property.
@@ -123,7 +114,7 @@
         /// </summary>
         /// <value>The property changed event handler.</value>
         [XmlIgnore]
-        public EventHandler<PropertyChangedEventArgs> PropertyChangedEventHandler { get; private set; }
+        public EventHandler<PropertyChangedEventArgs>? PropertyChangedEventHandler { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this property is serializable.
@@ -172,7 +163,7 @@
         /// Returns the default value of the property.
         /// </summary>
         /// <returns>Default value of the property.</returns>
-        public object GetDefaultValue()
+        public object? GetDefaultValue()
         {
             return DefaultValue;
         }
@@ -188,7 +179,7 @@
                 return typedValue;
             }
 
-            return default;
+            return default!;
         }
 
         /// <summary>
@@ -196,7 +187,7 @@
         /// </summary>
         /// <param name="containingType">Type of the containing.</param>
         /// <returns>CachedPropertyInfo.</returns>
-        public CachedPropertyInfo GetPropertyInfo(Type containingType)
+        public CachedPropertyInfo? GetPropertyInfo(Type containingType)
         {
             if (!_updatedCachedPropertyInfo)
             {

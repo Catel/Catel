@@ -35,7 +35,7 @@
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.String.</returns>
-        public static string GetString(string resourceName, CultureInfo culture = null)
+        public static string GetString(string resourceName, CultureInfo? culture = null)
         {
             var value = string.Empty;
 

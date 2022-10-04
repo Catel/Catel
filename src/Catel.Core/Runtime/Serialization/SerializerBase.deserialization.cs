@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using Collections;
@@ -85,7 +86,7 @@
         /// <returns>
         /// The deserialized model.
         /// </returns>
-        public virtual object Deserialize(object model, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual object Deserialize(object model, Stream stream, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -107,7 +108,7 @@
         /// <returns>
         /// The deserialized model.
         /// </returns>
-        public object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             return Deserialize(model, (TSerializationContextInfo)serializationContext, configuration);
         }
@@ -119,7 +120,7 @@
         /// <param name="serializationContext">The serialization context.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -181,7 +182,7 @@
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public virtual object Deserialize(Type modelType, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual object Deserialize(Type modelType, Stream stream, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -203,7 +204,7 @@
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             return Deserialize(modelType, (TSerializationContextInfo)serializationContext, configuration);
         }
@@ -217,7 +218,7 @@
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public virtual object Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual object Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             var model = TypeFactory.CreateInstance(modelType);
 
@@ -235,7 +236,7 @@
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -257,7 +258,7 @@
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(object model, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(object model, Stream stream, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -279,7 +280,7 @@
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration configuration = null)
+        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration? configuration = null)
         {
             return DeserializeMembers(modelType, (TSerializationContextInfo)serializationContextInfo, configuration);
         }
@@ -293,7 +294,7 @@
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -315,7 +316,7 @@
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public List<MemberValue> DeserializeMembers(object model, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration configuration = null)
+        public List<MemberValue> DeserializeMembers(object model, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration? configuration = null)
         {
             return DeserializeMembers(model, (TSerializationContextInfo)serializationContextInfo, configuration);
         }
@@ -329,7 +330,7 @@
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -401,7 +402,7 @@
         /// <param name="member">The member that has been deserialized.</param>
         /// <param name="serializationObject">Result of the member deserialization.</param>
         /// <param name="serializerModifiers">The serializer modifiers.</param>
-        protected virtual MemberValue EndMemberDeserialization(ISerializationContext<TSerializationContextInfo> context, MemberValue member,
+        protected virtual MemberValue? EndMemberDeserialization(ISerializationContext<TSerializationContextInfo> context, MemberValue member,
             SerializationObject serializationObject, IEnumerable<ISerializerModifier> serializerModifiers)
         {
             if (!serializationObject.IsSuccessful)
@@ -428,6 +429,11 @@
                 {
                     foreach (var item in enumerable)
                     {
+                        if (item.Key is null)
+                        {
+                            continue;
+                        }
+
                         targetDictionary.Add(item.Key, item.Value);
                     }
                 }
@@ -448,30 +454,32 @@
             else if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
             {
                 var sourceCollection = memberValue.Value as IEnumerable;
-
-                if (member.MemberType.IsArrayEx())
+                if (sourceCollection is not null)
                 {
-                    var elementType = member.MemberType.GetElementTypeEx();
-                    member.Value = sourceCollection.ToArray(elementType);
-                }
-                else
-                {
-                    var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
-                    if (targetCollection is null)
+                    if (member.MemberType.IsArrayEx())
                     {
-                        throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
-                            context.ModelTypeName);
+                        var elementType = member.MemberType.GetElementTypeEx();
+                        member.Value = sourceCollection.ToArray(elementType);
                     }
-
-                    if (sourceCollection is not null)
+                    else
                     {
-                        foreach (var item in sourceCollection)
+                        var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
+                        if (targetCollection is null)
                         {
-                            targetCollection.Add(item);
+                            throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
+                                context.ModelTypeName);
                         }
-                    }
 
-                    member.Value = targetCollection;
+                        if (sourceCollection is not null)
+                        {
+                            foreach (var item in sourceCollection)
+                            {
+                                targetCollection.Add(item);
+                            }
+                        }
+
+                        member.Value = targetCollection;
+                    }
                 }
             }
             else
@@ -498,7 +506,7 @@
         /// Deserializes the object using the <c>Parse(string, IFormatProvider)</c> method.
         /// </summary>
         /// <returns>The deserialized object.</returns>
-        protected virtual object DeserializeUsingObjectParse(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
+        protected virtual object? DeserializeUsingObjectParse(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             // Note: don't use GetBestMemberType, it could return string type
             var parseMethod = GetObjectParseMethod(memberValue.MemberType);
@@ -515,7 +523,11 @@
 
             try
             {
-                var obj = parseMethod.Invoke(null, new object[] { memberValueAsString, context.Configuration.Culture });
+                var obj = parseMethod.Invoke(null, new object[] 
+                { 
+                    memberValueAsString, context.Configuration?.Culture ?? CultureInfo.InvariantCulture 
+                });
+
                 return obj;
             }
             catch (Exception ex)

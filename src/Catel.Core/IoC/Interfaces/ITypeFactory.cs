@@ -22,7 +22,7 @@
         /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        object CreateInstanceWithTag(Type typeToConstruct, object tag);
+        object CreateInstanceWithTag(Type typeToConstruct, object? tag);
 
         /// <summary>
         /// Creates an instance of the specified type using the specified parameters as injection values.

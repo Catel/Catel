@@ -16,7 +16,7 @@
         /// <returns>
         ///   <see cref="XDocument" /> containing the serialized data.
         /// </returns>
-        public static XDocument ToXml(this IModel model, ISerializer serializer, ISerializationConfiguration configuration = null)
+        public static XDocument ToXml(this IModel model, ISerializer serializer, ISerializationConfiguration? configuration = null)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -40,7 +40,7 @@
         /// <returns>
         /// Byte array containing the serialized data.
         /// </returns>
-        public static byte[] ToByteArray(this IModel model, ISerializer serializer, ISerializationConfiguration configuration = null)
+        public static byte[] ToByteArray(this IModel model, ISerializer serializer, ISerializationConfiguration? configuration = null)
         {
             using (var memoryStream = new MemoryStream())
             {

@@ -12,7 +12,7 @@
         /// </summary>
         /// <typeparam name="TTargetType"> The target type. </typeparam>
         /// <returns> The <see cref="IValidator" /> for the specified type or <c>null</c> if no validator is available for the specified type. </returns>
-        IValidator GetValidator<TTargetType>();
+        IValidator? GetValidator<TTargetType>();
 
         /// <summary>
         ///   Gets a validator for the specified target type.
@@ -20,6 +20,6 @@
         /// <param name="targetType"> The target type. </param>
         /// <returns> The <see cref="IValidator" /> for the specified type or <c>null</c> if no validator is available for the specified type. </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="targetType" /> is <c>null</c>.</exception>
-        IValidator GetValidator(Type targetType);
+        IValidator? GetValidator(Type targetType);
     }
 }

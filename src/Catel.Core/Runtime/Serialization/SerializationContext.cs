@@ -13,7 +13,9 @@
     public class SerializationContext<TSerializationContextInfo> : Disposable, ISerializationContext<TSerializationContextInfo>
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
-        private ScopeManager<SerializationContextScope<TSerializationContextInfo>> _scopeManager;
+#pragma warning disable IDISP006 // Implement IDisposable
+        private ScopeManager<SerializationContextScope<TSerializationContextInfo>>? _scopeManager;
+#pragma warning restore IDISP006 // Implement IDisposable
         private int? _depth;
 
         /// <summary>
@@ -28,7 +30,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         public SerializationContext(object model, Type modelType, TSerializationContextInfo context,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
             Model = model;
             ModelType = modelType;
@@ -126,7 +128,7 @@
         /// <summary>
         /// Gets the serialization configuration.
         /// </summary>
-        public ISerializationConfiguration Configuration { get; private set; }
+        public ISerializationConfiguration? Configuration { get; private set; }
 
         /// <summary>
         /// Gets the context mode.
@@ -146,7 +148,7 @@
         /// <value>
         /// The parent context.
         /// </value>
-        public ISerializationContext<TSerializationContextInfo> Parent { get; private set; }
+        public ISerializationContext<TSerializationContextInfo>? Parent { get; private set; }
 
         /// <summary>
         /// Gets the reference manager.
@@ -158,7 +160,7 @@
         /// Gets or sets the serialization information.
         /// </summary>
         /// <value>The serialization information.</value>
-        public SerializationInfo SerializationInfo { get; set; }
+        public SerializationInfo? SerializationInfo { get; set; }
 
         /// <summary>
         /// Disposes the managed resources.

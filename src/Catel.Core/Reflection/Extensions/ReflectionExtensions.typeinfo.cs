@@ -108,7 +108,7 @@
         /// <returns>The <see cref="FieldInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static FieldInfo GetField(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static FieldInfo? GetField(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
             
@@ -148,7 +148,7 @@
         /// <param name="bindingFlags">The binding flags.</param>
         /// <returns>An array of <see cref="ConstructorInfo"/>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
-        public static ConstructorInfo GetConstructor(this TypeInfo typeInfo, Type[] types, BindingFlags bindingFlags)
+        public static ConstructorInfo? GetConstructor(this TypeInfo typeInfo, Type[] types, BindingFlags bindingFlags)
         {
             return (from x in GetConstructors(typeInfo, bindingFlags)
                     where CollectionHelper.IsEqualTo(types, from parameterInfo in x.GetParameters()
@@ -196,7 +196,7 @@
         /// <returns>The <see cref="PropertyInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static PropertyInfo GetProperty(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static PropertyInfo? GetProperty(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -230,7 +230,7 @@
         /// <returns>The <see cref="EventInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static EventInfo GetEvent(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static EventInfo? GetEvent(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -285,7 +285,7 @@
         /// <returns>The <see cref="MethodInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethod(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static MethodInfo? GetMethod(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -304,7 +304,7 @@
         /// <returns>The <see cref="MethodInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethod(this TypeInfo typeInfo, string name, Type[] types, BindingFlags bindingFlags)
+        public static MethodInfo? GetMethod(this TypeInfo typeInfo, string name, Type[] types, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 

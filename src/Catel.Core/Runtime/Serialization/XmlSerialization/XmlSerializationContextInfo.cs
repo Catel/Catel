@@ -26,8 +26,8 @@
             XmlWriter = xmlWriter;
             IsRootObject = xmlWriter.WriteState == WriteState.Start;
             AllowCustomXmlSerialization = true;
-
-            Initialize(model);
+            KnownTypes = new HashSet<Type>();
+            Model = model;
         }
 
         /// <summary>
@@ -42,8 +42,8 @@
             XmlReader = xmlReader;
             IsRootObject = xmlReader.NodeType == XmlNodeType.None;
             AllowCustomXmlSerialization = true;
-
-            Initialize(model);
+            KnownTypes = new HashSet<Type>();
+            Model = model;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@
         /// <value>
         /// The known types.
         /// </value>
-        public HashSet<Type>? KnownTypes { get; private set; }
+        public HashSet<Type> KnownTypes { get; private set; }
 
         /// <summary>
         /// Gets the model.
@@ -97,12 +97,6 @@
                 // as duplicates anyway
                 KnownTypes.AddRange(parentKnownTypes);
             }
-        }
-
-        private void Initialize(object model)
-        {
-            KnownTypes = new HashSet<Type>();
-            Model = model;
         }
     }
 }

@@ -31,7 +31,7 @@
         /// </param>
         /// <param name="tag">a tag</param>
         /// <exception cref="ArgumentNullException">The <paramref name="interfaceType"/> is <c>null</c>.</exception>
-        public MissingTypeEventArgs(Type interfaceType, object tag)
+        public MissingTypeEventArgs(Type interfaceType, object? tag)
         {
             InterfaceType = interfaceType;
             RegistrationType = RegistrationType.Singleton;
@@ -64,7 +64,7 @@
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         /// Gets or sets the life style of the type that will be registered. 

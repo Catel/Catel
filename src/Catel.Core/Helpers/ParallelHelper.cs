@@ -27,7 +27,7 @@
         /// <param name="taskName">Name of the task, can be <c>null</c>.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="items" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="actionToInvoke" /> is <c>null</c>.</exception>
-        public static void ExecuteInParallel<T>(List<T> items, Action<T> actionToInvoke, int itemsPerBatch = 1000, string taskName = null)
+        public static void ExecuteInParallel<T>(List<T> items, Action<T> actionToInvoke, int itemsPerBatch = 1000, string? taskName = null)
         {
             taskName = ObjectToStringHelper.ToString(taskName);
 
@@ -110,7 +110,7 @@
         /// <param name="tasks">The task list.</param>
         /// <param name="taskName">The task name.</param>
         /// <param name="batchSize">The batch size.</param>
-        public static async Task ExecuteInParallelAsync(List<Func<Task>> tasks, int batchSize = 1000, string taskName = null)
+        public static async Task ExecuteInParallelAsync(List<Func<Task>> tasks, int batchSize = 1000, string? taskName = null)
         {
             taskName = ObjectToStringHelper.ToString(taskName);
 

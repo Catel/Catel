@@ -17,12 +17,12 @@
         /// Gets the first type in the type path.
         /// </summary>
         /// <value>The first type.</value>
-        TypeRequestInfo FirstType { get; }
+        TypeRequestInfo? FirstType { get; }
 
         /// <summary>
         /// Gets the last type in the type path.
         /// </summary>
         /// <value>The last type.</value>
-        TypeRequestInfo LastType { get; }
+        TypeRequestInfo? LastType { get; }
     }
 }

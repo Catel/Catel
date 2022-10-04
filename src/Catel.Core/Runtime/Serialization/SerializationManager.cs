@@ -45,7 +45,7 @@
         /// <summary>
         /// Occurs when the cache for a specific type has been invalidated.
         /// </summary>
-        public event EventHandler<CacheInvalidatedEventArgs> CacheInvalidated;
+        public event EventHandler<CacheInvalidatedEventArgs>? CacheInvalidated;
 
         /// <summary>
         /// Warmups the specified type by calling all the methods for the specified type.
@@ -124,7 +124,11 @@
                 foreach (var typeField in fields)
                 {
                     var memberMetadata = typeField.Value;
-                    var fieldInfo = (FieldInfo)memberMetadata.Tag;
+                    var fieldInfo = memberMetadata.Tag as FieldInfo;
+                    if (fieldInfo is null)
+                    {
+                        continue;
+                    }
 
                     // Exclude fields by default
                     var include = false;
@@ -165,16 +169,23 @@
                 foreach (var modelProperty in properties)
                 {
                     var memberMetadata = modelProperty.Value;
-                    var propertyData = (IPropertyData)memberMetadata.Tag;
+                    var propertyData = memberMetadata.Tag as IPropertyData;
+                    if (propertyData is null)
+                    {
+                        continue;
+                    }
 
                     bool isSerializable = propertyData.IsSerializable || propertyData.Type.IsModelBase();
                     if (!isSerializable)
                     {
                         // CTL-550
                         var cachedPropertyInfo = propertyData.GetPropertyInfo(type);
-                        if (cachedPropertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
+                        if (cachedPropertyInfo is not null)
                         {
-                            isSerializable = true;
+                            if (cachedPropertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
+                            {
+                                isSerializable = true;
+                            }
                         }
                     }
 
@@ -233,7 +244,11 @@
                 foreach (var typeProperty in regularProperties)
                 {
                     var memberMetadata = typeProperty.Value;
-                    var propertyInfo = (PropertyInfo)memberMetadata.Tag;
+                    var propertyInfo = memberMetadata.Tag as PropertyInfo;
+                    if (propertyInfo is null)
+                    {
+                        continue;
+                    }
 
                     if (!catelPropertyNames.Contains(memberMetadata.MemberName))
                     {
@@ -436,7 +451,7 @@
                 foreach (var fieldInfo in fields)
                 {
                     if (fieldInfo.Name.Contains("__BackingField") ||
-                        fieldInfo.DeclaringType == typeof (ModelBase))
+                        fieldInfo.DeclaringType == typeof(ModelBase))
                     {
                         continue;
                     }

@@ -15,7 +15,7 @@
         /// <param name = "object1">The first object.</param>
         /// <param name = "object2">The second object.</param>
         /// <returns><c>true</c> if the objects are equal; otherwise <c>false</c>.</returns>
-        public static bool AreEqual(object object1, object object2)
+        public static bool AreEqual(object? object1, object? object2)
         {
             var isObject1Null = object1 is null;
             var isObject2Null = object2 is null;
@@ -71,7 +71,7 @@
         /// <param name = "object1">The first object.</param>
         /// <param name = "object2">The second object.</param>
         /// <returns><c>true</c> if the objects are equal references; otherwise <c>false</c>.</returns>
-        public static bool AreEqualReferences(object object1, object object2)
+        public static bool AreEqualReferences(object? object1, object? object2)
         {
             var isObject1Null = object1 is null;
             var isObject2Null = object2 is null;
@@ -91,8 +91,8 @@
                 return true;
             }
 
-            var object1Type = object1.GetType();
-            var object2Type = object2.GetType();
+            var object1Type = object1!.GetType();
+            var object2Type = object2!.GetType();
 
             if (object1Type.IsValueTypeEx() && object2Type.IsValueTypeEx())
             {
@@ -117,7 +117,7 @@
         /// <returns>
         ///   <c>true</c> if the specified object is <c>null</c> or <c>DBNull.Value</c>; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsNull(object obj)
+        public static bool IsNull(object? obj)
         {
             if (obj is null)
             {

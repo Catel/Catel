@@ -14,7 +14,7 @@
         /// <param name="validationContext">The validation context.</param>
         /// <param name="tag">The tag.</param>
         /// <returns>The <see cref="IValidationSummary"/>.</returns>
-        public static IValidationSummary GetValidationSummary(this IValidationContext validationContext, object tag = null)
+        public static IValidationSummary GetValidationSummary(this IValidationContext validationContext, object? tag = null)
         {
             return new ValidationSummary(validationContext, tag);
         }

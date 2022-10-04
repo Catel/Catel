@@ -77,7 +77,7 @@
         /// <param name="type">The type.</param>
         /// <param name="fullyQualifiedAssemblyName">if set to <c>true</c>, include the assembly name in the type name.</param>
         /// <returns>The safe full name.</returns>
-        public static string GetSafeFullName(this Type type, bool fullyQualifiedAssemblyName /* in v5, set = false */)
+        public static string GetSafeFullName(this Type type, bool fullyQualifiedAssemblyName = false)
         {
             if (type is null)
             {

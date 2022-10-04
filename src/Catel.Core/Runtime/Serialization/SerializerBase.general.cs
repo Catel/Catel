@@ -233,7 +233,7 @@
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        protected virtual ScopeManager<SerializationScope> GetCurrentSerializationScopeManager(ISerializationConfiguration configuration)
+        protected virtual ScopeManager<SerializationScope> GetCurrentSerializationScopeManager(ISerializationConfiguration? configuration)
         {
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
             var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(this, configuration ?? DefaultSerializationConfiguration));
@@ -245,7 +245,7 @@
         /// </summary>
         /// <param name="configuration">The configuration that might override the existing scope configuration.</param>
         /// <returns></returns>
-        protected virtual ISerializationConfiguration GetCurrentSerializationConfiguration(ISerializationConfiguration configuration)
+        protected virtual ISerializationConfiguration GetCurrentSerializationConfiguration(ISerializationConfiguration? configuration)
         {
             using (var scopeManager = GetCurrentSerializationScopeManager(configuration))
             {
@@ -292,7 +292,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, TSerializationContextInfo context,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
             var model = CreateModelInstance(modelType);
             return GetContext(model, modelType, context, contextMode, configuration);
@@ -312,7 +312,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
             var model = CreateModelInstance(modelType);
             return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
@@ -333,7 +333,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected virtual ISerializationContext<TSerializationContextInfo> GetContext(object model, Type modelType,
-            TSerializationContextInfo context, SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            TSerializationContextInfo context, SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
             var finalContext = new SerializationContext<TSerializationContextInfo>(model, modelType, context, contextMode, configuration);
             return finalContext;
@@ -354,7 +354,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected abstract ISerializationContext<TSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration);
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration);
 
         /// <summary>
         /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization
@@ -443,6 +443,11 @@
                         return new SerializationModelInfo(modelType, catelProperties, fields, regularProperties);
                     });
 
+                    if (modelInfo is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Failed to find model info for '{modelType.GetSafeFullName(false)}'");
+                    }
+
                     foreach (var member in members)
                     {
                         ObjectAdapter.SetMemberValue(model, member, modelInfo);
@@ -480,7 +485,7 @@
         /// <param name="modelType">Type of the model.</param>
         /// <param name="memberName">Name of the member.</param>
         /// <returns>The <see cref="Type"/> of the member.</returns>
-        protected Type GetMemberType(Type modelType, string memberName)
+        protected Type? GetMemberType(Type modelType, string memberName)
         {
             var catelProperties = SerializationManager.GetCatelProperties(modelType);
             if (catelProperties.TryGetValue(memberName, out var catelProperty))
@@ -907,9 +912,9 @@
         /// </summary>
         /// <param name="type">Type of the model.</param>
         /// <returns>The instantiated type.</returns>
-        protected virtual object CreateModelInstance(Type type)
+        protected virtual object? CreateModelInstance(Type type)
         {
-            Type elementType = null;
+            Type? elementType = null;
 
             if (type == typeof(string))
             {

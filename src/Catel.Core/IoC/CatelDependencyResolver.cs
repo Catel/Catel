@@ -30,7 +30,7 @@
         /// <param name="type">The type.</param>
         /// <param name="tag">The tag.</param>
         /// <returns><c>true</c> if the specified type with the specified tag can be resolved; otherwise, <c>false</c>.</returns>
-        public bool CanResolve(Type type, object tag = null)
+        public bool CanResolve(Type type, object? tag = null)
         {
             return _serviceLocator.IsTypeRegistered(type, tag);
         }
@@ -62,7 +62,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <returns>The resolved object.</returns>
-        public object Resolve(Type type, object tag = null)
+        public object? Resolve(Type type, object? tag = null)
         {
             return _serviceLocator.ResolveType(type, tag);
         }
@@ -73,23 +73,27 @@
         /// <param name="types">The types.</param>
         /// <param name="tag">The tag.</param>
         /// <returns>A list of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
-        public object[] ResolveMultiple(Type[] types, object tag = null)
+        public object[] ResolveMultiple(Type[] types, object? tag = null)
         {
             if (types.Length == 0)
             {
                 return Array.Empty<object>();
             }
 
-            int typeCount = types.Length;
+            var typeCount = types.Length;
             var resolvedTypes = new object[typeCount];
 
             lock (_serviceLocator)
             {
-                for (int i = 0; i < typeCount; i++)
+                for (var i = 0; i < typeCount; i++)
                 {
                     try
                     {
-                        resolvedTypes[i] = Resolve(types[i], tag);
+                        var resolvedType = Resolve(types[i], tag);
+                        if (resolvedType is not null)
+                        {
+                            resolvedTypes[i] = resolvedType;
+                         }
                     }
                     catch (TypeNotRegisteredException ex)
                     {

@@ -16,7 +16,7 @@
         /// <param name="registrationType">Type of the registration.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
-        public TypeRegisteredEventArgs(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType)
+        public TypeRegisteredEventArgs(Type serviceType, Type serviceImplementationType, object? tag, RegistrationType registrationType)
         {
             ServiceType = serviceType;
             ServiceImplementationType = serviceImplementationType;
@@ -40,7 +40,7 @@
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object? Tag { get; private set; }
 
         /// <summary>
         /// Gets the type of the registration.

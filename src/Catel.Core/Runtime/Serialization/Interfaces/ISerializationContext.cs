@@ -52,7 +52,7 @@
         /// <summary>
         /// Gets the configuration used during serialization.
         /// </summary>
-        ISerializationConfiguration Configuration { get; }
+        ISerializationConfiguration? Configuration { get; }
     }
 
     /// <summary>
@@ -74,6 +74,6 @@
         /// <value>
         /// The parent context.
         /// </value>
-        ISerializationContext<TSerializationContext> Parent { get; }
+        ISerializationContext<TSerializationContext>? Parent { get; }
     }
 }

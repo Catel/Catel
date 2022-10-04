@@ -60,7 +60,7 @@
         /// </summary>
         /// <param name="types">The types to warmp up. If <c>null</c>, all types will be initialized.</param>
         /// <param name="typesPerThread">The types per thread. If <c>-1</c>, all types will be initialized on the same thread.</param>
-        void Warmup(IEnumerable<Type> types = null, int typesPerThread = 1000);
+        void Warmup(IEnumerable<Type>? types = null, int typesPerThread = 1000);
 
         /// <summary>
         /// Serializes the specified model.
@@ -70,7 +70,7 @@
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        void Serialize(object model, Stream stream, ISerializationConfiguration configuration = null);
+        void Serialize(object model, Stream stream, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Serializes the specified model.
@@ -80,7 +80,7 @@
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        void Serialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
+        void Serialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Serializes the members.
@@ -92,7 +92,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="membersToIgnore"/> is <c>null</c>.</exception>
-        void SerializeMembers(object model, Stream stream, ISerializationConfiguration configuration, params string[] membersToIgnore);
+        void SerializeMembers(object model, Stream stream, ISerializationConfiguration? configuration, params string[] membersToIgnore);
 
         /// <summary>
         /// Deserializes the specified model. The deserialized values will be set in the specified model.
@@ -103,7 +103,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        object Deserialize(object model, Stream stream, ISerializationConfiguration configuration = null);
+        object Deserialize(object model, Stream stream, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the specified model. The deserialized values will be set in the specified model.
@@ -114,7 +114,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
+        object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -125,7 +125,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        object Deserialize(Type modelType, Stream stream, ISerializationConfiguration configuration = null);
+        object Deserialize(Type modelType, Stream stream, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -147,7 +147,7 @@
         /// <returns>The list of members that have been deserialized.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration configuration = null);
+        List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the members of the specified model.
@@ -158,7 +158,7 @@
         /// <returns>The list of members that have been deserialized.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        List<MemberValue> DeserializeMembers(object model, Stream stream, ISerializationConfiguration configuration = null);
+        List<MemberValue> DeserializeMembers(object model, Stream stream, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the members of the specified model.
@@ -169,7 +169,7 @@
         /// <returns>The list of members that have been deserialized.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
+        List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the members.
@@ -182,6 +182,6 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        List<MemberValue> DeserializeMembers(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
+        List<MemberValue> DeserializeMembers(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
     }
 }

@@ -36,26 +36,26 @@
 
                 if (instance is IPropertySerializable propertySerializable)
                 {
-                    object objectValue = null;
+                    object? objectValue = null;
                     if (propertySerializable.GetPropertyValue(memberName, ref objectValue))
                     {
-                        value = (TValue)objectValue;
+                        value = (TValue)objectValue!;
                         return true;
                     }
                 }
 
                 if (instance is IFieldSerializable fieldSerializable)
                 {
-                    object objectValue = null;
+                    object? objectValue = null;
                     if (fieldSerializable.GetFieldValue(memberName, ref objectValue))
                     {
-                        value = (TValue)objectValue;
+                        value = (TValue)objectValue!;
                         return true;
                     }
                 }
 
                 var modelType = instance.GetType();
-                IFastMemberInvoker fastMemberInvoker = null;
+                IFastMemberInvoker? fastMemberInvoker = null;
 
                 lock (_fastMemberInvokerCache)
                 {
@@ -83,7 +83,7 @@
                 Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
             }
 
-            value = default;
+            value = default!;
             return false;
         }
 
@@ -123,7 +123,7 @@
                 }
 
                 var modelType = instance.GetType();
-                IFastMemberInvoker fastMemberInvoker = null;
+                IFastMemberInvoker? fastMemberInvoker = null;
 
                 lock (_fastMemberInvokerCache)
                 {
@@ -162,7 +162,13 @@
         protected virtual IFastMemberInvoker GetFastMemberInvoker(Type modelType)
         {
             var typeDefinition = typeof(FastMemberInvoker<>).MakeGenericTypeEx(modelType);
-            return (IFastMemberInvoker)Activator.CreateInstance(typeDefinition);
+            var fastMemberInvoker = Activator.CreateInstance(typeDefinition) as IFastMemberInvoker;
+            if (fastMemberInvoker is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Failed to get fast member invoker for type '{modelType.GetSafeFullName(false)}'");
+            }
+
+            return fastMemberInvoker;
         }
     }
 }

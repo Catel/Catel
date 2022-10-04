@@ -12,14 +12,14 @@
     internal class CacheStorageValueInfo<TValue>
     {
         private readonly ExpirationPolicy? _expirationPolicy;
-        private readonly TValue? _value;
+        private readonly TValue _value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheStorageValueInfo{TValue}" /> class.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="expiration">The expiration.</param>
-        public CacheStorageValueInfo(TValue? value, TimeSpan expiration)
+        public CacheStorageValueInfo(TValue value, TimeSpan expiration)
             : this(value, ExpirationPolicy.Duration(expiration))
         {
         }
@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="expirationPolicy">The expiration policy.</param>
-        public CacheStorageValueInfo(TValue? value, ExpirationPolicy? expirationPolicy = null)
+        public CacheStorageValueInfo(TValue value, ExpirationPolicy? expirationPolicy = null)
         {
             _value = value;
             _expirationPolicy = expirationPolicy;
@@ -39,7 +39,7 @@
         /// Gets the value.
         /// </summary>
         /// <value>The value.</value>
-        public TValue? Value
+        public TValue Value
         {
             get
             {

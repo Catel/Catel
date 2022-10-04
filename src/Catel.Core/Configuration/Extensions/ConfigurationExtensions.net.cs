@@ -14,12 +14,12 @@
         /// <returns>The section</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="this"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="sectionName"/> is <c>null</c> or empty.</exception>
-        public static TSection GetSection<TSection>(this Configuration @this, string sectionName, string sectionGroupName = null)
+        public static TSection? GetSection<TSection>(this Configuration @this, string sectionName, string? sectionGroupName = null)
             where TSection : ConfigurationSection
         {
             Argument.IsNotNullOrEmpty("sectionName", sectionName);
 
-            TSection section = null;
+            TSection? section = null;
             if (!string.IsNullOrEmpty(sectionGroupName))
             {
                 var configurationSectionGroup = @this.GetSectionGroup(sectionGroupName);

@@ -37,7 +37,7 @@
         /// <param name="name">Name of the property.</param>
         /// <returns>Default value of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
-        object GetDefaultValue(string name);
+        object? GetDefaultValue(string name);
 
         /// <summary>
         /// Returns the typed default value of a specific property.

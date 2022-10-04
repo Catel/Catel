@@ -31,7 +31,7 @@
         /// <param name="stream">Stream that will contain the serialized data of this object.</param>
         /// <param name="serializer">The serializer to use.</param>
         /// <param name="configuration">The configuration.</param>
-        public void Save(Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null)
+        public void Save(Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null)
         {
             serializer.Serialize(this, stream, configuration);
 
@@ -51,7 +51,7 @@
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load(Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null)
+        public static T Load(Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null)
         {
             return (T)Load(typeof(T), stream, serializer, configuration);
         }
@@ -70,10 +70,10 @@
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static IModel Load(Type type, Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null)
+        public static IModel Load(Type type, Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null)
         {
             var result = serializer.Deserialize(type, stream, configuration);
-            return result as IModel;
+            return (IModel)result;
         }
     }
 }

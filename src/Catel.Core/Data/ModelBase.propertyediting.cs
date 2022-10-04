@@ -9,7 +9,7 @@
 
     public partial class ModelBase
     {
-        private static readonly Dictionary<string, object> CalculatedPropertyExpressions = new Dictionary<string, object>();
+        private static readonly Dictionary<string, object?> CalculatedPropertyExpressions = new Dictionary<string, object?>();
 
         /// <summary>
         /// Gets the object value for the specified value. This method allows caching of boxed objects.
@@ -17,9 +17,9 @@
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>An object representing the value.</returns>
-        protected static object GetObjectValue<TValue>(TValue value)
+        protected static object? GetObjectValue<TValue>(TValue value)
         {
-            object objectValue = null;
+            object? objectValue = null;
 
             if (typeof(TValue).IsValueTypeEx())
             {
@@ -48,7 +48,7 @@
             if ((value is null) && !property.Type.IsNullableType())
             {
                 throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
-                    "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().FullName);
+                    "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().GetSafeFullName());
             }
 
             SetValue(property, value, notifyOnChange);
@@ -94,7 +94,7 @@
                 if (!value.GetType().IsCOMObjectEx())
                 {
                     throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
-                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", BoxingCache.GetBoxedValue(value), property.Name, GetType().FullName);
+                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", BoxingCache.GetBoxedValue(value), property.Name, GetType().GetSafeFullName());
                 }
             }
 
@@ -213,7 +213,7 @@
         /// <typeparam name="TValue">The value of the property.</typeparam>
         /// <param name="propertyName">The property name.</param>
         /// <returns>The compiled expression for the specified property name.</returns>
-        protected Func<object, TValue> GetPropertyGetterExpression<TValue>(string propertyName)
+        protected Func<object, TValue>? GetPropertyGetterExpression<TValue>(string propertyName)
         {
             var key = $"{propertyName}_as_{typeof(TValue).Name}";
 
@@ -225,7 +225,7 @@
                 CalculatedPropertyExpressions[key] = getter;
             }
 
-            return (Func<object, TValue>)getter;
+            return (Func<object, TValue>?)getter;
         }
 
         /// <summary>
@@ -285,7 +285,7 @@
         /// <param name="name">Name of the property.</param>
         /// <returns>Default value of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        object IModel.GetDefaultValue(string name)
+        object? IModel.GetDefaultValue(string name)
         {
             return GetPropertyData(name).GetDefaultValue();
         }
@@ -301,7 +301,7 @@
         {
             var obj = ((IModel)this).GetDefaultValue(name);
 
-            return (obj is TValue) ? (TValue)obj : default;
+            return (obj is TValue) ? (TValue)obj : default!;
         }
     }
 }

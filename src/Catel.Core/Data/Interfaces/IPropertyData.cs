@@ -19,8 +19,8 @@
 
         EventHandler<PropertyChangedEventArgs>? PropertyChangedEventHandler { get; }
 
-        object GetDefaultValue();
+        object? GetDefaultValue();
         TValue GetDefaultValue<TValue>();
-        CachedPropertyInfo GetPropertyInfo(Type containingType);
+        CachedPropertyInfo? GetPropertyInfo(Type containingType);
     }
 }

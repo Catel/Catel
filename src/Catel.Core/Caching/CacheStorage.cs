@@ -14,10 +14,9 @@
     /// </summary>
     /// <typeparam name="TKey">The key type.</typeparam>
     /// <typeparam name="TValue">The value type.</typeparam>
-    public class CacheStorage<TKey, TValue> : ICacheStorage<TKey, TValue?>
+    public class CacheStorage<TKey, TValue> : ICacheStorage<TKey, TValue>
         where TKey : notnull
     {
-        #region Fields
         private readonly Func<ExpirationPolicy>? _defaultExpirationPolicyInitCode;
 
         /// <summary>
@@ -28,7 +27,7 @@
         /// <summary>
         /// The dictionary.
         /// </summary>
-        private readonly ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue?>> _dictionary;
+        private readonly ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue>> _dictionary;
 
         /// <summary>
         /// The synchronization object.
@@ -61,19 +60,17 @@
         /// Determines whether the cache storage can check for expired items.
         /// </summary>
         private bool _checkForExpiredItems;
-        #endregion
 
         /// <summary>
         /// Occurs when the item is expiring.
         /// </summary>
-        public event EventHandler<ExpiringEventArgs<TKey, TValue?>>? Expiring;
+        public event EventHandler<ExpiringEventArgs<TKey, TValue>>? Expiring;
 
         /// <summary>
         /// Occurs when the item has expired.
         /// </summary>
-        public event EventHandler<ExpiredEventArgs<TKey, TValue?>>? Expired;
+        public event EventHandler<ExpiredEventArgs<TKey, TValue>>? Expired;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheStorage{TKey,TValue}" /> class.
         /// </summary>
@@ -83,15 +80,13 @@
         public CacheStorage(Func<ExpirationPolicy>? defaultExpirationPolicyInitCode = null, bool storeNullValues = false,
             IEqualityComparer<TKey>? equalityComparer = null)
         {
-            _dictionary = new ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue?>>(equalityComparer ?? EqualityComparer<TKey>.Default);
+            _dictionary = new ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer ?? EqualityComparer<TKey>.Default);
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
             _expirationTimerInterval = TimeSpan.FromSeconds(1);
         }
-        #endregion
 
-        #region ICacheStorage<TKey,TValue> Members
         /// <summary>
         /// Gets or sets whether values should be disposed on removal.
         /// </summary>
@@ -199,7 +194,7 @@
 
         /// <inheritdoc />
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification = "Reviewed. Suppression is OK here.")]
-        public TValue? GetFromCacheOrFetch(TKey key, Func<TValue?> code, ExpirationPolicy? expirationPolicy, bool @override = false)
+        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, ExpirationPolicy? expirationPolicy, bool @override = false)
         {
             return ExecuteInLock(key, () =>
             {
@@ -216,7 +211,7 @@
                         expirationPolicy = _defaultExpirationPolicyInitCode();
                     }
 
-                    var valueInfo = new CacheStorageValueInfo<TValue?>(value, expirationPolicy);
+                    var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
                     lock (_syncObj)
                     {
                         _dictionary[key] = valueInfo;
@@ -247,7 +242,7 @@
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public TValue? GetFromCacheOrFetch(TKey key, Func<TValue?> code, bool @override = false, TimeSpan expiration = default)
+        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default)
         {
             return GetFromCacheOrFetch(key, code, ExpirationPolicy.Duration(expiration), @override);
         }
@@ -264,7 +259,7 @@
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue?> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue?>> code, ExpirationPolicy? expirationPolicy, bool @override = false)
+        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy? expirationPolicy, bool @override = false)
         {
             return ExecuteInLockAsync(key, async () =>
             {
@@ -282,7 +277,7 @@
                         expirationPolicy = _defaultExpirationPolicyInitCode();
                     }
 
-                    var valueInfo = new CacheStorageValueInfo<TValue?>(value, expirationPolicy);
+                    var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
                     lock (_syncObj)
                     {
                         _dictionary[key] = valueInfo;
@@ -315,7 +310,7 @@
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue?> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue?>> code, bool @override = false, TimeSpan expiration = default)
+        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default)
         {
             return GetFromCacheOrFetchAsync(key, code, ExpirationPolicy.Duration(expiration), @override);
         }
@@ -328,7 +323,7 @@
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <param name="expiration">The timespan in which the cache item should expire when added.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public void Add(TKey key, TValue? @value, bool @override = false, TimeSpan expiration = default(TimeSpan))
+        public void Add(TKey key, TValue @value, bool @override = false, TimeSpan expiration = default(TimeSpan))
         {
             Add(key, value, ExpirationPolicy.Duration(expiration), @override);
         }
@@ -341,7 +336,7 @@
         /// <param name="expirationPolicy">The expiration policy.</param>
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public void Add(TKey key, TValue? @value, ExpirationPolicy? expirationPolicy, bool @override = false)
+        public void Add(TKey key, TValue @value, ExpirationPolicy? expirationPolicy, bool @override = false)
         {
             if (!_storeNullValues)
             {
@@ -556,7 +551,7 @@
             var expirationPolicy = item.ExpirationPolicy;
             if (raiseEvents)
             {
-                var expiringEventArgs = new ExpiringEventArgs<TKey, TValue?>(key, item.Value, expirationPolicy);
+                var expiringEventArgs = new ExpiringEventArgs<TKey, TValue>(key, item.Value, expirationPolicy);
                 Expiring?.Invoke(this, expiringEventArgs);
 
                 cancel = expiringEventArgs.Cancel;
@@ -570,7 +565,7 @@
                     expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
                 }
 
-                _dictionary[key] = new CacheStorageValueInfo<TValue?>(item.Value, expirationPolicy);
+                _dictionary[key] = new CacheStorageValueInfo<TValue>(item.Value, expirationPolicy);
 
                 return false;
             }
@@ -580,7 +575,7 @@
             var dispose = DisposeValuesOnRemoval;
             if (raiseEvents)
             {
-                var expiredEventArgs = new ExpiredEventArgs<TKey, TValue?>(key, item.Value, dispose);
+                var expiredEventArgs = new ExpiredEventArgs<TKey, TValue>(key, item.Value, dispose);
                 Expired?.Invoke(this, expiredEventArgs);
 
                 dispose = expiredEventArgs.Dispose;
@@ -593,6 +588,5 @@
 
             return true;
         }
-        #endregion
     }
 }

@@ -83,7 +83,7 @@
                 if (!_catelProperties.TryGetValue(name, out var catelProperty))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
-                        "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
+                        "Property '{0}' on type '{1}' is not registered", name, Type.GetSafeFullName());
                 }
 
                 return catelProperty;
@@ -166,7 +166,7 @@
                 if (_catelProperties.ContainsKey(name))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyAlreadyRegisteredException(name, Type),
-                        "Property '{0}' on type '{1}' is already registered", name, Type.FullName);
+                        "Property '{0}' on type '{1}' is already registered", name, Type.GetSafeFullName());
                 }
 
                 _catelProperties[name] = propertyData;

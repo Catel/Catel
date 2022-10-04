@@ -46,7 +46,7 @@
                 Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
             }
 
-            value = default;
+            value = default!;
             return false;
         }
 
@@ -62,10 +62,10 @@
         {
             if (instance is IPropertySerializable serializable)
             {
-                object objectValue = null;
+                object? objectValue = null;
                 if (serializable.GetPropertyValue(memberName, ref objectValue))
                 {
-                    value = (TValue)objectValue;
+                    value = (TValue)objectValue!;
                     return true;
                 }
             }
@@ -73,11 +73,11 @@
             var propertyInfo = instance.GetType().GetPropertyEx(memberName);
             if (propertyInfo is not null)
             {
-                value = (TValue)propertyInfo.GetValue(instance, null);
+                value = (TValue)propertyInfo.GetValue(instance, null)!;
                 return true;
             }
 
-            value = default;
+            value = default!;
             return false;
         }
 
@@ -93,10 +93,10 @@
         {
             if (instance is IFieldSerializable serializable)
             {
-                object objectValue = null;
+                object? objectValue = null;
                 if (serializable.GetFieldValue(memberName, ref objectValue))
                 {
-                    value = (TValue)objectValue;
+                    value = (TValue)objectValue!;
                     return true; 
                 }
             }
@@ -104,11 +104,11 @@
             var fieldInfo = instance.GetType().GetFieldEx(memberName);
             if (fieldInfo is not null)
             {
-                value = (TValue)fieldInfo.GetValue(instance);
+                value = (TValue)fieldInfo.GetValue(instance)!;
                 return true;
             }
 
-            value = default;
+            value = default!;
             return false;
         }
 

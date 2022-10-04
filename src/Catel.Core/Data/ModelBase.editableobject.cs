@@ -12,7 +12,7 @@
 
     public partial class ModelBase
     {
-        internal ISerializer _editableObjectSerializer;
+        internal ISerializer? _editableObjectSerializer;
 
         /// <summary>
         /// Class containing backup information.
@@ -32,12 +32,12 @@
             /// <summary>
             /// Backup of the property values.
             /// </summary>
-            private byte[] _propertyValuesBackup;
+            private readonly byte[] _propertyValuesBackup;
 
             /// <summary>
             /// Backup of the object values.
             /// </summary>
-            private Dictionary<string, object> _objectValuesBackup;
+            private readonly Dictionary<string, object> _objectValuesBackup;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ModelBase.BackupData" /> class.
@@ -49,14 +49,6 @@
                 _object = obj;
                 _serializer = serializer;
 
-                CreateBackup();
-            }
-
-            /// <summary>
-            /// Creates a backup of the object property values.
-            /// </summary>
-            private void CreateBackup()
-            {
                 using (var stream = new MemoryStream())
                 {
                     var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(_object.GetType());
@@ -64,7 +56,7 @@
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
-                    _serializer?.SerializeMembers(_object, stream, null, propertiesToIgnore);
+                    _serializer.SerializeMembers(_object, stream, null, propertiesToIgnore);
 
                     _propertyValuesBackup = stream.ToByteArray();
                 }
@@ -80,7 +72,7 @@
             /// </summary>
             public void RestoreBackup()
             {
-                Dictionary<string, object> oldPropertyValues = null;
+                Dictionary<string, object>? oldPropertyValues = null;
 
                 using (var stream = new MemoryStream(_propertyValuesBackup))
                 {

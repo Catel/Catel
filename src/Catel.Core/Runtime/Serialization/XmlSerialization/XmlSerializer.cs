@@ -616,9 +616,9 @@
         /// <param name="model">The model.</param>
         /// <param name="memberName">Name of the member.</param>
         /// <returns>System.String.</returns>
-        protected string GetXmlElementName(Type modelType, object model, string memberName)
+        protected string GetXmlElementName(Type modelType, object model, string? memberName)
         {
-            string xmlElementName = null;
+            string xmlElementName = string.Empty;
 
             if (ShouldSerializeAsCollection(modelType))
             {
@@ -1177,6 +1177,7 @@
         {
             var model = context.Model;
             var rootName = "root";
+
             if (model is not null)
             {
                 rootName = _rootNameCache.GetFromCacheOrFetch(context.ModelType, () =>
@@ -1188,7 +1189,7 @@
             return rootName;
         }
 
-        private void AddObjectMetadata(XmlWriter xmlWriter, Type memberTypeToSerialize, Type actualMemberType,
+        private void AddObjectMetadata(XmlWriter xmlWriter, Type? memberTypeToSerialize, Type? actualMemberType,
             ReferenceInfo referenceInfo, string namespacePrefix)
         {
             if (referenceInfo is not null)
@@ -1198,7 +1199,7 @@
 
             if (memberTypeToSerialize != actualMemberType)
             {
-                var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName);
+                var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName ?? memberTypeToSerialize.Name);
                 xmlWriter.WriteAttributeString(namespacePrefix, XmlType, null, memberTypeToSerializerName);
             }
         }
@@ -1249,7 +1250,7 @@
         /// <param name="model">The model.</param>
         private void AddReferenceId(ISerializationContext<XmlSerializationContextInfo> context, object model)
         {
-            var xmlWriter = context.Context.XmlWriter;
+            var xmlWriter = context.Context.XmlWriter!;
             var referenceManager = context.ReferenceManager;
             var referenceInfo = referenceManager.GetInfo(model, true);
             var namespacePrefix = GetNamespacePrefix();

@@ -8,7 +8,7 @@
     public class TypeRequestInfo
     {
         private int? _hash;
-        private string _string;
+        private string? _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeRequestInfo"/> class.
@@ -16,7 +16,7 @@
         /// <param name="type">The type.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public TypeRequestInfo(Type type, object tag = null)
+        public TypeRequestInfo(Type type, object? tag = null)
         {
             Type = type;
             Tag = tag;
@@ -32,7 +32,7 @@
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object? Tag { get; private set; }
 
         /// <summary>
         /// Implements the operator ==.
@@ -71,7 +71,7 @@
         /// </summary>
         /// <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />.</param>
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
             {

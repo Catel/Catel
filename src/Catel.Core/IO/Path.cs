@@ -263,7 +263,7 @@
         /// <param name="basePath">The base path (a.k.a. working directory). If this parameter is <c>null</c> or empty, the current working directory will be used.</param>
         /// <returns>Relative path.</returns>
         /// <exception cref="ArgumentException">The <paramref name="fullPath"/> is <c>null</c> or whitespace.</exception>
-        public static string GetRelativePath(string fullPath, string basePath = null)
+        public static string GetRelativePath(string fullPath, string? basePath = null)
         {
             Argument.IsNotNullOrWhitespace("fullPath", fullPath);
 

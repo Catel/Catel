@@ -31,8 +31,8 @@
         /// <param name="instance">The instance of the service was instantiated.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
-        public TypeUnregisteredEventArgs(Type serviceType, Type serviceImplementationType, object tag, 
-            RegistrationType registrationType, object instance)
+        public TypeUnregisteredEventArgs(Type serviceType, Type serviceImplementationType, object? tag, 
+            RegistrationType registrationType, object? instance)
         {
             ServiceType = serviceType;
             ServiceImplementationType = serviceImplementationType;
@@ -51,7 +51,7 @@
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object? Tag { get; private set; }
 
         /// <summary>
         /// Gets the type of the actual implementation.
@@ -62,7 +62,7 @@
         /// <summary>
         /// Gets the instance of the service if it was instantiated.
         /// </summary>
-        public object Instance { get; private set; }
+        public object? Instance { get; private set; }
 
         /// <summary>
         /// Gets the type of the registration.

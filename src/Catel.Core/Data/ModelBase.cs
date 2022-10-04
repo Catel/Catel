@@ -19,7 +19,7 @@
         /// <summary>
         /// The property values.
         /// </summary>
-        internal IPropertyBag? _propertyBag;
+        internal IPropertyBag _propertyBag;
 
         /// <summary>
         /// Lock object.
@@ -42,6 +42,8 @@
         /// </summary>
         protected ModelBase()
         {
+            _propertyBag = CreatePropertyBag();
+
             Initialize();
         }
 
@@ -151,8 +153,6 @@
         {
             AlwaysInvokeNotifyChanged = false;
 
-            _propertyBag = CreatePropertyBag();
-
             InitializeProperties();
 
             InitializeCustomProperties();
@@ -166,7 +166,7 @@
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return base.ToString();
         }
@@ -236,7 +236,7 @@
             },
             x =>
             {
-                SuspensionContext suspensionContext;
+                SuspensionContext? suspensionContext;
 
                 lock (_lock)
                 {
@@ -361,7 +361,7 @@
             {
                 if (!isRefreshCallOnly)
                 {
-                    SuspensionContext callbackSuspensionContext;
+                    SuspensionContext? callbackSuspensionContext;
 
                     lock (_lock)
                     {

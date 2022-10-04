@@ -15,7 +15,7 @@
 
         public abstract string[] GetAllNames();
 
-        public abstract TValue GetValue<TValue>(string name, TValue defaultValue = default);
+        public abstract TValue GetValue<TValue>(string name, TValue defaultValue = default!);
 
         public abstract bool IsAvailable(string name);
 

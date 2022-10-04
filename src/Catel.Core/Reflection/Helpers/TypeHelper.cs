@@ -61,9 +61,9 @@
             where TTargetType : class
         {
             var typedInstance = instance as TTargetType;
-            if ((typedInstance is null) && (instance is not null))
+            if (typedInstance is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof (TTargetType).Name, instance.GetType().Name);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
             }
 
             return typedInstance;
@@ -137,7 +137,7 @@
             }
 
             var splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
-            var assemblyName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : null;
+            var assemblyName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : string.Empty;
             return assemblyName;
         }
 
@@ -403,7 +403,7 @@
         /// <param name = "value">The value to cast.</param>
         /// <param name = "output">The casted value.</param>
         /// <returns>When a cast is succeded true else false.</returns>
-        public static bool TryCast<TOutput, TInput>(TInput value, out TOutput output)
+        public static bool TryCast<TOutput, TInput>(TInput? value, out TOutput output)
         {
             var success = true;
 
@@ -415,7 +415,7 @@
                 // Database support...
                 if (value is null)
                 {
-                    output = default;
+                    output = default!;
 
                     if (outputType.IsValueTypeEx() && innerType is null)
                     {
@@ -445,7 +445,7 @@
             }
             catch (Exception)
             {
-                output = default;
+                output = default!;
                 success = false;
             }
 
@@ -459,7 +459,7 @@
         /// <typeparam name = "TInput">The input type.</typeparam>
         /// <param name = "value">The value to cast.</param>
         /// <returns>The casted value.</returns>
-        public static TOutput Cast<TOutput, TInput>(TInput value)
+        public static TOutput Cast<TOutput, TInput>(TInput? value)
         {
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return Cast<TOutput>(value);
@@ -472,12 +472,12 @@
         /// <typeparam name = "TOutput">Requested return type.</typeparam>
         /// <param name = "value">The value to cast.</param>
         /// <returns>The casted value.</returns>
-        public static TOutput Cast<TOutput>(object value)
+        public static TOutput Cast<TOutput>(object? value)
         {
             if (!TryCast(value, out TOutput output))
             {
-                var tI = value.GetType().GetSafeFullName(false);
-                var tO = typeof(TOutput).FullName;
+                var tI = (value ?? typeof(object)).GetType().GetSafeFullName(false);
+                var tO = typeof(TOutput).FullName ?? typeof(TOutput).Name;
                 var vl = string.Concat(value);
                 var msg = "Failed to cast from '{0}' to '{1}'";
 
@@ -500,7 +500,7 @@
         /// <param name = "value">The value to cast.</param>
         /// <param name = "whenNullValue">When unable to cast the incoming value, this value is returned instead.</param>
         /// <returns>The casted value or when uncastable the <paramref name = "whenNullValue" /> is returned.</returns>
-        public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue)
+        public static TOutput Cast<TOutput, TInput>(TInput? value, TOutput whenNullValue)
         {
             if (!TryCast(value, out TOutput output) || output is null)
             {

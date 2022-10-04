@@ -141,7 +141,7 @@
         /// Warning string or empty in case of no warnings.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="validatable"/> is <c>null</c>.</exception>
-        public static string GetWarningMessage(this IValidatable validatable, string userFriendlyObjectName = null)
+        public static string GetWarningMessage(this IValidatable validatable, string? userFriendlyObjectName = null)
         {
             var validationContext = validatable.ValidationContext;
 
@@ -172,7 +172,7 @@
         /// Error string or empty in case of no errors.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="validatable"/> is <c>null</c>.</exception>
-        public static string GetErrorMessage(this IValidatable validatable, string userFriendlyObjectName = null)
+        public static string GetErrorMessage(this IValidatable validatable, string? userFriendlyObjectName = null)
         {
             var validationContext = validatable.ValidationContext;
 

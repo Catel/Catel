@@ -74,13 +74,13 @@
 
             if (createDefaultValue is null)
             {
-                createDefaultValue = () => default;
+                createDefaultValue = () => default!;
             }
 
             var propertyName = memberExpression.Member.Name;
             return RegisterProperty<TValue>(propertyName, createDefaultValue, (sender, args) =>
             {
-                propertyChangedEventHandler?.Invoke((TModel)sender, args);
+                propertyChangedEventHandler?.Invoke((TModel)sender!, args);
             }, includeInSerialization, includeInBackup);
         }
 
@@ -172,7 +172,7 @@
 
             if (createDefaultValue is null)
             {
-                typedDefaultValueCallback = () => default;
+                typedDefaultValueCallback = () => default!;
             }
             else
             {
@@ -184,7 +184,7 @@
                         return value;
                     }
 
-                    return default(TValue);
+                    return default!;
                 };
             }
 

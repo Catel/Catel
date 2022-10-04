@@ -13,7 +13,7 @@
         /// <summary>
         /// The cache storage.
         /// </summary>
-        private readonly CacheStorage<Type, IValidator> _cacheStorage = new CacheStorage<Type, IValidator>(storeNullValues: true);
+        private readonly CacheStorage<Type, IValidator?> _cacheStorage = new CacheStorage<Type, IValidator?>(storeNullValues: true);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatorProviderBase"/> class. 
@@ -39,7 +39,7 @@
         /// <returns>
         /// The <see cref="IValidator"/> for the specified type or <c>null</c> if no validator is available for the specified type.
         /// </returns>
-        IValidator IValidatorProvider.GetValidator<TTargetType>()
+        IValidator? IValidatorProvider.GetValidator<TTargetType>()
         {
             return ((IValidatorProvider)this).GetValidator(typeof(TTargetType));
         }
@@ -56,7 +56,7 @@
         /// <exception cref="ArgumentNullException">
         /// The <paramref name="targetType"/> is <c>null</c>.
         /// </exception>
-        IValidator IValidatorProvider.GetValidator(Type targetType)
+        IValidator? IValidatorProvider.GetValidator(Type targetType)
         {
             return _cacheStorage.GetFromCacheOrFetch(targetType, () => GetValidator(targetType), !UseCache);
         }
@@ -70,6 +70,6 @@
         /// <returns>
         /// The <see cref="IValidator"/> for the specified type or <c>null</c> if no validator is available for the specified type.
         /// </returns>
-        protected abstract IValidator GetValidator(Type targetType);
+        protected abstract IValidator? GetValidator(Type targetType);
     }
 }

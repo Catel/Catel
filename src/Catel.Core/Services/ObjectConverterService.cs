@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The string value.</returns>
-        public virtual string ConvertFromObjectToString(object value)
+        public virtual string ConvertFromObjectToString(object? value)
         {
             return ConvertFromObjectToString(value, DefaultCulture);
         }
@@ -39,7 +39,7 @@
         /// <param name="culture">The culture.</param>
         /// <returns>System.String.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public string ConvertFromObjectToString(object value, CultureInfo culture)
+        public string ConvertFromObjectToString(object? value, CultureInfo culture)
         {
             return ObjectToStringHelper.ToString(value, culture);
         }
@@ -74,7 +74,7 @@
         /// <param name="value">The value.</param>
         /// <param name="targetType">Type of the target.</param>
         /// <returns>The object value.</returns>
-        public virtual object ConvertFromObjectToObject(object value, Type targetType)
+        public virtual object ConvertFromObjectToObject(object? value, Type targetType)
         {
             var stringValue = ConvertFromObjectToString(value);
             return ConvertFromStringToObject(stringValue, targetType);

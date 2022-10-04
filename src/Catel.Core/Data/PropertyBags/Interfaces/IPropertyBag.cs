@@ -24,7 +24,7 @@
         /// <param name="name">The name of the value.</param>
         /// <param name="defaultValue">The default value of the property.</param>
         /// <returns>The value or the specified default value in case the property is not set yet.</returns>
-        TValue GetValue<TValue>(string name, TValue defaultValue = default);
+        TValue GetValue<TValue>(string name, TValue defaultValue = default!);
 
         /// <summary>
         /// Determines whether the specified property is available on the property bag, which means it has a value.

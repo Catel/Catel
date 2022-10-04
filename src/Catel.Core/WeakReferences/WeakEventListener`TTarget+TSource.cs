@@ -163,7 +163,7 @@
             var handlerType = handler.GetType();
             var eventArgsType = EventHandlerEventArgsCache.GetFromCacheOrFetch(handlerType, () =>
             {
-                Type type = null;
+                Type? type = null;
 
                 if (handlerType == typeof(PropertyChangedEventHandler))
                 {
@@ -214,9 +214,9 @@
             var targetType = typeof(TTarget);
             var sourceType = typeof(TSource);
 
-            MethodInfo methodInfo = null;
+            MethodInfo? methodInfo = null;
 
-            var cacheKey = $"{targetType.FullName}_{sourceType.FullName}_{eventArgsType?.FullName}";
+            var cacheKey = $"{targetType.FullName}_{sourceType.FullName}_{eventArgsType.FullName}";
 
             lock (ListenerTypeCache)
             {
@@ -238,8 +238,13 @@
 #pragma warning disable HAA0101 // Array allocation for params parameter
             var genericMethodInfo = methodInfo.MakeGenericMethod(typeof(TExplicitSourceType));
 #pragma warning restore HAA0101 // Array allocation for params parameter
-            return (IWeakEventListener)genericMethodInfo.Invoke(null, new object[] { target, source, eventName, handler, throwWhenSubscriptionFails });
+            var weakEventListener = (IWeakEventListener?)genericMethodInfo.Invoke(null, new object[] { target, source, eventName, handler, throwWhenSubscriptionFails });
+            if (weakEventListener is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Failed to create weak event listener subscription");
+            }
+
+            return weakEventListener;
         }
     }
-
 }

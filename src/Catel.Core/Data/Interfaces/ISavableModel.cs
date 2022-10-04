@@ -14,6 +14,6 @@
         /// <param name="stream">Stream that will contain the serialized data of this object.</param>
         /// <param name="serializer">The serializer to use.</param>
         /// <param name="configuration">The configuration.</param>
-        void Save(Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null);
+        void Save(Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null);
     }
 }

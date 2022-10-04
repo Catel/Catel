@@ -17,7 +17,7 @@
         /// <param name="tag">The tag.</param>
         /// <param name="registrationType">Type of the registration.</param>
         /// <param name="createServiceFunc">The create service function.</param>
-        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc)
+        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object? tag, RegistrationType registrationType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc)
         {
             CreateServiceFunc = createServiceFunc;
             DeclaringType = declaringType;
@@ -46,7 +46,7 @@
         /// Gets the name of the declaring type.
         /// </summary>
         /// <value>The name of the declaring type.</value>
-        public string DeclaringTypeName { get; private set; }
+        public string? DeclaringTypeName { get; private set; }
 
         /// <summary>
         /// Gets the implementing type.
@@ -58,7 +58,7 @@
         /// Gets the name of the implementing type.
         /// </summary>
         /// <value>The name of the implementing type.</value>
-        public string ImplementingTypeName { get; private set; }
+        public string? ImplementingTypeName { get; private set; }
 
         /// <summary>
         /// Gets the type of the registration.
@@ -70,6 +70,6 @@
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object? Tag { get; private set; }
     }
 }

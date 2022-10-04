@@ -20,7 +20,7 @@
         /// <summary>
         /// <see cref="ToString"/> method result cache.
         /// </summary>
-        private string _string;
+        private string? _string;
 
         private TypeRequestPath(TypeRequestInfo[] typePath, string name)
         {
@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="name">Path's name</param>
         /// <returns></returns>
-        public static TypeRequestPath Root(string name = null)
+        public static TypeRequestPath Root(string name)
         {
             return new TypeRequestPath(Array.Empty<TypeRequestInfo>(), name);
         }
@@ -109,7 +109,7 @@
         /// Gets the first type in the type path.
         /// </summary>
         /// <value>The first type.</value>
-        public TypeRequestInfo FirstType
+        public TypeRequestInfo? FirstType
         {
             get
             {
@@ -126,7 +126,7 @@
         /// Gets the last type in the type path.
         /// </summary>
         /// <value>The last type.</value>
-        public TypeRequestInfo LastType
+        public TypeRequestInfo? LastType
         {
             get
             {
@@ -134,6 +134,7 @@
                 {
                     return null;
                 }
+
                 var index = _typePath.Length - 1;
                 
                 return _typePath[index];

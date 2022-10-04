@@ -47,20 +47,20 @@
         /// Gets or sets the name of the property.
         /// </summary>
         /// <value>The name of the property.</value>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the property.
         /// </summary>
         /// <value>The value of the property.</value>
-        public object Value { get; set; }
+        public object? Value { get; set; }
 
         /// <summary>
         /// Gets the property data.
         /// </summary>
         /// <value>The property data.</value>
         [XmlIgnore]
-        public IPropertyData PropertyData { get; internal set; }
+        public IPropertyData? PropertyData { get; internal set; }
 
         /// <summary>
         /// Gets or sets the graph identifier.
@@ -86,8 +86,8 @@
 
             try
             {
-                GraphId = (int)info.GetValue("GraphId", typeof(int));
-                GraphRefId = (int)info.GetValue("GraphRefId", typeof(int));
+                GraphId = (int)info.GetValue("GraphId", typeof(int))!;
+                GraphRefId = (int)info.GetValue("GraphRefId", typeof(int))!;
             }
             catch (Exception)
             {

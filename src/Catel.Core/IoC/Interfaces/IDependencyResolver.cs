@@ -15,7 +15,7 @@
         /// <param name="tag">The tag.</param>
         /// <returns><c>true</c> if the specified type with the specified tag can be resolved; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        bool CanResolve(Type type, object tag = null);
+        bool CanResolve(Type type, object? tag = null);
 
         /// <summary>
         /// Determines whether all types specified can be resolved. Though <see cref="ResolveMultiple"/> will return <c>null</c>
@@ -36,7 +36,7 @@
         /// <param name="tag">The tag.</param>
         /// <returns>The resolved object or <c>null</c> if the type could not be resolved.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        object Resolve(Type type, object tag = null);
+        object? Resolve(Type type, object? tag = null);
 
         /// <summary>
         /// Resolves the specified types with the specified tag.
@@ -45,6 +45,6 @@
         /// <param name="tag">The tag.</param>
         /// <returns>A lost of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="types"/> is <c>null</c> or empty.</exception>
-        object[] ResolveMultiple(Type[] types, object tag = null);
+        object[] ResolveMultiple(Type[] types, object? tag = null);
     }
 }

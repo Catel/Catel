@@ -19,7 +19,8 @@
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
         /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to compare keys.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains values of type <typeparamref name="TElement"/> selected from the input sequence.</returns>
-        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, 
+            Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             where TKey : notnull
         {
             var d = new FastObservableDictionary<TKey, TElement>(comparer);
@@ -57,7 +58,8 @@
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to compare keys.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains keys and values.</returns>
-        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+            where TKey : notnull
         {
             return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, comparer);
         }
@@ -71,6 +73,7 @@
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains keys and values.</returns>
         public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+            where TKey : notnull
         {
             return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, null);
         }

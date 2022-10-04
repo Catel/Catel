@@ -29,7 +29,7 @@
         {
             private readonly int _hash;
 
-            public ServiceInfo(Type type, object tag)
+            public ServiceInfo(Type type, object? tag)
             {
                 Type = type;
                 Tag = tag;
@@ -40,14 +40,14 @@
 
             public Type Type { get; private set; }
 
-            public object Tag { get; private set; }
+            public object? Tag { get; private set; }
 
             public override int GetHashCode()
             {
                 return _hash;
             }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 var objAsServiceInfo = obj as ServiceInfo;
                 if (objAsServiceInfo is null)
@@ -96,7 +96,7 @@
         /// <summary>
         /// The parent service locator.
         /// </summary>
-        private readonly IServiceLocator _parentServiceLocator;
+        private readonly IServiceLocator? _parentServiceLocator;
 
         /// <summary>
         /// The lock object.
@@ -158,7 +158,7 @@
         /// <param name="tag">The tag the service is registered with. The default value is <c>null</c>.</param>
         /// <returns>The <see cref="RegistrationInfo" /> or <c>null</c> if the type is not registered.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        public RegistrationInfo GetRegistrationInfo(Type serviceType, object tag = null)
+        public RegistrationInfo? GetRegistrationInfo(Type serviceType, object? tag = null)
         {
             lock (_lockObject)
             {
@@ -221,7 +221,7 @@
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        public bool IsTypeRegistered(Type serviceType, object tag = null)
+        public bool IsTypeRegistered(Type serviceType, object? tag = null)
         {
             var isRegistered = IsTypeRegisteredInCurrentLocator(serviceType, tag);
             if (!isRegistered && _parentServiceLocator is not null)
@@ -232,7 +232,7 @@
             return isRegistered;
         }
 
-        private bool IsTypeRegisteredInCurrentLocator(Type serviceType, object tag = null)
+        private bool IsTypeRegisteredInCurrentLocator(Type serviceType, object? tag = null)
         {
             var serviceInfo = new ServiceInfo(serviceType, tag);
 
@@ -273,7 +273,7 @@
         /// <param name="serviceType">The service type.</param>
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns><c>true</c> if the <paramref name="serviceType" /> type is registered as singleton, otherwise <c>false</c>.</returns>
-        public bool IsTypeRegisteredAsSingleton(Type serviceType, object tag = null)
+        public bool IsTypeRegisteredAsSingleton(Type serviceType, object? tag = null)
         {
             lock (_lockObject)
             {
@@ -308,7 +308,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance"/> is not of the right type.</exception>
-        public void RegisterInstance(Type serviceType, object instance, object tag = null)
+        public void RegisterInstance(Type serviceType, object instance, object? tag = null)
         {
             RegisterInstance(serviceType, instance, tag, this);
         }
@@ -324,23 +324,24 @@
         /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        public void RegisterType(Type serviceType, Type serviceImplementationType, object? tag = null, 
+            RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
-            RegisterType(serviceType, serviceImplementationType, tag, registrationType, registerIfAlreadyRegistered,
-                this, null);
+            RegisterType(serviceType, serviceImplementationType, tag, registrationType, registerIfAlreadyRegistered, this, null);
         }
 
-        public void RegisterType(Type serviceType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        public void RegisterType(Type serviceType, Func<ITypeFactory, ServiceLocatorRegistration, object?> createServiceFunc, object? tag = null, 
+            RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
-            RegisterType(serviceType, null, tag, registrationType, registerIfAlreadyRegistered, this, createServiceFunc);
+            RegisterType(serviceType, typeof(LateBoundImplementation), tag, registrationType, registerIfAlreadyRegistered, this, createServiceFunc);
         }
 
-        public virtual object ResolveType(Type serviceType, object tag = null)
+        public virtual object? ResolveType(Type serviceType, object? tag = null)
         {
             return ResolveTypeUsingFactory(_typeFactory, serviceType, tag);
         }
 
-        public virtual object ResolveTypeUsingFactory(ITypeFactory typeFactory, Type serviceType, object tag = null)
+        public virtual object? ResolveTypeUsingFactory(ITypeFactory typeFactory, Type serviceType, object? tag = null)
         {
             lock (_lockObject)
             {
@@ -357,7 +358,7 @@
                         return _parentServiceLocator.ResolveTypeUsingFactory(typeFactory, serviceType, tag);
                     }
 
-                    ThrowTypeNotRegisteredException(serviceType);
+                    throw CreateTypeNotRegisteredException(serviceType);
                 }
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
@@ -389,8 +390,12 @@
                     if (serviceInfo.Type == serviceType)
                     {
                         try
-                        {
-                            resolvedInstances.Add(ResolveTypeUsingFactory(typeFactory, serviceInfo.Type, serviceInfo.Tag));
+                        { 
+                            var resolvedInstance = ResolveTypeUsingFactory(typeFactory, serviceInfo.Type, serviceInfo.Tag);
+                            if (resolvedInstance is not null)
+                            {
+                                resolvedInstances.Add(resolvedInstance);
+                            }
                         }
                         catch (TypeNotRegisteredException ex)
                         {
@@ -464,14 +469,17 @@
                 // ReSharper restore LoopCanBeConvertedToQuery
                 {
                     var resolvedType = ResolveType(type);
-                    values.Add(resolvedType);
+                    if (resolvedType is not null)
+                    {
+                        values.Add(resolvedType);
+                    }
                 }
 
                 return values.ToArray();
             }
         }
 
-        public bool RemoveType(Type serviceType, object tag = null)
+        public bool RemoveType(Type serviceType, object? tag = null)
         {
             var wasRemoved = false;
 
@@ -491,10 +499,13 @@
                     wasRemoved = true;
                 }
 
-                if (wasRemoved)
+                if (existingRegistration is not null)
                 {
-                    TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(serviceType, existingRegistration.ImplementingType,
-                        tag, existingRegistration.RegistrationType, existingInstance?.ImplementingInstance));
+                    if (wasRemoved)
+                    {
+                        TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(serviceType, existingRegistration.ImplementingType,
+                            tag, existingRegistration.RegistrationType, existingInstance?.ImplementingInstance));
+                    }
                 }
             }
 
@@ -562,7 +573,7 @@
         /// <param name="serviceType">The type of the service.</param>
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
-        private bool IsTypeRegisteredAsOpenGeneric(Type serviceType, object tag = null)
+        private bool IsTypeRegisteredAsOpenGeneric(Type serviceType, object? tag = null)
         {
             if (!serviceType.IsGenericTypeEx())
             {
@@ -582,11 +593,14 @@
                     Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(false), serviceType.GetSafeFullName(false));
 
                     var registrationInfo = GetRegistrationInfo(genericType, tag);
-                    var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
+                    if (registrationInfo is not null)
+                    {
+                        var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
 
-                    RegisterType(serviceType, finalType, tag, registrationInfo.RegistrationType);
+                        RegisterType(serviceType, finalType, tag, registrationInfo.RegistrationType);
 
-                    return true;
+                        return true;
+                    }
                 }
             }
 
@@ -599,7 +613,7 @@
         /// <param name="serviceType">The type of the service.</param>
         /// <param name="tag">Tag to resolve or null</param>
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
-        private bool IsTypeRegisteredByMissingTypeHandler(Type serviceType, object tag)
+        private bool IsTypeRegisteredByMissingTypeHandler(Type serviceType, object? tag)
         {
             var missingTypeHandler = MissingType;
             if (missingTypeHandler is not null)
@@ -636,7 +650,7 @@
         /// <param name="originalContainer">The original container where the instance was found in.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
-        private void RegisterInstance(Type serviceType, object instance, object tag, object originalContainer)
+        private void RegisterInstance(Type serviceType, object instance, object? tag, object? originalContainer)
         {
             Log.Debug("Registering type '{0}' to instance of type '{1}'", serviceType.FullName, instance.GetType().FullName);
 
@@ -676,10 +690,11 @@
         /// <param name="createServiceFunc">The create service function.</param>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        private void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc)
+        private void RegisterType(Type serviceType, Type serviceImplementationType, object? tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, 
+            object? originalContainer, Func<ITypeFactory, ServiceLocatorRegistration, object?>? createServiceFunc)
         {
             // Outside lock scope for event
-            ServiceLocatorRegistration registeredTypeInfo = null;
+            ServiceLocatorRegistration? registeredTypeInfo = null;
 
             lock (_lockObject)
             {
@@ -687,12 +702,6 @@
                 {
                     //Log.Debug("Type '{0}' already registered, will not overwrite registration", serviceType.FullName);
                     return;
-                }
-
-                if (serviceImplementationType is null)
-                {
-                    // Dynamic late-bound type
-                    serviceImplementationType = typeof(LateBoundImplementation);
                 }
 
                 if (serviceImplementationType.IsInterfaceEx())
@@ -726,11 +735,12 @@
             Log.Debug("Registered type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
         }
 
-        private object ResolveTypeFromKnownContainer(ITypeFactory typeFactory, ServiceInfo serviceInfo)
+        private object? ResolveTypeFromKnownContainer(ITypeFactory typeFactory, ServiceInfo serviceInfo)
         {
             lock (_lockObject)
             {
-                var previousTypeRequestPath = _currentTypeRequestPath.Value;
+                var previousTypeRequestPath = _currentTypeRequestPath.Value!;
+
                 try
                 {
                     var typeRequestInfo = new TypeRequestInfo(serviceInfo.Type, serviceInfo.Tag);
@@ -749,7 +759,7 @@
 
                     if (instance is null)
                     {
-                        ThrowTypeNotRegisteredException(serviceType);
+                        throw CreateTypeNotRegisteredException(serviceType);
                     }
 
                     if (IsTypeRegisteredAsSingleton(serviceType, tag))
@@ -772,12 +782,12 @@
             return instance;
         }
 
-        private object CreateServiceInstanceWrapper(ITypeFactory typeFactory, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, ServiceLocatorRegistration registration)
+        private object CreateServiceInstanceWrapper(ITypeFactory typeFactory, Func<ITypeFactory, ServiceLocatorRegistration, object?> createServiceFunc, ServiceLocatorRegistration registration)
         {
             var instance = createServiceFunc(typeFactory, registration);
             if (instance is null)
             {
-                ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");
+                throw CreateTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");
             }
 
             var handler = TypeInstantiated;
@@ -795,7 +805,7 @@
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="message">The message.</param>
-        private void ThrowTypeNotRegisteredException(Type type, string message = null)
+        private Exception CreateTypeNotRegisteredException(Type type, string? message = null)
         {
             throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(type, msg),
                 "The type '{0}' is not registered", type.GetSafeFullName(true));
@@ -806,7 +816,7 @@
         /// </summary>
         /// <param name="serviceType">An object that specifies the type of service object to get.</param>
         /// <returns>A service object of type <paramref name="serviceType" />.-or- null if there is no service object of type <paramref name="serviceType" />.</returns>
-        object IServiceProvider.GetService(Type serviceType)
+        object? IServiceProvider.GetService(Type serviceType)
         {
             return ResolveType(serviceType);
         }

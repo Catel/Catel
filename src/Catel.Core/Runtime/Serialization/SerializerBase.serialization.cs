@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using Catel.Logging;
     using Catel.Reflection;
@@ -37,7 +38,7 @@
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="configuration">The configuration.</param>
-        public virtual void Serialize(object model, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual void Serialize(object model, Stream stream, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -58,7 +59,7 @@
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
         /// <param name="configuration">The configuration.</param>
-        public void Serialize(object model, ISerializationContextInfo context, ISerializationConfiguration configuration = null)
+        public void Serialize(object model, ISerializationContextInfo context, ISerializationConfiguration? configuration = null)
         {
             Serialize(model, (TSerializationContextInfo)context, configuration);
         }
@@ -69,7 +70,7 @@
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
         /// <param name="configuration">The configuration.</param>
-        public virtual void Serialize(object model, TSerializationContextInfo context, ISerializationConfiguration configuration = null)
+        public virtual void Serialize(object model, TSerializationContextInfo context, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -124,7 +125,7 @@
         /// <param name="stream">The stream.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="membersToIgnore">The members to ignore.</param>
-        public virtual void SerializeMembers(object model, Stream stream, ISerializationConfiguration configuration, params string[] membersToIgnore)
+        public virtual void SerializeMembers(object model, Stream stream, ISerializationConfiguration? configuration, params string[] membersToIgnore)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -228,7 +229,7 @@
         /// <param name="context">The serialization context.</param>
         /// <param name="member">The member that is about to be serialized.</param>
         /// <param name="serializerModifiers">The serializer modifiers.</param>
-        protected bool StartMemberSerialization(ISerializationContext<TSerializationContextInfo> context, 
+        protected bool StartMemberSerialization(ISerializationContext<TSerializationContextInfo> context,
             MemberValue member, ISerializerModifier[] serializerModifiers)
         {
             var skipByModifiers = false;
@@ -285,7 +286,7 @@
         /// Deserializes the object using the <c>Parse(string, IFormatProvider)</c> method.
         /// </summary>
         /// <returns>The deserialized object.</returns>
-        protected virtual string SerializeUsingObjectToString(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
+        protected virtual string? SerializeUsingObjectToString(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             var toStringMethod = GetObjectToStringMethod(memberValue.GetBestMemberType());
             if (toStringMethod is null)
@@ -295,7 +296,10 @@
 
             try
             {
-                var stringValue = (string)toStringMethod.Invoke(memberValue.Value, new object[] { context.Configuration.Culture });
+                var stringValue = (string?)toStringMethod.Invoke(memberValue.Value, new object[]
+                {
+                    context.Configuration?.Culture ?? CultureInfo.InvariantCulture
+                });
                 return stringValue;
             }
             catch (Exception ex)
