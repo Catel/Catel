@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSchemaHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections.Generic;
@@ -25,7 +19,6 @@ namespace Catel.Runtime.Serialization.Xml
     /// </summary>
     public static class XmlSchemaHelper
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -35,16 +28,12 @@ namespace Catel.Runtime.Serialization.Xml
         /// Default xml schema.
         /// </summary>
         public const string Xmlns = "http://www.w3.org/2001/XMLSchema";
-        #endregion
 
-        #region Properties
         private static IXmlNamespaceManager XmlNamespaceManager
         {
             get { return IoCConfiguration.DefaultDependencyResolver.Resolve<IXmlNamespaceManager>(); }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the XML schema.
         /// </summary>
@@ -55,8 +44,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="schemaSet"/> is <c>null</c>.</exception>
         public static XmlQualifiedName GetXmlSchema(Type type, XmlSchemaSet schemaSet, bool generateFlatSchema)
         {
-            Argument.IsNotNull("schemaSet", schemaSet);
-
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
             var serializationManager = dependencyResolver.Resolve<ISerializationManager>();
 
@@ -130,10 +117,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>Sequence containing all properties.</returns>
         private static XmlSchemaSequence GetPropertiesSequence(Type type, XmlSchema schema, XmlSchemaSet schemaSet, ISerializationManager serializationManager, HashSet<string> exportedTypes)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("schema", schema);
-            Argument.IsNotNull("schemaSet", schemaSet);
-
             var propertiesSequence = new XmlSchemaSequence();
 
             if (type.IsModelBase())
@@ -367,7 +350,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>The name.</returns>
         private static string GetTypeNameForSchema(Type type)
         {
-            string typeName = type.Name;
+            var typeName = type.Name;
 
             if (type.IsGenericType)
             {
@@ -391,6 +374,5 @@ namespace Catel.Runtime.Serialization.Xml
 
             return xmlNamespace.Uri;
         }
-        #endregion
     }
 }

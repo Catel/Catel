@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -36,10 +30,6 @@ namespace Catel.Runtime.Serialization
         public SerializationContext(object model, Type modelType, TSerializationContextInfo context,
             SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", context);
-            Argument.IsNotNull("configuration", configuration);
-
             Model = model;
             ModelType = modelType;
             ModelTypeName = modelType.GetSafeFullName(false);

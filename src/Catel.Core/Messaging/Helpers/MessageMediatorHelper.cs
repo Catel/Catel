@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageMediatorHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Messaging
+﻿namespace Catel.Messaging
 {
     using System;
     using IoC;
@@ -30,10 +24,8 @@ namespace Catel.Messaging
         /// <exception cref="NotSupportedException">The object has non-public methods decorated with the <see cref="MessageRecipientAttribute"/>, but the
         /// application is not written in full .NET.</exception>
         /// <exception cref="InvalidCastException">One of the methods cannot be casted to a valid message method.</exception>
-        public static void SubscribeRecipient(object instance, IMessageMediator messageMediator = null)
+        public static void SubscribeRecipient(object instance, IMessageMediator? messageMediator = null)
         {
-            Argument.IsNotNull("instance", instance);
-
             if (messageMediator is null)
             {
                 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
@@ -88,10 +80,8 @@ namespace Catel.Messaging
         /// <param name="instance">The instance.</param>
         /// <param name="messageMediator">The message mediator. If <c>null</c>, the default will be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
-        public static void UnsubscribeRecipient(object instance, IMessageMediator messageMediator = null)
+        public static void UnsubscribeRecipient(object instance, IMessageMediator? messageMediator = null)
         {
-            Argument.IsNotNull("instance", instance);
-
             if (messageMediator is null)
             {
                 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;

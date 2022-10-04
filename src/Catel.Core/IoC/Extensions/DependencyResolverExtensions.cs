@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyResolverExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -23,8 +16,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver"/> is <c>null</c>.</exception>
         public static bool CanResolve<T>(this IDependencyResolver dependencyResolver, object tag = null)
         {
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
-
             return dependencyResolver.CanResolve(typeof (T), tag);
         }
 
@@ -38,8 +29,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver" /> is <c>null</c>.</exception>
         public static T Resolve<T>(this IDependencyResolver dependencyResolver, object tag = null)
         {
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
-
             return (T)dependencyResolver.Resolve(typeof(T), tag);
         }
 
@@ -53,8 +42,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver" /> is <c>null</c>.</exception>
         public static object TryResolve(this IDependencyResolver dependencyResolver, Type serviceType, object tag = null)
         {
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
-
             try
             {
                 if (dependencyResolver.CanResolve(serviceType, tag))
@@ -80,8 +67,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver" /> is <c>null</c>.</exception>
         public static T TryResolve<T>(this IDependencyResolver dependencyResolver, object tag = null)
         {
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
-
             return (T)TryResolve(dependencyResolver, typeof (T), tag);
         }
     }

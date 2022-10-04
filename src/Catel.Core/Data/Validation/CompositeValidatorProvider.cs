@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeValidatorProvider.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -19,8 +13,6 @@ namespace Catel.Data
     /// </remarks>
     public class CompositeValidatorProvider : ValidatorProviderBase
     {
-        #region Constants and Fields
-
         /// <summary>
         /// The locker.
         /// </summary>
@@ -30,9 +22,6 @@ namespace Catel.Data
         /// The validator providers.
         /// </summary>
         private readonly HashSet<IValidatorProvider> _validatorProviders = new HashSet<IValidatorProvider>();
-        #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// Add the validator provider to this composite validator provider.
@@ -41,8 +30,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Add(IValidatorProvider validatorProvider)
         {
-            Argument.IsNotNull("validatorProvider", validatorProvider);
-
             lock (_syncObj)
             {
                 _validatorProviders.Add(validatorProvider);
@@ -57,8 +44,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public bool Contains(IValidatorProvider validatorProvider)
         {
-            Argument.IsNotNull("validatorProvider", validatorProvider);
-
             lock (_syncObj)
             {
                 return _validatorProviders.Contains(validatorProvider);
@@ -105,14 +90,10 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Remove(IValidatorProvider validatorProvider)
         {
-            Argument.IsNotNull("validatorProvider", validatorProvider);
-
             lock (_syncObj)
             {
                 _validatorProviders.Remove(validatorProvider);
             }
         }
-
-        #endregion
     }
 }

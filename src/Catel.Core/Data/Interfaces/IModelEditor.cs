@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IModelEditor.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
 
@@ -15,7 +8,6 @@ namespace Catel.Data
     /// </summary>
     public interface IModelEditor
     {
-        #region Methods
         /// <summary>
         /// Checks whether the specified property name is available.
         /// </summary>
@@ -61,6 +53,5 @@ namespace Catel.Data
         /// Note that this method does not do any sanity checks. Use at your own risk!
         /// </remarks>
         void SetValueFastButUnsecure<TValue>(string propertyName, TValue value);
-        #endregion
     }
 }

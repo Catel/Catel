@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CombinedMessage.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Messaging
+﻿namespace Catel.Messaging
 {
     using System;
 
@@ -40,7 +34,7 @@ namespace Catel.Messaging
         /// <param name="data">The boolean payload Data to be sent with.</param>
         /// <param name="exception">The exception payload Data to be sent with.</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
-        public static void SendWith(bool data, Exception exception, object tag = null)
+        public static void SendWith(bool data, Exception exception, object? tag = null)
         {
             var message = new CombinedMessage(data, exception);
             Send(message, tag);
@@ -49,6 +43,6 @@ namespace Catel.Messaging
         /// <summary>
         /// Provides access to the additional exception payload data of the message.
         /// </summary>
-        public Exception Exception { get; private set; }
+        public Exception? Exception { get; private set; }
     }
 }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IoCFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
@@ -21,15 +14,12 @@ namespace Catel.IoC
 
         private static readonly object _lockObject = new object();
 
-        #region Constants
         private static Func<IServiceLocator> _createServiceLocatorFunc;
         private static Func<IServiceLocator, IDependencyResolver> _createDependencyResolverFunc;
         private static Func<IServiceLocator, ITypeFactory> _createTypeFactoryFunc;
 
         private static List<Type> _serviceLocatorInitializers = new List<Type>(); 
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="IoCFactory"/> class.
         /// </summary>
@@ -41,9 +31,7 @@ namespace Catel.IoC
 
             TypeCache.AssemblyLoaded += OnAssemblyLoaded;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the create service locator function.
         /// </summary>
@@ -59,8 +47,6 @@ namespace Catel.IoC
             }
             set
             {
-                Argument.IsNotNull("CreateServiceLocatorFunc", value);
-
                 lock (_lockObject)
                 {
                     _createServiceLocatorFunc = value;
@@ -83,8 +69,6 @@ namespace Catel.IoC
             }
             set
             {
-                Argument.IsNotNull("CreateDependencyResolverFunc", value);
-
                 lock (_lockObject)
                 {
                     _createDependencyResolverFunc = value;
@@ -107,17 +91,13 @@ namespace Catel.IoC
             }
             set
             {
-                Argument.IsNotNull("CreateTypeFactoryFunc", value);
-
                 lock (_lockObject)
                 {
                     _createTypeFactoryFunc = value;
                 }
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when an assembly gets loaded.
         /// </summary>
@@ -192,6 +172,5 @@ namespace Catel.IoC
                 return serviceLocator;
             }
         }
-        #endregion
     }
 }

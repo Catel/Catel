@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyData.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
@@ -38,7 +32,6 @@ namespace Catel.Data
     /// <typeparam name="T">The type of the property.</typeparam>
     public class PropertyData<T> : IPropertyData
     {
-        #region Fields
         /// <summary>
         /// Type of the property.
         /// </summary>
@@ -52,9 +45,7 @@ namespace Catel.Data
         private CachedPropertyInfo _cachedPropertyInfo;
 
         private bool _updatedCachedPropertyInfo;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyData" /> class.
         /// </summary>
@@ -90,7 +81,6 @@ namespace Catel.Data
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("createDefaultValue", createDefaultValue);
 
             Name = name;
             Type = typeof(T);
@@ -103,9 +93,7 @@ namespace Catel.Data
 
             _createDefaultValue = createDefaultValue;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the property.
         /// </summary>
@@ -179,9 +167,7 @@ namespace Catel.Data
         /// <value><c>true</c> if this is a calculated property; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public bool IsCalculatedProperty { get; set; }
-        #endregion
-
-        #region Methods
+        
         /// <summary>
         /// Returns the default value of the property.
         /// </summary>
@@ -212,8 +198,6 @@ namespace Catel.Data
         /// <returns>CachedPropertyInfo.</returns>
         public CachedPropertyInfo GetPropertyInfo(Type containingType)
         {
-            Argument.IsNotNull("containingType", containingType);
-
             if (!_updatedCachedPropertyInfo)
             {
                 _updatedCachedPropertyInfo = true;
@@ -229,6 +213,5 @@ namespace Catel.Data
         {
             return $"[{Type.Name}] {Name}";
         }
-        #endregion
     }
 }

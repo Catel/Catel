@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SavableModelBaseBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.IO;
@@ -19,27 +13,18 @@ namespace Catel.Data
     public abstract class SavableModelBase<T> : ModelBase, ISavableModel
         where T : class
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SavableModelBase{T}"/> class.
         /// </summary>
         protected SavableModelBase()
         {
         }
-        #endregion
 
-        #region Properties
-        #endregion
-
-        #region Methods
-        #region Saving
         /// <summary>
         /// Saves the object to a stream using a specific formatting.
         /// </summary>
@@ -48,16 +33,11 @@ namespace Catel.Data
         /// <param name="configuration">The configuration.</param>
         public void Save(Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("stream", stream);
-            Argument.IsNotNull("serializer", serializer);
-
             serializer.Serialize(this, stream, configuration);
 
             this.ClearIsDirtyOnAllChildren();
         }
-        #endregion
 
-        #region Loading
         /// <summary>
         /// Loads the object from a stream using a specific formatting.
         /// </summary>
@@ -92,14 +72,8 @@ namespace Catel.Data
         /// </remarks>
         public static IModel Load(Type type, Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("stream", stream);
-            Argument.IsNotNull("serializer", serializer);
-
             var result = serializer.Deserialize(type, stream, configuration);
             return result as IModel;
         }
-        #endregion
-        #endregion
     }
 }

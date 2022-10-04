@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyBag.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -15,13 +9,10 @@ namespace Catel.Data
     /// </summary>
     public partial class PropertyBag : PropertyBagBase
     {
-        #region Fields
         private readonly object _lockObject = new object();
 
         private readonly IDictionary<string, object> _properties;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyBag"/> class.
         /// </summary>
@@ -36,13 +27,9 @@ namespace Catel.Data
         /// <param name="propertyDictionary">The property dictionary.</param>
         public PropertyBag(IDictionary<string, object> propertyDictionary)
         {
-            Argument.IsNotNull(nameof(propertyDictionary), propertyDictionary);
-
             _properties = propertyDictionary;
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         /// Gets or sets the property using the indexer.
         /// </summary>
@@ -53,9 +40,7 @@ namespace Catel.Data
             get { return GetValue<object>(name); }
             set { SetValue(name, value); }
         }
-        #endregion
-
-        #region Methods
+        
         /// <summary>
         /// Imports the properties in the existing dictionary.
         /// <para />
@@ -65,8 +50,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="propertiesToImport"/> is <c>null</c>.</exception>
         public void Import(Dictionary<string, object> propertiesToImport)
         {
-            Argument.IsNotNull("propertiesToImport", propertiesToImport);
-
             foreach (var property in propertiesToImport)
             {
                 SetValue(property.Key, property.Value);
@@ -75,8 +58,6 @@ namespace Catel.Data
 
         public override bool IsAvailable(string name)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-
             lock (_lockObject)
             {
                 return _properties.ContainsKey(name);
@@ -155,7 +136,6 @@ namespace Catel.Data
         public void UpdatePropertyValue<TValue>(string propertyName, Func<TValue, TValue> update)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("update", update);
 
             lock (_lockObject)
             {
@@ -170,6 +150,5 @@ namespace Catel.Data
                 SetValue(propertyName, updatedValue);
             }
         }
-        #endregion
     }
 }

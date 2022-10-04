@@ -42,6 +42,6 @@
         /// The default value is <null/>.
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
-        DataContractResolver DataContractResolver { get; set; }
+        DataContractResolver? DataContractResolver { get; set; }
     }
 }

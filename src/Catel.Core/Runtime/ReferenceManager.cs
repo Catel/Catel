@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReferenceManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime
+﻿namespace Catel.Runtime
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -15,14 +8,11 @@ namespace Catel.Runtime
     /// </summary>
     public class ReferenceManager
     {
-        #region Constants
         /// <summary>
         /// The default reference equality comparer.
         /// </summary>
         private static readonly IEqualityComparer<object> DefaultReferenceEqualityComparer = new ReferenceEqualityComparer<object>();
-        #endregion
 
-        #region Fields
         /// <summary>
         /// The dictionary containing the actualy information by object reference.
         /// </summary>
@@ -47,18 +37,14 @@ namespace Catel.Runtime
         /// The hashset containing the used ids.
         /// </summary>
         private readonly HashSet<int> _usedIds = new HashSet<int>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceManager"/> class.
         /// </summary>
         public ReferenceManager()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the number of items in the reference manager.
         /// </summary>
@@ -73,9 +59,7 @@ namespace Catel.Runtime
                 }
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the specified instance manually.
         /// </summary>
@@ -226,6 +210,5 @@ namespace Catel.Runtime
                 return id;
             }
         }
-        #endregion
     }
 }

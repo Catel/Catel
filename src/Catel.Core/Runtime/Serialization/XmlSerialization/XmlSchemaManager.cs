@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSchemaManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Xml;
@@ -24,7 +18,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <value><c>true</c> if the xml schema manager should generate flat schemas; otherwise, <c>false</c>.</value>
         public static bool GenerateFlatSchemas { get; set; }
 
-        #region Methods
         /// <summary>
         /// Gets the XML schema.
         /// </summary>
@@ -39,6 +32,5 @@ namespace Catel.Runtime.Serialization.Xml
         {
             return XmlSchemaHelper.GetXmlSchema(type, schemaSet, GenerateFlatSchemas);
         }
-        #endregion
     }
 }

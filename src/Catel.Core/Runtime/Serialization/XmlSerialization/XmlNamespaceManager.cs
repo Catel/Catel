@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlNamespaceManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections;
@@ -38,8 +31,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentException">The <paramref name="preferredPrefix"/> is <c>null</c> or whitespace.</exception>
         public XmlNamespace GetNamespace(Type type, string preferredPrefix)
         {
-            Argument.IsNotNull("type", type);
-
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
             using (var scopeManager = ScopeManager<SerializationContextScope<XmlSerializationContextInfo>>.GetScopeManager(scopeName))
             {

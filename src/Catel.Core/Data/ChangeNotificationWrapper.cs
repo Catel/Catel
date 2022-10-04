@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeNotificationWrapper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections;
@@ -42,11 +35,8 @@ namespace Catel.Data
     /// </summary>
     public class ChangeNotificationWrapper
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
-
-        #region Fields
+        
         private readonly object _lockObject = new object();
 
         private readonly WeakReference _weakReference;
@@ -56,9 +46,7 @@ namespace Catel.Data
         private ConditionalWeakTable<object, IWeakEventListener> _weakPropertyChangedListenersTable;
 
         private ConditionalWeakTable<object, List<WeakReference>> _collectionItems;
-        #endregion
-
-        #region Constructors
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeNotificationWrapper"/> class.
         /// </summary>
@@ -66,8 +54,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
         public ChangeNotificationWrapper(object value)
         {
-            Argument.IsNotNull("value", value);
-
             _weakReference = new WeakReference(value);
 
             // Note that we either support collections OR property changed, not both because ObservableCollection implements
@@ -86,9 +72,7 @@ namespace Catel.Data
 
             SubscribeNotifyChangedEvents(value, null);
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         /// Gets a value indicating whether <see cref="INotifyPropertyChanged"/> is supported by the target object.
         /// </summary>
@@ -109,9 +93,7 @@ namespace Catel.Data
         {
             get { return _weakReference.IsAlive; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines whether creating a <see cref="ChangeNotificationWrapper"/> is useful for the specified object.
         /// <para />
@@ -121,11 +103,6 @@ namespace Catel.Data
         /// <returns><c>true</c> if it is useful to create a <see cref="ChangeNotificationWrapper"/>; otherwise, <c>false</c>.</returns>
         public static bool IsUsefulForObject(object obj)
         {
-            if (obj is null)
-            {
-                return false;
-            }
-
             if (obj is INotifyPropertyChanged)
             {
                 return true;
@@ -321,11 +298,6 @@ namespace Catel.Data
         /// <param name="parentCollection">If not <c>null</c>, this is a collection item which should use <see cref="OnObjectCollectionItemPropertyChanged"/>.</param>
         public void SubscribeNotifyChangedEvents(object value, ICollection parentCollection)
         {
-            if (value is null)
-            {
-                return;
-            }
-
             lock (_lockObject)
             {
                 var collectionChangedValue = value as INotifyCollectionChanged;
@@ -361,11 +333,6 @@ namespace Catel.Data
 
         private void SubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType, ICollection parentCollection)
         {
-            if (value is null)
-            {
-                return;
-            }
-
             lock (_lockObject)
             {
                 ConditionalWeakTable<object, IWeakEventListener> eventsTable;
@@ -477,11 +444,6 @@ namespace Catel.Data
 
         private void UnsubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType, ICollection parentCollection)
         {
-            if (value is null)
-            {
-                return;
-            }
-
             lock (_lockObject)
             {
                 ConditionalWeakTable<object, IWeakEventListener> eventsTable;
@@ -549,21 +511,20 @@ namespace Catel.Data
                 }
             }
         }
-        #endregion
 
         /// <summary>
         /// Occurs when the <see cref="PropertyChanged"/> event occurs on the target object.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="PropertyChanged"/> event occurs in the collection when the target object is a collection.
         /// </summary>
-        public event PropertyChangedEventHandler CollectionItemPropertyChanged;
+        public event PropertyChangedEventHandler? CollectionItemPropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="CollectionChanged"/> event occurs on the target object.
         /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
     }
 }

@@ -1,15 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRequestPath.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Collections;
     using Logging;
 
     /// <summary>
@@ -53,8 +46,6 @@ namespace Catel.IoC
         /// <returns></returns>
         public static TypeRequestPath Branch(TypeRequestPath parent, TypeRequestInfo typeRequestInfo)
         {
-            Argument.IsNotNull("parent", parent);
-            Argument.IsNotNull("typeRequestInfo", typeRequestInfo);
             //if (parent._typePath.Inde(o => o.Equals(typeRequestInfo)))
             int previousIndex = Array.IndexOf(parent._typePath, typeRequestInfo);
             if (previousIndex >= 0)

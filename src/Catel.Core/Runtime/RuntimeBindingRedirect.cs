@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RuntimeBindingRedirect.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime
+﻿namespace Catel.Runtime
 {
     using System;
     using System.Collections.Generic;
@@ -37,8 +31,6 @@ namespace Catel.Runtime
         /// <param name="appDomain">The application domain.</param>
         public RuntimeBindingRedirect(AppDomain appDomain)
         {
-            Argument.IsNotNull(nameof(appDomain), appDomain);
-
             _appDomain = appDomain;
             _appDomain.AssemblyResolve += OnAssemblyResolve;
         }

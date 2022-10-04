@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidatableModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections;
@@ -23,7 +16,6 @@ namespace Catel.Data
     /// </summary>
     public abstract class ValidatableModelBase : ModelBase, IValidatableModel
     {
-        #region Constants
         /// <summary>
         /// The name of the <see cref="IDataWarningInfo.Warning"/> property.
         /// </summary>
@@ -43,9 +35,7 @@ namespace Catel.Data
         /// The name of the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </summary>
         internal const string HasErrorsMessageProperty = "HasErrors";
-        #endregion
-
-        #region Fields
+        
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -86,13 +76,11 @@ namespace Catel.Data
 
         private readonly Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext> _dataAnnotationsValidationContext = new Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext>();
 
-        private event EventHandler<DataErrorsChangedEventArgs> _errorsChanged;
-        private event EventHandler<DataErrorsChangedEventArgs> _warningsChanged;
-        private event EventHandler<ValidationEventArgs> _validating;
-        private event EventHandler<ValidationEventArgs> _validated;
-        #endregion
+        private event EventHandler<DataErrorsChangedEventArgs>? _errorsChanged;
+        private event EventHandler<DataErrorsChangedEventArgs>? _warningsChanged;
+        private event EventHandler<ValidationEventArgs>? _validating;
+        private event EventHandler<ValidationEventArgs>? _validated;
 
-        #region Constructors
         /// <summary>
         /// Initializes the <see cref="ValidatableModelBase"/> class.
         /// </summary>
@@ -108,9 +96,7 @@ namespace Catel.Data
         {
             InitializeModelValidation();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether the object is currently validating. During validation, no validation will be invoked.
         /// </summary>
@@ -236,13 +222,11 @@ namespace Catel.Data
                 return false;
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the object is validating.
         /// </summary>
-        event EventHandler<ValidationEventArgs> IValidatable.Validating
+        event EventHandler<ValidationEventArgs>? IValidatable.Validating
         {
             add { _validating += value; }
             remove { _validating -= value; }
@@ -251,34 +235,32 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is about the validate the fields.
         /// </summary>
-        protected event EventHandler ValidatingFields;
+        protected event EventHandler? ValidatingFields;
 
         /// <summary>
         /// Occurs when the object has validated the fields.
         /// </summary>
-        protected event EventHandler ValidatedFields;
+        protected event EventHandler? ValidatedFields;
 
         /// <summary>
         /// Occurs when the object is about the validate the business rules.
         /// </summary>
-        protected event EventHandler ValidatingBusinessRules;
+        protected event EventHandler? ValidatingBusinessRules;
 
         /// <summary>
         /// Occurs when the object has validated the business rules.
         /// </summary>
-        protected event EventHandler ValidatedBusinessRules;
+        protected event EventHandler? ValidatedBusinessRules;
 
         /// <summary>
         /// Occurs when the object is validated.
         /// </summary>
-        event EventHandler<ValidationEventArgs> IValidatable.Validated
+        event EventHandler<ValidationEventArgs>? IValidatable.Validated
         {
             add { _validated += value; }
             remove { _validated -= value; }
         }
-        #endregion
 
-        #region Methods
         private void InitializeModelValidation()
         {
             var type = GetType();
@@ -290,16 +272,17 @@ namespace Catel.Data
             {
                 if (!PropertiesNotCausingValidation.ContainsKey(type))
                 {
-                    var hashSet = new HashSet<string>();
-
-                    // Ignore modelbase properties
-                    hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
-                    hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
-                    hashSet.Add(nameof(HideValidationResults));
-                    hashSet.Add(nameof(HasWarnings));
-                    hashSet.Add(nameof(HasErrors));
-                    hashSet.Add(nameof(IsValidating));
-                    hashSet.Add("IsValidated");
+                    var hashSet = new HashSet<string>
+                    {
+                        // Ignore modelbase properties
+                        nameof(AlwaysInvokeNotifyChanged),
+                        nameof(AutomaticallyValidateOnPropertyChanged),
+                        nameof(HideValidationResults),
+                        nameof(HasWarnings),
+                        nameof(HasErrors),
+                        nameof(IsValidating),
+                        "IsValidated"
+                    };
 
                     var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
 
@@ -1080,9 +1063,7 @@ namespace Catel.Data
         {
             return ((IValidatable)this).GetFieldErrors(columnName);
         }
-        #endregion
 
-        #region IDataWarningInfo Members
         /// <summary>
         /// Gets the current warning.
         /// </summary>
@@ -1125,9 +1106,7 @@ namespace Catel.Data
                 return GetFieldWarnings(columnName) ?? string.Empty;
             }
         }
-        #endregion
-
-        #region IDataErrorInfo Members
+        
         /// <summary>
         /// Gets the current error.
         /// </summary>
@@ -1170,9 +1149,7 @@ namespace Catel.Data
                 return GetFieldErrors(columnName) ?? string.Empty;
             }
         }
-        #endregion
-
-        #region INotifyDataErrorInfo Members
+        
         /// <summary>
         /// Gets a value indicating whether this object contains any field or business errors.
         /// </summary>
@@ -1199,7 +1176,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the validation errors have changed for a property or for the entire object.
         /// </summary>
-        event EventHandler<DataErrorsChangedEventArgs> INotifyDataErrorInfo.ErrorsChanged
+        event EventHandler<DataErrorsChangedEventArgs>? INotifyDataErrorInfo.ErrorsChanged
         {
             add { _errorsChanged += value; }
             remove { _errorsChanged -= value; }
@@ -1245,9 +1222,7 @@ namespace Catel.Data
 
             return elements;
         }
-        #endregion
 
-        #region INotifyDataWarningInfo Members
         /// <summary>
         /// Gets a value indicating whether this object contains any field or business warnings.
         /// </summary>
@@ -1274,7 +1249,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the warnings have changed.
         /// </summary>
-        event EventHandler<DataErrorsChangedEventArgs> INotifyDataWarningInfo.WarningsChanged
+        event EventHandler<DataErrorsChangedEventArgs>? INotifyDataWarningInfo.WarningsChanged
         {
             add { _warningsChanged += value; }
             remove { _warningsChanged -= value; }
@@ -1318,9 +1293,7 @@ namespace Catel.Data
 
             return elements;
         }
-        #endregion
-
-        #region Notifications
+        
         /// <summary>
         /// Raises the right events based on the validation result.
         /// </summary>
@@ -1329,8 +1302,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationResult"/> is <c>null</c>.</exception>
         protected void NotifyValidationResult(IValidationResult validationResult, bool notifyGlobal)
         {
-            Argument.IsNotNull("validationResult", validationResult);
-
             var propertyName = string.Empty;
 
             var fieldValidationResult = validationResult as IFieldValidationResult;
@@ -1350,6 +1321,5 @@ namespace Catel.Data
                     break;
             }
         }
-        #endregion
     }
 }

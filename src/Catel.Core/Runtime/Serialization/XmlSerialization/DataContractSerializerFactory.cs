@@ -9,33 +9,27 @@ namespace Catel.Runtime.Serialization.Xml
     using System.Reflection;
     using System.Runtime.Serialization;
     using Catel.Caching;
-    using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
     using Collections;
-    using IoC;
 
     /// <summary>
     /// Default implementation of the <see cref="IDataContractSerializerFactory" /> interface.
     /// </summary>
     public class DataContractSerializerFactory : IDataContractSerializerFactory
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly CacheStorage<string, List<Type>> _knownTypesCache = new CacheStorage<string, List<Type>>(storeNullValues: true);
         private readonly CacheStorage<string, DataContractSerializer> _dataContractSerializersCache = new CacheStorage<string, DataContractSerializer>(storeNullValues: true);
         private readonly CacheStorage<string, Type[]> _knownTypesByAttributesCache = new CacheStorage<string, Type[]>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DataContractSerializerFactory"/> class.
         /// </summary>
         public DataContractSerializerFactory()
         {
         }
-        #endregion
 
         /// <summary>
         /// Gets or sets the <see cref="DataContractResolver"/> passed in constructor to <see cref="DataContractSerializer"/>.
@@ -43,9 +37,8 @@ namespace Catel.Runtime.Serialization.Xml
         /// The default value is <null/>.
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
-        public DataContractResolver DataContractResolver { get; set; }
+        public DataContractResolver? DataContractResolver { get; set; }
 
-        #region IDataContractSerializerFactory Members
         /// <summary>
         /// Gets the known types for a specific type. This method caches the lists so the
         /// performance can be improved when a type is used more than once.
@@ -58,9 +51,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
         public virtual List<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, List<Type> additionalKnownTypes = null)
         {
-            Argument.IsNotNull("serializingType", serializingType);
-            Argument.IsNotNull("typeToSerialize", typeToSerialize);
-
             var serializingTypeName = serializingType.GetSafeFullName(false);
             var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
             var key = $"{serializingTypeName}|{typeToSerializeName}|{(additionalKnownTypes?.Count ?? 0).ToString()}";
@@ -108,8 +98,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
         public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null)
         {
-            Argument.IsNotNull("serializingType", serializingType);
-            Argument.IsNotNull("typeToSerialize", typeToSerialize);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
             var serializingTypeName = serializingType.GetSafeFullName(false);
@@ -123,9 +111,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return xmlSerializer;
             });
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the known types inside the specific type.
         /// </summary>
@@ -356,11 +342,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><c>true</c> if the specified type is serializable; otherwise, <c>false</c>.</returns>
         protected virtual bool IsTypeSerializable(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
-            if (type is null)
-            {
-                return false;
-            }
-
             // DataContract attribute
             if (type.IsDecoratedWithAttribute<DataContractAttribute>())
             {
@@ -397,11 +378,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><c>true</c> if the type should be handled; otherwise, <c>false</c>.</returns>
         protected virtual bool ShouldTypeBeIgnored(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
-            if (type is null)
-            {
-                return true;
-            }
-
             // Never include generic type definitions, otherwise we will get this:
             // Error while getting known types for Type 'Catel.Tests.Data.PropertyDataManagerFacts+SupportsGenericClasses+GenericClass`1[T]'. The type must not be an open or partial generic class.
             if (type.IsGenericTypeDefinitionEx())
@@ -444,9 +420,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         protected virtual Type[] GetKnownTypesViaAttributes(Type type)
         {
-            Argument.IsNotNull("type", type);
-
-            string typeName = type.AssemblyQualifiedName;
+            var typeName = type.AssemblyQualifiedName;
             if (string.IsNullOrWhiteSpace(typeName))
             {
                 return Array.Empty<Type>();
@@ -532,15 +506,12 @@ namespace Catel.Runtime.Serialization.Xml
 
             return allowNonPublicReflection;
         }
-        #endregion
 
-        #region Nested type: XmlSerializerTypeInfo
         /// <summary>
         /// Class containing serializer type info.
         /// </summary>
         protected class XmlSerializerTypeInfo
         {
-            #region Fields
             private readonly HashSet<Type> _collectionTypesAlreadyHandled = new HashSet<Type>();
             private readonly Dictionary<Type, bool> _isSpecialCollectionCache = new Dictionary<Type, bool>();
 
@@ -550,9 +521,7 @@ namespace Catel.Runtime.Serialization.Xml
             private readonly HashSet<Type> _typesAlreadyHandled = new HashSet<Type>();
 
             private readonly CacheStorage<Type, bool> _isTypeSerializableCache = new CacheStorage<Type, bool>();
-            #endregion
 
-            #region Constructors
             /// <summary>
             /// Initializes a new instance of the <see cref="XmlSerializerTypeInfo" /> class.
             /// </summary>
@@ -569,9 +538,7 @@ namespace Catel.Runtime.Serialization.Xml
                     _knownTypes.AddRange(additionalKnownTypes);
                 }
             }
-            #endregion
 
-            #region Properties
             /// <summary>
             /// Gets the serializing type.
             /// </summary>
@@ -619,9 +586,7 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 get { return _specialGenericCollectionTypes; }
             }
-            #endregion
 
-            #region Methods
             /// <summary>
             /// Adds the type to the list of known types.
             /// </summary>
@@ -808,8 +773,6 @@ namespace Catel.Runtime.Serialization.Xml
 
                 return false;
             }
-            #endregion
         }
-        #endregion
     }
 }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceLocatorRegistration.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Diagnostics;
@@ -26,8 +19,6 @@ namespace Catel.IoC
         /// <param name="createServiceFunc">The create service function.</param>
         public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc)
         {
-            Argument.IsNotNull("createServiceFunc", createServiceFunc);
-
             CreateServiceFunc = createServiceFunc;
             DeclaringType = declaringType;
             DeclaringTypeName = declaringType.AssemblyQualifiedName;

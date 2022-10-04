@@ -489,8 +489,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public static ILog GetLogger(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             return GetLogger(type.FullName, type);
         }
 
@@ -529,8 +527,7 @@
         public static ILog GetLogger(string name, Type type)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("type", type);
-
+            
             lock (_loggers)
             {
                 if (!_loggers.TryGetValue(name, out var log))
@@ -555,8 +552,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         internal static ICatelLog GetCatelLogger(Type type, bool alwaysLog = false)
         {
-            Argument.IsNotNull("type", type);
-
             var name = type.FullName;
 
             lock (_loggers)

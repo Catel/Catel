@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Linq;
@@ -29,10 +23,9 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="objectType">Type of the object.</param>
         /// <param name="objectValue">The object value.</param>
         /// <returns>The created <see cref="XElement"/>.</returns>
-        public static XElement ConvertToXml(string elementName, Type objectType, object objectValue)
+        public static XElement? ConvertToXml(string elementName, Type objectType, object objectValue)
         {
             Argument.IsNotNullOrWhitespace("elementName", elementName);
-            Argument.IsNotNull("objectType", objectType);
 
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
             var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
@@ -55,11 +48,8 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="objectType">Type of the object.</param>
         /// <param name="createDefaultValue">The create default value.</param>
         /// <returns>The created object.</returns>
-        public static object ConvertToObject(XElement element, Type objectType, Func<object> createDefaultValue)
+        public static object? ConvertToObject(XElement element, Type objectType, Func<object> createDefaultValue)
         {
-            Argument.IsNotNull("element", element);
-            Argument.IsNotNull("objectType", objectType);
-
             var xmlName = element.Name.LocalName;
 
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;

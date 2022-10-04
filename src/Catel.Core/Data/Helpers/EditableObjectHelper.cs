@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EditableObjectHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System.ComponentModel;
 
@@ -21,11 +15,6 @@ namespace Catel.Data
         /// <param name="obj">The object to call the <see cref="IEditableObject.BeginEdit"/> method on.</param>
         public static void BeginEditObject(object obj)
         {
-            if (obj is null)
-            {
-                return;
-            }
-
             var objAsIEditableObject = obj as IEditableObject;
             if (objAsIEditableObject is not null)
             {
@@ -41,11 +30,6 @@ namespace Catel.Data
         /// <param name="obj">The object to call the <see cref="IEditableObject.EndEdit"/> method on.</param>
         public static void EndEditObject(object obj)
         {
-            if (obj is null)
-            {
-                return;
-            }
-
             var objAsIEditableObject = obj as IEditableObject;
             if (objAsIEditableObject is not null)
             {
@@ -64,11 +48,6 @@ namespace Catel.Data
         /// </remarks>
         public static void CancelEditObject(object obj)
         {
-            if (obj is null)
-            {
-                return;
-            }
-
             var objAsIEditableObject = obj as IEditableObject;
             if (objAsIEditableObject is not null)
             {

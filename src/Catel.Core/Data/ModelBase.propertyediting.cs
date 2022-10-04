@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.editing.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -80,8 +73,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         protected internal void SetValue<TValue>(IPropertyData property, TValue value, bool notifyOnChange = true)
         {
-            Argument.IsNotNull("property", property);
-
             // Is the object currently read-only (and aren't we changing that)?
             if (IsReadOnly || _isFrozen)
             {
@@ -197,8 +188,6 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         protected TValue GetValue<TValue>(IPropertyData property)
         {
-            Argument.IsNotNull("property", property);
-
             if (property.IsCalculatedProperty)
             {
                 // Note: don't use IObjectAdapter since it might cause a stackoverflow going into

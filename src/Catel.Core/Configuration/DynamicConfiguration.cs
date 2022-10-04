@@ -81,8 +81,6 @@
         /// <returns><c>true</c> if the property is set; otherwise, <c>false</c>.</returns>
         public virtual bool IsConfigurationValueSet(string name)
         {
-            Argument.IsNotNull("name", name);
-
             if (!IsPropertyRegistered(GetType(), name))
             {
                 return false;
@@ -100,8 +98,6 @@
         /// <param name="name">The name.</param>
         public virtual void MarkConfigurationValueAsSet(string name)
         {
-            Argument.IsNotNull("name", name);
-
             lock (_propertiesSetAtLeastOnce)
             {
                 _propertiesSetAtLeastOnce.Add(name);

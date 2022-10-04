@@ -1,4 +1,4 @@
-﻿namespace Catel.ComponentModel
+﻿namespace System.ComponentModel
 {
     using System;
     using System.ComponentModel;

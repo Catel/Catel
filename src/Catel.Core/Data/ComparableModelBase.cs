@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ComparableModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +15,7 @@ namespace Catel.Data
         /// <summary>
         /// Backing field for the <see cref="EqualityComparer{T}"/> property. Because it has custom logic, it needs a backing field.
         /// </summary>
-        private IModelEqualityComparer _equalityComparer;
+        private IModelEqualityComparer? _equalityComparer;
 
         /// <summary>
         /// Backing field for the <see cref="GetHashCode"/> method so it only has to be calculated once to gain the best performance possible.
@@ -36,7 +29,6 @@ namespace Catel.Data
         {
         }
 
-        #region Operators
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
@@ -59,9 +51,6 @@ namespace Catel.Data
             return !(firstObject == secondObject);
         }
 
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Gets or sets the equality comparer used to compare model bases with each other.
         /// </summary>
@@ -86,9 +75,7 @@ namespace Catel.Data
                 _equalityComparer = value;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
@@ -137,7 +124,5 @@ namespace Catel.Data
 
             return _hashCode.Value;
         }
-
-        #endregion
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeFactoryExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -22,8 +16,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
         public static T CreateInstance<T>(this ITypeFactory typeFactory)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-
             return (T)typeFactory.CreateInstance(typeof(T));
         }
 
@@ -37,8 +29,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
         public static T CreateInstanceWithTag<T>(this ITypeFactory typeFactory, object tag)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-
             return (T)typeFactory.CreateInstanceWithTag(typeof(T), tag);
         }
 
@@ -52,8 +42,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
         public static T CreateInstanceWithParameters<T>(this ITypeFactory typeFactory, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-
             return (T)typeFactory.CreateInstanceWithParameters(typeof(T), parameters);
         }
 
@@ -68,8 +56,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
         public static T CreateInstanceWithParametersWithTag<T>(this ITypeFactory typeFactory, object tag, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-
             return (T)typeFactory.CreateInstanceWithParametersWithTag(typeof(T), tag, parameters);
         }
 
@@ -85,8 +71,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
         public static T CreateInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-
             return (T)typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(T), parameters);
         }
 
@@ -103,8 +87,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
         public static T CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this ITypeFactory typeFactory, object tag, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-
             return (T)typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(typeof(T), tag, parameters);
         }
     }

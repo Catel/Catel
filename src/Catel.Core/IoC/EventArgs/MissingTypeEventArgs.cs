@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MissingTypeEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -17,8 +11,6 @@ namespace Catel.IoC
     /// </summary>
     public class MissingTypeEventArgs : EventArgs
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MissingTypeEventArgs"/> class. 
         /// </summary>
@@ -41,16 +33,11 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="interfaceType"/> is <c>null</c>.</exception>
         public MissingTypeEventArgs(Type interfaceType, object tag)
         {
-            Argument.IsNotNull("interfaceType", interfaceType);
-
             InterfaceType = interfaceType;
             RegistrationType = RegistrationType.Singleton;
             Tag = tag;
         }
-        #endregion
-
-        #region Properties
-
+        
         /// <summary>
         /// Gets the type of the interface that is currently unresolved.
         /// </summary>
@@ -86,6 +73,5 @@ namespace Catel.IoC
         /// If the <see cref="ImplementingInstance"/> is set then this value will be ignored.
         /// </remarks>
         public RegistrationType RegistrationType { get; set; }
-        #endregion
     }
 }

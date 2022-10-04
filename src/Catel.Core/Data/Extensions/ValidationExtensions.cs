@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -22,8 +16,6 @@ namespace Catel.Data
         /// <returns>The <see cref="IValidationSummary"/>.</returns>
         public static IValidationSummary GetValidationSummary(this IValidationContext validationContext, object tag = null)
         {
-            Argument.IsNotNull("validationContext", validationContext);
-
             return new ValidationSummary(validationContext, tag);
         }
 
@@ -40,9 +32,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext" /> is <c>null</c>.</exception>
         public static List<ValidationContextChange> SynchronizeWithContext(this ValidationContext validationContext, IValidationContext additionalValidationContext, bool onlyAddValidation = false)
         {
-            Argument.IsNotNull("validationContext", validationContext);
-            Argument.IsNotNull("additionalValidationContext", additionalValidationContext);
-
             var changes = ValidationContextHelper.GetChanges(validationContext, additionalValidationContext);
 
             foreach (var change in changes)

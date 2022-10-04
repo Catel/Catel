@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.editableobject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -20,13 +14,11 @@ namespace Catel.Data
     {
         internal ISerializer _editableObjectSerializer;
 
-        #region Internal classes
         /// <summary>
         /// Class containing backup information.
         /// </summary>
         private class BackupData
         {
-            #region Fields
             /// <summary>
             /// The <see cref="ModelBase"/> object that this backup is created for.
             /// </summary>
@@ -46,9 +38,7 @@ namespace Catel.Data
             /// Backup of the object values.
             /// </summary>
             private Dictionary<string, object> _objectValuesBackup;
-            #endregion
 
-            #region Constructors
             /// <summary>
             /// Initializes a new instance of the <see cref="ModelBase.BackupData" /> class.
             /// </summary>
@@ -61,9 +51,7 @@ namespace Catel.Data
 
                 CreateBackup();
             }
-            #endregion
 
-            #region Methods
             /// <summary>
             /// Creates a backup of the object property values.
             /// </summary>
@@ -81,8 +69,10 @@ namespace Catel.Data
                     _propertyValuesBackup = stream.ToByteArray();
                 }
 
-                _objectValuesBackup = new Dictionary<string, object>();
-                _objectValuesBackup.Add(nameof(IsDirty), BoxingCache.GetBoxedValue(_object.IsDirty));
+                _objectValuesBackup = new Dictionary<string, object>
+                {
+                    { nameof(IsDirty), BoxingCache.GetBoxedValue(_object.IsDirty) }
+                };
             }
 
             /// <summary>
@@ -127,16 +117,14 @@ namespace Catel.Data
 
                 _object.IsDirty = (bool)_objectValuesBackup[nameof(IsDirty)];
             }
-            #endregion
         }
-        #endregion
 
         /// <summary>
         /// The backup of the current object if any backup is initiated.
         /// </summary>
-        private BackupData _backup;
+        private BackupData? _backup;
 
-        private event EventHandler<BeginEditEventArgs> _beginEditingEvent;
+        private event EventHandler<BeginEditEventArgs>? _beginEditingEvent;
 
         /// <summary>
         /// Occurs when the edit cancel has been completed or canceled.
@@ -148,31 +136,31 @@ namespace Catel.Data
         /// be no need for the <see cref="EditEventArgs.EditableObject"/> as
         /// the sender of the event should be the same information.
         /// </remarks>
-        private event EventHandler<EventArgs> _cancelEditingCompletedEvent;
+        private event EventHandler<EventArgs>? _cancelEditingCompletedEvent;
 
-        private event EventHandler<CancelEditEventArgs> _cancelEditingEvent;
+        private event EventHandler<CancelEditEventArgs>? _cancelEditingEvent;
 
-        private event EventHandler<EndEditEventArgs> _endEditingEvent;
+        private event EventHandler<EndEditEventArgs>? _endEditingEvent;
 
-        event EventHandler<BeginEditEventArgs> IAdvancedEditableObject.BeginEditing
+        event EventHandler<BeginEditEventArgs>? IAdvancedEditableObject.BeginEditing
         {
             add { _beginEditingEvent += value; }
             remove { _beginEditingEvent -= value; }
         }
 
-        event EventHandler<EventArgs> IAdvancedEditableObject.CancelEditingCompleted
+        event EventHandler<EventArgs>? IAdvancedEditableObject.CancelEditingCompleted
         {
             add { _cancelEditingCompletedEvent += value; }
             remove { _cancelEditingCompletedEvent += value; }
         }
 
-        event EventHandler<CancelEditEventArgs> IAdvancedEditableObject.CancelEditing
+        event EventHandler<CancelEditEventArgs>? IAdvancedEditableObject.CancelEditing
         {
             add { _cancelEditingEvent += value; }
             remove { _cancelEditingEvent += value; }
         }
 
-        event EventHandler<EndEditEventArgs> IAdvancedEditableObject.EndEditing
+        event EventHandler<EndEditEventArgs>? IAdvancedEditableObject.EndEditing
         {
             add { _endEditingEvent += value; }
             remove { _endEditingEvent += value; }

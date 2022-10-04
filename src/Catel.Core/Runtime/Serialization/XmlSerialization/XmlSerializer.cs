@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSerializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections;
@@ -29,16 +23,13 @@ namespace Catel.Runtime.Serialization.Xml
     /// </summary>
     public class XmlSerializer : SerializerBase<XmlSerializationContextInfo>, IXmlSerializer
     {
-        #region Enums
         private enum MemberType
         {
             Field,
 
             Property
         }
-        #endregion
 
-        #region Constants
         private const string XmlIsNull = "IsNull";
         private const string XmlType = "type";
         private const string XmlGraphId = "graphid";
@@ -48,16 +39,12 @@ namespace Catel.Runtime.Serialization.Xml
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
-
-        #region Fields
+        
         private readonly CacheStorage<Type, HashSet<string>> _ignoredMembersCache = new CacheStorage<Type, HashSet<string>>();
         private readonly CacheStorage<Type, string> _rootNameCache = new CacheStorage<Type, string>();
         private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
         private readonly IXmlNamespaceManager _xmlNamespaceManager;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlSerializer" /> class.
         /// </summary>
@@ -73,15 +60,10 @@ namespace Catel.Runtime.Serialization.Xml
             IXmlNamespaceManager xmlNamespaceManager, ITypeFactory typeFactory, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
             : base(serializationManager, typeFactory, objectAdapter)
         {
-            Argument.IsNotNull("dataContractSerializerFactory", dataContractSerializerFactory);
-            Argument.IsNotNull("xmlNamespaceManager", xmlNamespaceManager);
-
             _dataContractSerializerFactory = dataContractSerializerFactory;
             _xmlNamespaceManager = xmlNamespaceManager;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Serializes the specified model.
         /// </summary>
@@ -1320,6 +1302,5 @@ namespace Catel.Runtime.Serialization.Xml
         {
             return "http://schemas.catelproject.com";
         }
-        #endregion
     }
 }

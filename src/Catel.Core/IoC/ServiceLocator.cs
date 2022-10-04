@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
@@ -19,8 +13,6 @@ namespace Catel.IoC
     /// </summary>
     public class ServiceLocator : IServiceLocator
     {
-        #region Classes
-        #region Nested type: RegisteredInstanceInfo
         private class RegisteredInstanceInfo : ServiceLocatorRegistration
         {
             public RegisteredInstanceInfo(ServiceLocatorRegistration registration, object instance)
@@ -31,9 +23,7 @@ namespace Catel.IoC
 
             public object ImplementingInstance { get; private set; }
         }
-        #endregion
 
-        #region Nested type: ServiceInfo
         [DebuggerDisplay("{Type} ({Tag})")]
         private class ServiceInfo
         {
@@ -47,9 +37,7 @@ namespace Catel.IoC
                 _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag is not null ? Tag.GetHashCode() : 0);
 #pragma warning restore HAA0101 // Array allocation for params parameter
             }
-            #endregion
 
-            #region Properties
             public Type Type { get; private set; }
 
             public object Tag { get; private set; }
@@ -79,21 +67,11 @@ namespace Catel.IoC
                 return Equals(objAsServiceInfo.Tag, Tag);
             }
         }
-        #endregion
-        #endregion
 
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
-
-        #region Fields
-        /// <summary>
-        /// The auto registration manager which handles the registration via attributes.
-        /// </summary>
-        private readonly ServiceLocatorAutoRegistrationManager _autoRegistrationManager;
 
         /// <summary>
         /// A list of registered instances of objects.
@@ -125,9 +103,7 @@ namespace Catel.IoC
         /// </summary>
         private readonly object _lockObject = new object();
         private bool _disposedValue;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceLocator"/> class.
         /// </summary>
@@ -142,9 +118,6 @@ namespace Catel.IoC
             _typeFactory = IoCFactory.CreateTypeFactoryFunc(this);
             RegisterInstance(typeof(ITypeFactory), _typeFactory);
 
-            _autoRegistrationManager = new ServiceLocatorAutoRegistrationManager(this);
-
-            IgnoreRuntimeIncorrectUsageOfRegisterAttribute = true;
             CanResolveNonAbstractTypesWithoutRegistration = true;
 
             // Register default implementations
@@ -161,13 +134,9 @@ namespace Catel.IoC
         public ServiceLocator(IServiceLocator serviceLocator)
             : this()
         {
-            Argument.IsNotNull(nameof(serviceLocator), serviceLocator);
-
             _parentServiceLocator = serviceLocator;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the instance of the default service locator. This property serves as as singleton.
         /// </summary>
@@ -176,38 +145,11 @@ namespace Catel.IoC
         {
             get { return IoCConfiguration.DefaultServiceLocator; }
         }
-        #endregion
 
-        #region IServiceLocator Members
         /// <summary>
         /// Gets or sets a value indicating whether the service locator can resolve non abstract types without registration.
         /// </summary>
         public bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this service locators will ignore incorrect usage of <see cref="ServiceLocatorRegistrationAttribute"/> 
-        /// and do not throw <see cref="InvalidOperationException"/>.
-        /// </summary>
-        /// <remarks>
-        /// By default, this value is <c>true</c>.
-        /// </remarks>
-        public bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute
-        {
-            get { return _autoRegistrationManager.IgnoreRuntimeIncorrectUsageOfRegisterAttribute; }
-            set { _autoRegistrationManager.IgnoreRuntimeIncorrectUsageOfRegisterAttribute = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this service locators will automatically register types via attributes.
-        /// </summary>
-        /// <remarks>
-        /// By default, this value is <c>false</c>
-        /// </remarks>
-        public bool AutoRegisterTypesViaAttributes
-        {
-            get { return _autoRegistrationManager.AutoRegisterTypesViaAttributes; }
-            set { _autoRegistrationManager.AutoRegisterTypesViaAttributes = value; }
-        }
 
         /// <summary>
         /// Gets the registration info about the specified type.
@@ -218,8 +160,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         public RegistrationInfo GetRegistrationInfo(Type serviceType, object tag = null)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-
             lock (_lockObject)
             {
                 // Always check via IsTypeRegistered, allow late-time registration
@@ -245,8 +185,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         public bool IsTypeRegisteredWithOrWithoutTag(Type serviceType)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-
             lock (_lockObject)
             {
                 if (_registeredInstances.Keys.Any(info => info.Type == serviceType))
@@ -285,8 +223,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         public bool IsTypeRegistered(Type serviceType, object tag = null)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-
             var isRegistered = IsTypeRegisteredInCurrentLocator(serviceType, tag);
             if (!isRegistered && _parentServiceLocator is not null)
             {
@@ -298,8 +234,6 @@ namespace Catel.IoC
 
         private bool IsTypeRegisteredInCurrentLocator(Type serviceType, object tag = null)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-
             var serviceInfo = new ServiceInfo(serviceType, tag);
 
             lock (_lockObject)
@@ -376,10 +310,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentException">The <paramref name="instance"/> is not of the right type.</exception>
         public void RegisterInstance(Type serviceType, object instance, object tag = null)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-            Argument.IsNotNull("instance", instance);
-            Argument.IsOfType("instance", instance, serviceType);
-
             RegisterInstance(serviceType, instance, tag, this);
         }
 
@@ -396,16 +326,12 @@ namespace Catel.IoC
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
-            Argument.IsNotNull("serviceImplementationType", serviceImplementationType);
-
             RegisterType(serviceType, serviceImplementationType, tag, registrationType, registerIfAlreadyRegistered,
                 this, null);
         }
 
         public void RegisterType(Type serviceType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
-            Argument.IsNotNull("createServiceFunc", createServiceFunc);
-
             RegisterType(serviceType, null, tag, registrationType, registerIfAlreadyRegistered, this, createServiceFunc);
         }
 
@@ -416,9 +342,6 @@ namespace Catel.IoC
 
         public virtual object ResolveTypeUsingFactory(ITypeFactory typeFactory, Type serviceType, object tag = null)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-            Argument.IsNotNull("serviceType", serviceType);
-
             lock (_lockObject)
             {
                 var isTypeRegistered = IsTypeRegisteredInCurrentLocator(serviceType, tag);
@@ -456,9 +379,6 @@ namespace Catel.IoC
 
         public IEnumerable<object> ResolveTypesUsingFactory(ITypeFactory typeFactory, Type serviceType)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-            Argument.IsNotNull("serviceType", serviceType);
-
             var resolvedInstances = new List<object>();
 
             lock (_lockObject)
@@ -503,8 +423,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="types"/> is <c>null</c>.</exception>
         public bool AreMultipleTypesRegistered(params Type[] types)
         {
-            Argument.IsNotNull("types", types);
-
             lock (_lockObject)
             {
                 // Note: do NOT rewrite as linq because that is much slower
@@ -537,8 +455,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="types"/> is <c>null</c>.</exception>
         public object[] ResolveMultipleTypes(params Type[] types)
         {
-            Argument.IsNotNull("types", types);
-
             lock (_lockObject)
             {
                 // Note: do NOT rewrite as linq because that is much slower
@@ -557,8 +473,6 @@ namespace Catel.IoC
 
         public bool RemoveType(Type serviceType, object tag = null)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-
             var wasRemoved = false;
 
             lock (_lockObject)
@@ -595,8 +509,6 @@ namespace Catel.IoC
 
         public bool RemoveAllTypes(Type serviceType)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-
             var hasRemoved = false;
 
             lock (_lockObject)
@@ -620,34 +532,30 @@ namespace Catel.IoC
 
             return hasRemoved;
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a type cannot be resolved the by service locator. It first tries to raise this event.
         /// <para/>
         /// If there are no handlers or no handler can fill up the missing type, an exception will be thrown by
         /// the service locator.
         /// </summary>
-        public event EventHandler<MissingTypeEventArgs> MissingType;
+        public event EventHandler<MissingTypeEventArgs>? MissingType;
 
         /// <summary>
         /// Occurs when a type is registered in the service locator.
         /// </summary>
-        public event EventHandler<TypeRegisteredEventArgs> TypeRegistered;
+        public event EventHandler<TypeRegisteredEventArgs>? TypeRegistered;
 
         /// <summary>
         /// Occurs when a type is unregistered in the service locator.
         /// </summary>
-        public event EventHandler<TypeUnregisteredEventArgs> TypeUnregistered;
+        public event EventHandler<TypeUnregisteredEventArgs>? TypeUnregistered;
 
         /// <summary>
         /// Occurs when a type is instantiated in the service locator.
         /// </summary>
-        public event EventHandler<TypeInstantiatedEventArgs> TypeInstantiated;
-        #endregion
+        public event EventHandler<TypeInstantiatedEventArgs>? TypeInstantiated;
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified service type is registered as open generic.
         /// </summary>
@@ -730,9 +638,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         private void RegisterInstance(Type serviceType, object instance, object tag, object originalContainer)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-            Argument.IsNotNull("instance", instance);
-
             Log.Debug("Registering type '{0}' to instance of type '{1}'", serviceType.FullName, instance.GetType().FullName);
 
             var registeredTypeInfo = new ServiceLocatorRegistration(serviceType, instance.GetType(), tag, RegistrationType.Singleton, (tf, r) => instance);
@@ -773,8 +678,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         private void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-
             // Outside lock scope for event
             ServiceLocatorRegistration registeredTypeInfo = null;
 
@@ -825,8 +728,6 @@ namespace Catel.IoC
 
         private object ResolveTypeFromKnownContainer(ITypeFactory typeFactory, ServiceInfo serviceInfo)
         {
-            Argument.IsNotNull("serviceInfo", serviceInfo);
-
             lock (_lockObject)
             {
                 var previousTypeRequestPath = _currentTypeRequestPath.Value;
@@ -899,7 +800,6 @@ namespace Catel.IoC
             throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(type, msg),
                 "The type '{0}' is not registered", type.GetSafeFullName(true));
         }
-        #endregion
 
         /// <summary>
         /// Gets the service object of the specified type.

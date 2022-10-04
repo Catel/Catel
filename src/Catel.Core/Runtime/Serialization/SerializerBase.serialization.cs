@@ -1,47 +1,36 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializerBase.serialization.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using Catel.Logging;
     using Catel.Reflection;
-    using Catel.Scoping;
 
     /// <summary>
     /// Base class for all serializers.
     /// </summary>
     public partial class SerializerBase<TSerializationContextInfo>
     {
-        #region Events
         /// <summary>
         /// Occurs when an object is about to be deserialized.
         /// </summary>
-        public event EventHandler<SerializationEventArgs> Deserializing;
+        public event EventHandler<SerializationEventArgs>? Deserializing;
 
         /// <summary>
         /// Occurs when an object is about to deserialize a specific member.
         /// </summary>
-        public event EventHandler<MemberSerializationEventArgs> DeserializingMember;
+        public event EventHandler<MemberSerializationEventArgs>? DeserializingMember;
 
         /// <summary>
         /// Occurs when an object has just deserialized a specific member.
         /// </summary>
-        public event EventHandler<MemberSerializationEventArgs> DeserializedMember;
+        public event EventHandler<MemberSerializationEventArgs>? DeserializedMember;
 
         /// <summary>
         /// Occurs when an object has just been deserialized.
         /// </summary>
-        public event EventHandler<SerializationEventArgs> Deserialized;
-        #endregion
+        public event EventHandler<SerializationEventArgs>? Deserialized;
 
-        #region ISerializer<TSerializationContextInfo> Members
         /// <summary>
         /// Serializes the specified model.
         /// </summary>
@@ -50,9 +39,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="configuration">The configuration.</param>
         public virtual void Serialize(object model, Stream stream, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("stream", stream);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -85,9 +71,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="configuration">The configuration.</param>
         public virtual void Serialize(object model, TSerializationContextInfo context, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("context", context);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -106,9 +89,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         protected virtual void Serialize(object model, ISerializationContext<TSerializationContextInfo> context)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("context", context);
-
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
 
             //Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, context.ModelTypeName);
@@ -146,9 +126,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="membersToIgnore">The members to ignore.</param>
         public virtual void SerializeMembers(object model, Stream stream, ISerializationConfiguration configuration, params string[] membersToIgnore)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("stream", stream);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -165,9 +142,7 @@ namespace Catel.Runtime.Serialization
                 }
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called before the serializer starts serializing an object.
         /// </summary>
@@ -329,6 +304,5 @@ namespace Catel.Runtime.Serialization
                 return null;
             }
         }
-        #endregion
     }
 }

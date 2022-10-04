@@ -1,29 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISerializationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
-
-    /// <summary>
-    /// The mode in which a context is being used.
-    /// </summary>
-    public enum SerializationContextMode 
-    {
-        /// <summary>
-        /// The context is being used for serialization.
-        /// </summary>
-        Serialization,
-
-        /// <summary>
-        /// The context is being used for deserialization.
-        /// </summary>
-        Deserialization
-    }
 
     /// <summary>
     /// Interface for the serialization context used to serialize and deserialize models.

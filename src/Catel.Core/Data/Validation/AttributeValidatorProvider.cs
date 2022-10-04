@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AttributeValidatorProvider.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
 
@@ -19,7 +13,6 @@ namespace Catel.Data
     {
         private readonly ICacheStorage<Type, IValidator> _validatorPerType = new CacheStorage<Type, IValidator>(storeNullValues: true); 
 
-        #region Methods
         /// <summary>
         /// Provides an access point to allow a custom implementation in order to retrieve the available validator for the specified type.
         /// </summary>
@@ -39,6 +32,5 @@ namespace Catel.Data
                 return null;
             });
         }
-        #endregion
     }
 }

@@ -160,8 +160,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable<T> collection, int index)
         {
-            Argument.IsNotNull("collection", collection);
-
             using (SuspendChangeNotifications(SuspensionMode.Adding))
             {
                 foreach (var item in collection)
@@ -179,8 +177,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable collection, int index)
         {
-            Argument.IsNotNull("collection", collection);
-
             var list = (IList)this;
 
             using (SuspendChangeNotifications(SuspensionMode.Adding))
@@ -216,8 +212,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable<T> collection)
         {
-            Argument.IsNotNull("collection", collection);
-
             using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Adding))
             {
                 foreach (var item in collection)
@@ -236,8 +230,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable collection)
         {
-            Argument.IsNotNull("collection", collection);
-
             var list = (IList)this;
 
             using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Adding))
@@ -258,8 +250,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable<T> collection)
         {
-            Argument.IsNotNull("collection", collection);
-
             using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Removing))
             {
                 foreach (var item in collection)
@@ -278,8 +268,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable collection)
         {
-            Argument.IsNotNull("collection", collection);
-
             var list = (IList)this;
 
             using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Removing))

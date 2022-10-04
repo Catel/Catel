@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageMediator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Messaging
+﻿namespace Catel.Messaging
 {
     using System;
     using System.Collections.Generic;
@@ -19,13 +13,11 @@ namespace Catel.Messaging
     /// </summary>
     public class MessageMediator : IMessageMediator
     {
-        #region Types
         /// <summary>
         /// Object containing the weak action and the tag of a weak action.
         /// </summary>
         private struct WeakActionInfo
         {
-            #region Fields
             /// <summary>
             /// The action to execute, which is always a <see cref="IWeakAction{TParameter}"/>.
             /// </summary>
@@ -35,11 +27,8 @@ namespace Catel.Messaging
             /// The tag which can be used to make a difference between messages.
             /// </summary>
             public object Tag;
-            #endregion
         }
-        #endregion
 
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -49,9 +38,7 @@ namespace Catel.Messaging
         /// The static instance of the message mediator.
         /// </summary>
         private static readonly IMessageMediator _instance = new MessageMediator();
-        #endregion
 
-        #region Fields
         private readonly object _lockObject = new object();
 
         /// <summary>
@@ -59,9 +46,7 @@ namespace Catel.Messaging
         /// interested listeners.
         /// </summary>
         private readonly Dictionary<Type, List<WeakActionInfo>> _registeredHandlers = new Dictionary<Type, List<WeakActionInfo>>();
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the default instance of the message mediator.
         /// </summary>
@@ -70,9 +55,7 @@ namespace Catel.Messaging
         {
             get { return _instance; }
         }
-        #endregion
 
-        #region IMessageMediator Members
         /// <summary>
         /// Determines whether the specified message type is registered.
         /// </summary>
@@ -81,7 +64,7 @@ namespace Catel.Messaging
         /// <returns>
         ///   <c>true</c> if the message type is registered; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsMessageRegistered<TMessage>(object tag = null)
+        public bool IsMessageRegistered<TMessage>(object? tag = null)
         {
             var messageType = typeof(TMessage);
 
@@ -97,10 +80,8 @@ namespace Catel.Messaging
         ///   <c>true</c> if the message type is registered; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="messageType"/> is <c>null</c>.</exception>
-        public bool IsMessageRegistered(Type messageType, object tag = null)
+        public bool IsMessageRegistered(Type messageType, object? tag = null)
         {
-            Argument.IsNotNull("messageType", messageType);
-
             lock (_lockObject)
             {
                 if (_registeredHandlers.TryGetValue(messageType, out var messageHandlers))
@@ -125,10 +106,8 @@ namespace Catel.Messaging
         /// return <c>false</c>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public bool Register<TMessage>(object recipient, Action<TMessage> handler, object tag = null)
+        public bool Register<TMessage>(object recipient, Action<TMessage> handler, object? tag = null)
         {
-            Argument.IsNotNull("handler", handler);
-
             lock (_lockObject)
             {
                 var messageType = typeof(TMessage);
@@ -173,10 +152,8 @@ namespace Catel.Messaging
         /// is not registered, this method will return <c>false</c>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public bool Unregister<TMessage>(object recipient, Action<TMessage> handler, object tag = null)
+        public bool Unregister<TMessage>(object recipient, Action<TMessage> handler, object? tag = null)
         {
-            Argument.IsNotNull("handler", handler);
-
             lock (_lockObject)
             {
                 var messageType = typeof(TMessage);
@@ -221,7 +198,7 @@ namespace Catel.Messaging
         /// is not registered, this method will return <c>false</c>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="recipient"/> is <c>null</c>.</exception>
-        public bool UnregisterRecipient(object recipient, object tag = null)
+        public bool UnregisterRecipient(object recipient, object? tag = null)
         {
             return UnregisterRecipient(recipient, null, true);
         }
@@ -253,10 +230,8 @@ namespace Catel.Messaging
         /// <c>true</c> if any handlers were invoked; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        public bool SendMessage<TMessage>(TMessage message, object tag = null)
+        public bool SendMessage<TMessage>(TMessage message, object? tag = null)
         {
-            Argument.IsNotNull("message", message);
-
             Log.Debug("Sending message of type '{0}' with tag '{1}'", message.GetType().FullName, ObjectToStringHelper.ToString(tag));
 
             var invokedHandlersCount = 0;
@@ -322,9 +297,7 @@ namespace Catel.Messaging
 
             Log.Debug("Cleaned up handlers");
         }
-        #endregion
-
-        #region Methods
+        
         /// <summary>
         /// Unregisters a specific recipient for all the (non-static) message the recipient is subscribed to.
         /// </summary>
@@ -335,10 +308,8 @@ namespace Catel.Messaging
         /// <exception cref="ArgumentNullException">The <paramref name="recipient"/> is <c>null</c>.</exception>
         /// <remarks>A handler cannot be unregistered when it is not registered first. If a handler is unregistered while it
         /// is not registered, this method will return <c>false</c>.</remarks>
-        public bool UnregisterRecipient(object recipient, object tag, bool ignoreTag)
+        public bool UnregisterRecipient(object recipient, object? tag, bool ignoreTag)
         {
-            Argument.IsNotNull("recipient", recipient);
-
             lock (_lockObject)
             {
                 var handlerCounter = 0;
@@ -380,10 +351,8 @@ namespace Catel.Messaging
         /// 	<c>true</c> if the specified recipient is registered; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public bool IsRegistered<TMessage>(object recipient, Action<TMessage> handler, object tag = null)
+        public bool IsRegistered<TMessage>(object recipient, Action<TMessage> handler, object? tag = null)
         {
-            Argument.IsNotNull("handler", handler);
-
             lock (_lockObject)
             {
                 var messageType = typeof(TMessage);
@@ -432,9 +401,6 @@ namespace Catel.Messaging
         /// <exception cref="ArgumentNullException">The <paramref name="weakAction"/> is <c>null</c></exception>
         private bool AreEqualHandlers<TMessage>(Action<TMessage> handler, IWeakAction<TMessage> weakAction)
         {
-            Argument.IsNotNull("handler", handler);
-            Argument.IsNotNull("weakAction", weakAction);
-
             var handlerMethod = handler.Method.ToString();
             return string.CompareOrdinal(weakAction.MethodName, handlerMethod) == 0;
         }
@@ -463,6 +429,5 @@ namespace Catel.Messaging
                 return registeredHandlers;
             }
         }
-        #endregion
     }
 }

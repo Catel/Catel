@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IModelExtensions.serialization.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System.IO;
     using System.Xml;
@@ -25,9 +18,6 @@ namespace Catel.Data
         /// </returns>
         public static XDocument ToXml(this IModel model, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("serializer", serializer);
-
             using (var memoryStream = new MemoryStream())
             {
                 serializer.Serialize(model, memoryStream, configuration);
@@ -52,9 +42,6 @@ namespace Catel.Data
         /// </returns>
         public static byte[] ToByteArray(this IModel model, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("serializer", serializer);
-
             using (var memoryStream = new MemoryStream())
             {
                 serializer.Serialize(model, memoryStream, configuration);

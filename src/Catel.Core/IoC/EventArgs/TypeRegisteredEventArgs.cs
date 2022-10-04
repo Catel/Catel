@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRegisteredEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -24,9 +18,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
         public TypeRegisteredEventArgs(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-            Argument.IsNotNull("serviceImplementationType", serviceImplementationType);
-
             ServiceType = serviceType;
             ServiceImplementationType = serviceImplementationType;
             Tag = tag;

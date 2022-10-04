@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationSummary.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +11,6 @@ namespace Catel.Data
     /// </summary>
     public class ValidationSummary : IValidationSummary
     {
-        #region Fields
         /// <summary>
         /// The field warnings.
         /// </summary>
@@ -37,9 +30,7 @@ namespace Catel.Data
         /// The business rule errors.
         /// </summary>
         private readonly List<IBusinessRuleValidationResult> _businessRuleErrors;
-        #endregion
-
-        #region Constructors
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationSummary"/> class.
         /// </summary>
@@ -47,8 +38,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public ValidationSummary(IValidationContext validationContext)
         {
-            Argument.IsNotNull("validationContext", validationContext);
-
             _fieldWarnings = validationContext.GetFieldWarnings();
             _fieldErrors = validationContext.GetFieldErrors();
             _businessRuleWarnings = validationContext.GetBusinessRuleWarnings();
@@ -66,8 +55,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public ValidationSummary(IValidationContext validationContext, object tag)
         {
-            Argument.IsNotNull("validationContext", validationContext);
-
             _fieldWarnings = validationContext.GetFieldWarnings(tag);
             _fieldErrors = validationContext.GetFieldErrors(tag);
             _businessRuleWarnings = validationContext.GetBusinessRuleWarnings(tag);
@@ -76,9 +63,7 @@ namespace Catel.Data
             LastModified = validationContext.LastModified;
             LastModifiedTicks = validationContext.LastModifiedTicks;
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         /// Gets the last modified date/time.
         /// <para />
@@ -211,9 +196,7 @@ namespace Catel.Data
                 return new ReadOnlyCollection<IBusinessRuleValidationResult>(_businessRuleErrors);
             }
         }
-        #endregion
-
-        #region Methods
+        
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
@@ -265,6 +248,5 @@ namespace Catel.Data
             var finalString = stringBuilder.ToString();
             return finalString;
         }
-        #endregion
     }
 }

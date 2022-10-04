@@ -4,7 +4,6 @@
     using System.ComponentModel;
     using Catel.Reflection;
 
-
     /// <summary>
     /// Object that contains all the property data that is used by the <see cref="ModelBase"/> class.
     /// </summary>
@@ -18,7 +17,7 @@
         string Name { get; }
         Type Type { get; }
 
-        EventHandler<PropertyChangedEventArgs> PropertyChangedEventHandler { get; }
+        EventHandler<PropertyChangedEventArgs>? PropertyChangedEventHandler { get; }
 
         object GetDefaultValue();
         TValue GetDefaultValue<TValue>();

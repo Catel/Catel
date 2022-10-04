@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectAdapter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
-    using System.Reflection;
     using Catel.Data;
     using Logging;
     using Reflection;
@@ -24,8 +16,6 @@ namespace Catel.Runtime.Serialization
 
         public ObjectAdapter(Data.IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull(nameof(objectAdapter), objectAdapter);
-
             _objectAdapter = objectAdapter;
         }
 

@@ -1,51 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MemberValue.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using Catel.Reflection;
     using System;
     using System.Diagnostics;
-
-    /// <summary>
-    /// Enum representing all member group.
-    /// </summary>
-    public enum SerializationMemberGroup
-    {
-        /// <summary>
-        /// The member is a catel property.
-        /// </summary>
-        CatelProperty,
-
-        /// <summary>
-        /// The member is a regular property.
-        /// </summary>
-        RegularProperty,
-
-        /// <summary>
-        /// The member is a field.
-        /// </summary>
-        Field,
-
-        /// <summary>
-        /// The member is a simple root object, must be handled by external serializer immediately.
-        /// </summary>
-        SimpleRootObject,
-
-        /// <summary>
-        /// The member is a collection.
-        /// </summary>
-        Collection,
-
-        /// <summary>
-        /// The member is a dictionary.
-        /// </summary>
-        Dictionary
-    }
 
     /// <summary>
     /// Member value which represents the serialization info of a specific member.
@@ -76,7 +33,6 @@ namespace Catel.Runtime.Serialization
             Value = value;
         }
 
-        #region Properties
         /// <summary>
         /// Gets the group of the member.
         /// </summary>
@@ -114,7 +70,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the actual type of the value.
         /// </summary>
         /// <value>The actual type of the value.</value>
-        public Type ActualMemberType { get; private set; }
+        public Type? ActualMemberType { get; private set; }
 
         /// <summary>
         /// Gets the name of the member.
@@ -152,6 +108,5 @@ namespace Catel.Runtime.Serialization
         {
             return ActualMemberType ?? MemberType;
         }
-        #endregion
     }
 }

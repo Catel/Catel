@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationObject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Reflection;
@@ -16,7 +10,6 @@ namespace Catel.Runtime.Serialization
     {
         private readonly object _memberValue;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationObject" /> class.
         /// </summary>
@@ -27,12 +20,10 @@ namespace Catel.Runtime.Serialization
         private SerializationObject(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
         {
             ModelType = modelType;
-
             MemberGroup = memberGroup;
             MemberName = memberName;
             _memberValue = memberValue;
         }
-        #endregion
 
         /// <summary>
         /// Gets the type of the model.
@@ -87,7 +78,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
         public static SerializationObject FailedToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName)
         {
-            Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNullOrWhitespace("memberName", memberName);
 
             var obj = new SerializationObject(modelType, memberGroup, memberName, null);
@@ -108,7 +98,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
         public static SerializationObject SucceededToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
         {
-            Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNullOrWhitespace("memberName", memberName);
 
             var obj = new SerializationObject(modelType, memberGroup, memberName, memberValue);

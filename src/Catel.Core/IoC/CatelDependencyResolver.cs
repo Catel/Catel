@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CatelDependencyResolver.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
-    using Collections;
     using Logging;
     using Reflection;
 
@@ -29,8 +21,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
         public CatelDependencyResolver(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             _serviceLocator = serviceLocator;
         }
 
@@ -42,8 +32,6 @@ namespace Catel.IoC
         /// <returns><c>true</c> if the specified type with the specified tag can be resolved; otherwise, <c>false</c>.</returns>
         public bool CanResolve(Type type, object tag = null)
         {
-            Argument.IsNotNull("type", type);
-
             return _serviceLocator.IsTypeRegistered(type, tag);
         }
 
@@ -58,8 +46,6 @@ namespace Catel.IoC
         /// <returns><c>true</c> if all types specified can be resolved; otherwise, <c>false</c>.</returns>
         public bool CanResolveMultiple(Type[] types)
         {
-            Argument.IsNotNull("types", types);
-
             if (types.Length == 0)
             {
                 return true;
@@ -78,8 +64,6 @@ namespace Catel.IoC
         /// <returns>The resolved object.</returns>
         public object Resolve(Type type, object tag = null)
         {
-            Argument.IsNotNull("type", type);
-
             return _serviceLocator.ResolveType(type, tag);
         }
 
@@ -91,8 +75,6 @@ namespace Catel.IoC
         /// <returns>A list of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
         public object[] ResolveMultiple(Type[] types, object tag = null)
         {
-            Argument.IsNotNull("types", types);
-
             if (types.Length == 0)
             {
                 return Array.Empty<object>();

@@ -1,29 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IServiceLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
-
-    /// <summary>
-    /// Available registration types.
-    /// </summary>
-    public enum RegistrationType
-    {
-        /// <summary>
-        /// Singleton mode which means that the same instance will be returned every time a type is resolved.
-        /// </summary>
-        Singleton,
-
-        /// <summary>
-        /// Transient mode which means that a new instance will be returned every time a type is resolved.
-        /// </summary>
-        Transient
-    }
 
     /// <summary>
     /// The service locator which is used to retrieve the right instances of services.
@@ -44,55 +22,34 @@ namespace Catel.IoC
     /// </summary>
     public interface IServiceLocator : IServiceProvider, IDisposable
     {
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the service locator can resolve non abstract types without registration.
         /// </summary>
         bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this service locators will automatically register types via attributes.
-        /// </summary>
-        /// <remarks>
-        /// By default, this value is <c>true</c>.
-        /// </remarks>
-        bool AutoRegisterTypesViaAttributes { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this service locators will ignore incorrect usage of <see cref="ServiceLocatorRegistrationAttribute"/> and do not throw <see cref="InvalidOperationException"/>.
-        /// </summary>
-        /// <remarks>
-        /// By default, this value is <c>true</c>.
-        /// </remarks>
-        bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
-        #endregion
-
-        #region Events
-        /// <summary>
         /// Occurs when a type cannot be resolved the by service locator. It first tries to raise this event.
         /// <para />
         /// If there are no handlers or no handler can fill up the missing type, an exception will be thrown by
         /// the service locator.
         /// </summary>
-        event EventHandler<MissingTypeEventArgs> MissingType;
+        event EventHandler<MissingTypeEventArgs>? MissingType;
 
         /// <summary>
         /// Occurs when a type is registered in the service locator.
         /// </summary>
-        event EventHandler<TypeRegisteredEventArgs> TypeRegistered;
+        event EventHandler<TypeRegisteredEventArgs>? TypeRegistered;
 
         /// <summary>
         /// Occurs when a type is unregistered in the service locator.
         /// </summary>
-        event EventHandler<TypeUnregisteredEventArgs> TypeUnregistered;
+        event EventHandler<TypeUnregisteredEventArgs>? TypeUnregistered;
 
         /// <summary>
         /// Occurs when a type is instantiated in the service locator.
         /// </summary>
-        event EventHandler<TypeInstantiatedEventArgs> TypeInstantiated;
-        #endregion
-
-        #region Methods
+        event EventHandler<TypeInstantiatedEventArgs>? TypeInstantiated;
+        
         /// <summary>
         /// Gets the registration info about the specified type.
         /// </summary>
@@ -209,7 +166,6 @@ namespace Catel.IoC
         /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         IEnumerable<object> ResolveTypesUsingFactory(ITypeFactory typeFactory, Type serviceType);
-        #endregion
 
         /// <summary>
         /// Determines whether all the specified types are registered with the service locator.

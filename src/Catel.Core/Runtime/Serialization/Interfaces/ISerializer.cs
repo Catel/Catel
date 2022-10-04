@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISerializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -21,42 +14,42 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Occurs when an object is about to be serialized.
         /// </summary>
-        event EventHandler<SerializationEventArgs> Serializing;
+        event EventHandler<SerializationEventArgs>? Serializing;
 
         /// <summary>
         /// Occurs when an object is about to serialize a specific member.
         /// </summary>
-        event EventHandler<MemberSerializationEventArgs> SerializingMember;
+        event EventHandler<MemberSerializationEventArgs>? SerializingMember;
 
         /// <summary>
         /// Occurs when an object has just serialized a specific member.
         /// </summary>
-        event EventHandler<MemberSerializationEventArgs> SerializedMember;
+        event EventHandler<MemberSerializationEventArgs>? SerializedMember;
 
         /// <summary>
         /// Occurs when an object has just been serialized.
         /// </summary>
-        event EventHandler<SerializationEventArgs> Serialized;
+        event EventHandler<SerializationEventArgs>? Serialized;
 
         /// <summary>
         /// Occurs when an object is about to be deserialized.
         /// </summary>
-        event EventHandler<SerializationEventArgs> Deserializing;
+        event EventHandler<SerializationEventArgs>? Deserializing;
 
         /// <summary>
         /// Occurs when an object is about to deserialize a specific member.
         /// </summary>
-        event EventHandler<MemberSerializationEventArgs> DeserializingMember;
+        event EventHandler<MemberSerializationEventArgs>? DeserializingMember;
 
         /// <summary>
         /// Occurs when an object has just deserialized a specific member.
         /// </summary>
-        event EventHandler<MemberSerializationEventArgs> DeserializedMember;
+        event EventHandler<MemberSerializationEventArgs>? DeserializedMember;
 
         /// <summary>
         /// Occurs when an object has just been deserialized.
         /// </summary>
-        event EventHandler<SerializationEventArgs> Deserialized;
+        event EventHandler<SerializationEventArgs>? Deserialized;
 
         /// <summary>
         /// Warms up the specified types. If the <paramref name="types" /> is <c>null</c>, all types known

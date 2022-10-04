@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializerBase.general.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections;
@@ -27,7 +20,6 @@ namespace Catel.Runtime.Serialization
     public abstract partial class SerializerBase<TSerializationContextInfo> : ISerializer
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -55,9 +47,7 @@ namespace Catel.Runtime.Serialization
         /// The dictionary name.
         /// </summary>
         protected const string DictionaryName = "Pairs";
-        #endregion
-
-        #region Fields
+        
         private readonly CacheStorage<Type, SerializationModelInfo> _serializationModelCache = new CacheStorage<Type, SerializationModelInfo>();
 
         private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>();
@@ -69,9 +59,7 @@ namespace Catel.Runtime.Serialization
         private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
 
         private readonly CacheStorage<string, bool> _shouldSerializeEnumAsStringCache = new CacheStorage<string, bool>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContextInfo}" /> class.
         /// </summary>
@@ -81,19 +69,13 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
         protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-            Argument.IsNotNull("typeFactory", typeFactory);
-            Argument.IsNotNull("objectAdapter", objectAdapter);
-
             SerializationManager = serializationManager;
             TypeFactory = typeFactory;
             ObjectAdapter = objectAdapter;
 
             SerializationManager.CacheInvalidated += OnSerializationManagerCacheInvalidated;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the serialization manager.
         /// </summary>
@@ -111,9 +93,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The object adapter.</value>
         protected IObjectAdapter ObjectAdapter { get; private set; }
-        #endregion
 
-        #region ISerializer<TSerializationContextInfo> Members
         /// <summary>
         /// Gets the serializable members for the specified model.
         /// </summary>
@@ -124,8 +104,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public virtual List<MemberValue> GetSerializableMembers(ISerializationContext<TSerializationContextInfo> context, object model, params string[] membersToIgnore)
         {
-            Argument.IsNotNull("model", model);
-
             var listToSerialize = new List<MemberValue>();
             var membersToIgnoreHashSet = new HashSet<string>(membersToIgnore);
 
@@ -205,9 +183,7 @@ namespace Catel.Runtime.Serialization
 
             return listToSerialize;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Handles the <see cref="E:SerializationManagerCacheInvalidated" /> event.
         /// </summary>
@@ -318,9 +294,6 @@ namespace Catel.Runtime.Serialization
         protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, TSerializationContextInfo context,
             SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("type", modelType);
-            Argument.IsNotNull("context", context);
-
             var model = CreateModelInstance(modelType);
             return GetContext(model, modelType, context, contextMode, configuration);
         }
@@ -341,9 +314,6 @@ namespace Catel.Runtime.Serialization
         protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("type", modelType);
-            Argument.IsNotNull("stream", stream);
-
             var model = CreateModelInstance(modelType);
             return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
         }
@@ -365,9 +335,6 @@ namespace Catel.Runtime.Serialization
         protected virtual ISerializationContext<TSerializationContextInfo> GetContext(object model, Type modelType,
             TSerializationContextInfo context, SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", context);
-
             var finalContext = new SerializationContext<TSerializationContextInfo>(model, modelType, context, contextMode, configuration);
             return finalContext;
         }
@@ -406,9 +373,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
         protected virtual void PopulateModel(ISerializationContext<TSerializationContextInfo> context, List<MemberValue> members)
         {
-            Argument.IsNotNull("model", context);
-            Argument.IsNotNull("members", members);
-
             if (members.Count > 0)
             {
                 var firstMember = members[0];
@@ -811,9 +775,8 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="memberType">Type of the member.</param>
         /// <returns></returns>
-        protected virtual MethodInfo GetObjectToStringMethod(Type memberType)
+        protected virtual MethodInfo? GetObjectToStringMethod(Type memberType)
         {
-
             var toStringMethod = _toStringMethodCache.GetFromCacheOrFetch(memberType, () =>
             {
                 var method = memberType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>(), BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
@@ -828,7 +791,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="memberType">Type of the member.</param>
         /// <returns></returns>
-        protected virtual MethodInfo GetObjectParseMethod(Type memberType)
+        protected virtual MethodInfo? GetObjectParseMethod(Type memberType)
         {
             var parseMethod = _parseMethodCache.GetFromCacheOrFetch(memberType, () =>
             {
@@ -1035,6 +998,5 @@ namespace Catel.Runtime.Serialization
 
             return true;
         }
-        #endregion
     }
 }

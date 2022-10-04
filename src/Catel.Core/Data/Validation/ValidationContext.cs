@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +12,6 @@ namespace Catel.Data
     /// </summary>
     public class ValidationContext : IValidationContext
     {
-        #region Fields
         /// <summary>
         /// The stop watch which will give accurate modification stamps.
         /// </summary>
@@ -33,9 +26,7 @@ namespace Catel.Data
         /// List of business rule validations.
         /// </summary>
         private readonly List<IBusinessRuleValidationResult> _businessRuleValidations = new List<IBusinessRuleValidationResult>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="ValidationContext"/> class.
         /// </summary>
@@ -84,9 +75,7 @@ namespace Catel.Data
 
             UpdateLastModificationStamp(lastModified, fieldValidationsIsNull && businessRuleValidationsIsNull);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the last modified date/time.
         /// <para />
@@ -121,9 +110,7 @@ namespace Catel.Data
         {
             get { return (GetFieldErrorCount() != 0) || (GetBusinessRuleErrorCount() != 0); }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the total validation count of all fields and business rules.
         /// </summary>
@@ -783,8 +770,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
         public void Add(IFieldValidationResult fieldValidationResult)
         {
-            Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
-
             lock (_fieldValidations)
             {
                 _fieldValidations.Add(fieldValidationResult);
@@ -800,8 +785,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
         public void Remove(IFieldValidationResult fieldValidationResult)
         {
-            Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
-
             lock (_fieldValidations)
             {
                 _fieldValidations.Remove(fieldValidationResult);
@@ -817,8 +800,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
         public void Add(IBusinessRuleValidationResult businessRuleValidationResult)
         {
-            Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
-
             lock (_businessRuleValidations)
             {
                 _businessRuleValidations.Add(businessRuleValidationResult);
@@ -834,8 +815,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
         public void Remove(IBusinessRuleValidationResult businessRuleValidationResult)
         {
-            Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
-
             lock (_businessRuleValidations)
             {
                 _businessRuleValidations.Remove(businessRuleValidationResult);
@@ -903,6 +882,5 @@ namespace Catel.Data
             var finalString = stringBuilder.ToString();
             return finalString;
         }
-        #endregion
     }
 }

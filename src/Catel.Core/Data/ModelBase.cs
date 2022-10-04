@@ -1,16 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
     using System.Xml.Serialization;
     using Logging;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
@@ -18,7 +11,6 @@ namespace Catel.Data
     [Serializable]
     public abstract partial class ModelBase : ObservableObject, IModel
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -27,18 +19,15 @@ namespace Catel.Data
         /// <summary>
         /// The property values.
         /// </summary>
-        internal IPropertyBag _propertyBag;
+        internal IPropertyBag? _propertyBag;
 
         /// <summary>
         /// Lock object.
         /// </summary>
         internal readonly object _lock = new object();
 
-        internal SuspensionContext _changeCallbacksSuspensionContext;
-        internal SuspensionContext _changeNotificationsSuspensionContext;
-        #endregion
-
-        #region Constructors
+        internal SuspensionContext? _changeCallbacksSuspensionContext;
+        internal SuspensionContext? _changeNotificationsSuspensionContext;
 
         /// <summary>
         /// Initializes static members of the <see cref="ModelBase"/> class.
@@ -55,9 +44,7 @@ namespace Catel.Data
         {
             Initialize();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
@@ -142,9 +129,7 @@ namespace Catel.Data
         /// Register the IsReadOnly property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData IsReadOnlyProperty = RegisterProperty<bool>(nameof(IsReadOnly), false, null, false, true, true);
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Allows the initialization of custom properties. This is a virtual method that is called
         /// inside the constructor before the object is fully constructed.
@@ -283,9 +268,7 @@ namespace Catel.Data
 
             return token;
         }
-        #endregion
 
-        #region INotifyPropertyChanged Members
         /// <summary>
         /// Invokes the property changed for all registered properties.
         /// </summary>
@@ -439,6 +422,5 @@ namespace Catel.Data
                 IsDirty = true;
             }
         }
-        #endregion
     }
 }

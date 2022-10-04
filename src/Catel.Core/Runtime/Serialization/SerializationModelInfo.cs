@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationModelCache.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -28,11 +21,6 @@ namespace Catel.Runtime.Serialization
         public SerializationModelInfo(Type modelType, Dictionary<string, MemberMetadata> catelProperties, Dictionary<string, MemberMetadata> fields,
             Dictionary<string, MemberMetadata> regularProperties)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("catelProperties", catelProperties);
-            Argument.IsNotNull("fields", fields);
-            Argument.IsNotNull("properties", regularProperties);
-
             ModelType = modelType;
 
             CatelTypeInfo catelTypeInfo = null;

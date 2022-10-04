@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeInstantiatedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -39,9 +33,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
         public TypeInstantiatedEventArgs(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, object instance)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-            Argument.IsNotNull("serviceImplementationType", serviceImplementationType);
-
             ServiceType = serviceType;
             ServiceImplementationType = serviceImplementationType;
             Tag = tag;

@@ -20,8 +20,6 @@
         /// <param name="serviceLocator">The service locator.</param>
         public void Initialize(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             // No need to clean the small boxing caches
             BoxingCache<bool>.Default.CleanUpInterval = TimeSpan.Zero;
 
@@ -31,7 +29,6 @@
             serviceLocator.RegisterType<IDispatcherService, ShimDispatcherService>();
 
             serviceLocator.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
-            serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
 
             serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();

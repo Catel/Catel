@@ -2,7 +2,6 @@
 {
     using System;
     using Catel;
-    using Catel.ComponentModel.Interfaces;
 
     /// <summary>
     /// Event args class containing information about events that occur in the <see cref="IAdvancedEditableObject"/>
@@ -17,8 +16,6 @@
         /// <exception cref="System.ArgumentNullException">The <paramref name="editableObject"/> is <c>null</c>.</exception>
         public EditEventArgs(IEditableObject editableObject)
         {
-            Argument.IsNotNull("editableObject", editableObject);
-
             EditableObject = editableObject;
         }
 

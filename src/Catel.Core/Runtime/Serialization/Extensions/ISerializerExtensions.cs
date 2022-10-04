@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISerializerExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.IO;
@@ -26,12 +19,10 @@ namespace Catel.Runtime.Serialization
         /// The deserialized model.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializer" /> is <c>null</c>.</exception>
-        public static TModel Deserialize<TModel>(this ISerializer serializer, Stream stream, ISerializationConfiguration configuration = null)
+        public static TModel? Deserialize<TModel>(this ISerializer serializer, Stream stream, ISerializationConfiguration configuration = null)
         {
-            Argument.IsNotNull("serializer", serializer);
-
             var model = serializer.Deserialize(typeof(TModel), stream, configuration);
-            return (TModel)model;
+            return (TModel?)model;
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-//#define EXTREME_LOGGING
+﻿//#define EXTREME_LOGGING
 
 namespace Catel.IoC
 {
@@ -30,7 +24,6 @@ namespace Catel.IoC
     /// </summary>
     public class TypeFactory : ITypeFactory
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -40,9 +33,7 @@ namespace Catel.IoC
         /// The type request path name.
         /// </summary>
         private const string TypeRequestPathName = "TypeFactory";
-        #endregion
 
-        #region Fields
         /// <summary>
         /// Provides thread safe access to constructors cache.
         /// </summary>
@@ -74,9 +65,7 @@ namespace Catel.IoC
         private readonly ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
 
         private bool _disposedValue;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeFactory" /> class.
         /// </summary>
@@ -84,8 +73,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
         public TypeFactory(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             _currentTypeRequestPath = new ThreadLocal<TypeRequestPath>(() => TypeRequestPath.Root(TypeRequestPathName));
 
             _serviceLocator = serviceLocator;
@@ -94,9 +81,7 @@ namespace Catel.IoC
             // Note: this will cause memory leaks (TypeCache will keep this class alive), but it's an acceptable "loss"
             TypeCache.AssemblyLoaded += OnAssemblyLoaded;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the default instance.
         /// </summary>
@@ -111,9 +96,7 @@ namespace Catel.IoC
                 return IoCConfiguration.DefaultTypeFactory;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Creates an instance of the specified type using dependency injection.
         /// </summary>
@@ -159,8 +142,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         public object CreateInstanceWithParametersWithTag(Type typeToConstruct, object tag, params object[] parameters)
         {
-            Argument.IsNotNull("typeToConstruct", typeToConstruct);
-
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, false);
         }
 
@@ -190,8 +171,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         public object CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object tag, params object[] parameters)
         {
-            Argument.IsNotNull("typeToConstruct", typeToConstruct);
-
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
 
@@ -202,11 +181,6 @@ namespace Catel.IoC
         /// <param name="typeMetaData">Metadata about object to initialize</param>
         private void InitializeAfterConstruction(object obj, TypeMetaData typeMetaData)
         {
-            if (obj is null)
-            {
-                return;
-            }
-
             var objectType = ObjectToStringHelper.ToTypeString(obj);
 
 #if EXTREME_LOGGING
@@ -221,23 +195,6 @@ namespace Catel.IoC
 #if EXTREME_LOGGING
             Log.Debug($"Injecting properties into type '{objectType}' after construction");
 #endif
-
-            var type = obj.GetType();
-            foreach (var injectedProperty in typeMetaData.GetInjectedProperties())
-            {
-                var propertyInfo = injectedProperty.Key;
-                var injectAttribute = injectedProperty.Value;
-
-                try
-                {
-                    var dependency = _serviceLocator.ResolveTypeUsingFactory(this, injectAttribute.Type, injectAttribute.Tag);
-                    propertyInfo.SetValue(obj, dependency, null);
-                }
-                catch (Exception ex)
-                {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>(ex, $"Failed to set property '{type.Name}.{propertyInfo.Name}' during property dependency injection");
-                }
-            }
 
             var objAsINeedCustomInitialization = obj as INeedCustomInitialization;
             if (objAsINeedCustomInitialization is not null)
@@ -255,16 +212,15 @@ namespace Catel.IoC
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, the additional dependencies will be auto completed.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters, bool autoCompleteDependencies)
+        private object? CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters, bool autoCompleteDependencies)
         {
-            Argument.IsNotNull("typeToConstruct", typeToConstruct);
-
             if (parameters is null)
             {
                 parameters = Array.Empty<object>();
             }
 
             var previousRequestPath = _currentTypeRequestPath.Value;
+
             try
             {
                 var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
@@ -706,13 +662,11 @@ namespace Catel.IoC
         {
             ClearCache();
         }
-        #endregion
 
         private class ConstructorCacheKey
         {
             private readonly int _hashCode;
 
-            #region Constructors
             public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object[] parameters)
             {
                 string key = type.GetSafeFullName(true);
@@ -725,16 +679,11 @@ namespace Catel.IoC
                 AutoCompleteDependecies = autoCompleteDependecies;
                 _hashCode = Key.GetHashCode();
             }
-            #endregion
 
-            #region Properties
             public string Key { get; private set; }
 
             public bool AutoCompleteDependecies { get; private set; }
 
-            #endregion
-
-            #region Methods
             public override bool Equals(object obj)
             {
                 var cacheKey = obj as ConstructorCacheKey;
@@ -760,7 +709,6 @@ namespace Catel.IoC
             {
                 return _hashCode;
             }
-            #endregion
         }
 
         private class ConstructorCacheValue
@@ -799,20 +747,16 @@ namespace Catel.IoC
                 Version = version;
             }
 
-            #region Properties
-
             public ConstructorInfo ConstructorInfo { get; private set; }
 
             public uint Version { get; private set; }
-            #endregion
-
+            
             // TODO: Equals & GetHashCode currently are redundant
         }
 
         private class TypeMetaData
         {
             private readonly ICacheStorage<string, List<ConstructorInfo>> _callCache = new CacheStorage<string, List<ConstructorInfo>>();
-            private volatile Dictionary<PropertyInfo, InjectAttribute> _injectedProperties;
             private readonly object _lockObject = new object();
 
             public TypeMetaData(Type type)
@@ -821,41 +765,6 @@ namespace Catel.IoC
             }
 
             public Type Type { get; private set; }
-
-            public Dictionary<PropertyInfo, InjectAttribute> GetInjectedProperties()
-            {
-                if (_injectedProperties is not null)
-                {
-                    return _injectedProperties;
-                }
-
-                lock (_lockObject)
-                {
-                    if (_injectedProperties is not null)
-                    {
-                        return _injectedProperties;
-                    }
-
-                    _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
-
-                    var properties = Type.GetPropertiesEx();
-                    foreach (var property in properties)
-                    {
-                        var injectAttribute = property.GetCustomAttributeEx<InjectAttribute>(false);
-                        if (injectAttribute is not null)
-                        {
-                            if (injectAttribute.Type is null)
-                            {
-                                injectAttribute.Type = property.PropertyType;
-                            }
-
-                            _injectedProperties.Add(property, injectAttribute);
-                        }
-                    }
-                }
-
-                return _injectedProperties;
-            }
 
             public List<ConstructorInfo> GetConstructors()
             {
@@ -893,19 +802,6 @@ namespace Catel.IoC
                     constructors = (from ctor in Type.GetConstructorsEx()
                                     where ctor.GetParameters().Length >= parameterCount
                                     orderby ctor.GetParameters().Length descending, CountSpecialObjects(ctor)
-                                    select ctor).ToList();
-                }
-
-                if (decoratedWithInjectionConstructorAttribute)
-                {
-                    constructors = (from ctor in constructors
-                                    where ctor.IsDecoratedWithAttribute<InjectionConstructorAttribute>()
-                                    select ctor).ToList();
-                }
-                else
-                {
-                    constructors = (from ctor in constructors
-                                    where !ctor.IsDecoratedWithAttribute<InjectionConstructorAttribute>()
                                     select ctor).ToList();
                 }
 

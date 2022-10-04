@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyResolverManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
@@ -16,16 +9,13 @@ namespace Catel.IoC
     /// </summary>
     public class DependencyResolverManager : IDependencyResolverManager
     {
-        #region Fields
         private IDependencyResolver _defaultDependencyResolver;
 
         private readonly object _lockObject = new object();
 
         private readonly ConditionalWeakTable<object, IDependencyResolver> _dependencyResolversByInstance = new ConditionalWeakTable<object, IDependencyResolver>(); 
         private readonly Dictionary<Type, IDependencyResolver> _dependencyResolversByType = new Dictionary<Type, IDependencyResolver>(); 
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="DependencyResolverManager"/> class.
         /// </summary>
@@ -41,9 +31,7 @@ namespace Catel.IoC
         {
             DefaultDependencyResolver = ServiceLocator.Default.ResolveType<IDependencyResolver>();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or the default instance.
         /// </summary>
@@ -63,14 +51,10 @@ namespace Catel.IoC
             }
             set
             {
-                Argument.IsNotNull("value", value);
-
                 _defaultDependencyResolver = value;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the dependency resolver for a specific instance.
         /// </summary>
@@ -80,9 +64,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver" /> is <c>null</c>.</exception>
         public virtual void RegisterDependencyResolverForInstance(object instance, IDependencyResolver dependencyResolver)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
-
             lock (_lockObject)
             {
                 _dependencyResolversByInstance.Add(instance, dependencyResolver);
@@ -98,8 +79,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         public virtual IDependencyResolver GetDependencyResolverForInstance(object instance)
         {
-            Argument.IsNotNull("instance", instance);
-
             lock (_lockObject)
             {
                 if (!_dependencyResolversByInstance.TryGetValue(instance, out var dependencyResolver))
@@ -120,9 +99,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver" /> is <c>null</c>.</exception>
         public virtual void RegisterDependencyResolverForType(Type type, IDependencyResolver dependencyResolver)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
-
             lock (_lockObject)
             {
                 _dependencyResolversByType[type] = dependencyResolver;
@@ -138,8 +114,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual IDependencyResolver GetDependencyResolverForType(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             lock (_lockObject)
             {
                 if (_dependencyResolversByType.TryGetValue(type, out var resolver))
@@ -150,6 +124,5 @@ namespace Catel.IoC
 
             return DefaultDependencyResolver;
         }
-        #endregion
     }
 }
