@@ -12,7 +12,7 @@
 
     public static partial class ExpressionBuilder
     {
-        public static Expression<Func<object, TField>> CreateFieldGetter<TField>(Type modelType, string fieldName)
+        public static Expression<Func<object, TField>>? CreateFieldGetter<TField>(Type modelType, string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -20,7 +20,7 @@
             return field is null ? null : CreateFieldGetter<object, TField>(field);
         }
 
-        public static Expression<Func<T, TField>> CreateFieldGetter<T, TField>(string fieldName)
+        public static Expression<Func<T, TField>>? CreateFieldGetter<T, TField>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -28,12 +28,12 @@
             return field is null ? null : CreateFieldGetter<T, TField>(field);
         }
 
-        public static Expression<Func<T, TField>> CreateFieldGetter<T, TField>(FieldInfo fieldInfo)
+        public static Expression<Func<T, TField>>? CreateFieldGetter<T, TField>(FieldInfo fieldInfo)
         {
             return CreateFieldGetterExpression<T, TField>(fieldInfo);
         }
 
-        public static Expression<Func<T, object>> CreateFieldGetter<T>(string fieldName)
+        public static Expression<Func<T, object>>? CreateFieldGetter<T>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -41,7 +41,7 @@
             return field is null ? null : CreateFieldGetter<T>(field);
         }
 
-        public static Expression<Func<T, object>> CreateFieldGetter<T>(FieldInfo fieldInfo)
+        public static Expression<Func<T, object>>? CreateFieldGetter<T>(FieldInfo fieldInfo)
         {
             return fieldInfo is null ? null : CreateFieldGetterExpression<T, object>(fieldInfo);
         }
@@ -84,7 +84,7 @@
             return new ReadOnlyDictionary<string, Expression<Func<T, object>>>(fieldGetters);
         }
 
-        private static Expression<Func<T, TField>> CreateFieldGetterExpression<T, TField>(FieldInfo fieldInfo)
+        private static Expression<Func<T, TField>>? CreateFieldGetterExpression<T, TField>(FieldInfo fieldInfo)
         {
             var targetType = fieldInfo.DeclaringType;
             if (targetType is null)

@@ -8,7 +8,7 @@
     /// </summary>
     public static partial class ReflectionExtensions
     {
-        public static Attribute GetCustomAttributeEx(this MethodInfo methodInfo, Type attributeType, bool inherit)
+        public static Attribute? GetCustomAttributeEx(this MethodInfo methodInfo, Type attributeType, bool inherit)
         {
             var attributes = GetCustomAttributesEx(methodInfo, attributeType, inherit);
             return (attributes.Length > 0) ? attributes[0] : null;

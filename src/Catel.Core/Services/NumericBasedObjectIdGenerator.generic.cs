@@ -9,6 +9,7 @@
     /// <typeparam name="TUniqueIdentifier">The unique identifier type.</typeparam>
     public abstract class NumericBasedObjectIdGenerator<TObjectType, TUniqueIdentifier> : ObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType : class
+        where TUniqueIdentifier : notnull
     {
         static NumericBasedObjectIdGenerator()
         {
@@ -18,6 +19,6 @@
         /// <summary>
         /// Gets and sets the value.
         /// </summary>
-        protected static TUniqueIdentifier Value { get; set; } = default(TUniqueIdentifier);
+        protected static TUniqueIdentifier Value { get; set; } = default!;
     }
 }

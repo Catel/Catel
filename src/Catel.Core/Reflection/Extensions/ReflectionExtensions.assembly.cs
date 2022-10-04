@@ -24,7 +24,7 @@
             return results;
         }
 
-        public static Attribute GetCustomAttributeEx(this Assembly assembly, Type attributeType)
+        public static Attribute? GetCustomAttributeEx(this Assembly assembly, Type attributeType)
         {
             var attributes = GetCustomAttributesEx(assembly, attributeType);
             return (attributes.Length > 0) ? attributes[0] : null;

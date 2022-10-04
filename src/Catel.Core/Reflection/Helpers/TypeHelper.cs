@@ -87,15 +87,17 @@
         /// <exception cref = "ArgumentNullException">The <paramref name = "toCheck" /> is <c>null</c>.</exception>
         public static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
         {
-            while ((toCheck is not null) && (toCheck != typeof(object)))
+            var processedType = toCheck;
+
+            while ((processedType is not null) && (processedType != typeof(object)))
             {
-                var cur = toCheck.IsGenericTypeEx() ? toCheck.GetGenericTypeDefinition() : toCheck;
+                var cur = processedType.IsGenericTypeEx() ? processedType.GetGenericTypeDefinition() : processedType;
                 if (generic == cur)
                 {
                     return true;
                 }
 
-                toCheck = toCheck.GetBaseTypeEx();
+                processedType = processedType.GetBaseTypeEx();
             }
 
             return false;

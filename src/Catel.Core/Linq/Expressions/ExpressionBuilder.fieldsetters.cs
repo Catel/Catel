@@ -12,7 +12,7 @@
 
     public static partial class ExpressionBuilder
     {
-        public static Expression<Action<object, TField>> CreateFieldSetter<TField>(Type modelType, string fieldName)
+        public static Expression<Action<object, TField>>? CreateFieldSetter<TField>(Type modelType, string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -20,7 +20,7 @@
             return field is null ? null : CreateFieldSetter<object, TField>(field);
         }
 
-        public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(string fieldName)
+        public static Expression<Action<T, TField>>? CreateFieldSetter<T, TField>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -28,12 +28,12 @@
             return field is null ? null : CreateFieldSetter<T, TField>(field);
         }
 
-        public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(FieldInfo fieldInfo)
+        public static Expression<Action<T, TField>>? CreateFieldSetter<T, TField>(FieldInfo fieldInfo)
         {
             return CreateFieldSetterExpression<T, TField>(fieldInfo);
         }
 
-        public static Expression<Action<T, object>> CreateFieldSetter<T>(string fieldName)
+        public static Expression<Action<T, object>>? CreateFieldSetter<T>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -41,7 +41,7 @@
             return field is null ? null : CreateFieldSetter<T>(field);
         }
 
-        public static Expression<Action<T, object>> CreateFieldSetter<T>(FieldInfo fieldInfo)
+        public static Expression<Action<T, object>>? CreateFieldSetter<T>(FieldInfo fieldInfo)
         {
             return CreateFieldSetterExpression<T, object>(fieldInfo);
         }
@@ -84,7 +84,7 @@
             return new ReadOnlyDictionary<string, Expression<Action<T, TField>>>(fieldSetters);
         }
 
-        private static Expression<Action<T, TField>> CreateFieldSetterExpression<T, TField>(FieldInfo fieldInfo)
+        private static Expression<Action<T, TField>>? CreateFieldSetterExpression<T, TField>(FieldInfo fieldInfo)
         {
             var targetType = fieldInfo.DeclaringType;
             if (targetType is null)

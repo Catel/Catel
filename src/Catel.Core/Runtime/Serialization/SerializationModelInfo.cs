@@ -23,7 +23,7 @@
         {
             ModelType = modelType;
 
-            CatelTypeInfo catelTypeInfo = null;
+            CatelTypeInfo? catelTypeInfo = null;
 
             CatelPropertyNames = new HashSet<string>(catelProperties.Keys);
             CatelProperties = new List<IPropertyData>();
@@ -56,7 +56,10 @@
                     fieldInfo = modelType.GetFieldEx(field.Key);
                 }
 
-                Fields.Add(fieldInfo);
+                if (fieldInfo is not null)
+                {
+                    Fields.Add(fieldInfo);
+                }
             }
 
             PropertyNames = new HashSet<string>(regularProperties.Keys);
@@ -71,7 +74,10 @@
                     propertyInfo = modelType.GetPropertyEx(regularProperty.Key);
                 }
 
-                Properties.Add(propertyInfo);
+                if (propertyInfo is not null)
+                {
+                    Properties.Add(propertyInfo);
+                }
             }
         }
 

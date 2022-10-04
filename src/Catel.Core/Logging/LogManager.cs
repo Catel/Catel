@@ -381,7 +381,7 @@
         {
             var callingType = StaticHelper.GetCallingType();
 
-            return GetLogger(callingType);
+            return GetLogger(callingType ?? typeof(object));
         }
 
         /// <summary>
@@ -389,7 +389,7 @@
         /// </summary>
         /// <param name="configurationFilePath">The configuration file path.</param>
         /// <param name="assembly">The assembly to determine product info. If <c>null</c>, the entry assembly will be used.</param>
-        public static void LoadListenersFromConfigurationFile(string configurationFilePath, Assembly assembly = null)
+        public static void LoadListenersFromConfigurationFile(string configurationFilePath, Assembly? assembly = null)
         {
             if (string.IsNullOrWhiteSpace(configurationFilePath))
             {
@@ -419,7 +419,7 @@
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="assembly">The assembly to determine product info. If <c>null</c>, the entry assembly will be used.</param>
-        public static void LoadListenersFromConfiguration(Configuration configuration, Assembly assembly = null)
+        public static void LoadListenersFromConfiguration(Configuration configuration, Assembly? assembly = null)
         {
             if (configuration is null)
             {

@@ -58,7 +58,7 @@
         /// </summary>
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns>IEnumerable{ILogListener}.</returns>
-        public IEnumerable<ILogListener> GetLogListeners(Assembly assembly = null)
+        public IEnumerable<ILogListener> GetLogListeners(Assembly? assembly = null)
         {
             var logListeners = new List<ILogListener>();
 

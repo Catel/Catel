@@ -28,7 +28,7 @@
             Argument.IsNotNullOrWhitespace("elementName", elementName);
 
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
+            var dataContractSerializerFactory = dependencyResolver.ResolveRequired<IDataContractSerializerFactory>();
             var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, elementName, null, null);
 
             var document = new XDocument();
@@ -53,7 +53,7 @@
             var xmlName = element.Name.LocalName;
 
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
+            var dataContractSerializerFactory = dependencyResolver.ResolveRequired<IDataContractSerializerFactory>();
             var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, xmlName, null, null);
 
             var attribute = element.Attribute(XName.Get("type", "http://schemas.catelproject.com"));

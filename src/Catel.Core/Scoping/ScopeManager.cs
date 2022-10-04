@@ -53,7 +53,13 @@ namespace Catel.Scoping
                 Log.Debug($"No custom function to create the scope is provided, creating custom scope for type '{TypeName}' with name '{_scopeName}' using TypeFactory");
 
                 var typeFactory = this.GetTypeFactory();
-                _scopeObject = typeFactory.CreateInstance<T>();
+                var scopeObject = typeFactory.CreateInstance<T>();
+                if (scopeObject is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Failed to create scope object '{typeof(T).GetSafeFullName()}'");
+                }
+
+                _scopeObject = scopeObject;
             }
         }
 

@@ -19,7 +19,7 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly ICacheStorage<string, PropertyInfo> _availableProperties = new CacheStorage<string, PropertyInfo>();
+        private static readonly ICacheStorage<string, PropertyInfo?> _availableProperties = new CacheStorage<string, PropertyInfo?>();
 
         /// <summary>
         /// Determines whether the specified property is a public property on the specified object.
@@ -176,7 +176,7 @@
         {
             Argument.IsNotNullOrWhitespace("property", property);
 
-            value = default;
+            value = default!;
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
             if (propertyInfo is null)
@@ -204,7 +204,7 @@
 
             try
             {
-                value = (TValue)propertyInfo.GetValue(obj, null);
+                value = (TValue)propertyInfo.GetValue(obj, null)!;
                 return true;
             }
             catch (MethodAccessException)
@@ -230,7 +230,7 @@
         /// <returns><c>true</c> if the method succeeds; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase = false)
+        public static bool TrySetPropertyValue(object obj, string property, object? value, bool ignoreCase = false)
         {
             return TrySetPropertyValue(obj, property, value, ignoreCase, false);
         }
@@ -246,12 +246,12 @@
         /// <exception cref="CannotSetPropertyValueException">The the property value cannot be written.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static void SetPropertyValue(object obj, string property, object value, bool ignoreCase = false)
+        public static void SetPropertyValue(object obj, string property, object? value, bool ignoreCase = false)
         {
             TrySetPropertyValue(obj, property, value, ignoreCase, true);
         }
 
-        private static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase, bool throwOnError)
+        private static bool TrySetPropertyValue(object obj, string property, object? value, bool ignoreCase, bool throwOnError)
         {
             Argument.IsNotNullOrWhitespace("property", property);
 
@@ -321,7 +321,7 @@
                     "Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
             }
 
-            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, Array.Empty<object>(), CultureInfo.InvariantCulture);
+            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, Array.Empty<object>(), CultureInfo.InvariantCulture)!;
         }
 
         /// <summary>
@@ -331,7 +331,7 @@
         /// <param name="property">The property.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case.</param>
         /// <returns>PropertyInfo.</returns>
-        public static PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase = false)
+        public static PropertyInfo? GetPropertyInfo(object obj, string property, bool ignoreCase = false)
         {
             var cacheKey = $"{obj.GetType().FullName}_{property}_{BoxingCache.GetBoxedValue(ignoreCase)}";
             return _availableProperties.GetFromCacheOrFetch(cacheKey, () =>

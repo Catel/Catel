@@ -13,16 +13,6 @@
         /// <summary>
         /// Determines whether the specified message type is registered.
         /// </summary>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="tag">The tag.</param>
-        /// <returns>
-        ///   <c>true</c> if the message type is registered; otherwise, <c>false</c>.
-        /// </returns>
-        bool IsMessageRegistered<TMessage>(object? tag = null);
-
-        /// <summary>
-        /// Determines whether the specified message type is registered.
-        /// </summary>
         /// <param name="messageType">The type of the message.</param>
         /// <param name="tag">The tag.</param>
         /// <returns>
@@ -44,7 +34,8 @@
         /// return <c>false</c>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        bool Register<TMessage>(object recipient, Action<TMessage> handler, object? tag = null);
+        bool Register<TMessage>(object recipient, Action<TMessage> handler, object? tag = null)
+            where TMessage : notnull;
 
         /// <summary>
         /// Unregisters a specific recipient for a specific message with the specified tag.
@@ -59,7 +50,8 @@
         /// is not registered, this method will return <c>false</c>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        bool Unregister<TMessage>(object recipient, Action<TMessage> handler, object? tag = null);
+        bool Unregister<TMessage>(object recipient, Action<TMessage> handler, object? tag = null)
+            where TMessage : notnull;
 
         /// <summary>
         /// Unregisters a specific recipient for all the (non-static) message the recipient is subscribed to.
@@ -98,7 +90,8 @@
         /// <c>true</c> if any handlers were invoked; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        bool SendMessage<TMessage>(TMessage message, object? tag = null);
+        bool SendMessage<TMessage>(TMessage message, object? tag = null)
+            where TMessage : notnull;
 
         /// <summary>
         /// Cleans up the list of registered handlers. All handlers that are no longer alive

@@ -63,9 +63,9 @@
             module.Initialize(serviceLocator);
         }
 
-        private static Configuration GetExeConfiguration()
+        private static Configuration? GetExeConfiguration()
         {
-            Configuration config = null;
+            Configuration? config = null;
 
             config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             if (ContainsVsHost(config.FilePath))
@@ -76,7 +76,7 @@
             return config;
         }
 
-        private static Configuration GetDllConfiguration()
+        private static Configuration? GetDllConfiguration()
         {
             var entryAssembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
             if (entryAssembly is null)

@@ -15,7 +15,7 @@
         /// <param name="memberInfo">The member Info.</param>
         /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo" /> is <c>null</c>.</exception>
-        public static TAttribute GetAttribute<TAttribute>(this MemberInfo memberInfo)
+        public static TAttribute? GetAttribute<TAttribute>(this MemberInfo memberInfo)
             where TAttribute : Attribute
         {
             TryGetAttribute(memberInfo, typeof(TAttribute), out var tempAttribute);
@@ -31,7 +31,7 @@
         /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static Attribute GetAttribute(this MemberInfo memberInfo, Type attributeType)
+        public static Attribute? GetAttribute(this MemberInfo memberInfo, Type attributeType)
         {
             TryGetAttribute(memberInfo, attributeType, out var attribute);
 
@@ -45,7 +45,7 @@
         /// <param name="type">The type.</param>
         /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static TAttribute GetAttribute<TAttribute>(this Type type)
+        public static TAttribute? GetAttribute<TAttribute>(this Type type)
             where TAttribute : Attribute
         {
             TryGetAttribute(type, typeof(TAttribute), out var tempAttribute);
@@ -61,7 +61,7 @@
         /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static Attribute GetAttribute(this Type type, Type attributeType)
+        public static Attribute? GetAttribute(this Type type, Type attributeType)
         {
             TryGetAttribute(type, attributeType, out var attribute);
 
@@ -78,7 +78,7 @@
         /// <c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
-        public static bool TryGetAttribute<TAttribute>(this MemberInfo memberInfo, out TAttribute attribute)
+        public static bool TryGetAttribute<TAttribute>(this MemberInfo memberInfo, out TAttribute? attribute)
             where TAttribute : Attribute
         {
             var result = TryGetAttribute(memberInfo, typeof(TAttribute), out var tempAttribute);
@@ -98,7 +98,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType"/> is <c>null</c>.</exception>
-        public static bool TryGetAttribute(this MemberInfo memberInfo, Type attributeType, out Attribute attribute)
+        public static bool TryGetAttribute(this MemberInfo memberInfo, Type attributeType, out Attribute? attribute)
         {
             attribute = null;
             var attributes = memberInfo.GetCustomAttributes(attributeType, false) as Attribute[];
@@ -120,7 +120,7 @@
         /// <param name="attribute">The attribute.</param>
         /// <returns><c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static bool TryGetAttribute<TAttribute>(this Type type, out TAttribute attribute)
+        public static bool TryGetAttribute<TAttribute>(this Type type, out TAttribute? attribute)
             where TAttribute : Attribute
         {
             var result = TryGetAttribute(type, typeof(TAttribute), out var tempAttribute);
@@ -138,7 +138,7 @@
         /// <returns><c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static bool TryGetAttribute(this Type type, Type attributeType, out Attribute attribute)
+        public static bool TryGetAttribute(this Type type, Type attributeType, out Attribute? attribute)
         {
             attribute = null;
             var attributes = type.GetCustomAttributesEx(attributeType, false) as Attribute[];

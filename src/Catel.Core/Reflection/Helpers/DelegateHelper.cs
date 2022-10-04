@@ -37,6 +37,11 @@
             Argument.IsNotNullOrWhitespace("methodName", methodName);
 
             var methodInfo = targetType.GetMethodEx(methodName, BindingFlagsHelper.GetFinalBindingFlags(true, true));
+            if (methodInfo is null)
+            {
+                throw new CatelException($"Could not find method '{targetType.Name}.{methodName}'");
+            }
+
             return CreateDelegate(delegateType, null, methodInfo);
         }
 
@@ -55,6 +60,11 @@
             Argument.IsNotNullOrWhitespace("methodName", methodName);
 
             var methodInfo = target.GetType().GetMethodEx(methodName, BindingFlagsHelper.GetFinalBindingFlags(true, true));
+            if (methodInfo is null)
+            {
+                throw new CatelException($"Could not find method '{target.GetType().Name}.{methodName}'");
+            }
+
             return CreateDelegate(delegateType, target, methodInfo);
         }
 
@@ -67,7 +77,7 @@
         /// <returns>The delegate.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="delegateType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="methodInfo"/> is <c>null</c>.</exception>
-        public static Delegate CreateDelegate(Type delegateType, object target, MethodInfo methodInfo)
+        public static Delegate CreateDelegate(Type delegateType, object? target, MethodInfo methodInfo)
         {
             return Delegate.CreateDelegate(delegateType, target, methodInfo);
         }

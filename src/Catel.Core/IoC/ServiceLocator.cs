@@ -785,7 +785,7 @@
             }
         }
 
-        private object DefaultCreateServiceFunc(ITypeFactory typeFactory, ServiceLocatorRegistration registration)
+        private object? DefaultCreateServiceFunc(ITypeFactory typeFactory, ServiceLocatorRegistration registration)
         {
             var instance = typeFactory.CreateInstanceWithTag(registration.ImplementingType, registration.Tag);
             return instance;

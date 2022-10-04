@@ -15,6 +15,6 @@
         /// <returns>The xml namespace.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="preferredPrefix"/> is <c>null</c> or whitespace.</exception>
-        XmlNamespace GetNamespace(Type type, string preferredPrefix);
+        XmlNamespace? GetNamespace(Type type, string preferredPrefix);
     }
 }

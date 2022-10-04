@@ -136,14 +136,14 @@
         /// <param name="type">The type.</param>
         /// <returns>Type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public static Type GetCollectionElementType(this Type type)
+        public static Type? GetCollectionElementType(this Type type)
         {
             if (type.IsArrayEx())
             {
                 return type.GetElementTypeEx();
             }
 
-            Type genericEnumerableInterface;
+            Type? genericEnumerableInterface;
             if (typeof(IEnumerable).IsAssignableFromEx(type) && type.IsGenericTypeEx())
             {
                 genericEnumerableInterface = type;

@@ -26,7 +26,7 @@
             /// <summary>
             /// The tag which can be used to make a difference between messages.
             /// </summary>
-            public object Tag;
+            public object? Tag;
         }
 
         /// <summary>
@@ -54,21 +54,6 @@
         public static IMessageMediator Default
         {
             get { return _instance; }
-        }
-
-        /// <summary>
-        /// Determines whether the specified message type is registered.
-        /// </summary>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="tag">The tag.</param>
-        /// <returns>
-        ///   <c>true</c> if the message type is registered; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsMessageRegistered<TMessage>(object? tag = null)
-        {
-            var messageType = typeof(TMessage);
-
-            return IsMessageRegistered(messageType, tag);
         }
 
         /// <summary>
@@ -107,6 +92,7 @@
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public bool Register<TMessage>(object recipient, Action<TMessage> handler, object? tag = null)
+            where TMessage : notnull
         {
             lock (_lockObject)
             {
@@ -153,6 +139,7 @@
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public bool Unregister<TMessage>(object recipient, Action<TMessage> handler, object? tag = null)
+            where TMessage : notnull
         {
             lock (_lockObject)
             {
@@ -231,6 +218,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
         public bool SendMessage<TMessage>(TMessage message, object? tag = null)
+            where TMessage : notnull
         {
             Log.Debug("Sending message of type '{0}' with tag '{1}'", message.GetType().FullName, ObjectToStringHelper.ToString(tag));
 

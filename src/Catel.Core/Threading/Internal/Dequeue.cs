@@ -17,6 +17,7 @@ namespace Catel.Threading
     [DebuggerDisplay("Count = {Count}, Capacity = {Capacity}")]
     [DebuggerTypeProxy(typeof (Dequeue<>.DebugView))]
     internal sealed class Dequeue<T> : IList<T>, System.Collections.IList
+        where T : notnull
     {
         /// <summary>
         /// The default capacity.
@@ -725,25 +726,25 @@ namespace Catel.Threading
         #endregion
 
         #region ObjectListImplementations
-        int System.Collections.IList.Add(object value)
+        int System.Collections.IList.Add(object? value)
         {
-            AddToBack((T) value);
+            AddToBack((T) value!);
             return Count - 1;
         }
 
-        bool System.Collections.IList.Contains(object value)
+        bool System.Collections.IList.Contains(object? value)
         {
-            return this.Contains((T) value);
+            return this.Contains((T?) value);
         }
 
-        int System.Collections.IList.IndexOf(object value)
+        int System.Collections.IList.IndexOf(object? value)
         {
-            return IndexOf((T) value);
+            return IndexOf((T) value!);
         }
 
-        void System.Collections.IList.Insert(int index, object value)
+        void System.Collections.IList.Insert(int index, object? value)
         {
-            Insert(index, (T) value);
+            Insert(index, (T) value!);
         }
 
         bool System.Collections.IList.IsFixedSize
@@ -756,16 +757,15 @@ namespace Catel.Threading
             get { return false; }
         }
 
-        void System.Collections.IList.Remove(object value)
+        void System.Collections.IList.Remove(object? value)
         {
-            Remove((T) value);
+            Remove((T) value!);
         }
 
-        object System.Collections.IList.this[int index]
+        object? System.Collections.IList.this[int index]
         {
             get { return this[index]; }
-
-            set { this[index] = (T) value; }
+            set { this[index] = (T) value!; }
         }
 
         void System.Collections.ICollection.CopyTo(Array array, int index)

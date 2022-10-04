@@ -40,7 +40,7 @@
                 var serviceLocator = ServiceLocator.Default;
                 if (serviceLocator.IsTypeRegistered<IEntryAssemblyResolver>())
                 {
-                    var entryAssemblyResolver = serviceLocator.ResolveType<IEntryAssemblyResolver>();
+                    var entryAssemblyResolver = serviceLocator.ResolveRequiredType<IEntryAssemblyResolver>();
                     assembly = entryAssemblyResolver.Resolve();
 
                     if (assembly is not null)

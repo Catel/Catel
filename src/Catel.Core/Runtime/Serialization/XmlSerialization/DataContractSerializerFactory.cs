@@ -49,11 +49,11 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><see cref="DataContractSerializer" /> for the given type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
-        public virtual List<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, List<Type> additionalKnownTypes = null)
+        public virtual List<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, List<Type>? additionalKnownTypes = null)
         {
             var serializingTypeName = serializingType.GetSafeFullName(false);
             var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = $"{serializingTypeName}|{typeToSerializeName}|{(additionalKnownTypes?.Count ?? 0).ToString()}";
+            var key = $"{serializingTypeName}|{typeToSerializeName}|{additionalKnownTypes?.Count ?? 0}";
 
             return _knownTypesCache.GetFromCacheOrFetch(key, () =>
             {
@@ -96,7 +96,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
-        public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null)
+        public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string? rootNamespace = null, List<Type>? additionalKnownTypes = null)
         {
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
@@ -430,6 +430,7 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 var additionalTypes = new List<Type>();
                 var knownTypeAttributes = type.GetCustomAttributesEx(typeof(KnownTypeAttribute), true);
+
                 foreach (var attr in knownTypeAttributes)
                 {
                     var ktattr = attr as KnownTypeAttribute;
@@ -453,7 +454,10 @@ namespace Catel.Runtime.Serialization.Xml
                         }
                         else
                         {
-                            additionalTypes.Add(ktattr.Type);
+                            if (ktattr.Type is not null)
+                            {
+                                additionalTypes.Add(ktattr.Type);
+                            }
                         }
                     }
                 }
@@ -528,7 +532,7 @@ namespace Catel.Runtime.Serialization.Xml
             /// <param name="serializingType">Type of the serializing.</param>
             /// <param name="typeToSerialize">The type to serialize.</param>
             /// <param name="additionalKnownTypes">The additional known types.</param>
-            public XmlSerializerTypeInfo(Type serializingType, Type typeToSerialize, IEnumerable<Type> additionalKnownTypes = null)
+            public XmlSerializerTypeInfo(Type serializingType, Type typeToSerialize, IEnumerable<Type>? additionalKnownTypes = null)
             {
                 SerializingType = serializingType;
                 TypeToSerialize = typeToSerialize;

@@ -27,13 +27,13 @@
         /// Removes a single entry in the wait queue. Returns a disposable that completes that entry.
         /// </summary>
         /// <param name="result">The result used to complete the wait queue entry. If this isn't needed, use <c>default(T)</c>.</param>
-        IDisposable Dequeue(T result = default(T));
+        IDisposable Dequeue(T result = default!);
 
         /// <summary>
         /// Removes all entries in the wait queue. Returns a disposable that completes all entries.
         /// </summary>
         /// <param name="result">The result used to complete the wait queue entries. If this isn't needed, use <c>default(T)</c>.</param>
-        IDisposable DequeueAll(T result = default(T));
+        IDisposable DequeueAll(T result = default!);
 
         /// <summary>
         /// Attempts to remove an entry from the wait queue. Returns a disposable that cancels the entry.

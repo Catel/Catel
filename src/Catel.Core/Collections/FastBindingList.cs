@@ -400,7 +400,7 @@
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequired(action);
+                _dispatcherService.Value.BeginInvokeIfRequired(action);
             }
             else
             {
@@ -440,7 +440,7 @@
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequired(() => base.OnListChanged(e));
+                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnListChanged(e));
             }
             else
             {

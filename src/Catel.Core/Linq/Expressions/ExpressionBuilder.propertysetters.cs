@@ -10,7 +10,7 @@
 
     public static partial class ExpressionBuilder
     {
-        public static Expression<Action<object, TProperty>> CreatePropertySetter<TProperty>(Type modelType, string propertyName)
+        public static Expression<Action<object, TProperty>>? CreatePropertySetter<TProperty>(Type modelType, string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -18,7 +18,7 @@
             return property?.SetMethod is null ? null : CreatePropertySetter<object, TProperty>(property);
         }
 
-        public static Expression<Action<T, TProperty>> CreatePropertySetter<T, TProperty>(string propertyName)
+        public static Expression<Action<T, TProperty>>? CreatePropertySetter<T, TProperty>(string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -26,12 +26,12 @@
             return property?.SetMethod is null ? null : CreatePropertySetter<T, TProperty>(property);
         }
 
-        public static Expression<Action<T, TProperty>> CreatePropertySetter<T, TProperty>(PropertyInfo propertyInfo)
+        public static Expression<Action<T, TProperty>>? CreatePropertySetter<T, TProperty>(PropertyInfo propertyInfo)
         {
             return propertyInfo.SetMethod is null ? null : CreatePropertySetterExpression<T, TProperty>(propertyInfo);
         }
 
-        public static Expression<Action<T, object>> CreatePropertySetter<T>(string propertyName)
+        public static Expression<Action<T, object>>? CreatePropertySetter<T>(string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -39,7 +39,7 @@
             return property?.SetMethod is null ? null : CreatePropertySetter<T>(property);
         }
 
-        public static Expression<Action<T, object>> CreatePropertySetter<T>(PropertyInfo propertyInfo)
+        public static Expression<Action<T, object>>? CreatePropertySetter<T>(PropertyInfo propertyInfo)
         {
             return propertyInfo.SetMethod is null ? null : CreatePropertySetterExpression<T, object>(propertyInfo);
         }
@@ -82,7 +82,7 @@
             return new ReadOnlyDictionary<string, Expression<Action<T, TProperty>>>(propertySetters);
         }
 
-        private static Expression<Action<T, TProperty>> CreatePropertySetterExpression<T, TProperty>(PropertyInfo propertyInfo)
+        private static Expression<Action<T, TProperty>>? CreatePropertySetterExpression<T, TProperty>(PropertyInfo propertyInfo)
         {
             var targetType = propertyInfo.DeclaringType;
             var methodInfo = propertyInfo.SetMethod;

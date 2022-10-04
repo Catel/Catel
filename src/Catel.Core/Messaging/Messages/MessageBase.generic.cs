@@ -36,7 +36,7 @@
                 serviceLocator.RegisterInstance(MessageMediator.Default);
             }
 
-            _mediator = serviceLocator.ResolveType<IMessageMediator>();
+            _mediator = serviceLocator.ResolveRequiredType<IMessageMediator>();
         }
 
         /// <summary>
@@ -50,6 +50,7 @@
         /// </summary>
         protected MessageBase()
         {
+            Data = default!;
         }
 
         /// <summary>
@@ -82,7 +83,7 @@
         /// <param name="data">The payload data.</param>
         /// <param name="initializer">The optional Catel mediator tag to be used.</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
-        public static void SendWith(TData data, Action<TMessage> initializer, object? tag = null)
+        public static void SendWith(TData data, Action<TMessage>? initializer, object? tag = null)
         {
             var message = With(data);
 

@@ -238,7 +238,7 @@
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
             {
-                ImplementsInterface(parameterInfo.Name, (T)parameterInfo.Value as Type, interfaceType);
+                ImplementsInterface(parameterInfo.Name, (T)parameterInfo.Value, interfaceType);
             }
             else
             {
@@ -262,7 +262,7 @@
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
             {
-                ImplementsOneOfTheInterfaces(parameterInfo.Name, (T)parameterInfo.Value as Type, interfaceTypes);
+                ImplementsOneOfTheInterfaces(parameterInfo.Name, (T)parameterInfo.Value, interfaceTypes);
             }
             else
             {
@@ -285,7 +285,7 @@
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
             {
-                IsOfType(parameterInfo.Name, (T)parameterInfo.Value as Type, requiredType);
+                IsOfType(parameterInfo.Name, (T)parameterInfo.Value, requiredType);
             }
             else
             {
@@ -309,7 +309,7 @@
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
             {
-                IsOfOneOfTheTypes(parameterInfo.Name, (T)parameterInfo.Value as Type, requiredTypes);
+                IsOfOneOfTheTypes(parameterInfo.Name, (T)parameterInfo.Value, requiredTypes);
             }
             else
             {
@@ -333,7 +333,7 @@
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
             {
-                IsNotOfType(parameterInfo.Name, (T)parameterInfo.Value as Type, notRequiredType);
+                IsNotOfType(parameterInfo.Name, (T)parameterInfo.Value, notRequiredType);
             }
             else
             {
@@ -357,7 +357,7 @@
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
             {
-                IsNotOfOneOfTheTypes(parameterInfo.Name, (T)parameterInfo.Value as Type, notRequiredTypes);
+                IsNotOfOneOfTheTypes(parameterInfo.Name, (T)parameterInfo.Value, notRequiredTypes);
             }
             else
             {

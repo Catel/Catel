@@ -29,8 +29,8 @@
                 {
                     if (valueType.GetGenericTypeDefinitionEx() == typeof(KeyValuePair<,>))
                     {
-                        var keyProperty = valueType.GetPropertyEx("Key");
-                        var valueProperty = valueType.GetPropertyEx("Value");
+                        var keyProperty = valueType.GetPropertyEx("Key")!;
+                        var valueProperty = valueType.GetPropertyEx("Value")!;
 
                         var kvpKey = keyProperty.GetValue(value, null);
                         var kvpValue = valueProperty.GetValue(value, null);
@@ -63,7 +63,17 @@
 
                     var keyValuePairType = typeof(KeyValuePair<,>);
                     var keyType = TypeCache.GetTypeWithoutAssembly(splittedValues[1], allowInitialization: false);
+                    if (keyType is null)
+                    {
+                        throw new CatelException($"Cannot find key type '{splittedValues[1]}'");
+                    }
+
                     var valueType = TypeCache.GetTypeWithoutAssembly(splittedValues[2], allowInitialization: false);
+                    if (valueType is null)
+                    {
+                        throw new CatelException($"Cannot find value type '{splittedValues[2]}'");
+                    }
+
                     var keyValue = splittedValues[3];
                     var valueValue = splittedValues[4];
 

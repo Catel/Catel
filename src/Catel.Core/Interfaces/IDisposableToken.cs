@@ -17,6 +17,6 @@
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; }
+        object? Tag { get; }
     }
 }

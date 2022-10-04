@@ -29,7 +29,7 @@
         /// <returns>The xml namespace.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="preferredPrefix"/> is <c>null</c> or whitespace.</exception>
-        public XmlNamespace GetNamespace(Type type, string preferredPrefix)
+        public XmlNamespace? GetNamespace(Type type, string preferredPrefix)
         {
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
             using (var scopeManager = ScopeManager<SerializationContextScope<XmlSerializationContextInfo>>.GetScopeManager(scopeName))
@@ -50,18 +50,20 @@
             }
         }
 
-        private void OnScopeClosed(object sender, ScopeClosedEventArgs e)
+        private void OnScopeClosed(object? sender, ScopeClosedEventArgs e)
         {
             _scopeInfo.Remove(e.ScopeName);
 
-            var scopeManager = (ScopeManager<SerializationContextScope<XmlSerializationContextInfo>>)sender;
-            scopeManager.ScopeClosed -= OnScopeClosed;
+            var scopeManager = sender as ScopeManager<SerializationContextScope<XmlSerializationContextInfo>>;
+            if (scopeManager is not null)
+            {
+                scopeManager.ScopeClosed -= OnScopeClosed;
+            }
         }
 
         private class XmlScopeNamespaceInfo
         {
-            private readonly Dictionary<Type, XmlNamespace> _xmlNamespaces = new Dictionary<Type, XmlNamespace>();
-            //private readonly Dictionary<string, XmlNamespace> _xmlNamespacesByDotNetNamespace = new Dictionary<string, XmlNamespace>();
+            private readonly Dictionary<Type, XmlNamespace?> _xmlNamespaces = new Dictionary<Type, XmlNamespace?>();
             private readonly Dictionary<string, int> _prefixCounter = new Dictionary<string, int>();
 
             public XmlScopeNamespaceInfo(string scopeName)
@@ -71,7 +73,7 @@
 
             public string ScopeName { get; private set; }
 
-            public XmlNamespace GetNamespace(Type type, string preferredPrefix)
+            public XmlNamespace? GetNamespace(Type type, string preferredPrefix)
             {
                 if (!_xmlNamespaces.TryGetValue(type, out var xmlNamespace))
                 {
@@ -82,7 +84,7 @@
                 return xmlNamespace;
             }
 
-            private XmlNamespace GetTypeNamespace(Type type, string preferredPrefix)
+            private XmlNamespace? GetTypeNamespace(Type type, string preferredPrefix)
             {
                 var typeNamespace = type.Namespace;
                 //if (_xmlNamespacesByDotNetNamespace.ContainsKey(typeNamespace))

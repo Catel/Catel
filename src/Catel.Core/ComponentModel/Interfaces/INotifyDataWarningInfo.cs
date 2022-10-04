@@ -20,13 +20,13 @@
         /// <summary>
         /// Occurs when the warnings have changed.
         /// </summary>
-        event EventHandler<DataErrorsChangedEventArgs> WarningsChanged;
+        event EventHandler<DataErrorsChangedEventArgs>? WarningsChanged;
 
         /// <summary>
         /// Gets the warnings for the specific property name.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns><see cref="IEnumerable"/> of warnings.</returns>
-        IEnumerable GetWarnings(string propertyName);
+        IEnumerable GetWarnings(string? propertyName);
     }
 }

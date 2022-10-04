@@ -10,7 +10,7 @@
 
     public partial class LanguageService
     {
-        private readonly ICacheStorage<string, ResourceManager> _resourceFileCache = new CacheStorage<string, ResourceManager>(storeNullValues: true);
+        private readonly ICacheStorage<string, ResourceManager?> _resourceFileCache = new CacheStorage<string, ResourceManager?>(storeNullValues: true);
 
         /// <summary>
         /// Preloads the language sources to provide optimal performance.
@@ -53,7 +53,7 @@
         /// <param name="source">The source.</param>
         private ResourceManager? GetResourceManager(string source)
         {
-            Func<ResourceManager> retrievalFunc = () =>
+            Func<ResourceManager?> retrievalFunc = () =>
             {
                 try
                 {
@@ -66,7 +66,7 @@
                     // Invert so design-time will always pick the latest version
                     loadedAssemblies.Reverse();
 
-                    var assembly = loadedAssemblies.FirstOrDefault(x => x.FullName.StartsWith(containingAssemblyName));
+                    var assembly = loadedAssemblies.FirstOrDefault(x => (x.FullName ?? string.Empty).StartsWith(containingAssemblyName));
                     if (assembly is null)
                     {
                         return null;

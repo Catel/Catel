@@ -6,7 +6,6 @@
     using System.Reflection;
     using System.Text;
     using Catel.Caching;
-    using IoC;
 
     /// <summary>
     /// Member info extensions.
@@ -46,9 +45,9 @@
         /// <returns>
         /// The constructors sorted by match distance.
         /// </returns>
-        public static IEnumerable<ConstructorInfo> SortByParametersMatchDistance(this List<ConstructorInfo> constructors, object[] parameters)
+        public static IEnumerable<ConstructorInfo> SortByParametersMatchDistance(this List<ConstructorInfo> constructors, object?[] parameters)
         {
-            if (constructors is not null && constructors.Count > 1)
+            if (constructors.Count > 1)
             {
                 var constructorDistances = new List<ConstructorDistance>();
 

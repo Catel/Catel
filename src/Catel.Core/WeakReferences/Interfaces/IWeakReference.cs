@@ -22,6 +22,6 @@
         /// <remarks>
         /// In case of static event handlers, this property always returns <c>null</c>.
         /// </remarks>
-        object Target { get; }
+        object? Target { get; }
     }
 }

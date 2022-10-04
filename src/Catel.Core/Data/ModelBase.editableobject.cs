@@ -72,7 +72,7 @@
             /// </summary>
             public void RestoreBackup()
             {
-                Dictionary<string, object>? oldPropertyValues = null;
+                Dictionary<string, object?>? oldPropertyValues = null;
 
                 using (var stream = new MemoryStream(_propertyValuesBackup))
                 {

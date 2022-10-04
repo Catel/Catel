@@ -54,25 +54,25 @@
         /// <summary>
         /// The backing field for the <see cref="IValidatable.Validator"/> property.
         /// </summary>
-        private IValidator _validator;
+        private IValidator? _validator;
 
         /// <summary>
         /// The validation context, which can contain in-between validation info.
         /// </summary>
         private readonly ValidationContext _validationContext = new ValidationContext();
 
-        private SuspensionContext _validationSuspensionContext;
+        private SuspensionContext? _validationSuspensionContext;
 
         private readonly HashSet<string> _propertiesCurrentlyBeingValidated = new HashSet<string>();
 
-        private IObjectAdapter _objectAdapter;
+        private IObjectAdapter? _objectAdapter;
 
         private bool _firstAnnotationValidation = true;
 
         /// <summary>
         /// A dictionary containing the annotation (attribute) validation results of properties of this class.
         /// </summary>
-        private readonly Dictionary<string, string> _dataAnnotationValidationResults = new Dictionary<string, string>();
+        private readonly Dictionary<string, string?> _dataAnnotationValidationResults = new Dictionary<string, string?>();
 
         private readonly Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext> _dataAnnotationsValidationContext = new Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext>();
 
@@ -122,7 +122,7 @@
         /// </summary>
         [Browsable(false)]
         [XmlIgnore]
-        IValidator IValidatable.Validator
+        IValidator? IValidatable.Validator
         {
             get { return GetValidator(); }
             set { _validator = value; }
@@ -143,14 +143,14 @@
         /// Gets or sets the object adapter. If unset, this value will be retrieved via the default <see cref="IDependencyResolver"/>
         /// as soon as it is required.
         /// </summary>
-        protected IObjectAdapter ObjectAdapter
+        protected IObjectAdapter? ObjectAdapter
         {
             get
             {
                 if (_objectAdapter is null)
                 {
                     var dependencyResolver = this.GetDependencyResolver();
-                    _objectAdapter = dependencyResolver.TryResolve<IObjectAdapter>();
+                    _objectAdapter = dependencyResolver.Resolve<IObjectAdapter>();
                 }
 
                 return _objectAdapter;
@@ -319,7 +319,7 @@
                 },
                 x =>
                 {
-                    SuspensionContext suspensionContext;
+                    SuspensionContext? suspensionContext;
 
                     lock (_lock)
                     {
@@ -504,7 +504,7 @@
             {
                 if (!PropertiesNotCausingValidation[type].Contains(propertyName))
                 {
-                    object value = null;
+                    object? value = null;
                     var handled = false;
 
                     var propertyDataManager = PropertyDataManager;
@@ -541,7 +541,7 @@
 
                             value = PropertyHelper.GetPropertyValue(this, propertyName);
                         }
-                        else if (!_objectAdapter.GetMemberValue(this, propertyName, out value))
+                        else if (!objectAdapter.GetMemberValue(this, propertyName, out value))
                         {
                             Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 
@@ -1189,7 +1189,7 @@
         /// <returns>
         /// The validation errors for the property or object.
         /// </returns>
-        IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
+        IEnumerable INotifyDataErrorInfo.GetErrors(string? propertyName)
         {
             var elements = new List<string>();
 
@@ -1206,7 +1206,6 @@
                     {
                         elements.Add(error.Message);
                     }
-
                 }
             }
             else
@@ -1260,7 +1259,7 @@
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns><see cref="IEnumerable"/> of warnings.</returns>
-        IEnumerable INotifyDataWarningInfo.GetWarnings(string propertyName)
+        IEnumerable INotifyDataWarningInfo.GetWarnings(string? propertyName)
         {
             var elements = new List<string>();
 
@@ -1277,7 +1276,6 @@
                     {
                         elements.Add(warning.Message);
                     }
-
                 }
             }
             else

@@ -14,7 +14,7 @@
         /// <param name="initialize">The initialize action.</param>
         /// <param name="dispose">The dispose action.</param>
         /// <param name="tag">The tag.</param>
-        public DisposableToken(object instance, Action<IDisposableToken<object>> initialize, Action<IDisposableToken<object>> dispose, object tag = null)
+        public DisposableToken(object instance, Action<IDisposableToken<object>> initialize, Action<IDisposableToken<object>> dispose, object? tag = null)
             : base(instance, initialize, dispose, tag)
         {
         }
@@ -27,7 +27,7 @@
     {
         private T _instance;
         private Action<IDisposableToken<T>> _dispose;
-        private object _tag;
+        private object? _tag;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DisposableToken{T}" /> class.
@@ -36,7 +36,7 @@
         /// <param name="initialize">The initialize action that will be called with (token).</param>
         /// <param name="dispose">The dispose action that will be called with (instance, tag).</param>
         /// <param name="tag">The tag.</param>
-        public DisposableToken(T instance, Action<IDisposableToken<T>> initialize, Action<IDisposableToken<T>> dispose, object tag = null)
+        public DisposableToken(T instance, Action<IDisposableToken<T>> initialize, Action<IDisposableToken<T>> dispose, object? tag = null)
         {
             _instance = instance;
             _dispose = dispose;
@@ -58,7 +58,7 @@
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get { return _tag; } }
+        public object? Tag { get { return _tag; } }
 
         protected override void DisposeManaged()
         {
@@ -67,8 +67,8 @@
                 _dispose(this);
             }
 
-            _instance = default(T);
-            _dispose = null;
+            //_instance = default(T);
+            //_dispose = null;
             _tag = null;
         }
     }

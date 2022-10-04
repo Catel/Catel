@@ -7,6 +7,7 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using System.Threading;
     using Caching;
     using Catel.Collections;
@@ -117,7 +118,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         public object? CreateInstanceWithTag(Type typeToConstruct, object? tag)
         {
-            return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, null, true);
+            return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, Array.Empty<object>(), true);
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
-        public object CreateInstanceWithParameters(Type typeToConstruct, params object[] parameters)
+        public object? CreateInstanceWithParameters(Type typeToConstruct, params object?[] parameters)
         {
             return CreateInstanceWithParametersWithTag(typeToConstruct, null, parameters);
         }
@@ -140,7 +141,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        public object? CreateInstanceWithParametersWithTag(Type typeToConstruct, object? tag, params object[] parameters)
+        public object? CreateInstanceWithParametersWithTag(Type typeToConstruct, object? tag, params object?[] parameters)
         {
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, false);
         }
@@ -154,7 +155,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
-        public object? CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object[] parameters)
+        public object? CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object?[] parameters)
         {
             return CreateInstanceWithParametersAndAutoCompletionWithTag(typeToConstruct, null, parameters);
         }
@@ -169,7 +170,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        public object? CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object? tag, params object[] parameters)
+        public object? CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object? tag, params object?[] parameters)
         {
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
@@ -190,6 +191,11 @@ namespace Catel.IoC
             // TODO: Consider to cache for performance
             var dependencyResolverManager = DependencyResolverManager.Default;
             var dependencyResolver = _serviceLocator.ResolveTypeUsingFactory<IDependencyResolver>(this);
+            if (dependencyResolver is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Failed to resolve dependency resolver using factory");
+            }
+
             dependencyResolverManager.RegisterDependencyResolverForInstance(obj, dependencyResolver);
 
 #if EXTREME_LOGGING
@@ -212,14 +218,9 @@ namespace Catel.IoC
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, the additional dependencies will be auto completed.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        private object? CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters, bool autoCompleteDependencies)
+        private object? CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object? tag, object?[] parameters, bool autoCompleteDependencies)
         {
-            if (parameters is null)
-            {
-                parameters = Array.Empty<object>();
-            }
-
-            var previousRequestPath = _currentTypeRequestPath.Value;
+            var previousRequestPath = _currentTypeRequestPath.Value!;
 
             try
             {
@@ -235,7 +236,7 @@ namespace Catel.IoC
                 if (constructorCacheValue.ConstructorInfo is not null)
                 {
                     var cachedConstructor = constructorCacheValue.ConstructorInfo;
-                    var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false, typeConstructorsMetadata);
+                    var instanceCreatedWithInjection = ConstructType(typeToConstruct, cachedConstructor, tag, parameters, false, false, typeConstructorsMetadata);
                     if (instanceCreatedWithInjection is not null)
                     {
                         return instanceCreatedWithInjection;
@@ -256,7 +257,7 @@ namespace Catel.IoC
                 {
                     var constructor = constructors[i];
 
-                    var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1, typeConstructorsMetadata);
+                    var instanceCreatedWithInjection = ConstructType(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1, typeConstructorsMetadata);
                     if (instanceCreatedWithInjection is not null)
                     {
                         // We found a constructor that works, cache it
@@ -321,7 +322,7 @@ namespace Catel.IoC
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, additional dependencies can be completed from the <see cref="IServiceLocator" />.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if this instance [can constructor be used] the specified constructor; otherwise, <c>false</c>.</returns>
-        private bool CanConstructorBeUsed(ConstructorInfo constructor, object tag, bool autoCompleteDependencies, params object[] parameters)
+        private bool CanConstructorBeUsed(ConstructorInfo constructor, object? tag, bool autoCompleteDependencies, params object?[] parameters)
         {
             // Some loging like .GetSignature are expensive
 #if EXTREME_LOGGING
@@ -407,10 +408,10 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="parameterType">Type of the parameter.</param>
         /// <param name="parameterValue">The parameter value.</param>
-        private bool IsValidParameterValue(Type parameterType, object parameterValue)
+        private bool IsValidParameterValue(Type parameterType, object? parameterValue)
         {
             // 1: check if value is null and if the ctor accepts that
-            var isParameterNull = (parameterValue is null);
+            var isParameterNull = parameterValue is null;
             var isCtorParameterValueType = parameterType.IsValueTypeEx();
             if (isParameterNull && isCtorParameterValueType)
             {
@@ -424,7 +425,7 @@ namespace Catel.IoC
             }
 
             // 2: check if the values are both value or reference types 
-            var parameterValueType = parameterValue.GetType();
+            var parameterValueType = parameterValue!.GetType();
             bool isParameterValueType = parameterValueType.IsValueTypeEx();
             if (isParameterValueType != isCtorParameterValueType)
             {
@@ -462,7 +463,7 @@ namespace Catel.IoC
         /// <remarks>Note that this method does not require an implementation of
         /// <see cref="TypeRequestPath" /> because this already has the parameter values
         /// and thus cannot lead to invalid circular dependencies.</remarks>
-        private object? TryCreateToConstruct(Type typeToConstruct, ConstructorInfo constructor, object tag, object[] parameters,
+        private object? ConstructType(Type typeToConstruct, ConstructorInfo constructor, object? tag, object?[] parameters,
             bool checkConstructor, bool hasMoreConstructorsLeft, TypeMetaData typeMetaData)
         {
             // Check if this constructor is even possible
@@ -476,11 +477,11 @@ namespace Catel.IoC
 
             try
             {
-                var finalParameters = new List<object>(parameters);
+                var finalParameters = new List<object?>(parameters);
                 var ctorParameters = constructor.GetParameters();
                 for (var i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    object ctorParameterValue = null;
+                    object? ctorParameterValue = null;
 
                     var parameterTypeToResolve = ctorParameters[i].ParameterType;
                     if (!typeof(string).IsAssignableFromEx(parameterTypeToResolve) && typeof(IEnumerable).IsAssignableFromEx(parameterTypeToResolve))
@@ -520,7 +521,6 @@ namespace Catel.IoC
                             ctorParameterValue = _serviceLocator.ResolveTypeUsingFactory(this, parameterTypeToResolve);
                         }
                     }
-
 
                     finalParameters.Add(ctorParameterValue);
                 }
@@ -583,7 +583,7 @@ namespace Catel.IoC
             });
         }
 
-        private void SetConstructor(ConstructorCacheKey cacheKey, ConstructorCacheValue previousCacheValue, ConstructorInfo constructorInfo)
+        private void SetConstructor(ConstructorCacheKey cacheKey, ConstructorCacheValue previousCacheValue, ConstructorInfo? constructorInfo)
         {
             // Currently I choose last-win strategy but maybe other should be used
             _constructorCacheLock.PerformWrite(() =>
@@ -667,15 +667,24 @@ namespace Catel.IoC
         {
             private readonly int _hashCode;
 
-            public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object[] parameters)
+            public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object?[] parameters)
             {
-                string key = type.GetSafeFullName(true);
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append(type.GetSafeFullName(true));
+
                 foreach (var parameter in parameters)
                 {
-                    key += "_" + ObjectToStringHelper.ToFullTypeString(parameter);
+                    if (parameter is null)
+                    {
+                        stringBuilder.Append($"_null");
+                    }
+                    else
+                    {
+                        stringBuilder.Append($"_{ObjectToStringHelper.ToFullTypeString(parameter)}");
+                    }
                 }
 
-                Key = key;
+                Key = stringBuilder.ToString();
                 AutoCompleteDependecies = autoCompleteDependecies;
                 _hashCode = Key.GetHashCode();
             }

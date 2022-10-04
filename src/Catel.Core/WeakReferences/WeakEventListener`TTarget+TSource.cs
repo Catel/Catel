@@ -30,7 +30,7 @@
         /// </summary>
         private static readonly ICacheStorage<Type, Type> EventHandlerEventArgsCache = new CacheStorage<Type, Type>();
 
-        private static readonly Dictionary<string, MethodInfo> ListenerTypeCache = new Dictionary<string, MethodInfo>();
+        private static readonly Dictionary<string, MethodInfo?> ListenerTypeCache = new Dictionary<string, MethodInfo?>();
 
         /// <summary>
         /// Subscribes to a weak event by using one single method. This method also takes care of automatic
@@ -53,7 +53,7 @@
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is not of type <see cref="PropertyChangedEventHandler" />,
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
-        public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
+        public static IWeakEventListener? SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
             where TEventArgs : EventArgsBase
         {
             return SubscribeToWeakEvent(target, source, eventName, handler, throwWhenSubscriptionFails);
@@ -78,7 +78,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged")
+        public static IWeakEventListener? SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged")
         {
             return SubscribeToWeakEventWithExplicitSourceType<INotifyPropertyChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -102,7 +102,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged")
+        public static IWeakEventListener? SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged")
         {
             return SubscribeToWeakEventWithExplicitSourceType<INotifyCollectionChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -126,7 +126,7 @@
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, 
         /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
+        public static IWeakEventListener? SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
         {
             return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -156,7 +156,7 @@
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
+        public static IWeakEventListener? SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
@@ -194,7 +194,10 @@
                         else
                         {
                             var invokeMethod = eventHandlerType.GetMethodEx("Invoke");
-                            type = invokeMethod.GetParameters()[1].ParameterType;
+                            if (invokeMethod is not null)
+                            {
+                                type = invokeMethod.GetParameters()[1].ParameterType;
+                            }
                         }
                     }
                     else
@@ -203,7 +206,7 @@
                     }
                 }
 
-                return type;
+                return type ?? typeof(EventArgsBase);
             });
 
             if (eventArgsType is null)

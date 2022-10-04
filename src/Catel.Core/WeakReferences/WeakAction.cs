@@ -20,7 +20,7 @@
         /// </summary>
         /// <param name="target">The target of the weak action.</param>
         /// <exception cref="ArgumentException">The <paramref name="target"/> is <c>null</c> or whitespace.</exception>
-        protected WeakActionBase(object target)
+        protected WeakActionBase(object? target)
         {
             if (target is not null)
             {
@@ -32,7 +32,7 @@
         /// Gets the target or <c>null</c> if the target is garbage collected.
         /// </summary>
         /// <value>The target.</value>
-        public object Target { get { return (_weakTarget is not null) ? _weakTarget.Target : null; } }
+        public object? Target { get { return (_weakTarget is not null) ? _weakTarget.Target : null; } }
 
         /// <summary>
         /// Gets a value indicating whether the event target has not yet been garbage collected.
@@ -79,7 +79,12 @@
             : base(target)
         {
             var methodInfo = action.GetMethodInfoEx();
-            MethodName = methodInfo.ToString();
+            if (methodInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
+            }
+
+            MethodName = methodInfo.ToString() ?? string.Empty;
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
@@ -105,7 +110,7 @@
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        public Delegate Action { get { return _action; } }
+        public Delegate? Action { get { return _action; } }
 
         /// <summary>
         /// Executes the action. This only happens if the action's target is still alive.
@@ -167,7 +172,12 @@
             : base(target)
         {
             var methodInfo = action.GetMethodInfoEx();
-            MethodName = methodInfo.ToString();
+            if (methodInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
+            }
+
+            MethodName = methodInfo.ToString() ?? string.Empty;
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
@@ -195,7 +205,7 @@
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        public Delegate Action { get { return _action; } }
+        public Delegate? Action { get { return _action; } }
 
         /// <summary>
         /// Executes the action. This only happens if the action's target is still alive.

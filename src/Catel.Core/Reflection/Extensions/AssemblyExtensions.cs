@@ -23,9 +23,9 @@
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The title of the assembly.</returns>
-        public static string Title(this Assembly assembly)
+        public static string? Title(this Assembly assembly)
         {
-            string title = GetAssemblyAttributeValue(assembly, typeof(AssemblyTitleAttribute), "Title");
+            var title = GetAssemblyAttributeValue(assembly, typeof(AssemblyTitleAttribute), "Title");
             if (!string.IsNullOrEmpty(title))
             {
                 return title;
@@ -45,9 +45,13 @@
             separatorCount++;
 
             // Get full name, which is in [name], Version=[version], Culture=[culture], PublicKeyToken=[publickeytoken] format
-            string assemblyFullName = assembly.FullName;
+            var assemblyFullName = assembly.FullName ?? assembly.GetName().Name;
+            if (string.IsNullOrWhiteSpace(assemblyFullName))
+            {
+                return "unknown";
+            }
 
-            string[] splittedAssemblyFullName = assemblyFullName.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var splittedAssemblyFullName = assemblyFullName.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (splittedAssemblyFullName.Length < 2)
             {
                 return "unknown";
@@ -74,7 +78,7 @@
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The informational version.</returns>
-        public static string InformationalVersion(this Assembly assembly)
+        public static string? InformationalVersion(this Assembly assembly)
         {
             var version = GetAssemblyAttribute<AssemblyInformationalVersionAttribute>(assembly);
             return version is null ? null : version.InformationalVersion;
@@ -85,7 +89,7 @@
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The description of the assembly.</returns>
-        public static string Description(this Assembly assembly)
+        public static string? Description(this Assembly assembly)
         {
             return GetAssemblyAttributeValue(assembly, typeof(AssemblyDescriptionAttribute), "Description");
         }
@@ -95,7 +99,7 @@
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The product of the assembly.</returns>
-        public static string Product(this Assembly assembly)
+        public static string? Product(this Assembly assembly)
         {
             return GetAssemblyAttributeValue(assembly, typeof(AssemblyProductAttribute), "Product");
         }
@@ -105,7 +109,7 @@
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The copyright of the assembly.</returns>
-        public static string Copyright(this Assembly assembly)
+        public static string? Copyright(this Assembly assembly)
         {
             return GetAssemblyAttributeValue(assembly, typeof(AssemblyCopyrightAttribute), "Copyright");
         }
@@ -115,7 +119,7 @@
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The company of the assembly.</returns>
-        public static string Company(this Assembly assembly)
+        public static string? Company(this Assembly assembly)
         {
             return GetAssemblyAttributeValue(assembly, typeof(AssemblyCompanyAttribute), "Company");
         }
@@ -138,7 +142,7 @@
         /// <typeparam name="TAttibute">The type of the attribute.</typeparam>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The attribute that the assembly is decorated with or <c>null</c> if the assembly is not decorated with the attribute.</returns>
-        private static TAttibute GetAssemblyAttribute<TAttibute>(Assembly assembly) 
+        private static TAttibute? GetAssemblyAttribute<TAttibute>(Assembly assembly) 
             where TAttibute : Attribute
         {
             var attibutes = assembly.GetCustomAttributesEx(typeof(TAttibute));
@@ -152,7 +156,7 @@
         /// <param name="attribute">Attribute to read.</param>
         /// <param name="property">Property to read from the attribute.</param>
         /// <returns>Value of the attribute or empty if the attribute is not found.</returns>
-        private static string GetAssemblyAttributeValue(Assembly assembly, Type attribute, string property)
+        private static string? GetAssemblyAttributeValue(Assembly assembly, Type attribute, string property)
         {
             var attributes = assembly.GetCustomAttributesEx(attribute);
             if (attributes.Length == 0)
@@ -160,7 +164,7 @@
                 return string.Empty;
             }
 
-            object attributeValue = attributes[0];
+            var attributeValue = attributes[0];
             if (attributeValue is null)
             {
                 return string.Empty;
@@ -173,7 +177,7 @@
                 return string.Empty;
             }
 
-            object propertyValue = propertyInfo.GetValue(attributeValue, null);
+            var propertyValue = propertyInfo.GetValue(attributeValue, null);
             if (propertyValue is null)
             {
                 return string.Empty;

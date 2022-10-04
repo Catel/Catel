@@ -24,6 +24,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
-        public abstract string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo);
+        public abstract string? GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo);
     }
 }

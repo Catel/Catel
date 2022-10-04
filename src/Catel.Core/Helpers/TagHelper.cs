@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
-        public static string ToString(object? tag)
+        public static string? ToString(object? tag)
         {
             return ObjectToStringHelper.ToString(tag);
         }

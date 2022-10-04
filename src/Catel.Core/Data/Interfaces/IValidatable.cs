@@ -14,7 +14,7 @@
         /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
         /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
-        IValidator Validator { get; set; }
+        IValidator? Validator { get; set; }
 
         /// <summary>
         /// Gets the validation context which contains all information about the validation.

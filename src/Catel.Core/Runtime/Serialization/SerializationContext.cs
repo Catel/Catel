@@ -187,9 +187,11 @@
             if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
+                if (registrationInfo is null)
+                {
+                    return;
+                }
 
-                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                //switch ((SerializationContextMode)x.Tag)
                 switch (ContextMode)
                 {
                     case SerializationContextMode.Serialization:
@@ -220,9 +222,11 @@
             if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
+                if (registrationInfo is null)
+                {
+                    return;
+                }
 
-                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                //switch ((SerializationContextMode)x.Tag)
                 switch (ContextMode)
                 {
                     case SerializationContextMode.Serialization:

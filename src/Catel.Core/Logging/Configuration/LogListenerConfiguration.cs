@@ -64,18 +64,18 @@
         /// </summary>
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns>The <see cref="ILogListener"/>.</returns>
-        public ILogListener GetLogListener(Assembly assembly = null)
+        public ILogListener GetLogListener(Assembly? assembly = null)
         {
             var typeAsString = ObjectToStringHelper.ToString(Type);
 
             Log.Debug("Creating ILogListener based on configuration for type '{0}'", typeAsString);
 
-            ILogListener logListener = null;
+            ILogListener? logListener = null;
 
             var type = TypeCache.GetType(Type, allowInitialization: false);
             if (type is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to retrieve type '{0}'", typeAsString);
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to retrieve type '{typeAsString}'");
             }
 
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
@@ -89,7 +89,7 @@
 
             if (logListener is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to instantiate type '{0}' or it does not implement ILogListener and thus cannot be used as such", typeAsString);
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to instantiate type '{typeAsString}' or it does not implement ILogListener and thus cannot be used as such");
             }
 
             foreach (var dynamicProperty in _dynamicProperties)

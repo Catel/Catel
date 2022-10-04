@@ -39,7 +39,7 @@
         /// <param name="appDomain">The app domain.</param>
         /// <param name="directory">The directory. If <c>null</c>, only the referenced assemblies are forced to be loaded.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
-        public static void PreloadAssemblies(this AppDomain appDomain, string directory = null)
+        public static void PreloadAssemblies(this AppDomain appDomain, string? directory = null)
         {
             Log.Info("Preloading assemblies from AppDomain");
             Log.Indent();
