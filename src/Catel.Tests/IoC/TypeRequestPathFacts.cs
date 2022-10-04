@@ -86,7 +86,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void RootOfThePathCanBeCreatedWithoutTheName()
             {
-                Assert.DoesNotThrow(() => TypeRequestPath.Root());
+                Assert.DoesNotThrow(() => TypeRequestPath.Root(string.Empty));
             }
 
             [TestCase]
@@ -110,7 +110,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
             {
-                var parent = TypeRequestPath.Root();
+                var parent = TypeRequestPath.Root(string.Empty);
                 Assert.Throws<ArgumentNullException>(() => TypeRequestPath.Branch(parent, null));
             }
 
@@ -176,7 +176,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsNullForEmpty()
             {
-                var path = TypeRequestPath.Root();
+                var path = TypeRequestPath.Root(string.Empty);
                 Assert.IsNull(path.FirstType);
             }
 
@@ -196,7 +196,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsNullForEmpty()
             {
-                var path = TypeRequestPath.Root();
+                var path = TypeRequestPath.Root(string.Empty);
                 Assert.IsNull(path.LastType);
             }
 

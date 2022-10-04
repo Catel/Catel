@@ -431,19 +431,7 @@ namespace Catel.Tests.IoC
                 {
                 }
 
-                [InjectionConstructor]
-                public ClassWithSeveralMatchesForDependencyInjection(IMessageMediator messageMediator, IMessageService messageService)
-                {
-                    IsRightConstructorUsed = true;
-                }
-
                 public bool IsRightConstructorUsed { get; private set; }
-            }
-
-            public class ClassWithPropertyInjection
-            {
-                [Inject]
-                public IUIVisualizerService UiVisualizerService { get; set; }
             }
 
             [TestCase]
@@ -488,16 +476,6 @@ namespace Catel.Tests.IoC
                 var instance = typeFactory.CreateInstance<ClassWithSeveralMatchesForDependencyInjection>();
 
                 Assert.IsTrue(instance.IsRightConstructorUsed);
-            }
-
-            [TestCase]
-            public void CreatesTypeWithPropertyInjection()
-            {
-                var typeFactory = TypeFactory.Default;
-
-                var instance = typeFactory.CreateInstance<ClassWithPropertyInjection>();
-
-                Assert.IsNotNull(instance.UiVisualizerService);
             }
 
             [TestCase, Explicit]

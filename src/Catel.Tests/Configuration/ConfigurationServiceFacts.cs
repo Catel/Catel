@@ -17,8 +17,8 @@
         {
             private readonly string _name;
 
-            public TestConfigurationService(string name, ISerializationManager serializationManager, IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService) 
-                : base(serializationManager, objectConverterService, serializer, appDataService)
+            public TestConfigurationService(string name, IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService) 
+                : base(objectConverterService, serializer, appDataService)
             {
                 _name = name;
             }
@@ -53,7 +53,7 @@
 
         private static TestConfigurationService GetConfigurationService(string name = null)
         {
-            return new TestConfigurationService(name, new SerializationManager(), new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService());
+            return new TestConfigurationService(name, new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService());
         }
 
         [TestFixture]
