@@ -103,7 +103,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        object Deserialize(object model, Stream stream, ISerializationConfiguration? configuration = null);
+        object? Deserialize(object model, Stream stream, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the specified model. The deserialized values will be set in the specified model.
@@ -114,7 +114,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
+        object? Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -125,7 +125,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        object Deserialize(Type modelType, Stream stream, ISerializationConfiguration? configuration = null);
+        object? Deserialize(Type modelType, Stream stream, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -136,7 +136,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
+        object? Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the members of the specified model.

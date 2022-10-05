@@ -1650,8 +1650,8 @@ namespace Catel.Data
     {
         protected SavableModelBase() { }
         public void Save(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
-        public static T Load(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
-        public static Catel.Data.IModel Load(System.Type type, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public static T? Load(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public static Catel.Data.IModel? Load(System.Type type, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
     }
     public class SuspensionContext
     {
@@ -3281,10 +3281,10 @@ namespace Catel.Runtime.Serialization
         event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? SerializedMember;
         event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Serializing;
         event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? SerializingMember;
-        object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
-        object Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
-        object Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
-        object Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        object? Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        object? Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        object? Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        object? Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
@@ -3535,14 +3535,14 @@ namespace Catel.Runtime.Serialization
         protected virtual void BeforeSerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
         protected virtual void BeforeSerializeMember(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected System.Collections.Generic.List<Catel.Runtime.Serialization.SerializableKeyValuePair> ConvertDictionaryToCollection(object? memberValue) { }
-        protected virtual object? CreateModelInstance(System.Type type) { }
-        protected virtual object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
-        public object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
-        public virtual object Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
-        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
-        public object Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
-        public virtual object Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
-        public virtual object Deserialize(System.Type modelType, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        protected virtual object CreateModelInstance(System.Type type) { }
+        protected virtual object? Deserialize(object model, Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
+        public object? Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object? Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object? Deserialize(object model, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public object? Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object? Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object? Deserialize(System.Type modelType, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
         protected abstract Catel.Runtime.Serialization.SerializationObject DeserializeMember(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue);
         protected virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
         public System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContextInfo, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
@@ -3722,7 +3722,7 @@ namespace Catel.Runtime.Serialization.Xml
         protected override void AppendContextToStream(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.IO.Stream stream) { }
         protected override void BeforeDeserialization(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void BeforeSerialization(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
-        protected override object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
+        protected override object? Deserialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override Catel.Runtime.Serialization.SerializationObject DeserializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected override System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected virtual string GetNamespacePrefix() { }

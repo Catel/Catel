@@ -87,7 +87,7 @@
         /// <returns>
         /// The deserialized model.
         /// </returns>
-        public virtual object Deserialize(object model, Stream stream, ISerializationConfiguration? configuration = null)
+        public virtual object? Deserialize(object model, Stream stream, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -109,7 +109,7 @@
         /// <returns>
         /// The deserialized model.
         /// </returns>
-        public object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
+        public object? Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             return Deserialize(model, (TSerializationContextInfo)serializationContext, configuration);
         }
@@ -121,7 +121,7 @@
         /// <param name="serializationContext">The serialization context.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
+        public virtual object? Deserialize(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -139,7 +139,7 @@
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The serialization context.</param>
-        protected virtual object Deserialize(object model, ISerializationContext<TSerializationContextInfo> context)
+        protected virtual object? Deserialize(object model, ISerializationContext<TSerializationContextInfo> context)
         {
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
 
@@ -183,7 +183,7 @@
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public virtual object Deserialize(Type modelType, Stream stream, ISerializationConfiguration? configuration = null)
+        public virtual object? Deserialize(Type modelType, Stream stream, ISerializationConfiguration? configuration = null)
         {
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -205,7 +205,7 @@
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
+        public object? Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             return Deserialize(modelType, (TSerializationContextInfo)serializationContext, configuration);
         }
@@ -219,7 +219,7 @@
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public virtual object Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
+        public virtual object? Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             var model = TypeFactory.CreateRequiredInstance(modelType);
 

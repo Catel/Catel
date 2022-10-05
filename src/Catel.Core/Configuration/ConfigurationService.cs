@@ -295,6 +295,11 @@
                         }
 
                         var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
+                        if (configuration is null)
+                        {
+                            configuration = new DynamicConfiguration();
+                        }
+
                         return configuration;
                     }
                 }

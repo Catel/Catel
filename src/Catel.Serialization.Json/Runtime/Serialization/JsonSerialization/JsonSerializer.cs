@@ -20,6 +20,7 @@ namespace Catel.Runtime.Serialization.Json
 
 #if SUPPORT_BSON
     using Newtonsoft.Json.Bson;
+    using System.Reflection;
 #endif
 
     /// <summary>
@@ -85,7 +86,13 @@ namespace Catel.Runtime.Serialization.Json
             var customJsonSerializable = model as ICustomJsonSerializable;
             if (customJsonSerializable is not null)
             {
-                customJsonSerializable.Serialize(context.Context.JsonWriter);
+                var jsonWriter = context.Context.JsonWriter;
+                if (jsonWriter is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("Json writer is required");
+                }
+
+                customJsonSerializable.Serialize(jsonWriter);
                 return;
             }
 
@@ -98,12 +105,18 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        protected override object Deserialize(object model, ISerializationContext<JsonSerializationContextInfo> context)
+        protected override object? Deserialize(object model, ISerializationContext<JsonSerializationContextInfo> context)
         {
             var customJsonSerializable = model as ICustomJsonSerializable;
             if (customJsonSerializable is not null)
             {
-                customJsonSerializable.Deserialize(context.Context.JsonReader);
+                var jsonReader = context.Context.JsonReader;
+                if (jsonReader is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("Json reader is required");
+                }
+
+                customJsonSerializable.Deserialize(jsonReader);
                 return customJsonSerializable;
             }
 
@@ -116,7 +129,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
         /// <param name="configuration">The configuration.</param>
-        public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration = null)
+        public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration? configuration = null)
         {
             Argument.IsNotNull("model", model);
 
@@ -140,10 +153,10 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// The model.
         /// </returns>
-        public object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration = null)
+        public object? Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration? configuration = null)
         {
-            Dictionary<string, JProperty> jsonProperties = null;
-            JArray jsonArray = null;
+            Dictionary<string, JProperty>? jsonProperties = null;
+            JArray? jsonArray = null;
 
             if (modelType.ImplementsInterfaceEx<ICustomJsonSerializable>())
             {
@@ -196,15 +209,18 @@ namespace Catel.Runtime.Serialization.Json
 
                 if (jsonProperties.TryGetValue(TypeName, out var typeNameProperty))
                 {
-                    var modelTypeOverrideValue = (string)typeNameProperty.Value;
-                    var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue, allowInitialization: false);
-                    if (modelTypeOverride is null)
+                    var modelTypeOverrideValue = (string?)typeNameProperty.Value;
+                    if (!string.IsNullOrWhiteSpace(modelTypeOverrideValue))
                     {
-                        Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName(false));
-                    }
-                    else
-                    {
-                        modelType = modelTypeOverride;
+                        var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue, allowInitialization: false);
+                        if (modelTypeOverride is null)
+                        {
+                            Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName(false));
+                        }
+                        else
+                        {
+                            modelType = modelTypeOverride;
+                        }
                     }
                 }
             }
@@ -241,6 +257,10 @@ namespace Catel.Runtime.Serialization.Json
         protected override void BeforeSerialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
             var jsonWriter = context.Context.JsonWriter;
+            if (jsonWriter is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Json writer is required");
+            }
 
             if (ShouldSerializeAsCollection(context.ModelType))
             {
@@ -254,9 +274,11 @@ namespace Catel.Runtime.Serialization.Json
                 {
                     var referenceManager = context.ReferenceManager;
                     var referenceInfo = referenceManager.GetInfo(context.Model);
-
-                    jsonWriter.WritePropertyName(GraphId);
-                    jsonWriter.WriteValue(referenceInfo.Id);
+                    if (referenceInfo is not null)
+                    {
+                        jsonWriter.WritePropertyName(GraphId);
+                        jsonWriter.WriteValue(referenceInfo.Id);
+                    }
                 }
 
                 if (WriteTypeInfo && context.ModelType != typeof(SerializableKeyValuePair))
@@ -278,6 +300,10 @@ namespace Catel.Runtime.Serialization.Json
             base.AfterSerialization(context);
 
             var jsonWriter = context.Context.JsonWriter;
+            if (jsonWriter is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Json writer is required");
+            }
 
             if (ShouldSerializeAsCollection(context.ModelType))
             {
@@ -299,6 +325,10 @@ namespace Catel.Runtime.Serialization.Json
             var serializationContext = context.Context;
             var jsonSerializer = serializationContext.JsonSerializer;
             var jsonWriter = serializationContext.JsonWriter;
+            if (jsonWriter is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Json writer is required");
+            }
 
             // Only write property names when this is not the root and not a collection
             var isRootDictionary = IsRootDictionary(context, memberValue);
@@ -314,21 +344,28 @@ namespace Catel.Runtime.Serialization.Json
                     {
                         // Ignore basic types (value types, strings, etc) and ModelBase (already gets the graph id written)
                         var memberType = memberValue.ActualMemberType;
-                        if (!memberType.IsBasicType()) // && !(value is ModelBase))
+                        if (memberType is null)
+                        {
+                            throw Log.ErrorAndCreateException<CatelException>($"Could not retrieve actual member type from member '{memberValue.Name}'");
+                        }
+
+                        if (!memberType.IsBasicType() && memberValue.Value is not null)
                         {
                             var referenceManager = context.ReferenceManager;
                             var referenceInfo = referenceManager.GetInfo(memberValue.Value);
+                            if (referenceInfo is not null)
+                            {
+                                var idPropertyName = string.Format("${0}_{1}", memberValue.NameForSerialization, referenceInfo.IsFirstUsage ? GraphId : GraphRefId);
 
-                            var idPropertyName = string.Format("${0}_{1}", memberValue.NameForSerialization, referenceInfo.IsFirstUsage ? GraphId : GraphRefId);
-
-                            jsonWriter.WritePropertyName(idPropertyName);
+                                jsonWriter.WritePropertyName(idPropertyName);
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-                            jsonSerializer.Serialize(jsonWriter, referenceInfo.Id);
+                                jsonSerializer.Serialize(jsonWriter, referenceInfo.Id);
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
-                            if (!referenceInfo.IsFirstUsage && !ReferenceEquals(value, context.Model))
-                            {
-                                return;
+                                if (!referenceInfo.IsFirstUsage && !ReferenceEquals(value, context.Model))
+                                {
+                                    return;
+                                }
                             }
                         }
                     }
@@ -337,43 +374,45 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.WritePropertyName(memberValue.NameForSerialization);
             }
 
-            if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
+            if (memberValue.Value is null || ShouldExternalSerializerHandleMember(memberValue))
             {
-                object valueToSerialize = memberValue.Value;
-
-                var isEnum = memberValue.MemberType.IsEnumEx();
-                if (isEnum)
+                var valueToSerialize = memberValue.Value;
+                if (valueToSerialize is not null)
                 {
-                    if (ShouldSerializeEnumAsString(memberValue, false))
+                    var isEnum = memberValue.MemberType.IsEnumEx();
+                    if (isEnum)
                     {
-                        valueToSerialize = memberValue.Value.ToString();
-                    }
-                    else
-                    {
-                        var underlyingType = Enum.GetUnderlyingType(memberValue.MemberType);
-                        if (underlyingType == typeof(short))
+                        if (ShouldSerializeEnumAsString(memberValue, false))
                         {
-                            valueToSerialize = (short)memberValue.Value;
+                            valueToSerialize = memberValue.Value?.ToString();
                         }
-                        else if (underlyingType == typeof(ushort))
+                        else
                         {
-                            valueToSerialize = (ushort)memberValue.Value;
-                        }
-                        else if (underlyingType == typeof(int))
-                        {
-                            valueToSerialize = (int)memberValue.Value;
-                        }
-                        else if (underlyingType == typeof(uint))
-                        {
-                            valueToSerialize = (uint)memberValue.Value;
-                        }
-                        else if (underlyingType == typeof(long))
-                        {
-                            valueToSerialize = (long)memberValue.Value;
-                        }
-                        else if (underlyingType == typeof(ulong))
-                        {
-                            valueToSerialize = (ulong)memberValue.Value;
+                            var underlyingType = Enum.GetUnderlyingType(memberValue.MemberType);
+                            if (underlyingType == typeof(short))
+                            {
+                                valueToSerialize = (short)valueToSerialize;
+                            }
+                            else if (underlyingType == typeof(ushort))
+                            {
+                                valueToSerialize = (ushort)valueToSerialize;
+                            }
+                            else if (underlyingType == typeof(int))
+                            {
+                                valueToSerialize = (int)valueToSerialize;
+                            }
+                            else if (underlyingType == typeof(uint))
+                            {
+                                valueToSerialize = (uint)valueToSerialize;
+                            }
+                            else if (underlyingType == typeof(long))
+                            {
+                                valueToSerialize = (long)valueToSerialize;
+                            }
+                            else if (underlyingType == typeof(ulong))
+                            {
+                                valueToSerialize = (ulong)valueToSerialize;
+                            }
                         }
                     }
                 }
@@ -454,6 +493,10 @@ namespace Catel.Runtime.Serialization.Json
         {
             var serializationContext = context.Context;
             var jsonReader = serializationContext.JsonReader;
+            if (jsonReader is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Json reader is required");
+            }
 
             if (context.ModelType.ImplementsInterfaceEx<ICustomJsonSerializable>())
             {
@@ -515,7 +558,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The <see cref="SerializationObject"/> representing the deserialized value or result.</returns>
-        protected override SerializationObject? DeserializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
+        protected override SerializationObject DeserializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
 
@@ -532,8 +575,7 @@ namespace Catel.Runtime.Serialization.Json
                         var referenceInfo = referenceManager.GetInfoById(graphId);
                         if (referenceInfo is null)
                         {
-                            Log.Error($"Expected to find graph object with id '{BoxingCache.GetBoxedValue(graphId)}' in ReferenceManager, but it was not found. Defaulting value for member '{memberValue.Name}' to null");
-                            return null;
+                            throw Log.ErrorAndCreateException<CatelException>($"Expected to find graph object with id '{BoxingCache.GetBoxedValue(graphId)}' in ReferenceManager, but it was not found. Defaulting value for member '{memberValue.Name}' to null");
                         }
 
                         return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, referenceInfo.Instance);
@@ -543,6 +585,10 @@ namespace Catel.Runtime.Serialization.Json
                 if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
                     var dictionary = CreateModelInstance(memberValue.MemberType) as IDictionary;
+                    if (dictionary is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot process '{memberValue.Name}', cannot create member type as dictionary");
+                    }
 
                     var keyType = typeof(object);
                     var valueType = typeof(object);
@@ -563,10 +609,15 @@ namespace Catel.Runtime.Serialization.Json
 
                         object? deserializedItem = null;
 
-                        object key = jsonProperty.Name;
+                        object? key = jsonProperty.Name;
                         if (keyType != typeof(object))
                         {
                             key = StringToObjectHelper.ToRightType(keyType, jsonProperty.Name);
+                        }
+
+                        if (key is null)
+                        {
+                            throw Log.ErrorAndCreateException<CatelException>($"Cannot process '{jsonProperty.Name}', generated key for dictionary is null");
                         }
 
                         var typeToDeserialize = valueType;
@@ -614,15 +665,21 @@ namespace Catel.Runtime.Serialization.Json
                         var shouldValueTypeBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(typeToDeserialize);
                         if (shouldValueTypeBeHandledByExternalSerializer)
                         {
-                            deserializedItem = jsonProperty.Value.ToObject(valueType, serializationContext.JsonSerializer);
+                            deserializedItem = jsonProperty.Value?.ToObject(valueType, serializationContext.JsonSerializer);
                         }
                         else
                         {
-                            using (var reader = jsonProperty.Value.CreateReader(context.Configuration))
+#pragma warning disable IDISP001 // Dispose created
+                            var reader = jsonProperty.Value?.CreateReader(context.Configuration);
+#pragma warning restore IDISP001 // Dispose created
+                            if (reader is not null)
                             {
-                                reader.Culture = context.Configuration.Culture;
+                                using (reader)
+                            {
+                                    reader.Culture = context.Configuration?.Culture ?? CultureInfo.InvariantCulture;
 
-                                deserializedItem = Deserialize(valueType, reader, context.Configuration);
+                                    deserializedItem = Deserialize(valueType, reader, context.Configuration);
+                                }
                             }
                         }
 
@@ -645,8 +702,7 @@ namespace Catel.Runtime.Serialization.Json
 
                             if (ShouldSerializeEnumAsString(memberValue, false))
                             {
-                                valueToConvert = (string)jsonValue;
-
+                                valueToConvert = (string?)jsonValue ?? string.Empty;
                             }
                             else
                             {
@@ -667,7 +723,7 @@ namespace Catel.Runtime.Serialization.Json
                                 if (jsonValue.Type == JTokenType.String && ShouldSerializeUsingParseAndToString(memberValue, false))
                                 {
                                     var tempValue = memberValue.Value;
-                                    memberValue.Value = (string)jsonValue;
+                                    memberValue.Value = (string?)jsonValue;
 
                                     var parsedValue = DeserializeUsingObjectParse(context, memberValue);
                                     if (parsedValue is not null)
@@ -701,8 +757,12 @@ namespace Catel.Runtime.Serialization.Json
                                             var typeNameValue = jsonValue.Value<string>(TypeName);
                                             if (!string.IsNullOrWhiteSpace(typeNameValue))
                                             {
-                                                finalValueType = TypeCache.GetType(typeNameValue,
-                                                    allowInitialization: false);
+                                                finalValueType = TypeCache.GetType(typeNameValue, allowInitialization: false);
+                                            }
+
+                                            if (finalValueType is null)
+                                            {
+                                                throw Log.ErrorAndCreateException<CatelException>($"Failed to find value type of '{memberValue.Name}'");
                                             }
 
                                             // Serialize ourselves
@@ -724,7 +784,7 @@ namespace Catel.Runtime.Serialization.Json
                                 Log.Debug(ex, "Failed to parse json value for '{0}', treating value as string", memberValue.Name);
 
                                 // As a fallback, interpret as a string (might be a modifier)
-                                finalMemberValue = (string)jsonValue;
+                                finalMemberValue = (string?)jsonValue;
                             }
                         }
 
@@ -758,6 +818,10 @@ namespace Catel.Runtime.Serialization.Json
                 {
                     var memberType = memberValue.GetBestMemberType();
                     var collectionItemType = memberType.GetCollectionElementType();
+                    if (collectionItemType is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot process collection member type '{memberType.GetSafeFullName()}'");
+                    }
 
                     var shouldBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(collectionItemType);
 
@@ -799,7 +863,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected override ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration)
         {
             JsonReader? jsonReader = null;
             JsonWriter? jsonWriter = null;
@@ -889,16 +953,18 @@ namespace Catel.Runtime.Serialization.Json
                     throw new ArgumentOutOfRangeException("contextMode");
             }
 
+            var culture = configuration?.Culture ?? CultureInfo.InvariantCulture;
+
             if (jsonReader is not null)
             {
-                jsonReader.Culture = configuration.Culture;
+                jsonReader.Culture = culture;
                 jsonReader.DateParseHandling = dateParseHandling;
                 jsonReader.DateTimeZoneHandling = dateTimeZoneHandling;
             }
 
             if (jsonWriter is not null)
             {
-                jsonWriter.Culture = configuration.Culture;
+                jsonWriter.Culture = culture;
                 jsonWriter.DateTimeZoneHandling = dateTimeZoneHandling;
                 jsonWriter.Formatting = formatting;
             }
@@ -921,7 +987,7 @@ namespace Catel.Runtime.Serialization.Json
         /// ISerializationContext&lt;JsonSerializationContextInfo&gt;.
         /// </returns>
         protected virtual ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, JsonReader? jsonReader, JsonWriter? jsonWriter,
-            SerializationContextMode contextMode, Dictionary<string, JProperty>? jsonProperties, JArray? jsonArray, ISerializationConfiguration configuration)
+            SerializationContextMode contextMode, Dictionary<string, JProperty>? jsonProperties, JArray? jsonArray, ISerializationConfiguration? configuration)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
             jsonSerializer.ContractResolver = new CatelJsonContractResolver();

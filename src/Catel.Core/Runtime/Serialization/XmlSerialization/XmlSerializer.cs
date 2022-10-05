@@ -108,7 +108,7 @@
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        protected override object Deserialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
+        protected override object? Deserialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
         {
             if (context.Context.AllowCustomXmlSerialization)
             {

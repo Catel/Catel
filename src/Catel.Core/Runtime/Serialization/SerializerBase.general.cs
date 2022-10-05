@@ -925,7 +925,7 @@
         /// </summary>
         /// <param name="type">Type of the model.</param>
         /// <returns>The instantiated type.</returns>
-        protected virtual object? CreateModelInstance(Type type)
+        protected virtual object CreateModelInstance(Type type)
         {
             Type? elementType = null;
 
@@ -936,7 +936,7 @@
 
             if (type.IsBasicType())
             {
-                return Activator.CreateInstance(type);
+                return Activator.CreateInstance(type)!;
             }
 
             if (type == typeof(IEnumerable))
@@ -970,7 +970,7 @@
                 type = genericCollectionType;
             }
 
-            return TypeFactory.CreateInstance(type);
+            return TypeFactory.CreateRequiredInstance(type);
         }
 
         /// <summary>

@@ -8,7 +8,7 @@
     <PackageVersion>5.10.0-beta0013</PackageVersion>
     <Description>Catel.Serialization.Json library.</Description>
     <PackageTags>catel;serialization;json</PackageTags>
-    <Nullable>annotations</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <PropertyGroup>

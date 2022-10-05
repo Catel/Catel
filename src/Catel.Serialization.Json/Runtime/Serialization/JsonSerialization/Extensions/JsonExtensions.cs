@@ -1,5 +1,6 @@
 ﻿namespace Catel
 {
+    using System.Globalization;
     using System.IO;
     using Data;
     using IoC;
@@ -13,8 +14,8 @@
     /// </summary>
     public static class JsonExtensions
     {
-        private static readonly ISerializationManager SerializationManager = ServiceLocator.Default.ResolveType<ISerializationManager>();
-        private static readonly Catel.Runtime.Serialization.IObjectAdapter ObjectAdapter = ServiceLocator.Default.ResolveType<Catel.Runtime.Serialization.IObjectAdapter>();
+        private static readonly ISerializationManager SerializationManager = ServiceLocator.Default.ResolveRequiredType<ISerializationManager>();
+        private static readonly Catel.Runtime.Serialization.IObjectAdapter ObjectAdapter = ServiceLocator.Default.ResolveRequiredType<Catel.Runtime.Serialization.IObjectAdapter>();
 
         /// <summary>
         /// Converters the specified model to a json string.
@@ -24,7 +25,7 @@
         /// <returns>
         /// System.String.
         /// </returns>
-        public static string ToJson(this ModelBase model, ISerializationConfiguration configuration = null)
+        public static string ToJson(this ModelBase model, ISerializationConfiguration? configuration = null)
         {
             var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
 
@@ -49,10 +50,10 @@
         /// <returns>
         /// The json reader.
         /// </returns>
-        public static JsonReader CreateReader(this JToken token, ISerializationConfiguration configuration)
+        public static JsonReader CreateReader(this JToken token, ISerializationConfiguration? configuration)
         {
             var reader = token.CreateReader();
-            reader.Culture = configuration.Culture;
+            reader.Culture = configuration?.Culture ?? CultureInfo.InvariantCulture;
 
             return reader;
         }

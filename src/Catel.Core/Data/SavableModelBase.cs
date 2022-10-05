@@ -51,9 +51,9 @@
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load(Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null)
+        public static T? Load(Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null)
         {
-            return (T)Load(typeof(T), stream, serializer, configuration);
+            return (T?)Load(typeof(T), stream, serializer, configuration);
         }
 
         /// <summary>
@@ -70,10 +70,10 @@
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static IModel Load(Type type, Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null)
+        public static IModel? Load(Type type, Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null)
         {
             var result = serializer.Deserialize(type, stream, configuration);
-            return (IModel)result;
+            return (IModel?)result;
         }
     }
 }

@@ -12,15 +12,17 @@
     public class CatelJsonConverter : JsonConverter
     {
         private readonly IJsonSerializer _jsonSerializer;
-        private readonly ISerializationConfiguration _configuration;
+        private readonly ISerializationConfiguration? _configuration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CatelJsonConverter" /> class.
         /// </summary>
         /// <param name="jsonSerializer">The json serializer.</param>
         /// <param name="configuration">The configuration.</param>
-        public CatelJsonConverter(IJsonSerializer jsonSerializer, ISerializationConfiguration configuration)
+        public CatelJsonConverter(IJsonSerializer jsonSerializer, ISerializationConfiguration? configuration)
         {
+            ArgumentNullException.ThrowIfNull(jsonSerializer);
+
             _jsonSerializer = jsonSerializer;
             _configuration = configuration;
         }
@@ -31,9 +33,17 @@
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
         /// <param name="serializer">The serializer.</param>
-        public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, Newtonsoft.Json.JsonSerializer serializer)
         {
+            ArgumentNullException.ThrowIfNull(writer);
+
             var serialize = true;
+
+            var modelBase = value as ModelBase;
+            if (modelBase is null)
+            {
+                return;
+            }
 
             if (_jsonSerializer.PreserveReferences)
             {
@@ -42,7 +52,7 @@
                 {
                     var referenceManager = scopeManager.ScopeObject.ReferenceManager;
 
-                    var referenceInfo = referenceManager.GetInfo(value);
+                    var referenceInfo = referenceManager.GetInfo(modelBase);
                     if (referenceInfo is not null && !referenceInfo.IsFirstUsage)
                     {
                         writer.WriteStartObject();
@@ -57,7 +67,7 @@
 
             if (serialize)
             {
-                _jsonSerializer.Serialize((ModelBase)value, writer, _configuration);
+                _jsonSerializer.Serialize(modelBase, writer, _configuration);
             }
         }
 
@@ -69,8 +79,11 @@
         /// <param name="existingValue">The existing value.</param>
         /// <param name="serializer">The serializer.</param>
         /// <returns>System.Object.</returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
+            ArgumentNullException.ThrowIfNull(reader);
+            ArgumentNullException.ThrowIfNull(objectType);
+
             var obj = _jsonSerializer.Deserialize(objectType, reader, _configuration);
             return obj;
         }
@@ -82,6 +95,8 @@
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
+            ArgumentNullException.ThrowIfNull(objectType);
+
             var canConvert = objectType.IsModelBase();
             return canConvert;
         }

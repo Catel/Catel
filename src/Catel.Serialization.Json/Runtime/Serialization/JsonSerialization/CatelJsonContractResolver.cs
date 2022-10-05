@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="objectType">Type of the object.</param>
         /// <returns>JsonConverter.</returns>
-        protected override JsonConverter ResolveContractConverter(Type objectType)
+        protected override JsonConverter? ResolveContractConverter(Type objectType)
         {
             if (objectType.IsModelBase())
             {
