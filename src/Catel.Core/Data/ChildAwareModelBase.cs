@@ -1,18 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChildAwareModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Class that is aware of changes of child objects by using the <see cref="ChangeNotificationWrapper"/>.
@@ -22,7 +12,7 @@ namespace Catel.Data
         /// <summary>
         /// The change notification wrappers for all property values.
         /// </summary>
-        private Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers;
+        private Dictionary<string, ChangeNotificationWrapper>? _propertyValueChangeNotificationWrappers;
 
         /// <summary>
         /// Initializes the <see cref="ChildAwareModelBase"/> class.
@@ -136,7 +126,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnPropertyObjectPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // It is possible that the sender used string.Empty or null for the property name, then exit
             var propertyName = e.PropertyName;
@@ -158,7 +148,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        protected virtual void OnPropertyObjectCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             SetDirty(string.Empty);
 
@@ -171,7 +161,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             SetDirty(string.Empty);
 

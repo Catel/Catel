@@ -164,13 +164,23 @@ namespace Catel.Tests.IoC
                 }
 
                 [TestCase]
-                public void ThrowsTypeNotRegisteredException()
+                public void ResolveRequired_Throws_TypeNotRegisteredException()
                 {
                     var dependencyResolverManager = new DependencyResolverManager();
 
                     var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
 
-                    Assert.Throws<TypeNotRegisteredException>(() => resolvedDependencyResolver.Resolve(typeof(IDummy)));
+                    Assert.Throws<CatelException>(() => resolvedDependencyResolver.ResolveRequired(typeof(IDummy)));
+                }
+
+                [TestCase]
+                public void Resolve_Returns_Null()
+                {
+                    var dependencyResolverManager = new DependencyResolverManager();
+
+                    var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
+
+                    Assert.IsNull(resolvedDependencyResolver.Resolve(typeof(IDummy)));
                 }
             }
         }

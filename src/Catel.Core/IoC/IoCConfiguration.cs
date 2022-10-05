@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IoCConfiguration.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using Catel.Logging;
 
@@ -17,9 +10,9 @@ namespace Catel.IoC
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly object _lockObject = new object();
 
-        private static IServiceLocator _defaultServiceLocator;
-        private static IDependencyResolver _defaultDependencyResolver;
-        private static ITypeFactory _defaultTypeFactory;
+        private static IServiceLocator? _defaultServiceLocator;
+        private static IDependencyResolver? _defaultDependencyResolver;
+        private static ITypeFactory? _defaultTypeFactory;
 
         /// <summary>
         /// Gets or sets the default service locator.
@@ -36,7 +29,7 @@ namespace Catel.IoC
                         UpdateDefaultComponents();
                     }
 
-                    return _defaultServiceLocator;
+                    return _defaultServiceLocator!;
                 }
             }
             private set
@@ -60,7 +53,7 @@ namespace Catel.IoC
                         UpdateDefaultComponents();
                     }
 
-                    return _defaultDependencyResolver;
+                    return _defaultDependencyResolver!;
                 }
             }
             private set
@@ -84,7 +77,7 @@ namespace Catel.IoC
                         UpdateDefaultComponents();
                     }
 
-                    return _defaultTypeFactory;
+                    return _defaultTypeFactory!;
                 }
             }
             private set
@@ -104,14 +97,14 @@ namespace Catel.IoC
             Log.Info("Updating default components");
 
             // Don't initialize the first service locator (we are still loading assemblies at that time)
-            bool initializeServiceLocator = (_defaultServiceLocator is not null);
+            var initializeServiceLocator = (_defaultServiceLocator is not null);
             var serviceLocator = IoCFactory.CreateServiceLocator(initializeServiceLocator);
 
             lock (_lockObject)
             {
                 DefaultServiceLocator = serviceLocator;
-                DefaultDependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-                DefaultTypeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                DefaultDependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
+                DefaultTypeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
             }
         }
     }

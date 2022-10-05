@@ -1,14 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
-    using System;
-
     /// <summary>
     /// IoC extensions for all objects.
     /// </summary>
@@ -32,7 +23,7 @@ namespace Catel.IoC
         public static IServiceLocator GetServiceLocator(this object obj)
         {
             var dependencyResolver = GetDependencyResolver(obj);
-            var serviceLocator = dependencyResolver.Resolve<IServiceLocator>();
+            var serviceLocator = dependencyResolver.ResolveRequired<IServiceLocator>();
 
             return serviceLocator;
         }
@@ -55,7 +46,7 @@ namespace Catel.IoC
         public static ITypeFactory GetTypeFactory(this object obj)
         {
             var dependencyResolver = GetDependencyResolver(obj);
-            var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
+            var typeFactory = dependencyResolver.ResolveRequired<ITypeFactory>();
 
             return typeFactory;
         }

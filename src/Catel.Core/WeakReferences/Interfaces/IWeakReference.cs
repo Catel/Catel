@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWeakReference.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     /// <summary>
     /// Weak reference interface.
@@ -28,6 +22,6 @@ namespace Catel
         /// <remarks>
         /// In case of static event handlers, this property always returns <c>null</c>.
         /// </remarks>
-        object Target { get; }
+        object? Target { get; }
     }
 }

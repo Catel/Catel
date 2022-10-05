@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CustomExpirationPolicy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Caching.Policies
+﻿namespace Catel.Caching.Policies
 {
     using System;
 
@@ -12,20 +7,15 @@ namespace Catel.Caching.Policies
     /// </summary>
     public sealed class CustomExpirationPolicy : ExpirationPolicy
     {
-        #region Fields
-
         /// <summary>
         /// The function to check if the policy is expired.
         /// </summary>
-        private readonly Func<bool> _isExpiredFunc;
+        private readonly Func<bool>? _isExpiredFunc;
 
         /// <summary>
         ///  The action that will be executed if the item is read before expiration.
         /// </summary>
-        private readonly Action _resetAction;
-        #endregion
-
-        #region Constructors
+        private readonly Action? _resetAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomExpirationPolicy"/> class.
@@ -36,16 +26,12 @@ namespace Catel.Caching.Policies
         /// <param name="resetAction">
         /// The action that will be executed if the item is read before expiration.
         /// </param>
-        public CustomExpirationPolicy(Func<bool> isExpiredFunc = null, Action resetAction = null)
+        public CustomExpirationPolicy(Func<bool>? isExpiredFunc = null, Action? resetAction = null)
             : base(resetAction is not null)
         {
             _isExpiredFunc = isExpiredFunc;
             _resetAction = resetAction;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether is expired.
@@ -57,18 +43,13 @@ namespace Catel.Caching.Policies
                 return _isExpiredFunc is null || _isExpiredFunc.Invoke();
             }
         }
-        #endregion
-
-        #region Methods
 
 		/// <summary>
         /// Called when the policy is resetting.
         /// </summary>
         protected override void OnReset()
         {
-            _resetAction.Invoke();
+            _resetAction?.Invoke();
         }
-
-        #endregion
     }
 }

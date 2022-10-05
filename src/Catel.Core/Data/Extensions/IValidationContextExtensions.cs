@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidationContextExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Text;
@@ -26,8 +19,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public static bool HasWarningsOrErrors(this IValidationContext validationContext)
         {
-            Argument.IsNotNull("validationContext", validationContext);
-
             return validationContext.HasWarnings || validationContext.HasErrors;
         }
 
@@ -46,8 +37,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public static string GetValidationsAsStringList(this IValidationContext validationContext, ValidationResultType validationResult)
         {
-            Argument.IsNotNull("validationContext", validationContext);
-
             var messageBuilder = new StringBuilder();
 
             switch (validationResult)

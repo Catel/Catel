@@ -15,7 +15,7 @@
         /// <returns>
         /// ISerializationContextInfo.
         /// </returns>
-        public ISerializationContextInfo GetSerializationContextInfo(ISerializer serializer, object model, object data, ISerializationConfiguration configuration = null)
+        public ISerializationContextInfo GetSerializationContextInfo(ISerializer serializer, object model, object data, ISerializationConfiguration? configuration = null)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
             jsonSerializer.ContractResolver = new CatelJsonContractResolver();

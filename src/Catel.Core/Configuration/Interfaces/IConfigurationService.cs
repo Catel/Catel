@@ -12,7 +12,7 @@
         /// <summary>
         /// Occurs when the configuration has changed.
         /// </summary>
-        event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
+        event EventHandler<ConfigurationChangedEventArgs>? ConfigurationChanged;
 
         /// <summary>
         /// Suspends the notifications of this service until the returned object is disposed.
@@ -29,7 +29,7 @@
         /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        Task<T> GetValueAsync<T>(ConfigurationContainer container, string key, T defaultValue = default(T));
+        Task<T> GetValueAsync<T>(ConfigurationContainer container, string key, T defaultValue = default!);
 
         /// <summary>
         /// Sets the configuration value.
@@ -38,7 +38,7 @@
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        Task SetValueAsync(ConfigurationContainer container, string key, object value);
+        Task SetValueAsync(ConfigurationContainer container, string key, object? value);
 
         /// <summary>
         /// Determines whether the specified value is available.
@@ -56,7 +56,7 @@
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        Task InitializeValueAsync(ConfigurationContainer container, string key, object defaultValue);
+        Task InitializeValueAsync(ConfigurationContainer container, string key, object? defaultValue);
 
         /// <summary>
         /// Sets the roaming config file path.

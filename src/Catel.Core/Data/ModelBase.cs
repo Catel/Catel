@@ -1,16 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
     using System.Xml.Serialization;
     using Logging;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
@@ -18,7 +11,6 @@ namespace Catel.Data
     [Serializable]
     public abstract partial class ModelBase : ObservableObject, IModel
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -34,11 +26,8 @@ namespace Catel.Data
         /// </summary>
         internal readonly object _lock = new object();
 
-        internal SuspensionContext _changeCallbacksSuspensionContext;
-        internal SuspensionContext _changeNotificationsSuspensionContext;
-        #endregion
-
-        #region Constructors
+        internal SuspensionContext? _changeCallbacksSuspensionContext;
+        internal SuspensionContext? _changeNotificationsSuspensionContext;
 
         /// <summary>
         /// Initializes static members of the <see cref="ModelBase"/> class.
@@ -53,11 +42,11 @@ namespace Catel.Data
         /// </summary>
         protected ModelBase()
         {
+            _propertyBag = CreatePropertyBag();
+
             Initialize();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
@@ -142,9 +131,7 @@ namespace Catel.Data
         /// Register the IsReadOnly property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData IsReadOnlyProperty = RegisterProperty<bool>(nameof(IsReadOnly), false, null, false, true, true);
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Allows the initialization of custom properties. This is a virtual method that is called
         /// inside the constructor before the object is fully constructed.
@@ -166,8 +153,6 @@ namespace Catel.Data
         {
             AlwaysInvokeNotifyChanged = false;
 
-            _propertyBag = CreatePropertyBag();
-
             InitializeProperties();
 
             InitializeCustomProperties();
@@ -181,7 +166,7 @@ namespace Catel.Data
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return base.ToString();
         }
@@ -251,7 +236,7 @@ namespace Catel.Data
             },
             x =>
             {
-                SuspensionContext suspensionContext;
+                SuspensionContext? suspensionContext;
 
                 lock (_lock)
                 {
@@ -283,9 +268,7 @@ namespace Catel.Data
 
             return token;
         }
-        #endregion
 
-        #region INotifyPropertyChanged Members
         /// <summary>
         /// Invokes the property changed for all registered properties.
         /// </summary>
@@ -316,7 +299,7 @@ namespace Catel.Data
         /// <para />
         /// If this method is overriden, it is very important to call the base.
         /// </remarks>
-        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(sender, e, true, false);
         }
@@ -329,7 +312,7 @@ namespace Catel.Data
         /// <param name="updateIsDirty">if set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
         /// <param name="isRefreshCallOnly">if set to <c>true</c>, the call is only to refresh updates (for example, for the IDataErrorInfo 
         /// implementation). If this value is <c>false</c>, the custom change handlers will not be called.</param>
-        protected void RaisePropertyChanged(object sender, PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly)
+        protected void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly)
         {
             if (string.IsNullOrEmpty(e.PropertyName))
             {
@@ -378,7 +361,7 @@ namespace Catel.Data
             {
                 if (!isRefreshCallOnly)
                 {
-                    SuspensionContext callbackSuspensionContext;
+                    SuspensionContext? callbackSuspensionContext;
 
                     lock (_lock)
                     {
@@ -439,6 +422,5 @@ namespace Catel.Data
                 IsDirty = true;
             }
         }
-        #endregion
     }
 }

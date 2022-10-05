@@ -14,10 +14,10 @@
         /// </summary>
         /// <returns>The type calling the method.</returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static Type GetCallingType()
+        public static Type? GetCallingType()
         {
             var frame = new StackFrame(2, false);
-            var type = frame.GetMethod().DeclaringType;
+            var type = frame?.GetMethod()?.DeclaringType;
 
             return type;
         }

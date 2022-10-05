@@ -1,10 +1,4 @@
-﻿// ------------------------------------------------------------------------------------------------- -------------------
-// <copyright file="AssemblyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -37,16 +31,16 @@ namespace Catel.Reflection
         /// Gets the entry assembly.
         /// </summary>
         /// <returns>Assembly.</returns>
-        public static Assembly GetEntryAssembly()
+        public static Assembly? GetEntryAssembly()
         {
-            Assembly assembly = null;
+            Assembly? assembly = null;
 
             try
             {
                 var serviceLocator = ServiceLocator.Default;
                 if (serviceLocator.IsTypeRegistered<IEntryAssemblyResolver>())
                 {
-                    var entryAssemblyResolver = serviceLocator.ResolveType<IEntryAssemblyResolver>();
+                    var entryAssemblyResolver = serviceLocator.ResolveRequiredType<IEntryAssemblyResolver>();
                     assembly = entryAssemblyResolver.Resolve();
 
                     if (assembly is not null)
@@ -81,7 +75,7 @@ namespace Catel.Reflection
         /// <param name="assemblyNameWithoutVersion">The assembly name without version.</param>
         /// <returns>The assembly name with version or <c>null</c> if the assembly is not found in the <see cref="AppDomain"/>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="assemblyNameWithoutVersion" /> is <c>null</c> or whitespace.</exception>
-        public static string GetAssemblyNameWithVersion(string assemblyNameWithoutVersion)
+        public static string? GetAssemblyNameWithVersion(string assemblyNameWithoutVersion)
         {
             Argument.IsNotNullOrWhitespace("assemblyNameWithoutVersion", assemblyNameWithoutVersion);
 
@@ -113,8 +107,6 @@ namespace Catel.Reflection
 #endif
         public static Type[] GetAllTypesSafely(this Assembly assembly, bool logLoaderExceptions = true)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             Type[] foundAssemblyTypes;
 
             RegisterAssemblyWithVersionInfo(assembly);
@@ -248,8 +240,11 @@ namespace Catel.Reflection
                     _registeredAssemblies.Add(assembly);
 
                     var assemblyNameWithVersion = assembly.FullName;
-                    var assemblyNameWithoutVersion = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyNameWithVersion);
-                    _assemblyMappings[assemblyNameWithoutVersion] = assemblyNameWithVersion;
+                    if (!string.IsNullOrEmpty(assemblyNameWithVersion))
+                    {
+                        var assemblyNameWithoutVersion = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyNameWithVersion);
+                        _assemblyMappings[assemblyNameWithoutVersion] = assemblyNameWithVersion;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -260,11 +255,6 @@ namespace Catel.Reflection
 
         private static bool ShouldIgnoreAssembly(Assembly assembly, bool ignoreDynamicAssemblies)
         {
-            if (assembly is null)
-            {
-                return true;
-            }
-
             if (ignoreDynamicAssemblies)
             {
                 if (assembly.IsDynamicAssembly())
@@ -309,7 +299,9 @@ namespace Catel.Reflection
 
             try
             {
+#pragma warning disable CS8605 // Unboxing a possibly null value.
                 var coffHeader = (_IMAGE_FILE_HEADER)Marshal.PtrToStructure(pinnedBuffer.AddrOfPinnedObject(), typeof(_IMAGE_FILE_HEADER));
+#pragma warning restore CS8605 // Unboxing a possibly null value.
 
                 var utcStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 var offset = TimeSpan.FromSeconds(coffHeader.TimeDateStamp);

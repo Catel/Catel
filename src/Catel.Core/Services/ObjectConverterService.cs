@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeConverterService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Globalization;
@@ -34,7 +27,7 @@ namespace Catel.Services
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The string value.</returns>
-        public virtual string ConvertFromObjectToString(object value)
+        public virtual string ConvertFromObjectToString(object? value)
         {
             return ConvertFromObjectToString(value, DefaultCulture);
         }
@@ -46,7 +39,7 @@ namespace Catel.Services
         /// <param name="culture">The culture.</param>
         /// <returns>System.String.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public string ConvertFromObjectToString(object value, CultureInfo culture)
+        public string ConvertFromObjectToString(object? value, CultureInfo culture)
         {
             return ObjectToStringHelper.ToString(value, culture);
         }
@@ -57,7 +50,7 @@ namespace Catel.Services
         /// <param name="value">The value.</param>
         /// <param name="targetType">The target type.</param>
         /// <returns>The object value.</returns>
-        public virtual object ConvertFromStringToObject(string value, Type targetType)
+        public virtual object? ConvertFromStringToObject(string value, Type targetType)
         {
             return ConvertFromStringToObject(value, targetType, DefaultCulture);
         }
@@ -70,7 +63,7 @@ namespace Catel.Services
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public object ConvertFromStringToObject(string value, Type targetType, CultureInfo culture)
+        public object? ConvertFromStringToObject(string value, Type targetType, CultureInfo culture)
         {
             return StringToObjectHelper.ToRightType(targetType, value, culture);
         }
@@ -81,7 +74,7 @@ namespace Catel.Services
         /// <param name="value">The value.</param>
         /// <param name="targetType">Type of the target.</param>
         /// <returns>The object value.</returns>
-        public virtual object ConvertFromObjectToObject(object value, Type targetType)
+        public virtual object? ConvertFromObjectToObject(object? value, Type targetType)
         {
             var stringValue = ConvertFromObjectToString(value);
             return ConvertFromStringToObject(stringValue, targetType);

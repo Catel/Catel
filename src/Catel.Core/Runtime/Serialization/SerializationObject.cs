@@ -1,22 +1,16 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationObject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Reflection;
+    using Catel.Services;
 
     /// <summary>
     /// Class containing information about a (de)serialized value.
     /// </summary>
     public class SerializationObject
     {
-        private readonly object _memberValue;
+        private readonly object? _memberValue;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationObject" /> class.
         /// </summary>
@@ -24,15 +18,13 @@ namespace Catel.Runtime.Serialization
         /// <param name="memberGroup">Group of the member.</param>
         /// <param name="memberName">Name of the member.</param>
         /// <param name="memberValue">The member value.</param>
-        private SerializationObject(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
+        private SerializationObject(Type modelType, SerializationMemberGroup memberGroup, string memberName, object? memberValue)
         {
             ModelType = modelType;
-
             MemberGroup = memberGroup;
             MemberName = memberName;
             _memberValue = memberValue;
         }
-        #endregion
 
         /// <summary>
         /// Gets the type of the model.
@@ -57,7 +49,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The member value.</value>
         /// <exception cref="InvalidOperationException">The <see cref="IsSuccessful"/> is false and this member cannot be used.</exception>
-        public object MemberValue
+        public object? MemberValue
         {
             get
             {
@@ -87,7 +79,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
         public static SerializationObject FailedToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName)
         {
-            Argument.IsNotNull("modelType", modelType);
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace("memberName", memberName);
 
             var obj = new SerializationObject(modelType, memberGroup, memberName, null);
@@ -106,9 +98,9 @@ namespace Catel.Runtime.Serialization
         /// <returns>SerializationObject.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
-        public static SerializationObject SucceededToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
+        public static SerializationObject SucceededToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName, object? memberValue)
         {
-            Argument.IsNotNull("modelType", modelType);
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace("memberName", memberName);
 
             var obj = new SerializationObject(modelType, memberGroup, memberName, memberValue);

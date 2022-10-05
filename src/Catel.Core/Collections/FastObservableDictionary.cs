@@ -8,8 +8,6 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
@@ -23,16 +21,23 @@
         INotifyCollectionChanged,
         INotifyPropertyChanged,
         ISuspendChangeNotificationsCollection
+        where TKey : notnull
     {
         #region Fields & Properties
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
+
+        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
+            return dispatcherService;
+        });
 
         /// <summary>
         /// The current suspension context.
         /// </summary>
         [field: NonSerialized]
-        private SuspensionContext<KeyValuePair<TKey, TValue>> _suspensionContext;
+        private SuspensionContext<KeyValuePair<TKey, TValue>>? _suspensionContext;
 
         /// <summary>
         /// maps from TKey to TValue
@@ -52,7 +57,7 @@
         private readonly List<TKey> _list;
 
         [field: NonSerialized]
-        private readonly SerializationInfo _serializationInfo;
+        private readonly SerializationInfo? _serializationInfo;
 
         /// <summary>
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
@@ -81,36 +86,46 @@
 
         public FastObservableDictionary(IEnumerable<KeyValuePair<TKey, TValue>> originalDict)
         {
+            ArgumentNullException.ThrowIfNull(originalDict);
+
             if (originalDict is ICollection<KeyValuePair<TKey, TValue>> collection)
             {
                 _dict = new Dictionary<TKey, TValue>(collection.Count);
                 _dictIndexMapping = new Dictionary<TKey, int>(collection.Count);
                 _list = new List<TKey>(collection.Count);
             }
+            else
+            {
+                _dict = new Dictionary<TKey, TValue>();
+                _dictIndexMapping = new Dictionary<TKey, int>();
+                _list = new List<TKey>();
+            }
+
             InsertMultipleValues(0, originalDict, false);
         }
 
-        public FastObservableDictionary(IEqualityComparer<TKey> comparer)
+        public FastObservableDictionary(IEqualityComparer<TKey>? comparer)
         {
             _list = new List<TKey>();
             _dictIndexMapping = new Dictionary<TKey, int>(comparer);
             _dict = new Dictionary<TKey, TValue>(comparer);
         }
 
-        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary) : this((IEnumerable<KeyValuePair<TKey, TValue>>)dictionary)
+        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary)
+            : this((IEnumerable<KeyValuePair<TKey, TValue>>)dictionary)
         {
         }
 
-        public FastObservableDictionary(int capacity, IEqualityComparer<TKey> comparer)
+        public FastObservableDictionary(int capacity, IEqualityComparer<TKey>? comparer)
         {
             _list = new List<TKey>(capacity);
             _dictIndexMapping = new Dictionary<TKey, int>(capacity, comparer);
             _dict = new Dictionary<TKey, TValue>(capacity, comparer);
         }
 
-        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
+        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? comparer)
         {
-            Argument.IsNotNull(nameof(dictionary), dictionary);
+            ArgumentNullException.ThrowIfNull(dictionary);
 
             _dict = new Dictionary<TKey, TValue>(dictionary.Count, comparer);
             _dictIndexMapping = new Dictionary<TKey, int>(dictionary.Count, comparer);
@@ -121,6 +136,10 @@
 
         private FastObservableDictionary(Dictionary<TKey, TValue> dict, Dictionary<TKey, int> dictIndexMapping, List<TKey> list)
         {
+            ArgumentNullException.ThrowIfNull(dict);
+            ArgumentNullException.ThrowIfNull(dictIndexMapping);
+            ArgumentNullException.ThrowIfNull(list);
+
             _dict = dict;
             _list = list;
             _dictIndexMapping = dictIndexMapping;
@@ -271,8 +290,6 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(int index, TKey key, TValue newValue, bool checkKeyDuplication)
         {
-            Argument.IsNotNull(nameof(key), key);
-
             // Check
             if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
@@ -353,8 +370,6 @@
         }
         protected virtual void InternalMoveItem(int oldIndex, int newIndex, TKey key, TValue element)
         {
-            Argument.IsNotNull(nameof(key), key);
-
             // Check
             if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
@@ -395,10 +410,8 @@
         /// <param name="keyToRemove"></param>
         /// <param name="value">the removed value</param>
         /// <returns></returns>
-        public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue value)
+        public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue? value)
         {
-            Argument.IsNotNull(nameof(keyToRemove), keyToRemove);
-
             if (_dictIndexMapping.TryGetValue(keyToRemove, out var removedKeyIndex) && _dict.TryGetValue(keyToRemove, out var removedKeyValue))
             {
                 // Check
@@ -435,7 +448,9 @@
                 value = removedKeyValue;
                 return true;
             }
+
             value = default;
+
             return false;
         }
 
@@ -483,8 +498,6 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertMultipleValues(IEnumerable<KeyValuePair<TKey, TValue>> newValues, bool checkKeyDuplication)
         {
-            Argument.IsNotNull(nameof(newValues), newValues);
-
             if (checkKeyDuplication)
             {
                 newValues = newValues.Where(x => !_dict.ContainsKey(x.Key));
@@ -563,14 +576,13 @@
         /// <param name="checkKeyDuplication">only set to false if you are absolutely sure there is never going to be key duplication (e.g. during construction)</param>
         public virtual void InsertMultipleValues(int startIndex, IEnumerable<KeyValuePair<TKey, TValue>> newValues, bool checkKeyDuplication)
         {
-            Argument.IsNotNull(nameof(newValues), newValues);
-
             if (checkKeyDuplication)
             {
                 newValues = newValues.Where(x => !_dict.ContainsKey(x.Key));
             }
 
             var counterIndex = startIndex;
+
             if (newValues is ICollection<KeyValuePair<TKey, TValue>> collection)
             {
                 var count = collection.Count;
@@ -640,8 +652,6 @@
         /// <param name="keysToRemove">The keys to remove</param>
         public virtual void RemoveMultipleValues(IEnumerable<TKey> keysToRemove)
         {
-            Argument.IsNotNull(nameof(keysToRemove), keysToRemove);
-
             Dictionary<int, List<KeyValuePair<TKey, TValue>>> removedList;
 
             if (keysToRemove is ICollection<TKey> collectionOfKeysToRemove)
@@ -691,11 +701,14 @@
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
-            List<KeyValuePair<TKey, TValue>> copyList = null;
+
+            List<KeyValuePair<TKey, TValue>>? copyList = null;
+
             if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
             {
                 copyList = AsEnumerable().ToList();
             }
+
             _list.Clear();
             _dict.Clear();
 
@@ -706,14 +719,11 @@
 
             OnCollectionChanged(_cachedResetArgs);
 
-
             if (copyList is not null)
             {
                 WriteMultipleRemoveSuspension(copyList, 0, copyList.Count);
             }
         }
-
-
         #endregion
 
         #region ICollection<KeyValuePair<TKey, TValue>>
@@ -722,7 +732,6 @@
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-
             InsertSingleValue(item.Key, item.Value, true);
         }
 
@@ -738,9 +747,11 @@
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            Argument.IsNotNull(nameof(array), array);
+            if (array.Length - arrayIndex < Count)
+            {
+                throw new IndexOutOfRangeException("Array doesn't have enough space to copy all the elements");
+            }
 
-            if (array.Length - arrayIndex < Count) throw new IndexOutOfRangeException("Array doesn't have enough space to copy all the elements");
             for (var i = 0; i < Count; i++)
             {
                 var key = _list[i];
@@ -751,7 +762,6 @@
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-
             return TryRemoveSingleValue(item.Key, out _);
         }
         #endregion
@@ -789,9 +799,18 @@
         /// <returns></returns>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            return _dict.TryGetValue(key, out value);
-        }
+#pragma warning disable CS8601 // Possible null reference assignment.
+            value = default;
+#pragma warning restore CS8601 // Possible null reference assignment.
 
+            if (_dict.TryGetValue(key, out var typedValue))
+            {
+                value = typedValue;
+                return true;
+            }
+
+            return false;
+        }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
@@ -823,7 +842,7 @@
         /// is not assignable to the key of type <typeparamref name="TKey"/> of the 
         /// <see cref="FastObservableDictionary{TKey,TValue}"/>.
         /// </returns>
-        public object this[object key]
+        public object? this[object key]
         {
             get
             {
@@ -838,7 +857,19 @@
                     return null;
                 }
             }
-            set => this[(TKey)key] = (TValue)value;
+            set
+            {
+                TValue? typedValue = default;
+
+                if (value is TValue correctTypedValue)
+                {
+                    typedValue = correctTypedValue;
+                }
+
+#pragma warning disable CS8601 // Possible null reference assignment.
+                this[(TKey)key] = typedValue;
+#pragma warning restore CS8601 // Possible null reference assignment.
+            }
         }
 
         /// <summary>
@@ -852,12 +883,12 @@
             {
                 return ContainsKey(castedKey);
             }
+
             return false;
         }
-        public void Add(object key, object value)
-        {
-            Argument.IsNotNull(nameof(key), key);
 
+        public void Add(object key, object? value)
+        {
             if (key is TKey castedKey)
             {
                 if (value is TValue castedValue)
@@ -874,6 +905,7 @@
                 throw Log.ErrorAndCreateException<InvalidCastException>($"Key must be of type {typeof(TKey)}");
             }
         }
+
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
@@ -935,6 +967,7 @@
         #region ISerializable and IDeserializationCallback
         private const string EntriesName = "entries";
         protected FastObservableDictionary(SerializationInfo info, StreamingContext context)
+            : this()
         {
             _serializationInfo = info;
         }
@@ -950,19 +983,20 @@
             info.AddValue(EntriesName, entries);
         }
 
-        public void OnDeserialization(object sender)
+        public void OnDeserialization(object? sender)
         {
             if (_serializationInfo is null)
             {
                 return;
             }
 
-            var entries =
-                (Collection<KeyValuePair<TKey, TValue>>)_serializationInfo.GetValue(EntriesName, typeof(Collection<KeyValuePair<TKey, TValue>>));
-
-            foreach (var keyValuePair in entries)
+            var entries = (Collection<KeyValuePair<TKey, TValue>>?)_serializationInfo.GetValue(EntriesName, typeof(Collection<KeyValuePair<TKey, TValue>>));
+            if (entries is not null)
             {
-                Add(keyValuePair.Key, keyValuePair.Value);
+                foreach (var keyValuePair in entries)
+                {
+                    Add(keyValuePair.Key, keyValuePair.Value);
+                }
             }
         }
         #endregion
@@ -972,8 +1006,6 @@
         {
             return AsEnumerable().GetEnumerator();
         }
-
-
         #endregion
 
         #region INotifyPropertyChanged and INotifyCollectionChanged
@@ -1024,10 +1056,10 @@
         }
 
         /// <inheritdoc cref="INotifyCollectionChanged.CollectionChanged"/>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
         #region ISuspendChangeNotificationsCollection
@@ -1063,11 +1095,11 @@
                 this,
                 x =>
                 {
-                    x.Instance._suspensionContext.Count++;
+                    x.Instance._suspensionContext!.Count++;
                 },
                 x =>
                 {
-                    x.Instance._suspensionContext.Count--;
+                    x.Instance._suspensionContext!.Count--;
                     if (x.Instance._suspensionContext.Count == 0)
                     {
                         if (x.Instance.IsDirty)
@@ -1078,17 +1110,18 @@
 
                         x.Instance._suspensionContext = null;
                     }
-                }, _suspensionContext);
+                }, _suspensionContext!);
         }
+
         /// <summary>
         /// Notifies external classes of property changes.
         /// </summary>
         protected void NotifyChanges()
         {
-            Action action = () =>
+            var action = () =>
             {
                 // Create event args list
-                var eventArgsList = _suspensionContext.CreateEvents();
+                var eventArgsList = _suspensionContext!.CreateEvents();
 
                 // Fire events
                 if (eventArgsList.Count != 0)
@@ -1117,6 +1150,5 @@
 
         public bool NotificationsSuspended { get; private set; }
         #endregion
-
     }
 }

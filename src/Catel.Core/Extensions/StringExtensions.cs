@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -14,7 +7,6 @@ namespace Catel
     /// </summary>
     public static partial class StringExtensions
     {
-        #region Methods
         /// <summary>
         /// Splits the string by camel case, e.g. 'HiThere' will result in 'Hi there'.
         /// </summary>
@@ -300,6 +292,5 @@ namespace Catel
 
             return false;
         }
-        #endregion
     }
 }

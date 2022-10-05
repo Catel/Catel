@@ -16,11 +16,8 @@
         /// <param name="jsonSerializer">The json serializer.</param>
         /// <param name="jsonReader">The json reader.</param>
         /// <param name="jsonWriter">The json writer.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="jsonSerializer" /> is <c>null</c>.</exception>
-        public JsonSerializationContextInfo(Newtonsoft.Json.JsonSerializer jsonSerializer, JsonReader jsonReader, JsonWriter jsonWriter)
+        public JsonSerializationContextInfo(Newtonsoft.Json.JsonSerializer jsonSerializer, JsonReader? jsonReader, JsonWriter? jsonWriter)
         {
-            Argument.IsNotNull("jsonSerializer", jsonSerializer);
-
             JsonSerializer = jsonSerializer;
             JsonReader = jsonReader;
             JsonWriter = jsonWriter;
@@ -36,24 +33,24 @@
         /// Gets the json reader.
         /// </summary>
         /// <value>The json reader.</value>
-        public JsonReader JsonReader { get; private set; }
+        public JsonReader? JsonReader { get; private set; }
 
         /// <summary>
         /// Gets the json writer.
         /// </summary>
         /// <value>The json writer.</value>
-        public JsonWriter JsonWriter { get; private set; }
+        public JsonWriter? JsonWriter { get; private set; }
 
         /// <summary>
         /// Gets or sets the json array.
         /// </summary>
         /// <value>The json array.</value>
-        public JArray JsonArray { get; set; }
+        public JArray? JsonArray { get; set; }
 
         /// <summary>
         /// Gets or sets the json properties used during deserialization.
         /// </summary>
         /// <value>The json object.</value>
-        public Dictionary<string, JProperty> JsonProperties { get; set; }
+        public Dictionary<string, JProperty>? JsonProperties { get; set; }
     }
 }

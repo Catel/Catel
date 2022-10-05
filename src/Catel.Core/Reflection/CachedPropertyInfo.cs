@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CachedPropertyInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -28,8 +21,6 @@ namespace Catel.Reflection
         /// <param name="propertyInfo">The property information.</param>
         public CachedPropertyInfo(PropertyInfo propertyInfo)
         {
-            Argument.IsNotNull("propertyInfo", propertyInfo);
-
             PropertyInfo = propertyInfo;
         }
 
@@ -55,8 +46,6 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the property is decorated with the specified attribute.; otherwise, <c>false</c>.</returns>
         public bool IsDecoratedWithAttribute(Type attributeType)
         {
-            Argument.IsNotNull("attributeType", attributeType);
-
             lock (_decoratedWithAttributeCache)
             {
                 if (!_decoratedWithAttributeCache.TryGetValue(attributeType, out var isDecorated))

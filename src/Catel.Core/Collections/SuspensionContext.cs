@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SuspensionContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -17,14 +10,11 @@ namespace Catel.Collections
     /// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
     public class SuspensionContext<T>
     {
-        #region Fields
         /// <summary>
         /// The suspension count.
         /// </summary>
         private int _suspensionCount;
-        #endregion Fields
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SuspensionContext{T}" /> class.
         /// </summary>
@@ -33,9 +23,7 @@ namespace Catel.Collections
         {
             Mode = mode;
         }
-        #endregion Constructors
 
-        #region Properties
         /// <summary>
         /// Gets events generators registry.
         /// </summary>
@@ -76,9 +64,7 @@ namespace Catel.Collections
         /// Gets the suspension mode.
         /// </summary>
         public SuspensionMode Mode { get; }
-        #endregion Properties
 
-        #region Methods
         /// <summary>
         /// Initialize the Events generators registry
         /// </summary>
@@ -86,16 +72,15 @@ namespace Catel.Collections
         private static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> InitializeRegistry()
         {
             return new Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>
-                       {
-                           { SuspensionMode.None, context => context.CreateNoneEvents() },
-                           { SuspensionMode.Adding, context => context.CreateAddingEvents() },
-                           { SuspensionMode.Removing, context => context.CreateRemovingEvents() },
-                           { SuspensionMode.Mixed, context => context.CreateMixedEvents() },
-                           { SuspensionMode.MixedBash, context => context.CreateMixedBashEvents() },
-                           { SuspensionMode.MixedConsolidate, context => context.CreateMixedConsolidateEvents() },
-                           { SuspensionMode.Silent, context => context.CreateSilentEvents() }
-                       };
+            {
+                { SuspensionMode.None, context => context.CreateNoneEvents() },
+                { SuspensionMode.Adding, context => context.CreateAddingEvents() },
+                { SuspensionMode.Removing, context => context.CreateRemovingEvents() },
+                { SuspensionMode.Mixed, context => context.CreateMixedEvents() },
+                { SuspensionMode.MixedBash, context => context.CreateMixedBashEvents() },
+                { SuspensionMode.MixedConsolidate, context => context.CreateMixedConsolidateEvents() },
+                { SuspensionMode.Silent, context => context.CreateSilentEvents() }
+            };
         }
-        #endregion Methods
     }
 }

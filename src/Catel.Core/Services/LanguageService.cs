@@ -1,17 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using Caching;
-    using Catel.Linq;
     using Logging;
 
     /// <summary>
@@ -23,7 +15,7 @@ namespace Catel.Services
 
         private readonly List<ILanguageSource> _languageSources = new List<ILanguageSource>();
 
-        private readonly ICacheStorage<LanguageResourceKey, string> _stringCache = new CacheStorage<LanguageResourceKey, string>();
+        private readonly ICacheStorage<LanguageResourceKey, string?> _stringCache = new CacheStorage<LanguageResourceKey, string?>();
 
         private CultureInfo _fallbackCulture;
         private CultureInfo _preferredCulture;
@@ -40,12 +32,11 @@ namespace Catel.Services
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Resources"));
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Exceptions"));
 
-            FallbackCulture = CultureInfo.CurrentUICulture;
-            PreferredCulture = CultureInfo.CurrentUICulture;
+            _fallbackCulture = CultureInfo.CurrentUICulture;
+            _preferredCulture = CultureInfo.CurrentUICulture;
             CacheResults = true;
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the fallback culture.
         /// </summary>
@@ -81,15 +72,12 @@ namespace Catel.Services
         /// </summary>
         /// <value><c>true</c> if the results should be cached; otherwise, <c>false</c>.</value>
         public bool CacheResults { get; set; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
         /// </summary>
-        public event EventHandler<EventArgs> LanguageUpdated;
-        #endregion
-
+        public event EventHandler<EventArgs>? LanguageUpdated;
+        
         /// <summary>
         /// Preloads the language sources to provide optimal performance.
         /// </summary>
@@ -115,7 +103,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c> or whitespace.</exception>
         public void RegisterLanguageSource(ILanguageSource languageSource)
         {
-            Argument.IsNotNull("languageSource", languageSource);
+            ArgumentNullException.ThrowIfNull(languageSource);
 
             lock (_languageSources)
             {
@@ -142,7 +130,7 @@ namespace Catel.Services
         /// <param name="resourceName">Name of the resource.</param>
         /// <returns>The string or <c>null</c> if the resource cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
-        public string GetString(string resourceName)
+        public string? GetString(string resourceName)
         {
             var preferredString = GetString(resourceName, PreferredCulture);
             if (string.IsNullOrWhiteSpace(preferredString))
@@ -161,10 +149,9 @@ namespace Catel.Services
         /// <returns>The string or <c>null</c> if the resource cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
-        public string GetString(string resourceName, CultureInfo cultureInfo)
+        public string? GetString(string resourceName, CultureInfo cultureInfo)
         {
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
-            Argument.IsNotNull("cultureInfo", cultureInfo);
 
             if (CacheResults)
             {
@@ -175,7 +162,7 @@ namespace Catel.Services
             return GetStringInternal(resourceName, cultureInfo);
         }
 
-        private string GetStringInternal(string resourceName, CultureInfo cultureInfo)
+        private string? GetStringInternal(string resourceName, CultureInfo cultureInfo)
         {
             lock (_languageSources)
             {

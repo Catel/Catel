@@ -35,11 +35,6 @@
                     serviceLocator.RegisterInstance(MessageMediator.Default);
                 }
 
-                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
-                {
-                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
-                }
-
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, FastViewPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherProviderService, DispatcherProviderService>();

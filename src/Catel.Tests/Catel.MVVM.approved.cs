@@ -144,14 +144,13 @@ namespace Catel.MVVM
     }
     public class Command : Catel.MVVM.Command<object, object>
     {
-        public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
+        public Command(System.Action execute, System.Func<bool>? canExecute = null, object? tag = null) { }
     }
     public abstract class CommandBase
     {
-        [System.CLSCompliant(false)]
-        protected static readonly Catel.MVVM.IAuthenticationProvider AuthenticationProvider;
-        protected static readonly Catel.Services.IDispatcherService DispatcherService;
         protected CommandBase() { }
+        protected static Catel.MVVM.IAuthenticationProvider? AuthenticationProvider { get; }
+        protected static Catel.Services.IDispatcherService? DispatcherService { get; }
     }
     public class CommandCanceledEventArgs : Catel.MVVM.CommandEventArgs
     {
@@ -241,8 +240,8 @@ namespace Catel.MVVM
     }
     public class Command<TExecuteParameter> : Catel.MVVM.Command<TExecuteParameter, TExecuteParameter>
     {
-        public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
-        public Command(System.Action<TExecuteParameter> execute, System.Func<TExecuteParameter, bool> canExecute = null, object tag = null) { }
+        public Command(System.Action execute, System.Func<bool>? canExecute = null, object? tag = null) { }
+        public Command(System.Action<TExecuteParameter> execute, System.Func<TExecuteParameter, bool>? canExecute = null, object? tag = null) { }
     }
     public class Command<TExecuteParameter, TCanExecuteParameter> : Catel.MVVM.CommandBase, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelCommand<TExecuteParameter, TCanExecuteParameter>, System.Windows.Input.ICommand
     {
@@ -250,18 +249,18 @@ namespace Catel.MVVM
         public Command(System.Action<TExecuteParameter> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
         public bool AutomaticallyDispatchEvents { get; set; }
         public object Tag { get; }
-        public event System.EventHandler CanExecuteChanged;
-        public event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs> Executed;
+        public event System.EventHandler? CanExecuteChanged;
+        public event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs>? Executed;
         public bool CanExecute() { }
-        public bool CanExecute(object parameter) { }
         public virtual bool CanExecute(TCanExecuteParameter parameter) { }
+        public bool CanExecute(object? parameter) { }
         public void Execute() { }
-        public void Execute(object parameter) { }
         public void Execute(TExecuteParameter parameter) { }
+        public void Execute(object? parameter) { }
         protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
-        protected void InitializeActions(System.Action<TExecuteParameter> executeWithParameter, System.Action executeWithoutParameter, System.Func<TCanExecuteParameter, bool> canExecuteWithParameter, System.Func<bool> canExecuteWithoutParameter) { }
+        protected void InitializeActions(System.Action<TExecuteParameter>? executeWithParameter, System.Action? executeWithoutParameter, System.Func<TCanExecuteParameter, bool>? canExecuteWithParameter, System.Func<bool>? canExecuteWithoutParameter) { }
         public virtual void RaiseCanExecuteChanged() { }
-        protected virtual void RaiseExecuted(object parameter) { }
+        protected virtual void RaiseExecuted(object? parameter) { }
     }
     public class CompositeCommand : Catel.MVVM.Command, Catel.MVVM.ICatelCommand, Catel.MVVM.ICompositeCommand, System.Windows.Input.ICommand
     {
@@ -841,8 +840,8 @@ namespace Catel.MVVM.Converters
     public class AreEqualMultiValueConverter : System.Windows.Markup.MarkupExtension, System.Windows.Data.IMultiValueConverter
     {
         public AreEqualMultiValueConverter() { }
-        public object Convert(object[] values, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
-        public object[] ConvertBack(object value, System.Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture) { }
+        public object Convert(object?[] values, System.Type targetType, object? parameter, System.Globalization.CultureInfo? culture) { }
+        public object[] ConvertBack(object? value, System.Type[] targetTypes, object? parameter, System.Globalization.CultureInfo? culture) { }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
     }
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(System.Windows.Visibility))]
@@ -1078,11 +1077,11 @@ namespace Catel.MVVM.Converters
         [System.ComponentModel.TypeConverter(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
         public System.Type OverrideType { get; set; }
         public bool SupportInversionUsingCommandParameter { get; set; }
-        protected abstract object Convert(TConvert value, System.Type targetType, object parameter);
-        public virtual object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
-        protected virtual object ConvertBack(TConvertBack value, System.Type targetType, object parameter) { }
-        public virtual object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
-        protected virtual bool IsConvertable<T>(object value) { }
+        protected abstract object Convert(TConvert value, System.Type targetType, object? parameter);
+        public virtual object Convert(object? value, System.Type targetType, object? parameter, System.Globalization.CultureInfo? culture) { }
+        protected virtual object ConvertBack(TConvertBack value, System.Type targetType, object? parameter) { }
+        public virtual object ConvertBack(object? value, System.Type targetType, object? parameter, System.Globalization.CultureInfo? culture) { }
+        protected virtual bool IsConvertable<T>(object? value) { }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
     }
     [System.Windows.Markup.ContentProperty("Converters")]

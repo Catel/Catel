@@ -1,15 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeHelperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using Catel.Collections;
     using Catel.Data;
     using Catel.Reflection;
 

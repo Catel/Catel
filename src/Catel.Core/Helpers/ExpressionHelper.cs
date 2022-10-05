@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpressionHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Linq.Expressions;
@@ -32,6 +26,8 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
         public static string GetPropertyName<TSource, TProperty>(Expression<Func<TSource, TProperty>> propertyExpression)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             return PropertyHelper.GetPropertyName(propertyExpression);
         }
 
@@ -46,6 +42,8 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         public static string GetPropertyName<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             return PropertyHelper.GetPropertyName(propertyExpression);
         }
 
@@ -56,9 +54,9 @@ namespace Catel
         /// <param name="propertyExpression">The property expression.</param>
         /// <returns>The owner of the expression or <c>null</c> if the owner cannot be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        public static object GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
+        public static object? GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             var expressionToHandle = GetExpressionToHandle(propertyExpression);
 
@@ -85,7 +83,7 @@ namespace Catel
             return null;
         }
 
-        private static object ResolveMemberExpression(MemberExpression memberExpression)
+        private static object? ResolveMemberExpression(MemberExpression memberExpression)
         {
             var fieldInfo = memberExpression.Member as FieldInfo;
             if (fieldInfo is not null)

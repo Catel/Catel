@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidationResult.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     /// <summary>
     /// Types of validation results.
@@ -49,7 +43,7 @@ namespace Catel.Data
         /// Gets or sets the tag that allows grouping of validations.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; set; }
+        object? Tag { get; set; }
     }
 
     /// <summary>

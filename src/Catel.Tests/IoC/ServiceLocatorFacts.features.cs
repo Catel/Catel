@@ -10,7 +10,6 @@ namespace Catel.Tests.IoC
     using System.Collections.Generic;
     using System.Linq;
     using Catel.IoC;
-    using Catel.Reflection;
     using NUnit.Framework;
 
     /// <summary>

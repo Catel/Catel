@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.editing.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +9,7 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-        private static readonly Dictionary<string, object> CalculatedPropertyExpressions = new Dictionary<string, object>();
+        private static readonly Dictionary<string, object?> CalculatedPropertyExpressions = new Dictionary<string, object?>();
 
         /// <summary>
         /// Gets the object value for the specified value. This method allows caching of boxed objects.
@@ -24,9 +17,9 @@ namespace Catel.Data
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>An object representing the value.</returns>
-        protected static object GetObjectValue<TValue>(TValue value)
+        protected static object? GetObjectValue<TValue>(TValue value)
         {
-            object objectValue = null;
+            object? objectValue = null;
 
             if (typeof(TValue).IsValueTypeEx())
             {
@@ -55,7 +48,7 @@ namespace Catel.Data
             if ((value is null) && !property.Type.IsNullableType())
             {
                 throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
-                    "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().FullName);
+                    "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().GetSafeFullName());
             }
 
             SetValue(property, value, notifyOnChange);
@@ -80,8 +73,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         protected internal void SetValue<TValue>(IPropertyData property, TValue value, bool notifyOnChange = true)
         {
-            Argument.IsNotNull("property", property);
-
             // Is the object currently read-only (and aren't we changing that)?
             if (IsReadOnly || _isFrozen)
             {
@@ -103,7 +94,7 @@ namespace Catel.Data
                 if (!value.GetType().IsCOMObjectEx())
                 {
                     throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
-                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", BoxingCache.GetBoxedValue(value), property.Name, GetType().FullName);
+                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", BoxingCache.GetBoxedValue(value), property.Name, GetType().GetSafeFullName());
                 }
             }
 
@@ -197,8 +188,6 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         protected TValue GetValue<TValue>(IPropertyData property)
         {
-            Argument.IsNotNull("property", property);
-
             if (property.IsCalculatedProperty)
             {
                 // Note: don't use IObjectAdapter since it might cause a stackoverflow going into
@@ -224,7 +213,7 @@ namespace Catel.Data
         /// <typeparam name="TValue">The value of the property.</typeparam>
         /// <param name="propertyName">The property name.</param>
         /// <returns>The compiled expression for the specified property name.</returns>
-        protected Func<object, TValue> GetPropertyGetterExpression<TValue>(string propertyName)
+        protected Func<object, TValue>? GetPropertyGetterExpression<TValue>(string propertyName)
         {
             var key = $"{propertyName}_as_{typeof(TValue).Name}";
 
@@ -236,7 +225,7 @@ namespace Catel.Data
                 CalculatedPropertyExpressions[key] = getter;
             }
 
-            return (Func<object, TValue>)getter;
+            return (Func<object, TValue>?)getter;
         }
 
         /// <summary>
@@ -296,7 +285,7 @@ namespace Catel.Data
         /// <param name="name">Name of the property.</param>
         /// <returns>Default value of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        object IModel.GetDefaultValue(string name)
+        object? IModel.GetDefaultValue(string name)
         {
             return GetPropertyData(name).GetDefaultValue();
         }
@@ -312,7 +301,7 @@ namespace Catel.Data
         {
             var obj = ((IModel)this).GetDefaultValue(name);
 
-            return (obj is TValue) ? (TValue)obj : default;
+            return (obj is TValue) ? (TValue)obj : default!;
         }
     }
 }

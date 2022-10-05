@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DictionaryExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -25,6 +19,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
         public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, Dictionary<TKey, TValue> source, bool overwriteExisting = true)
+            where TKey : notnull
         {
             AddRange(target, (IEnumerable<KeyValuePair<TKey, TValue>>)source, overwriteExisting);
         }
@@ -40,10 +35,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
         public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IEnumerable<KeyValuePair<TKey, TValue>> source, bool overwriteExisting = true)
+            where TKey : notnull
         { 
-            Argument.IsNotNull("target", target);
-            Argument.IsNotNull("source", source);
-
             foreach (var keyValuePair in source)
             {
                 if (!overwriteExisting && target.ContainsKey(keyValuePair.Key))
@@ -65,10 +58,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="dictionary"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="key"/> is <c>null</c>.</exception>
         public static void AddItemIfNotEmpty<TKey>(this Dictionary<TKey, string> dictionary, TKey key, string value)
+            where TKey : notnull
         {
-            Argument.IsNotNull("dictionary", dictionary);
-            Argument.IsNotNull("key", key);
-
             if (!string.IsNullOrEmpty(value))
             {
                 dictionary[key] = value;

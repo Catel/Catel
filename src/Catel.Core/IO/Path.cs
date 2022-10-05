@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Path.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IO
+﻿namespace Catel.IO
 {
     using System;
     using System.IO;
@@ -132,7 +126,19 @@ namespace Catel.IO
                 assembly = Assembly.GetCallingAssembly();
             }
 
-            return GetApplicationDataDirectory(applicationDataTarget, assembly.Company(), assembly.Product());
+            var company = assembly.Company() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(company))
+            {
+                throw new CatelException("Assembly does not contain a company attribute");
+            }
+
+            var product = assembly.Product() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(product))
+            {
+                throw new CatelException("Assembly does not contain a product attribute");
+            }
+
+            return GetApplicationDataDirectory(applicationDataTarget, company, product);
         }
 
         /// <summary>
@@ -269,7 +275,7 @@ namespace Catel.IO
         /// <param name="basePath">The base path (a.k.a. working directory). If this parameter is <c>null</c> or empty, the current working directory will be used.</param>
         /// <returns>Relative path.</returns>
         /// <exception cref="ArgumentException">The <paramref name="fullPath"/> is <c>null</c> or whitespace.</exception>
-        public static string GetRelativePath(string fullPath, string basePath = null)
+        public static string GetRelativePath(string fullPath, string? basePath = null)
         {
             Argument.IsNotNullOrWhitespace("fullPath", fullPath);
 

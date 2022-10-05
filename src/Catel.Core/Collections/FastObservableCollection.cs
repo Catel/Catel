@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FastObservableCollection.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections;
@@ -25,24 +19,21 @@ namespace Catel.Collections
     [Serializable]
     public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            return dependencyResolver.Resolve<IDispatcherService>();
-        });
-        #endregion
+            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
 
-        #region Fields
+            return dispatcherService;
+        });
+
         /// <summary>
         /// The current suspension context.
         /// </summary>
-        private SuspensionContext<T> _suspensionContext;
-        #endregion
+        private SuspensionContext<T>? _suspensionContext;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FastObservableCollection{T}" /> class.
         /// </summary>
@@ -70,9 +61,7 @@ namespace Catel.Collections
         {
             AddItems(collection);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether change to the collection is made when
         /// its notifications are suspended.
@@ -95,9 +84,7 @@ namespace Catel.Collections
         /// </summary>
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Inserts the elements of the specified collection at the specified index.
         /// <para />
@@ -108,6 +95,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable<T> collection, int index)
         {
+            ArgumentNullException.ThrowIfNull(collection);
+
             InsertItems(collection, index, SuspensionMode.None);
         }
 
@@ -122,7 +111,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable<T> collection, int index, SuspensionMode mode)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             using (SuspendChangeNotifications(mode))
             {
@@ -143,6 +132,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable collection, int index)
         {
+            ArgumentNullException.ThrowIfNull(collection);
+
             InsertItems(collection, index, SuspensionMode.None);
         }
 
@@ -157,7 +148,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable collection, int index, SuspensionMode mode)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             var list = (IList)this;
 
@@ -194,6 +185,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable<T> collection)
         {
+            ArgumentNullException.ThrowIfNull(collection);
+
             AddItems(collection, SuspensionMode.None);
         }
 
@@ -207,7 +200,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable<T> collection, SuspensionMode mode)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             using (SuspendChangeNotifications(mode))
             {
@@ -227,6 +220,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable collection)
         {
+            ArgumentNullException.ThrowIfNull(collection);
+
             // Don't create overload, keep as is
             AddItems(collection, SuspensionMode.None);
         }
@@ -241,7 +236,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable collection, SuspensionMode mode)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             var list = (IList)this;
 
@@ -263,6 +258,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable<T> collection)
         {
+            ArgumentNullException.ThrowIfNull(collection);
+
             // Don't create overload, keep as is
             RemoveItems(collection, SuspensionMode.None);
         }
@@ -277,7 +274,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable<T> collection, SuspensionMode mode)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             using (SuspendChangeNotifications(mode))
             {
@@ -297,6 +294,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable collection)
         {
+            ArgumentNullException.ThrowIfNull(collection);
+
             // Don't create overload, keep as is
             RemoveItems(collection, SuspensionMode.None);
         }
@@ -311,7 +310,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable collection, SuspensionMode mode)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             var list = (IList)this;
 
@@ -390,11 +389,11 @@ namespace Catel.Collections
                 this,
                 x =>
                 {
-                    x.Instance._suspensionContext.Count++;
+                    x.Instance._suspensionContext!.Count++;
                 },
                 x =>
                 {
-                    x.Instance._suspensionContext.Count--;
+                    x.Instance._suspensionContext!.Count--;
                     if (x.Instance._suspensionContext.Count == 0)
                     {
                         if (x.Instance.IsDirty)
@@ -405,7 +404,7 @@ namespace Catel.Collections
 
                         x.Instance._suspensionContext = null;
                     }
-                }, _suspensionContext);
+                }, _suspensionContext!);
         }
 
         /// <summary>
@@ -416,16 +415,20 @@ namespace Catel.Collections
             Action action = () =>
             {
                 // Create event args list
-                var eventArgsList = _suspensionContext.CreateEvents();
-
-                // Fire events
-                if (eventArgsList.Count != 0)
+                if (_suspensionContext is not null)
                 {
-                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-                    OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-                    foreach (var eventArgs in eventArgsList)
+                    var eventArgsList = _suspensionContext.CreateEvents();
+
+                    // Fire events
+                    if (eventArgsList.Count != 0)
                     {
-                        OnCollectionChanged(eventArgs);
+                        OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                        OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+
+                        foreach (var eventArgs in eventArgsList)
+                        {
+                            OnCollectionChanged(eventArgs);
+                        }
                     }
                 }
             };
@@ -485,7 +488,6 @@ namespace Catel.Collections
             }
         }
 
-        #region Overrides of ObservableCollection
         /// <summary>
         /// Removes all items from the collection.
         /// </summary>
@@ -624,7 +626,5 @@ namespace Catel.Collections
                 base.SetItem(index, item);
             }
         }
-        #endregion Overrides of ObservableCollection
-        #endregion
     }
 }

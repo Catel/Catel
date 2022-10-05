@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -19,7 +13,9 @@ namespace Catel.Runtime.Serialization
     public class SerializationContext<TSerializationContextInfo> : Disposable, ISerializationContext<TSerializationContextInfo>
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
-        private ScopeManager<SerializationContextScope<TSerializationContextInfo>> _scopeManager;
+#pragma warning disable IDISP006 // Implement IDisposable
+        private ScopeManager<SerializationContextScope<TSerializationContextInfo>>? _scopeManager;
+#pragma warning restore IDISP006 // Implement IDisposable
         private int? _depth;
 
         /// <summary>
@@ -34,12 +30,8 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         public SerializationContext(object model, Type modelType, TSerializationContextInfo context,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", context);
-            Argument.IsNotNull("configuration", configuration);
-
             Model = model;
             ModelType = modelType;
             ModelTypeName = modelType.GetSafeFullName(false);
@@ -136,7 +128,7 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Gets the serialization configuration.
         /// </summary>
-        public ISerializationConfiguration Configuration { get; private set; }
+        public ISerializationConfiguration? Configuration { get; private set; }
 
         /// <summary>
         /// Gets the context mode.
@@ -156,7 +148,7 @@ namespace Catel.Runtime.Serialization
         /// <value>
         /// The parent context.
         /// </value>
-        public ISerializationContext<TSerializationContextInfo> Parent { get; private set; }
+        public ISerializationContext<TSerializationContextInfo>? Parent { get; private set; }
 
         /// <summary>
         /// Gets the reference manager.
@@ -168,7 +160,7 @@ namespace Catel.Runtime.Serialization
         /// Gets or sets the serialization information.
         /// </summary>
         /// <value>The serialization information.</value>
-        public SerializationInfo SerializationInfo { get; set; }
+        public SerializationInfo? SerializationInfo { get; set; }
 
         /// <summary>
         /// Disposes the managed resources.
@@ -195,9 +187,11 @@ namespace Catel.Runtime.Serialization
             if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
+                if (registrationInfo is null)
+                {
+                    return;
+                }
 
-                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                //switch ((SerializationContextMode)x.Tag)
                 switch (ContextMode)
                 {
                     case SerializationContextMode.Serialization:
@@ -228,9 +222,11 @@ namespace Catel.Runtime.Serialization
             if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
+                if (registrationInfo is null)
+                {
+                    return;
+                }
 
-                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                //switch ((SerializationContextMode)x.Tag)
                 switch (ContextMode)
                 {
                     case SerializationContextMode.Serialization:

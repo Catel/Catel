@@ -176,7 +176,7 @@ namespace Catel.Tests.Logging
             [Test]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                Assert.Throws<ArgumentException>(() => new Log((Type) null));
+                Assert.Throws<ArgumentNullException>(() => new Log((Type) null));
             }
 
             [Test]
@@ -219,7 +219,7 @@ namespace Catel.Tests.Logging
                 var log = new Log("log");
 
                 Assert.AreEqual("log", log.Name);
-                Assert.IsNull(log.TargetType);
+                Assert.AreEqual(typeof(object), log.TargetType);
             }
 
             [Test]

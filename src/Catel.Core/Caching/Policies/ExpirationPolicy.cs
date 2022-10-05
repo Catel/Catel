@@ -1,9 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpirationPolicy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Caching.Policies
+﻿namespace Catel.Caching.Policies
 {
     using System;
     using Logging;
@@ -15,8 +10,6 @@ namespace Catel.Caching.Policies
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpirationPolicy" /> class.
         /// </summary>
@@ -25,10 +18,6 @@ namespace Catel.Caching.Policies
         {
             CanReset = canReset;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether the value with this policy attached is expired.
@@ -44,9 +33,7 @@ namespace Catel.Caching.Policies
         /// Gets a value indicating whether is resting.
         /// </summary>
         protected bool IsResting { get; private set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Creates a <see cref="AbsoluteExpirationPolicy" /> instance.
         /// </summary>
@@ -54,7 +41,7 @@ namespace Catel.Caching.Policies
         /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="AbsoluteExpirationPolicy" /> or <c>null</c> if <paramref name="absoluteExpirationDateTime" /> is in the pass.</returns>
         /// <remarks>The cache item will expire on the absolute expiration date time.</remarks>
-        public static ExpirationPolicy Absolute(DateTime absoluteExpirationDateTime, bool force = false)
+        public static ExpirationPolicy? Absolute(DateTime absoluteExpirationDateTime, bool force = false)
         {
             return force || FastDateTime.Now < absoluteExpirationDateTime ? new AbsoluteExpirationPolicy(absoluteExpirationDateTime) : null;
         }
@@ -66,7 +53,7 @@ namespace Catel.Caching.Policies
         /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="DurationExpirationPolicy" /> or <c>null</c> if <paramref name="durationTimeSpan" /> is less than 0 ticks.</returns>
         /// <remarks>The cache item will expire using the duration to calculate the absolute expiration from now.</remarks>
-        public static ExpirationPolicy Duration(TimeSpan durationTimeSpan, bool force = false)
+        public static ExpirationPolicy? Duration(TimeSpan durationTimeSpan, bool force = false)
         {
             return force || durationTimeSpan.Ticks > 0 ? new DurationExpirationPolicy(durationTimeSpan) : null;
         }
@@ -78,7 +65,7 @@ namespace Catel.Caching.Policies
         /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="SlidingExpirationPolicy" /> or <c>null</c> if <paramref name="durationTimeSpan" /> is less than 0 ticks.</returns>
         /// <remarks>The cache item will expire using the duration property as the sliding expiration.</remarks>
-        public static ExpirationPolicy Sliding(TimeSpan durationTimeSpan, bool force = false)
+        public static ExpirationPolicy? Sliding(TimeSpan durationTimeSpan, bool force = false)
         {
             return force || durationTimeSpan.Ticks > 0 ? new SlidingExpirationPolicy(durationTimeSpan) : null;
         }
@@ -91,7 +78,7 @@ namespace Catel.Caching.Policies
         /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="CustomExpirationPolicy" />.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="isExpiredFunc" /> is <c>null</c>.</exception>
-        public static ExpirationPolicy Custom(Func<bool> isExpiredFunc, Action resetAction = null, bool force = false)
+        public static ExpirationPolicy? Custom(Func<bool>? isExpiredFunc, Action? resetAction = null, bool force = false)
         {
             return force || (isExpiredFunc is not null && !isExpiredFunc.Invoke()) ? new CustomExpirationPolicy(isExpiredFunc, resetAction) : null;
         }
@@ -125,7 +112,5 @@ namespace Catel.Caching.Policies
         protected virtual void OnReset()
         {
         }
-
-        #endregion
     }
 }

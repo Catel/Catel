@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeValidatorProvider.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -19,8 +13,6 @@ namespace Catel.Data
     /// </remarks>
     public class CompositeValidatorProvider : ValidatorProviderBase
     {
-        #region Constants and Fields
-
         /// <summary>
         /// The locker.
         /// </summary>
@@ -30,9 +22,6 @@ namespace Catel.Data
         /// The validator providers.
         /// </summary>
         private readonly HashSet<IValidatorProvider> _validatorProviders = new HashSet<IValidatorProvider>();
-        #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// Add the validator provider to this composite validator provider.
@@ -41,7 +30,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Add(IValidatorProvider validatorProvider)
         {
-            Argument.IsNotNull("validatorProvider", validatorProvider);
+            ArgumentNullException.ThrowIfNull(validatorProvider);
 
             lock (_syncObj)
             {
@@ -57,7 +46,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public bool Contains(IValidatorProvider validatorProvider)
         {
-            Argument.IsNotNull("validatorProvider", validatorProvider);
+            ArgumentNullException.ThrowIfNull(validatorProvider);
 
             lock (_syncObj)
             {
@@ -72,13 +61,18 @@ namespace Catel.Data
         /// <returns>The <see cref="IValidator" /> for the specified type or <c>null</c> if no validator is available for the specified type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="targetType" /> is <c>null</c>.</exception>
         /// <remarks>If there are more than once validator provider and they retrieve more than once validator all of these will be aggregated into a single <see cref="CompositeValidator" />.</remarks>
-        protected override IValidator GetValidator(Type targetType)
+        protected override IValidator? GetValidator(Type targetType)
         {
-            IValidator validator; 
+            ArgumentNullException.ThrowIfNull(targetType);
+
+            IValidator? validator; 
 
             lock (_syncObj)
             {
-                IList<IValidator> discoveredValidators = _validatorProviders.Select(validatorProvider => validatorProvider.GetValidator(targetType)).Where(discoveredValidator => discoveredValidator is not null).ToList();
+                IList<IValidator> discoveredValidators = (from x in _validatorProviders
+                                                          let y = x.GetValidator(targetType)
+                                                          where y is not null
+                                                          select y).ToList();
                 if (discoveredValidators.Count > 1)
                 {
                     var composite = new CompositeValidator();
@@ -105,14 +99,12 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Remove(IValidatorProvider validatorProvider)
         {
-            Argument.IsNotNull("validatorProvider", validatorProvider);
+            ArgumentNullException.ThrowIfNull(validatorProvider);
 
             lock (_syncObj)
             {
                 _validatorProviders.Remove(validatorProvider);
             }
         }
-
-        #endregion
     }
 }

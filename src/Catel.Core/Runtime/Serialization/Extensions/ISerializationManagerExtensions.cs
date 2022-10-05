@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISerializationManagerExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
 
@@ -21,8 +14,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager"/> is <c>null</c>.</exception>
         public static ISerializerModifier[] GetSerializerModifiers<TType>(this ISerializationManager serializationManager)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-
             return serializationManager.GetSerializerModifiers(typeof(TType));
         }
 
@@ -35,8 +26,6 @@ namespace Catel.Runtime.Serialization
         public static void AddSerializerModifier<TType, TSerializerModifier>(this ISerializationManager serializationManager)
             where TSerializerModifier : ISerializerModifier
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-
             serializationManager.AddSerializerModifier(typeof(TType), typeof(TSerializerModifier));
         }
 
@@ -49,8 +38,6 @@ namespace Catel.Runtime.Serialization
         public static void RemoveSerializerModifier<TType, TSerializerModifier>(this ISerializationManager serializationManager)
             where TSerializerModifier : ISerializerModifier
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-
             serializationManager.RemoveSerializerModifier(typeof(TType), typeof(TSerializerModifier));
         }
     }

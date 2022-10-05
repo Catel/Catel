@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Linq;
@@ -46,13 +39,13 @@ namespace Catel.Runtime.Serialization
         private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _fieldsCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
 
         private readonly Dictionary<Type, List<Type>> _serializationModifierDefinitionsPerTypeCache = new Dictionary<Type, List<Type>>();
-        private readonly ICacheStorage<Type, ISerializerModifier> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier>();
+        private readonly ICacheStorage<Type, ISerializerModifier?> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier?>();
         private readonly ICacheStorage<Type, ISerializerModifier[]> _serializationModifiersPerTypeCache = new CacheStorage<Type, ISerializerModifier[]>();
 
         /// <summary>
         /// Occurs when the cache for a specific type has been invalidated.
         /// </summary>
-        public event EventHandler<CacheInvalidatedEventArgs> CacheInvalidated;
+        public event EventHandler<CacheInvalidatedEventArgs>? CacheInvalidated;
 
         /// <summary>
         /// Warmups the specified type by calling all the methods for the specified type.
@@ -61,7 +54,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public void Warmup(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             lock (_lock)
             {
@@ -89,7 +82,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public void Clear(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             lock (_lock)
             {
@@ -127,7 +120,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual Dictionary<string, MemberMetadata> GetFieldsToSerialize(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _fieldsToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
@@ -137,7 +130,11 @@ namespace Catel.Runtime.Serialization
                 foreach (var typeField in fields)
                 {
                     var memberMetadata = typeField.Value;
-                    var fieldInfo = (FieldInfo)memberMetadata.Tag;
+                    var fieldInfo = memberMetadata.Tag as FieldInfo;
+                    if (fieldInfo is null)
+                    {
+                        continue;
+                    }
 
                     // Exclude fields by default
                     var include = false;
@@ -170,7 +167,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual Dictionary<string, MemberMetadata> GetCatelPropertiesToSerialize(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _catelPropertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
@@ -180,16 +177,23 @@ namespace Catel.Runtime.Serialization
                 foreach (var modelProperty in properties)
                 {
                     var memberMetadata = modelProperty.Value;
-                    var propertyData = (IPropertyData)memberMetadata.Tag;
+                    var propertyData = memberMetadata.Tag as IPropertyData;
+                    if (propertyData is null)
+                    {
+                        continue;
+                    }
 
                     bool isSerializable = propertyData.IsSerializable || propertyData.Type.IsModelBase();
                     if (!isSerializable)
                     {
                         // CTL-550
                         var cachedPropertyInfo = propertyData.GetPropertyInfo(type);
-                        if (cachedPropertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
+                        if (cachedPropertyInfo is not null)
                         {
-                            isSerializable = true;
+                            if (cachedPropertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
+                            {
+                                isSerializable = true;
+                            }
                         }
                     }
 
@@ -232,7 +236,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual Dictionary<string, MemberMetadata> GetRegularPropertiesToSerialize(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _regularPropertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
@@ -250,7 +254,11 @@ namespace Catel.Runtime.Serialization
                 foreach (var typeProperty in regularProperties)
                 {
                     var memberMetadata = typeProperty.Value;
-                    var propertyInfo = (PropertyInfo)memberMetadata.Tag;
+                    var propertyInfo = memberMetadata.Tag as PropertyInfo;
+                    if (propertyInfo is null)
+                    {
+                        continue;
+                    }
 
                     if (!catelPropertyNames.Contains(memberMetadata.MemberName))
                     {
@@ -287,7 +295,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public HashSet<string> GetCatelPropertyNames(Type type, bool includeModelBaseProperties = false)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             var key = GetCacheKey(type, includeModelBaseProperties);
 
@@ -314,7 +322,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public Dictionary<string, MemberMetadata> GetCatelProperties(Type type, bool includeModelBaseProperties = false)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             var key = GetCacheKey(type, includeModelBaseProperties);
 
@@ -364,7 +372,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public HashSet<string> GetRegularPropertyNames(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _regularPropertyNamesCache.GetFromCacheOrFetch(type, () =>
             {
@@ -388,7 +396,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public Dictionary<string, MemberMetadata> GetRegularProperties(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _regularPropertiesCache.GetFromCacheOrFetch(type, () =>
             {
@@ -431,7 +439,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public HashSet<string> GetFieldNames(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _fieldNamesCache.GetFromCacheOrFetch(type, () =>
             {
@@ -455,7 +463,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public Dictionary<string, MemberMetadata> GetFields(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _fieldsCache.GetFromCacheOrFetch(type, () =>
             {
@@ -465,7 +473,7 @@ namespace Catel.Runtime.Serialization
                 foreach (var fieldInfo in fields)
                 {
                     if (fieldInfo.Name.Contains("__BackingField") ||
-                        fieldInfo.DeclaringType == typeof (ModelBase))
+                        fieldInfo.DeclaringType == typeof(ModelBase))
                     {
                         continue;
                     }
@@ -497,7 +505,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
         public void AddSerializerModifier(Type type, Type serializerModifierType)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNull("serializerModifierType", serializerModifierType);
 
             if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var serializerModifierTypes))
@@ -527,8 +534,8 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
         public void RemoveSerializerModifier(Type type, Type serializerModifierType)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("serializerModifierType", serializerModifierType);
+            ArgumentNullException.ThrowIfNull(type);
+            ArgumentNullException.ThrowIfNull(serializerModifierType);
 
             if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var serializerModifierTypes))
             {
@@ -559,7 +566,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual ISerializerModifier[] GetSerializerModifiers(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _serializationModifiersPerTypeCache.GetFromCacheOrFetch(type, () =>
             {
@@ -569,10 +576,16 @@ namespace Catel.Runtime.Serialization
                 foreach (var serializerModifierType in serializerModifierTypes)
                 {
                     var innerAttribute = serializerModifierType;
-                    serializers.Add(_serializerModifierCache.GetFromCacheOrFetch(serializerModifierType, () =>
+
+                    var serializerModifier = _serializerModifierCache.GetFromCacheOrFetch(serializerModifierType, () =>
                     {
-                        return (ISerializerModifier)_typeFactory.CreateInstance(serializerModifierType);
-                    }));
+                        return (ISerializerModifier?)_typeFactory.CreateInstance(serializerModifierType);
+                    });
+
+                    if (serializerModifier is not null)
+                    {
+                        serializers.Add(serializerModifier);
+                    }
                 }
 
                 return serializers.ToArray();
@@ -586,6 +599,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>The list of modifier attributes found.</returns>
         protected virtual List<Type> FindSerializerModifiers(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             var modifiers = new List<Type>();
 
             if (_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var customModifierTypes))
@@ -608,8 +623,7 @@ namespace Catel.Runtime.Serialization
         {
             var name = string.Empty;
 
-            DataMemberAttribute dataMemberAttribute = null;
-            if (memberInfo.TryGetAttribute(out dataMemberAttribute))
+            if (memberInfo.TryGetAttribute<DataMemberAttribute>(out var dataMemberAttribute))
             {
                 if (!string.IsNullOrWhiteSpace(dataMemberAttribute.Name))
                 {
@@ -617,8 +631,7 @@ namespace Catel.Runtime.Serialization
                 }
             }
 
-            IncludeInSerializationAttribute includeInSerializationAttribute = null;
-            if (memberInfo.TryGetAttribute(out includeInSerializationAttribute))
+            if (memberInfo.TryGetAttribute<IncludeInSerializationAttribute>(out var includeInSerializationAttribute))
             {
                 if (!string.IsNullOrWhiteSpace(includeInSerializationAttribute.Name))
                 {
@@ -631,7 +644,7 @@ namespace Catel.Runtime.Serialization
 
         private string GetCacheKey(Type type, bool additionalValue)
         {
-            var key = $"{type.AssemblyQualifiedName}_{additionalValue.ToString()}";
+            var key = $"{type.AssemblyQualifiedName}_{additionalValue}";
             return key;
         }
     }

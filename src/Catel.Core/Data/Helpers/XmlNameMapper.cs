@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlNameMapper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Concurrent;
@@ -45,8 +39,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="propertyDataManager"/> is <c>null</c>.</exception>
         internal XmlNameMapper(PropertyDataManager propertyDataManager)
         {
-            Argument.IsNotNull("propertyDataManager", propertyDataManager);
-
             _propertyDataManager = propertyDataManager;
         }
 
@@ -62,7 +54,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="xmlName"/> is <c>null</c> or whitespace.</exception>
         public bool IsXmlNameMappedToProperty(Type type, string xmlName)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
             InitializeXmlPropertyMappings(type);
@@ -85,7 +76,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         public bool IsPropertyNameMappedToXmlName(Type type, string propertyName)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             InitializeXmlPropertyMappings(type);
@@ -108,7 +98,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="xmlName"/> is <c>null</c> or whitespace.</exception>
         public string MapXmlNameToPropertyName(Type type, string xmlName)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
             InitializeXmlPropertyMappings(type);
@@ -116,7 +105,12 @@ namespace Catel.Data
             lock (_xmlMappingsLock)
             {
                 var typeMappings = _xmlNameToPropertyNameMappings[type];
-                return typeMappings[xmlName];
+                if (typeMappings.TryGetValue(xmlName, out var mappedValue))
+                {
+                    return mappedValue;
+                }
+
+                return xmlName;
             }
         }
 
@@ -130,7 +124,6 @@ namespace Catel.Data
         /// </returns>
         public string MapPropertyNameToXmlName(Type type, string propertyName)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             InitializeXmlPropertyMappings(type);
@@ -138,7 +131,12 @@ namespace Catel.Data
             lock (_xmlMappingsLock)
             {
                 var typeMappings = _xmlPropertyNameToXmlNameMappings[type];
-                return typeMappings[propertyName];
+                if (typeMappings.TryGetValue(propertyName, out var mappedValue))
+                {
+                    return mappedValue;
+                }
+
+                return propertyName;
             }
         }
 
@@ -191,19 +189,21 @@ namespace Catel.Data
                     }
 
                     // 2nd, check if XmlAttribute is used
-                    XmlAttributeAttribute xmlAttributeAttribute = null;
-                    propertyInfo.TryGetAttribute(out xmlAttributeAttribute);
-                    if (InitializeXmlAttributeAttribute(type, xmlAttributeAttribute, propertyData.Key))
+                    if (propertyInfo.TryGetAttribute<XmlAttributeAttribute>(out var xmlAttributeAttribute))
                     {
-                        continue;
+                        if (InitializeXmlAttributeAttribute(type, xmlAttributeAttribute, propertyData.Key))
+                        {
+                            continue;
+                        }
                     }
 
                     // 3rd, check if XmlElement is used
-                    XmlElementAttribute xmlElementAttribute = null;
-                    propertyInfo.TryGetAttribute(out xmlElementAttribute);
-                    if (InitializeXmlElementAttribute(type, xmlElementAttribute, propertyData.Key))
+                    if (propertyInfo.TryGetAttribute<XmlElementAttribute>(out var xmlElementAttribute))
                     {
-                        continue;
+                        if (InitializeXmlElementAttribute(type, xmlElementAttribute, propertyData.Key))
+                        {
+                            continue;
+                        }
                     }
                 }
             }
@@ -220,7 +220,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         private bool InitializeXmlAttributeAttribute(Type type, XmlAttributeAttribute attribute, string propertyName)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             if (typeof(T) != typeof(XmlAttributeAttribute))
@@ -256,7 +255,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         private bool InitializeXmlElementAttribute(Type type, XmlElementAttribute attribute, string propertyName)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             if (typeof(T) != typeof(XmlElementAttribute))

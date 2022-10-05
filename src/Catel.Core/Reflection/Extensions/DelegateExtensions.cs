@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DelegateExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Reflection;
@@ -22,8 +16,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="del"/> is <c>null</c>.</exception>
         public static MethodInfo GetMethodInfoEx(this Delegate del)
         {
-            Argument.IsNotNull("del", del);
-
             return del.Method;
         }
     }

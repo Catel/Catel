@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExceptionFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
-    using Collections;
 
     /// <summary>
     /// Exception factory.
@@ -23,10 +15,10 @@ namespace Catel
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
         /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static TException CreateException<TException>(string message, Exception innerException = null)
+        public static TException? CreateException<TException>(string message, Exception? innerException = null)
             where TException : Exception
         {
-            return (TException)CreateException(typeof(TException), message, innerException);
+            return (TException?)CreateException(typeof(TException), message, innerException);
         }
 
         /// <summary>
@@ -37,7 +29,7 @@ namespace Catel
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
         /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static Exception CreateException(Type exceptionType, string message, Exception innerException = null)
+        public static Exception? CreateException(Type exceptionType, string message, Exception? innerException = null)
         {
             // Try 1: with inner exception
             if (innerException is not null)
@@ -74,10 +66,10 @@ namespace Catel
         /// <typeparam name="TException">The type of the exception.</typeparam>
         /// <param name="args">The arguments.</param>
         /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static TException CreateException<TException>(object[] args)
+        public static TException? CreateException<TException>(object[] args)
             where TException : Exception
         {
-            return (TException)CreateException(typeof(TException), args);
+            return (TException?)CreateException(typeof(TException), args);
         }
 
         /// <summary>
@@ -86,11 +78,11 @@ namespace Catel
         /// <param name="exceptionType">Type of the exception.</param>
         /// <param name="args">The arguments.</param>
         /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static Exception CreateException(Type exceptionType, object[] args)
+        public static Exception? CreateException(Type exceptionType, object[] args)
         {
             try
             {
-                return (Exception)Activator.CreateInstance(exceptionType, args);
+                return (Exception?)Activator.CreateInstance(exceptionType, args);
             }
             catch (Exception)
             {

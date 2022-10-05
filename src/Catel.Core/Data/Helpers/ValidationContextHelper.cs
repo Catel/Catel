@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationContextHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -39,7 +33,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationResult"/> is <c>null</c>.</exception>
         public ValidationContextChange(IValidationResult validationResult, ValidationContextChangeType changeType)
         {
-            Argument.IsNotNull("validationResult", validationResult);
+            ArgumentNullException.ThrowIfNull(validationResult);
 
             ValidationResult = validationResult;
             ChangeType = changeType;
@@ -73,8 +67,8 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="secondContext"/> is <c>null</c>.</exception>
         public static List<ValidationContextChange> GetChanges(IValidationContext firstContext, IValidationContext secondContext)
         {
-            Argument.IsNotNull("firstContext", firstContext);
-            Argument.IsNotNull("secondContext", secondContext);
+            ArgumentNullException.ThrowIfNull(firstContext);
+            ArgumentNullException.ThrowIfNull(secondContext);
 
             var changes = new List<ValidationContextChange>();
 

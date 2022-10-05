@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyLoadedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +9,7 @@ namespace Catel.Reflection
     /// </summary>
     public class AssemblyLoadedEventArgs : EventArgs
     {
-        private readonly Lazy<IEnumerable<Type>> _lazyLoadedTypes;
+        private readonly Lazy<IEnumerable<Type>>? _lazyLoadedTypes;
         private readonly List<Type> _loadedTypes = new List<Type>();
 
         /// <summary>
@@ -27,9 +21,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="loadedTypesLazy"/> is <c>null</c>.</exception>
         public AssemblyLoadedEventArgs(Assembly assembly, Lazy<IEnumerable<Type>> loadedTypesLazy)
         {
-            Argument.IsNotNull("assembly", assembly);
-            Argument.IsNotNull("loadedTypesLazy", loadedTypesLazy);
-
             Assembly = assembly;
             _lazyLoadedTypes = loadedTypesLazy;
         }
@@ -43,9 +34,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="loadedTypes"/> is <c>null</c>.</exception>
         public AssemblyLoadedEventArgs(Assembly assembly, IEnumerable<Type> loadedTypes)
         {
-            Argument.IsNotNull("assembly", assembly);
-            Argument.IsNotNull("loadedTypes", loadedTypes);
-
             Assembly = assembly;
             _loadedTypes.AddRange(loadedTypes);
         }

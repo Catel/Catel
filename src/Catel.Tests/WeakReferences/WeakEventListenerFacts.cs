@@ -14,26 +14,18 @@
 
     public class WeakEventListenerFacts
     {
-        #region Test classes
-
-        #region Nested type: CustomObservableCollection
         public class CustomObservableCollection : ObservableCollection<DateTime>
         {
         }
-        #endregion
 
-        #region Nested type: EventListener
         public class EventListener
         {
-            #region Constructors
             public EventListener()
             {
                 // Always reset the static handler count
                 StaticEventHandlerCounter = 0;
             }
-            #endregion
 
-            #region Properties
             public int StaticEventCounter { get; private set; }
 
             public static int StaticEventHandlerCounter { get; private set; }
@@ -48,15 +40,13 @@
             public int PrivateClassEventCount { get; private set; }
             public int PropertyChangedEventCount { get; private set; }
             public int CollectionChangedEventCount { get; private set; }
-            #endregion
 
-            #region Methods
-            public void OnStaticEvent(object sender, ViewModelClosedEventArgs e)
+            public void OnStaticEvent(object? sender, ViewModelClosedEventArgs e)
             {
                 StaticEventCounter++;
             }
 
-            public static void OnEventStaticHandler(object sender, EventArgs e)
+            public static void OnEventStaticHandler(object? sender, EventArgs e)
             {
                 StaticEventHandlerCounter++;
             }
@@ -66,61 +56,53 @@
                 PublicActionCounter++;
             }
 
-            public void OnPublicEvent(object sender, ViewModelClosedEventArgs e)
+            public void OnPublicEvent(object? sender, ViewModelClosedEventArgs e)
             {
                 PublicEventCounter++;
             }
 
-            public void OnPrivateEvent(object sender, EventArgs e)
+            public void OnPrivateEvent(object? sender, EventArgs e)
             {
                 PrivateEventCounter++;
             }
 
-            public IWeakEventListener SubscribeToPublicClassEvent(EventSource source)
+            public IWeakEventListener? SubscribeToPublicClassEvent(EventSource source)
             {
                 return WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(this, source, "PublicEvent", OnPublicClassEvent);
             }
 
-            public void OnPublicClassEvent(object sender, EventArgs e)
+            public void OnPublicClassEvent(object? sender, EventArgs e)
             {
                 PublicClassEventCount++;
             }
 
-            public IWeakEventListener SubscribeToPrivateClassEvent(EventSource source)
+            public IWeakEventListener? SubscribeToPrivateClassEvent(EventSource source)
             {
                 return WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(this, source, "PublicEvent", OnPrivateClassEvent);
             }
 
-            private void OnPrivateClassEvent(object sender, EventArgs e)
+            private void OnPrivateClassEvent(object? sender, EventArgs e)
             {
                 PrivateClassEventCount++;
             }
 
-            public void OnPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
+            public void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
             {
                 PropertyChangedEventCount++;
             }
 
-            public void OnCollectionChangedEvent(object sender, NotifyCollectionChangedEventArgs e)
+            public void OnCollectionChangedEvent(object? sender, NotifyCollectionChangedEventArgs e)
             {
                 CollectionChangedEventCount++;
             }
-            #endregion
         }
-        #endregion
 
-        #region Nested type: EventSource
         public class EventSource : INotifyPropertyChanged, INotifyCollectionChanged
         {
-            #region INotifyCollectionChanged Members
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
-            #endregion
+            public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
-            #region INotifyPropertyChanged Members
-            public event PropertyChangedEventHandler PropertyChanged;
-            #endregion
+            public event PropertyChangedEventHandler? PropertyChanged;
 
-            #region Methods
             public static void RaiseStaticEvent()
             {
                 StaticEvent?.Invoke(null, new ViewModelClosedEventArgs(new TestViewModel(), true));
@@ -145,15 +127,11 @@
             {
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
-            #endregion
 
-            public static event EventHandler<ViewModelClosedEventArgs> StaticEvent;
-            public event EventHandler<ViewModelClosedEventArgs> PublicEvent;
-            private event EventHandler<EventArgs> PrivateEvent;
+            public static event EventHandler<ViewModelClosedEventArgs>? StaticEvent;
+            public event EventHandler<ViewModelClosedEventArgs>? PublicEvent;
+            private event EventHandler<EventArgs>? PrivateEvent;
         }
-        #endregion
-
-        #endregion
 
         [TestFixture]
         public class TheConstructor
@@ -164,6 +142,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, null, "StaticEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.IsFalse(weakEventListener.IsSourceAlive);
                 Assert.IsTrue(weakEventListener.IsStaticEvent);
@@ -177,6 +159,10 @@
                 var source = new EventSource();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(null, source, "PublicEvent", EventListener.OnEventStaticHandler);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.IsTrue(weakEventListener.IsSourceAlive);
                 Assert.IsFalse(weakEventListener.IsStaticEvent);
@@ -194,23 +180,6 @@
         [TestFixture]
         public class TheStaticOverloadsWithoutAnyTypeSpecificationMethods
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullListener()
-            {
-                var source = new EventSource();
-                var listener = new EventListener();
-
-                Assert.Throws<ArgumentNullException>(() => WeakEventListener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, source, "event", listener.OnPublicEvent));
-            }
-
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullSource()
-            {
-                var listener = new EventListener();
-
-                Assert.Throws<ArgumentNullException>(() => listener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, "event", listener.OnPublicEvent));
-            }
-
             [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticDetectionOfAllTypes()
             {
@@ -218,6 +187,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PublicEventCounter);
 
@@ -244,6 +217,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakPropertyChangedEvent(source, listener.OnPropertyChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PropertyChangedEventCount);
 
@@ -270,6 +247,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakCollectionChangedEvent(source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.CollectionChangedEventCount);
 
@@ -300,6 +281,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource>.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(listener, source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PublicEventCounter);
 
@@ -326,6 +311,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PropertyChangedEventCount);
 
@@ -352,6 +341,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.CollectionChangedEventCount);
 
@@ -382,6 +375,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.CollectionChangedEventCount);
 
@@ -408,6 +405,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakCollectionChangedEvent(source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.CollectionChangedEventCount);
 
@@ -449,6 +450,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent, eventName: "CollectionChanged");
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.CollectionChangedEventCount);
 
@@ -479,6 +484,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PropertyChangedEventCount);
 
@@ -520,6 +529,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent, eventName: "PropertyChanged");
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PropertyChangedEventCount);
 
@@ -550,6 +563,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
@@ -569,6 +586,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, null, "StaticEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.StaticEventCounter);
 
@@ -587,6 +608,10 @@
                 var source = new EventSource();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(null, source, "PublicEvent", EventListener.OnEventStaticHandler);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, EventListener.StaticEventHandlerCounter);
 
@@ -626,6 +651,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener.SubscribeToWeakEvent(listener, source, "PublicEvent", listener.OnPublicAction);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PublicActionCounter);
 
@@ -658,6 +687,10 @@
                 };
 
                 var weakEventListener = WeakEventListener.SubscribeToWeakEvent(this, source, "PublicEvent", action);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, counter);
 
@@ -682,6 +715,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PublicEventCounter);
 
@@ -725,6 +762,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToPublicClassEvent(source);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PublicClassEventCount);
 
@@ -751,6 +792,10 @@
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToPrivateClassEvent(source);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 Assert.AreEqual(0, listener.PrivateClassEventCount);
 

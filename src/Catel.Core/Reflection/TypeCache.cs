@@ -94,7 +94,6 @@
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
         }
 
-        #region Properties
         /// <summary>
         /// Gets the names of the assemblies initialized by the TypeCache.
         /// </summary>
@@ -111,7 +110,6 @@
                 }
             }
         }
-        #endregion
 
         /// <summary>
         /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.
@@ -121,7 +119,7 @@
 #if DEBUG
         [Time("{args}")]
 #endif
-        private static void OnAssemblyLoaded(object sender, AssemblyLoadEventArgs args)
+        private static void OnAssemblyLoaded(object? sender, AssemblyLoadEventArgs args)
         {
             var assembly = args.LoadedAssembly;
             if (ShouldIgnoreAssembly(assembly))
@@ -135,7 +133,7 @@
             if (Monitor.TryEnter(_lockObject))
             {
                 var assemblyName = assembly.FullName;
-                if (!_loadedAssemblies.Contains(assemblyName))
+                if (string.IsNullOrEmpty(assemblyName) || !_loadedAssemblies.Contains(assemblyName))
                 {
                     // Fix for CTL-543
                     // General idea of fix - prevent to call GetTypes() method recursively.
@@ -223,14 +221,12 @@
             }
         }
 
-        #region Events
         /// <summary>
         /// Occurs when an assembly is loaded into the currently <see cref="AppDomain"/>.
         /// </summary>
 #pragma warning disable 67
-        public static event EventHandler<AssemblyLoadedEventArgs> AssemblyLoaded;
+        public static event EventHandler<AssemblyLoadedEventArgs>? AssemblyLoaded;
 #pragma warning restore 67
-        #endregion
 
         /// <summary>
         /// Clears the cache causing automatic re-initialization.
@@ -254,7 +250,7 @@
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true)
+        public static Type? GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
@@ -275,7 +271,7 @@
         /// multiple assemblies, it will always use the latest known type for resolving the type.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithoutAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true)
+        public static Type? GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithoutAssembly", typeNameWithoutAssembly);
 
@@ -290,7 +286,7 @@
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true)
+        public static Type? GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithAssembly", typeNameWithAssembly);
 
@@ -309,7 +305,7 @@
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
-        private static Type GetType(string typeName, string assemblyName, bool ignoreCase, bool allowInitialization = true)
+        private static Type? GetType(string typeName, string? assemblyName, bool ignoreCase, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
 
@@ -355,7 +351,7 @@
                 }
 
                 // Try to remove version info from assembly info
-                var assemblyNameWithoutOverhead = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyName);
+                var assemblyNameWithoutOverhead = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyName!);
                 var typeNameWithoutAssemblyOverhead = TypeHelper.FormatType(assemblyNameWithoutOverhead, typeName);
 
                 if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out var typeWithoutAssembly))
@@ -383,7 +379,7 @@
                 }
 
                 // Fallback for this assembly only
-                InitializeTypes(assemblyName, false);
+                InitializeTypes(assemblyName!, false);
 
                 if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out var exisingTypeWithAssembly))
                 {
@@ -405,7 +401,7 @@
         /// </summary>
         /// <param name="typeWithInnerTypes">The type with inner types.</param>
         /// <returns></returns>
-        private static Type GetTypeBySplittingInternals(string typeWithInnerTypes)
+        private static Type? GetTypeBySplittingInternals(string typeWithInnerTypes)
         {
             // Try fast method first
             var fastType = Type.GetType(typeWithInnerTypes);
@@ -474,8 +470,6 @@
         /// <returns>Type[].</returns>
         public static Type[] GetTypesImplementingInterface(Type interfaceType)
         {
-            Argument.IsNotNull("interfaceType", interfaceType);
-
             lock (_lockObject)
             {
                 if (!_typesByInterface.TryGetValue(interfaceType, out var typesByInterface))
@@ -506,10 +500,8 @@
 #if DEBUG
         [Time]
 #endif
-        public static Type[] GetTypesOfAssembly(Assembly assembly, Func<Type, bool> predicate = null)
+        public static Type[] GetTypesOfAssembly(Assembly assembly, Func<Type, bool>? predicate = null)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             return GetTypesPrefilteredByAssembly(assembly, predicate, true);
         }
 
@@ -520,7 +512,7 @@
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>An array containing all the <see cref="Type"/> that match the predicate.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate"/> is <c>null</c>.</exception>
-        public static Type[] GetTypes(Func<Type, bool> predicate = null, bool allowInitialization = true)
+        public static Type[] GetTypes(Func<Type, bool>? predicate = null, bool allowInitialization = true)
         {
             return GetTypesPrefilteredByAssembly(null, predicate, allowInitialization);
         }
@@ -532,20 +524,20 @@
         /// <param name="predicate">The predicate.</param>
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>System.Type[].</returns>
-        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate, bool allowInitialization)
+        private static Type[] GetTypesPrefilteredByAssembly(Assembly? assembly, Func<Type, bool>? predicate, bool allowInitialization)
         {
-            if (allowInitialization)
+            if (allowInitialization && assembly is not null)
             {
                 InitializeTypes(assembly);
             }
 
-            var assemblyName = (assembly is not null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
+            var assemblyName = (assembly is not null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName ?? string.Empty) : string.Empty;
 
             // IMPORTANT NOTE!!!! DON'T USE LOGGING IN THE CODE BELOW BECAUSE IT MIGHT CAUSE DEADLOCK (BatchLogListener will load
             // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
             // the lock and make sure not to make calls to other methods
 
-            Dictionary<string, Type> typeSource = null;
+            Dictionary<string, Type>? typeSource = null;
 
             lock (_lockObject)
             {
@@ -634,7 +626,7 @@
                 {
                     try
                     {
-                        if (assembly.FullName.Contains(assemblyName))
+                        if (assembly.FullName?.Contains(assemblyName) ?? false)
                         {
                             InitializeTypes(assembly, forceFullInitialization, allowMultithreadedInitialization);
                         }
@@ -659,7 +651,7 @@
 #if DEBUG
         [Time("{assembly}")]
 #endif
-        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false)
+        public static void InitializeTypes(Assembly? assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false)
         {
             // Important note: only allow explicit multithreaded initialization
 
@@ -690,7 +682,7 @@
                     _typesWithoutAssemblyIgnoreCase?.Clear();
                 }
 
-                var assembliesToInitialize = checkSingleAssemblyOnly ? (IEnumerable<Assembly>)new [] { assembly } : AssemblyHelper.GetLoadedAssemblies();
+                var assembliesToInitialize = checkSingleAssemblyOnly ? (IEnumerable<Assembly>)new[] { assembly! } : AssemblyHelper.GetLoadedAssemblies();
                 InitializeAssemblies(assembliesToInitialize, forceFullInitialization, allowMultithreadedInitialization);
             }
         }
@@ -711,15 +703,18 @@
                 foreach (var assembly in assemblies)
                 {
                     var loadedAssemblyFullName = assembly.FullName;
-                    var containsLoadedAssembly = _loadedAssemblies.Contains(loadedAssemblyFullName);
-                    if (!force && containsLoadedAssembly)
+                    if (!string.IsNullOrEmpty(loadedAssemblyFullName))
                     {
-                        continue;
-                    }
+                        var containsLoadedAssembly = _loadedAssemblies.Contains(loadedAssemblyFullName);
+                        if (!force && containsLoadedAssembly)
+                        {
+                            continue;
+                        }
 
-                    if (!containsLoadedAssembly)
-                    {
-                        _loadedAssemblies.Add(loadedAssemblyFullName);
+                        if (!containsLoadedAssembly)
+                        {
+                            _loadedAssemblies.Add(loadedAssemblyFullName);
+                        }
                     }
 
                     if (ShouldIgnoreAssembly(assembly))
@@ -880,8 +875,8 @@
                 return;
             }
 
-            var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
-            var newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
+            var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName ?? string.Empty);
+            var newFullType = TypeHelper.FormatType(newAssemblyName, type.GetSafeFullName());
 
             if (!_typesByAssembly.TryGetValue(newAssemblyName, out var typesByAssembly))
             {
@@ -920,7 +915,7 @@
                 return true;
             }
 
-            var assemblyFullName = assembly.FullName;
+            var assemblyFullName = assembly.FullName ?? string.Empty;
             if (assemblyFullName.Contains("Anonymously Hosted DynamicMethods Assembly"))
             {
                 return true;

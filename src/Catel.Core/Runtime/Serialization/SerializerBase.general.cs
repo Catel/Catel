@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializerBase.general.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections;
@@ -14,6 +7,7 @@ namespace Catel.Runtime.Serialization
     using System.Globalization;
     using System.IO;
     using System.Reflection;
+    using System.Xml;
     using Catel.Caching;
     using Catel.IoC;
     using Catel.Logging;
@@ -27,7 +21,6 @@ namespace Catel.Runtime.Serialization
     public abstract partial class SerializerBase<TSerializationContextInfo> : ISerializer
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -55,9 +48,7 @@ namespace Catel.Runtime.Serialization
         /// The dictionary name.
         /// </summary>
         protected const string DictionaryName = "Pairs";
-        #endregion
 
-        #region Fields
         private readonly CacheStorage<Type, SerializationModelInfo> _serializationModelCache = new CacheStorage<Type, SerializationModelInfo>();
 
         private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>();
@@ -65,13 +56,11 @@ namespace Catel.Runtime.Serialization
         private readonly CacheStorage<Type, bool> _shouldSerializeByExternalSerializerCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<string, bool> _shouldSerializeUsingParseCache = new CacheStorage<string, bool>();
 
-        private readonly CacheStorage<Type, MethodInfo> _parseMethodCache = new CacheStorage<Type, MethodInfo>();
-        private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
+        private readonly CacheStorage<Type, MethodInfo?> _parseMethodCache = new CacheStorage<Type, MethodInfo?>();
+        private readonly CacheStorage<Type, MethodInfo?> _toStringMethodCache = new CacheStorage<Type, MethodInfo?>();
 
         private readonly CacheStorage<string, bool> _shouldSerializeEnumAsStringCache = new CacheStorage<string, bool>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContextInfo}" /> class.
         /// </summary>
@@ -81,19 +70,13 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
         protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-            Argument.IsNotNull("typeFactory", typeFactory);
-            Argument.IsNotNull("objectAdapter", objectAdapter);
-
             SerializationManager = serializationManager;
             TypeFactory = typeFactory;
             ObjectAdapter = objectAdapter;
 
             SerializationManager.CacheInvalidated += OnSerializationManagerCacheInvalidated;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the serialization manager.
         /// </summary>
@@ -111,9 +94,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The object adapter.</value>
         protected IObjectAdapter ObjectAdapter { get; private set; }
-        #endregion
 
-        #region ISerializer<TSerializationContextInfo> Members
         /// <summary>
         /// Gets the serializable members for the specified model.
         /// </summary>
@@ -124,8 +105,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public virtual List<MemberValue> GetSerializableMembers(ISerializationContext<TSerializationContextInfo> context, object model, params string[] membersToIgnore)
         {
-            Argument.IsNotNull("model", model);
-
             var listToSerialize = new List<MemberValue>();
             var membersToIgnoreHashSet = new HashSet<string>(membersToIgnore);
 
@@ -205,15 +184,13 @@ namespace Catel.Runtime.Serialization
 
             return listToSerialize;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Handles the <see cref="E:SerializationManagerCacheInvalidated" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="CacheInvalidatedEventArgs"/> instance containing the event data.</param>
-        private void OnSerializationManagerCacheInvalidated(object sender, CacheInvalidatedEventArgs e)
+        private void OnSerializationManagerCacheInvalidated(object? sender, CacheInvalidatedEventArgs e)
         {
             _serializationModelCache.Remove(e.Type);
         }
@@ -227,7 +204,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="types">The types to warmp up. If <c>null</c>, all types will be initialized.</param>
         /// <param name="typesPerThread">The types per thread. If <c>-1</c>, all types will be initialized on the same thread.</param>
-        public void Warmup(IEnumerable<Type> types, int typesPerThread = 1000)
+        public void Warmup(IEnumerable<Type>? types = null, int typesPerThread = 1000)
         {
             if (types is null)
             {
@@ -257,7 +234,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        protected virtual ScopeManager<SerializationScope> GetCurrentSerializationScopeManager(ISerializationConfiguration configuration)
+        protected virtual ScopeManager<SerializationScope> GetCurrentSerializationScopeManager(ISerializationConfiguration? configuration)
         {
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
             var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(this, configuration ?? DefaultSerializationConfiguration));
@@ -269,7 +246,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="configuration">The configuration that might override the existing scope configuration.</param>
         /// <returns></returns>
-        protected virtual ISerializationConfiguration GetCurrentSerializationConfiguration(ISerializationConfiguration configuration)
+        protected virtual ISerializationConfiguration GetCurrentSerializationConfiguration(ISerializationConfiguration? configuration)
         {
             using (var scopeManager = GetCurrentSerializationScopeManager(configuration))
             {
@@ -316,12 +293,14 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, TSerializationContextInfo context,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("type", modelType);
-            Argument.IsNotNull("context", context);
-
             var model = CreateModelInstance(modelType);
+            if (model is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot get context of null model");
+            }
+
             return GetContext(model, modelType, context, contextMode, configuration);
         }
 
@@ -339,12 +318,14 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("type", modelType);
-            Argument.IsNotNull("stream", stream);
-
             var model = CreateModelInstance(modelType);
+            if (model is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot get context of null model");
+            }
+
             return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
         }
 
@@ -363,11 +344,8 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected virtual ISerializationContext<TSerializationContextInfo> GetContext(object model, Type modelType,
-            TSerializationContextInfo context, SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            TSerializationContextInfo context, SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", context);
-
             var finalContext = new SerializationContext<TSerializationContextInfo>(model, modelType, context, contextMode, configuration);
             return finalContext;
         }
@@ -387,7 +365,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected abstract ISerializationContext<TSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration);
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration);
 
         /// <summary>
         /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization
@@ -406,16 +384,14 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
         protected virtual void PopulateModel(ISerializationContext<TSerializationContextInfo> context, List<MemberValue> members)
         {
-            Argument.IsNotNull("model", context);
-            Argument.IsNotNull("members", members);
-
             if (members.Count > 0)
             {
                 var firstMember = members[0];
                 if (firstMember.MemberGroup == SerializationMemberGroup.SimpleRootObject)
                 {
                     // Completely replace root object (this is a basic (non-reference) type)
-                    context.Model = firstMember.Value;
+                    // CHECK IF WE SHOULD ALLOW NULL HERE
+                    context.Model = firstMember.Value!;
                 }
                 else if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
@@ -441,7 +417,8 @@ namespace Catel.Runtime.Serialization
                 {
                     if (context.ModelType.IsArrayEx())
                     {
-                        context.Model = firstMember.Value;
+                        // CHECK IF WE SHOULD ALLOW NULL HERE
+                        context.Model = firstMember.Value!;
                     }
                     else
                     {
@@ -478,6 +455,11 @@ namespace Catel.Runtime.Serialization
 
                         return new SerializationModelInfo(modelType, catelProperties, fields, regularProperties);
                     });
+
+                    if (modelInfo is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Failed to find model info for '{modelType.GetSafeFullName(false)}'");
+                    }
 
                     foreach (var member in members)
                     {
@@ -516,7 +498,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <param name="memberName">Name of the member.</param>
         /// <returns>The <see cref="Type"/> of the member.</returns>
-        protected Type GetMemberType(Type modelType, string memberName)
+        protected Type? GetMemberType(Type modelType, string memberName)
         {
             var catelProperties = SerializationManager.GetCatelProperties(modelType);
             if (catelProperties.TryGetValue(memberName, out var catelProperty))
@@ -811,9 +793,8 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="memberType">Type of the member.</param>
         /// <returns></returns>
-        protected virtual MethodInfo GetObjectToStringMethod(Type memberType)
+        protected virtual MethodInfo? GetObjectToStringMethod(Type memberType)
         {
-
             var toStringMethod = _toStringMethodCache.GetFromCacheOrFetch(memberType, () =>
             {
                 var method = memberType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>(), BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
@@ -828,7 +809,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="memberType">Type of the member.</param>
         /// <returns></returns>
-        protected virtual MethodInfo GetObjectParseMethod(Type memberType)
+        protected virtual MethodInfo? GetObjectParseMethod(Type memberType)
         {
             var parseMethod = _parseMethodCache.GetFromCacheOrFetch(memberType, () =>
             {
@@ -844,14 +825,14 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The list of serializable key value pairs.</returns>
-        protected List<SerializableKeyValuePair> ConvertDictionaryToCollection(object memberValue)
+        protected List<SerializableKeyValuePair> ConvertDictionaryToCollection(object? memberValue)
         {
             var collection = new List<SerializableKeyValuePair>();
 
             var dictionary = memberValue as IDictionary;
             if (dictionary is not null)
             {
-                var genericArguments = memberValue.GetType().GetGenericArgumentsEx();
+                var genericArguments = memberValue!.GetType().GetGenericArgumentsEx();
                 var keyType = genericArguments[0];
                 var valueType = genericArguments[1];
 
@@ -946,7 +927,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The instantiated type.</returns>
         protected virtual object CreateModelInstance(Type type)
         {
-            Type elementType = null;
+            Type? elementType = null;
 
             if (type == typeof(string))
             {
@@ -955,7 +936,7 @@ namespace Catel.Runtime.Serialization
 
             if (type.IsBasicType())
             {
-                return Activator.CreateInstance(type);
+                return Activator.CreateInstance(type)!;
             }
 
             if (type == typeof(IEnumerable))
@@ -966,6 +947,11 @@ namespace Catel.Runtime.Serialization
             if (type.IsArrayEx())
             {
                 elementType = type.GetElementTypeEx();
+                if (elementType is null)
+                {
+                    elementType = typeof(object);
+                }
+
                 return Array.CreateInstance(elementType, 0);
             }
 
@@ -984,7 +970,7 @@ namespace Catel.Runtime.Serialization
                 type = genericCollectionType;
             }
 
-            return TypeFactory.CreateInstance(type);
+            return TypeFactory.CreateRequiredInstance(type);
         }
 
         /// <summary>
@@ -1035,6 +1021,5 @@ namespace Catel.Runtime.Serialization
 
             return true;
         }
-        #endregion
     }
 }

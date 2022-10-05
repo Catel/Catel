@@ -1,15 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRequestPath.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Collections;
     using Logging;
 
     /// <summary>
@@ -27,7 +20,7 @@ namespace Catel.IoC
         /// <summary>
         /// <see cref="ToString"/> method result cache.
         /// </summary>
-        private string _string;
+        private string? _string;
 
         private TypeRequestPath(TypeRequestInfo[] typePath, string name)
         {
@@ -40,7 +33,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="name">Path's name</param>
         /// <returns></returns>
-        public static TypeRequestPath Root(string name = null)
+        public static TypeRequestPath Root(string name)
         {
             return new TypeRequestPath(Array.Empty<TypeRequestInfo>(), name);
         }
@@ -53,8 +46,9 @@ namespace Catel.IoC
         /// <returns></returns>
         public static TypeRequestPath Branch(TypeRequestPath parent, TypeRequestInfo typeRequestInfo)
         {
-            Argument.IsNotNull("parent", parent);
-            Argument.IsNotNull("typeRequestInfo", typeRequestInfo);
+            ArgumentNullException.ThrowIfNull(parent);
+            ArgumentNullException.ThrowIfNull(typeRequestInfo);
+
             //if (parent._typePath.Inde(o => o.Equals(typeRequestInfo)))
             int previousIndex = Array.IndexOf(parent._typePath, typeRequestInfo);
             if (previousIndex >= 0)
@@ -118,7 +112,7 @@ namespace Catel.IoC
         /// Gets the first type in the type path.
         /// </summary>
         /// <value>The first type.</value>
-        public TypeRequestInfo FirstType
+        public TypeRequestInfo? FirstType
         {
             get
             {
@@ -135,7 +129,7 @@ namespace Catel.IoC
         /// Gets the last type in the type path.
         /// </summary>
         /// <value>The last type.</value>
-        public TypeRequestInfo LastType
+        public TypeRequestInfo? LastType
         {
             get
             {
@@ -143,6 +137,7 @@ namespace Catel.IoC
                 {
                     return null;
                 }
+
                 var index = _typePath.Length - 1;
                 
                 return _typePath[index];

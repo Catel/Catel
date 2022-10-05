@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISavableDataObjectBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System.IO;
     using Runtime.Serialization;
@@ -20,6 +14,6 @@ namespace Catel.Data
         /// <param name="stream">Stream that will contain the serialized data of this object.</param>
         /// <param name="serializer">The serializer to use.</param>
         /// <param name="configuration">The configuration.</param>
-        void Save(Stream stream, ISerializer serializer, ISerializationConfiguration configuration = null);
+        void Save(Stream stream, ISerializer serializer, ISerializationConfiguration? configuration = null);
     }
 }

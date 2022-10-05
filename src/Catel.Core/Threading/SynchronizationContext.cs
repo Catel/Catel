@@ -36,8 +36,6 @@
         /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released.</remarks>
         public void Execute(Action code)
         {
-            Argument.IsNotNull("code", code);
-
             Acquire();
             _calls++;
             try
@@ -63,8 +61,6 @@
         /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released, blocking the current thread.</remarks>
         public T Execute<T>(Func<T> code)
         {
-            Argument.IsNotNull("code", code);
-
             Acquire();
             _calls++;
             try

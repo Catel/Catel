@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SuspensionContextExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +9,6 @@ namespace Catel.Collections
     /// </summary>
     public static class SuspensionContextExtensions
     {
-        #region Methods
         /// <summary>
         /// The create event args list.
         /// </summary>
@@ -25,8 +17,10 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
+
             // No suspension context is the same as None mode
-            var mode = suspensionContext?.Mode ?? SuspensionMode.None;
+            var mode = suspensionContext.Mode;
 
             // Fast return for no items in not None modes
             if (mode != SuspensionMode.None && suspensionContext?.ChangedItems.Count == 0)
@@ -40,7 +34,7 @@ namespace Catel.Collections
                 throw new ArgumentOutOfRangeException(nameof(mode), $"The suspension mode '{Enum<SuspensionMode>.ToString(mode)}' is unhandled.");
             }
 
-            return createEvents(suspensionContext);
+            return createEvents(suspensionContext!);
         }
 
         /// <summary>
@@ -51,6 +45,7 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context is null || context.Mode == SuspensionMode.None);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs() };
@@ -64,7 +59,7 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateAddingEvents<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Adding);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode) };
@@ -78,7 +73,7 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateRemovingEvents<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Removing);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode) };
@@ -92,7 +87,7 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedEvents<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Mixed);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.MixedActions) };
@@ -106,7 +101,7 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedBashEvents<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedBash);
 
             return suspensionContext.CreateBashEvents(SuspensionMode.MixedBash);
@@ -120,12 +115,13 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedConsolidateEvents<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedConsolidate);
 
             var events = suspensionContext.CreateBashEvents(suspensionContext.Mode);
 
             bool restartRequired;
+
             do
             {
                 restartRequired = false;
@@ -133,16 +129,19 @@ namespace Catel.Collections
                 for (var i = events.Count - 1; i >= 1; i--)
                 {
                     var currentEvent = events[i];
-                    if (currentEvent.Indices.Count > 0)
+                    if (currentEvent.Indices is not null)
                     {
-                        var previousEvent = events[i - 1];
-                        restartRequired = currentEvent.Action == previousEvent.Action ? previousEvent.ConsolidateItemsByAppend(currentEvent) : previousEvent.ConsolidateItems(currentEvent);
-                    }
+                        if (currentEvent.Indices.Count > 0)
+                        {
+                            var previousEvent = events[i - 1];
+                            restartRequired = currentEvent.Action == previousEvent.Action ? previousEvent.ConsolidateItemsByAppend(currentEvent) : previousEvent.ConsolidateItems(currentEvent);
+                        }
 
-                    if (currentEvent.Indices.Count == 0)
-                    {
-                        events.RemoveAt(i);
-                        restartRequired = i < events.Count;
+                        if (currentEvent.Indices.Count == 0)
+                        {
+                            events.RemoveAt(i);
+                            restartRequired = i < events.Count;
+                        }
                     }
                 }
             }
@@ -159,7 +158,7 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateSilentEvents<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Silent);
 
             return Array.Empty<NotifyRangedCollectionChangedEventArgs>();
@@ -173,7 +172,7 @@ namespace Catel.Collections
         /// <returns><c>True</c> if <see cref="SuspensionMode"/> is one of the mixed modes; otherwise, <c>false</c>.</returns>
         public static bool IsMixedMode<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            ArgumentNullException.ThrowIfNull(suspensionContext);
 
             return suspensionContext.Mode.IsMixedMode();
         }
@@ -187,11 +186,14 @@ namespace Catel.Collections
         /// <returns>The <see cref="IList{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         private static IList<NotifyRangedCollectionChangedEventArgs> CreateBashEvents<T>(this SuspensionContext<T> suspensionContext, SuspensionMode suspensionMode)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
+
             var i = 0;
             var changedItems = new List<T>();
             var changedItemIndices = new List<int>();
             var previousAction = (NotifyCollectionChangedAction?)null;
             var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+
             foreach (var action in suspensionContext.MixedActions)
             {
                 // If action changed, create event args for remembered items
@@ -206,7 +208,11 @@ namespace Catel.Collections
                 }
 
                 // Remember item and index
-                changedItems.Add(suspensionContext.ChangedItems[i]);
+                if (suspensionContext.ChangedItems is not null)
+                {
+                    changedItems.Add(suspensionContext.ChangedItems[i]);
+                }
+
                 changedItemIndices.Add(suspensionContext.ChangedItemIndices[i]);
 
                 // Update to current action
@@ -223,6 +229,5 @@ namespace Catel.Collections
 
             return eventArgsList;
         }
-        #endregion Methods
     }
 }

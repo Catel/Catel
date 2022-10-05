@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FastBindingList.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections;
@@ -23,31 +17,23 @@ namespace Catel.Collections
     [Serializable]
     public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCollection
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private static readonly IDispatcherService _dispatcherService;
-        #endregion
 
-        #region Fields
+        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
+            return dispatcherService;
+        });
+
         private bool _sorted;
         private ListSortDirection _sortDirection = ListSortDirection.Ascending;
-        private PropertyDescriptor _sortProperty;
+        private PropertyDescriptor? _sortProperty;
 
         /// <summary>
         /// The current suspension context.
         /// </summary>
-        private ExtendedSuspensionContext<T> _suspensionContext;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initializes static members of the <see cref="FastBindingList{T}"/> class.
-        /// </summary>
-        static FastBindingList()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
-        }
+        private ExtendedSuspensionContext<T>? _suspensionContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastBindingList{T}" /> class.
@@ -76,9 +62,7 @@ namespace Catel.Collections
         {
             AddItems(collection);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether change to the collection is made when
         /// its notifications are suspended.
@@ -105,7 +89,6 @@ namespace Catel.Collections
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
 
-        #region Overrides of BindingList
         /// <summary>
         /// Gets a value indicating whether the list is sorted.
         /// </summary>
@@ -134,7 +117,7 @@ namespace Catel.Collections
         /// Gets the property descriptor that is used for sorting the list.
         /// </summary>
         /// <value>The <see cref="PropertyDescriptor"/> used for sorting the list.</value>
-        protected override PropertyDescriptor SortPropertyCore
+        protected override PropertyDescriptor? SortPropertyCore
         {
             get
             {
@@ -165,10 +148,7 @@ namespace Catel.Collections
                 return true;
             }
         }
-        #endregion Overrides of BindingList
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Inserts the elements of the specified collection at the specified index.
         /// </summary>
@@ -177,7 +157,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable<T> collection, int index)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             using (SuspendChangeNotifications(SuspensionMode.Adding))
             {
@@ -196,7 +176,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable collection, int index)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             var list = (IList)this;
 
@@ -233,7 +213,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable<T> collection)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Adding))
             {
@@ -253,7 +233,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable collection)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             var list = (IList)this;
 
@@ -275,7 +255,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable<T> collection)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Removing))
             {
@@ -295,7 +275,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable collection)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             var list = (IList)this;
 
@@ -374,7 +354,7 @@ namespace Catel.Collections
                 this,
                 x =>
                 {
-                    if (x.Instance._suspensionContext.Count == 0)
+                    if (x.Instance._suspensionContext!.Count == 0)
                     {
                         x.Instance.RaiseListChangedEvents = false;
                         x.Instance.IsDirty = true;
@@ -383,7 +363,7 @@ namespace Catel.Collections
                 },
                 x =>
                 {
-                    x.Instance._suspensionContext.Count--;
+                    x.Instance._suspensionContext!.Count--;
                     if (x.Instance._suspensionContext.Count == 0)
                     {
                         x.Instance.RaiseListChangedEvents = true;
@@ -432,7 +412,7 @@ namespace Catel.Collections
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequired(action);
+                _dispatcherService.Value.BeginInvokeIfRequired(action);
             }
             else
             {
@@ -454,9 +434,9 @@ namespace Catel.Collections
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     e = new NotifyListChangedEventArgs(e.ListChangedType,
                         e.NewIndex,
-                        e.NewIndex >= 0 ? this[e.NewIndex] : default(T),
+                        e.NewIndex >= 0 ? this[e.NewIndex] : default,
                         e.OldIndex,
-                        e.OldIndex >= 0 ? this[e.OldIndex] : default(T));
+                        e.OldIndex >= 0 ? this[e.OldIndex] : default);
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
                 else
@@ -464,7 +444,7 @@ namespace Catel.Collections
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     e = new NotifyListChangedEventArgs(e.ListChangedType,
                         e.NewIndex,
-                        e.NewIndex >= 0 ? this[e.NewIndex] : default(T),
+                        e.NewIndex >= 0 ? this[e.NewIndex] : default,
                         e.PropertyDescriptor);
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
@@ -472,7 +452,7 @@ namespace Catel.Collections
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequired(() => base.OnListChanged(e));
+                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnListChanged(e));
             }
             else
             {
@@ -480,7 +460,6 @@ namespace Catel.Collections
             }
         }
 
-        #region Overrides of BindingList
         /// <summary>
         /// Apply sort.
         /// </summary>
@@ -528,7 +507,7 @@ namespace Catel.Collections
                 }
                 else // compare as string
                 {
-                    result = lhsValue.ToString().CompareTo(rhsValue.ToString());
+                    result = (lhsValue.ToString() ?? string.Empty).CompareTo(rhsValue.ToString());
                 }
 
                 if (_sortDirection == ListSortDirection.Descending)
@@ -736,7 +715,5 @@ namespace Catel.Collections
                 RaiseListChangedEvents = oldValue;
             }
         }
-        #endregion Overrides of BindingList
-        #endregion
     }
 }

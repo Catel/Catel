@@ -1,16 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseEqualityComparer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using Catel.Collections;
+    using Catel.Reflection;
 
     /// <summary>
     /// Implementation of the <see cref="EqualityComparer{T}" /> for the <see cref="ModelBase" />.
@@ -75,14 +69,14 @@ namespace Catel.Data
         /// <param name="y">The second object to compare.</param>
         /// <returns>true if the specified objects are equal; otherwise, false.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool Equals(ModelBase x, ModelBase y)
+        public override bool Equals(ModelBase? x, ModelBase? y)
         {
             if (ReferenceEquals(x, y))
             {
                 return true;
             }
 
-            if (((object)x is null) || ((object)y is null))
+            if ((x is null) || (y is null))
             {
                 return false;
             }
@@ -109,8 +103,8 @@ namespace Catel.Data
                     // Only check if this is not an internal data object base property
                     if (!propertyData.IsModelBaseProperty)
                     {
-                        object valueA = propertyValue.Value;
-                        object valueB = ((IModelEditor)y).GetValue<object>(propertyValue.Key);
+                        var valueA = propertyValue.Value;
+                        var valueB = ((IModelEditor)y).GetValue<object?>(propertyValue.Key);
 
                         if (!ReferenceEquals(valueA, valueB))
                         {
@@ -164,7 +158,7 @@ namespace Catel.Data
             }
 
             var objType = obj.GetType();
-            return objType.FullName.GetHashCode();
+            return objType.GetSafeFullName().GetHashCode();
         }
     }
 }

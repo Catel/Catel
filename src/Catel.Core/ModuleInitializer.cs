@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Core
+﻿namespace Catel.Core
 {
     using System;
     using Reflection;
@@ -69,9 +63,9 @@ namespace Catel.Core
             module.Initialize(serviceLocator);
         }
 
-        private static Configuration GetExeConfiguration()
+        private static Configuration? GetExeConfiguration()
         {
-            Configuration config = null;
+            Configuration? config = null;
 
             config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             if (ContainsVsHost(config.FilePath))
@@ -82,7 +76,7 @@ namespace Catel.Core
             return config;
         }
 
-        private static Configuration GetDllConfiguration()
+        private static Configuration? GetDllConfiguration()
         {
             var entryAssembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
             if (entryAssembly is null)

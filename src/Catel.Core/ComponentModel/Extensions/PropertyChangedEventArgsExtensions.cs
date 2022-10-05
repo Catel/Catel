@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyChangedEventArgsExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace System.ComponentModel
+﻿namespace System.ComponentModel
 {
     using System;
     using Linq.Expressions;
@@ -26,7 +20,7 @@ namespace System.ComponentModel
         /// <exception cref="ArgumentNullException">The <paramref name="e" /> is <c>null</c>.</exception>
         public static bool AllPropertiesChanged(this PropertyChangedEventArgs e)
         {
-            Argument.IsNotNull("e", e);
+            ArgumentNullException.ThrowIfNull(e);
 
             return string.IsNullOrEmpty(e.PropertyName);
         }
@@ -42,7 +36,7 @@ namespace System.ComponentModel
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
         public static bool HasPropertyChanged(this PropertyChangedEventArgs e, string propertyName)
         {
-            Argument.IsNotNull("e", e);
+            ArgumentNullException.ThrowIfNull(e);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             return string.Equals(e.PropertyName, propertyName);
@@ -61,8 +55,8 @@ namespace System.ComponentModel
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
         public static bool HasPropertyChanged<TValue>(this PropertyChangedEventArgs e, Expression<Func<TValue>> propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("e", e);
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(e);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             return string.Equals(e.PropertyName, PropertyHelper.GetPropertyName(propertyExpression, allowNested), StringComparison.Ordinal);
         }
@@ -81,8 +75,8 @@ namespace System.ComponentModel
         /// <exception cref="ArgumentNullException">The <paramref name="e" /> is <c>null</c>.</exception>
         public static bool HasPropertyChanged<TModel, TValue>(this PropertyChangedEventArgs e, Expression<Func<TModel, TValue>> propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("e", e);
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(e);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             return string.Equals(e.PropertyName, PropertyHelper.GetPropertyName(propertyExpression, allowNested), StringComparison.Ordinal);
         }

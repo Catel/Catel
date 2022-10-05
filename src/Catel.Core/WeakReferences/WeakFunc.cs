@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakFunc.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Reflection;
@@ -32,7 +26,7 @@ namespace Catel
         /// <summary>
         /// The action that must be invoked on the action.
         /// </summary>
-        private Delegate _action;
+        private Delegate? _action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakAction"/> class.
@@ -44,11 +38,13 @@ namespace Catel
         public WeakFunc(object target, Func<TResult> func)
             : base(target)
         {
-            Argument.IsNotNull("action", func);
-
             var methodInfo = func.GetMethodInfoEx();
-            MethodName = methodInfo.ToString();
+            if (methodInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Could not find method info for specified func");
+            }
 
+            MethodName = methodInfo.ToString() ?? string.Empty;
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
@@ -75,7 +71,7 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        public Delegate Action { get { return _action; } }
+        public Delegate? Action { get { return _action; } }
 
         /// <summary>
         /// Executes the action. This only happens if the action's target is still alive.
@@ -86,7 +82,8 @@ namespace Catel
         /// </returns>
         public bool Execute(out TResult result)
         {
-            result = default(TResult);
+            result = default!;  
+
             if (_action is not null)
             {
                 if (IsTargetAlive)
@@ -94,7 +91,7 @@ namespace Catel
                     try
                     {
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                        result = (TResult)_action.DynamicInvoke(Target);
+                        result = (TResult)_action.DynamicInvoke(Target)!;
 #pragma warning restore HAA0101 // Array allocation for params parameter
                     }
                     catch (TargetInvocationException ex)
@@ -137,7 +134,7 @@ namespace Catel
         /// <summary>
         /// The action that must be invoked on the action.
         /// </summary>
-        private Delegate _action;
+        private Delegate? _action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakAction"/> class.
@@ -149,11 +146,12 @@ namespace Catel
         public WeakFunc(object target, Func<TParameter, TResult> func)
             : base(target)
         {
-            Argument.IsNotNull("func", func);
+            var methodInfo = func.GetMethodInfoEx(); if (methodInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Could not find method info for specified func");
+            }
 
-            var methodInfo = func.GetMethodInfoEx();
-            MethodName = methodInfo.ToString();
-
+            MethodName = methodInfo.ToString() ?? string.Empty;
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
@@ -180,7 +178,7 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        public Delegate Action { get { return _action; } }
+        public Delegate? Action { get { return _action; } }
 
         /// <summary>
         /// Executes the action. This only happens if the action's target is still alive.
@@ -189,7 +187,7 @@ namespace Catel
         /// <param name="result">The result</param>
         public bool Execute(TParameter parameter, out TResult result)
         {
-            result = default(TResult);
+            result = default!;
 
             if (_action is not null)
             {
@@ -198,7 +196,7 @@ namespace Catel
                     try
                     {
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                        result = (TResult)_action.DynamicInvoke(Target, BoxingCache.GetBoxedValue(parameter));
+                        result = (TResult)_action.DynamicInvoke(Target, BoxingCache.GetBoxedValue(parameter))!;
 #pragma warning restore HAA0101 // Array allocation for params parameter
                     }
                     catch (TargetInvocationException ex)

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRequestInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -14,7 +8,7 @@ namespace Catel.IoC
     public class TypeRequestInfo
     {
         private int? _hash;
-        private string _string;
+        private string? _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeRequestInfo"/> class.
@@ -22,9 +16,9 @@ namespace Catel.IoC
         /// <param name="type">The type.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public TypeRequestInfo(Type type, object tag = null)
+        public TypeRequestInfo(Type type, object? tag = null)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             Type = type;
             Tag = tag;
@@ -40,7 +34,7 @@ namespace Catel.IoC
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object? Tag { get; private set; }
 
         /// <summary>
         /// Implements the operator ==.
@@ -79,7 +73,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />.</param>
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
             {

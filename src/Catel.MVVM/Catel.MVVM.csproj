@@ -8,6 +8,7 @@
     <PackageVersion>5.10.0-beta0013</PackageVersion>
     <Description>Catel.MVVM library.</Description>
     <PackageTags>catel;mvvm;view;viewmodel;model;interaction;interactivity;behaviors;xamarin</PackageTags>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObservableObject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
@@ -16,14 +10,11 @@ namespace Catel.Data
     [Serializable]
     public class ObservableObject : INotifyPropertyChanged
     {
-        #region Events
         /// <summary>
         /// Occurs when a property of this object has changed.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-        #endregion
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        #region Methods
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event.
         /// </summary>
@@ -37,8 +28,6 @@ namespace Catel.Data
         /// </example>
         protected internal void RaisePropertyChanged<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
-
             var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
 
             RaisePropertyChanged(propertyName);
@@ -91,6 +80,5 @@ namespace Catel.Data
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
         }
-        #endregion
     }
 }

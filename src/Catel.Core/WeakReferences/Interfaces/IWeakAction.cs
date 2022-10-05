@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWeakAction.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -27,7 +21,7 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        Delegate Action { get; }
+        Delegate? Action { get; }
     }
 
     /// <summary>
@@ -50,7 +44,7 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        Delegate Action { get; }
+        Delegate? Action { get; }
 
         /// <summary>
         /// Executes the action. This only happens if the action's target is still alive.

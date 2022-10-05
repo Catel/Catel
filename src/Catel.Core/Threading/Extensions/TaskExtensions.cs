@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TaskExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
     using System.Threading;
@@ -29,7 +22,6 @@ namespace Catel.Threading
         {
             using (var cts = new CancellationTokenSource())
             {
-
                 // If the task is the first one to be returned, the task completed faster than the delay task
 #pragma warning disable HAA0101 // Array allocation for params parameter
                 if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
@@ -67,8 +59,12 @@ namespace Catel.Threading
             }
             catch (AggregateException ex)
             {
-                //throw ExceptionHelpers.PrepareForRethrow(ex.InnerException);
-                throw ex.InnerException;
+                if (ex.InnerException is not null)
+                {
+                    throw ex.InnerException;
+                }
+
+                throw;
             }
         }
 
@@ -100,8 +96,12 @@ namespace Catel.Threading
             }
             catch (AggregateException ex)
             {
-                //throw ExceptionHelpers.PrepareForRethrow(ex.InnerException);
-                throw ex.InnerException;
+                if (ex.InnerException is not null)
+                {
+                    throw ex.InnerException;
+                }
+
+                throw;
             }
         }
     }

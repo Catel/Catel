@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyDataTypeInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -20,21 +13,16 @@ namespace Catel.Data
     /// </summary>
     public class CatelTypeInfo
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
-
-        #region Fields
+        
         private readonly object _lockObject = new object();
 
         private readonly IDictionary<string, IPropertyData> _catelProperties = new ListDictionary<string, IPropertyData>();
         private readonly IDictionary<string, CachedPropertyInfo> _nonCatelProperties = new ListDictionary<string, CachedPropertyInfo>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CatelTypeInfo" /> class.
         /// </summary>
@@ -42,15 +30,11 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public CatelTypeInfo(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             Type = type;
 
             RegisterProperties();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the type.
         /// </summary>
@@ -62,9 +46,7 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if the <see cref="RegisterProperties"/> method has been called at least once; otherwise, <c>false</c>.</value>
         public bool IsRegisterPropertiesCalled { get; private set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the Catel properties.
         /// </summary>
@@ -101,7 +83,7 @@ namespace Catel.Data
                 if (!_catelProperties.TryGetValue(name, out var catelProperty))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
-                        "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
+                        "Property '{0}' on type '{1}' is not registered", name, Type.GetSafeFullName());
                 }
 
                 return catelProperty;
@@ -178,14 +160,13 @@ namespace Catel.Data
         public void RegisterProperty(string name, IPropertyData propertyData)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("propertyData", propertyData);
-
+            
             lock (_lockObject)
             {
                 if (_catelProperties.ContainsKey(name))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyAlreadyRegisteredException(name, Type),
-                        "Property '{0}' on type '{1}' is already registered", name, Type.FullName);
+                        "Property '{0}' on type '{1}' is already registered", name, Type.GetSafeFullName());
                 }
 
                 _catelProperties[name] = propertyData;
@@ -321,6 +302,5 @@ namespace Catel.Data
                 throw Log.ErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
             }
         }
-        #endregion
     }
 }

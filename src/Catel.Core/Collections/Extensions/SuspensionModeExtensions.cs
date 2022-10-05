@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SuspensionModeExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -14,14 +8,11 @@ namespace Catel.Collections
     /// </summary>
     public static class SuspensionModeExtensions
     {
-        #region Fields
         /// <summary>
         /// The mixed modes.
         /// </summary>
         private static readonly List<SuspensionMode> MixedModes = Enum<SuspensionMode>.GetValues().Where(mode => Enum<SuspensionMode>.ToString(mode).ToString().ContainsIgnoreCase("Mixed")).ToList();
-        #endregion Fields
 
-        #region Methods
         /// <summary>
         /// The is mixed mode.
         /// </summary>
@@ -31,6 +22,5 @@ namespace Catel.Collections
         {
             return MixedModes.Contains(suspensionMode);
         }
-        #endregion Methods
     }
 }

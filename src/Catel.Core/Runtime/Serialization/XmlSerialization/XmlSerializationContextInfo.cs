@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSerializationContextInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections.Generic;
@@ -29,14 +23,11 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="xmlWriter" /> is <c>null</c>.</exception>
         public XmlSerializationContextInfo(XmlWriter xmlWriter, object model)
         {
-            Argument.IsNotNull("element", xmlWriter);
-            Argument.IsNotNull("model", model);
-
             XmlWriter = xmlWriter;
             IsRootObject = xmlWriter.WriteState == WriteState.Start;
             AllowCustomXmlSerialization = true;
-
-            Initialize(model);
+            KnownTypes = new HashSet<Type>();
+            Model = model;
         }
 
         /// <summary>
@@ -48,14 +39,11 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         public XmlSerializationContextInfo(XmlReader xmlReader, object model)
         {
-            Argument.IsNotNull("xmlReader", xmlReader);
-            Argument.IsNotNull("model", model);
-
             XmlReader = xmlReader;
             IsRootObject = xmlReader.NodeType == XmlNodeType.None;
             AllowCustomXmlSerialization = true;
-
-            Initialize(model);
+            KnownTypes = new HashSet<Type>();
+            Model = model;
         }
 
         /// <summary>
@@ -66,12 +54,12 @@ namespace Catel.Runtime.Serialization.Xml
         /// <summary>
         /// Gets the xml writer.
         /// </summary>
-        public XmlWriter XmlWriter { get; private set; }
+        public XmlWriter? XmlWriter { get; private set; }
 
         /// <summary>
         /// Gets the xml reader.
         /// </summary>
-        public XmlReader XmlReader { get; private set; }
+        public XmlReader? XmlReader { get; private set; }
 
         /// <summary>
         /// Gets the list of known types from the current stack.
@@ -85,7 +73,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// Gets the model.
         /// </summary>
         /// <value>The model.</value>
-        public object Model { get; private set; }
+        public object? Model { get; private set; }
 
         /// <summary>
         /// Gets or sets whether custom xml serialization is allowed via the <see cref="ICustomXmlSerializable"/> interface.
@@ -94,7 +82,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         public bool AllowCustomXmlSerialization { get; set; }
 
-        #region Methods
         protected override void OnContextUpdated(ISerializationContext<XmlSerializationContextInfo> context)
         {
             base.OnContextUpdated(context);
@@ -111,12 +98,5 @@ namespace Catel.Runtime.Serialization.Xml
                 KnownTypes.AddRange(parentKnownTypes);
             }
         }
-
-        private void Initialize(object model)
-        {
-            KnownTypes = new HashSet<Type>();
-            Model = model;
-        }
-        #endregion
     }
 }

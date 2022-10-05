@@ -577,7 +577,7 @@ namespace Catel.Tests.Collections
 
                 fastCollection.Reset();
 
-                Assert.AreEqual(true, collectionChanged);
+                Assert.AreEqual(false, collectionChanged);
             }
 
             [Test]

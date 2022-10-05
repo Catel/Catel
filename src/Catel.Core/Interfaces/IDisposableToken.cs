@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IDisposableToken.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -24,6 +17,6 @@ namespace Catel
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; }
+        object? Tag { get; }
     }
 }

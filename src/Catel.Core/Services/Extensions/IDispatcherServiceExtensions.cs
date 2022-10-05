@@ -17,8 +17,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static void Invoke(this IDispatcherService dispatcherService, Delegate method, params object[] args)
         {
-            Argument.IsNotNull("method", method);
-
             dispatcherService.Invoke(() => method.DynamicInvoke(args), true);
         }
 
@@ -46,8 +44,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static void InvokeIfRequired(this IDispatcherService dispatcherService, Delegate method, params object[] args)
         {
-            Argument.IsNotNull("method", method);
-
             dispatcherService.Invoke(() => method.DynamicInvoke(args), true);
         }
 
@@ -60,8 +56,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static void BeginInvoke(this IDispatcherService dispatcherService, Delegate method, params object[] args)
         {
-            Argument.IsNotNull("method", method);
-
             dispatcherService.BeginInvoke(() => method.DynamicInvoke(args), false);
         }
 
@@ -100,8 +94,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static void BeginInvokeIfRequired(this IDispatcherService dispatcherService, Delegate method, params object[] args)
         {
-            Argument.IsNotNull("method", method);
-
             dispatcherService.BeginInvoke(() => method.DynamicInvoke(args), true);
         }
     }

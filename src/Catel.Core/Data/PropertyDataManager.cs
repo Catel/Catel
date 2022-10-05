@@ -1,14 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyDataManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Xml.Serialization;
+    using Catel.Reflection;
     using Logging;
 
     /// <summary>
@@ -16,7 +11,6 @@ namespace Catel.Data
     /// </summary>
     public class PropertyDataManager
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -34,7 +28,6 @@ namespace Catel.Data
 
         private readonly XmlNameMapper<XmlElementAttribute> _xmlElementMappings;
         private readonly XmlNameMapper<XmlAttributeAttribute> _xmlAttributeMappings;
-        #endregion
 
         /// <summary>
         /// Initializes static members of the <see cref="PropertyDataManager" /> class.
@@ -53,15 +46,12 @@ namespace Catel.Data
             _xmlAttributeMappings = new XmlNameMapper<XmlAttributeAttribute>(this);
         }
 
-        #region Properties
         /// <summary>
         /// Gets the default instance of the property data manager.
         /// </summary>
         /// <value>The default.</value>
         public static PropertyDataManager Default { get; private set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the property data type information.
         /// </summary>
@@ -70,8 +60,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public CatelTypeInfo GetCatelTypeInfo(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             lock (_propertyDataLock)
             {
                 if (!_propertyData.TryGetValue(type, out var typeInfo))
@@ -95,8 +83,6 @@ namespace Catel.Data
         /// <exception cref="InvalidOperationException">The properties are not declared correctly.</exception>
         public CatelTypeInfo RegisterProperties(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             lock (_propertyDataLock)
             {
                 if (!_propertyData.TryGetValue(type, out var typeInfo))
@@ -121,9 +107,7 @@ namespace Catel.Data
         /// <exception cref="PropertyAlreadyRegisteredException">A property with the same name is already registered.</exception>
         public void RegisterProperty(Type type, string name, IPropertyData propertyData)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("propertyData", propertyData);
 
             lock (_propertyDataLock)
             {
@@ -172,7 +156,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public bool IsPropertyRegistered(Type type, string name)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
             lock (_propertyDataLock)
@@ -197,7 +180,6 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
         public IPropertyData GetPropertyData(Type type, string name)
         {
-            Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
             lock (_propertyDataLock)
@@ -205,7 +187,7 @@ namespace Catel.Data
                 if (!_propertyData.TryGetValue(type, out var propertyDataOfType))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
-                        "Property '{0}' on type '{1}' is not registered", name, type.FullName);
+                        "Property '{0}' on type '{1}' is not registered", name, type.GetSafeFullName());
                 }
 
                 return propertyDataOfType.GetPropertyData(name);
@@ -327,6 +309,5 @@ namespace Catel.Data
         {
             return _xmlElementMappings.MapPropertyNameToXmlName(type, propertyName);
         }
-        #endregion
     }
 }

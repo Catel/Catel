@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageRecipientAttribute.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Messaging
+﻿namespace Catel.Messaging
 {
     using System;
 
@@ -24,6 +18,6 @@ namespace Catel.Messaging
         /// <summary>
         /// Gets the tag.
         /// </summary>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
     }
 }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="KeyValuePairSerializerModifier.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -36,8 +29,8 @@ namespace Catel.Runtime.Serialization
                 {
                     if (valueType.GetGenericTypeDefinitionEx() == typeof(KeyValuePair<,>))
                     {
-                        var keyProperty = valueType.GetPropertyEx("Key");
-                        var valueProperty = valueType.GetPropertyEx("Value");
+                        var keyProperty = valueType.GetPropertyEx("Key")!;
+                        var valueProperty = valueType.GetPropertyEx("Value")!;
 
                         var kvpKey = keyProperty.GetValue(value, null);
                         var kvpValue = valueProperty.GetValue(value, null);
@@ -70,7 +63,17 @@ namespace Catel.Runtime.Serialization
 
                     var keyValuePairType = typeof(KeyValuePair<,>);
                     var keyType = TypeCache.GetTypeWithoutAssembly(splittedValues[1], allowInitialization: false);
+                    if (keyType is null)
+                    {
+                        throw new CatelException($"Cannot find key type '{splittedValues[1]}'");
+                    }
+
                     var valueType = TypeCache.GetTypeWithoutAssembly(splittedValues[2], allowInitialization: false);
+                    if (valueType is null)
+                    {
+                        throw new CatelException($"Cannot find value type '{splittedValues[2]}'");
+                    }
+
                     var keyValue = splittedValues[3];
                     var valueValue = splittedValues[4];
 

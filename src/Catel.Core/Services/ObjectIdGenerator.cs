@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectIdGenerator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2018 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
@@ -18,7 +11,7 @@ namespace Catel.Services
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType : class
     {
-        private static Queue<TUniqueIdentifier> ReleasedUniqueIdentifiers;
+        private static Queue<TUniqueIdentifier>? ReleasedUniqueIdentifiers;
 
         private static readonly object SyncObj = new object();
 
@@ -60,8 +53,6 @@ namespace Catel.Services
         /// <inheritdoc />
         public TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = false)
         {
-            Argument.IsNotNull("instance", instance);
-
             lock (SyncObj)
             {
                 if (AllocatedUniqueIdentifierPerInstances.TryGetValue(instance, out var wrapper))

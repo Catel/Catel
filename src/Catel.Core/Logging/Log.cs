@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Log.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using Reflection;
@@ -14,20 +8,17 @@ namespace Catel.Logging
     /// </summary>
     public class Log : ILog
     {
-        #region Fields
         private int _indentSize = 2;
         private int _indentLevel = 0;
         private readonly Lazy<bool> _shouldIgnoreIfCatelLoggingIsDisabled;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Log"/> class.
         /// </summary>
         /// <param name="targetType">The type for which this logger is intended.</param>
         /// <exception cref="ArgumentException">If <paramref name="targetType"/> is <c>null</c>.</exception>
         public Log(Type targetType)
-            : this(targetType?.FullName, targetType)
+            : this(targetType.GetSafeFullName(), targetType)
         {
         }
 
@@ -37,7 +28,7 @@ namespace Catel.Logging
         /// <param name="name">The name of this logger.</param>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
         public Log(string name)
-            : this(name, null)
+            : this(name, typeof(object))
         {
         }
 
@@ -49,6 +40,7 @@ namespace Catel.Logging
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
         public Log(string name, Type targetType)
         {
+            ArgumentNullException.ThrowIfNull(targetType);
             Argument.IsNotNullOrWhitespace("name", name);
 
             Name = name;
@@ -57,9 +49,7 @@ namespace Catel.Logging
             IsCatelLogging = targetType?.IsCatelType() ?? false;
             _shouldIgnoreIfCatelLoggingIsDisabled = new Lazy<bool>(ShouldIgnoreIfCatelLoggingIsDisabled);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the logger.
         /// </summary>
@@ -76,7 +66,7 @@ namespace Catel.Logging
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this logger is a Catel logger.
@@ -130,23 +120,19 @@ namespace Catel.Logging
                 _indentLevel = value;
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         ///   Occurs when a message is written to the log.
         /// </summary>
-        public event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
+        public event EventHandler<LogMessageEventArgs>? LogMessage;
 
-        #region Methods
         /// <summary>
         /// Writes the specified message as specified log event with extra data.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
-        public void WriteWithData(string message, object extraData, LogEvent logEvent)
+        public void WriteWithData(string message, object? extraData, LogEvent logEvent)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
@@ -167,7 +153,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
-        public void WriteWithData(string message, LogData logData, LogEvent logEvent)
+        public void WriteWithData(string message, LogData? logData, LogEvent logEvent)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
@@ -198,7 +184,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
-        private void WriteMessage(string message, object extraData, LogData logData, LogEvent logEvent)
+        private void WriteMessage(string message, object? extraData, LogData? logData, LogEvent logEvent)
         {
             var logMessage = LogMessage;
             if (logMessage is not null)
@@ -227,6 +213,5 @@ namespace Catel.Logging
                 IndentLevel--;
             }
         }
-        #endregion
     }
 }

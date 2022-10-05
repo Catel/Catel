@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidatableModelExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections;
@@ -17,7 +10,6 @@ namespace Catel.Data
     /// </summary>
     public static class IValidatableModelExtensions
     {
-        #region Methods
         /// <summary>
         /// Gets the validation context for a complete object graph by also checking the properties and recursive 
         /// </summary>
@@ -26,8 +18,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public static IValidationContext GetValidationContextForObjectGraph(this IValidatableModel model)
         {
-            Argument.IsNotNull("model", model);
-
             var validationContext = new ValidationContext();
 
             validationContext.AddModelValidation(model, new List<IValidatableModel>());
@@ -37,8 +27,6 @@ namespace Catel.Data
 
         private static void AddModelValidation(this ValidationContext validationContext, IValidatableModel model, List<IValidatableModel> handledModels)
         {
-            Argument.IsNotNull("validationContext", validationContext);
-
             if (handledModels.Any(x => ReferenceEquals(x, model)))
             {
                 return;
@@ -74,6 +62,5 @@ namespace Catel.Data
                 }
             }
         }
-        #endregion
     }
 }

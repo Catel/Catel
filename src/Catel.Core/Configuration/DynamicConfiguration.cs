@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DynamicConfiguration.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
     using System.Collections.Generic;
@@ -26,9 +20,8 @@ namespace Catel.Configuration
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
-        private IXmlSerializer _xmlSerializer;
+        private IXmlSerializer? _xmlSerializer;
 
-        #region Methods
         protected override IPropertyBag CreatePropertyBag()
         {
             // Fix for https://github.com/Catel/Catel/issues/1517 since values
@@ -88,8 +81,6 @@ namespace Catel.Configuration
         /// <returns><c>true</c> if the property is set; otherwise, <c>false</c>.</returns>
         public virtual bool IsConfigurationValueSet(string name)
         {
-            Argument.IsNotNull("name", name);
-
             if (!IsPropertyRegistered(GetType(), name))
             {
                 return false;
@@ -107,20 +98,17 @@ namespace Catel.Configuration
         /// <param name="name">The name.</param>
         public virtual void MarkConfigurationValueAsSet(string name)
         {
-            Argument.IsNotNull("name", name);
-
             lock (_propertiesSetAtLeastOnce)
             {
                 _propertiesSetAtLeastOnce.Add(name);
             }
         }
-        #endregion
 
         protected virtual IXmlSerializer GetXmlSerializer()
         {
             if (_xmlSerializer is null)
             {
-                _xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+                _xmlSerializer = ServiceLocator.Default.ResolveRequiredType<IXmlSerializer>();
             }
 
             return _xmlSerializer;
@@ -159,7 +147,7 @@ namespace Catel.Configuration
                 while (xmlReader.MoveToNextContentElement(parentNode))
                 {
                     var valueRead = false;
-                    object value = null;
+                    object? value = null;
 
                     var elementName = xmlReader.LocalName;
 
@@ -179,11 +167,13 @@ namespace Catel.Configuration
                             if (elementType != typeof(string) && !elementType.IsValueTypeEx())
                             {
                                 var instance = Activator.CreateInstance(elementType);
-
-                                // Complex object, use xml serializer
-                                var xmlSerializer = GetXmlSerializer();
-                                value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
-                                valueRead = true;
+                                if (instance is not null)
+                                {
+                                    // Complex object, use xml serializer
+                                    var xmlSerializer = GetXmlSerializer();
+                                    value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
+                                    valueRead = true;
+                                }
                             }
                         }
                     }

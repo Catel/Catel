@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DisposableToken.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -21,7 +14,7 @@ namespace Catel
         /// <param name="initialize">The initialize action.</param>
         /// <param name="dispose">The dispose action.</param>
         /// <param name="tag">The tag.</param>
-        public DisposableToken(object instance, Action<IDisposableToken<object>> initialize, Action<IDisposableToken<object>> dispose, object tag = null) 
+        public DisposableToken(object instance, Action<IDisposableToken<object>> initialize, Action<IDisposableToken<object>> dispose, object? tag = null)
             : base(instance, initialize, dispose, tag)
         {
         }
@@ -32,13 +25,10 @@ namespace Catel
     /// </summary>
     public class DisposableToken<T> : Disposable, IDisposableToken<T>
     {
-        #region Fields
         private T _instance;
         private Action<IDisposableToken<T>> _dispose;
-        private object _tag;
-        #endregion
+        private object? _tag;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DisposableToken{T}" /> class.
         /// </summary>
@@ -46,7 +36,7 @@ namespace Catel
         /// <param name="initialize">The initialize action that will be called with (token).</param>
         /// <param name="dispose">The dispose action that will be called with (instance, tag).</param>
         /// <param name="tag">The tag.</param>
-        public DisposableToken(T instance, Action<IDisposableToken<T>> initialize, Action<IDisposableToken<T>> dispose, object tag = null)
+        public DisposableToken(T instance, Action<IDisposableToken<T>> initialize, Action<IDisposableToken<T>> dispose, object? tag = null)
         {
             _instance = instance;
             _dispose = dispose;
@@ -57,7 +47,6 @@ namespace Catel
                 initialize(this);
             }
         }
-        #endregion
 
         /// <summary>
         /// Gets the instance attached to this token.
@@ -69,9 +58,8 @@ namespace Catel
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get { return _tag; } }
+        public object? Tag { get { return _tag; } }
 
-        #region IDisposable Members
         protected override void DisposeManaged()
         {
             if (_dispose is not null)
@@ -79,10 +67,9 @@ namespace Catel
                 _dispose(this);
             }
 
-            _instance = default(T);
-            _dispose = null;
+            //_instance = default(T);
+            //_dispose = null;
             _tag = null;
         }
-        #endregion
     }
 }

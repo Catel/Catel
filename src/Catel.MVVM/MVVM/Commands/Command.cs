@@ -1,50 +1,57 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Command.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
+﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable 1956 // Both Command and CompositeCommand implement ICommand
 #pragma warning disable 3021 // 'type' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 
 namespace Catel.MVVM
 {
     using System;
-    using System.Threading.Tasks;
     using System.Windows.Input;
 
     using Services;
 
     using IoC;
     using Logging;
-    using Threading;
 
     /// <summary>
     /// Base class for generic command classes. Contains protected static services for using in derived classes.
     /// </summary>
     public abstract class CommandBase
     {
+        private static IAuthenticationProvider? _authenticationProvider;
+        private static IDispatcherService? _dispatcherService;
+
         /// <summary>
         /// Authentication provider.
         /// </summary>
-        [CLSCompliant(false)]
-        protected static readonly IAuthenticationProvider AuthenticationProvider;
+        protected static IAuthenticationProvider? AuthenticationProvider
+        {
+            get
+            {
+                if (_authenticationProvider is null)
+                {
+                    var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                    _authenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
+                }
+
+                return _authenticationProvider;
+            }
+        }
 
         /// <summary>
         /// Dispatcher service.
         /// </summary>
-        protected static readonly IDispatcherService DispatcherService;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="CommandBase"/> class.
-        /// </summary>
-        static CommandBase()
+        protected static IDispatcherService? DispatcherService
         {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            get
+            {
+                if (_dispatcherService is null)
+                {
+                    var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                    _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
+                }
 
-            AuthenticationProvider = dependencyResolver.TryResolve<IAuthenticationProvider>();
-            DispatcherService = dependencyResolver.TryResolve<IDispatcherService>();
+                return _dispatcherService;
+            }
         }
     }
 
@@ -55,16 +62,13 @@ namespace Catel.MVVM
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
     public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICatelCommand<TExecuteParameter, TCanExecuteParameter>
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
         private Func<bool> _canExecuteWithoutParameter;
         private Action<TExecuteParameter> _executeWithParameter;
         private Action _executeWithoutParameter;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
@@ -100,21 +104,17 @@ namespace Catel.MVVM
             Tag = tag;
             AutomaticallyDispatchEvents = true;
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when changes occur that affect whether or not the command should execute.
         /// </summary>
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
         /// <summary>
         /// Occurs when the command has just been executed successfully.
         /// </summary>
-        public event EventHandler<CommandExecutedEventArgs> Executed;
-        #endregion
+        public event EventHandler<CommandExecutedEventArgs>? Executed;
 
-        #region Properties
         /// <summary>
         /// Gets the tag for this command. A tag is a way to link any object to a command so you can use your own
         /// methods to recognize the commands, for example by ID or string.
@@ -130,14 +130,12 @@ namespace Catel.MVVM
         /// The default value is <c>true</c>.
         /// </summary>
         public bool AutomaticallyDispatchEvents { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Initializes the actions.
         /// </summary>
-        protected void InitializeActions(Action<TExecuteParameter> executeWithParameter, Action executeWithoutParameter,
-            Func<TCanExecuteParameter, bool> canExecuteWithParameter, Func<bool> canExecuteWithoutParameter)
+        protected void InitializeActions(Action<TExecuteParameter>? executeWithParameter, Action? executeWithoutParameter,
+            Func<TCanExecuteParameter, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter)
         {
             _canExecuteWithParameter = canExecuteWithParameter;
             _canExecuteWithoutParameter = canExecuteWithoutParameter;
@@ -167,7 +165,7 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if this command can be executed; otherwise, <c>false</c>.
         /// </returns>
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             if (!(parameter is TCanExecuteParameter))
             {
@@ -186,9 +184,10 @@ namespace Catel.MVVM
         /// </returns>
         public virtual bool CanExecute(TCanExecuteParameter parameter)
         {
-            if (AuthenticationProvider is not null)
+            var authenticationProvider = AuthenticationProvider;
+            if (authenticationProvider is not null)
             {
-                if (!AuthenticationProvider.CanCommandBeExecuted(this, parameter))
+                if (!authenticationProvider.CanCommandBeExecuted(this, parameter))
                 {
                     return false;
                 }
@@ -223,7 +222,7 @@ namespace Catel.MVVM
         /// Defines the method to be called when the command is invoked.
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
             if (!(parameter is TExecuteParameter))
             {
@@ -292,7 +291,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>Task.</returns>
-        protected virtual void RaiseExecuted(object parameter)
+        protected virtual void RaiseExecuted(object? parameter)
         {
             var action = new Action(() =>
             {
@@ -314,7 +313,6 @@ namespace Catel.MVVM
                 action();
             }
         }
-        #endregion
     }
 
     /// <summary>
@@ -329,7 +327,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(Action execute, Func<bool> canExecute = null, object tag = null)
+        public Command(Action execute, Func<bool>? canExecute = null, object? tag = null)
             : base(null, execute, null, canExecute, tag) { }
 
         /// <summary>
@@ -338,7 +336,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(Action<TExecuteParameter> execute, Func<TExecuteParameter, bool> canExecute = null, object tag = null)
+        public Command(Action<TExecuteParameter> execute, Func<TExecuteParameter, bool>? canExecute = null, object? tag = null)
             : base(execute, null, canExecute, null, tag) { }
     }
 
@@ -353,7 +351,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(Action execute, Func<bool> canExecute = null, object tag = null)
+        public Command(Action execute, Func<bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag) { }
     }
 }

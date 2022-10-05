@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyHelper.expression.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Linq.Expressions;
@@ -30,7 +24,7 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName(Expression propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             return GetPropertyName(propertyExpression, allowNested, false);
         }
@@ -46,7 +40,7 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName<TValue>(Expression<Func<TValue>> propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             var body = propertyExpression.Body;
             return GetPropertyName(body, allowNested);
@@ -64,7 +58,7 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             var body = propertyExpression.Body;
             return GetPropertyName(body, allowNested);
@@ -81,15 +75,15 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         private static string GetPropertyName(Expression propertyExpression, bool allowNested = false, bool nested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             const string NoMemberExpression = "The expression is not a member access expression";
 
-            string cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, BoxingCache.GetBoxedValue(allowNested), BoxingCache.GetBoxedValue(nested));
+            var cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, BoxingCache.GetBoxedValue(allowNested), BoxingCache.GetBoxedValue(nested));
 
             return ExpressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
             {
-                MemberExpression memberExpression;
+                MemberExpression? memberExpression;
 
                 var unaryExpression = propertyExpression as UnaryExpression;
                 if (unaryExpression is not null)

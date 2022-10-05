@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExceptionExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
     using System.Threading;
-    using System.Xml.Linq;
 
     /// <summary>
     /// Extension methods for the <see cref="Exception"/> class.
@@ -27,27 +17,26 @@ namespace Catel
         /// <returns><c>true</c> if the specified exception is critical; otherwise, <c>false</c>.</returns>
         public static bool IsCritical(this Exception ex)
         {
-            while (ex is not null)
+            var currentException = ex;
+            while (currentException is not null)
             {
-                if (ex is OutOfMemoryException ||
-                    ex is BadImageFormatException || 
-                    ex is AppDomainUnloadedException ||
-                    ex is CannotUnloadAppDomainException ||
-                    ex is InvalidProgramException ||
-                    ex is ThreadAbortException ||
-                    ex is StackOverflowException
-                    )
+                if (currentException is OutOfMemoryException ||
+                    currentException is BadImageFormatException || 
+                    currentException is AppDomainUnloadedException ||
+                    currentException is CannotUnloadAppDomainException ||
+                    currentException is InvalidProgramException ||
+                    currentException is ThreadAbortException ||
+                    currentException is StackOverflowException)
                 {
                     return true;
                 }
 
-                ex = ex.InnerException;
+                currentException = currentException.InnerException;
             }
 
             return false;
         }
 
-        #region Methods
         /// <summary>
         /// Flattens the specified exception and inner exception data.
         /// </summary>
@@ -58,12 +47,10 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <param ref="exception"> is <c>null</c>.</param></exception>
         public static string Flatten(this Exception exception, string message = "", bool includeStackTrace = false)
         {
-            Argument.IsNotNull("exception", exception);
-
             var stringBuilder = new StringBuilder(message);
 
             var currentException = exception;
-            while (!ObjectHelper.IsNull(currentException))
+            while (currentException is not null)
             {
                 stringBuilder.AppendLine(currentException.Message);
                 if (includeStackTrace)
@@ -89,13 +76,14 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <param ref="exception"> is <c>null</c>.</param></exception>
         public static IEnumerable<Exception> GetAllInnerExceptions(this Exception exception)
         {
-            Argument.IsNotNull("exception", exception);
-
             var exceptions = new List<Exception>();
 
-            while (!ObjectHelper.IsNull((exception = exception.InnerException)))
+            var processingException = exception;
+            while (processingException is not null)
             {
-                exceptions.Add(exception);
+                exceptions.Add(processingException);
+
+                processingException = processingException.InnerException;
             }
 
             return exceptions.ToArray();
@@ -108,69 +96,17 @@ namespace Catel
         /// <param name="exception">The exception.</param>
         /// <returns>The found exception.</returns>
         /// <exception cref="ArgumentNullException">The <param ref="exception"> is <c>null</c>.</param></exception>
-        public static TException Find<TException>(this Exception exception)
+        public static TException? Find<TException>(this Exception exception)
             where TException : Exception
         {
-            Argument.IsNotNull("exception", exception);
+            Exception? foundException = exception;
 
-            while (!ObjectHelper.IsNull(exception) && !(exception is TException))
+            while (foundException is not null && !(foundException is TException))
             {
-                exception = exception.InnerException;
+                foundException = foundException.InnerException;
             }
 
-            return (TException)exception;
+            return foundException as TException;
         }
-
-        /// <summary>
-        /// Returns the Exception message as XML document.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <returns>An XDocument of the Exception object.</returns>
-        /// <exception cref="ArgumentNullException">The <param ref="exception"> is <c>null</c>.</param></exception>
-        public static XDocument ToXml(this Exception exception)
-        {
-            Argument.IsNotNull("exception", exception);
-
-            var root = new XElement(exception.GetType().ToString());
-
-            if (!string.IsNullOrEmpty(exception.Message))
-            {
-                root.Add(new XElement("Message", exception.Message));
-            }
-
-            if (!ObjectHelper.IsNull(exception.StackTrace))
-            {
-                root.Add
-                (
-                    new XElement("StackTrace",
-                        from frame in exception.StackTrace.Split(new[] { '\n' })
-                        let prettierFrame = frame.Substring(6).Trim()
-                        select new XElement("Frame", prettierFrame))
-                );
-            }
-
-            if (exception.Data.Count > 0)
-            {
-                root.Add
-                (
-                    new XElement("Data",
-                        from entry in exception.Data.Cast<DictionaryEntry>()
-                        let key = entry.Key.ToString()
-                        let value = (ObjectHelper.IsNull(entry.Value)) ? "null" : entry.Value.ToString()
-                        select new XElement(key, value))
-                );
-            }
-
-            if (!ObjectHelper.IsNull(exception.InnerException))
-            {
-                root.Add
-                (
-                    exception.InnerException.ToXml()
-                );
-            }
-
-            return new XDocument(root);
-        }
-        #endregion
     }
 }

@@ -1,13 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotifyRangedCollectionChangedEventArgsExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
-    using System.Collections.Generic;
+    using System;
 
     /// <summary>
     /// The <see cref="NotifyRangedCollectionChangedEventArgs" /> extensions methods.
@@ -21,12 +14,23 @@ namespace Catel.Collections
         /// <param name="other">The other instance.</param>
         public static bool ConsolidateItemsByAppend(this NotifyRangedCollectionChangedEventArgs instance, NotifyRangedCollectionChangedEventArgs other)
         {
+            ArgumentNullException.ThrowIfNull(instance);
+            ArgumentNullException.ThrowIfNull(other);
+
+            // We can't deal non-information
+            if (instance.Indices is null || instance.ChangedItems is null ||
+                other.Indices is null || other.ChangedItems is null)
+            {
+                return false;
+            }
+
             if (other.Indices.Count == 0)
             {
                 return false;
             }
 
             instance.Indices.AddRange(other.Indices);
+
             foreach (var item in other.ChangedItems)
             {
                 instance.ChangedItems.Add(item);
@@ -46,7 +50,12 @@ namespace Catel.Collections
         /// <returns><c>True</c> if consolidation was executed; otherwise <c>False</c></returns>
         public static bool ConsolidateItems(this NotifyRangedCollectionChangedEventArgs instance, NotifyRangedCollectionChangedEventArgs other)
         {
-            if (instance.Indices.Count == 0 || other.Indices.Count == 0)
+            ArgumentNullException.ThrowIfNull(instance);
+            ArgumentNullException.ThrowIfNull(other);
+
+            // We can't deal non-information
+            if (instance.Indices is null || instance.ChangedItems is null ||
+                other.Indices is null || other.ChangedItems is null)
             {
                 return false;
             }
@@ -59,6 +68,7 @@ namespace Catel.Collections
             }
 
             var consolidated = false;
+
             for (var i = instance.Indices.Count - 1; i >= 0; i--)
             {
                 var idx = other.Indices.IndexOf(instance.Indices[i]);

@@ -63,6 +63,7 @@ Added/fixed
 Platform support changes
 ========================
 (-) #1285 Remove support for all frameworks except .NET 6.0
+(+) #2008 Implement nullable support (and remove all argument null checks) 
 
 ===========================================================
 * #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')

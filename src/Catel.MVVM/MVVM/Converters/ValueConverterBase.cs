@@ -87,7 +87,7 @@
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <param name="culture">The culture of the conversion.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
             CurrentCulture = culture;
 
@@ -123,7 +123,7 @@
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <param name="culture">The culture of the conversion.</param>
         /// <returns>The value to be passed to the source object.</returns>
-        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
             CurrentCulture = culture;
 
@@ -157,7 +157,7 @@
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected abstract object Convert(TConvert value, Type targetType, object parameter);
+        protected abstract object Convert(TConvert value, Type targetType, object? parameter);
 
         /// <summary>
         /// Determines whether the specified value is convertable.
@@ -165,7 +165,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the specified value is convertable; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsConvertable<T>(object value)
+        protected virtual bool IsConvertable<T>(object? value)
         {
             var canConvert = true;
             if (ReferenceEquals(value, null))
@@ -194,7 +194,7 @@
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected virtual object ConvertBack(TConvertBack value, Type targetType, object parameter)
+        protected virtual object ConvertBack(TConvertBack value, Type targetType, object? parameter)
         {
             return ConverterHelper.UnsetValue;
         }

@@ -1,14 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceLocatorExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
+    using Catel.Reflection;
     using Logging;
 
     /// <summary>
@@ -22,41 +18,6 @@ namespace Catel.IoC
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Resolves the type from the <see cref="IServiceLocator" />. If the type is not registered, this method will return <c>null</c>.
-        /// </summary>
-        /// <typeparam name="T">The type of the service to retrieve.</typeparam>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <param name="tag">The tag.</param>
-        /// <returns>The resolved type or <c>null</c> if the type is not registered in the <see cref="IServiceLocator" />.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
-        public static T ResolveTypeAndReturnNullIfNotRegistered<T>(this IServiceLocator serviceLocator, object tag = null)
-        {
-            return (T)ResolveTypeAndReturnNullIfNotRegistered(serviceLocator, typeof(T), tag);
-        }
-
-        /// <summary>
-        /// Resolves the type from the <see cref="IServiceLocator"/>. If the type is not registered, this method will return <c>null</c>.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <param name="serviceType">The type of the service to retrieve.</param>
-        /// <param name="tag">The tag.</param>
-        /// <returns>The resolved type or <c>null</c> if the type is not registered in the <see cref="IServiceLocator"/>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        public static object ResolveTypeAndReturnNullIfNotRegistered(this IServiceLocator serviceLocator, Type serviceType, object tag = null)
-        {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-            Argument.IsNotNull("serviceType", serviceType);
-
-            if (serviceLocator.IsTypeRegistered(serviceType, tag))
-            {
-                return serviceLocator.ResolveType(serviceType, tag);
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Resolves the type using parameters. This method combines the <see cref="IServiceLocator.GetRegistrationInfo" /> and
         /// the <see cref="ITypeFactory.CreateInstanceWithParameters" /> to provide the functionality.
         /// </summary>
@@ -68,9 +29,10 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="parameters" /> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The type is not registered in the container as transient type.</exception>
-        public static T ResolveTypeUsingParameters<T>(this IServiceLocator serviceLocator, object[] parameters, object tag = null)
+        public static T? ResolveTypeUsingParameters<T>(this IServiceLocator serviceLocator, object[] parameters, object? tag = null)
+            where T : notnull
         {
-            return (T)ResolveTypeUsingParameters(serviceLocator, typeof(T), parameters, tag);
+            return (T?)ResolveTypeUsingParameters(serviceLocator, typeof(T), parameters, tag);
         }
 
         /// <summary>
@@ -86,20 +48,16 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="parameters" /> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The type is not registered in the container as transient type.</exception>
-        public static object ResolveTypeUsingParameters(this IServiceLocator serviceLocator, Type serviceType, object[] parameters, object tag = null)
+        public static object? ResolveTypeUsingParameters(this IServiceLocator serviceLocator, Type serviceType, object[] parameters, object? tag = null)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-            Argument.IsNotNull("serviceType", serviceType);
-            Argument.IsNotNull("parameters", parameters);
-
             var registrationInfo = serviceLocator.GetRegistrationInfo(serviceType, tag);
             if (registrationInfo is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("The service locator could not return the registration info for type '{0}' with tag '{1}', cannot resolve type",
-                    serviceType.FullName, ObjectToStringHelper.ToString(tag));
+                    serviceType.GetSafeFullName(), ObjectToStringHelper.ToString(tag));
             }
 
-            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+            var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
             if (registrationInfo.RegistrationType == RegistrationType.Singleton)
             {
@@ -108,10 +66,14 @@ namespace Catel.IoC
                     return serviceLocator.ResolveType(serviceType);
                 }
 
-                Log.Debug("Type '{0}' is registered as singleton but has not yet been instantiated. Instantiated it with the specified parameters now and registering it in the ServiceLocator", serviceType.FullName);
+                Log.Debug("Type '{0}' is registered as singleton but has not yet been instantiated. Instantiated it with the specified parameters now and registering it in the ServiceLocator", serviceType.GetSafeFullName());
 
                 var instance = typeFactory.CreateInstanceWithParameters(registrationInfo.ImplementingType, parameters);
-                serviceLocator.RegisterInstance(serviceType, instance);
+                if (instance is not null)
+                {
+                    serviceLocator.RegisterInstance(serviceType, instance);
+                }
+
                 return instance;
             }
 
@@ -127,10 +89,9 @@ namespace Catel.IoC
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static bool IsTypeRegistered<TService>(this IServiceLocator serviceLocator, object tag = null)
+        public static bool IsTypeRegistered<TService>(this IServiceLocator serviceLocator, object? tag = null)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             return serviceLocator.IsTypeRegistered(typeof(TService), tag);
         }
 
@@ -142,10 +103,9 @@ namespace Catel.IoC
         /// <param name="tag">The tag.</param>
         /// <returns><c>true</c> if the <typeparamref name="TService" /> type is registered as singleton, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
-        public static bool IsTypeRegisteredAsSingleton<TService>(this IServiceLocator serviceLocator, object tag = null)
+        public static bool IsTypeRegisteredAsSingleton<TService>(this IServiceLocator serviceLocator, object? tag = null)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             return serviceLocator.IsTypeRegisteredAsSingleton(typeof(TService), tag);
         }
 
@@ -158,12 +118,10 @@ namespace Catel.IoC
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
-        public static void RegisterInstance<TService>(this IServiceLocator serviceLocator, TService instance, object tag = null)
+        public static void RegisterInstance<TService>(this IServiceLocator serviceLocator, TService instance, object? tag = null)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-            Argument.IsNotNull("instance", instance);
-
-            serviceLocator.RegisterInstance(typeof(TService), (object)instance, tag);
+            serviceLocator.RegisterInstance(typeof(TService), instance, tag);
         }
 
         /// <summary>
@@ -176,6 +134,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public static void RegisterTypeIfNotYetRegistered<TService, TServiceImplementation>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+            where TService : notnull
             where TServiceImplementation : TService
         {
             RegisterTypeIfNotYetRegisteredWithTag<TService, TServiceImplementation>(serviceLocator, null, registrationType);
@@ -191,11 +150,10 @@ namespace Catel.IoC
         /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterTypeIfNotYetRegisteredWithTag<TService, TServiceImplementation>(this IServiceLocator serviceLocator, object tag = null, RegistrationType registrationType = RegistrationType.Singleton)
+        public static void RegisterTypeIfNotYetRegisteredWithTag<TService, TServiceImplementation>(this IServiceLocator serviceLocator, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton)
+            where TService : notnull
             where TServiceImplementation : TService
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             serviceLocator.RegisterTypeWithTag<TService, TServiceImplementation>(tag, registrationType, false);
         }
 
@@ -227,10 +185,8 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterTypeIfNotYetRegisteredWithTag(this IServiceLocator serviceLocator, Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton)
+        public static void RegisterTypeIfNotYetRegisteredWithTag(this IServiceLocator serviceLocator, Type serviceType, Type serviceImplementationType, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             serviceLocator.RegisterType(serviceType, serviceImplementationType, tag, registrationType, false);
         }
 
@@ -244,7 +200,7 @@ namespace Catel.IoC
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public static void RegisterType<TServiceImplementation>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
         {
-            RegisterTypeWithTag<TServiceImplementation>(serviceLocator, (object)null, registrationType);
+            RegisterTypeWithTag<TServiceImplementation>(serviceLocator, null, registrationType);
         }
 
         /// <summary>
@@ -256,10 +212,8 @@ namespace Catel.IoC
         /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterTypeWithTag<TServiceImplementation>(this IServiceLocator serviceLocator, object tag = null, RegistrationType registrationType = RegistrationType.Singleton)
+        public static void RegisterTypeWithTag<TServiceImplementation>(this IServiceLocator serviceLocator, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             serviceLocator.RegisterType(typeof(TServiceImplementation), typeof(TServiceImplementation), tag, registrationType);
         }
 
@@ -274,6 +228,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public static void RegisterType<TService, TServiceImplementation>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+            where TService : notnull
             where TServiceImplementation : TService
         {
             RegisterTypeWithTag<TService, TServiceImplementation>(serviceLocator, null, registrationType, registerIfAlreadyRegistered);
@@ -290,11 +245,10 @@ namespace Catel.IoC
         /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterTypeWithTag<TService, TServiceImplementation>(this IServiceLocator serviceLocator, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        public static void RegisterTypeWithTag<TService, TServiceImplementation>(this IServiceLocator serviceLocator, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+            where TService : notnull
             where TServiceImplementation : TService
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             serviceLocator.RegisterType(typeof(TService), typeof(TServiceImplementation), tag, registrationType, registerIfAlreadyRegistered);
         }
 
@@ -310,6 +264,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public static void RegisterType<TService>(this IServiceLocator serviceLocator, Func<ITypeFactory, ServiceLocatorRegistration, TService> createServiceFunc, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+            where TService : notnull
         {
             RegisterTypeWithTag(serviceLocator, createServiceFunc, null, registrationType, registerIfAlreadyRegistered);
         }
@@ -326,11 +281,9 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterTypeWithTag<TService>(this IServiceLocator serviceLocator, Func<ITypeFactory, ServiceLocatorRegistration, TService> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        public static void RegisterTypeWithTag<TService>(this IServiceLocator serviceLocator, Func<ITypeFactory, ServiceLocatorRegistration, TService> createServiceFunc, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-            Argument.IsNotNull("createServiceFunc", createServiceFunc);
-
             serviceLocator.RegisterType(typeof(TService), (tf, reg) => createServiceFunc(tf, reg), tag, registrationType, registerIfAlreadyRegistered);
         }
 
@@ -344,13 +297,11 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static TService ResolveType<TService>(this IServiceLocator serviceLocator, object tag = null)
+        public static TService? ResolveType<TService>(this IServiceLocator serviceLocator, object? tag = null)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
-            return (TService)serviceLocator.ResolveType(typeof(TService), tag);
+            return (TService?)serviceLocator.ResolveType(typeof(TService), tag);
         }
-
 
         /// <summary>
         /// Resolves an instance of the type registered on the service.
@@ -363,16 +314,14 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static TService ResolveTypeUsingFactory<TService>(this IServiceLocator serviceLocator, ITypeFactory typeFactory, object tag = null)
+        public static TService? ResolveTypeUsingFactory<TService>(this IServiceLocator serviceLocator, ITypeFactory typeFactory, object? tag = null)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-            Argument.IsNotNull("typeFactory", typeFactory);
-
-            return (TService)serviceLocator.ResolveTypeUsingFactory(typeFactory, typeof(TService), tag);
+            return (TService?)serviceLocator.ResolveTypeUsingFactory(typeFactory, typeof(TService), tag);
         }
 
         /// <summary>
-        /// Try to resolve an instance of the type registered on the service.
+        /// Resolve the required type or throw an exception when it fails to do so.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <param name="serviceLocator">The service locator.</param>
@@ -380,30 +329,33 @@ namespace Catel.IoC
         /// <returns>An instance of the type registered on the service or <c>null</c> if missing.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static TService TryResolveType<TService>(this IServiceLocator serviceLocator, object tag = null)
+        public static TService ResolveRequiredType<TService>(this IServiceLocator serviceLocator, object? tag = null)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            return (TService)ResolveRequiredType(serviceLocator, typeof(TService), tag);
+        }
 
-            try
+        /// <summary>
+        /// Resolve the required type or throw an exception when it fails to do so.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="serviceType">The service type.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>An instance of the type registered on the service or <c>null</c> if missing.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static object ResolveRequiredType(this IServiceLocator serviceLocator, Type serviceType, object? tag = null)
+        {
+            lock (serviceLocator)
             {
-                lock (serviceLocator)
+                var instance = serviceLocator.ResolveType(serviceType, tag);
+                if (instance is null)
                 {
-                    if (serviceLocator.IsTypeRegistered(typeof (TService), tag))
-                    {
-                        return (TService) serviceLocator.ResolveType(typeof (TService), tag);
-                    }
+                    throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(serviceType, msg), $"Type '{serviceType.GetSafeFullName(true)}' cannot be instantiated");
                 }
-            }
-            catch (TypeNotRegisteredException)
-            {
-                // Prevent first chance exceptions
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
 
-            return default(TService);
+                return instance;
+            }
         }
 
         /// <summary>
@@ -415,9 +367,8 @@ namespace Catel.IoC
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         public static IEnumerable<TService> ResolveTypes<TService>(this IServiceLocator serviceLocator)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             return serviceLocator.ResolveTypes(typeof(TService)).Cast<TService>();
         }
 
@@ -428,10 +379,9 @@ namespace Catel.IoC
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
-        public static void RemoveType<TService>(this IServiceLocator serviceLocator, object tag = null)
+        public static void RemoveType<TService>(this IServiceLocator serviceLocator, object? tag = null)
+            where TService : notnull
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             serviceLocator.RemoveType(typeof(TService), tag);
         }
 
@@ -442,7 +392,8 @@ namespace Catel.IoC
         /// <param name="serviceLocator">The service locator.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static TServiceImplementation RegisterTypeAndInstantiate<TServiceImplementation>(this IServiceLocator serviceLocator)
+        public static TServiceImplementation? RegisterTypeAndInstantiate<TServiceImplementation>(this IServiceLocator serviceLocator)
+            where TServiceImplementation : notnull
         {
             return RegisterTypeAndInstantiate<TServiceImplementation, TServiceImplementation>(serviceLocator);
         }
@@ -456,10 +407,11 @@ namespace Catel.IoC
         /// <returns>TService.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static TService RegisterTypeAndInstantiate<TService, TServiceImplementation>(this IServiceLocator serviceLocator)
+        public static TService? RegisterTypeAndInstantiate<TService, TServiceImplementation>(this IServiceLocator serviceLocator)
+            where TService : notnull
             where TServiceImplementation : TService
         {
-            object tag = null;
+            object? tag = null;
 
             RegisterTypeWithTag<TService, TServiceImplementation>(serviceLocator, tag, RegistrationType.Singleton);
 

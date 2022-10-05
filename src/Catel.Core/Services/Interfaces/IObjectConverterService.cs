@@ -1,11 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IObjectConverterService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Globalization;
@@ -26,7 +19,7 @@ namespace Catel.Services
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The string value.</returns>
-        string ConvertFromObjectToString(object value);
+        string ConvertFromObjectToString(object? value);
 
         /// <summary>
         /// Converts the specified object to a string.
@@ -34,7 +27,7 @@ namespace Catel.Services
         /// <param name="value">The value.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>The string value.</returns>
-        string ConvertFromObjectToString(object value, CultureInfo culture);
+        string ConvertFromObjectToString(object? value, CultureInfo culture);
 
         /// <summary>
         /// Converts the specified string value to an object.
@@ -42,7 +35,7 @@ namespace Catel.Services
         /// <param name="value">The value.</param>
         /// <param name="targetType">The target type.</param>
         /// <returns>The object value.</returns>
-        object ConvertFromStringToObject(string value, Type targetType);
+        object? ConvertFromStringToObject(string value, Type targetType);
 
         /// <summary>
         /// Converts the specified string value to an object.
@@ -51,7 +44,7 @@ namespace Catel.Services
         /// <param name="targetType">The target type.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>The object value.</returns>
-        object ConvertFromStringToObject(string value, Type targetType, CultureInfo culture);
+        object? ConvertFromStringToObject(string value, Type targetType, CultureInfo culture);
 
         /// <summary>
         /// Converts the specified object to an object.
@@ -59,6 +52,6 @@ namespace Catel.Services
         /// <param name="value">The value.</param>
         /// <param name="targetType">Type of the target.</param>
         /// <returns>The object value.</returns>
-        object ConvertFromObjectToObject(object value, Type targetType);
+        object? ConvertFromObjectToObject(object? value, Type targetType);
     }
 }

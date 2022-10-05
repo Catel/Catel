@@ -1,9 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DurationExpirationPolicy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Caching.Policies
+﻿namespace Catel.Caching.Policies
 {
     using System;
 
@@ -12,8 +7,6 @@ namespace Catel.Caching.Policies
     /// </summary>
     public class DurationExpirationPolicy : AbsoluteExpirationPolicy
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DurationExpirationPolicy"/> class.
         /// </summary>
@@ -40,14 +33,9 @@ namespace Catel.Caching.Policies
             DurationTimeSpan = durationTimeSpan;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets the expiration.
         /// </summary>
         protected TimeSpan DurationTimeSpan { get; set; }
-        #endregion
     }
 }

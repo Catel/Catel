@@ -1,13 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.serialization.xml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System.Xml;
-    using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using Runtime.Serialization.Xml;
@@ -25,7 +18,7 @@ namespace Catel.Data
         /// <returns>
         /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
         /// </returns>
-        XmlSchema IXmlSerializable.GetSchema()
+        XmlSchema? IXmlSerializable.GetSchema()
         {
             // As requested by the documentation, we return null
             return null;

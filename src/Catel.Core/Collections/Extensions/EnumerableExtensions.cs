@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumerableExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2019 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -26,12 +19,10 @@ namespace Catel.Collections
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
         /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to compare keys.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains values of type <typeparamref name="TElement"/> selected from the input sequence.</returns>
-        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, 
+            Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+            where TKey : notnull
         {
-            Argument.IsNotNull(nameof(source), source);
-            Argument.IsNotNull(nameof(keySelector), keySelector);
-            Argument.IsNotNull(nameof(elementSelector), elementSelector);
-
             var d = new FastObservableDictionary<TKey, TElement>(comparer);
 
             foreach (var element in source)
@@ -53,6 +44,7 @@ namespace Catel.Collections
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains values of type <typeparamref name="TElement"/> selected from the input sequence.</returns>
         public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+            where TKey : notnull
         {
             return ToObservableDictionary(source, keySelector, elementSelector, null);
         }
@@ -66,7 +58,8 @@ namespace Catel.Collections
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to compare keys.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains keys and values.</returns>
-        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+            where TKey : notnull
         {
             return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, comparer);
         }
@@ -80,6 +73,7 @@ namespace Catel.Collections
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains keys and values.</returns>
         public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+            where TKey : notnull
         {
             return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, null);
         }

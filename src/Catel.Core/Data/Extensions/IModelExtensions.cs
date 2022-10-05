@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IModelExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -23,8 +16,6 @@ namespace Catel.Data
         /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
         public static void ClearIsDirtyOnAllChildren(this IModel model, bool suspendNotifications = false)
         {
-            Argument.IsNotNull("model", model);
-
             ClearIsDirtyOnAllChildren(model, new HashSet<object>(), suspendNotifications);
         }
 

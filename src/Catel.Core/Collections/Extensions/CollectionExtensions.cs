@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System;
     using System.Collections;
@@ -12,6 +6,7 @@ namespace Catel.Collections
     using System.Collections.ObjectModel;
     using System.Linq;
     using Logging;
+    using Microsoft.VisualBasic;
 
     /// <summary>
     /// Extensions for the <see cref="ICollection"/> and <see cref="Collection{T}"/> classes.
@@ -33,7 +28,7 @@ namespace Catel.Collections
         /// <returns>The index of the item in the is if it's present; otherwise <value>-1</value></returns>
         public static int IndexOf<T>(this IList<T> list, T item, int index)
         {
-            Argument.IsNotNull("list", list);
+            ArgumentNullException.ThrowIfNull(list);
 
             var asList = list as List<T>;
             if (asList is not null)
@@ -65,7 +60,6 @@ namespace Catel.Collections
             return -1;
         }
 
-
         /// <summary>
         /// Determines whether the item can be moved up in the list.
         /// </summary>
@@ -75,7 +69,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="list"/> is <c>null</c>.</exception>
         public static bool CanMoveItemUp(this IList list, object item)
         {
-            Argument.IsNotNull("list", list);
+            ArgumentNullException.ThrowIfNull(list);
 
             if (item is null)
             {
@@ -105,8 +99,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="item"/> is <c>null</c>.</exception>
         public static bool MoveItemUp(this IList list, object item)
         {
-            Argument.IsNotNull("list", list);
-            Argument.IsNotNull("item", item);
+            ArgumentNullException.ThrowIfNull(list);
+            ArgumentNullException.ThrowIfNull(item);
 
             var currentIndex = list.IndexOf(item);
             if (currentIndex == -1)
@@ -127,7 +121,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="list"/> is <c>null</c>.</exception>
         public static bool CanMoveItemDown(this IList list, object item)
         {
-            Argument.IsNotNull("list", list);
+            ArgumentNullException.ThrowIfNull(list);
 
             if (item is null)
             {
@@ -163,7 +157,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="index"/> is smaller than 0 or larger than the list count.</exception>
         public static bool MoveItemUpByIndex(this IList list, int index)
         {
-            Argument.IsNotNull("list", list);
+            ArgumentNullException.ThrowIfNull(list);
             Argument.IsNotOutOfRange("index", index, 0, list.Count - 1);
 
             if (list.Count < index - 1)
@@ -195,8 +189,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="item"/> is <c>null</c>.</exception>
         public static bool MoveItemDown(this IList list, object item)
         {
-            Argument.IsNotNull("list", list);
-            Argument.IsNotNull("item", item);
+            ArgumentNullException.ThrowIfNull(list);
+            ArgumentNullException.ThrowIfNull(item);
 
             var currentIndex = list.IndexOf(item);
             if (currentIndex == -1)
@@ -218,7 +212,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="index"/> is smaller than 0 or larger than the list count.</exception>
         public static bool MoveItemDownByIndex(this IList list, int index)
         {
-            Argument.IsNotNull("list", list);
+            ArgumentNullException.ThrowIfNull(list);
             Argument.IsNotOutOfRange("index", index, 0, list.Count - 1);
 
             if (list.Count < index - 1)
@@ -250,8 +244,8 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> range)
         {
-            Argument.IsNotNull("collection", collection);
-            Argument.IsNotNull("range", range);
+            ArgumentNullException.ThrowIfNull(collection);
+            ArgumentNullException.ThrowIfNull(range);
 
             foreach (T curItem in range)
             {
@@ -270,8 +264,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
         public static void ReplaceRange<T>(this ICollection<T> collection, IEnumerable<T> range)
         {
-            Argument.IsNotNull("collection", collection);
-            Argument.IsNotNull("range", range);
+            ArgumentNullException.ThrowIfNull(collection);
 
             collection.Clear();
 
@@ -287,7 +280,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="list"/> is <c>null</c>.</exception>
         public static void RemoveFirst(this IList list)
         {
-            Argument.IsNotNull("list", list);
+            ArgumentNullException.ThrowIfNull(list);
 
             if (list.Count == 0)
             {
@@ -306,7 +299,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="list"/> is <c>null</c>.</exception>
         public static void RemoveLast(this IList list)
         {
-            Argument.IsNotNull("list", list);
+            ArgumentNullException.ThrowIfNull(list);
 
             if (list.Count == 0)
             {
@@ -344,7 +337,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public static ReadOnlyCollection<T> AsReadOnly<T>(this IList<T> collection)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             return new ReadOnlyCollection<T>(collection);
         }
@@ -357,7 +350,7 @@ namespace Catel.Collections
         /// <returns>Array.</returns>
         public static Array ToArray(this IEnumerable collection, Type elementType)
         {
-            Argument.IsNotNull("elementType", elementType);
+            ArgumentNullException.ThrowIfNull(collection);
 
             var internalList = new List<object>(collection is not null ? collection.Cast<object>() : Array.Empty<object>());
             var array = Array.CreateInstance(elementType, internalList.Count);
@@ -382,6 +375,9 @@ namespace Catel.Collections
         /// <returns>IEnumerable&lt;T&gt;.</returns>
         public static IEnumerable<T> SynchronizeCollection<T>(this IList<T> existingSet, IEnumerable<T> newSet, bool updateExistingSet = true)
         {
+            ArgumentNullException.ThrowIfNull(existingSet);
+            ArgumentNullException.ThrowIfNull(newSet);
+
             return SynchronizeCollection((ICollection<T>)existingSet, newSet, updateExistingSet);
         }
         
@@ -395,6 +391,9 @@ namespace Catel.Collections
         /// <returns>IEnumerable&lt;T&gt;.</returns>
         public static IEnumerable<T> SynchronizeCollection<T>(this ICollection<T> existingSet, IEnumerable<T> newSet, bool updateExistingSet = true)
         {
+            ArgumentNullException.ThrowIfNull(existingSet);
+            ArgumentNullException.ThrowIfNull(newSet);
+
             var finalSet = updateExistingSet ? existingSet : new List<T>(existingSet);
             var itemsToRemove = new List<T>(existingSet);
             var itemsToAdd = new List<T>();
@@ -430,9 +429,9 @@ namespace Catel.Collections
         /// <typeparam name="T">The type of elements.</typeparam>
         /// <param name="existingSet">The existing set.</param>
         /// <param name="comparer">The comparer.</param>
-        public static void Sort<T>(this IList<T> existingSet, Func<T, T, int> comparer = null)
+        public static void Sort<T>(this IList<T> existingSet, Func<T, T, int>? comparer = null)
         {
-            Argument.IsNotNull("existingSet", existingSet);
+            ArgumentNullException.ThrowIfNull(existingSet);
 
             for (var i = existingSet.Count - 1; i >= 0; i--)
             {
@@ -441,7 +440,7 @@ namespace Catel.Collections
                     var o1 = existingSet[j - 1];
                     var o2 = existingSet[j];
 
-                    bool reshuffle;
+                    bool reshuffle = false;
 
                     if (comparer is not null)
                     {
@@ -449,7 +448,10 @@ namespace Catel.Collections
                     }
                     else
                     {
-                        reshuffle = ((IComparable<T>)o1).CompareTo(o2) > 0;
+                        if (o1 is not null)
+                        {
+                            reshuffle = ((IComparable<T>)o1).CompareTo(o2) > 0;
+                        }
                     }
 
                     if (reshuffle)

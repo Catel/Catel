@@ -11,7 +11,7 @@
         private readonly Guid _randomGuid = Guid.NewGuid();
         private readonly string _rootDirectory;
 
-        public TemporaryFilesContext(string name = null)
+        public TemporaryFilesContext(string? name = null)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

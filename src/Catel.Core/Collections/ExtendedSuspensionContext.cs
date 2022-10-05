@@ -1,10 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtendedSuspensionContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Collections
+﻿namespace Catel.Collections
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
@@ -15,7 +9,6 @@ namespace Catel.Collections
     /// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
     public class ExtendedSuspensionContext<T>
     {
-        #region Fields
         private readonly List<int> _newItemIndices = new List<int>();
 
         private readonly List<T> _newItems = new List<T>();
@@ -33,9 +26,7 @@ namespace Catel.Collections
         private int _suspensionCount;
 
         private readonly SuspensionMode _suspensionMode;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtendedSuspensionContext{T}" /> class.
         /// </summary>
@@ -44,9 +35,7 @@ namespace Catel.Collections
         {
             _suspensionMode = mode;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the suspension count.
         /// </summary>
@@ -160,9 +149,7 @@ namespace Catel.Collections
                 return _mixedActions;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Tries to remove the item from old items
         /// </summary>
@@ -225,6 +212,5 @@ namespace Catel.Collections
 
             return false;
         }
-        #endregion
     }
 }

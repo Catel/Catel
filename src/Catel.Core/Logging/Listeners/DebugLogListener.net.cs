@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DebugLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-// Define debug so this code doesn't get stripped out
+﻿// Define debug so this code doesn't get stripped out
 #define DEBUG
 
 namespace Catel.Logging
@@ -22,7 +16,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             var consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
 

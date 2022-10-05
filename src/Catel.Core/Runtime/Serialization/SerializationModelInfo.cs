@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationModelCache.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -28,14 +21,9 @@ namespace Catel.Runtime.Serialization
         public SerializationModelInfo(Type modelType, Dictionary<string, MemberMetadata> catelProperties, Dictionary<string, MemberMetadata> fields,
             Dictionary<string, MemberMetadata> regularProperties)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("catelProperties", catelProperties);
-            Argument.IsNotNull("fields", fields);
-            Argument.IsNotNull("properties", regularProperties);
-
             ModelType = modelType;
 
-            CatelTypeInfo catelTypeInfo = null;
+            CatelTypeInfo? catelTypeInfo = null;
 
             CatelPropertyNames = new HashSet<string>(catelProperties.Keys);
             CatelProperties = new List<IPropertyData>();
@@ -68,7 +56,10 @@ namespace Catel.Runtime.Serialization
                     fieldInfo = modelType.GetFieldEx(field.Key);
                 }
 
-                Fields.Add(fieldInfo);
+                if (fieldInfo is not null)
+                {
+                    Fields.Add(fieldInfo);
+                }
             }
 
             PropertyNames = new HashSet<string>(regularProperties.Keys);
@@ -83,7 +74,10 @@ namespace Catel.Runtime.Serialization
                     propertyInfo = modelType.GetPropertyEx(regularProperty.Key);
                 }
 
-                Properties.Add(propertyInfo);
+                if (propertyInfo is not null)
+                {
+                    Properties.Add(propertyInfo);
+                }
             }
         }
 

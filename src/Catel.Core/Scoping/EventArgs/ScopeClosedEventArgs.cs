@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScopeClosedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Scoping
+﻿namespace Catel.Scoping
 {
     using System;
 
@@ -19,7 +12,7 @@ namespace Catel.Scoping
         /// </summary>
         /// <param name="scopeObject">The scope object.</param>
         /// <param name="scopeName">Name of the scope.</param>
-        public ScopeClosedEventArgs(object scopeObject, string scopeName)
+        public ScopeClosedEventArgs(object? scopeObject, string scopeName)
         {
             ScopeObject = scopeObject;
             ScopeName = scopeName;
@@ -29,7 +22,7 @@ namespace Catel.Scoping
         /// Gets the scope object.
         /// </summary>
         /// <value>The scope object.</value>
-        public object ScopeObject { get; private set; }
+        public object? ScopeObject { get; private set; }
 
         /// <summary>
         /// Gets the name of the scope.

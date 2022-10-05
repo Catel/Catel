@@ -1,17 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BoxingCache.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Timers;
     using Catel.Logging;
-    using Catel.Reflection;
 
     /// <summary>
     /// Boxing cache helper.
@@ -28,8 +20,9 @@ namespace Catel.Data
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly Dictionary<T, object> _boxedValues = new Dictionary<T, object>();
-        //private readonly Dictionary<object, T> _unboxedValues = new Dictionary<object, T>();
+#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+        private readonly Dictionary<T, object> _boxedValues = new();
+#pragma warning restore CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
 
         private TimeSpan _cleanUpInterval = TimeSpan.FromMinutes(5);
 
@@ -66,7 +59,7 @@ namespace Catel.Data
             {
                 _cleanUpInterval = value;
 
-                Log.Debug($"Cleanup interval is set to '{value.ToString()}'");
+                Log.Debug($"Cleanup interval is set to '{value}'");
 
                 _cleanUpTimer.Stop();
 
@@ -78,8 +71,13 @@ namespace Catel.Data
         /// Adds the value to the cache.
         /// </summary>
         /// <param name="value">The value to add to the cache.</param>
-        protected object AddUnboxedValue(T value)
+        protected object? AddUnboxedValue(T value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             var boxedValue = (object)value;
 
             lock (_boxedValues)
@@ -125,7 +123,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="value">The value to box.</param>
         /// <returns>The boxed value.</returns>
-        public object GetBoxedValue(T value)
+        public object? GetBoxedValue(T? value)
         {
             if (value is null)
             {
@@ -180,7 +178,7 @@ namespace Catel.Data
             //}
         }
 
-        private void OnCleanUpTimerElapsed(object sender, ElapsedEventArgs e)
+        private void OnCleanUpTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _cleanUpTimer.Stop();
 

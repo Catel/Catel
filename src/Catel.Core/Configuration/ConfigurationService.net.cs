@@ -6,7 +6,6 @@
     using System.Timers;
     using Catel.Data;
     using Catel.Logging;
-    using Catel.Runtime.Serialization;
 
     public partial class ConfigurationService
     {
@@ -15,9 +14,9 @@
         /// </summary>
         /// <param name="container">The settings container.</param>
         /// <returns>The settings container.</returns>
-        protected virtual async Task<DynamicConfiguration> GetSettingsContainerAsync(ConfigurationContainer container)
+        protected virtual async Task<DynamicConfiguration?> GetSettingsContainerAsync(ConfigurationContainer container)
         {
-            DynamicConfiguration settings = null;
+            DynamicConfiguration? settings = null;
 
             switch (container)
             {
@@ -53,10 +52,6 @@
 
                 if (settings is not null)
                 {
-                    // As soon as we initialized the config, make sure we do a 1-time write so we have the serializer and all required objects
-                    // to prevent any deadlocks when resolving required services when doing a delayed save of the settings
-                    _xmlSerializer ??= SerializationFactory.GetXmlSerializer();
-
                     switch (container)
                     {
                         case ConfigurationContainer.Local:
@@ -73,14 +68,14 @@
             return settings;
         }
 
-        private async void OnLocalSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnLocalSaveConfigurationTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _localSaveConfigurationTimer.Stop();
 
             await SaveLocalConfigurationAsync();
         }
 
-        private async void OnRoamingSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnRoamingSaveConfigurationTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _roamingSaveConfigurationTimer.Stop();
 
@@ -137,7 +132,16 @@
             using (await lockObject.LockAsync())
             {
                 var settings = await GetSettingsContainerAsync(container);
+                if (settings is null)
+                {
+                    return;
+                }
+
                 var fileName = _localConfigFilePath;
+                if (fileName is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("Cannot save local configuration without a file name");
+                }
 
                 try
                 {
@@ -158,7 +162,16 @@
             using (await lockObject.LockAsync())
             {
                 var settings = await GetSettingsContainerAsync(container);
+                if (settings is null)
+                {
+                    return;
+                }
+
                 var fileName = _roamingConfigFilePath;
+                if (fileName is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("Cannot save roaming configuration without a file name");
+                }
 
                 try
                 {
@@ -175,7 +188,7 @@
         {
             using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                configuration.Save(fileStream, _xmlSerializer);
+                configuration.Save(fileStream, _serializer);
             }
         }
     }

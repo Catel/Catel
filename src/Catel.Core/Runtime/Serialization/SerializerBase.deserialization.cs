@@ -1,16 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializerBase.deserialization.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using Catel.IoC;
     using Collections;
     using Logging;
     using Reflection;
@@ -20,27 +16,25 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public partial class SerializerBase<TSerializationContextInfo>
     {
-        #region Events
         /// <summary>
         /// Occurs when an object is about to be serialized.
         /// </summary>
-        public event EventHandler<SerializationEventArgs> Serializing;
+        public event EventHandler<SerializationEventArgs>? Serializing;
 
         /// <summary>
         /// Occurs when an object is about to serialize a specific member.
         /// </summary>
-        public event EventHandler<MemberSerializationEventArgs> SerializingMember;
+        public event EventHandler<MemberSerializationEventArgs>? SerializingMember;
 
         /// <summary>
         /// Occurs when an object has just serialized a specific member.
         /// </summary>
-        public event EventHandler<MemberSerializationEventArgs> SerializedMember;
+        public event EventHandler<MemberSerializationEventArgs>? SerializedMember;
 
         /// <summary>
         /// Occurs when an object has just been serialized.
         /// </summary>
-        public event EventHandler<SerializationEventArgs> Serialized;
-        #endregion
+        public event EventHandler<SerializationEventArgs>? Serialized;
 
         /// <summary>
         /// Called before the serializer starts deserializing an object.
@@ -84,7 +78,6 @@ namespace Catel.Runtime.Serialization
         {
         }
 
-        #region Methods
         /// <summary>
         /// Deserializes the specified model.
         /// </summary>
@@ -94,11 +87,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized model.
         /// </returns>
-        public virtual object Deserialize(object model, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual object? Deserialize(object model, Stream stream, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("stream", stream);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -119,7 +109,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized model.
         /// </returns>
-        public object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public object? Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             return Deserialize(model, (TSerializationContextInfo)serializationContext, configuration);
         }
@@ -131,11 +121,8 @@ namespace Catel.Runtime.Serialization
         /// <param name="serializationContext">The serialization context.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual object? Deserialize(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("context", serializationContext);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -152,11 +139,8 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The serialization context.</param>
-        protected virtual object Deserialize(object model, ISerializationContext<TSerializationContextInfo> context)
+        protected virtual object? Deserialize(object model, ISerializationContext<TSerializationContextInfo> context)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("context", context);
-
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
 
             //Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, context.ModelTypeName);
@@ -199,11 +183,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public virtual object Deserialize(Type modelType, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual object? Deserialize(Type modelType, Stream stream, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("stream", stream);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -224,7 +205,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public object? Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
             return Deserialize(modelType, (TSerializationContextInfo)serializationContext, configuration);
         }
@@ -238,12 +219,9 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public virtual object Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual object? Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", serializationContext);
-
-            var model = TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateRequiredInstance(modelType);
 
             Deserialize(model, serializationContext, configuration);
 
@@ -259,11 +237,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("stream", stream);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -284,11 +259,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(object model, Stream stream, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(object model, Stream stream, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("stream", stream);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -309,7 +281,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration configuration = null)
+        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration? configuration = null)
         {
             return DeserializeMembers(modelType, (TSerializationContextInfo)serializationContextInfo, configuration);
         }
@@ -323,11 +295,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", serializationContext);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -348,7 +317,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public List<MemberValue> DeserializeMembers(object model, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration configuration = null)
+        public List<MemberValue> DeserializeMembers(object model, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration? configuration = null)
         {
             return DeserializeMembers(model, (TSerializationContextInfo)serializationContextInfo, configuration);
         }
@@ -362,11 +331,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("context", serializationContext);
-
             using (GetCurrentSerializationScopeManager(configuration))
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
@@ -401,6 +367,7 @@ namespace Catel.Runtime.Serialization
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType).Reverse();
 
             var membersToDeserialize = GetSerializableMembers(context, context.Model);
+
             foreach (var member in membersToDeserialize)
             {
                 StartMemberDeserialization(context, member);
@@ -436,7 +403,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="member">The member that has been deserialized.</param>
         /// <param name="serializationObject">Result of the member deserialization.</param>
         /// <param name="serializerModifiers">The serializer modifiers.</param>
-        protected virtual MemberValue EndMemberDeserialization(ISerializationContext<TSerializationContextInfo> context, MemberValue member,
+        protected virtual MemberValue? EndMemberDeserialization(ISerializationContext<TSerializationContextInfo> context, MemberValue member,
             SerializationObject serializationObject, IEnumerable<ISerializerModifier> serializerModifiers)
         {
             if (!serializationObject.IsSuccessful)
@@ -463,6 +430,11 @@ namespace Catel.Runtime.Serialization
                 {
                     foreach (var item in enumerable)
                     {
+                        if (item.Key is null)
+                        {
+                            continue;
+                        }
+
                         targetDictionary.Add(item.Key, item.Value);
                     }
                 }
@@ -483,30 +455,37 @@ namespace Catel.Runtime.Serialization
             else if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
             {
                 var sourceCollection = memberValue.Value as IEnumerable;
-
-                if (member.MemberType.IsArrayEx())
+                if (sourceCollection is not null)
                 {
-                    var elementType = member.MemberType.GetElementTypeEx();
-                    member.Value = sourceCollection.ToArray(elementType);
-                }
-                else
-                {
-                    var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
-                    if (targetCollection is null)
+                    if (member.MemberType.IsArrayEx())
                     {
-                        throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
-                            context.ModelTypeName);
-                    }
-
-                    if (sourceCollection is not null)
-                    {
-                        foreach (var item in sourceCollection)
+                        var elementType = member.MemberType.GetElementTypeEx();
+                        if (elementType is null)
                         {
-                            targetCollection.Add(item);
+                            elementType = typeof(object);
                         }
-                    }
 
-                    member.Value = targetCollection;
+                        member.Value = sourceCollection.ToArray(elementType);
+                    }
+                    else
+                    {
+                        var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
+                        if (targetCollection is null)
+                        {
+                            throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
+                                context.ModelTypeName);
+                        }
+
+                        if (sourceCollection is not null)
+                        {
+                            foreach (var item in sourceCollection)
+                            {
+                                targetCollection.Add(item);
+                            }
+                        }
+
+                        member.Value = targetCollection;
+                    }
                 }
             }
             else
@@ -533,7 +512,7 @@ namespace Catel.Runtime.Serialization
         /// Deserializes the object using the <c>Parse(string, IFormatProvider)</c> method.
         /// </summary>
         /// <returns>The deserialized object.</returns>
-        protected virtual object DeserializeUsingObjectParse(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
+        protected virtual object? DeserializeUsingObjectParse(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             // Note: don't use GetBestMemberType, it could return string type
             var parseMethod = GetObjectParseMethod(memberValue.MemberType);
@@ -550,7 +529,11 @@ namespace Catel.Runtime.Serialization
 
             try
             {
-                var obj = parseMethod.Invoke(null, new object[] { memberValueAsString, context.Configuration.Culture });
+                var obj = parseMethod.Invoke(null, new object[] 
+                { 
+                    memberValueAsString, context.Configuration?.Culture ?? CultureInfo.InvariantCulture 
+                });
+
                 return obj;
             }
             catch (Exception ex)
@@ -559,6 +542,5 @@ namespace Catel.Runtime.Serialization
                 return null;
             }
         }
-        #endregion
     }
 }

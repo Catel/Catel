@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using Catel.Runtime.Serialization.Xml;
     using IoC;
@@ -22,7 +16,7 @@ namespace Catel.Runtime.Serialization
         public static IXmlSerializer GetXmlSerializer()
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            return dependencyResolver.Resolve<IXmlSerializer>();
+            return dependencyResolver.ResolveRequired<IXmlSerializer>();
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScopeManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-//#define EXTREME_LOGGING
+﻿//#define EXTREME_LOGGING
 
 namespace Catel.Scoping
 {
@@ -28,7 +22,7 @@ namespace Catel.Scoping
         private static readonly Dictionary<string, object> _instances = new Dictionary<string, object>();
 
         private readonly string _scopeName;
-        private T _scopeObject;
+        private readonly T _scopeObject;
         private int _refCount;
 
         /// <summary>
@@ -44,7 +38,7 @@ namespace Catel.Scoping
         /// </summary>
         /// <param name="scopeName">Name of the scope.</param>
         /// <param name="createScopeFunction">The create scope function.</param>
-        protected ScopeManager(string scopeName, Func<T> createScopeFunction)
+        protected ScopeManager(string scopeName, Func<T>? createScopeFunction)
         {
             _scopeName = scopeName;
 
@@ -59,14 +53,20 @@ namespace Catel.Scoping
                 Log.Debug($"No custom function to create the scope is provided, creating custom scope for type '{TypeName}' with name '{_scopeName}' using TypeFactory");
 
                 var typeFactory = this.GetTypeFactory();
-                _scopeObject = typeFactory.CreateInstance<T>();
+                var scopeObject = typeFactory.CreateInstance<T>();
+                if (scopeObject is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Failed to create scope object '{typeof(T).GetSafeFullName()}'");
+                }
+
+                _scopeObject = scopeObject;
             }
         }
 
         /// <summary>
         /// Occurs when the scope reference count reaches zero.
         /// </summary>
-        public event EventHandler<ScopeClosedEventArgs> ScopeClosed;
+        public event EventHandler<ScopeClosedEventArgs>? ScopeClosed;
 
         /// <summary>
         /// Gets the scope object.
@@ -104,7 +104,6 @@ namespace Catel.Scoping
             DeRef();
         }
 
-        #region Methods
         private void AddRef()
         {
             lock (_lock)
@@ -131,20 +130,20 @@ namespace Catel.Scoping
                 {
                     Log.Debug($"Type '{TypeName}' with scope name '{_scopeName}' has reached a ref count of 0, scope is closed now");
 
-                    var scopeObjectAsDisposable = _scopeObject as IDisposable;
+                    var scopeObject = _scopeObject;
+
+                    var scopeObjectAsDisposable = scopeObject as IDisposable;
                     if (scopeObjectAsDisposable is not null)
                     {
                         scopeObjectAsDisposable.Dispose();
                     }
-
-                    _scopeObject = null;
 
                     _instances.Remove(_scopeName);
 
                     var scopeClosed = ScopeClosed;
                     if (scopeClosed is not null)
                     {
-                        scopeClosed.Invoke(this, new ScopeClosedEventArgs(ScopeObject, _scopeName));
+                        scopeClosed.Invoke(this, new ScopeClosedEventArgs(scopeObject, _scopeName));
                     }
                 }
             }
@@ -158,8 +157,6 @@ namespace Catel.Scoping
         /// <exception cref="ArgumentException">The <paramref name="scopeName"/> is <c>null</c>.</exception>
         public static bool ScopeExists(string scopeName = "")
         {
-            Argument.IsNotNull("scopeName", scopeName);
-
             lock (_lock)
             {
                 return _instances.ContainsKey(scopeName);
@@ -173,10 +170,8 @@ namespace Catel.Scoping
         /// <param name="createScopeFunction">The create scope function. Can be <c>null</c>.</param>
         /// <returns>The <see cref="ScopeManager{T}" />.</returns>
         /// <exception cref="ArgumentException">The <paramref name="scopeName"/> is <c>null</c>.</exception>
-        public static ScopeManager<T> GetScopeManager(string scopeName = "", Func<T> createScopeFunction = null)
+        public static ScopeManager<T> GetScopeManager(string scopeName = "", Func<T>? createScopeFunction = null)
         {
-            Argument.IsNotNull("scopeName", scopeName);
-
             lock (_lock)
             {
                 ScopeManager<T> scopeManager;
@@ -204,6 +199,5 @@ namespace Catel.Scoping
                 return scopeManager;
             }
         }
-        #endregion
     }
 }

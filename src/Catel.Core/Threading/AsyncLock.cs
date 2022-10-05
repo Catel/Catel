@@ -179,7 +179,7 @@
         /// </summary>
         internal void ReleaseLock()
         {
-            IDisposable queuedLocker = null;
+            IDisposable? queuedLocker = null;
 
             lock (_mutex)
             {

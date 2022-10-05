@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSerializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections;
@@ -29,16 +23,13 @@ namespace Catel.Runtime.Serialization.Xml
     /// </summary>
     public class XmlSerializer : SerializerBase<XmlSerializationContextInfo>, IXmlSerializer
     {
-        #region Enums
         private enum MemberType
         {
             Field,
 
             Property
         }
-        #endregion
 
-        #region Constants
         private const string XmlIsNull = "IsNull";
         private const string XmlType = "type";
         private const string XmlGraphId = "graphid";
@@ -48,16 +39,12 @@ namespace Catel.Runtime.Serialization.Xml
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
         private readonly CacheStorage<Type, HashSet<string>> _ignoredMembersCache = new CacheStorage<Type, HashSet<string>>();
         private readonly CacheStorage<Type, string> _rootNameCache = new CacheStorage<Type, string>();
         private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
         private readonly IXmlNamespaceManager _xmlNamespaceManager;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlSerializer" /> class.
         /// </summary>
@@ -73,15 +60,10 @@ namespace Catel.Runtime.Serialization.Xml
             IXmlNamespaceManager xmlNamespaceManager, ITypeFactory typeFactory, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
             : base(serializationManager, typeFactory, objectAdapter)
         {
-            Argument.IsNotNull("dataContractSerializerFactory", dataContractSerializerFactory);
-            Argument.IsNotNull("xmlNamespaceManager", xmlNamespaceManager);
-
             _dataContractSerializerFactory = dataContractSerializerFactory;
             _xmlNamespaceManager = xmlNamespaceManager;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Serializes the specified model.
         /// </summary>
@@ -95,23 +77,24 @@ namespace Catel.Runtime.Serialization.Xml
                 if (customXmlSerializable is not null)
                 {
                     var xmlWriter = context.Context.XmlWriter;
-
-                    if (context.Context.IsRootObject)
+                    if (xmlWriter is not null)
                     {
-                        var rootName = GetObjectRootName(context);
+                        if (context.Context.IsRootObject)
+                        {
+                            var rootName = GetObjectRootName(context);
 
-                        xmlWriter.WriteStartElement(rootName);
+                            xmlWriter.WriteStartElement(rootName);
 
-                        EnsureNamespaceInXmlWriter(context, xmlWriter, null);
+                            EnsureNamespaceInXmlWriter(context, xmlWriter, null);
+                        }
+
+                        customXmlSerializable.Serialize(xmlWriter);
+
+                        if (context.Context.IsRootObject)
+                        {
+                            xmlWriter.WriteEndElement();
+                        }
                     }
-
-                    customXmlSerializable.Serialize(xmlWriter);
-
-                    if (context.Context.IsRootObject)
-                    {
-                        xmlWriter.WriteEndElement();
-                    }
-
                     return;
                 }
             }
@@ -125,7 +108,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        protected override object Deserialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
+        protected override object? Deserialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
         {
             if (context.Context.AllowCustomXmlSerialization)
             {
@@ -133,10 +116,12 @@ namespace Catel.Runtime.Serialization.Xml
                 if (customXmlSerializable is not null)
                 {
                     var xmlReader = context.Context.XmlReader;
+                    if (xmlReader is not null)
+                    {
+                        customXmlSerializable.Deserialize(xmlReader);
 
-                    customXmlSerializable.Deserialize(xmlReader);
-
-                    return customXmlSerializable;
+                        return customXmlSerializable;
+                    }
                 }
             }
 
@@ -179,7 +164,8 @@ namespace Catel.Runtime.Serialization.Xml
 
             try
             {
-                Type memberRepresentedType = null;
+                Type? memberRepresentedType = null;
+
                 switch (memberType)
                 {
                     case MemberType.Field:
@@ -211,8 +197,11 @@ namespace Catel.Runtime.Serialization.Xml
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, memberName);
                 }
 
-                // Cache
-                _dataContractSerializerFactory.GetDataContractSerializer(type, memberRepresentedType, xmlName, null, null);
+                if (memberRepresentedType is not null)
+                {
+                    // Cache
+                    _dataContractSerializerFactory.GetDataContractSerializer(type, memberRepresentedType, xmlName, null, null);
+                }
             }
             catch (Exception ex)
             {
@@ -247,6 +236,11 @@ namespace Catel.Runtime.Serialization.Xml
             if (context.Context.IsRootObject && !ShouldSerializeAsCollection(context.ModelType))
             {
                 var xmlWriter = context.Context.XmlWriter;
+                if (xmlWriter is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("Xml writer is required");
+                }
+
                 xmlWriter.WriteEndElement();
             }
         }
@@ -260,6 +254,11 @@ namespace Catel.Runtime.Serialization.Xml
             base.BeforeDeserialization(context);
 
             var xmlReader = context.Context.XmlReader;
+            if (xmlReader is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml reader is required");
+            }
+
             if (xmlReader.NodeType == XmlNodeType.None)
             {
                 xmlReader.Read();
@@ -404,6 +403,11 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var deserializedMemberValues = new List<MemberValue>();
             var xmlReader = context.Context.XmlReader;
+            if (xmlReader is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml reader is required");
+            }
+
             var modelType = context.ModelType;
 
             var propertyDataManager = PropertyDataManager.Default;
@@ -522,6 +526,10 @@ namespace Catel.Runtime.Serialization.Xml
 
             var modelType = context.ModelType;
             var xmlReader = context.Context.XmlReader;
+            if (xmlReader is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml reader is required");
+            }
 
             try
             {
@@ -624,6 +632,11 @@ namespace Catel.Runtime.Serialization.Xml
         protected override void AppendContextToStream(ISerializationContext<XmlSerializationContextInfo> context, Stream stream)
         {
             var xmlWriter = context.Context.XmlWriter;
+            if (xmlWriter is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml writer is required");
+            }
+
             xmlWriter.Flush();
         }
 
@@ -634,16 +647,16 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="model">The model.</param>
         /// <param name="memberName">Name of the member.</param>
         /// <returns>System.String.</returns>
-        protected string GetXmlElementName(Type modelType, object model, string memberName)
+        protected string GetXmlElementName(Type modelType, object model, string? memberName)
         {
-            string xmlElementName = null;
+            string xmlElementName = string.Empty;
 
             if (ShouldSerializeAsCollection(modelType))
             {
                 xmlElementName = CollectionName;
             }
 
-            else if (modelType.TryGetAttribute(out XmlRootAttribute xmlRootAttribute))
+            else if (modelType.TryGetAttribute<XmlRootAttribute>(out var xmlRootAttribute))
             {
                 xmlElementName = xmlRootAttribute.ElementName;
             }
@@ -685,9 +698,9 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected override ISerializationContext<XmlSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration)
         {
-            XmlSerializationContextInfo contextInfo = null;
+            XmlSerializationContextInfo? contextInfo = null;
             var xmlConfiguration = configuration as XmlSerializationConfiguration;
 
             try
@@ -733,7 +746,7 @@ namespace Catel.Runtime.Serialization.Xml
 #pragma warning restore IDISP001 // Dispose created.
             }
 
-            var context = new SerializationContext<XmlSerializationContextInfo>(model, modelType, contextInfo, contextMode, configuration);
+            var context = new SerializationContext<XmlSerializationContextInfo>(model, modelType, contextInfo!, contextMode, configuration);
             return context;
         }
 
@@ -745,12 +758,17 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="modelType">Type of the model.</param>
         /// <returns>Object or <c>null</c>.</returns>
         /// <remarks>Note that this method can cause exceptions. The caller will handle them.</remarks>
-        private object GetObjectFromXmlElement(ISerializationContext<XmlSerializationContextInfo> context, MemberValue memberValue, Type modelType)
+        private object? GetObjectFromXmlElement(ISerializationContext<XmlSerializationContextInfo> context, MemberValue memberValue, Type modelType)
         {
-            object value = null;
+            object? value = null;
 
             var namespacePrefix = GetNamespacePrefix();
             var xmlReader = context.Context.XmlReader;
+            if (xmlReader is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml reader is required");
+            }
+
             var xmlName = xmlReader.LocalName;
 
             var propertyTypeToDeserialize = memberValue.MemberType;
@@ -882,7 +900,7 @@ namespace Catel.Runtime.Serialization.Xml
                             continue;
                         }
 
-                        object childValue = null;
+                        object? childValue = null;
 
                         // Step 1: check for graph attributes
                         var collectionItemGraphRefIdAttribute = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlGraphRefId);
@@ -981,10 +999,10 @@ namespace Catel.Runtime.Serialization.Xml
             return value;
         }
 
-        protected virtual object ReadXmlObject(ISerializationContext<XmlSerializationContextInfo> context, XmlReader xmlReader, 
+        protected virtual object? ReadXmlObject(ISerializationContext<XmlSerializationContextInfo> context, XmlReader xmlReader,
             DataContractSerializer serializer, string namespacePrefix, string xmlName, Type modelType)
         {
-            object value = null;
+            object? value = null;
 
             // Special case if we have an abstract item, we might have a specific type specified
             var typeName = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlType);
@@ -1001,9 +1019,9 @@ namespace Catel.Runtime.Serialization.Xml
                     value = tempSerializer.ReadObject(xmlReader, false);
                 }
             }
-            
+
             if (value is null)
-            { 
+            {
                 // Fallback to default deserialization, will fail for abstract types
                 value = serializer.ReadObject(xmlReader, false);
             }
@@ -1011,7 +1029,7 @@ namespace Catel.Runtime.Serialization.Xml
             return value;
         }
 
-        private string GetSpecialAttributeValue(XmlReader xmlReader, string namespacePrefix, string attributeName)
+        private string? GetSpecialAttributeValue(XmlReader xmlReader, string namespacePrefix, string attributeName)
         {
             // Backwards compatibility
             return xmlReader.GetAttribute($"{namespacePrefix}:{attributeName}") ?? xmlReader.GetAttribute(attributeName);
@@ -1026,6 +1044,11 @@ namespace Catel.Runtime.Serialization.Xml
         private void WriteXmlAttribute(ISerializationContext<XmlSerializationContextInfo> context, string attributeName, MemberValue memberValue)
         {
             var xmlWriter = context.Context.XmlWriter;
+            if (xmlWriter is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml writer is required");
+            }
+
             var attributeValue = ObjectToStringHelper.ToString(memberValue.Value);
 
             xmlWriter.WriteAttributeString(attributeName, attributeValue);
@@ -1043,6 +1066,10 @@ namespace Catel.Runtime.Serialization.Xml
             var namespacePrefix = GetNamespacePrefix();
 
             var xmlWriter = context.Context.XmlWriter;
+            if (xmlWriter is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml writer is required");
+            }
 
             if (memberValue.Value is null)
             {
@@ -1055,7 +1082,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var memberTypeToSerialize = memberValue.GetBestMemberType();
 
                 var referenceManager = context.ReferenceManager;
-                ReferenceInfo referenceInfo = null;
+                ReferenceInfo? referenceInfo = null;
                 var serializeElement = true;
 
                 if (memberValue.MemberGroup != SerializationMemberGroup.Collection)
@@ -1063,11 +1090,12 @@ namespace Catel.Runtime.Serialization.Xml
                     if (memberTypeToSerialize.IsClassType())
                     {
                         referenceInfo = referenceManager.GetInfo(memberValue.Value, true);
-
-                        if (WriteXmlElementAsGraphReference(xmlWriter, referenceInfo, memberTypeToSerialize,
-                                elementName, namespacePrefix))
+                        if (referenceInfo is not null)
                         {
-                            serializeElement = false;
+                            if (WriteXmlElementAsGraphReference(xmlWriter, referenceInfo, memberTypeToSerialize, elementName, namespacePrefix))
+                            {
+                                serializeElement = false;
+                            }
                         }
                     }
                 }
@@ -1095,10 +1123,11 @@ namespace Catel.Runtime.Serialization.Xml
                             if (modelType.IsArrayEx())
                             {
                                 // Get array specific serializer
-                                memberTypeToSerialize = modelType.GetElementTypeEx();
+                                memberTypeToSerialize = modelType.GetElementTypeEx() ?? typeof(object);
                             }
 
                             var collectionElementType = typeof(object);
+
                             if (memberTypeToSerialize.IsGenericTypeEx())
                             {
                                 collectionElementType = memberTypeToSerialize.GetGenericArgumentsEx().FirstOrDefault() ?? typeof(object);
@@ -1169,6 +1198,11 @@ namespace Catel.Runtime.Serialization.Xml
         private bool WriteDocumentStartIfRequired(ISerializationContext<XmlSerializationContextInfo> context, bool skipCollectionCheck = false)
         {
             var xmlWriter = context.Context.XmlWriter;
+            if (xmlWriter is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Xml writer is required");
+            }
+
             if (xmlWriter.WriteState != WriteState.Start)
             {
                 return false;
@@ -1195,6 +1229,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var model = context.Model;
             var rootName = "root";
+
             if (model is not null)
             {
                 rootName = _rootNameCache.GetFromCacheOrFetch(context.ModelType, () =>
@@ -1206,23 +1241,31 @@ namespace Catel.Runtime.Serialization.Xml
             return rootName;
         }
 
-        private void AddObjectMetadata(XmlWriter xmlWriter, Type memberTypeToSerialize, Type actualMemberType,
-            ReferenceInfo referenceInfo, string namespacePrefix)
+        private void AddObjectMetadata(XmlWriter xmlWriter, Type? memberTypeToSerialize, Type? actualMemberType,
+            ReferenceInfo? referenceInfo, string namespacePrefix)
         {
             if (referenceInfo is not null)
             {
                 xmlWriter.WriteAttributeString(namespacePrefix, XmlGraphId, null, referenceInfo.Id.ToString());
             }
 
-            if (memberTypeToSerialize != actualMemberType)
+            if (memberTypeToSerialize is not null)
             {
-                var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName);
-                xmlWriter.WriteAttributeString(namespacePrefix, XmlType, null, memberTypeToSerializerName);
+                if (memberTypeToSerialize != actualMemberType)
+                {
+                    var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName ?? memberTypeToSerialize.Name);
+                    xmlWriter.WriteAttributeString(namespacePrefix, XmlType, null, memberTypeToSerializerName);
+                }
             }
         }
 
-        private bool WriteXmlElementAsGraphReference(XmlWriter xmlWriter, ReferenceInfo referenceInfo, Type memberTypeToSerialize, string elementName, string namespacePrefix)
+        private bool WriteXmlElementAsGraphReference(XmlWriter xmlWriter, ReferenceInfo? referenceInfo, Type memberTypeToSerialize, string elementName, string namespacePrefix)
         {
+            if (referenceInfo is null)
+            {
+                return false;
+            }
+
             var isClassType = memberTypeToSerialize.IsClassType();
             if (!isClassType)
             {
@@ -1267,7 +1310,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="model">The model.</param>
         private void AddReferenceId(ISerializationContext<XmlSerializationContextInfo> context, object model)
         {
-            var xmlWriter = context.Context.XmlWriter;
+            var xmlWriter = context.Context.XmlWriter!;
             var referenceManager = context.ReferenceManager;
             var referenceInfo = referenceManager.GetInfo(model, true);
             var namespacePrefix = GetNamespacePrefix();
@@ -1281,7 +1324,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="context">The serialization context.</param>
         /// <param name="xmlWriter">The xml writer.</param>
         /// <param name="xmlNamespace">The xml namespace.</param>
-        private void EnsureNamespaceInXmlWriter(ISerializationContext<XmlSerializationContextInfo> context, XmlWriter xmlWriter, XmlNamespace xmlNamespace)
+        private void EnsureNamespaceInXmlWriter(ISerializationContext<XmlSerializationContextInfo> context, XmlWriter xmlWriter, XmlNamespace? xmlNamespace)
         {
             var catelNamespacePrefix = GetNamespacePrefix();
             var catelNamespaceUrl = GetNamespaceUrl();
@@ -1320,6 +1363,5 @@ namespace Catel.Runtime.Serialization.Xml
         {
             return "http://schemas.catelproject.com";
         }
-        #endregion
     }
 }

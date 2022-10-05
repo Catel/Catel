@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConsoleLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -45,9 +39,9 @@ namespace Catel.Logging
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
-            string consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
+            var consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
 
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;

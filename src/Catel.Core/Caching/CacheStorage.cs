@@ -1,15 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CacheStorage.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Caching
+﻿namespace Catel.Caching
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
     using Policies;
@@ -21,9 +16,9 @@ namespace Catel.Caching
     /// <typeparam name="TKey">The key type.</typeparam>
     /// <typeparam name="TValue">The value type.</typeparam>
     public class CacheStorage<TKey, TValue> : ICacheStorage<TKey, TValue>
+        where TKey : notnull
     {
-        #region Fields
-        private readonly Func<ExpirationPolicy> _defaultExpirationPolicyInitCode;
+        private readonly Func<ExpirationPolicy>? _defaultExpirationPolicyInitCode;
 
         /// <summary>
         /// Determines whether the cache storage can store null values.
@@ -54,7 +49,7 @@ namespace Catel.Caching
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
 #pragma warning disable IDISP006 // Implement IDisposable.
-        private Timer _expirationTimer;
+        private Timer? _expirationTimer;
 #pragma warning restore IDISP006 // Implement IDisposable.
 
         /// <summary>
@@ -66,27 +61,25 @@ namespace Catel.Caching
         /// Determines whether the cache storage can check for expired items.
         /// </summary>
         private bool _checkForExpiredItems;
-        #endregion
 
         /// <summary>
         /// Occurs when the item is expiring.
         /// </summary>
-        public event EventHandler<ExpiringEventArgs<TKey, TValue>> Expiring;
+        public event EventHandler<ExpiringEventArgs<TKey, TValue>>? Expiring;
 
         /// <summary>
         /// Occurs when the item has expired.
         /// </summary>
-        public event EventHandler<ExpiredEventArgs<TKey, TValue>> Expired;
+        public event EventHandler<ExpiredEventArgs<TKey, TValue>>? Expired;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheStorage{TKey,TValue}" /> class.
         /// </summary>
         /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
         /// <param name="storeNullValues">Allow store null values on the cache.</param>
         /// <param name="equalityComparer">The equality comparer.</param>
-        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false,
-            IEqualityComparer<TKey> equalityComparer = null)
+        public CacheStorage(Func<ExpirationPolicy>? defaultExpirationPolicyInitCode = null, bool storeNullValues = false,
+            IEqualityComparer<TKey>? equalityComparer = null)
         {
             _dictionary = new ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer ?? EqualityComparer<TKey>.Default);
             _storeNullValues = storeNullValues;
@@ -95,9 +88,6 @@ namespace Catel.Caching
             _expirationTimerInterval = TimeSpan.FromSeconds(1);
         }
 
-        #endregion
-
-        #region ICacheStorage<TKey,TValue> Members
         /// <summary>
         /// Gets or sets whether values should be disposed on removal.
         /// </summary>
@@ -110,7 +100,7 @@ namespace Catel.Caching
         /// <param name="key">The key.</param>
         /// <returns>The value associated with the specified key, or default value for the type of the value if the key do not exists.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public TValue this[TKey key]
+        public TValue? this[TKey key]
         {
             get { return Get(key); }
         }
@@ -179,10 +169,8 @@ namespace Catel.Caching
         /// <param name="key">The key of the value to get.</param>
         /// <returns>The value associated with the specified key, or default value for the type of the value if the key do not exists.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public TValue Get(TKey key)
+        public TValue? Get(TKey key)
         {
-            Argument.IsNotNull("key", key);
-
             return ExecuteInLock(key, () =>
             {
                 _dictionary.TryGetValue(key, out var valueInfo);
@@ -199,30 +187,16 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public bool Contains(TKey key)
         {
-            Argument.IsNotNull("key", key);
-
             return ExecuteInLock(key, () =>
             {
                 return _dictionary.ContainsKey(key);
             });
         }
 
-        /// <summary>
-        /// Adds a value to the cache associated with to a key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="code">The deferred initialization code of the value.</param>
-        /// <param name="expirationPolicy">The expiration policy.</param>
-        /// <param name="override">Indicates if the key exists the value will be overridden.</param>
-        /// <returns>The instance initialized by the <paramref name="code" />.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        /// <inheritdoc />
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification = "Reviewed. Suppression is OK here.")]
-        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
+        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, ExpirationPolicy? expirationPolicy, bool @override = false)
         {
-            Argument.IsNotNull("key", key);
-            Argument.IsNotNull("code", code);
-
             return ExecuteInLock(key, () =>
             {
                 if (!@override && _dictionary.TryGetValue(key, out var cacheStorageValueInfo))
@@ -269,8 +243,10 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
+        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default)
         {
+            ArgumentNullException.ThrowIfNull(code);
+
             return GetFromCacheOrFetch(key, code, ExpirationPolicy.Duration(expiration), @override);
         }
 
@@ -286,10 +262,9 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy expirationPolicy, bool @override = false)
+        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy? expirationPolicy, bool @override = false)
         {
-            Argument.IsNotNull("key", key);
-            Argument.IsNotNull("code", code);
+            ArgumentNullException.ThrowIfNull(code);
 
             return ExecuteInLockAsync(key, async () =>
             {
@@ -340,7 +315,7 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
+        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default)
         {
             return GetFromCacheOrFetchAsync(key, code, ExpirationPolicy.Duration(expiration), @override);
         }
@@ -366,10 +341,8 @@ namespace Catel.Caching
         /// <param name="expirationPolicy">The expiration policy.</param>
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public void Add(TKey key, TValue @value, ExpirationPolicy expirationPolicy, bool @override = false)
+        public void Add(TKey key, TValue @value, ExpirationPolicy? expirationPolicy, bool @override = false)
         {
-            Argument.IsNotNull("key", key);
-
             if (!_storeNullValues)
             {
                 Argument.IsNotNull("value", value);
@@ -384,10 +357,8 @@ namespace Catel.Caching
         /// <param name="key">The key.</param>
         /// <param name="action">The action that need to be executed in synchronization with the item cache removal.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public void Remove(TKey key, Action action = null)
+        public void Remove(TKey key, Action? action = null)
         {
-            Argument.IsNotNull("key", key);
-
             ExecuteInLock(key, () =>
             {
                 RemoveItem(key, false, action);
@@ -422,7 +393,6 @@ namespace Catel.Caching
         /// <summary>
         /// Removes the expired items from the cache.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1409:RemoveUnnecessaryCode", Justification = "Reviewed. Suppression is OK here.")]
         private void RemoveExpiredItems()
         {
             var containsItemsThatCanExpire = false;
@@ -488,7 +458,7 @@ namespace Catel.Caching
             {
                 // Looks complex, but we need to ensure that we can enter the same lock multiple times in non-async scenarios
                 var taken = asyncLock.IsTaken;
-                IDisposable unlockDisposable = null;
+                IDisposable? unlockDisposable = null;
 
                 try
                 {
@@ -555,7 +525,7 @@ namespace Catel.Caching
         /// Called when the timer to clean up the cache elapsed.
         /// </summary>
         /// <param name="state">The timer state.</param>
-        private void OnTimerElapsed(object state)
+        private void OnTimerElapsed(object? state)
         {
             if (!_checkForExpiredItems)
             {
@@ -572,7 +542,7 @@ namespace Catel.Caching
         /// <param name="raiseEvents">Indicates whether events should be raised.</param>
         /// <param name="action">The action that need to be executed in synchronization with the item cache removal.</param>
         /// <returns>The value indicating whether the item was removed.</returns>
-        private bool RemoveItem(TKey key, bool raiseEvents, Action action = null)
+        private bool RemoveItem(TKey key, bool raiseEvents, Action? action = null)
         {
             // Try to get item, if there is no item by that key then return true to indicate that item was removed.
             if (!_dictionary.TryGetValue(key, out var item))
@@ -623,6 +593,5 @@ namespace Catel.Caching
 
             return true;
         }
-        #endregion
     }
 }

@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CacheStorageValueInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Caching
+﻿namespace Catel.Caching
 {
     using System;
-
     using Policies;
 
     /// <summary>
@@ -17,13 +11,8 @@ namespace Catel.Caching
     /// </typeparam>
     internal class CacheStorageValueInfo<TValue>
     {
-        #region Fields
-        private readonly ExpirationPolicy _expirationPolicy;
-
+        private readonly ExpirationPolicy? _expirationPolicy;
         private readonly TValue _value;
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheStorageValueInfo{TValue}" /> class.
@@ -40,15 +29,11 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="expirationPolicy">The expiration policy.</param>
-        public CacheStorageValueInfo(TValue value, ExpirationPolicy expirationPolicy = null)
+        public CacheStorageValueInfo(TValue value, ExpirationPolicy? expirationPolicy = null)
         {
             _value = value;
             _expirationPolicy = expirationPolicy;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the value.
@@ -58,9 +43,12 @@ namespace Catel.Caching
         {
             get
             {
-                if (CanExpire && _expirationPolicy.CanReset)
+                if (_expirationPolicy is not null)
                 {
-                    _expirationPolicy.Reset();
+                    if (CanExpire && _expirationPolicy.CanReset)
+                    {
+                        _expirationPolicy.Reset();
+                    }
                 }
 
                 return _value;
@@ -87,14 +75,19 @@ namespace Catel.Caching
         {
             get
             {
-                return CanExpire && _expirationPolicy.IsExpired;
+                if (_expirationPolicy is not null)
+                {
+                    return CanExpire && _expirationPolicy.IsExpired;
+                }
+
+                return false;
             }
         }
 
         /// <summary>
         /// Gets or sets the expiration policy.
         /// </summary>
-        internal ExpirationPolicy ExpirationPolicy
+        internal ExpirationPolicy? ExpirationPolicy
         {
             get
             {
@@ -102,9 +95,6 @@ namespace Catel.Caching
             }
         }
 
-        #endregion
-
-        #region Methods
         /// <summary>
         /// Dispose value.
         /// </summary>
@@ -116,6 +106,5 @@ namespace Catel.Caching
                 disposable.Dispose();
             }
         }
-        #endregion
     }
 }

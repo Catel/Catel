@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObservableObjectExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
 
@@ -20,7 +14,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="sender"/> is <c>null</c>.</exception>
         public static void RaiseAllPropertiesChanged(this ObservableObject sender)
         {
-            Argument.IsNotNull("sender", sender);
+            ArgumentNullException.ThrowIfNull(sender);
 
             sender.RaisePropertyChanged(string.Empty);
         }

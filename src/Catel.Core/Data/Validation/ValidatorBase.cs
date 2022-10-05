@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidatorBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -31,7 +25,10 @@ namespace Catel.Data
         public void Validate(object instance, ValidationContext validationContext)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            Validate(typedInstance, validationContext);
+            if (typedInstance is not null)
+            {
+                Validate(typedInstance, validationContext);
+            }
         }
 
         /// <summary>
@@ -62,7 +59,10 @@ namespace Catel.Data
             List<IBusinessRuleValidationResult> previousBusinessRuleValidationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            BeforeValidation(typedInstance, previousFieldValidationResults, previousBusinessRuleValidationResults);
+            if (typedInstance is not null)
+            {
+                BeforeValidation(typedInstance, previousFieldValidationResults, previousBusinessRuleValidationResults);
+            }
         }
 
         /// <summary>
@@ -91,7 +91,10 @@ namespace Catel.Data
         public void BeforeValidateFields(object instance, List<IFieldValidationResult> previousValidationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            BeforeValidateFields(typedInstance, previousValidationResults);
+            if (typedInstance is not null)
+            {
+                BeforeValidateFields(typedInstance, previousValidationResults);
+            }
         }
 
         /// <summary>
@@ -118,7 +121,10 @@ namespace Catel.Data
         public void ValidateFields(object instance, List<IFieldValidationResult> validationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            ValidateFields(typedInstance, validationResults);
+            if (typedInstance is not null)
+            {
+                ValidateFields(typedInstance, validationResults);
+            }
         }
 
         /// <summary>
@@ -148,7 +154,10 @@ namespace Catel.Data
         public void AfterValidateFields(object instance, List<IFieldValidationResult> validationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            AfterValidateFields(typedInstance, validationResults);
+            if (typedInstance is not null)
+            {
+                AfterValidateFields(typedInstance, validationResults);
+            }
         }
 
         /// <summary>
@@ -174,7 +183,10 @@ namespace Catel.Data
         public void BeforeValidateBusinessRules(object instance, List<IBusinessRuleValidationResult> previousValidationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            BeforeValidateBusinessRules(typedInstance, previousValidationResults);
+            if (typedInstance is not null)
+            {
+                BeforeValidateBusinessRules(typedInstance, previousValidationResults);
+            }
         }
 
         /// <summary>
@@ -201,7 +213,10 @@ namespace Catel.Data
         public void ValidateBusinessRules(object instance, List<IBusinessRuleValidationResult> validationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            ValidateBusinessRules(typedInstance, validationResults);
+            if (typedInstance is not null)
+            {
+                ValidateBusinessRules(typedInstance, validationResults);
+            }
         }
 
         /// <summary>
@@ -231,7 +246,10 @@ namespace Catel.Data
         public void AfterValidateBusinessRules(object instance, List<IBusinessRuleValidationResult> validationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            AfterValidateBusinessRules(typedInstance, validationResults);
+            if (typedInstance is not null)
+            {
+                AfterValidateBusinessRules(typedInstance, validationResults);
+            }
         }
 
         /// <summary>
@@ -260,7 +278,10 @@ namespace Catel.Data
             List<IBusinessRuleValidationResult> businessRuleValidationResults)
         {
             var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
-            AfterValidation(typedInstance, fieldValidationResults, businessRuleValidationResults);
+            if (typedInstance is not null)
+            {
+                AfterValidation(typedInstance, fieldValidationResults, businessRuleValidationResults);
+            }
         }
 
         /// <summary>
