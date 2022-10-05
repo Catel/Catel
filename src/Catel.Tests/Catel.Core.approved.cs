@@ -280,12 +280,12 @@ namespace Catel
     }
     public interface IWeakFunc<TResult> : Catel.IExecute<TResult>, Catel.IWeakReference
     {
-        System.Delegate Action { get; }
+        System.Delegate? Action { get; }
         string MethodName { get; }
     }
     public interface IWeakFunc<TParameter, TResult> : Catel.IExecuteWithObject<TParameter, TResult>, Catel.IWeakReference
     {
-        System.Delegate Action { get; }
+        System.Delegate? Action { get; }
         string MethodName { get; }
     }
     public interface IWeakReference
@@ -323,8 +323,8 @@ namespace Catel
     {
         public static System.Globalization.CultureInfo DefaultCulture { get; set; }
         public static string ToFullTypeString(object instance) { }
-        public static string? ToString(object? instance) { }
-        public static string? ToString(object? instance, System.Globalization.CultureInfo cultureInfo) { }
+        public static string ToString(object? instance) { }
+        public static string ToString(object? instance, System.Globalization.CultureInfo cultureInfo) { }
         public static string ToTypeString(object instance) { }
     }
     public delegate void OpenInstanceActionHandler<TTarget>(TTarget @this);
@@ -512,7 +512,7 @@ namespace Catel
     public class WeakFunc<TResult> : Catel.WeakActionBase, Catel.IExecute<TResult>, Catel.IWeakFunc<TResult>, Catel.IWeakReference
     {
         public WeakFunc(object target, System.Func<TResult> func) { }
-        public System.Delegate Action { get; }
+        public System.Delegate? Action { get; }
         public string MethodName { get; }
         public bool Execute(out TResult result) { }
         public delegate TResult OpenInstanceAction<TResult, TTarget>(TTarget @this);
@@ -520,7 +520,7 @@ namespace Catel
     public class WeakFunc<TParameter, TResult> : Catel.WeakActionBase, Catel.IExecuteWithObject<TParameter, TResult>, Catel.IWeakFunc<TParameter, TResult>, Catel.IWeakReference
     {
         public WeakFunc(object target, System.Func<TParameter, TResult> func) { }
-        public System.Delegate Action { get; }
+        public System.Delegate? Action { get; }
         public string MethodName { get; }
         public bool Execute(TParameter parameter, out TResult result) { }
         public delegate TResult OpenInstanceGenericAction<TParameter, TResult, TTarget>(TTarget @this, TParameter parameter);
@@ -1136,9 +1136,9 @@ namespace Catel.Data
         [System.ComponentModel.Browsable(false)]
         protected bool HandlePropertyAndCollectionChanges { get; set; }
         public static bool DefaultDisableEventSubscriptionsOfChildValuesValue { get; set; }
-        protected virtual void OnPropertyObjectCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
-        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
-        protected virtual void OnPropertyObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected virtual void OnPropertyObjectCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
+        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected virtual void OnPropertyObjectPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected override void SetValueToPropertyBag<TValue>(string propertyName, TValue value) { }
     }
     public abstract class ComparableModelBase : Catel.Data.ModelBase
@@ -1267,7 +1267,7 @@ namespace Catel.Data
     public interface IPropertyBag : System.ComponentModel.INotifyPropertyChanged
     {
         string[] GetAllNames();
-        System.Collections.Generic.Dictionary<string, object> GetAllProperties();
+        System.Collections.Generic.Dictionary<string, object?> GetAllProperties();
         TValue GetValue<TValue>(string name, TValue defaultValue = default);
         bool IsAvailable(string name);
         void SetValue<TValue>(string name, TValue value);
@@ -1330,47 +1330,47 @@ namespace Catel.Data
         void Add(Catel.Data.IBusinessRuleValidationResult businessRuleValidationResult);
         void Add(Catel.Data.IFieldValidationResult fieldValidationResult);
         int GetBusinessRuleErrorCount();
-        int GetBusinessRuleErrorCount(object tag);
+        int GetBusinessRuleErrorCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleErrors();
-        System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleErrors(object tag);
+        System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleErrors(object? tag);
         int GetBusinessRuleValidationCount();
-        int GetBusinessRuleValidationCount(object tag);
+        int GetBusinessRuleValidationCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleValidations();
-        System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleValidations(object tag);
+        System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleValidations(object? tag);
         int GetBusinessRuleWarningCount();
-        int GetBusinessRuleWarningCount(object tag);
+        int GetBusinessRuleWarningCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleWarnings();
-        System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleWarnings(object tag);
+        System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleWarnings(object? tag);
         int GetErrorCount();
-        int GetErrorCount(object tag);
+        int GetErrorCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IValidationResult> GetErrors();
-        System.Collections.Generic.List<Catel.Data.IValidationResult> GetErrors(object tag);
+        System.Collections.Generic.List<Catel.Data.IValidationResult> GetErrors(object? tag);
         int GetFieldErrorCount();
-        int GetFieldErrorCount(object tag);
+        int GetFieldErrorCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors();
-        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(object tag);
         System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(string propertyName);
-        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(string propertyName, object tag);
+        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(object? tag);
+        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(string propertyName, object? tag);
         int GetFieldValidationCount();
-        int GetFieldValidationCount(object tag);
+        int GetFieldValidationCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations();
-        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(object tag);
         System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(string propertyName);
-        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(string propertyName, object tag);
+        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(object? tag);
+        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(string propertyName, object? tag);
         int GetFieldWarningCount();
-        int GetFieldWarningCount(object tag);
+        int GetFieldWarningCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings();
-        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(object tag);
         System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(string propertyName);
-        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(string propertyName, object tag);
+        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(object? tag);
+        System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(string propertyName, object? tag);
         int GetValidationCount();
-        int GetValidationCount(object tag);
+        int GetValidationCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IValidationResult> GetValidations();
-        System.Collections.Generic.List<Catel.Data.IValidationResult> GetValidations(object tag);
+        System.Collections.Generic.List<Catel.Data.IValidationResult> GetValidations(object? tag);
         int GetWarningCount();
-        int GetWarningCount(object tag);
+        int GetWarningCount(object? tag);
         System.Collections.Generic.List<Catel.Data.IValidationResult> GetWarnings();
-        System.Collections.Generic.List<Catel.Data.IValidationResult> GetWarnings(object tag);
+        System.Collections.Generic.List<Catel.Data.IValidationResult> GetWarnings(object? tag);
         void Remove(Catel.Data.IBusinessRuleValidationResult businessRuleValidationResult);
         void Remove(Catel.Data.IFieldValidationResult fieldValidationResult);
     }
@@ -1382,7 +1382,7 @@ namespace Catel.Data
     public interface IValidationResult
     {
         string Message { get; set; }
-        object Tag { get; set; }
+        object? Tag { get; set; }
         Catel.Data.ValidationResultType ValidationResultType { get; }
     }
     public interface IValidationSummary
@@ -1466,8 +1466,8 @@ namespace Catel.Data
         protected virtual void OnEndEdit(System.ComponentModel.EditEventArgs e) { }
         protected virtual void OnSerialized() { }
         protected virtual void OnSerializing() { }
-        protected override void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
-        protected void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly) { }
+        protected override void RaisePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected void RaisePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly) { }
         protected void SetDefaultValueToPropertyBag(Catel.Data.IPropertyData propertyData) { }
         protected virtual void SetDirty(string propertyName) { }
         protected void SetValue<TValue>(Catel.Data.IPropertyData property, TValue value, bool notifyOnChange = true) { }
@@ -1500,7 +1500,7 @@ namespace Catel.Data
         public bool CompareCollections { get; set; }
         public bool CompareProperties { get; set; }
         public bool CompareValues { get; set; }
-        public override bool Equals(Catel.Data.ModelBase x, Catel.Data.ModelBase y) { }
+        public override bool Equals(Catel.Data.ModelBase? x, Catel.Data.ModelBase? y) { }
         public override int GetHashCode(Catel.Data.ModelBase obj) { }
     }
     [System.Serializable]
@@ -1532,7 +1532,7 @@ namespace Catel.Data
         public override string[] GetAllNames() { }
         public override System.Collections.Generic.Dictionary<string, object?> GetAllProperties() { }
         public override TValue GetValue<TValue>(string name, TValue defaultValue = default) { }
-        public void Import(System.Collections.Generic.Dictionary<string, object> propertiesToImport) { }
+        public void Import(System.Collections.Generic.Dictionary<string, object?> propertiesToImport) { }
         public override bool IsAvailable(string name) { }
         public void SetValue(string propertyName, bool value) { }
         public void SetValue(string propertyName, byte value) { }
@@ -1557,7 +1557,7 @@ namespace Catel.Data
         protected PropertyBagBase() { }
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
         public abstract string[] GetAllNames();
-        public abstract System.Collections.Generic.Dictionary<string, object> GetAllProperties();
+        public abstract System.Collections.Generic.Dictionary<string, object?> GetAllProperties();
         public abstract TValue GetValue<TValue>(string name, TValue defaultValue = default);
         public abstract bool IsAvailable(string name);
         protected void RaisePropertyChanged(string propertyName) { }
@@ -1716,7 +1716,7 @@ namespace Catel.Data
         protected virtual string GetBusinessRuleWarnings() { }
         protected virtual string GetFieldErrors(string columnName) { }
         protected virtual string GetFieldWarnings(string columnName) { }
-        protected virtual bool IsValidationProperty(string propertyName) { }
+        protected virtual bool IsValidationProperty(string? propertyName) { }
         protected void NotifyValidationResult(Catel.Data.IValidationResult validationResult, bool notifyGlobal) { }
         protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnValidated(Catel.Data.IValidationContext validationContext) { }
@@ -1725,7 +1725,7 @@ namespace Catel.Data
         protected virtual void OnValidating(Catel.Data.IValidationContext validationContext) { }
         protected virtual void OnValidatingBusinessRules(Catel.Data.IValidationContext validationContext) { }
         protected virtual void OnValidatingFields(Catel.Data.IValidationContext validationContext) { }
-        protected override bool ShouldPropertyChangeUpdateIsDirty(string propertyName) { }
+        protected override bool ShouldPropertyChangeUpdateIsDirty(string? propertyName) { }
         public System.IDisposable SuspendValidations(bool validateOnResume = true) { }
         public virtual void Validate(bool force = false) { }
         protected virtual void ValidateBusinessRules(System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> validationResults) { }
@@ -1740,8 +1740,8 @@ namespace Catel.Data
     public class ValidationContext : Catel.Data.IValidationContext
     {
         public ValidationContext() { }
-        public ValidationContext(System.Collections.Generic.IEnumerable<Catel.Data.IFieldValidationResult> fieldValidationResults, System.Collections.Generic.IEnumerable<Catel.Data.IBusinessRuleValidationResult> businessRuleValidationResults) { }
-        public ValidationContext(System.Collections.Generic.IEnumerable<Catel.Data.IFieldValidationResult> fieldValidationResults, System.Collections.Generic.IEnumerable<Catel.Data.IBusinessRuleValidationResult> businessRuleValidationResults, System.DateTime lastModified) { }
+        public ValidationContext(System.Collections.Generic.IEnumerable<Catel.Data.IFieldValidationResult>? fieldValidationResults, System.Collections.Generic.IEnumerable<Catel.Data.IBusinessRuleValidationResult>? businessRuleValidationResults) { }
+        public ValidationContext(System.Collections.Generic.IEnumerable<Catel.Data.IFieldValidationResult>? fieldValidationResults, System.Collections.Generic.IEnumerable<Catel.Data.IBusinessRuleValidationResult>? businessRuleValidationResults, System.DateTime lastModified) { }
         public bool HasErrors { get; }
         public bool HasWarnings { get; }
         public System.DateTime LastModified { get; }
@@ -1749,47 +1749,47 @@ namespace Catel.Data
         public void Add(Catel.Data.IBusinessRuleValidationResult businessRuleValidationResult) { }
         public void Add(Catel.Data.IFieldValidationResult fieldValidationResult) { }
         public int GetBusinessRuleErrorCount() { }
-        public int GetBusinessRuleErrorCount(object tag) { }
+        public int GetBusinessRuleErrorCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleErrors() { }
-        public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleErrors(object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleErrors(object? tag) { }
         public int GetBusinessRuleValidationCount() { }
-        public int GetBusinessRuleValidationCount(object tag) { }
+        public int GetBusinessRuleValidationCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleValidations() { }
-        public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleValidations(object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleValidations(object? tag) { }
         public int GetBusinessRuleWarningCount() { }
-        public int GetBusinessRuleWarningCount(object tag) { }
+        public int GetBusinessRuleWarningCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleWarnings() { }
-        public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleWarnings(object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IBusinessRuleValidationResult> GetBusinessRuleWarnings(object? tag) { }
         public int GetErrorCount() { }
-        public int GetErrorCount(object tag) { }
+        public int GetErrorCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IValidationResult> GetErrors() { }
-        public System.Collections.Generic.List<Catel.Data.IValidationResult> GetErrors(object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IValidationResult> GetErrors(object? tag) { }
         public int GetFieldErrorCount() { }
-        public int GetFieldErrorCount(object tag) { }
+        public int GetFieldErrorCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors() { }
-        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(object tag) { }
         public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(string propertyName) { }
-        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(string propertyName, object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(object? tag) { }
+        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldErrors(string propertyName, object? tag) { }
         public int GetFieldValidationCount() { }
-        public int GetFieldValidationCount(object tag) { }
+        public int GetFieldValidationCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations() { }
-        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(object tag) { }
         public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(string propertyName) { }
-        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(string propertyName, object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(object? tag) { }
+        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldValidations(string propertyName, object? tag) { }
         public int GetFieldWarningCount() { }
-        public int GetFieldWarningCount(object tag) { }
+        public int GetFieldWarningCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings() { }
-        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(object tag) { }
         public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(string propertyName) { }
-        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(string propertyName, object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(object? tag) { }
+        public System.Collections.Generic.List<Catel.Data.IFieldValidationResult> GetFieldWarnings(string propertyName, object? tag) { }
         public int GetValidationCount() { }
-        public int GetValidationCount(object tag) { }
+        public int GetValidationCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IValidationResult> GetValidations() { }
-        public System.Collections.Generic.List<Catel.Data.IValidationResult> GetValidations(object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IValidationResult> GetValidations(object? tag) { }
         public int GetWarningCount() { }
-        public int GetWarningCount(object tag) { }
+        public int GetWarningCount(object? tag) { }
         public System.Collections.Generic.List<Catel.Data.IValidationResult> GetWarnings() { }
-        public System.Collections.Generic.List<Catel.Data.IValidationResult> GetWarnings(object tag) { }
+        public System.Collections.Generic.List<Catel.Data.IValidationResult> GetWarnings(object? tag) { }
         public void Remove(Catel.Data.IBusinessRuleValidationResult businessRuleValidationResult) { }
         public void Remove(Catel.Data.IFieldValidationResult fieldValidationResult) { }
         public override string ToString() { }
@@ -1823,7 +1823,7 @@ namespace Catel.Data
     {
         protected ValidationResult(Catel.Data.ValidationResultType validationResultType, string message) { }
         public string Message { get; set; }
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
         public Catel.Data.ValidationResultType ValidationResultType { get; }
     }
     public enum ValidationResultType
@@ -1834,7 +1834,7 @@ namespace Catel.Data
     public class ValidationSummary : Catel.Data.IValidationSummary
     {
         public ValidationSummary(Catel.Data.IValidationContext validationContext) { }
-        public ValidationSummary(Catel.Data.IValidationContext validationContext, object tag) { }
+        public ValidationSummary(Catel.Data.IValidationContext validationContext, object? tag) { }
         public System.Collections.ObjectModel.ReadOnlyCollection<Catel.Data.IBusinessRuleValidationResult> BusinessRuleErrors { get; }
         public System.Collections.ObjectModel.ReadOnlyCollection<Catel.Data.IBusinessRuleValidationResult> BusinessRuleWarnings { get; }
         public System.Collections.ObjectModel.ReadOnlyCollection<Catel.Data.IFieldValidationResult> FieldErrors { get; }
@@ -1991,7 +1991,7 @@ namespace Catel.IoC
         void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object? tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
         bool RemoveAllTypes(System.Type serviceType);
         bool RemoveType(System.Type serviceType, object? tag = null);
-        object[] ResolveMultipleTypes(params System.Type[] types);
+        object?[] ResolveMultipleTypes(params System.Type[] types);
         object? ResolveType(System.Type serviceType, object? tag = null);
         object? ResolveTypeUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType, object? tag = null);
         System.Collections.Generic.IEnumerable<object> ResolveTypes(System.Type serviceType);
@@ -2036,8 +2036,8 @@ namespace Catel.IoC
     {
         public MissingTypeEventArgs(System.Type interfaceType) { }
         public MissingTypeEventArgs(System.Type interfaceType, object? tag) { }
-        public object ImplementingInstance { get; set; }
-        public System.Type ImplementingType { get; set; }
+        public object? ImplementingInstance { get; set; }
+        public System.Type? ImplementingType { get; set; }
         public System.Type InterfaceType { get; }
         public Catel.IoC.RegistrationType RegistrationType { get; set; }
         public object? Tag { get; set; }
@@ -2176,6 +2176,10 @@ namespace Catel.IoC
         public static T? CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
         public static T? CreateInstanceWithParametersWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
         public static T? CreateInstanceWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag) { }
+        public static object CreateRequiredInstance(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct) { }
+        public static T CreateRequiredInstance<T>(this Catel.IoC.ITypeFactory typeFactory) { }
+        public static object CreateRequiredInstanceWithParameters(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
+        public static T CreateRequiredInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
     }
     public class TypeInstantiatedEventArgs : System.EventArgs
     {
@@ -2285,23 +2289,23 @@ namespace Catel.Logging
         protected System.TimeSpan Interval { get; set; }
         public int MaximumBatchCount { get; }
         public System.Threading.Tasks.Task FlushAsync() { }
-        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
+        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
         protected virtual System.Threading.Tasks.Task WriteBatchAsync(System.Collections.Generic.List<Catel.Logging.LogBatchEntry> batchEntries) { }
     }
     public class ConsoleLogListener : Catel.Logging.LogListenerBase
     {
         public ConsoleLogListener() { }
-        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
+        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
     }
     public class DebugLogListener : Catel.Logging.LogListenerBase
     {
         public DebugLogListener() { }
-        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
+        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
     }
     public class FileLogListener : Catel.Logging.BatchLogListenerBase
     {
-        public FileLogListener(System.Reflection.Assembly assembly = null) { }
-        public FileLogListener(string filePath, int maxSizeInKiloBytes, System.Reflection.Assembly assembly = null) { }
+        public FileLogListener(System.Reflection.Assembly? assembly = null) { }
+        public FileLogListener(string filePath, int maxSizeInKiloBytes, System.Reflection.Assembly? assembly = null) { }
         public string FilePath { get; set; }
         public int MaxSizeInKiloBytes { get; set; }
         protected virtual string DetermineFilePath(string filePath) { }
@@ -2334,13 +2338,13 @@ namespace Catel.Logging
         int IndentSize { get; set; }
         bool IsCatelLogging { get; }
         string Name { get; }
-        object Tag { get; set; }
+        object? Tag { get; set; }
         System.Type TargetType { get; }
         event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         void Indent();
         void Unindent();
-        void WriteWithData(string message, Catel.Logging.LogData logData, Catel.Logging.LogEvent logEvent);
-        void WriteWithData(string message, object extraData, Catel.Logging.LogEvent logEvent);
+        void WriteWithData(string message, Catel.Logging.LogData? logData, Catel.Logging.LogEvent logEvent);
+        void WriteWithData(string message, object? extraData, Catel.Logging.LogEvent logEvent);
     }
     public interface ILogListener
     {
@@ -2352,12 +2356,7 @@ namespace Catel.Logging
         bool IsWarningEnabled { get; set; }
         Catel.Logging.TimeDisplay TimeDisplay { get; set; }
         event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
-        void Debug(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
-        void Error(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
-        void Info(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
-        void Status(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
-        void Warning(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
-        void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time);
+        void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time);
     }
     public class Log : Catel.Logging.ILog
     {
@@ -2368,18 +2367,18 @@ namespace Catel.Logging
         public int IndentSize { get; set; }
         public virtual bool IsCatelLogging { get; }
         public string Name { get; }
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
         public System.Type TargetType { get; }
-        public event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
+        public event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         public void Indent() { }
         protected virtual bool ShouldIgnoreIfCatelLoggingIsDisabled() { }
         public void Unindent() { }
-        public void WriteWithData(string message, Catel.Logging.LogData logData, Catel.Logging.LogEvent logEvent) { }
-        public void WriteWithData(string message, object extraData, Catel.Logging.LogEvent logEvent) { }
+        public void WriteWithData(string message, Catel.Logging.LogData? logData, Catel.Logging.LogEvent logEvent) { }
+        public void WriteWithData(string message, object? extraData, Catel.Logging.LogEvent logEvent) { }
     }
     public class LogBatchEntry : Catel.Logging.LogEntry
     {
-        public LogBatchEntry(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
+        public LogBatchEntry(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
     }
     public class LogData : System.Collections.Generic.Dictionary<string, object>
     {
@@ -2389,9 +2388,9 @@ namespace Catel.Logging
     public class LogEntry
     {
         public LogEntry(Catel.Logging.LogMessageEventArgs eventArgs) { }
-        public LogEntry(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        public Catel.Logging.LogData Data { get; }
-        public object ExtraData { get; }
+        public LogEntry(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        public Catel.Logging.LogData? Data { get; }
+        public object? ExtraData { get; }
         public Catel.Logging.ILog Log { get; }
         public Catel.Logging.LogEvent LogEvent { get; }
         public string Message { get; }
@@ -2447,7 +2446,7 @@ namespace Catel.Logging
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, params object[] args)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception? innerException, string messageFormat, params object[] args)
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1)
             where TException : System.Exception { }
@@ -2455,9 +2454,9 @@ namespace Catel.Logging
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1, object arg2)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
-            where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0, object arg1)
+            where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception? innerException, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1, object arg2)
             where TException : System.Exception { }
@@ -2552,7 +2551,7 @@ namespace Catel.Logging
         public static void Write(this Catel.Logging.ILog log, Catel.Logging.LogEvent logEvent, string messageFormat, object s1, object s2, object s3) { }
         public static void Write(this Catel.Logging.ILog log, Catel.Logging.LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4) { }
         public static void Write(this Catel.Logging.ILog log, Catel.Logging.LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others) { }
-        public static void WriteWithData(this Catel.Logging.ILog log, System.Exception exception, string message, object extraData, Catel.Logging.LogEvent logEvent) { }
+        public static void WriteWithData(this Catel.Logging.ILog log, System.Exception exception, string message, object? extraData, Catel.Logging.LogEvent logEvent) { }
     }
     public abstract class LogListenerBase : Catel.Logging.ILogListener
     {
@@ -2565,16 +2564,16 @@ namespace Catel.Logging
         public bool IsStatusEnabled { get; set; }
         public bool IsWarningEnabled { get; set; }
         public Catel.Logging.TimeDisplay TimeDisplay { get; set; }
-        public event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
-        protected virtual void Debug(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected virtual void Error(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected virtual string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected virtual void Info(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected void RaiseLogMessage(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected virtual bool ShouldIgnoreLogMessage(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected virtual void Status(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected virtual void Warning(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected virtual void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
+        public event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
+        protected virtual void Debug(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected virtual void Error(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected virtual string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected virtual void Info(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected void RaiseLogMessage(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected virtual bool ShouldIgnoreLogMessage(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected virtual void Status(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected virtual void Warning(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
+        protected virtual void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
     }
     public sealed class LogListenerConfiguration : System.Configuration.ConfigurationElement
     {
@@ -2631,14 +2630,14 @@ namespace Catel.Logging
     }
     public class LogMessageEventArgs : System.EventArgs
     {
-        public LogMessageEventArgs(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, Catel.Logging.LogEvent logEvent) { }
-        public LogMessageEventArgs(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, Catel.Logging.LogEvent logEvent, System.DateTime time) { }
-        public object ExtraData { get; }
+        public LogMessageEventArgs(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, Catel.Logging.LogEvent logEvent) { }
+        public LogMessageEventArgs(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, Catel.Logging.LogEvent logEvent, System.DateTime time) { }
+        public object? ExtraData { get; }
         public Catel.Logging.ILog Log { get; }
-        public Catel.Logging.LogData LogData { get; }
+        public Catel.Logging.LogData? LogData { get; }
         public Catel.Logging.LogEvent LogEvent { get; }
         public string Message { get; }
-        public object Tag { get; }
+        public object? Tag { get; }
         public System.DateTime Time { get; }
     }
     public sealed class LoggingConfigurationSection : System.Configuration.ConfigurationSection
@@ -2657,7 +2656,7 @@ namespace Catel.Logging
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetErrorLogEntries() { }
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetLogEntries() { }
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetWarningLogEntries() { }
-        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
+        protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
     }
     public class StatusLogListener : Catel.Logging.LogListenerBase
     {
@@ -2945,7 +2944,7 @@ namespace Catel.Reflection
         public static string GetSignature(this System.Reflection.MethodInfo methodInfo) { }
         public static bool IsStatic(this System.Reflection.PropertyInfo propertyInfo) { }
         public static System.Collections.Generic.IEnumerable<System.Reflection.ConstructorInfo> SortByParametersMatchDistance(this System.Collections.Generic.List<System.Reflection.ConstructorInfo> constructors, object?[] parameters) { }
-        public static bool TryGetConstructorDistanceByParametersMatch(this System.Reflection.ConstructorInfo constructor, object[] parameters, out int distance) { }
+        public static bool TryGetConstructorDistanceByParametersMatch(this System.Reflection.ConstructorInfo constructor, object?[] parameters, out int distance) { }
     }
     public static class ObjectExtensions
     {
@@ -3060,11 +3059,11 @@ namespace Catel.Reflection
         public static bool IsValueTypeEx(this System.Type type) { }
         public static System.Type MakeGenericTypeEx(this System.Type type, System.Type typeArgument) { }
         public static System.Type MakeGenericTypeEx(this System.Type type, params System.Type[] typeArguments) { }
-        public static bool TryGetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType, out System.Attribute? attribute) { }
-        public static bool TryGetAttribute(this System.Type type, System.Type attributeType, out System.Attribute? attribute) { }
-        public static bool TryGetAttribute<TAttribute>(this System.Reflection.MemberInfo memberInfo, out TAttribute? attribute)
+        public static bool TryGetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out System.Attribute? attribute) { }
+        public static bool TryGetAttribute(this System.Type type, System.Type attributeType, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out System.Attribute? attribute) { }
+        public static bool TryGetAttribute<TAttribute>(this System.Reflection.MemberInfo memberInfo, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TAttribute? attribute)
             where TAttribute : System.Attribute { }
-        public static bool TryGetAttribute<TAttribute>(this System.Type type, out TAttribute? attribute)
+        public static bool TryGetAttribute<TAttribute>(this System.Type type, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TAttribute? attribute)
             where TAttribute : System.Attribute { }
     }
     public static class StaticHelper
@@ -3193,7 +3192,7 @@ namespace Catel.Runtime.Serialization
     }
     public interface IObjectAdapter
     {
-        Catel.Runtime.Serialization.MemberValue GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo);
+        Catel.Runtime.Serialization.MemberValue? GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo);
         void SetMemberValue(object model, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationModelInfo modelInfo);
     }
     public interface IPropertySerializable
@@ -3284,7 +3283,7 @@ namespace Catel.Runtime.Serialization
         event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? SerializingMember;
         object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         object Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
-        object Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
+        object Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         object Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
@@ -3297,7 +3296,7 @@ namespace Catel.Runtime.Serialization
     }
     public static class ISerializerExtensions
     {
-        public static TModel? Deserialize<TModel>(this Catel.Runtime.Serialization.ISerializer serializer, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
+        public static TModel? Deserialize<TModel>(this Catel.Runtime.Serialization.ISerializer serializer, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
     }
     public interface ISerializerModifier
     {
@@ -3359,7 +3358,7 @@ namespace Catel.Runtime.Serialization
     public class ObjectAdapter : Catel.Runtime.Serialization.IObjectAdapter
     {
         public ObjectAdapter(Catel.Data.IObjectAdapter objectAdapter) { }
-        public virtual Catel.Runtime.Serialization.MemberValue GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
+        public virtual Catel.Runtime.Serialization.MemberValue? GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
         public virtual void SetMemberValue(object model, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
     }
     [System.Serializable]
@@ -3489,8 +3488,8 @@ namespace Catel.Runtime.Serialization
     }
     public class SerializationScope
     {
-        public SerializationScope(Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
-        public Catel.Runtime.Serialization.ISerializationConfiguration Configuration { get; set; }
+        public SerializationScope(Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration) { }
+        public Catel.Runtime.Serialization.ISerializationConfiguration? Configuration { get; set; }
         public Catel.Runtime.Serialization.ISerializer Serializer { get; }
     }
     [System.AttributeUsage(System.AttributeTargets.Class)]
@@ -3823,16 +3822,16 @@ namespace Catel.Services
     public interface IObjectConverterService
     {
         System.Globalization.CultureInfo DefaultCulture { get; set; }
-        object ConvertFromObjectToObject(object? value, System.Type targetType);
+        object? ConvertFromObjectToObject(object? value, System.Type targetType);
         string ConvertFromObjectToString(object? value);
         string ConvertFromObjectToString(object? value, System.Globalization.CultureInfo culture);
-        object ConvertFromStringToObject(string value, System.Type targetType);
-        object ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture);
+        object? ConvertFromStringToObject(string value, System.Type targetType);
+        object? ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture);
     }
     public static class IObjectConverterServiceExtensions
     {
-        public static T ConvertFromObjectToObject<T>(this Catel.Services.IObjectConverterService service, object value) { }
-        public static T ConvertFromStringToObject<T>(this Catel.Services.IObjectConverterService service, string value) { }
+        public static T? ConvertFromObjectToObject<T>(this Catel.Services.IObjectConverterService service, object value) { }
+        public static T? ConvertFromStringToObject<T>(this Catel.Services.IObjectConverterService service, string value) { }
     }
     public interface IObjectIdGenerator<TUniqueIdentifier>
     {
@@ -3922,11 +3921,11 @@ namespace Catel.Services
     {
         public ObjectConverterService() { }
         public System.Globalization.CultureInfo DefaultCulture { get; set; }
-        public virtual object ConvertFromObjectToObject(object? value, System.Type targetType) { }
+        public virtual object? ConvertFromObjectToObject(object? value, System.Type targetType) { }
         public virtual string ConvertFromObjectToString(object? value) { }
         public string ConvertFromObjectToString(object? value, System.Globalization.CultureInfo culture) { }
-        public virtual object ConvertFromStringToObject(string value, System.Type targetType) { }
-        public object ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture) { }
+        public virtual object? ConvertFromStringToObject(string value, System.Type targetType) { }
+        public object? ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture) { }
     }
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>, Catel.Services.IObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType :  class
@@ -3941,7 +3940,7 @@ namespace Catel.Services
     public class RollingInMemoryLogService : Catel.Services.ServiceBase, Catel.Services.IRollingInMemoryLogService
     {
         public RollingInMemoryLogService() { }
-        public RollingInMemoryLogService(Catel.Logging.RollingInMemoryLogListener logListener) { }
+        public RollingInMemoryLogService(Catel.Logging.RollingInMemoryLogListener? logListener) { }
         public Catel.Logging.RollingInMemoryLogListener LogListener { get; }
         public int MaximumNumberOfErrorLogEntries { get; set; }
         public int MaximumNumberOfLogEntries { get; set; }

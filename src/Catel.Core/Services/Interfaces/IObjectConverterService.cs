@@ -35,7 +35,7 @@
         /// <param name="value">The value.</param>
         /// <param name="targetType">The target type.</param>
         /// <returns>The object value.</returns>
-        object ConvertFromStringToObject(string value, Type targetType);
+        object? ConvertFromStringToObject(string value, Type targetType);
 
         /// <summary>
         /// Converts the specified string value to an object.
@@ -44,7 +44,7 @@
         /// <param name="targetType">The target type.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>The object value.</returns>
-        object ConvertFromStringToObject(string value, Type targetType, CultureInfo culture);
+        object? ConvertFromStringToObject(string value, Type targetType, CultureInfo culture);
 
         /// <summary>
         /// Converts the specified object to an object.
@@ -52,6 +52,6 @@
         /// <param name="value">The value.</param>
         /// <param name="targetType">Type of the target.</param>
         /// <returns>The object value.</returns>
-        object ConvertFromObjectToObject(object? value, Type targetType);
+        object? ConvertFromObjectToObject(object? value, Type targetType);
     }
 }

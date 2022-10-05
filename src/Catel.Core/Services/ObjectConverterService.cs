@@ -50,7 +50,7 @@
         /// <param name="value">The value.</param>
         /// <param name="targetType">The target type.</param>
         /// <returns>The object value.</returns>
-        public virtual object ConvertFromStringToObject(string value, Type targetType)
+        public virtual object? ConvertFromStringToObject(string value, Type targetType)
         {
             return ConvertFromStringToObject(value, targetType, DefaultCulture);
         }
@@ -63,7 +63,7 @@
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public object ConvertFromStringToObject(string value, Type targetType, CultureInfo culture)
+        public object? ConvertFromStringToObject(string value, Type targetType, CultureInfo culture)
         {
             return StringToObjectHelper.ToRightType(targetType, value, culture);
         }
@@ -74,7 +74,7 @@
         /// <param name="value">The value.</param>
         /// <param name="targetType">Type of the target.</param>
         /// <returns>The object value.</returns>
-        public virtual object ConvertFromObjectToObject(object? value, Type targetType)
+        public virtual object? ConvertFromObjectToObject(object? value, Type targetType)
         {
             var stringValue = ConvertFromObjectToString(value);
             return ConvertFromStringToObject(stringValue, targetType);

@@ -43,7 +43,7 @@
         /// Gets or sets the tag that allows grouping of validations.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; set; }
+        object? Tag { get; set; }
     }
 
     /// <summary>

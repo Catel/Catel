@@ -12,7 +12,7 @@
         /// <summary>
         /// The change notification wrappers for all property values.
         /// </summary>
-        private Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers;
+        private Dictionary<string, ChangeNotificationWrapper>? _propertyValueChangeNotificationWrappers;
 
         /// <summary>
         /// Initializes the <see cref="ChildAwareModelBase"/> class.
@@ -126,7 +126,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnPropertyObjectPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // It is possible that the sender used string.Empty or null for the property name, then exit
             var propertyName = e.PropertyName;
@@ -148,7 +148,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        protected virtual void OnPropertyObjectCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             SetDirty(string.Empty);
 
@@ -161,7 +161,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             SetDirty(string.Empty);
 

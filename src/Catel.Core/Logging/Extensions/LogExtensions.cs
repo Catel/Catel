@@ -29,21 +29,24 @@
             Write(log, LogEvent.Info, string.Empty);
 
             var assembly = AssemblyHelper.GetEntryAssembly();
-            Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title());
-            Write(log, LogEvent.Info, "Version:               {0}", assembly.Version());
-
-            try
+            if (assembly is not null)
             {
-                Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
-            }
-            catch (Exception)
-            {
-                // Ignore
-            }
+                Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title() ?? string.Empty);
+                Write(log, LogEvent.Info, "Version:               {0}", assembly.Version());
 
-            Write(log, LogEvent.Info, string.Empty);
-            Write(log, LogEvent.Info, "Company:               {0}", assembly.Company());
-            Write(log, LogEvent.Info, "Copyright:             {0}", assembly.Copyright());
+                try
+                {
+                    Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion() ?? string.Empty);
+                }
+                catch (Exception)
+                {
+                    // Ignore
+                }
+
+                Write(log, LogEvent.Info, string.Empty);
+                Write(log, LogEvent.Info, "Company:               {0}", assembly.Company() ?? string.Empty);
+                Write(log, LogEvent.Info, "Copyright:             {0}", assembly.Copyright() ?? string.Empty);
+            }
 
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "**************************************************************************");
@@ -285,9 +288,10 @@
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        public static void WriteWithData(this ILog log, Exception exception, string message, object extraData, LogEvent logEvent)
+        public static void WriteWithData(this ILog log, Exception exception, string message, object? extraData, LogEvent logEvent)
         {
             ArgumentNullException.ThrowIfNull(log);
+            ArgumentNullException.ThrowIfNull(exception);
 
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
@@ -299,7 +303,7 @@
                 return;
             }
 
-            if (exception is not null && LogManager.LogInfo.IgnoreDuplicateExceptionLogging)
+            if (LogManager.LogInfo.IgnoreDuplicateExceptionLogging)
             {
                 lock (exception)
                 {
@@ -337,7 +341,7 @@
         public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object arg1)
             where TException : Exception
         {
-            return ErrorAndCreateException<TException>(log, (Exception)null, string.Format(messageFormat, arg1));
+            return ErrorAndCreateException<TException>(log, (Exception?)null, string.Format(messageFormat, arg1));
         }
 
         /// <summary>
@@ -363,7 +367,7 @@
         public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object arg1, object arg2)
             where TException : Exception
         {
-            return ErrorAndCreateException<TException>(log, (Exception)null, string.Format(messageFormat, arg1, arg2));
+            return ErrorAndCreateException<TException>(log, (Exception?)null, string.Format(messageFormat, arg1, arg2));
         }
 
         /// <summary>
@@ -390,7 +394,7 @@
         public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object arg1, object arg2, object arg3)
             where TException : Exception
         {
-            return ErrorAndCreateException<TException>(log, (Exception)null, string.Format(messageFormat, arg1, arg2, arg3));
+            return ErrorAndCreateException<TException>(log, (Exception?)null, string.Format(messageFormat, arg1, arg2, arg3));
         }
 
         /// <summary>
@@ -415,7 +419,7 @@
         public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, params object[] args)
             where TException : Exception
         {
-            return ErrorAndCreateException<TException>(log, (Exception)null, messageFormat, args);
+            return ErrorAndCreateException<TException>(log, (Exception?)null, messageFormat, args);
         }
 
         /// <summary>
@@ -622,7 +626,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, params object[] args)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception? innerException, string messageFormat, params object[] args)
             where TException : Exception
         {
             ArgumentNullException.ThrowIfNull(log);
@@ -664,7 +668,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception? innerException, Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
             where TException : Exception
         {
             ArgumentNullException.ThrowIfNull(log);

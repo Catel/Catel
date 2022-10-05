@@ -14,7 +14,7 @@
         protected static readonly Dictionary<LogEvent, string> LogEventStrings;
 
         private TimeDisplay _timeDisplay;
-        private string _timeFormat;
+        private string _timeFormat = string.Empty;
 
         /// <summary>
         /// Initializes static members of the <see cref="LogListenerBase"/> class.
@@ -22,6 +22,7 @@
         static LogListenerBase()
         {
             LogEventStrings = new Dictionary<LogEvent, string>();
+
             foreach (var enumValue in Enum<LogEvent>.GetValues())
             {
                 LogEventStrings[enumValue] = Enum<LogEvent>.ToString(enumValue).ToUpper();
@@ -48,7 +49,7 @@
         /// <summary>
         /// Occurs when a log message is written to one of the logs.
         /// </summary>
-        public event EventHandler<LogMessageEventArgs> LogMessage;
+        public event EventHandler<LogMessageEventArgs>? LogMessage;
 
         /// <summary>
         /// Gets or sets a value indicating whether to ignore Catel logging.
@@ -144,7 +145,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        void ILogListener.Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        void ILogListener.Write(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             if (ShouldIgnoreLogging(log, message, logEvent, extraData, logData, time))
             {
@@ -153,100 +154,33 @@
 
             Write(log, message, logEvent, extraData, logData, time);
 
+            switch (logEvent)
+            {
+                case LogEvent.Status:
+                    Status(log, message, extraData, logData, time);
+                    break;
+
+                case LogEvent.Debug:
+                    Debug(log, message, extraData, logData, time);
+                    break;
+
+                case LogEvent.Info:
+                    Info(log, message, extraData, logData, time);
+                    break;
+
+                case LogEvent.Warning:
+                    Warning(log, message, extraData, logData, time);
+                    break;
+
+                case LogEvent.Error:
+                    Error(log, message, extraData, logData, time);
+                    break;
+            }
+
             RaiseLogMessage(log, message, logEvent, extraData, logData, time);
         }
 
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Debug" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void ILogListener.Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
-        {
-            if (ShouldIgnoreLogging(log, message, LogEvent.Debug, extraData, logData, time))
-            {
-                return;
-            }
-
-            Debug(log, message, extraData, logData, time);
-        }
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Info" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void ILogListener.Info(ILog log, string message, object extraData, LogData logData, DateTime time)
-        {
-            if (ShouldIgnoreLogging(log, message, LogEvent.Info, extraData, logData, time))
-            {
-                return;
-            }
-
-            Info(log, message, extraData, logData, time);
-        }
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Warning" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void ILogListener.Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
-        {
-            if (ShouldIgnoreLogging(log, message, LogEvent.Warning, extraData, logData, time))
-            {
-                return;
-            }
-
-            Warning(log, message, extraData, logData, time);
-        }
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Error" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The ti me.</param>
-        void ILogListener.Error(ILog log, string message, object extraData, LogData logData, DateTime time)
-        {
-            if (ShouldIgnoreLogging(log, message, LogEvent.Error, extraData, logData, time))
-            {
-                return;
-            }
-
-            Error(log, message, extraData, logData, time);
-        }
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Status" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The ti me.</param>
-        void ILogListener.Status(ILog log, string message, object extraData, LogData logData, DateTime time)
-        {
-            if (ShouldIgnoreLogging(log, message, LogEvent.Status, extraData, logData, time))
-            {
-                return;
-            }
-
-            Status(log, message, extraData, logData, time);
-        }
-
-        private bool ShouldIgnoreLogging(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        private bool ShouldIgnoreLogging(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             if (IgnoreCatelLogging && log.IsCatelLoggingAndCanBeIgnored())
             {
@@ -271,7 +205,7 @@
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
         /// <returns><c>true</c> if the message should be ignored, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected virtual bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             return false;
         }
@@ -285,7 +219,7 @@
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected void RaiseLogMessage(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected void RaiseLogMessage(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             var handler = LogMessage;
             if (handler is not null)
@@ -304,7 +238,7 @@
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
         /// <returns>The formatted log event.</returns>
-        protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             var logMessage = $"{time.ToString(_timeFormat)} => [{LogEventStrings[logEvent]}] [{log.Name}] [{ThreadHelper.GetCurrentThreadId().ToString()}] {message}";
             return logMessage;
@@ -319,7 +253,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected virtual void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected virtual void Write(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             // Empty by default
         }
@@ -332,7 +266,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected virtual void Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
+        protected virtual void Debug(ILog log, string message, object? extraData, LogData? logData, DateTime time)
         {
             // Empty by default
         }
@@ -345,7 +279,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected virtual void Info(ILog log, string message, object extraData, LogData logData, DateTime time)
+        protected virtual void Info(ILog log, string message, object? extraData, LogData? logData, DateTime time)
         {
             // Empty by default
         }
@@ -358,7 +292,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected virtual void Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
+        protected virtual void Warning(ILog log, string message, object? extraData, LogData? logData, DateTime time)
         {
             // Empty by default
         }
@@ -371,7 +305,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected virtual void Error(ILog log, string message, object extraData, LogData logData, DateTime time)
+        protected virtual void Error(ILog log, string message, object? extraData, LogData? logData, DateTime time)
         {
             // Empty by default
         }
@@ -384,7 +318,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected virtual void Status(ILog log, string message, object extraData, LogData logData, DateTime time)
+        protected virtual void Status(ILog log, string message, object? extraData, LogData? logData, DateTime time)
         {
             // Empty by default
         }

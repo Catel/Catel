@@ -16,7 +16,7 @@
         public static IXmlSerializer GetXmlSerializer()
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            return dependencyResolver.Resolve<IXmlSerializer>();
+            return dependencyResolver.ResolveRequired<IXmlSerializer>();
         }
     }
 }

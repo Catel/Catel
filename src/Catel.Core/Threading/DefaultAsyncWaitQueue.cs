@@ -86,7 +86,7 @@
 
         IDisposable IAsyncWaitQueue<T>.TryCancel(Task task)
         {
-            TaskCompletionSource<T> tcs = null;
+            TaskCompletionSource<T>? tcs = null;
 
             lock (_queue)
             {

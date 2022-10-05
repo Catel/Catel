@@ -34,7 +34,7 @@
                 throw new ArgumentOutOfRangeException(nameof(mode), $"The suspension mode '{Enum<SuspensionMode>.ToString(mode)}' is unhandled.");
             }
 
-            return createEvents(suspensionContext);
+            return createEvents(suspensionContext!);
         }
 
         /// <summary>

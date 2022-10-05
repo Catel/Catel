@@ -83,7 +83,7 @@
 
             return ExpressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
             {
-                MemberExpression memberExpression;
+                MemberExpression? memberExpression;
 
                 var unaryExpression = propertyExpression as UnaryExpression;
                 if (unaryExpression is not null)

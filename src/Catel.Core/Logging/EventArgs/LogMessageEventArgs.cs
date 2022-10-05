@@ -15,7 +15,7 @@
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
-        public LogMessageEventArgs(ILog log, string message, object extraData, LogData logData, LogEvent logEvent)
+        public LogMessageEventArgs(ILog log, string message, object? extraData, LogData? logData, LogEvent logEvent)
             : this(log, message, extraData, logData, logEvent, FastDateTime.Now) { }
 
         /// <summary>
@@ -27,7 +27,7 @@
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="time">The time.</param>
-        public LogMessageEventArgs(ILog log, string message, object extraData, LogData logData, LogEvent logEvent, DateTime time)
+        public LogMessageEventArgs(ILog log, string message, object? extraData, LogData? logData, LogEvent logEvent, DateTime time)
         {
             Log = log;
             Time = time;
@@ -47,7 +47,7 @@
         /// Gets the tag, which is automatically retrieved via the <see cref="ILog"/>.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get { return Log.Tag; } }
+        public object? Tag { get { return Log.Tag; } }
 
         /// <summary>
         ///   Gets the message that was written to the log.
@@ -59,13 +59,13 @@
         /// Gets the extra data.
         /// </summary>
         /// <value>The extra data.</value>
-        public object ExtraData { get; private set; }
+        public object? ExtraData { get; private set; }
 
         /// <summary>
         /// Gets the log data attached to this log entry.
         /// </summary>
         /// <value>The data.</value>
-        public LogData LogData { get; private set; }
+        public LogData? LogData { get; private set; }
 
         /// <summary>
         ///   Gets the log event.

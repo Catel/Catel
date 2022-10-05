@@ -11,7 +11,7 @@
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType : class
     {
-        private static Queue<TUniqueIdentifier> ReleasedUniqueIdentifiers;
+        private static Queue<TUniqueIdentifier>? ReleasedUniqueIdentifiers;
 
         private static readonly object SyncObj = new object();
 

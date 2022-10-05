@@ -6,6 +6,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using Catel.IoC;
     using Collections;
     using Logging;
     using Reflection;
@@ -220,7 +221,7 @@
         /// </returns>
         public virtual object Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
-            var model = TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateRequiredInstance(modelType);
 
             Deserialize(model, serializationContext, configuration);
 

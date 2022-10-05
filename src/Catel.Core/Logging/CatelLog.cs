@@ -7,14 +7,8 @@
     /// </summary>
     internal class CatelLog : Log, ICatelLog
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CatelLog"/> class.
-        /// </summary>
-        /// <param name="name">The name of this logger.</param>
-        /// <param name="alwaysLog">Flag indicating whether this log should always write logging statements regardless of log filter settings.</param>
-        /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
-        public CatelLog(string name, bool alwaysLog)
-            : base(name, null)
+        public CatelLog(Type type, bool alwaysLog)
+            : base(type)
         {
             AlwaysLog = alwaysLog;
         }

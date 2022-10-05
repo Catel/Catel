@@ -23,7 +23,7 @@
         /// Initializes a new instance of the <see cref="RollingInMemoryLogService"/> class.
         /// </summary>
         /// <param name="logListener">The log listener. If <c>null</c>, this service will create its own log listener.</param>
-        public RollingInMemoryLogService(RollingInMemoryLogListener logListener)
+        public RollingInMemoryLogService(RollingInMemoryLogListener? logListener)
         {
             if (logListener is null)
             {
@@ -109,7 +109,7 @@
             return _rollingInMemoryLogListener.GetErrorLogEntries();
         }
 
-        private void OnLogListenerLogMessage(object sender, LogMessageEventArgs e)
+        private void OnLogListenerLogMessage(object? sender, LogMessageEventArgs e)
         {
             LogMessage?.Invoke(this, e);
         }

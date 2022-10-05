@@ -47,7 +47,7 @@
         /// </summary>
         /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
         /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
-        public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults)
+        public ValidationContext(IEnumerable<IFieldValidationResult>? fieldValidationResults, IEnumerable<IBusinessRuleValidationResult>? businessRuleValidationResults)
             : this(fieldValidationResults, businessRuleValidationResults, FastDateTime.Now)
         { }
 
@@ -57,7 +57,7 @@
         /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
         /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
         /// <param name="lastModified">The last modified date/time.</param>
-        public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults, DateTime lastModified)
+        public ValidationContext(IEnumerable<IFieldValidationResult>? fieldValidationResults, IEnumerable<IBusinessRuleValidationResult>? businessRuleValidationResults, DateTime lastModified)
         {
             bool fieldValidationsIsNull = true;
             if (fieldValidationResults is not null)
@@ -127,7 +127,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of validations available.</returns>
-        public int GetValidationCount(object tag)
+        public int GetValidationCount(object? tag)
         {
             return GetValidations(tag).Count;
         }
@@ -164,7 +164,7 @@
         /// <returns>
         /// List of <see cref="IValidationResult"/> items.
         /// </returns>
-        public List<IValidationResult> GetValidations(object tag)
+        public List<IValidationResult> GetValidations(object? tag)
         {
             var list = new List<IValidationResult>();
 
@@ -199,7 +199,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of warnings available.</returns>
-        public int GetWarningCount(object tag)
+        public int GetWarningCount(object? tag)
         {
             return GetWarnings(tag).Count;
         }
@@ -223,7 +223,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IValidationResult" /> items.</returns>
-        public List<IValidationResult> GetWarnings(object tag)
+        public List<IValidationResult> GetWarnings(object? tag)
         {
             var validationResults = new List<IValidationResult>();
 
@@ -247,7 +247,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of errors available.</returns>
-        public int GetErrorCount(object tag)
+        public int GetErrorCount(object? tag)
         {
             return GetErrors(tag).Count;
         }
@@ -272,7 +272,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IValidationResult" /> items.</returns>
-        public List<IValidationResult> GetErrors(object tag)
+        public List<IValidationResult> GetErrors(object? tag)
         {
             var validationResults = new List<IValidationResult>();
 
@@ -297,7 +297,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of field validations available.</returns>
-        public int GetFieldValidationCount(object tag)
+        public int GetFieldValidationCount(object? tag)
         {
             return GetFieldValidations(tag).Count;
         }
@@ -322,7 +322,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
-        public List<IFieldValidationResult> GetFieldValidations(object tag)
+        public List<IFieldValidationResult> GetFieldValidations(object? tag)
         {
             lock (_fieldValidations)
             {
@@ -361,7 +361,7 @@
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public List<IFieldValidationResult> GetFieldValidations(string propertyName, object tag)
+        public List<IFieldValidationResult> GetFieldValidations(string propertyName, object? tag)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
@@ -390,7 +390,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of field warnings available.</returns>
-        public int GetFieldWarningCount(object tag)
+        public int GetFieldWarningCount(object? tag)
         {
             return GetFieldWarnings(tag).Count;
         }
@@ -416,7 +416,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
-        public List<IFieldValidationResult> GetFieldWarnings(object tag)
+        public List<IFieldValidationResult> GetFieldWarnings(object? tag)
         {
             lock (_fieldValidations)
             {
@@ -461,7 +461,7 @@
         /// List of <see cref="IFieldValidationResult"/> items.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public List<IFieldValidationResult> GetFieldWarnings(string propertyName, object tag)
+        public List<IFieldValidationResult> GetFieldWarnings(string propertyName, object? tag)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
@@ -491,7 +491,7 @@
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of field errors available.</returns>
-        public int GetFieldErrorCount(object tag)
+        public int GetFieldErrorCount(object? tag)
         {
             return GetFieldErrors(tag).Count;
         }
@@ -521,7 +521,7 @@
         /// <returns>
         /// List of <see cref="IFieldValidationResult"/> items.
         /// </returns>
-        public List<IFieldValidationResult> GetFieldErrors(object tag)
+        public List<IFieldValidationResult> GetFieldErrors(object? tag)
         {
             lock (_fieldValidations)
             {
@@ -566,7 +566,7 @@
         /// List of <see cref="IFieldValidationResult"/> items.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public List<IFieldValidationResult> GetFieldErrors(string propertyName, object tag)
+        public List<IFieldValidationResult> GetFieldErrors(string propertyName, object? tag)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
@@ -600,7 +600,7 @@
         /// <returns>
         /// The number of business rule validations available.
         /// </returns>
-        public int GetBusinessRuleValidationCount(object tag)
+        public int GetBusinessRuleValidationCount(object? tag)
         {
             return GetBusinessRuleValidations(tag).Count;
         }
@@ -629,7 +629,7 @@
         /// <returns>
         /// List of <see cref="IBusinessRuleValidationResult"/> items.
         /// </returns>
-        public List<IBusinessRuleValidationResult> GetBusinessRuleValidations(object tag)
+        public List<IBusinessRuleValidationResult> GetBusinessRuleValidations(object? tag)
         {
             lock (_businessRuleValidations)
             {
@@ -659,7 +659,7 @@
         /// <returns>
         /// The number of business rule warnings available.
         /// </returns>
-        public int GetBusinessRuleWarningCount(object tag)
+        public int GetBusinessRuleWarningCount(object? tag)
         {
             return GetBusinessRuleWarnings(tag).Count;
         }
@@ -689,7 +689,7 @@
         /// <returns>
         /// List of <see cref="IBusinessRuleValidationResult"/> items.
         /// </returns>
-        public List<IBusinessRuleValidationResult> GetBusinessRuleWarnings(object tag)
+        public List<IBusinessRuleValidationResult> GetBusinessRuleWarnings(object? tag)
         {
             lock (_businessRuleValidations)
             {
@@ -720,7 +720,7 @@
         /// <returns>
         /// The number of business rule errors available.
         /// </returns>
-        public int GetBusinessRuleErrorCount(object tag)
+        public int GetBusinessRuleErrorCount(object? tag)
         {
             return GetBusinessRuleErrors(tag).Count;
         }
@@ -750,7 +750,7 @@
         /// <returns>
         /// List of <see cref="IBusinessRuleValidationResult"/> items.
         /// </returns>
-        public List<IBusinessRuleValidationResult> GetBusinessRuleErrors(object tag)
+        public List<IBusinessRuleValidationResult> GetBusinessRuleErrors(object? tag)
         {
             lock (_businessRuleValidations)
             {

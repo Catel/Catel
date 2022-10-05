@@ -444,8 +444,13 @@
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns></returns>
-        protected override bool ShouldPropertyChangeUpdateIsDirty(string propertyName)
+        protected override bool ShouldPropertyChangeUpdateIsDirty(string? propertyName)
         {
+            if (propertyName is null)
+            {
+                return false;
+            }
+
             if (!base.ShouldPropertyChangeUpdateIsDirty(propertyName))
             {
                 return false;
@@ -466,8 +471,13 @@
         /// <returns>
         ///   <c>true</c> if the specified property is a validation property; otherwise, <c>false</c>.
         /// </returns>
-        protected virtual bool IsValidationProperty(string propertyName)
+        protected virtual bool IsValidationProperty(string? propertyName)
         {
+            if (propertyName is null)
+            {
+                return false;
+            }
+
             if ((string.CompareOrdinal(propertyName, WarningMessageProperty) == 0) ||
                 (string.CompareOrdinal(propertyName, HasWarningsMessageProperty) == 0) ||
                 (string.CompareOrdinal(propertyName, ErrorMessageProperty) == 0) ||

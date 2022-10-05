@@ -126,7 +126,19 @@
                 assembly = Assembly.GetCallingAssembly();
             }
 
-            return GetApplicationDataDirectory(applicationDataTarget, assembly.Company(), assembly.Product());
+            var company = assembly.Company() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(company))
+            {
+                throw new CatelException("Assembly does not contain a company attribute");
+            }
+
+            var product = assembly.Product() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(product))
+            {
+                throw new CatelException("Assembly does not contain a product attribute");
+            }
+
+            return GetApplicationDataDirectory(applicationDataTarget, company, product);
         }
 
         /// <summary>

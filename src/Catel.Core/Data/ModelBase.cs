@@ -299,7 +299,7 @@
         /// <para />
         /// If this method is overriden, it is very important to call the base.
         /// </remarks>
-        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(sender, e, true, false);
         }
@@ -312,7 +312,7 @@
         /// <param name="updateIsDirty">if set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
         /// <param name="isRefreshCallOnly">if set to <c>true</c>, the call is only to refresh updates (for example, for the IDataErrorInfo 
         /// implementation). If this value is <c>false</c>, the custom change handlers will not be called.</param>
-        protected void RaisePropertyChanged(object sender, PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly)
+        protected void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly)
         {
             if (string.IsNullOrEmpty(e.PropertyName))
             {

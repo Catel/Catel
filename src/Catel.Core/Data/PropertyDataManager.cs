@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Xml.Serialization;
+    using Catel.Reflection;
     using Logging;
 
     /// <summary>
@@ -186,7 +187,7 @@
                 if (!_propertyData.TryGetValue(type, out var propertyDataOfType))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
-                        "Property '{0}' on type '{1}' is not registered", name, type.FullName);
+                        "Property '{0}' on type '{1}' is not registered", name, type.GetSafeFullName());
                 }
 
                 return propertyDataOfType.GetPropertyData(name);

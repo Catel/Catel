@@ -105,7 +105,12 @@
             lock (_xmlMappingsLock)
             {
                 var typeMappings = _xmlNameToPropertyNameMappings[type];
-                return typeMappings[xmlName];
+                if (typeMappings.TryGetValue(xmlName, out var mappedValue))
+                {
+                    return mappedValue;
+                }
+
+                return xmlName;
             }
         }
 
@@ -126,7 +131,12 @@
             lock (_xmlMappingsLock)
             {
                 var typeMappings = _xmlPropertyNameToXmlNameMappings[type];
-                return typeMappings[propertyName];
+                if (typeMappings.TryGetValue(propertyName, out var mappedValue))
+                {
+                    return mappedValue;
+                }
+
+                return propertyName;
             }
         }
 
@@ -179,19 +189,21 @@
                     }
 
                     // 2nd, check if XmlAttribute is used
-                    XmlAttributeAttribute xmlAttributeAttribute = null;
-                    propertyInfo.TryGetAttribute(out xmlAttributeAttribute);
-                    if (InitializeXmlAttributeAttribute(type, xmlAttributeAttribute, propertyData.Key))
+                    if (propertyInfo.TryGetAttribute<XmlAttributeAttribute>(out var xmlAttributeAttribute))
                     {
-                        continue;
+                        if (InitializeXmlAttributeAttribute(type, xmlAttributeAttribute, propertyData.Key))
+                        {
+                            continue;
+                        }
                     }
 
                     // 3rd, check if XmlElement is used
-                    XmlElementAttribute xmlElementAttribute = null;
-                    propertyInfo.TryGetAttribute(out xmlElementAttribute);
-                    if (InitializeXmlElementAttribute(type, xmlElementAttribute, propertyData.Key))
+                    if (propertyInfo.TryGetAttribute<XmlElementAttribute>(out var xmlElementAttribute))
                     {
-                        continue;
+                        if (InitializeXmlElementAttribute(type, xmlElementAttribute, propertyData.Key))
+                        {
+                            continue;
+                        }
                     }
                 }
             }

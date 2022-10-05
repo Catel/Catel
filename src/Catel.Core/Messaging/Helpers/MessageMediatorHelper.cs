@@ -69,9 +69,15 @@
                     var action = DelegateHelper.CreateDelegate(actionType, instance, methodInfo);
 
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                    var registerMethod = mediator.GetType().GetMethodEx("Register").MakeGenericMethod(actionParameterType);
+                    var registerMethod = mediator.GetType().GetMethodEx("Register");
+                    if (registerMethod is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot find the Register method on '{mediator.GetType().GetSafeFullName()}'");
+                    }
+
+                    var genericRegisterMethod = registerMethod.MakeGenericMethod(actionParameterType);
 #pragma warning restore HAA0101 // Array allocation for params parameter
-                    registerMethod.Invoke(mediator, new[] { instance, action, tag });
+                    genericRegisterMethod.Invoke(mediator, new[] { instance, action, tag });
                 }
             }
         }

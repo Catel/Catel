@@ -8,7 +8,7 @@
     <PackageVersion>5.10.0-beta0013</PackageVersion>
     <Description>Catel.Core library.</Description>
     <PackageTags>catel;argument;checking;guard;logging;log;ioc;dependency;resolver;factory;configuration;data;model;messaging;messenger;reflection;scope;scoping;caching;cache;weak;reference;event</PackageTags>
-    <Nullable>annotations</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

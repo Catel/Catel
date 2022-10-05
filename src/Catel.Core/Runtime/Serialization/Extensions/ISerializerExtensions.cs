@@ -19,7 +19,7 @@
         /// The deserialized model.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializer" /> is <c>null</c>.</exception>
-        public static TModel? Deserialize<TModel>(this ISerializer serializer, Stream stream, ISerializationConfiguration configuration = null)
+        public static TModel? Deserialize<TModel>(this ISerializer serializer, Stream stream, ISerializationConfiguration? configuration = null)
         {
             var model = serializer.Deserialize(typeof(TModel), stream, configuration);
             return (TModel?)model;

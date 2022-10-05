@@ -44,6 +44,6 @@
         /// Gets all the properties and their values that are registered in this property bag.
         /// </summary>
         /// <returns>A dictionary containing all the properties and their values.</returns>
-        Dictionary<string, object> GetAllProperties();
+        Dictionary<string, object?> GetAllProperties();
     }
 }

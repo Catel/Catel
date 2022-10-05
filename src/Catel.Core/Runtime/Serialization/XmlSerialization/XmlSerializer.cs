@@ -656,7 +656,7 @@
                 xmlElementName = CollectionName;
             }
 
-            else if (modelType.TryGetAttribute(out XmlRootAttribute xmlRootAttribute))
+            else if (modelType.TryGetAttribute<XmlRootAttribute>(out var xmlRootAttribute))
             {
                 xmlElementName = xmlRootAttribute.ElementName;
             }

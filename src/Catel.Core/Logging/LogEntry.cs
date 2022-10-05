@@ -2,14 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Log entry class.
     /// </summary>
     public class LogEntry
     {
-        private LogData _logData;
+        private LogData? _logData;
 
         private static readonly Dictionary<LogEvent, string> LogEventCache = new Dictionary<LogEvent, string>();
 
@@ -39,7 +38,7 @@
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        public LogEntry(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        public LogEntry(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             Time = time;
             Log = log;
@@ -62,7 +61,7 @@
         /// <value>
         /// The extra data.
         /// </value>
-        public object ExtraData { get; private set; }
+        public object? ExtraData { get; private set; }
 
         /// <summary>
         /// Gets the log.
@@ -92,15 +91,10 @@
         /// Gets the log data attached to this log entry.
         /// </summary>
         /// <value>The data.</value>
-        public LogData Data
+        public LogData? Data
         {
             get
             {
-                if (_logData is null)
-                {
-                    _logData = new LogData();
-                }
-
                 return _logData;
             }
         }

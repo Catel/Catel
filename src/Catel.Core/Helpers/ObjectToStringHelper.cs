@@ -31,7 +31,7 @@
         /// </summary>
         /// <param name="instance">The instance, can be <c>null</c>.</param>
         /// <returns>A <see cref="string"/> that represents the instance.</returns>
-        public static string? ToString(object? instance)
+        public static string ToString(object? instance)
         {
             return ToString(instance, DefaultCulture);
         }
@@ -45,7 +45,7 @@
         /// <param name="instance">The instance, can be <c>null</c>.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>A <see cref="string" /> that represents the instance.</returns>
-        public static string? ToString(object? instance, CultureInfo cultureInfo)
+        public static string ToString(object? instance, CultureInfo cultureInfo)
         {
             if (instance is null)
             {
@@ -63,17 +63,21 @@
                 return ((DateTime) instance).ToString(cultureInfo);
             }
 
-			// Note: Not supported on NETFX_CORE, don't enable, really doesn't work. If you need a ToString
-			// for a specific string, use a cast like the DateTime about
+            // Note: Not supported on NETFX_CORE, don't enable, really doesn't work. If you need a ToString
+            // for a specific string, use a cast like the DateTime about
 
             // Check if there is a culture specific version
             var toStringMethod = instanceType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>());
             if (toStringMethod is not null)
             {
-                return (string?)toStringMethod.Invoke(instance, new object[] { cultureInfo });
+                var toStringResult = (string?)toStringMethod.Invoke(instance, new object[] { cultureInfo });
+                if (toStringResult is not null)
+                {
+                    return toStringResult;
+                }
             }
 
-            return instance.ToString();
+            return instance.ToString() ?? "null";
         }
 
         /// <summary>

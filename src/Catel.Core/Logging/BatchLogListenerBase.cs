@@ -84,7 +84,7 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             var logEntry = new LogBatchEntry(log, message, logEvent, extraData, logData, time);
 
@@ -109,7 +109,7 @@
             }
         }
 
-        private void OnTimerTick(object state)
+        private void OnTimerTick(object? state)
         {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             FlushAsync();
@@ -122,7 +122,7 @@
         /// <returns>Task so it can be awaited.</returns>
         public async Task FlushAsync()
         {
-            List<LogBatchEntry> batchToSubmit = null;
+            List<LogBatchEntry>? batchToSubmit = null;
 
             lock (_lock)
             {

@@ -18,7 +18,7 @@
         /// <param name="targetType">The type for which this logger is intended.</param>
         /// <exception cref="ArgumentException">If <paramref name="targetType"/> is <c>null</c>.</exception>
         public Log(Type targetType)
-            : this(targetType?.FullName, targetType)
+            : this(targetType.GetSafeFullName(), targetType)
         {
         }
 
@@ -28,7 +28,7 @@
         /// <param name="name">The name of this logger.</param>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
         public Log(string name)
-            : this(name, null)
+            : this(name, typeof(object))
         {
         }
 
@@ -40,6 +40,7 @@
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
         public Log(string name, Type targetType)
         {
+            ArgumentNullException.ThrowIfNull(targetType);
             Argument.IsNotNullOrWhitespace("name", name);
 
             Name = name;
@@ -65,7 +66,7 @@
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this logger is a Catel logger.
@@ -123,7 +124,7 @@
         /// <summary>
         ///   Occurs when a message is written to the log.
         /// </summary>
-        public event EventHandler<LogMessageEventArgs> LogMessage;
+        public event EventHandler<LogMessageEventArgs>? LogMessage;
 
         /// <summary>
         /// Writes the specified message as specified log event with extra data.
@@ -131,7 +132,7 @@
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
-        public void WriteWithData(string message, object extraData, LogEvent logEvent)
+        public void WriteWithData(string message, object? extraData, LogEvent logEvent)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
@@ -152,7 +153,7 @@
         /// <param name="message">The message.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
-        public void WriteWithData(string message, LogData logData, LogEvent logEvent)
+        public void WriteWithData(string message, LogData? logData, LogEvent logEvent)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
@@ -183,7 +184,7 @@
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
-        private void WriteMessage(string message, object extraData, LogData logData, LogEvent logEvent)
+        private void WriteMessage(string message, object? extraData, LogData? logData, LogEvent logEvent)
         {
             var logMessage = LogMessage;
             if (logMessage is not null)

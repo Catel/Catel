@@ -9,7 +9,7 @@
     /// </summary>
     public class AssemblyLoadedEventArgs : EventArgs
     {
-        private readonly Lazy<IEnumerable<Type>> _lazyLoadedTypes;
+        private readonly Lazy<IEnumerable<Type>>? _lazyLoadedTypes;
         private readonly List<Type> _loadedTypes = new List<Type>();
 
         /// <summary>

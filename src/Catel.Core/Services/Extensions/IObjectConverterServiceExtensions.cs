@@ -12,9 +12,9 @@
         /// <param name="service">The service.</param>
         /// <param name="value">The value.</param>
         /// <returns>The object value.</returns>
-        public static T ConvertFromStringToObject<T>(this IObjectConverterService service, string value)
+        public static T? ConvertFromStringToObject<T>(this IObjectConverterService service, string value)
         {
-            return (T) service.ConvertFromStringToObject(value, typeof (T));
+            return (T?) service.ConvertFromStringToObject(value, typeof (T));
         }
 
         /// <summary>
@@ -24,9 +24,9 @@
         /// <param name="service">The service.</param>
         /// <param name="value">The value.</param>
         /// <returns>The object value.</returns>
-        public static T ConvertFromObjectToObject<T>(this IObjectConverterService service, object value)
+        public static T? ConvertFromObjectToObject<T>(this IObjectConverterService service, object value)
         {
-            return (T)service.ConvertFromObjectToObject(value, typeof(T));
+            return (T?)service.ConvertFromObjectToObject(value, typeof(T));
         }
     }
 }

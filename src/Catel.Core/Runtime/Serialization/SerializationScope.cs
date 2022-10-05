@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="serializer">The serializer.</param>
         /// <param name="configuration">The configuration.</param>
-        public SerializationScope(ISerializer serializer, ISerializationConfiguration configuration)
+        public SerializationScope(ISerializer serializer, ISerializationConfiguration? configuration)
         {
             Serializer = serializer;
             Configuration = configuration;
@@ -30,6 +30,6 @@
         /// <value>
         /// The configuration.
         /// </value>
-        public ISerializationConfiguration Configuration { get; set; }
+        public ISerializationConfiguration? Configuration { get; set; }
     }
 }

@@ -26,13 +26,13 @@
         /// <param name="memberName">Name of the member.</param>
         /// <param name="modelInfo">The model information.</param>
         /// <returns>MemberValue.</returns>
-        public virtual MemberValue GetMemberValue(object model, string memberName, SerializationModelInfo modelInfo)
+        public virtual MemberValue? GetMemberValue(object model, string memberName, SerializationModelInfo modelInfo)
         {
             var modelType = model.GetType();
 
             try
             {
-                object value = null;
+                object? value = null;
 
                 var modelEditor = model as IModelEditor;
                 if (modelEditor is not null && modelInfo.CatelPropertyNames.Contains(memberName))

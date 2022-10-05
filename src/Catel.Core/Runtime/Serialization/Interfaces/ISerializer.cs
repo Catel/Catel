@@ -136,7 +136,7 @@
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
+        object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the members of the specified model.

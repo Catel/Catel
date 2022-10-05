@@ -12,7 +12,7 @@
         /// <param name="memberName">Name of the member.</param>
         /// <param name="modelInfo">The model information.</param>
         /// <returns>MemberValue.</returns>
-        MemberValue GetMemberValue(object model, string memberName, SerializationModelInfo modelInfo);
+        MemberValue? GetMemberValue(object model, string memberName, SerializationModelInfo modelInfo);
 
         /// <summary>
         /// Sets the member value.

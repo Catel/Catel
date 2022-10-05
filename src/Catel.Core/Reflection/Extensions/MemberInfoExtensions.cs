@@ -72,7 +72,7 @@
         /// <param name="parameters"></param>
         /// <param name="distance">The distance</param>
         /// <returns><c>true</c> whether the constructor match with the parameters and distance can be computed; otherwise <c>false</c></returns>
-        public static bool TryGetConstructorDistanceByParametersMatch(this ConstructorInfo constructor, object[] parameters, out int distance)
+        public static bool TryGetConstructorDistanceByParametersMatch(this ConstructorInfo constructor, object?[] parameters, out int distance)
         {
             distance = 0;
             var constructorParameters = constructor.GetParameters();

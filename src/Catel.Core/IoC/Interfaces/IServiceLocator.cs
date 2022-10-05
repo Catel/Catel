@@ -195,7 +195,7 @@
         /// <param name="types">The collection of types that should be resolved.</param>
         /// <returns>The resolved types in the same order as the types.</returns>
         /// <exception cref="ArgumentException">The <paramref name="types"/> is <c>null</c> or an empty array.</exception>
-        object[] ResolveMultipleTypes(params Type[] types);
+        object?[] ResolveMultipleTypes(params Type[] types);
 
         /// <summary>
         /// Removes the registered type with the specific tag.

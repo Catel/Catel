@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Xml.Linq;
 
     /// <summary>
     /// Class that is able to manage all properties of a specific object in a thread-safe manner.
@@ -49,7 +48,7 @@
         /// </summary>
         /// <param name="propertiesToImport">The properties to import.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="propertiesToImport"/> is <c>null</c>.</exception>
-        public void Import(Dictionary<string, object> propertiesToImport)
+        public void Import(Dictionary<string, object?> propertiesToImport)
         {
             ArgumentNullException.ThrowIfNull(propertiesToImport);
 

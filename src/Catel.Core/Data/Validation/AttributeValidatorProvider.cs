@@ -22,7 +22,7 @@
         {
             return _validatorPerType.GetFromCacheOrFetch(targetType, () =>
             {
-                if (targetType.TryGetAttribute(out ValidateModelAttribute attribute))
+                if (targetType.TryGetAttribute<ValidateModelAttribute>(out var attribute))
                 {
                     var validator = TypeFactory.Default.CreateInstance(attribute.ValidatorType) as IValidator;
                     return validator;

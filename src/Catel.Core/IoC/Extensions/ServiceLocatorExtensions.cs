@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using Catel.Reflection;
     using Logging;
@@ -68,7 +69,11 @@
                 Log.Debug("Type '{0}' is registered as singleton but has not yet been instantiated. Instantiated it with the specified parameters now and registering it in the ServiceLocator", serviceType.GetSafeFullName());
 
                 var instance = typeFactory.CreateInstanceWithParameters(registrationInfo.ImplementingType, parameters);
-                serviceLocator.RegisterInstance(serviceType, instance);
+                if (instance is not null)
+                {
+                    serviceLocator.RegisterInstance(serviceType, instance);
+                }
+
                 return instance;
             }
 

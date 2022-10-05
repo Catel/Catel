@@ -153,7 +153,7 @@
                         return (T)(object)value;
                     }
 
-                    return (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture);
+                    return (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture)!;
                 }
                 catch (Exception ex)
                 {

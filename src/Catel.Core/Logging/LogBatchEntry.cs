@@ -16,7 +16,7 @@
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        public LogBatchEntry(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        public LogBatchEntry(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
             : base(log, message, logEvent, extraData, logData, time)
         {
         }

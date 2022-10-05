@@ -39,7 +39,7 @@
         private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _fieldsCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
 
         private readonly Dictionary<Type, List<Type>> _serializationModifierDefinitionsPerTypeCache = new Dictionary<Type, List<Type>>();
-        private readonly ICacheStorage<Type, ISerializerModifier> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier>();
+        private readonly ICacheStorage<Type, ISerializerModifier?> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier?>();
         private readonly ICacheStorage<Type, ISerializerModifier[]> _serializationModifiersPerTypeCache = new CacheStorage<Type, ISerializerModifier[]>();
 
         /// <summary>
@@ -576,10 +576,16 @@
                 foreach (var serializerModifierType in serializerModifierTypes)
                 {
                     var innerAttribute = serializerModifierType;
-                    serializers.Add(_serializerModifierCache.GetFromCacheOrFetch(serializerModifierType, () =>
+
+                    var serializerModifier = _serializerModifierCache.GetFromCacheOrFetch(serializerModifierType, () =>
                     {
-                        return (ISerializerModifier)_typeFactory.CreateInstance(serializerModifierType);
-                    }));
+                        return (ISerializerModifier?)_typeFactory.CreateInstance(serializerModifierType);
+                    });
+
+                    if (serializerModifier is not null)
+                    {
+                        serializers.Add(serializerModifier);
+                    }
                 }
 
                 return serializers.ToArray();
@@ -617,7 +623,7 @@
         {
             var name = string.Empty;
 
-            if (memberInfo.TryGetAttribute(out DataMemberAttribute dataMemberAttribute))
+            if (memberInfo.TryGetAttribute<DataMemberAttribute>(out var dataMemberAttribute))
             {
                 if (!string.IsNullOrWhiteSpace(dataMemberAttribute.Name))
                 {
@@ -625,7 +631,7 @@
                 }
             }
 
-            if (memberInfo.TryGetAttribute(out IncludeInSerializationAttribute includeInSerializationAttribute))
+            if (memberInfo.TryGetAttribute<IncludeInSerializationAttribute>(out var includeInSerializationAttribute))
             {
                 if (!string.IsNullOrWhiteSpace(includeInSerializationAttribute.Name))
                 {

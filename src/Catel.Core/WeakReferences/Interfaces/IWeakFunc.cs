@@ -21,7 +21,7 @@
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        Delegate Action { get; }
+        Delegate? Action { get; }
     }
 
     /// <summary>
@@ -43,6 +43,6 @@
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        Delegate Action { get; }
+        Delegate? Action { get; }
     }
 }

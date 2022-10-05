@@ -22,7 +22,7 @@
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; set; }
+        object? Tag { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this logger is a Catel logger.
@@ -66,7 +66,7 @@
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
-        void WriteWithData(string message, object extraData, LogEvent logEvent);
+        void WriteWithData(string message, object? extraData, LogEvent logEvent);
 
         /// <summary>
         /// Writes the specified message as specified log event with extra data.
@@ -75,7 +75,7 @@
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
-        void WriteWithData(string message, LogData logData, LogEvent logEvent);
+        void WriteWithData(string message, LogData? logData, LogEvent logEvent);
 
         /// <summary>
         /// Increases the <see cref="IndentLevel"/> by <c>1</c>.

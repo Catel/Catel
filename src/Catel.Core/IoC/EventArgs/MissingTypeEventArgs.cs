@@ -52,7 +52,7 @@
         /// Set if the registration of an instance is required.
         /// </summary>
         /// <value>The implementing instance.</value>
-        public object ImplementingInstance { get; set; }
+        public object? ImplementingInstance { get; set; }
 
         /// <summary>
         /// Gets or sets the implementing type.
@@ -60,7 +60,7 @@
         /// Set if the registration of a type is required.
         /// </summary>
         /// <value>The implementing type.</value>
-        public Type ImplementingType { get; set; }
+        public Type? ImplementingType { get; set; }
 
         /// <summary>
         /// Gets or sets the tag.

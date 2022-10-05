@@ -18,16 +18,16 @@
         private static Func<IServiceLocator, IDependencyResolver> _createDependencyResolverFunc;
         private static Func<IServiceLocator, ITypeFactory> _createTypeFactoryFunc;
 
-        private static List<Type> _serviceLocatorInitializers = new List<Type>(); 
+        private static List<Type>? _serviceLocatorInitializers; 
 
         /// <summary>
         /// Initializes static members of the <see cref="IoCFactory"/> class.
         /// </summary>
         static IoCFactory()
         {
-            CreateServiceLocatorFunc = () => new ServiceLocator();
-            CreateDependencyResolverFunc = serviceLocator => new CatelDependencyResolver(serviceLocator);
-            CreateTypeFactoryFunc = serviceLocator => new TypeFactory(serviceLocator);
+            _createServiceLocatorFunc = () => new ServiceLocator();
+            _createDependencyResolverFunc = serviceLocator => new CatelDependencyResolver(serviceLocator);
+            _createTypeFactoryFunc = serviceLocator => new TypeFactory(serviceLocator);
 
             TypeCache.AssemblyLoaded += OnAssemblyLoaded;
         }
@@ -103,7 +103,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="AssemblyLoadedEventArgs"/> instance containing the event data.</param>
-        private static void OnAssemblyLoaded(object sender, AssemblyLoadedEventArgs e)
+        private static void OnAssemblyLoaded(object? sender, AssemblyLoadedEventArgs e)
         {
             lock (_lockObject)
             {
@@ -159,8 +159,11 @@
                     {
                         try
                         {
-                            var initializer = (IServiceLocatorInitializer)Activator.CreateInstance(serviceLocatorInitializer);
-                            initializer.Initialize(serviceLocator);
+                            var initializer = Activator.CreateInstance(serviceLocatorInitializer) as IServiceLocatorInitializer;
+                            if (initializer is not null)
+                            {
+                                initializer.Initialize(serviceLocator);
+                            }
                         }
                         catch (Exception ex)
                         {

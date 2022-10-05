@@ -1,6 +1,7 @@
 ﻿namespace Catel.Reflection
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
 
     /// <summary>
@@ -78,7 +79,7 @@
         /// <c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
-        public static bool TryGetAttribute<TAttribute>(this MemberInfo memberInfo, out TAttribute? attribute)
+        public static bool TryGetAttribute<TAttribute>(this MemberInfo memberInfo, [NotNullWhen(true)] out TAttribute? attribute)
             where TAttribute : Attribute
         {
             ArgumentNullException.ThrowIfNull(memberInfo);
@@ -100,7 +101,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType"/> is <c>null</c>.</exception>
-        public static bool TryGetAttribute(this MemberInfo memberInfo, Type attributeType, out Attribute? attribute)
+        public static bool TryGetAttribute(this MemberInfo memberInfo, Type attributeType, [NotNullWhen(true)] out Attribute? attribute)
         {
             ArgumentNullException.ThrowIfNull(memberInfo);
             ArgumentNullException.ThrowIfNull(attributeType);
@@ -125,7 +126,7 @@
         /// <param name="attribute">The attribute.</param>
         /// <returns><c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static bool TryGetAttribute<TAttribute>(this Type type, out TAttribute? attribute)
+        public static bool TryGetAttribute<TAttribute>(this Type type, [NotNullWhen(true)]out TAttribute? attribute)
             where TAttribute : Attribute
         {
             ArgumentNullException.ThrowIfNull(type);
@@ -145,7 +146,7 @@
         /// <returns><c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static bool TryGetAttribute(this Type type, Type attributeType, out Attribute? attribute)
+        public static bool TryGetAttribute(this Type type, Type attributeType, [NotNullWhen(true)] out Attribute? attribute)
         {
             ArgumentNullException.ThrowIfNull(type);
             ArgumentNullException.ThrowIfNull(attributeType);

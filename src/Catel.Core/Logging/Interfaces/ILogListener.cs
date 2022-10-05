@@ -84,56 +84,6 @@
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time);
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Debug" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void Debug(ILog log, string message, object extraData, LogData logData, DateTime time);
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Info" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void Info(ILog log, string message, object extraData, LogData logData, DateTime time);
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Warning" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void Warning(ILog log, string message, object extraData, LogData logData, DateTime time);
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Error" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void Error(ILog log, string message, object extraData, LogData logData, DateTime time);
-
-        /// <summary>
-        /// Called when a <see cref="LogEvent.Status" /> message is written to the log.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="extraData">The additional data.</param>
-        /// <param name="logData">The log data.</param>
-        /// <param name="time">The time.</param>
-        void Status(ILog log, string message, object extraData, LogData logData, DateTime time);
+        void Write(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time);
     }
 }

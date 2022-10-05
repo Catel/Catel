@@ -13,7 +13,7 @@
         /// <summary>
         /// WeakReference to the target listening for the event.
         /// </summary>
-        private readonly WeakReference _weakTarget;
+        private readonly WeakReference? _weakTarget;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakActionBase"/> class.

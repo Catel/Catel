@@ -55,7 +55,7 @@
         /// <param name="validationContext">The validation context to base the summary on.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
-        public ValidationSummary(IValidationContext validationContext, object tag)
+        public ValidationSummary(IValidationContext validationContext, object? tag)
         {
             ArgumentNullException.ThrowIfNull(validationContext);
 
