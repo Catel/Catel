@@ -30,6 +30,8 @@
         /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Add(IValidatorProvider validatorProvider)
         {
+            ArgumentNullException.ThrowIfNull(validatorProvider);
+
             lock (_syncObj)
             {
                 _validatorProviders.Add(validatorProvider);
@@ -44,6 +46,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public bool Contains(IValidatorProvider validatorProvider)
         {
+            ArgumentNullException.ThrowIfNull(validatorProvider);
+
             lock (_syncObj)
             {
                 return _validatorProviders.Contains(validatorProvider);
@@ -59,6 +63,8 @@
         /// <remarks>If there are more than once validator provider and they retrieve more than once validator all of these will be aggregated into a single <see cref="CompositeValidator" />.</remarks>
         protected override IValidator? GetValidator(Type targetType)
         {
+            ArgumentNullException.ThrowIfNull(targetType);
+
             IValidator? validator; 
 
             lock (_syncObj)
@@ -93,6 +99,8 @@
         /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Remove(IValidatorProvider validatorProvider)
         {
+            ArgumentNullException.ThrowIfNull(validatorProvider);
+
             lock (_syncObj)
             {
                 _validatorProviders.Remove(validatorProvider);

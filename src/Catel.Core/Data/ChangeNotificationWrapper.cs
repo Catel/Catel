@@ -7,9 +7,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using System.Windows;
     using Catel.Logging;
-    using Reflection;
     using IWeakEventListener = Catel.IWeakEventListener;
 
     /// <summary>
@@ -54,6 +52,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
         public ChangeNotificationWrapper(object value)
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             _weakReference = new WeakReference(value);
 
             // Note that we either support collections OR property changed, not both because ObservableCollection implements

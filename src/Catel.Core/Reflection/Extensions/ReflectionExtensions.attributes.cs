@@ -81,6 +81,8 @@
         public static bool TryGetAttribute<TAttribute>(this MemberInfo memberInfo, out TAttribute? attribute)
             where TAttribute : Attribute
         {
+            ArgumentNullException.ThrowIfNull(memberInfo);
+
             var result = TryGetAttribute(memberInfo, typeof(TAttribute), out var tempAttribute);
 
             attribute = tempAttribute as TAttribute;
@@ -100,6 +102,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType"/> is <c>null</c>.</exception>
         public static bool TryGetAttribute(this MemberInfo memberInfo, Type attributeType, out Attribute? attribute)
         {
+            ArgumentNullException.ThrowIfNull(memberInfo);
+            ArgumentNullException.ThrowIfNull(attributeType);
+
             attribute = null;
             var attributes = memberInfo.GetCustomAttributes(attributeType, false) as Attribute[];
 
@@ -123,6 +128,8 @@
         public static bool TryGetAttribute<TAttribute>(this Type type, out TAttribute? attribute)
             where TAttribute : Attribute
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             var result = TryGetAttribute(type, typeof(TAttribute), out var tempAttribute);
 
             attribute = tempAttribute as TAttribute;
@@ -140,6 +147,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
         public static bool TryGetAttribute(this Type type, Type attributeType, out Attribute? attribute)
         {
+            ArgumentNullException.ThrowIfNull(type);
+            ArgumentNullException.ThrowIfNull(attributeType);
+
             attribute = null;
             var attributes = type.GetCustomAttributesEx(attributeType, false) as Attribute[];
 

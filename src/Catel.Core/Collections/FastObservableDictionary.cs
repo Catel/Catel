@@ -86,6 +86,8 @@
 
         public FastObservableDictionary(IEnumerable<KeyValuePair<TKey, TValue>> originalDict)
         {
+            ArgumentNullException.ThrowIfNull(originalDict);
+
             if (originalDict is ICollection<KeyValuePair<TKey, TValue>> collection)
             {
                 _dict = new Dictionary<TKey, TValue>(collection.Count);
@@ -102,7 +104,7 @@
             InsertMultipleValues(0, originalDict, false);
         }
 
-        public FastObservableDictionary(IEqualityComparer<TKey> comparer)
+        public FastObservableDictionary(IEqualityComparer<TKey>? comparer)
         {
             _list = new List<TKey>();
             _dictIndexMapping = new Dictionary<TKey, int>(comparer);
@@ -114,15 +116,17 @@
         {
         }
 
-        public FastObservableDictionary(int capacity, IEqualityComparer<TKey> comparer)
+        public FastObservableDictionary(int capacity, IEqualityComparer<TKey>? comparer)
         {
             _list = new List<TKey>(capacity);
             _dictIndexMapping = new Dictionary<TKey, int>(capacity, comparer);
             _dict = new Dictionary<TKey, TValue>(capacity, comparer);
         }
 
-        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
+        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? comparer)
         {
+            ArgumentNullException.ThrowIfNull(dictionary);
+
             _dict = new Dictionary<TKey, TValue>(dictionary.Count, comparer);
             _dictIndexMapping = new Dictionary<TKey, int>(dictionary.Count, comparer);
             _list = new List<TKey>(dictionary.Count);
@@ -132,6 +136,10 @@
 
         private FastObservableDictionary(Dictionary<TKey, TValue> dict, Dictionary<TKey, int> dictIndexMapping, List<TKey> list)
         {
+            ArgumentNullException.ThrowIfNull(dict);
+            ArgumentNullException.ThrowIfNull(dictIndexMapping);
+            ArgumentNullException.ThrowIfNull(list);
+
             _dict = dict;
             _list = list;
             _dictIndexMapping = dictIndexMapping;
@@ -724,7 +732,6 @@
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-
             InsertSingleValue(item.Key, item.Value, true);
         }
 

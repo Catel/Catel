@@ -6,7 +6,6 @@
 
     using Catel.Caching;
     using Catel.Data;
-    using Collections;
     using Logging;
 
     /// <summary>
@@ -32,6 +31,7 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool IsPublicProperty(object obj, string property, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
@@ -60,6 +60,7 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool IsPropertyAvailable(object obj, string property, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return GetPropertyInfo(obj, property, ignoreCase) is not null;
@@ -77,6 +78,7 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue(object obj, string property, out object value)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue<object>(obj, property, out value);
@@ -95,6 +97,7 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue(object obj, string property, bool ignoreCase, out object value)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue<object>(obj, property, ignoreCase, out value);
@@ -113,6 +116,7 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue<TValue>(object obj, string property, out TValue value)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue(obj, property, false, out value);
@@ -132,6 +136,7 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue<TValue>(object obj, string property, bool ignoreCase, out TValue value)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue(obj, property, ignoreCase, false, out value);
@@ -150,6 +155,8 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static object GetPropertyValue(object obj, string property, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+
             return GetPropertyValue<object>(obj, property, ignoreCase);
         }
 
@@ -167,6 +174,8 @@
         /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
         public static TValue GetPropertyValue<TValue>(object obj, string property, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+
             TryGetPropertyValue(obj, property, ignoreCase, true, out TValue returnValue);
 
             return returnValue;
@@ -174,6 +183,7 @@
 
         private static bool TryGetPropertyValue<TValue>(object obj, string property, bool ignoreCase, bool throwOnException, out TValue value)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             value = default!;
@@ -232,6 +242,8 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TrySetPropertyValue(object obj, string property, object? value, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+
             return TrySetPropertyValue(obj, property, value, ignoreCase, false);
         }
 
@@ -248,11 +260,14 @@
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static void SetPropertyValue(object obj, string property, object? value, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+
             TrySetPropertyValue(obj, property, value, ignoreCase, true);
         }
 
         private static bool TrySetPropertyValue(object obj, string property, object? value, bool ignoreCase, bool throwOnError)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);

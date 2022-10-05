@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScopeManagerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Scoping
+﻿namespace Catel.Tests.Scoping
 {
     using System;
     using Catel.Scoping;
@@ -29,11 +22,11 @@ namespace Catel.Tests.Scoping
             }
 
             [TestCase]
-            public void ReturnsTrueForExistignScope()
+            public void ReturnsTrueForExistingScope()
             {
                 Assert.IsFalse(ScopeManager<string>.ScopeExists());
 
-                using (var scopeManager = ScopeManager<string>.GetScopeManager())
+                using (var scopeManager = ScopeManager<string>.GetScopeManager(createScopeFunction: () => string.Empty))
                 {
                     Assert.IsTrue(ScopeManager<string>.ScopeExists());    
                 }
@@ -42,11 +35,9 @@ namespace Catel.Tests.Scoping
             }
         }
 
-        #region Nested type: ScopingTest
         [TestFixture]
         public class ScopingTest
         {
-            #region Methods
             [TestCase]
             public void SingleLevelScoping()
             {
@@ -102,8 +93,6 @@ namespace Catel.Tests.Scoping
                     }
                 }
             }
-            #endregion
         }
-        #endregion
     }
 }

@@ -75,9 +75,9 @@ namespace Catel.Tests.Reflection
             }
 
             [TestCase]
-            public void ThrowsArgumentNullExceptionForNullObjectToCheck()
+            public void ReturnsFalseForNullInstance()
             {
-                Assert.Throws<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null));
+                Assert.IsFalse(ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null));
             }
 
             [TestCase]

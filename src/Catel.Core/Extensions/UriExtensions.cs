@@ -15,6 +15,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="uri" /> is <c>null</c>.</exception>
         public static string GetSafeUriString(this Uri uri)
         {
+            ArgumentNullException.ThrowIfNull(uri);
+
             var safeUri = uri.ToString();
             while (safeUri.StartsWith("//"))
             {

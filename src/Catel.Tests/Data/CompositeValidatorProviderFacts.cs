@@ -30,8 +30,7 @@
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
 
-                Assert.Throws<ArgumentNullException>(
-                    () => compositeValidatorProvider.Remove(null));
+                Assert.Throws<ArgumentNullException>(() => compositeValidatorProvider.Remove(null));
             }
 
             [TestCase]

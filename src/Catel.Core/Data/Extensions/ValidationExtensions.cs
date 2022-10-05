@@ -32,6 +32,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext" /> is <c>null</c>.</exception>
         public static List<ValidationContextChange> SynchronizeWithContext(this ValidationContext validationContext, IValidationContext additionalValidationContext, bool onlyAddValidation = false)
         {
+            ArgumentNullException.ThrowIfNull(validationContext);
+            ArgumentNullException.ThrowIfNull(additionalValidationContext);
+
             var changes = ValidationContextHelper.GetChanges(validationContext, additionalValidationContext);
 
             foreach (var change in changes)

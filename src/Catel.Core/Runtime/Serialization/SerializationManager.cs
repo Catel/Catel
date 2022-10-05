@@ -54,6 +54,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public void Warmup(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             lock (_lock)
             {
                 GetFieldsToSerialize(type);
@@ -80,6 +82,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public void Clear(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             lock (_lock)
             {
                 _fieldsToSerializeCache.Remove(type);
@@ -116,6 +120,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual Dictionary<string, MemberMetadata> GetFieldsToSerialize(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _fieldsToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
                 var serializableMembers = new Dictionary<string, MemberMetadata>();
@@ -161,6 +167,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual Dictionary<string, MemberMetadata> GetCatelPropertiesToSerialize(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _catelPropertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
                 var serializableMembers = new Dictionary<string, MemberMetadata>();
@@ -228,6 +236,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual Dictionary<string, MemberMetadata> GetRegularPropertiesToSerialize(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _regularPropertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
                 var serializableMembers = new Dictionary<string, MemberMetadata>();
@@ -285,6 +295,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public HashSet<string> GetCatelPropertyNames(Type type, bool includeModelBaseProperties = false)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             var key = GetCacheKey(type, includeModelBaseProperties);
 
             return _catelPropertyNamesCache.GetFromCacheOrFetch(key, () =>
@@ -310,6 +322,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public Dictionary<string, MemberMetadata> GetCatelProperties(Type type, bool includeModelBaseProperties = false)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             var key = GetCacheKey(type, includeModelBaseProperties);
 
             return _catelPropertiesCache.GetFromCacheOrFetch(key, () =>
@@ -358,6 +372,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public HashSet<string> GetRegularPropertyNames(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _regularPropertyNamesCache.GetFromCacheOrFetch(type, () =>
             {
                 var regularPropertyNames = GetRegularProperties(type);
@@ -380,6 +396,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public Dictionary<string, MemberMetadata> GetRegularProperties(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _regularPropertiesCache.GetFromCacheOrFetch(type, () =>
             {
                 var dictionary = new Dictionary<string, MemberMetadata>();
@@ -421,6 +439,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public HashSet<string> GetFieldNames(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _fieldNamesCache.GetFromCacheOrFetch(type, () =>
             {
                 var fieldNames = GetFields(type);
@@ -443,6 +463,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public Dictionary<string, MemberMetadata> GetFields(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _fieldsCache.GetFromCacheOrFetch(type, () =>
             {
                 var dictionary = new Dictionary<string, MemberMetadata>();
@@ -512,7 +534,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
         public void RemoveSerializerModifier(Type type, Type serializerModifierType)
         {
-            Argument.IsNotNull("serializerModifierType", serializerModifierType);
+            ArgumentNullException.ThrowIfNull(type);
+            ArgumentNullException.ThrowIfNull(serializerModifierType);
 
             if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var serializerModifierTypes))
             {
@@ -543,6 +566,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public virtual ISerializerModifier[] GetSerializerModifiers(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _serializationModifiersPerTypeCache.GetFromCacheOrFetch(type, () =>
             {
                 var serializers = new List<ISerializerModifier>();
@@ -568,6 +593,8 @@
         /// <returns>The list of modifier attributes found.</returns>
         protected virtual List<Type> FindSerializerModifiers(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             var modifiers = new List<Type>();
 
             if (_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var customModifierTypes))

@@ -9,7 +9,7 @@
 
     public interface ITestInterface1
     {
-        
+
     }
 
     public interface ITestInterface2
@@ -27,15 +27,13 @@
         public TestClass1()
         {
             Name = "created via injection";
-            if (PropertyChanged is not null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs("Name"));
-            }
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
         }
 
         public string Name { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 
     public class TestClass2 : ITestInterface, ITestInterface2

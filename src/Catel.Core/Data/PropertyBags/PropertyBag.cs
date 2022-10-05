@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Xml.Linq;
 
     /// <summary>
     /// Class that is able to manage all properties of a specific object in a thread-safe manner.
@@ -50,6 +51,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="propertiesToImport"/> is <c>null</c>.</exception>
         public void Import(Dictionary<string, object> propertiesToImport)
         {
+            ArgumentNullException.ThrowIfNull(propertiesToImport);
+
             foreach (var property in propertiesToImport)
             {
                 SetValue(property.Key, property.Value);
@@ -58,6 +61,8 @@
 
         public override bool IsAvailable(string name)
         {
+            Argument.IsNotNullOrWhitespace(nameof(name), name);
+
             lock (_lockObject)
             {
                 return _properties.ContainsKey(name);
@@ -136,6 +141,7 @@
         public void UpdatePropertyValue<TValue>(string propertyName, Func<TValue, TValue> update)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            ArgumentNullException.ThrowIfNull(update);
 
             lock (_lockObject)
             {

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using Catel.IoC;
@@ -34,8 +27,12 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
                     var obj = typeFactory.CreateInstance<object>();
+                    if (obj is null)
+                    {
+                        throw new Exception("Created object should not be null");
+                    }
 
 #pragma warning disable IDISP001 // Dispose created.
                     var usedTypeFactory = obj.GetTypeFactory();
@@ -53,7 +50,7 @@ namespace Catel.Tests.IoC
             public void ReturnsDefaultDependencyResolverForObjectNotCreatedWithTypeFactory()
             {
                 var obj = new object();
-                var defaultDependencyResolver = ServiceLocator.Default.ResolveType<IDependencyResolver>();
+                var defaultDependencyResolver = ServiceLocator.Default.ResolveRequiredType<IDependencyResolver>();
                 var dependencyResolver = obj.GetDependencyResolver();
 
                 Assert.IsTrue(ReferenceEquals(defaultDependencyResolver, dependencyResolver));
@@ -64,9 +61,13 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-                    var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
+                    var typeFactory = dependencyResolver.ResolveRequired<ITypeFactory>();
                     var obj = typeFactory.CreateInstance<object>();
+                    if (obj is null)
+                    {
+                        throw new Exception("Created object should not be null");
+                    }
 
                     var usedDependencyResolver = obj.GetDependencyResolver();
 

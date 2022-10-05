@@ -24,6 +24,8 @@
 
         public new void InitializePropertyAfterConstruction(IPropertyData propertyData)
         {
+            ArgumentNullException.ThrowIfNull(propertyData);
+
             base.InitializePropertyAfterConstruction(propertyData);
         }
 

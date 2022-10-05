@@ -56,7 +56,6 @@
 
             Assert.IsTrue(container.IsSuspended);
             Assert.IsTrue(container.IsDisposed);
-            Assert.IsNull(((DisposableToken<DisposableTokenTestContainer>)token).Instance);
         }
     }
 }

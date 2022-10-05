@@ -78,7 +78,7 @@ namespace Catel.Tests.MVVM.ViewModels
                     serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
                     serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
 
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
                     var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(null, "tag");
@@ -105,7 +105,7 @@ namespace Catel.Tests.MVVM.ViewModels
                     serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
                     serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
 
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
                     var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(5, "tag");

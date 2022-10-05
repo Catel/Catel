@@ -24,6 +24,8 @@
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName(Expression propertyExpression, bool allowNested = false)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             return GetPropertyName(propertyExpression, allowNested, false);
         }
 
@@ -38,6 +40,8 @@
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName<TValue>(Expression<Func<TValue>> propertyExpression, bool allowNested = false)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             var body = propertyExpression.Body;
             return GetPropertyName(body, allowNested);
         }
@@ -54,6 +58,8 @@
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, bool allowNested = false)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             var body = propertyExpression.Body;
             return GetPropertyName(body, allowNested);
         }
@@ -69,6 +75,8 @@
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         private static string GetPropertyName(Expression propertyExpression, bool allowNested = false, bool nested = false)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             const string NoMemberExpression = "The expression is not a member access expression";
 
             var cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, BoxingCache.GetBoxedValue(allowNested), BoxingCache.GetBoxedValue(nested));

@@ -57,9 +57,14 @@
         /// <param name="instance">The instance to retrieve in the typed form.</param>
         /// <returns>The typed instance.</returns>
         /// <exception cref="NotSupportedException">The <paramref name="instance"/> cannot be casted to <typeparamref name="TTargetType"/>.</exception>
-        public static TTargetType GetTypedInstance<TTargetType>(object instance)
+        public static TTargetType? GetTypedInstance<TTargetType>(object instance)
             where TTargetType : class
         {
+            if (instance is null)
+            {
+                return null;
+            }
+
             var typedInstance = instance as TTargetType;
             if (typedInstance is null)
             {
@@ -87,6 +92,9 @@
         /// <exception cref = "ArgumentNullException">The <paramref name = "toCheck" /> is <c>null</c>.</exception>
         public static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
         {
+            ArgumentNullException.ThrowIfNull(generic);
+            ArgumentNullException.ThrowIfNull(toCheck);
+
             var processedType = toCheck;
 
             while ((processedType is not null) && (processedType != typeof(object)))
@@ -128,7 +136,7 @@
         /// <param name="fullTypeName">Full name of the type, for example <c>Catel.TypeHelper, Catel.Core</c>.</param>
         /// <returns>The assembly name retrieved from the type, for example <c>Catel.Core</c> or <c>null</c> if the assembly is not contained by the type.</returns>
         /// <exception cref="ArgumentException">The <paramref name="fullTypeName"/> is <c>null</c> or whitespace.</exception>
-        public static string GetAssemblyName(string fullTypeName)
+        public static string? GetAssemblyName(string fullTypeName)
         {
             Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
 
@@ -139,7 +147,7 @@
             }
 
             var splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
-            var assemblyName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : string.Empty;
+            var assemblyName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : null;
             return assemblyName;
         }
 
@@ -161,6 +169,11 @@
             Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
 
             var assemblyNameWithoutOverhead = GetAssemblyName(fullTypeName);
+            if (assemblyNameWithoutOverhead is null)
+            {
+                return fullTypeName;
+            }
+
             var assemblyName = GetAssemblyNameWithoutOverhead(assemblyNameWithoutOverhead);
             var typeName = GetTypeName(fullTypeName);
 

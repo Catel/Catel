@@ -179,7 +179,7 @@ namespace Catel.Tests.IoC
                 _serviceLocator = IoCFactory.CreateServiceLocator();
 
                 var serviceLocator = _serviceLocator;
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
                 serviceLocator.RegisterType<IInterfaceB, ClassB>();
                 serviceLocator.RegisterType<IInterfaceC, ClassC>();
 
@@ -797,7 +797,7 @@ namespace Catel.Tests.IoC
 
                     var ref2 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
 
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
+                    Assert.IsNull(serviceLocator.ResolveType(typeof(ITestInterface), "1"));
                     Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface), "2"));
                     Assert.IsTrue(object.ReferenceEquals(ref1, ref2));
                 }
@@ -872,8 +872,8 @@ namespace Catel.Tests.IoC
 
                     serviceLocator.RemoveAllTypes(typeof(ITestInterface));
 
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "2"));
+                    Assert.IsNull(serviceLocator.ResolveType(typeof(ITestInterface), "1"));
+                    Assert.IsNull(serviceLocator.ResolveType(typeof(ITestInterface), "2"));
                 }
             }
 
@@ -969,7 +969,7 @@ namespace Catel.Tests.IoC
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
                     serviceLocator.CanResolveNonAbstractTypesWithoutRegistration = false;
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(DependencyInjectionTestClass)));
+                    Assert.IsNull(serviceLocator.ResolveType(typeof(DependencyInjectionTestClass)));
                 }
             }
 
@@ -1036,7 +1036,7 @@ namespace Catel.Tests.IoC
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
                     Assert.IsFalse(serviceLocator.IsTypeRegistered<ITestInterface>());
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface)));
+                    Assert.IsNull(serviceLocator.ResolveType(typeof(ITestInterface)));
                 }
             }
 
@@ -1232,7 +1232,11 @@ namespace Catel.Tests.IoC
                     serviceLocator.RegisterType<object>();
                     serviceLocator.RegisterType<ITestInterface1, TestClass1>();
 
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveMultipleTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
+                    var results = serviceLocator.ResolveMultipleTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2));
+
+                    Assert.IsTrue(results[0] is object);
+                    Assert.IsTrue(results[1] is ITestInterface1);
+                    Assert.IsNull(results[2]);
                 }
             }
 
@@ -1314,7 +1318,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveType<IDummy>());
+                    Assert.IsNotNull(() => serviceLocator.ResolveType<IDummy>());
                 }
             }
 
@@ -1326,7 +1330,7 @@ namespace Catel.Tests.IoC
                     serviceLocator.RegisterType(typeof(IDummy), typeof(Dummy), "SomeTag");
 
                     Assert.IsNotNull(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"));
-                    Assert.Throws<TypeNotRegisteredException>(() => serviceLocator.ResolveType<IDummy>());
+                    Assert.IsNotNull(() => serviceLocator.ResolveType<IDummy>());
                 }
             }
         }

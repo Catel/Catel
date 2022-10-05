@@ -140,20 +140,14 @@
 
     public class PercentProgress : ITaskProgressReport
     {
-        #region Constructors
-        public PercentProgress(int percents, string status = null)
+        public PercentProgress(int percents, string status = "")
         {
             Percents = percents;
             Status = status;
         }
-        #endregion
 
-        #region Properties
         public int Percents { get; private set; }
-        #endregion
 
-        #region ITaskProgressReport Members
         public string Status { get; private set; }
-        #endregion
     }
 }

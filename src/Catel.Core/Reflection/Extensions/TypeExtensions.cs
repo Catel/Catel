@@ -19,6 +19,11 @@
         /// <returns><c>true</c> if this type is a class type; otherwise, <c>false</c>.</returns>
         public static bool IsClassType(this Type type)
         {
+            if (type is null)
+            {
+                return false;
+            }
+
             if (type.IsValueTypeEx())
             {
                 return false;
@@ -39,6 +44,11 @@
         /// <returns><c>true</c> if the specified type is a collection; otherwise, <c>false</c>.</returns>
         public static bool IsCollection(this Type type)
         {
+            if (type is null)
+            {
+                return false;
+            }
+
             if (type == typeof(string))
             {
                 return false;
@@ -54,6 +64,11 @@
         /// <returns><c>true</c> if the specified type is a dictionary; otherwise, <c>false</c>.</returns>
         public static bool IsDictionary(this Type type)
         {
+            if (type is null)
+            {
+                return false;
+            }
+
             if (type == typeof(string))
             {
                 return false;
@@ -75,6 +90,11 @@
         /// <returns>True if the type is nullable, otherwise false.</returns>
         public static bool IsNullableType(this Type type)
         {
+            if (type is null)
+            {
+                return false;
+            }
+
             if (!type.IsValueTypeEx())
             {
                 return true;
@@ -97,6 +117,11 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public static bool IsBasicType(this Type type)
         {
+            if (type is null)
+            {
+                return false;
+            }
+
             if (type == typeof(string) || type.IsPrimitiveEx() || type.IsEnumEx() || type == typeof(DateTime) || type == typeof(decimal) || type == typeof(Guid))
             {
                 return true;
@@ -122,6 +147,11 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static bool IsModelBase(this Type type)
         {
+            if (type is null)
+            {
+                return false;
+            }
+
             if (type == typeof (ModelBase))
             {
                 return true;
@@ -138,6 +168,11 @@
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public static Type? GetCollectionElementType(this Type type)
         {
+            if (type is null)
+            {
+                return null;
+            }
+
             if (type.IsArrayEx())
             {
                 return type.GetElementTypeEx();

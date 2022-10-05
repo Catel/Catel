@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MissingTypeEventArgsTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.IoC.EventArgs
+﻿namespace Catel.Tests.IoC.EventArgs
 {
     using System;
     using Catel.IoC;

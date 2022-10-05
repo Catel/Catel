@@ -2,6 +2,7 @@
 {
     using System;
     using System.Reflection;
+    using Catel.Services;
 
     /// <summary>
     /// Class containing information about a (de)serialized value.
@@ -78,6 +79,7 @@
         /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
         public static SerializationObject FailedToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName)
         {
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace("memberName", memberName);
 
             var obj = new SerializationObject(modelType, memberGroup, memberName, null);
@@ -98,6 +100,7 @@
         /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
         public static SerializationObject SucceededToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName, object? memberValue)
         {
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace("memberName", memberName);
 
             var obj = new SerializationObject(modelType, memberGroup, memberName, memberValue);

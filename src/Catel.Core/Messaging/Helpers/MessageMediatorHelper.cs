@@ -26,10 +26,12 @@
         /// <exception cref="InvalidCastException">One of the methods cannot be casted to a valid message method.</exception>
         public static void SubscribeRecipient(object instance, IMessageMediator? messageMediator = null)
         {
+            ArgumentNullException.ThrowIfNull(instance);
+
             if (messageMediator is null)
             {
                 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-                messageMediator = dependencyResolver.Resolve<IMessageMediator>();
+                messageMediator = dependencyResolver.ResolveRequired<IMessageMediator>();
             }
 
             var mediator = messageMediator;
@@ -82,10 +84,12 @@
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         public static void UnsubscribeRecipient(object instance, IMessageMediator? messageMediator = null)
         {
+            ArgumentNullException.ThrowIfNull(instance);
+
             if (messageMediator is null)
             {
                 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-                messageMediator = dependencyResolver.Resolve<IMessageMediator>();
+                messageMediator = dependencyResolver.ResolveRequired<IMessageMediator>();
             }
 
             messageMediator.UnregisterRecipient(instance);

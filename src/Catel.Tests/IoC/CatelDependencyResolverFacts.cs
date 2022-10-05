@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CatelDependencyResolverFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using Catel.IoC;
@@ -32,7 +25,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.Throws<ArgumentNullException>(() => dependencyResolver.CanResolve(null));
                 }
@@ -43,7 +36,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.IsFalse(dependencyResolver.CanResolve(typeof(ITestInterface)));
                 }
@@ -55,7 +48,7 @@ namespace Catel.Tests.IoC
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
                     serviceLocator.RegisterType<IMessageService, MessageService>();
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.IsTrue(dependencyResolver.CanResolve(typeof(IMessageService)));
                 }
@@ -70,7 +63,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.Throws<ArgumentNullException>(() => dependencyResolver.CanResolveMultiple(null));
                 }
@@ -81,7 +74,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.IsTrue(dependencyResolver.CanResolveMultiple(new Type[] { }));
                 }
@@ -93,7 +86,7 @@ namespace Catel.Tests.IoC
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
                     serviceLocator.RegisterType<IMessageService, MessageService>();
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     var typesToResolve = new[] { typeof(ITestInterface), typeof(INavigationService), typeof(ITypeFactory) };
 
@@ -108,7 +101,7 @@ namespace Catel.Tests.IoC
                 {
                     serviceLocator.RegisterType<IMessageService, MessageService>();
                     serviceLocator.RegisterType<INavigationService, NavigationService>();
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
                     Assert.IsTrue(dependencyResolver.CanResolveMultiple(typesToResolve));
@@ -124,7 +117,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.Throws<ArgumentNullException>(() => dependencyResolver.Resolve(null));
                 }
@@ -135,9 +128,9 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                    Assert.Throws<TypeNotRegisteredException>(() => dependencyResolver.Resolve(typeof(ITestInterface)));
+                    Assert.IsNull(dependencyResolver.Resolve(typeof(ITestInterface)));
                 }
             }
 
@@ -147,7 +140,7 @@ namespace Catel.Tests.IoC
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
                     serviceLocator.RegisterType<IMessageService, MessageService>();
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.IsNotNull(dependencyResolver.Resolve(typeof(IMessageService)));
                 }
@@ -162,7 +155,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     Assert.Throws<ArgumentNullException>(() => dependencyResolver.ResolveMultiple(null));
                 }
@@ -173,7 +166,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     var resolvedObjects = dependencyResolver.ResolveMultiple(new Type[] { });
                     Assert.AreEqual(0, resolvedObjects.Length);
@@ -186,7 +179,7 @@ namespace Catel.Tests.IoC
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
                     serviceLocator.RegisterType<IMessageService, MessageService>();
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     var typesToResolve = new[] { typeof(IMessageService), typeof(ITestInterface), typeof(ITypeFactory) };
                     var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
@@ -204,7 +197,7 @@ namespace Catel.Tests.IoC
                 {
                     serviceLocator.RegisterType<IMessageService, MessageService>();
                     serviceLocator.RegisterType<INavigationService, NavigationService>();
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
                     var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);

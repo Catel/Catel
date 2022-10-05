@@ -262,7 +262,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
@@ -275,7 +275,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
                     serviceLocator.RegisterInstance(iniEntry);
@@ -294,7 +294,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
                     serviceLocator.RegisterInstance(iniEntry);
@@ -314,7 +314,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
                     serviceLocator.RegisterInstance(iniEntry);
@@ -335,7 +335,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
                     Assert.IsTrue(instance.HasCalledCustomInitialization);
@@ -347,8 +347,8 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
                     var dependencyResolverManager = DependencyResolverManager.Default;
@@ -378,7 +378,7 @@ namespace Catel.Tests.IoC
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     serviceLocator.RegisterType<X>();
                     serviceLocator.RegisterType<Y>();
@@ -468,16 +468,6 @@ namespace Catel.Tests.IoC
                 Assert.IsTrue(instance.IsTypedConstructorCalled);
             }
 
-            [TestCase]
-            public void CreatesTypeWithInjectionConstructorAttribute()
-            {
-                var typeFactory = TypeFactory.Default;
-
-                var instance = typeFactory.CreateInstance<ClassWithSeveralMatchesForDependencyInjection>();
-
-                Assert.IsTrue(instance.IsRightConstructorUsed);
-            }
-
             [TestCase, Explicit]
             public void IfTypeFactoryIsCalledConcurrentlyItRunsFasterThanSerial()
             {
@@ -549,15 +539,17 @@ namespace Catel.Tests.IoC
                     serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
                     serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
 
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
-                    var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<AdvancedDependencyInjectionTestClass>("tag", "string", 42, 42L);
+                    using (var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>())
+                    {
+                        var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<AdvancedDependencyInjectionTestClass>("tag", "string", 42, 42L);
 
-                    Assert.IsNotNull(instance);
-                    Assert.AreEqual("string", instance.StringValue);
-                    Assert.AreEqual(42, instance.IntValue);
-                    Assert.AreEqual(42L, instance.LongValue);
+                        Assert.IsNotNull(instance);
+                        Assert.AreEqual("string", instance.StringValue);
+                        Assert.AreEqual(42, instance.IntValue);
+                        Assert.AreEqual(42L, instance.LongValue);
 
-                    Assert.IsTrue(ReferenceEquals(tagDependency, instance.Dependency));
+                        Assert.IsTrue(ReferenceEquals(tagDependency, instance.Dependency));
+                    }
                 }
             }
         }

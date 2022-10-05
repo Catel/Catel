@@ -220,6 +220,11 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         private object? CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object? tag, object?[] parameters, bool autoCompleteDependencies)
         {
+            if (typeToConstruct.IsBasicType())
+            {
+                return Activator.CreateInstance(typeToConstruct);
+            }
+
             var previousRequestPath = _currentTypeRequestPath.Value!;
 
             try

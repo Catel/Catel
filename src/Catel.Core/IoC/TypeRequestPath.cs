@@ -46,6 +46,9 @@
         /// <returns></returns>
         public static TypeRequestPath Branch(TypeRequestPath parent, TypeRequestInfo typeRequestInfo)
         {
+            ArgumentNullException.ThrowIfNull(parent);
+            ArgumentNullException.ThrowIfNull(typeRequestInfo);
+
             //if (parent._typePath.Inde(o => o.Equals(typeRequestInfo)))
             int previousIndex = Array.IndexOf(parent._typePath, typeRequestInfo);
             if (previousIndex >= 0)

@@ -21,6 +21,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
         public CatelDependencyResolver(IServiceLocator serviceLocator)
         {
+            ArgumentNullException.ThrowIfNull(serviceLocator);
+
             _serviceLocator = serviceLocator;
         }
 
@@ -32,6 +34,8 @@
         /// <returns><c>true</c> if the specified type with the specified tag can be resolved; otherwise, <c>false</c>.</returns>
         public bool CanResolve(Type type, object? tag = null)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _serviceLocator.IsTypeRegistered(type, tag);
         }
 
@@ -46,6 +50,8 @@
         /// <returns><c>true</c> if all types specified can be resolved; otherwise, <c>false</c>.</returns>
         public bool CanResolveMultiple(Type[] types)
         {
+            ArgumentNullException.ThrowIfNull(types);
+
             if (types.Length == 0)
             {
                 return true;
@@ -64,6 +70,8 @@
         /// <returns>The resolved object.</returns>
         public object? Resolve(Type type, object? tag = null)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             return _serviceLocator.ResolveType(type, tag);
         }
 
@@ -75,6 +83,8 @@
         /// <returns>A list of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
         public object[] ResolveMultiple(Type[] types, object? tag = null)
         {
+            ArgumentNullException.ThrowIfNull(types);
+
             if (types.Length == 0)
             {
                 return Array.Empty<object>();

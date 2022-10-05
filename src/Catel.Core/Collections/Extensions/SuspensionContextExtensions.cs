@@ -17,8 +17,10 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
+
             // No suspension context is the same as None mode
-            var mode = suspensionContext?.Mode ?? SuspensionMode.None;
+            var mode = suspensionContext.Mode;
 
             // Fast return for no items in not None modes
             if (mode != SuspensionMode.None && suspensionContext?.ChangedItems.Count == 0)
@@ -43,6 +45,7 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context is null || context.Mode == SuspensionMode.None);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs() };
@@ -56,6 +59,7 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateAddingEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Adding);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode) };
@@ -69,6 +73,7 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateRemovingEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Removing);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode) };
@@ -82,6 +87,7 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Mixed);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.MixedActions) };
@@ -95,6 +101,7 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedBashEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedBash);
 
             return suspensionContext.CreateBashEvents(SuspensionMode.MixedBash);
@@ -108,6 +115,7 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedConsolidateEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedConsolidate);
 
             var events = suspensionContext.CreateBashEvents(suspensionContext.Mode);
@@ -150,6 +158,7 @@
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateSilentEvents<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Silent);
 
             return Array.Empty<NotifyRangedCollectionChangedEventArgs>();
@@ -163,6 +172,8 @@
         /// <returns><c>True</c> if <see cref="SuspensionMode"/> is one of the mixed modes; otherwise, <c>false</c>.</returns>
         public static bool IsMixedMode<T>(this SuspensionContext<T> suspensionContext)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
+
             return suspensionContext.Mode.IsMixedMode();
         }
 
@@ -175,6 +186,8 @@
         /// <returns>The <see cref="IList{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         private static IList<NotifyRangedCollectionChangedEventArgs> CreateBashEvents<T>(this SuspensionContext<T> suspensionContext, SuspensionMode suspensionMode)
         {
+            ArgumentNullException.ThrowIfNull(suspensionContext);
+
             var i = 0;
             var changedItems = new List<T>();
             var changedItemIndices = new List<int>();

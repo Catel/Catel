@@ -103,6 +103,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c> or whitespace.</exception>
         public void RegisterLanguageSource(ILanguageSource languageSource)
         {
+            ArgumentNullException.ThrowIfNull(languageSource);
+
             lock (_languageSources)
             {
                 _languageSources.Insert(0, languageSource);

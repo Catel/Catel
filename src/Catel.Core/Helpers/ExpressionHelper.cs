@@ -26,6 +26,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
         public static string GetPropertyName<TSource, TProperty>(Expression<Func<TSource, TProperty>> propertyExpression)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             return PropertyHelper.GetPropertyName(propertyExpression);
         }
 
@@ -40,6 +42,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         public static string GetPropertyName<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             return PropertyHelper.GetPropertyName(propertyExpression);
         }
 
@@ -52,6 +56,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         public static object? GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             var expressionToHandle = GetExpressionToHandle(propertyExpression);
 
             var body = expressionToHandle as MemberExpression;

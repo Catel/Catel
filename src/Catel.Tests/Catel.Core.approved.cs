@@ -101,25 +101,6 @@ namespace Catel
         public CatelException(string message) { }
         public CatelException(string message, System.Exception innerException) { }
     }
-    public class CompositeFilter<T> : Catel.ICompositeFilter<T>
-        where T :  class
-    {
-        public CompositeFilter() { }
-        public Catel.CompositePredicate<T> Excludes { get; set; }
-        public Catel.CompositePredicate<T> Includes { get; set; }
-        public bool Matches(T target) { }
-        public bool MatchesObject(object target) { }
-    }
-    public class CompositePredicate<T>
-        where T :  class
-    {
-        public CompositePredicate() { }
-        public bool DoesNotMatchAny(T target) { }
-        public bool MatchesAll(T target) { }
-        public bool MatchesAny(T target) { }
-        public bool MatchesNone(T target) { }
-        public static Catel.CompositePredicate<T> operator +(Catel.CompositePredicate<T> invokes, System.Predicate<T> filter) { }
-    }
     public class CoreModule : Catel.IoC.IServiceLocatorInitializer
     {
         public CoreModule() { }
@@ -137,13 +118,13 @@ namespace Catel
     }
     public class DisposableToken : Catel.DisposableToken<object>
     {
-        public DisposableToken(object instance, System.Action<Catel.IDisposableToken<object>> initialize, System.Action<Catel.IDisposableToken<object>> dispose, object tag = null) { }
+        public DisposableToken(object instance, System.Action<Catel.IDisposableToken<object>> initialize, System.Action<Catel.IDisposableToken<object>> dispose, object? tag = null) { }
     }
     public class DisposableToken<T> : Catel.Disposable, Catel.IDisposableToken<T>, System.IDisposable
     {
-        public DisposableToken(T instance, System.Action<Catel.IDisposableToken<T>> initialize, System.Action<Catel.IDisposableToken<T>> dispose, object tag = null) { }
+        public DisposableToken(T instance, System.Action<Catel.IDisposableToken<T>> initialize, System.Action<Catel.IDisposableToken<T>> dispose, object? tag = null) { }
         public T Instance { get; }
-        public object Tag { get; }
+        public object? Tag { get; }
         protected override void DisposeManaged() { }
     }
     public static class Enum<TEnum>
@@ -152,8 +133,8 @@ namespace Catel
         public static TEnum ConvertFromOtherEnumValue(object inputEnumValue) { }
         public static TEnum ConvertFromOtherEnumValue<TOtherEnum>(TOtherEnum inputEnumValue)
             where TOtherEnum :  struct, System.IComparable, System.IFormattable { }
-        public static string GetName(int value) { }
-        public static string GetName(long value) { }
+        public static string? GetName(int value) { }
+        public static string? GetName(long value) { }
         public static string[] GetNames() { }
         public static System.Collections.Generic.List<TEnum> GetValues() { }
         public static TEnum Parse(string input, bool ignoreCase = false) { }
@@ -165,7 +146,7 @@ namespace Catel
         public static bool TryParse(string input, bool ignoreCase, out TEnum? result) { }
         public static class DataBinding
         {
-            public static System.Collections.Generic.IList<Catel.IBindableEnum<TEnum>> CreateList(Catel.Enum<TEnum>.DataBinding.FormatEnumName formatName = null) { }
+            public static System.Collections.Generic.IList<Catel.IBindableEnum<TEnum>> CreateList(Catel.Enum<TEnum>.DataBinding.FormatEnumName? formatName = null) { }
             public delegate string FormatEnumName<TEnum>(TEnum value);
         }
         public static class Flags
@@ -204,32 +185,26 @@ namespace Catel
         public static bool IsProcessCurrentlyHostedByTool(bool checkParentProcesses = false) { }
         public static bool IsProcessCurrentlyHostedByVisualStudio(bool checkParentProcesses = false) { }
     }
-    public static class EventHandlerExtensions
-    {
-        public static void UnsubscribeAllHandlers<TEventArgs>(this System.EventHandler<TEventArgs> handler)
-            where TEventArgs : System.EventArgs { }
-    }
     public static class ExceptionExtensions
     {
-        public static TException Find<TException>(this System.Exception exception)
+        public static TException? Find<TException>(this System.Exception exception)
             where TException : System.Exception { }
         public static string Flatten(this System.Exception exception, string message = "", bool includeStackTrace = false) { }
         public static System.Collections.Generic.IEnumerable<System.Exception> GetAllInnerExceptions(this System.Exception exception) { }
         public static bool IsCritical(this System.Exception ex) { }
-        public static System.Xml.Linq.XDocument ToXml(this System.Exception exception) { }
     }
     public static class ExceptionFactory
     {
-        public static System.Exception CreateException(System.Type exceptionType, object[] args) { }
-        public static System.Exception CreateException(System.Type exceptionType, string message, System.Exception innerException = null) { }
-        public static TException CreateException<TException>(object[] args)
+        public static System.Exception? CreateException(System.Type exceptionType, object[] args) { }
+        public static System.Exception? CreateException(System.Type exceptionType, string message, System.Exception? innerException = null) { }
+        public static TException? CreateException<TException>(object[] args)
             where TException : System.Exception { }
-        public static TException CreateException<TException>(string message, System.Exception innerException = null)
+        public static TException? CreateException<TException>(string message, System.Exception? innerException = null)
             where TException : System.Exception { }
     }
     public static class ExpressionHelper
     {
-        public static object GetOwner<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
+        public static object? GetOwner<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
         public static string GetPropertyName<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
         public static string GetPropertyName<TSource, TProperty>(System.Linq.Expressions.Expression<System.Func<TSource, TProperty>> propertyExpression) { }
     }
@@ -248,18 +223,10 @@ namespace Catel
         string Name { get; }
         TEnum Value { get; }
     }
-    public interface ICompositeFilter<T>
-        where T :  class
-    {
-        Catel.CompositePredicate<T> Excludes { get; set; }
-        Catel.CompositePredicate<T> Includes { get; set; }
-        bool Matches(T target);
-        bool MatchesObject(object target);
-    }
     public interface IDisposableToken<T> : System.IDisposable
     {
         T Instance { get; }
-        object Tag { get; }
+        object? Tag { get; }
     }
     public interface IExecute
     {
@@ -281,25 +248,18 @@ namespace Catel
     {
         bool Execute(out TResult result);
     }
-    public interface IFluent
-    {
-        bool Equals(object obj);
-        int GetHashCode();
-        System.Type GetType();
-        string ToString();
-    }
     public interface IUniqueIdentifyable
     {
         int UniqueIdentifier { get; }
     }
     public interface IWeakAction : Catel.IExecute, Catel.IWeakReference
     {
-        System.Delegate Action { get; }
+        System.Delegate? Action { get; }
         string MethodName { get; }
     }
     public interface IWeakAction<TParameter> : Catel.IExecuteWithObject, Catel.IExecuteWithObject<TParameter>, Catel.IWeakReference
     {
-        System.Delegate Action { get; }
+        System.Delegate? Action { get; }
         string MethodName { get; }
         bool Execute(TParameter parameter);
     }
@@ -310,12 +270,12 @@ namespace Catel
         bool IsStaticEvent { get; }
         bool IsStaticEventHandler { get; }
         bool IsTargetAlive { get; }
-        object Source { get; }
-        System.Type SourceType { get; }
-        System.WeakReference SourceWeakReference { get; }
-        object Target { get; }
-        System.Type TargetType { get; }
-        System.WeakReference TargetWeakReference { get; }
+        object? Source { get; }
+        System.Type? SourceType { get; }
+        System.WeakReference? SourceWeakReference { get; }
+        object? Target { get; }
+        System.Type? TargetType { get; }
+        System.WeakReference? TargetWeakReference { get; }
         void Detach();
     }
     public interface IWeakFunc<TResult> : Catel.IExecute<TResult>, Catel.IWeakReference
@@ -331,7 +291,7 @@ namespace Catel
     public interface IWeakReference
     {
         bool IsTargetAlive { get; }
-        object Target { get; }
+        object? Target { get; }
     }
     public enum KnownPlatforms
     {
@@ -340,10 +300,6 @@ namespace Catel
         NET6 = 2,
         NET7 = 3,
         NET8 = 4,
-    }
-    public static class LanguageHelper
-    {
-        public static string GetString(string resourceName, System.Globalization.CultureInfo culture = null) { }
     }
     public class MustBeImplementedException : System.Exception
     {
@@ -359,24 +315,24 @@ namespace Catel
     }
     public static class ObjectHelper
     {
-        public static bool AreEqual(object object1, object object2) { }
-        public static bool AreEqualReferences(object object1, object object2) { }
-        public static bool IsNull(object obj) { }
+        public static bool AreEqual(object? object1, object? object2) { }
+        public static bool AreEqualReferences(object? object1, object? object2) { }
+        public static bool IsNull(object? obj) { }
     }
     public static class ObjectToStringHelper
     {
         public static System.Globalization.CultureInfo DefaultCulture { get; set; }
         public static string ToFullTypeString(object instance) { }
-        public static string ToString(object instance) { }
-        public static string ToString(object instance, System.Globalization.CultureInfo cultureInfo) { }
+        public static string? ToString(object? instance) { }
+        public static string? ToString(object? instance, System.Globalization.CultureInfo cultureInfo) { }
         public static string ToTypeString(object instance) { }
     }
     public delegate void OpenInstanceActionHandler<TTarget>(TTarget @this);
     public delegate void OpenInstanceEventHandler<TTarget, TEventArgs>(TTarget @this, object sender, TEventArgs e);
     public static class ParallelHelper
     {
-        public static void ExecuteInParallel<T>(System.Collections.Generic.List<T> items, System.Action<T> actionToInvoke, int itemsPerBatch = 1000, string taskName = null) { }
-        public static System.Threading.Tasks.Task ExecuteInParallelAsync(System.Collections.Generic.List<System.Func<System.Threading.Tasks.Task>> tasks, int batchSize = 1000, string taskName = null) { }
+        public static void ExecuteInParallel<T>(System.Collections.Generic.List<T> items, System.Action<T> actionToInvoke, int itemsPerBatch = 1000, string? taskName = null) { }
+        public static System.Threading.Tasks.Task ExecuteInParallelAsync(System.Collections.Generic.List<System.Func<System.Threading.Tasks.Task>> tasks, int batchSize = 1000, string? taskName = null) { }
     }
     public static class Platforms
     {
@@ -396,11 +352,11 @@ namespace Catel
     }
     public static class ResourceHelper
     {
-        public static string ExtractEmbeddedResource(this System.Reflection.Assembly assembly, string relativeResourceName) { }
+        public static string? ExtractEmbeddedResource(this System.Reflection.Assembly assembly, string relativeResourceName) { }
         public static void ExtractEmbeddedResource(this System.Reflection.Assembly assembly, string relativeResourceName, System.IO.Stream targetStream) { }
         public static void ExtractEmbeddedResource(this System.Reflection.Assembly assembly, string assemblyName, string relativeResourceName, System.IO.Stream targetStream) { }
-        public static string GetString(string resourceName) { }
-        public static string GetString(System.Type callingType, string resourceFile, string resourceName) { }
+        public static string? GetString(string resourceName) { }
+        public static string? GetString(System.Type callingType, string resourceFile, string resourceName) { }
     }
     public static class StringExtensions
     {
@@ -443,21 +399,21 @@ namespace Catel
         public static int ToInt(string value, System.Globalization.CultureInfo cultureInfo) { }
         public static long ToLong(string value) { }
         public static long ToLong(string value, System.Globalization.CultureInfo cultureInfo) { }
-        public static object ToRightType(System.Type targetType, string value) { }
-        public static object ToRightType(System.Type targetType, string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static object? ToRightType(System.Type targetType, string value) { }
+        public static object? ToRightType(System.Type targetType, string value, System.Globalization.CultureInfo cultureInfo) { }
         public static short ToShort(string value) { }
         public static short ToShort(string value, System.Globalization.CultureInfo cultureInfo) { }
-        public static string ToString(string value) { }
+        public static string? ToString(string value) { }
         public static System.TimeSpan ToTimeSpan(string value) { }
         public static System.TimeSpan ToTimeSpan(string value, System.Globalization.CultureInfo cultureInfo) { }
-        public static System.Type ToType(string value) { }
+        public static System.Type? ToType(string value) { }
         public static uint ToUInt(string value) { }
         public static uint ToUInt(string value, System.Globalization.CultureInfo cultureInfo) { }
         public static ulong ToULong(string value) { }
         public static ulong ToULong(string value, System.Globalization.CultureInfo cultureInfo) { }
         public static ushort ToUShort(string value) { }
         public static ushort ToUShort(string value, System.Globalization.CultureInfo cultureInfo) { }
-        public static System.Uri ToUri(string value) { }
+        public static System.Uri? ToUri(string value) { }
     }
     public enum SupportedPlatforms
     {
@@ -467,8 +423,8 @@ namespace Catel
     }
     public static class TagHelper
     {
-        public static bool AreTagsEqual(object firstTag, object secondTag) { }
-        public static string ToString(object tag) { }
+        public static bool AreTagsEqual(object? firstTag, object? secondTag) { }
+        public static string? ToString(object? tag) { }
     }
     public static class ThreadHelper
     {
@@ -489,44 +445,44 @@ namespace Catel
     public class WeakAction : Catel.WeakActionBase, Catel.IExecute, Catel.IWeakAction, Catel.IWeakReference
     {
         public WeakAction(object target, System.Action action) { }
-        public System.Delegate Action { get; }
+        public System.Delegate? Action { get; }
         public string MethodName { get; }
         public bool Execute() { }
         public delegate void OpenInstanceAction<TTarget>(TTarget @this);
     }
     public abstract class WeakActionBase : Catel.IWeakReference
     {
-        protected WeakActionBase(object target) { }
+        protected WeakActionBase(object? target) { }
         public bool IsTargetAlive { get; }
-        public object Target { get; }
+        public object? Target { get; }
     }
     public class WeakAction<TParameter> : Catel.WeakActionBase, Catel.IExecuteWithObject, Catel.IExecuteWithObject<TParameter>, Catel.IWeakAction<TParameter>, Catel.IWeakReference
     {
         public WeakAction(object target, System.Action<TParameter> action) { }
-        public System.Delegate Action { get; }
+        public System.Delegate? Action { get; }
         public string MethodName { get; }
         public bool Execute(TParameter parameter) { }
         public delegate void OpenInstanceGenericAction<TParameter, TTarget>(TTarget @this, TParameter parameter);
     }
     public static class WeakEventListener
     {
-        public static Catel.IWeakEventListener SubscribeToWeakCollectionChangedEvent(this object target, object source, System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged") { }
-        public static Catel.IWeakEventListener SubscribeToWeakEvent(this object target, object source, string eventName, System.Action handler, bool throwWhenSubscriptionFails = true) { }
-        public static Catel.IWeakEventListener SubscribeToWeakEvent(this object target, object source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
-        public static Catel.IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, System.EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
+        public static Catel.IWeakEventListener? SubscribeToWeakCollectionChangedEvent(this object target, object source, System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged") { }
+        public static Catel.IWeakEventListener? SubscribeToWeakEvent(this object target, object source, string eventName, System.Action handler, bool throwWhenSubscriptionFails = true) { }
+        public static Catel.IWeakEventListener? SubscribeToWeakEvent(this object target, object source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
+        public static Catel.IWeakEventListener? SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, System.EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
             where TEventArgs : System.EventArgs { }
-        public static Catel.IWeakEventListener SubscribeToWeakPropertyChangedEvent(this object target, object source, System.ComponentModel.PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged") { }
+        public static Catel.IWeakEventListener? SubscribeToWeakPropertyChangedEvent(this object target, object source, System.ComponentModel.PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged") { }
     }
     public static class WeakEventListener<TTarget, TSource>
         where TTarget :  class
         where TSource :  class
     {
-        public static Catel.IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged") { }
-        public static Catel.IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
-        public static Catel.IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
-        public static Catel.IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, System.EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
+        public static Catel.IWeakEventListener? SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged") { }
+        public static Catel.IWeakEventListener? SubscribeToWeakEvent(TTarget target, TSource source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
+        public static Catel.IWeakEventListener? SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
+        public static Catel.IWeakEventListener? SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, System.EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
             where TEventArgs : System.EventArgs { }
-        public static Catel.IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, System.ComponentModel.PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged") { }
+        public static Catel.IWeakEventListener? SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, System.ComponentModel.PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged") { }
     }
     public class WeakEventListener<TTarget, TSource, TEventArgs> : Catel.IWeakEventListener
         where TTarget :  class
@@ -538,20 +494,20 @@ namespace Catel
         public bool IsStaticEvent { get; }
         public bool IsStaticEventHandler { get; }
         public bool IsTargetAlive { get; }
-        public object Source { get; }
-        public System.Type SourceType { get; }
-        public System.WeakReference SourceWeakReference { get; }
-        public object Target { get; }
-        public System.Type TargetType { get; }
-        public System.WeakReference TargetWeakReference { get; }
+        public object? Source { get; }
+        public System.Type? SourceType { get; }
+        public System.WeakReference? SourceWeakReference { get; }
+        public object? Target { get; }
+        public System.Type? TargetType { get; }
+        public System.WeakReference? TargetWeakReference { get; }
         public void Detach() { }
-        public void OnEvent(object source, TEventArgs eventArgs) { }
-        public static Catel.IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged") { }
-        public static Catel.IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
-        public static Catel.IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true)
+        public void OnEvent(object? source, TEventArgs eventArgs) { }
+        public static Catel.IWeakEventListener? SubscribeToWeakCollectionChangedEvent(TTarget? target, TSource? source, System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged") { }
+        public static Catel.IWeakEventListener? SubscribeToWeakEvent(TTarget? target, TSource? source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true) { }
+        public static Catel.IWeakEventListener? SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget? target, TSource? source, string eventName, System.Delegate handler, bool throwWhenSubscriptionFails = true)
             where TExplicitSourceType :  class { }
-        public static Catel.IWeakEventListener SubscribeToWeakGenericEvent(TTarget target, TSource source, string eventName, System.EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true) { }
-        public static Catel.IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, System.ComponentModel.PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged") { }
+        public static Catel.IWeakEventListener? SubscribeToWeakGenericEvent(TTarget? target, TSource? source, string eventName, System.EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true) { }
+        public static Catel.IWeakEventListener? SubscribeToWeakPropertyChangedEvent(TTarget? target, TSource? source, System.ComponentModel.PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged") { }
     }
     public class WeakFunc<TResult> : Catel.WeakActionBase, Catel.IExecute<TResult>, Catel.IWeakFunc<TResult>, Catel.IWeakReference
     {
@@ -573,26 +529,28 @@ namespace Catel
 namespace Catel.Caching
 {
     public class CacheStorage<TKey, TValue> : Catel.Caching.ICacheStorage<TKey, TValue>
+        where TKey :  notnull
     {
-        public CacheStorage(System.Func<Catel.Caching.Policies.ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false, System.Collections.Generic.IEqualityComparer<TKey> equalityComparer = null) { }
+        public CacheStorage(System.Func<Catel.Caching.Policies.ExpirationPolicy>? defaultExpirationPolicyInitCode = null, bool storeNullValues = false, System.Collections.Generic.IEqualityComparer<TKey>? equalityComparer = null) { }
         public bool DisposeValuesOnRemoval { get; set; }
         public System.TimeSpan ExpirationTimerInterval { get; set; }
         public TValue this[TKey key] { get; }
         public System.Collections.Generic.IEnumerable<TKey> Keys { get; }
-        public event System.EventHandler<Catel.Caching.ExpiredEventArgs<TKey, TValue>> Expired;
-        public event System.EventHandler<Catel.Caching.ExpiringEventArgs<TKey, TValue>> Expiring;
-        public void Add(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy expirationPolicy, bool override = false) { }
+        public event System.EventHandler<Catel.Caching.ExpiredEventArgs<TKey, TValue>>? Expired;
+        public event System.EventHandler<Catel.Caching.ExpiringEventArgs<TKey, TValue>>? Expiring;
+        public void Add(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false) { }
         public void Add(TKey key, TValue value, bool override = false, System.TimeSpan expiration = default) { }
         public void Clear() { }
         public bool Contains(TKey key) { }
-        public TValue Get(TKey key) { }
-        public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, Catel.Caching.Policies.ExpirationPolicy expirationPolicy, bool override = false) { }
+        public TValue? Get(TKey key) { }
+        public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false) { }
         public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, bool override = false, System.TimeSpan expiration = default) { }
-        public System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, Catel.Caching.Policies.ExpirationPolicy expirationPolicy, bool override = false) { }
+        public System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false) { }
         public System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, bool override = false, System.TimeSpan expiration = default) { }
-        public void Remove(TKey key, System.Action action = null) { }
+        public void Remove(TKey key, System.Action? action = null) { }
     }
     public class ExpiredEventArgs<TKey, TValue> : System.EventArgs
+        where TKey :  notnull
     {
         public ExpiredEventArgs(TKey key, TValue value, bool dispose) { }
         public bool Dispose { get; set; }
@@ -600,31 +558,33 @@ namespace Catel.Caching
         public TValue Value { get; }
     }
     public class ExpiringEventArgs<TKey, TValue> : System.EventArgs
+        where TKey :  notnull
     {
-        public ExpiringEventArgs(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy expirationPolicy) { }
+        public ExpiringEventArgs(TKey key, TValue? value, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy) { }
         public bool Cancel { get; set; }
-        public Catel.Caching.Policies.ExpirationPolicy ExpirationPolicy { get; set; }
+        public Catel.Caching.Policies.ExpirationPolicy? ExpirationPolicy { get; set; }
         public TKey Key { get; }
         public TValue Value { get; }
     }
     public interface ICacheStorage<TKey, TValue>
+        where TKey :  notnull
     {
         bool DisposeValuesOnRemoval { get; set; }
         System.TimeSpan ExpirationTimerInterval { get; set; }
         TValue this[TKey key] { get; }
         System.Collections.Generic.IEnumerable<TKey> Keys { get; }
-        event System.EventHandler<Catel.Caching.ExpiredEventArgs<TKey, TValue>> Expired;
-        event System.EventHandler<Catel.Caching.ExpiringEventArgs<TKey, TValue>> Expiring;
-        void Add(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy expirationPolicy, bool override = false);
+        event System.EventHandler<Catel.Caching.ExpiredEventArgs<TKey, TValue>>? Expired;
+        event System.EventHandler<Catel.Caching.ExpiringEventArgs<TKey, TValue>>? Expiring;
+        void Add(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false);
         void Add(TKey key, TValue value, bool override = false, System.TimeSpan expiration = default);
         void Clear();
         bool Contains(TKey key);
-        TValue Get(TKey key);
-        TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, Catel.Caching.Policies.ExpirationPolicy expirationPolicy, bool override = false);
+        TValue? Get(TKey key);
+        TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false);
         TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, bool override = false, System.TimeSpan expiration = default);
-        System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, Catel.Caching.Policies.ExpirationPolicy expirationPolicy, bool override = false);
+        System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false);
         System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, bool override = false, System.TimeSpan expiration = default);
-        void Remove(TKey key, System.Action action = null);
+        void Remove(TKey key, System.Action? action = null);
     }
 }
 namespace Catel.Caching.Policies
@@ -645,7 +605,7 @@ namespace Catel.Caching.Policies
     }
     public sealed class CustomExpirationPolicy : Catel.Caching.Policies.ExpirationPolicy
     {
-        public CustomExpirationPolicy(System.Func<bool> isExpiredFunc = null, System.Action resetAction = null) { }
+        public CustomExpirationPolicy(System.Func<bool>? isExpiredFunc = null, System.Action? resetAction = null) { }
         public override bool IsExpired { get; }
         protected override void OnReset() { }
     }
@@ -662,10 +622,10 @@ namespace Catel.Caching.Policies
         protected bool IsResting { get; }
         protected virtual void OnReset() { }
         public void Reset() { }
-        public static Catel.Caching.Policies.ExpirationPolicy Absolute(System.DateTime absoluteExpirationDateTime, bool force = false) { }
-        public static Catel.Caching.Policies.ExpirationPolicy Custom(System.Func<bool> isExpiredFunc, System.Action resetAction = null, bool force = false) { }
-        public static Catel.Caching.Policies.ExpirationPolicy Duration(System.TimeSpan durationTimeSpan, bool force = false) { }
-        public static Catel.Caching.Policies.ExpirationPolicy Sliding(System.TimeSpan durationTimeSpan, bool force = false) { }
+        public static Catel.Caching.Policies.ExpirationPolicy? Absolute(System.DateTime absoluteExpirationDateTime, bool force = false) { }
+        public static Catel.Caching.Policies.ExpirationPolicy? Custom(System.Func<bool>? isExpiredFunc, System.Action? resetAction = null, bool force = false) { }
+        public static Catel.Caching.Policies.ExpirationPolicy? Duration(System.TimeSpan durationTimeSpan, bool force = false) { }
+        public static Catel.Caching.Policies.ExpirationPolicy? Sliding(System.TimeSpan durationTimeSpan, bool force = false) { }
     }
     public sealed class SlidingExpirationPolicy : Catel.Caching.Policies.DurationExpirationPolicy
     {
@@ -689,7 +649,7 @@ namespace Catel.Collections
         public static void RemoveFirst(this System.Collections.IList list) { }
         public static void RemoveLast(this System.Collections.IList list) { }
         public static void ReplaceRange<T>(this System.Collections.Generic.ICollection<T> collection, System.Collections.Generic.IEnumerable<T> range) { }
-        public static void Sort<T>(this System.Collections.Generic.IList<T> existingSet, System.Func<T, T, int> comparer = null) { }
+        public static void Sort<T>(this System.Collections.Generic.IList<T> existingSet, System.Func<T, T, int>? comparer = null) { }
         public static System.Collections.Generic.IEnumerable<T> SynchronizeCollection<T>(this System.Collections.Generic.ICollection<T> existingSet, System.Collections.Generic.IEnumerable<T> newSet, bool updateExistingSet = true) { }
         public static System.Collections.Generic.IEnumerable<T> SynchronizeCollection<T>(this System.Collections.Generic.IList<T> existingSet, System.Collections.Generic.IEnumerable<T> newSet, bool updateExistingSet = true) { }
         public static System.Array ToArray(this System.Collections.IEnumerable collection, System.Type elementType) { }
@@ -700,16 +660,23 @@ namespace Catel.Collections
     }
     public static class DictionaryExtensions
     {
-        public static void AddItemIfNotEmpty<TKey>(this System.Collections.Generic.Dictionary<TKey, string> dictionary, TKey key, string value) { }
-        public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.Dictionary<TKey, TValue> source, bool overwriteExisting = true) { }
-        public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, bool overwriteExisting = true) { }
+        public static void AddItemIfNotEmpty<TKey>(this System.Collections.Generic.Dictionary<TKey, string> dictionary, TKey key, string value)
+            where TKey :  notnull { }
+        public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.Dictionary<TKey, TValue> source, bool overwriteExisting = true)
+            where TKey :  notnull { }
+        public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, bool overwriteExisting = true)
+            where TKey :  notnull { }
     }
     public static class EnumerableExtensions
     {
-        public static Catel.Collections.FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
-        public static Catel.Collections.FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
-        public static Catel.Collections.FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector) { }
-        public static Catel.Collections.FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public static Catel.Collections.FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector)
+            where TKey :  notnull { }
+        public static Catel.Collections.FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer)
+            where TKey :  notnull { }
+        public static Catel.Collections.FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector)
+            where TKey :  notnull { }
+        public static Catel.Collections.FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer)
+            where TKey :  notnull { }
     }
     public class ExtendedSuspensionContext<T>
     {
@@ -737,7 +704,7 @@ namespace Catel.Collections
         protected override bool IsSortedCore { get; }
         public bool NotificationsSuspended { get; }
         protected override System.ComponentModel.ListSortDirection SortDirectionCore { get; }
-        protected override System.ComponentModel.PropertyDescriptor SortPropertyCore { get; }
+        protected override System.ComponentModel.PropertyDescriptor? SortPropertyCore { get; }
         protected override bool SupportsSearchingCore { get; }
         protected override bool SupportsSortingCore { get; }
         public void AddItems(System.Collections.Generic.IEnumerable<T> collection) { }
@@ -793,6 +760,7 @@ namespace Catel.Collections
         public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
     }
     public class FastObservableDictionary<TKey, TValue> : Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IDictionary<TKey, TValue>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyCollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>, System.Collections.ICollection, System.Collections.IDictionary, System.Collections.IEnumerable, System.Collections.Specialized.INotifyCollectionChanged, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.ISerializable
+        where TKey :  notnull
     {
         protected readonly System.ComponentModel.PropertyChangedEventArgs _cachedCountArgs;
         protected readonly System.ComponentModel.PropertyChangedEventArgs _cachedIndexerArgs;
@@ -802,10 +770,10 @@ namespace Catel.Collections
         public FastObservableDictionary() { }
         public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
         public FastObservableDictionary(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> originalDict) { }
-        public FastObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public FastObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
         public FastObservableDictionary(int capacity) { }
-        public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
-        public FastObservableDictionary(int capacity, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        public FastObservableDictionary(int capacity, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
         protected FastObservableDictionary(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
         public System.Collections.Generic.IEqualityComparer<TKey> Comparer { get; }
@@ -815,15 +783,15 @@ namespace Catel.Collections
         public bool IsReadOnly { get; }
         public bool IsSynchronized { get; }
         public TValue this[TKey key] { get; set; }
-        public object this[object key] { get; set; }
+        public object? this[object key] { get; set; }
         public System.Collections.Generic.ICollection<TKey> Keys { get; }
         public bool NotificationsSuspended { get; }
         public object SyncRoot { get; }
         public System.Collections.Generic.ICollection<TValue> Values { get; }
-        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler? CollectionChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
         public void Add(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
-        public void Add(object key, object value) { }
+        public void Add(object key, object? value) { }
         public void Add(TKey key, TValue value) { }
         public System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> AsEnumerable() { }
         public Catel.Collections.FastObservableDictionary<TKey, TValue> AsReadOnly() { }
@@ -845,7 +813,7 @@ namespace Catel.Collections
         public virtual void MoveItem(int oldIndex, int newIndex) { }
         protected void NotifyChanges() { }
         protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs eventArgs) { }
-        public void OnDeserialization(object sender) { }
+        public void OnDeserialization(object? sender) { }
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs eventArgs) { }
         public bool Remove(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
         public bool Remove(TKey keyToRemove) { }
@@ -858,7 +826,7 @@ namespace Catel.Collections
         public System.IDisposable SuspendChangeNotifications() { }
         public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
         public bool TryGetValue(TKey key, out TValue value) { }
-        public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue value) { }
+        public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue? value) { }
     }
     public static class HashSetExtensions
     {
@@ -895,15 +863,15 @@ namespace Catel.Collections
     public class NotifyListChangedEventArgs : System.ComponentModel.ListChangedEventArgs
     {
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, System.ComponentModel.PropertyDescriptor propDesc) { }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, System.ComponentModel.PropertyDescriptor? propDesc) { }
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, System.ComponentModel.PropertyDescriptor propDesc) { }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, System.ComponentModel.PropertyDescriptor? propDesc) { }
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, int oldIndex) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem, System.ComponentModel.PropertyDescriptor propDesc) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem, int oldIndex, object oldItem) { }
-        public object NewItem { get; }
-        public object OldItem { get; }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object? newItem) { }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object? newItem, System.ComponentModel.PropertyDescriptor? propDesc) { }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object? newItem, int oldIndex, object? oldItem) { }
+        public object? NewItem { get; }
+        public object? OldItem { get; }
     }
     public class NotifyRangedCollectionChangedEventArgs : System.Collections.Specialized.NotifyCollectionChangedEventArgs
     {
@@ -911,9 +879,9 @@ namespace Catel.Collections
         public NotifyRangedCollectionChangedEventArgs(System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices, Catel.Collections.SuspensionMode mode) { }
         public NotifyRangedCollectionChangedEventArgs(System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices, System.Collections.Generic.IList<System.Collections.Specialized.NotifyCollectionChangedAction> mixedActions) { }
         public NotifyRangedCollectionChangedEventArgs(System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices, Catel.Collections.SuspensionMode mode, System.Collections.Specialized.NotifyCollectionChangedAction action) { }
-        public System.Collections.IList ChangedItems { get; }
-        public System.Collections.Generic.IList<int> Indices { get; }
-        public System.Collections.Generic.IList<System.Collections.Specialized.NotifyCollectionChangedAction> MixedActions { get; }
+        public System.Collections.IList? ChangedItems { get; }
+        public System.Collections.Generic.IList<int>? Indices { get; }
+        public System.Collections.Generic.IList<System.Collections.Specialized.NotifyCollectionChangedAction>? MixedActions { get; }
         public Catel.Collections.SuspensionMode SuspensionMode { get; }
     }
     public enum NotifyRangedListChangedAction
@@ -927,10 +895,10 @@ namespace Catel.Collections
         public NotifyRangedListChangedEventArgs(Catel.Collections.NotifyRangedListChangedAction action) { }
         public NotifyRangedListChangedEventArgs(Catel.Collections.NotifyRangedListChangedAction action, System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices) { }
         public Catel.Collections.NotifyRangedListChangedAction Action { get; }
-        public System.Collections.Generic.IList<int> Indices { get; }
-        public System.Collections.IList NewItems { get; }
+        public System.Collections.Generic.IList<int>? Indices { get; }
+        public System.Collections.IList? NewItems { get; }
         public int NewStartingIndex { get; }
-        public System.Collections.IList OldItems { get; }
+        public System.Collections.IList? OldItems { get; }
         public int OldStartingIndex { get; }
     }
     public static class SuspensionContextExtensions
@@ -985,10 +953,10 @@ namespace Catel.Configuration
 {
     public class ConfigurationChangedEventArgs : System.EventArgs
     {
-        public ConfigurationChangedEventArgs(Catel.Configuration.ConfigurationContainer container, string key, object newValue) { }
+        public ConfigurationChangedEventArgs(Catel.Configuration.ConfigurationContainer container, string key, object? newValue) { }
         public Catel.Configuration.ConfigurationContainer Container { get; }
         public string Key { get; }
-        public object NewValue { get; }
+        public object? NewValue { get; }
     }
     public enum ConfigurationContainer
     {
@@ -997,34 +965,34 @@ namespace Catel.Configuration
     }
     public static class ConfigurationExtensions
     {
-        public static TSection GetSection<TSection>(this System.Configuration.Configuration @this, string sectionName, string sectionGroupName = null)
+        public static TSection? GetSection<TSection>(this System.Configuration.Configuration @this, string sectionName, string? sectionGroupName = null)
             where TSection : System.Configuration.ConfigurationSection { }
         public static bool IsConfigurationKey(this Catel.Configuration.ConfigurationChangedEventArgs eventArgs, string expectedKey) { }
         public static bool IsConfigurationKey(this string key, string expectedKey) { }
     }
     public class ConfigurationService : Catel.Configuration.IConfigurationService
     {
-        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer, Catel.Services.IAppDataService appDataService) { }
-        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer, Catel.Services.IAppDataService appDataService) { }
-        public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs> ConfigurationChanged;
+        public ConfigurationService(Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer, Catel.Services.IAppDataService appDataService) { }
+        public ConfigurationService(Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer, Catel.Services.IAppDataService appDataService) { }
+        public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs>? ConfigurationChanged;
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
         protected Catel.Threading.AsyncLock GetLockObject(Catel.Configuration.ConfigurationContainer container) { }
         protected virtual double GetSaveSettingsSchedulerIntervalInMilliseconds() { }
-        protected virtual System.Threading.Tasks.Task<Catel.Configuration.DynamicConfiguration> GetSettingsContainerAsync(Catel.Configuration.ConfigurationContainer container) { }
+        protected virtual System.Threading.Tasks.Task<Catel.Configuration.DynamicConfiguration?> GetSettingsContainerAsync(Catel.Configuration.ConfigurationContainer container) { }
         public virtual System.Threading.Tasks.Task<T> GetValueAsync<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
         protected virtual System.Threading.Tasks.Task<string> GetValueFromStoreAsync(Catel.Configuration.ConfigurationContainer container, string key) { }
-        public virtual System.Threading.Tasks.Task InitializeValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
+        public virtual System.Threading.Tasks.Task InitializeValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue) { }
         public virtual System.Threading.Tasks.Task<bool> IsValueAvailableAsync(Catel.Configuration.ConfigurationContainer container, string key) { }
         protected virtual System.Threading.Tasks.Task<Catel.Configuration.DynamicConfiguration> LoadConfigurationAsync(string fileName) { }
-        protected void RaiseConfigurationChanged(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
+        protected void RaiseConfigurationChanged(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
         protected virtual System.Threading.Tasks.Task SaveConfigurationAsync(Catel.Configuration.ConfigurationContainer container, Catel.Configuration.DynamicConfiguration configuration, string fileName) { }
         protected void ScheduleLocalConfigurationSave() { }
         protected void ScheduleRoamingConfigurationSave() { }
         protected virtual void ScheduleSaveConfiguration(Catel.Configuration.ConfigurationContainer container) { }
         public virtual System.Threading.Tasks.Task SetLocalConfigFilePathAsync(string filePath) { }
         public virtual System.Threading.Tasks.Task SetRoamingConfigFilePathAsync(string filePath) { }
-        public virtual System.Threading.Tasks.Task SetValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
+        public virtual System.Threading.Tasks.Task SetValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
         protected virtual System.Threading.Tasks.Task SetValueToStoreAsync(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
         public System.IDisposable SuspendNotifications() { }
         protected virtual System.Threading.Tasks.Task<bool> ValueExistsAsync(Catel.Configuration.ConfigurationContainer container, string key) { }
@@ -1055,25 +1023,25 @@ namespace Catel.Configuration
     }
     public interface IConfigurationService
     {
-        event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs> ConfigurationChanged;
+        event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs>? ConfigurationChanged;
         System.Threading.Tasks.Task<T> GetValueAsync<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default);
-        System.Threading.Tasks.Task InitializeValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue);
+        System.Threading.Tasks.Task InitializeValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue);
         System.Threading.Tasks.Task<bool> IsValueAvailableAsync(Catel.Configuration.ConfigurationContainer container, string key);
         System.Threading.Tasks.Task SetLocalConfigFilePathAsync(string filePath);
         System.Threading.Tasks.Task SetRoamingConfigFilePathAsync(string filePath);
-        System.Threading.Tasks.Task SetValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object value);
+        System.Threading.Tasks.Task SetValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? value);
         System.IDisposable SuspendNotifications();
     }
     public static class IConfigurationServiceExtensions
     {
         public static System.Threading.Tasks.Task<T> GetLocalValueAsync<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
         public static System.Threading.Tasks.Task<T> GetRoamingValueAsync<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
-        public static System.Threading.Tasks.Task InitializeLocalValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object defaultValue) { }
-        public static System.Threading.Tasks.Task InitializeRoamingValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object defaultValue) { }
+        public static System.Threading.Tasks.Task InitializeLocalValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? defaultValue) { }
+        public static System.Threading.Tasks.Task InitializeRoamingValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? defaultValue) { }
         public static System.Threading.Tasks.Task<bool> IsLocalValueAvailableAsync(this Catel.Configuration.IConfigurationService configurationService, string key) { }
         public static System.Threading.Tasks.Task<bool> IsRoamingValueAvailableAsync(this Catel.Configuration.IConfigurationService configurationService, string key) { }
-        public static System.Threading.Tasks.Task SetLocalValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object value) { }
-        public static System.Threading.Tasks.Task SetRoamingValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object value) { }
+        public static System.Threading.Tasks.Task SetLocalValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? value) { }
+        public static System.Threading.Tasks.Task SetRoamingValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? value) { }
     }
 }
 namespace Catel.Core
@@ -1088,7 +1056,7 @@ namespace Catel.Data
     public class AttributeValidatorProvider : Catel.Data.ValidatorProviderBase
     {
         public AttributeValidatorProvider() { }
-        protected override Catel.Data.IValidator GetValidator(System.Type targetType) { }
+        protected override Catel.Data.IValidator? GetValidator(System.Type targetType) { }
     }
     public static class BoxingCache
     {
@@ -1116,9 +1084,9 @@ namespace Catel.Data
         public System.TimeSpan CleanUpInterval { get; set; }
         public static Catel.Data.BoxingCache<T> Default { get; }
         protected T AddBoxedValue(object boxedValue) { }
-        protected object AddUnboxedValue(T value) { }
+        protected object? AddUnboxedValue(T value) { }
         public void CleanUp() { }
-        public object GetBoxedValue(T value) { }
+        public object? GetBoxedValue(T? value) { }
         public T GetUnboxedValue(object boxedValue) { }
     }
     public class BusinessRuleValidationResult : Catel.Data.ValidationResult, Catel.Data.IBusinessRuleValidationResult, Catel.Data.IValidationResult
@@ -1149,15 +1117,15 @@ namespace Catel.Data
         public bool IsObjectAlive { get; }
         public bool SupportsNotifyCollectionChanged { get; }
         public bool SupportsNotifyPropertyChanged { get; }
-        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
-        public event System.ComponentModel.PropertyChangedEventHandler CollectionItemPropertyChanged;
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        public void OnObjectCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
-        public void OnObjectCollectionItemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
-        public void OnObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
-        public void SubscribeNotifyChangedEvents(object value, System.Collections.ICollection parentCollection) { }
+        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler? CollectionChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler? CollectionItemPropertyChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+        public void OnObjectCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
+        public void OnObjectCollectionItemPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        public void OnObjectPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        public void SubscribeNotifyChangedEvents(object? value, System.Collections.ICollection? parentCollection) { }
         public void UnsubscribeFromAllEvents() { }
-        public void UnsubscribeNotifyChangedEvents(object value, System.Collections.ICollection parentCollection) { }
+        public void UnsubscribeNotifyChangedEvents(object? value, System.Collections.ICollection? parentCollection) { }
         public void UpdateCollectionSubscriptions(System.Collections.ICollection collection) { }
         public static bool IsUsefulForObject(object obj) { }
     }
@@ -1179,7 +1147,7 @@ namespace Catel.Data
         [System.ComponentModel.Browsable(false)]
         [System.Xml.Serialization.XmlIgnore]
         protected Catel.Data.IModelEqualityComparer EqualityComparer { get; set; }
-        public override bool Equals(object obj) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public static bool operator !=(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
         public static bool operator ==(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
@@ -1205,7 +1173,7 @@ namespace Catel.Data
         public CompositeValidatorProvider() { }
         public void Add(Catel.Data.IValidatorProvider validatorProvider) { }
         public bool Contains(Catel.Data.IValidatorProvider validatorProvider) { }
-        protected override Catel.Data.IValidator GetValidator(System.Type targetType) { }
+        protected override Catel.Data.IValidator? GetValidator(System.Type targetType) { }
         public void Remove(Catel.Data.IValidatorProvider validatorProvider) { }
     }
     public static class EditableObjectHelper
@@ -1266,7 +1234,7 @@ namespace Catel.Data
         bool IsDirty { get; }
         bool IsInEditSession { get; }
         string KeyName { get; }
-        object GetDefaultValue(string name);
+        object? GetDefaultValue(string name);
         TValue GetDefaultValue<TValue>(string name);
         System.Type GetPropertyType(string name);
     }
@@ -1287,8 +1255,8 @@ namespace Catel.Data
     public static class IModelExtensions
     {
         public static void ClearIsDirtyOnAllChildren(this Catel.Data.IModel model, bool suspendNotifications = false) { }
-        public static byte[] ToByteArray(this Catel.Data.IModel model, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public static System.Xml.Linq.XDocument ToXml(this Catel.Data.IModel model, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
+        public static byte[] ToByteArray(this Catel.Data.IModel model, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public static System.Xml.Linq.XDocument ToXml(this Catel.Data.IModel model, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
     }
     public interface IModelSerialization : Catel.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable { }
     public interface IObjectAdapter
@@ -1312,28 +1280,28 @@ namespace Catel.Data
         bool IsModelBaseProperty { get; }
         bool IsSerializable { get; }
         string Name { get; }
-        System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> PropertyChangedEventHandler { get; }
+        System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? PropertyChangedEventHandler { get; }
         System.Type Type { get; }
-        object GetDefaultValue();
+        object? GetDefaultValue();
         TValue GetDefaultValue<TValue>();
-        Catel.Reflection.CachedPropertyInfo GetPropertyInfo(System.Type containingType);
+        Catel.Reflection.CachedPropertyInfo? GetPropertyInfo(System.Type containingType);
     }
     public interface ISavableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Xml.Serialization.IXmlSerializable
     {
-        void Save(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
+        void Save(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
     }
     public static class ISavableModelExtensions
     {
-        public static void Save(this Catel.Data.ISavableModel model, string fileName, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
+        public static void Save(this Catel.Data.ISavableModel model, string fileName, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
     }
     public interface IValidatable : System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo
     {
         bool IsHidingValidationResults { get; }
         bool IsValidated { get; }
         Catel.Data.IValidationContext ValidationContext { get; }
-        Catel.Data.IValidator Validator { get; set; }
-        event System.EventHandler<Catel.Data.ValidationEventArgs> Validated;
-        event System.EventHandler<Catel.Data.ValidationEventArgs> Validating;
+        Catel.Data.IValidator? Validator { get; set; }
+        event System.EventHandler<Catel.Data.ValidationEventArgs>? Validated;
+        event System.EventHandler<Catel.Data.ValidationEventArgs>? Validating;
         void Validate(bool force = false);
     }
     public static class IValidatableExtensions
@@ -1342,11 +1310,11 @@ namespace Catel.Data
         public static void Add(this Catel.Data.IValidatable validatable, Catel.Data.IFieldValidationResult fieldValidationResult, bool validate = false) { }
         public static string GetBusinessRuleErrors(this Catel.Data.IValidatable validatable) { }
         public static string GetBusinessRuleWarnings(this Catel.Data.IValidatable validatable) { }
-        public static string GetErrorMessage(this Catel.Data.IValidatable validatable, string userFriendlyObjectName = null) { }
+        public static string GetErrorMessage(this Catel.Data.IValidatable validatable, string? userFriendlyObjectName = null) { }
         public static string GetFieldErrors(this Catel.Data.IValidatable validatable, string columnName) { }
         public static string GetFieldWarnings(this Catel.Data.IValidatable validatable, string columnName) { }
         public static Catel.Data.IValidationContext GetValidationContext(this Catel.Data.IValidatable validatable) { }
-        public static string GetWarningMessage(this Catel.Data.IValidatable validatable, string userFriendlyObjectName = null) { }
+        public static string GetWarningMessage(this Catel.Data.IValidatable validatable, string? userFriendlyObjectName = null) { }
     }
     public interface IValidatableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Data.IValidatable, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged, System.Xml.Serialization.IXmlSerializable { }
     public static class IValidatableModelExtensions
@@ -1446,8 +1414,8 @@ namespace Catel.Data
     }
     public interface IValidatorProvider
     {
-        Catel.Data.IValidator GetValidator(System.Type targetType);
-        Catel.Data.IValidator GetValidator<TTargetType>();
+        Catel.Data.IValidator? GetValidator(System.Type targetType);
+        Catel.Data.IValidator? GetValidator<TTargetType>();
     }
     public interface IValueValidator<in TValue>
     {
@@ -1481,7 +1449,7 @@ namespace Catel.Data
         public bool IsReadOnly { get; set; }
         protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
         protected Catel.Data.IPropertyData GetPropertyData(string name) { }
-        protected System.Func<object, TValue> GetPropertyGetterExpression<TValue>(string propertyName) { }
+        protected System.Func<object, TValue>? GetPropertyGetterExpression<TValue>(string propertyName) { }
         protected virtual Catel.Runtime.Serialization.ISerializer GetSerializerForIEditableObject() { }
         protected TValue GetValue<TValue>(Catel.Data.IPropertyData property) { }
         protected TValue GetValue<TValue>(string name) { }
@@ -1508,15 +1476,15 @@ namespace Catel.Data
         protected virtual bool ShouldPropertyChangeUpdateIsDirty(string propertyName) { }
         public System.IDisposable SuspendChangeCallbacks() { }
         public System.IDisposable SuspendChangeNotifications(bool raiseOnResume = true) { }
-        public override string ToString() { }
-        protected static object GetObjectValue<TValue>(TValue value) { }
+        public override string? ToString() { }
+        protected static object? GetObjectValue<TValue>(TValue value) { }
         protected static bool IsPropertyRegistered(System.Type type, string name) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, System.Func<TValue> createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue> createDefaultValue = null, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, TValue defaultValue, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, System.Func<object> createDefaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
-        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, object defaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, System.Func<TValue>? createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue>? createDefaultValue = null, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, TValue defaultValue, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, System.Func<object?>? createDefaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
+        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, object? defaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
         protected static void UnregisterProperty(System.Type modelType, string name) { }
     }
     public static class ModelBaseExtensions
@@ -1539,7 +1507,7 @@ namespace Catel.Data
     public class ObservableObject : System.ComponentModel.INotifyPropertyChanged
     {
         public ObservableObject() { }
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaisePropertyChanged(string propertyName) { }
         protected virtual void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
@@ -1559,10 +1527,10 @@ namespace Catel.Data
     public class PropertyBag : Catel.Data.PropertyBagBase
     {
         public PropertyBag() { }
-        public PropertyBag(System.Collections.Generic.IDictionary<string, object> propertyDictionary) { }
+        public PropertyBag(System.Collections.Generic.IDictionary<string, object?> propertyDictionary) { }
         public object this[string name] { get; set; }
         public override string[] GetAllNames() { }
-        public override System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
+        public override System.Collections.Generic.Dictionary<string, object?> GetAllProperties() { }
         public override TValue GetValue<TValue>(string name, TValue defaultValue = default) { }
         public void Import(System.Collections.Generic.Dictionary<string, object> propertiesToImport) { }
         public override bool IsAvailable(string name) { }
@@ -1587,7 +1555,7 @@ namespace Catel.Data
     public abstract class PropertyBagBase : Catel.Data.IPropertyBag, System.ComponentModel.INotifyPropertyChanged
     {
         protected PropertyBagBase() { }
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
         public abstract string[] GetAllNames();
         public abstract System.Collections.Generic.Dictionary<string, object> GetAllProperties();
         public abstract TValue GetValue<TValue>(string name, TValue defaultValue = default);
@@ -1629,12 +1597,12 @@ namespace Catel.Data
         public bool IsSerializable { get; }
         public string Name { get; }
         [System.Xml.Serialization.XmlIgnore]
-        public System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> PropertyChangedEventHandler { get; }
+        public System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? PropertyChangedEventHandler { get; }
         [System.Xml.Serialization.XmlIgnore]
         public System.Type Type { get; }
-        public object GetDefaultValue() { }
+        public object? GetDefaultValue() { }
         public TValue GetDefaultValue<TValue>() { }
-        public Catel.Reflection.CachedPropertyInfo GetPropertyInfo(System.Type containingType) { }
+        public Catel.Reflection.CachedPropertyInfo? GetPropertyInfo(System.Type containingType) { }
         public override string ToString() { }
     }
     public class PropertyNotNullableException : System.Exception
@@ -1660,10 +1628,10 @@ namespace Catel.Data
         public int GraphId { get; set; }
         [System.Xml.Serialization.XmlIgnore]
         public int GraphRefId { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [System.Xml.Serialization.XmlIgnore]
-        public Catel.Data.IPropertyData PropertyData { get; }
-        public object Value { get; set; }
+        public Catel.Data.IPropertyData? PropertyData { get; }
+        public object? Value { get; set; }
         public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public class ReflectionObjectAdapter : Catel.Data.IObjectAdapter
@@ -1681,9 +1649,9 @@ namespace Catel.Data
         where T :  class
     {
         protected SavableModelBase() { }
-        public void Save(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public static T Load(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public static Catel.Data.IModel Load(System.Type type, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
+        public void Save(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public static T Load(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public static Catel.Data.IModel Load(System.Type type, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
     }
     public class SuspensionContext
     {
@@ -1737,13 +1705,13 @@ namespace Catel.Data
         [System.Xml.Serialization.XmlIgnore]
         protected bool IsValidating { get; }
         protected virtual bool IsValidationSuspended { get; }
-        protected Catel.Data.IObjectAdapter ObjectAdapter { get; set; }
+        protected Catel.Data.IObjectAdapter? ObjectAdapter { get; set; }
         protected bool ValidateUsingDataAnnotations { get; set; }
         public static bool DefaultValidateUsingDataAnnotationsValue { get; set; }
-        protected event System.EventHandler ValidatedBusinessRules;
-        protected event System.EventHandler ValidatedFields;
-        protected event System.EventHandler ValidatingBusinessRules;
-        protected event System.EventHandler ValidatingFields;
+        protected event System.EventHandler? ValidatedBusinessRules;
+        protected event System.EventHandler? ValidatedFields;
+        protected event System.EventHandler? ValidatingBusinessRules;
+        protected event System.EventHandler? ValidatingFields;
         protected virtual string GetBusinessRuleErrors() { }
         protected virtual string GetBusinessRuleWarnings() { }
         protected virtual string GetFieldErrors(string columnName) { }
@@ -1848,7 +1816,7 @@ namespace Catel.Data
     }
     public static class ValidationExtensions
     {
-        public static Catel.Data.IValidationSummary GetValidationSummary(this Catel.Data.IValidationContext validationContext, object tag = null) { }
+        public static Catel.Data.IValidationSummary GetValidationSummary(this Catel.Data.IValidationContext validationContext, object? tag = null) { }
         public static System.Collections.Generic.List<Catel.Data.ValidationContextChange> SynchronizeWithContext(this Catel.Data.ValidationContext validationContext, Catel.Data.IValidationContext additionalValidationContext, bool onlyAddValidation = false) { }
     }
     public abstract class ValidationResult : Catel.Data.IValidationResult
@@ -1908,7 +1876,7 @@ namespace Catel.Data
     {
         protected ValidatorProviderBase() { }
         public bool UseCache { get; set; }
-        protected abstract Catel.Data.IValidator GetValidator(System.Type targetType);
+        protected abstract Catel.Data.IValidator? GetValidator(System.Type targetType);
     }
     public class XmlNameMapper<T>
     {
@@ -1916,153 +1884,6 @@ namespace Catel.Data
         public bool IsXmlNameMappedToProperty(System.Type type, string xmlName) { }
         public string MapPropertyNameToXmlName(System.Type type, string propertyName) { }
         public string MapXmlNameToPropertyName(System.Type type, string xmlName) { }
-    }
-}
-namespace Catel.ExceptionHandling
-{
-    public class BufferPolicy : Catel.ExceptionHandling.PolicyBase, Catel.ExceptionHandling.IBufferPolicy, Catel.ExceptionHandling.IPolicy
-    {
-        public BufferPolicy(int numberOfTimes, System.TimeSpan interval) { }
-        public override string ToString() { }
-    }
-    public class BufferedEventArgs : System.EventArgs
-    {
-        public BufferedEventArgs(System.Exception bufferedException, System.DateTime dateTime) { }
-        public System.Exception BufferedException { get; }
-        public System.DateTime DateTime { get; }
-    }
-    public class ExceptionHandler : Catel.ExceptionHandling.IExceptionHandler
-    {
-        public ExceptionHandler(System.Type exceptionType, System.Action<System.Exception> action, Catel.ExceptionHandling.ExceptionPredicate filter = null) { }
-        public Catel.ExceptionHandling.IBufferPolicy BufferPolicy { get; set; }
-        public System.Type ExceptionType { get; }
-        public Catel.ExceptionHandling.ExceptionPredicate Filter { get; }
-        public Catel.ExceptionHandling.IRetryPolicy RetryPolicy { get; set; }
-        public void Handle(System.Exception exception) { }
-    }
-    public static class ExceptionHandlerExtensions
-    {
-        public static void OnErrorRetry(this Catel.ExceptionHandling.IExceptionHandler exceptionHandler, int numberOfTimes, System.TimeSpan interval) { }
-        public static void OnErrorRetryImmediately(this Catel.ExceptionHandling.IExceptionHandler exceptionHandler, int numberOfTimes = 2147483647) { }
-        public static void UsingTolerance(this Catel.ExceptionHandling.IExceptionHandler exceptionHandler, int numberOfTimes, System.TimeSpan interval) { }
-    }
-    public abstract class ExceptionHandler<TException> : Catel.ExceptionHandling.IExceptionHandler, Catel.ExceptionHandling.IExceptionHandler<TException>
-        where TException : System.Exception
-    {
-        protected ExceptionHandler() { }
-        public Catel.ExceptionHandling.IBufferPolicy BufferPolicy { get; set; }
-        public System.Type ExceptionType { get; }
-        public Catel.ExceptionHandling.ExceptionPredicate Filter { get; }
-        public Catel.ExceptionHandling.IRetryPolicy RetryPolicy { get; set; }
-        public virtual System.Func<TException, bool> GetFilter() { }
-        public void Handle(System.Exception exception) { }
-        public abstract void OnException(TException exception);
-    }
-    public delegate bool ExceptionPredicate(System.Exception exception);
-    public class ExceptionService : Catel.ExceptionHandling.IExceptionService
-    {
-        public ExceptionService() { }
-        public System.Collections.Generic.IEnumerable<Catel.ExceptionHandling.IExceptionHandler> ExceptionHandlers { get; }
-        public static Catel.ExceptionHandling.IExceptionService Default { get; }
-        public event System.EventHandler<Catel.ExceptionHandling.BufferedEventArgs> ExceptionBuffered;
-        public event System.EventHandler<Catel.ExceptionHandling.RetryingEventArgs> RetryingAction;
-        public Catel.ExceptionHandling.IExceptionHandler GetHandler(System.Type exceptionType) { }
-        public Catel.ExceptionHandling.IExceptionHandler GetHandler<TException>()
-            where TException : System.Exception { }
-        public bool HandleException(System.Exception exception) { }
-        public bool IsExceptionRegistered(System.Type exceptionType) { }
-        public bool IsExceptionRegistered<TException>()
-            where TException : System.Exception { }
-        protected virtual void OnExceptionBuffered(System.Exception bufferedException, System.DateTime dateTime) { }
-        protected virtual void OnRetryingAction(int retryCount, System.Exception lastError, System.TimeSpan delay) { }
-        public void Process(System.Action action) { }
-        public TResult Process<TResult>(System.Func<TResult> action) { }
-        public System.Threading.Tasks.Task ProcessAsync(System.Func<System.Threading.Tasks.Task> action) { }
-        public System.Threading.Tasks.Task ProcessAsync(System.Threading.Tasks.Task action) { }
-        public System.Threading.Tasks.Task<TResult> ProcessAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> action) { }
-        public System.Threading.Tasks.Task<TResult> ProcessAsync<TResult>(System.Func<TResult> action, System.Threading.CancellationToken cancellationToken = default) { }
-        public TResult ProcessWithRetry<TResult>(System.Func<TResult> action) { }
-        public System.Threading.Tasks.Task<TResult> ProcessWithRetryAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> action) { }
-        public Catel.ExceptionHandling.IExceptionHandler Register(Catel.ExceptionHandling.IExceptionHandler handler) { }
-        public Catel.ExceptionHandling.IExceptionHandler Register<TException>(System.Action<TException> handler, System.Func<TException, bool> exceptionPredicate = null)
-            where TException : System.Exception { }
-        public bool Unregister<TException>()
-            where TException : System.Exception { }
-    }
-    public static class ExceptionServiceExtensions
-    {
-        public static System.Threading.Tasks.Task<bool> HandleExceptionAsync(this Catel.ExceptionHandling.IExceptionService exceptionService, System.Exception exception, System.Threading.CancellationToken cancellationToken = default) { }
-        public static void ProcessWithRetry(this Catel.ExceptionHandling.IExceptionService exceptionService, System.Action action) { }
-        public static System.Threading.Tasks.Task ProcessWithRetryAsync(this Catel.ExceptionHandling.IExceptionService exceptionService, System.Func<System.Threading.Tasks.Task> action) { }
-        public static System.Threading.Tasks.Task ProcessWithRetryAsync(this Catel.ExceptionHandling.IExceptionService exceptionService, System.Threading.Tasks.Task action) { }
-        public static System.Threading.Tasks.Task ProcessWithRetryAsync(this Catel.ExceptionHandling.IExceptionService exceptionService, System.Action action, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.Task<TResult> ProcessWithRetryAsync<TResult>(this Catel.ExceptionHandling.IExceptionService exceptionService, System.Func<TResult> action, System.Threading.CancellationToken cancellationToken = default) { }
-        public static Catel.ExceptionHandling.IExceptionHandler Register<TExceptionHandler>(this Catel.ExceptionHandling.IExceptionService exceptionService)
-            where TExceptionHandler : Catel.ExceptionHandling.IExceptionHandler, new () { }
-    }
-    public interface IBufferPolicy : Catel.ExceptionHandling.IPolicy { }
-    public interface IExceptionHandler
-    {
-        Catel.ExceptionHandling.IBufferPolicy BufferPolicy { get; set; }
-        System.Type ExceptionType { get; }
-        Catel.ExceptionHandling.ExceptionPredicate Filter { get; }
-        Catel.ExceptionHandling.IRetryPolicy RetryPolicy { get; set; }
-        void Handle(System.Exception exception);
-    }
-    public interface IExceptionHandler<in TException> : Catel.ExceptionHandling.IExceptionHandler
-        where in TException : System.Exception
-    {
-        System.Func<TException, bool> GetFilter();
-        void OnException(TException exception);
-    }
-    public interface IExceptionService
-    {
-        System.Collections.Generic.IEnumerable<Catel.ExceptionHandling.IExceptionHandler> ExceptionHandlers { get; }
-        event System.EventHandler<Catel.ExceptionHandling.BufferedEventArgs> ExceptionBuffered;
-        event System.EventHandler<Catel.ExceptionHandling.RetryingEventArgs> RetryingAction;
-        Catel.ExceptionHandling.IExceptionHandler GetHandler(System.Type exceptionType);
-        Catel.ExceptionHandling.IExceptionHandler GetHandler<TException>()
-            where TException : System.Exception;
-        bool HandleException(System.Exception exception);
-        bool IsExceptionRegistered(System.Type exceptionType);
-        bool IsExceptionRegistered<TException>()
-            where TException : System.Exception;
-        void Process(System.Action action);
-        TResult Process<TResult>(System.Func<TResult> action);
-        System.Threading.Tasks.Task ProcessAsync(System.Func<System.Threading.Tasks.Task> action);
-        System.Threading.Tasks.Task ProcessAsync(System.Threading.Tasks.Task action);
-        System.Threading.Tasks.Task<TResult> ProcessAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> action);
-        System.Threading.Tasks.Task<TResult> ProcessAsync<TResult>(System.Func<TResult> action, System.Threading.CancellationToken cancellationToken = default);
-        TResult ProcessWithRetry<TResult>(System.Func<TResult> action);
-        System.Threading.Tasks.Task<TResult> ProcessWithRetryAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> action);
-        Catel.ExceptionHandling.IExceptionHandler Register(Catel.ExceptionHandling.IExceptionHandler handler);
-        Catel.ExceptionHandling.IExceptionHandler Register<TException>(System.Action<TException> handler, System.Func<TException, bool> exceptionPredicate = null)
-            where TException : System.Exception;
-        bool Unregister<TException>()
-            where TException : System.Exception;
-    }
-    public interface IPolicy
-    {
-        System.TimeSpan Interval { get; }
-        int NumberOfTimes { get; }
-    }
-    public interface IRetryPolicy : Catel.ExceptionHandling.IPolicy { }
-    public class PolicyBase : Catel.ExceptionHandling.IPolicy
-    {
-        public PolicyBase() { }
-        public System.TimeSpan Interval { get; set; }
-        public int NumberOfTimes { get; set; }
-    }
-    public class RetryPolicy : Catel.ExceptionHandling.PolicyBase, Catel.ExceptionHandling.IPolicy, Catel.ExceptionHandling.IRetryPolicy
-    {
-        public RetryPolicy(int numberOfTimes, System.TimeSpan interval) { }
-    }
-    public class RetryingEventArgs : System.EventArgs
-    {
-        public RetryingEventArgs(int currentRetryCount, System.TimeSpan delay, System.Exception lastException) { }
-        public int CurrentRetryCount { get; }
-        public System.TimeSpan Delay { get; }
-        public System.Exception LastException { get; }
     }
 }
 namespace Catel.IO
@@ -2093,7 +1914,7 @@ namespace Catel.IO
         public static string GetFileName(string path) { }
         public static string GetFullPath(string relativePath, string basePath) { }
         public static string GetParentDirectory(string path) { }
-        public static string GetRelativePath(string fullPath, string basePath = null) { }
+        public static string GetRelativePath(string fullPath, string? basePath = null) { }
     }
     public static class StreamExtensions
     {
@@ -2107,10 +1928,10 @@ namespace Catel.IoC
     public class CatelDependencyResolver : Catel.IoC.IDependencyResolver
     {
         public CatelDependencyResolver(Catel.IoC.IServiceLocator serviceLocator) { }
-        public bool CanResolve(System.Type type, object tag = null) { }
+        public bool CanResolve(System.Type type, object? tag = null) { }
         public bool CanResolveMultiple(System.Type[] types) { }
-        public object Resolve(System.Type type, object tag = null) { }
-        public object[] ResolveMultiple(System.Type[] types, object tag = null) { }
+        public object? Resolve(System.Type type, object? tag = null) { }
+        public object[] ResolveMultiple(System.Type[] types, object? tag = null) { }
     }
     public class CircularDependencyException : System.Exception
     {
@@ -2119,10 +1940,10 @@ namespace Catel.IoC
     }
     public static class DependencyResolverExtensions
     {
-        public static bool CanResolve<T>(this Catel.IoC.IDependencyResolver dependencyResolver, object tag = null) { }
-        public static T Resolve<T>(this Catel.IoC.IDependencyResolver dependencyResolver, object tag = null) { }
-        public static object TryResolve(this Catel.IoC.IDependencyResolver dependencyResolver, System.Type serviceType, object tag = null) { }
-        public static T TryResolve<T>(this Catel.IoC.IDependencyResolver dependencyResolver, object tag = null) { }
+        public static bool CanResolve<T>(this Catel.IoC.IDependencyResolver dependencyResolver, object? tag = null) { }
+        public static T? Resolve<T>(this Catel.IoC.IDependencyResolver dependencyResolver, object? tag = null) { }
+        public static object ResolveRequired(this Catel.IoC.IDependencyResolver dependencyResolver, System.Type type, object? tag = null) { }
+        public static T ResolveRequired<T>(this Catel.IoC.IDependencyResolver dependencyResolver, object? tag = null) { }
     }
     public class DependencyResolverManager : Catel.IoC.IDependencyResolverManager
     {
@@ -2134,22 +1955,12 @@ namespace Catel.IoC
         public virtual void RegisterDependencyResolverForInstance(object instance, Catel.IoC.IDependencyResolver dependencyResolver) { }
         public virtual void RegisterDependencyResolverForType(System.Type type, Catel.IoC.IDependencyResolver dependencyResolver) { }
     }
-    public class ExternalContainerNotSupportedException : System.Exception
-    {
-        public ExternalContainerNotSupportedException(string[] supportedContainers) { }
-        public string[] SupportedContainers { get; }
-    }
-    public class FirstInterfaceRegistrationConvention : Catel.IoC.RegistrationConventionBase
-    {
-        public FirstInterfaceRegistrationConvention(Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
-        public override void Process(System.Collections.Generic.IEnumerable<System.Type> typesToRegister) { }
-    }
     public interface IDependencyResolver
     {
-        bool CanResolve(System.Type type, object tag = null);
+        bool CanResolve(System.Type type, object? tag = null);
         bool CanResolveMultiple(System.Type[] types);
-        object Resolve(System.Type type, object tag = null);
-        object[] ResolveMultiple(System.Type[] types, object tag = null);
+        object? Resolve(System.Type type, object? tag = null);
+        object[] ResolveMultiple(System.Type[] types, object? tag = null);
     }
     public interface IDependencyResolverManager
     {
@@ -2163,43 +1974,26 @@ namespace Catel.IoC
     {
         void Initialize();
     }
-    public interface IRegistrationConvention
-    {
-        Catel.IoC.RegistrationType RegistrationType { get; }
-        void Process(System.Collections.Generic.IEnumerable<System.Type> typesToRegister);
-    }
-    public interface IRegistrationConventionHandler
-    {
-        Catel.ICompositeFilter<System.Reflection.Assembly> AssemblyFilter { get; }
-        System.Collections.Generic.IEnumerable<Catel.IoC.IRegistrationConvention> RegistrationConventions { get; }
-        Catel.ICompositeFilter<System.Type> TypeFilter { get; }
-        void AddAssemblyToScan(System.Reflection.Assembly assembly);
-        void ApplyConventions();
-        void RegisterConvention<TRegistrationConvention>(Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention;
-    }
     public interface IServiceLocator : System.IDisposable, System.IServiceProvider
     {
-        bool AutoRegisterTypesViaAttributes { get; set; }
         bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
-        bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
-        event System.EventHandler<Catel.IoC.MissingTypeEventArgs> MissingType;
-        event System.EventHandler<Catel.IoC.TypeInstantiatedEventArgs> TypeInstantiated;
-        event System.EventHandler<Catel.IoC.TypeRegisteredEventArgs> TypeRegistered;
-        event System.EventHandler<Catel.IoC.TypeUnregisteredEventArgs> TypeUnregistered;
+        event System.EventHandler<Catel.IoC.MissingTypeEventArgs>? MissingType;
+        event System.EventHandler<Catel.IoC.TypeInstantiatedEventArgs>? TypeInstantiated;
+        event System.EventHandler<Catel.IoC.TypeRegisteredEventArgs>? TypeRegistered;
+        event System.EventHandler<Catel.IoC.TypeUnregisteredEventArgs>? TypeUnregistered;
         bool AreMultipleTypesRegistered(params System.Type[] types);
-        Catel.IoC.RegistrationInfo GetRegistrationInfo(System.Type serviceType, object tag = null);
-        bool IsTypeRegistered(System.Type serviceType, object tag = null);
-        bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null);
+        Catel.IoC.RegistrationInfo? GetRegistrationInfo(System.Type serviceType, object? tag = null);
+        bool IsTypeRegistered(System.Type serviceType, object? tag = null);
+        bool IsTypeRegisteredAsSingleton(System.Type serviceType, object? tag = null);
         bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType);
-        void RegisterInstance(System.Type serviceType, object instance, object tag = null);
-        void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
-        void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
+        void RegisterInstance(System.Type serviceType, object instance, object? tag = null);
+        void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object? tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
+        void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object? tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
         bool RemoveAllTypes(System.Type serviceType);
-        bool RemoveType(System.Type serviceType, object tag = null);
+        bool RemoveType(System.Type serviceType, object? tag = null);
         object[] ResolveMultipleTypes(params System.Type[] types);
-        object ResolveType(System.Type serviceType, object tag = null);
-        object ResolveTypeUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType, object tag = null);
+        object? ResolveType(System.Type serviceType, object? tag = null);
+        object? ResolveTypeUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType, object? tag = null);
         System.Collections.Generic.IEnumerable<object> ResolveTypes(System.Type serviceType);
         System.Collections.Generic.IEnumerable<object> ResolveTypesUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType);
     }
@@ -2210,30 +2004,18 @@ namespace Catel.IoC
     public interface ITypeFactory : System.IDisposable
     {
         void ClearCache();
-        object CreateInstance(System.Type typeToConstruct);
-        object CreateInstanceWithParameters(System.Type typeToConstruct, params object[] parameters);
-        object CreateInstanceWithParametersAndAutoCompletion(System.Type typeToConstruct, params object[] parameters);
-        object CreateInstanceWithParametersAndAutoCompletionWithTag(System.Type typeToConstruct, object tag, params object[] parameters);
-        object CreateInstanceWithParametersWithTag(System.Type typeToConstruct, object tag, params object[] parameters);
-        object CreateInstanceWithTag(System.Type typeToConstruct, object tag);
+        object? CreateInstance(System.Type typeToConstruct);
+        object? CreateInstanceWithParameters(System.Type typeToConstruct, params object?[] parameters);
+        object? CreateInstanceWithParametersAndAutoCompletion(System.Type typeToConstruct, params object?[] parameters);
+        object? CreateInstanceWithParametersAndAutoCompletionWithTag(System.Type typeToConstruct, object? tag, params object?[] parameters);
+        object? CreateInstanceWithParametersWithTag(System.Type typeToConstruct, object? tag, params object?[] parameters);
+        object? CreateInstanceWithTag(System.Type typeToConstruct, object? tag);
     }
     public interface ITypeRequestPath
     {
         System.Collections.Generic.IEnumerable<Catel.IoC.TypeRequestInfo> AllTypes { get; }
-        Catel.IoC.TypeRequestInfo FirstType { get; }
-        Catel.IoC.TypeRequestInfo LastType { get; }
-    }
-    [System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
-    public class InjectAttribute : System.Attribute
-    {
-        public InjectAttribute(System.Type type = null, object tag = null) { }
-        public object Tag { get; }
-        public System.Type Type { get; set; }
-    }
-    [System.AttributeUsage(System.AttributeTargets.Constructor, AllowMultiple=false, Inherited=false)]
-    public class InjectionConstructorAttribute : System.Attribute
-    {
-        public InjectionConstructorAttribute() { }
+        Catel.IoC.TypeRequestInfo? FirstType { get; }
+        Catel.IoC.TypeRequestInfo? LastType { get; }
     }
     public static class IoCConfiguration
     {
@@ -2253,64 +2035,18 @@ namespace Catel.IoC
     public class MissingTypeEventArgs : System.EventArgs
     {
         public MissingTypeEventArgs(System.Type interfaceType) { }
-        public MissingTypeEventArgs(System.Type interfaceType, object tag) { }
+        public MissingTypeEventArgs(System.Type interfaceType, object? tag) { }
         public object ImplementingInstance { get; set; }
         public System.Type ImplementingType { get; set; }
         public System.Type InterfaceType { get; }
         public Catel.IoC.RegistrationType RegistrationType { get; set; }
-        public object Tag { get; set; }
-    }
-    public class NamingRegistrationConvention : Catel.IoC.RegistrationConventionBase
-    {
-        public NamingRegistrationConvention(Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
-        public override void Process(System.Collections.Generic.IEnumerable<System.Type> typesToRegister) { }
+        public object? Tag { get; set; }
     }
     public static class ObjectExtensions
     {
         public static Catel.IoC.IDependencyResolver GetDependencyResolver(this object obj) { }
         public static Catel.IoC.IServiceLocator GetServiceLocator(this object obj) { }
         public static Catel.IoC.ITypeFactory GetTypeFactory(this object obj) { }
-    }
-    public abstract class RegistrationConventionBase : Catel.IoC.IRegistrationConvention
-    {
-        protected RegistrationConventionBase(Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
-        public Catel.IoC.IServiceLocator Container { get; set; }
-        public Catel.IoC.RegistrationType RegistrationType { get; set; }
-        public abstract void Process(System.Collections.Generic.IEnumerable<System.Type> typesToRegister);
-    }
-    public class RegistrationConventionHandler : Catel.IoC.IRegistrationConventionHandler
-    {
-        public RegistrationConventionHandler(Catel.IoC.IServiceLocator serviceLocator = null, Catel.IoC.ITypeFactory typeFactory = null) { }
-        public Catel.ICompositeFilter<System.Reflection.Assembly> AssemblyFilter { get; }
-        public System.Collections.Generic.IEnumerable<Catel.IoC.IRegistrationConvention> RegistrationConventions { get; }
-        public Catel.ICompositeFilter<System.Type> TypeFilter { get; }
-        public static Catel.IoC.IRegistrationConventionHandler Default { get; }
-        public void AddAssemblyToScan(System.Reflection.Assembly assembly) { }
-        public void ApplyConventions() { }
-        public void RegisterConvention<TRegistrationConvention>(Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention { }
-        protected void RemoveIfAlreadyRegistered(System.Type type) { }
-    }
-    public static class RegistrationConventionHandlerExtensions
-    {
-        public static Catel.IoC.IRegistrationConventionHandler AddAssemblyToScan<TAssembly>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler)
-            where TAssembly : System.Reflection.Assembly { }
-        public static Catel.IoC.IRegistrationConventionHandler ExcludeAllTypesOfNamespace(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, string @namespace) { }
-        public static Catel.IoC.IRegistrationConventionHandler ExcludeAllTypesOfNamespaceContaining<T>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler)
-            where T :  class { }
-        public static Catel.IoC.IRegistrationConventionHandler ExcludeAssembliesWhere(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, System.Predicate<System.Reflection.Assembly> exclude) { }
-        public static Catel.IoC.IRegistrationConventionHandler ExcludeAssembly<TAssembly>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler)
-            where TAssembly : System.Reflection.Assembly { }
-        public static Catel.IoC.IRegistrationConventionHandler ExcludeType<T>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler)
-            where T :  class { }
-        public static Catel.IoC.IRegistrationConventionHandler ExcludeTypesWhere(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, System.Predicate<System.Type> exclude) { }
-        public static Catel.IoC.IRegistrationConventionHandler IncludeAllTypesOfNamespace(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, string @namespace) { }
-        public static Catel.IoC.IRegistrationConventionHandler IncludeAllTypesOfNamespaceContaining<T>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler) { }
-        public static Catel.IoC.IRegistrationConventionHandler IncludeType<T>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler)
-            where T :  class { }
-        public static Catel.IoC.IRegistrationConventionHandler IncludeTypesWhere(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, System.Predicate<System.Type> include) { }
-        public static Catel.IoC.IRegistrationConventionHandler ShouldAlsoUseConvention<TRegistrationConvention>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention { }
     }
     public class RegistrationInfo
     {
@@ -2329,139 +2065,126 @@ namespace Catel.IoC
     {
         public ServiceLocator() { }
         public ServiceLocator(Catel.IoC.IServiceLocator serviceLocator) { }
-        public bool AutoRegisterTypesViaAttributes { get; set; }
         public bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
-        public bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
         public static Catel.IoC.IServiceLocator Default { get; }
-        public event System.EventHandler<Catel.IoC.MissingTypeEventArgs> MissingType;
-        public event System.EventHandler<Catel.IoC.TypeInstantiatedEventArgs> TypeInstantiated;
-        public event System.EventHandler<Catel.IoC.TypeRegisteredEventArgs> TypeRegistered;
-        public event System.EventHandler<Catel.IoC.TypeUnregisteredEventArgs> TypeUnregistered;
+        public event System.EventHandler<Catel.IoC.MissingTypeEventArgs>? MissingType;
+        public event System.EventHandler<Catel.IoC.TypeInstantiatedEventArgs>? TypeInstantiated;
+        public event System.EventHandler<Catel.IoC.TypeRegisteredEventArgs>? TypeRegistered;
+        public event System.EventHandler<Catel.IoC.TypeUnregisteredEventArgs>? TypeUnregistered;
         public bool AreMultipleTypesRegistered(params System.Type[] types) { }
         public void Dispose() { }
         protected virtual void Dispose(bool disposing) { }
-        public Catel.IoC.RegistrationInfo GetRegistrationInfo(System.Type serviceType, object tag = null) { }
-        public bool IsTypeRegistered(System.Type serviceType, object tag = null) { }
-        public bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null) { }
+        public Catel.IoC.RegistrationInfo? GetRegistrationInfo(System.Type serviceType, object? tag = null) { }
+        public bool IsTypeRegistered(System.Type serviceType, object? tag = null) { }
+        public bool IsTypeRegisteredAsSingleton(System.Type serviceType, object? tag = null) { }
         public bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType) { }
-        public void RegisterInstance(System.Type serviceType, object instance, object tag = null) { }
-        public void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
-        public void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
+        public void RegisterInstance(System.Type serviceType, object instance, object? tag = null) { }
+        public void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object?> createServiceFunc, object? tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
+        public void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object? tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
         public bool RemoveAllTypes(System.Type serviceType) { }
-        public bool RemoveType(System.Type serviceType, object tag = null) { }
-        public object[] ResolveMultipleTypes(params System.Type[] types) { }
-        public virtual object ResolveType(System.Type serviceType, object tag = null) { }
-        public virtual object ResolveTypeUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType, object tag = null) { }
+        public bool RemoveType(System.Type serviceType, object? tag = null) { }
+        public object?[] ResolveMultipleTypes(params System.Type[] types) { }
+        public virtual object? ResolveType(System.Type serviceType, object? tag = null) { }
+        public virtual object? ResolveTypeUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType, object? tag = null) { }
         public System.Collections.Generic.IEnumerable<object> ResolveTypes(System.Type serviceType) { }
         public System.Collections.Generic.IEnumerable<object> ResolveTypesUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType) { }
     }
-    public class ServiceLocatorAutoRegistrationManager
-    {
-        public ServiceLocatorAutoRegistrationManager(Catel.IoC.IServiceLocator serviceLocator) { }
-        public bool AutoRegisterTypesViaAttributes { get; set; }
-        public bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
-    }
     public static class ServiceLocatorExtensions
     {
-        public static bool IsTypeRegistered<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
-        public static bool IsTypeRegisteredAsSingleton<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
-        public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object tag = null) { }
+        public static bool IsTypeRegistered<TService>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null)
+            where TService :  notnull { }
+        public static bool IsTypeRegisteredAsSingleton<TService>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null)
+            where TService :  notnull { }
+        public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object? tag = null)
+            where TService :  notnull { }
         public static void RegisterType<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
-        public static void RegisterType<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
+        public static void RegisterType<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
+            where TService :  notnull { }
         public static void RegisterType<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
+            where TService :  notnull
             where TServiceImplementation : TService { }
-        public static TServiceImplementation RegisterTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator) { }
-        public static TService RegisterTypeAndInstantiate<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+        public static TServiceImplementation? RegisterTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+            where TServiceImplementation :  notnull { }
+        public static TService? RegisterTypeAndInstantiate<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+            where TService :  notnull
             where TServiceImplementation : TService { }
         public static void RegisterTypeIfNotYetRegistered(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, System.Type serviceImplementationType, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RegisterTypeIfNotYetRegistered<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0)
+            where TService :  notnull
             where TServiceImplementation : TService { }
-        public static void RegisterTypeIfNotYetRegisteredWithTag(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0) { }
-        public static void RegisterTypeIfNotYetRegisteredWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0)
+        public static void RegisterTypeIfNotYetRegisteredWithTag(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, System.Type serviceImplementationType, object? tag = null, Catel.IoC.RegistrationType registrationType = 0) { }
+        public static void RegisterTypeIfNotYetRegisteredWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null, Catel.IoC.RegistrationType registrationType = 0)
+            where TService :  notnull
             where TServiceImplementation : TService { }
-        public static void RegisterTypeWithTag<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0) { }
-        public static void RegisterTypeWithTag<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
-        public static void RegisterTypeWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
+        public static void RegisterTypeWithTag<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null, Catel.IoC.RegistrationType registrationType = 0) { }
+        public static void RegisterTypeWithTag<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, object? tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
+            where TService :  notnull { }
+        public static void RegisterTypeWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
+            where TService :  notnull
             where TServiceImplementation : TService { }
-        public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingAllConventions(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
-        public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingConvention<TRegistrationConvention>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention { }
-        public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingDefaultFirstInterfaceConvention(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
-        public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingDefaultNamingConvention(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
-        public static void RemoveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
-        public static TService ResolveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
-        public static object ResolveTypeAndReturnNullIfNotRegistered(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object tag = null) { }
-        public static T ResolveTypeAndReturnNullIfNotRegistered<T>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
-        public static TService ResolveTypeUsingFactory<TService>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.ITypeFactory typeFactory, object tag = null) { }
-        public static object ResolveTypeUsingParameters(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object[] parameters, object tag = null) { }
-        public static T ResolveTypeUsingParameters<T>(this Catel.IoC.IServiceLocator serviceLocator, object[] parameters, object tag = null) { }
-        public static System.Collections.Generic.IEnumerable<TService> ResolveTypes<TService>(this Catel.IoC.IServiceLocator serviceLocator) { }
-        public static TService TryResolveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
+        public static void RemoveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null)
+            where TService :  notnull { }
+        public static object ResolveRequiredType(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object? tag = null) { }
+        public static TService ResolveRequiredType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null)
+            where TService :  notnull { }
+        public static TService? ResolveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null)
+            where TService :  notnull { }
+        public static TService? ResolveTypeUsingFactory<TService>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.ITypeFactory typeFactory, object? tag = null)
+            where TService :  notnull { }
+        public static object? ResolveTypeUsingParameters(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object[] parameters, object? tag = null) { }
+        public static T? ResolveTypeUsingParameters<T>(this Catel.IoC.IServiceLocator serviceLocator, object[] parameters, object? tag = null)
+            where T :  notnull { }
+        public static System.Collections.Generic.IEnumerable<TService> ResolveTypes<TService>(this Catel.IoC.IServiceLocator serviceLocator)
+            where TService :  notnull { }
     }
     [System.Diagnostics.DebuggerDisplay("{DeclaringType} => {ImplementingType} ({RegistrationType})")]
     public class ServiceLocatorRegistration
     {
-        public ServiceLocatorRegistration(System.Type declaringType, System.Type implementingType, object tag, Catel.IoC.RegistrationType registrationType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc) { }
+        public ServiceLocatorRegistration(System.Type declaringType, System.Type implementingType, object? tag, Catel.IoC.RegistrationType registrationType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc) { }
         public System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> CreateServiceFunc { get; }
         public System.Type DeclaringType { get; }
-        public string DeclaringTypeName { get; }
+        public string? DeclaringTypeName { get; }
         public System.Type ImplementingType { get; }
-        public string ImplementingTypeName { get; }
+        public string? ImplementingTypeName { get; }
         public Catel.IoC.RegistrationType RegistrationType { get; }
-        public object Tag { get; }
-    }
-    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=false, Inherited=false)]
-    public class ServiceLocatorRegistrationAttribute : System.Attribute
-    {
-        public ServiceLocatorRegistrationAttribute(System.Type interfaceType, Catel.IoC.ServiceLocatorRegistrationMode registrationMode = 2, object tag = null) { }
-        public System.Type InterfaceType { get; }
-        public Catel.IoC.ServiceLocatorRegistrationMode RegistrationMode { get; }
-        public Catel.IoC.RegistrationType RegistrationType { get; }
-        public object Tag { get; }
+        public object? Tag { get; }
     }
     public class ServiceLocatorRegistrationGroup
     {
         public ServiceLocatorRegistrationGroup(Catel.IoC.ServiceLocatorRegistration entryRegistration) { }
         public Catel.IoC.ServiceLocatorRegistration EntryRegistration { get; }
     }
-    public enum ServiceLocatorRegistrationMode
-    {
-        Transient = 0,
-        SingletonInstantiateImmediately = 1,
-        SingletonInstantiateWhenRequired = 2,
-    }
     public class TypeFactory : Catel.IoC.ITypeFactory, System.IDisposable
     {
         public TypeFactory(Catel.IoC.IServiceLocator serviceLocator) { }
         public static Catel.IoC.ITypeFactory Default { get; }
         public void ClearCache() { }
-        public object CreateInstance(System.Type typeToConstruct) { }
-        public object CreateInstanceWithParameters(System.Type typeToConstruct, params object[] parameters) { }
-        public object CreateInstanceWithParametersAndAutoCompletion(System.Type typeToConstruct, params object[] parameters) { }
-        public object CreateInstanceWithParametersAndAutoCompletionWithTag(System.Type typeToConstruct, object tag, params object[] parameters) { }
-        public object CreateInstanceWithParametersWithTag(System.Type typeToConstruct, object tag, params object[] parameters) { }
-        public object CreateInstanceWithTag(System.Type typeToConstruct, object tag) { }
+        public object? CreateInstance(System.Type typeToConstruct) { }
+        public object? CreateInstanceWithParameters(System.Type typeToConstruct, params object?[] parameters) { }
+        public object? CreateInstanceWithParametersAndAutoCompletion(System.Type typeToConstruct, params object?[] parameters) { }
+        public object? CreateInstanceWithParametersAndAutoCompletionWithTag(System.Type typeToConstruct, object? tag, params object?[] parameters) { }
+        public object? CreateInstanceWithParametersWithTag(System.Type typeToConstruct, object? tag, params object?[] parameters) { }
+        public object? CreateInstanceWithTag(System.Type typeToConstruct, object? tag) { }
         public void Dispose() { }
         protected virtual void Dispose(bool disposing) { }
     }
     public static class TypeFactoryExtensions
     {
-        public static T CreateInstance<T>(this Catel.IoC.ITypeFactory typeFactory) { }
-        public static T CreateInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, params object[] parameters) { }
-        public static T CreateInstanceWithParametersAndAutoCompletion<T>(this Catel.IoC.ITypeFactory typeFactory, params object[] parameters) { }
-        public static T CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
-        public static T CreateInstanceWithParametersWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
-        public static T CreateInstanceWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag) { }
+        public static T? CreateInstance<T>(this Catel.IoC.ITypeFactory typeFactory) { }
+        public static T? CreateInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, params object[] parameters) { }
+        public static T? CreateInstanceWithParametersAndAutoCompletion<T>(this Catel.IoC.ITypeFactory typeFactory, params object[] parameters) { }
+        public static T? CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
+        public static T? CreateInstanceWithParametersWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
+        public static T? CreateInstanceWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag) { }
     }
     public class TypeInstantiatedEventArgs : System.EventArgs
     {
-        public TypeInstantiatedEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType) { }
-        public TypeInstantiatedEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType, object instance) { }
+        public TypeInstantiatedEventArgs(System.Type serviceType, System.Type serviceImplementationType, object? tag, Catel.IoC.RegistrationType registrationType, object instance) { }
         public object Instance { get; }
         public Catel.IoC.RegistrationType RegistrationType { get; }
         public System.Type ServiceImplementationType { get; }
         public System.Type ServiceType { get; }
-        public object Tag { get; }
+        public object? Tag { get; }
     }
     public class TypeNotRegisteredException : System.Exception
     {
@@ -2470,18 +2193,18 @@ namespace Catel.IoC
     }
     public class TypeRegisteredEventArgs : System.EventArgs
     {
-        public TypeRegisteredEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType) { }
+        public TypeRegisteredEventArgs(System.Type serviceType, System.Type serviceImplementationType, object? tag, Catel.IoC.RegistrationType registrationType) { }
         public Catel.IoC.RegistrationType RegistrationType { get; }
         public System.Type ServiceImplementationType { get; }
         public System.Type ServiceType { get; }
-        public object Tag { get; }
+        public object? Tag { get; }
     }
     public class TypeRequestInfo
     {
-        public TypeRequestInfo(System.Type type, object tag = null) { }
-        public object Tag { get; }
+        public TypeRequestInfo(System.Type type, object? tag = null) { }
+        public object? Tag { get; }
         public System.Type Type { get; }
-        public override bool Equals(object obj) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
         public static bool operator !=(Catel.IoC.TypeRequestInfo firstObject, Catel.IoC.TypeRequestInfo secondObject) { }
@@ -2490,23 +2213,23 @@ namespace Catel.IoC
     public class TypeRequestPath : Catel.IoC.ITypeRequestPath
     {
         public System.Collections.Generic.IEnumerable<Catel.IoC.TypeRequestInfo> AllTypes { get; }
-        public Catel.IoC.TypeRequestInfo FirstType { get; }
-        public Catel.IoC.TypeRequestInfo LastType { get; }
+        public Catel.IoC.TypeRequestInfo? FirstType { get; }
+        public Catel.IoC.TypeRequestInfo? LastType { get; }
         public string Name { get; }
         public int TypeCount { get; }
         public override string ToString() { }
         public static Catel.IoC.TypeRequestPath Branch(Catel.IoC.TypeRequestPath parent, Catel.IoC.TypeRequestInfo typeRequestInfo) { }
-        public static Catel.IoC.TypeRequestPath Root(string name = null) { }
+        public static Catel.IoC.TypeRequestPath Root(string name) { }
     }
     public class TypeUnregisteredEventArgs : System.EventArgs
     {
         public TypeUnregisteredEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType) { }
-        public TypeUnregisteredEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType, object instance) { }
-        public object Instance { get; }
+        public TypeUnregisteredEventArgs(System.Type serviceType, System.Type serviceImplementationType, object? tag, Catel.IoC.RegistrationType registrationType, object? instance) { }
+        public object? Instance { get; }
         public Catel.IoC.RegistrationType RegistrationType { get; }
         public System.Type ServiceImplementationType { get; }
         public System.Type ServiceType { get; }
-        public object Tag { get; }
+        public object? Tag { get; }
     }
 }
 namespace Catel.Linq
@@ -2523,32 +2246,32 @@ namespace Catel.Linq.Expressions
 {
     public static class ExpressionBuilder
     {
-        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreateFieldGetter<T>(System.Reflection.FieldInfo fieldInfo) { }
-        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreateFieldGetter<T>(string fieldName) { }
-        public static System.Linq.Expressions.Expression<System.Func<object, TField>> CreateFieldGetter<TField>(System.Type modelType, string fieldName) { }
-        public static System.Linq.Expressions.Expression<System.Func<T, TField>> CreateFieldGetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
-        public static System.Linq.Expressions.Expression<System.Func<T, TField>> CreateFieldGetter<T, TField>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>>? CreateFieldGetter<T>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>>? CreateFieldGetter<T>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Func<object, TField>>? CreateFieldGetter<TField>(System.Type modelType, string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, TField>>? CreateFieldGetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, TField>>? CreateFieldGetter<T, TField>(string fieldName) { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, object>>> CreateFieldGetters<T>() { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, TField>>> CreateFieldGetters<T, TField>() { }
-        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreateFieldSetter<T>(System.Reflection.FieldInfo fieldInfo) { }
-        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreateFieldSetter<T>(string fieldName) { }
-        public static System.Linq.Expressions.Expression<System.Action<object, TField>> CreateFieldSetter<TField>(System.Type modelType, string fieldName) { }
-        public static System.Linq.Expressions.Expression<System.Action<T, TField>> CreateFieldSetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
-        public static System.Linq.Expressions.Expression<System.Action<T, TField>> CreateFieldSetter<T, TField>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>>? CreateFieldSetter<T>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>>? CreateFieldSetter<T>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Action<object, TField>>? CreateFieldSetter<TField>(System.Type modelType, string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TField>>? CreateFieldSetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TField>>? CreateFieldSetter<T, TField>(string fieldName) { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, object>>> CreateFieldSetters<T>() { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, TField>>> CreateFieldSetters<T, TField>() { }
-        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreatePropertyGetter<T>(System.Reflection.PropertyInfo propertyInfo) { }
-        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreatePropertyGetter<T>(string propertyName) { }
-        public static System.Linq.Expressions.Expression<System.Func<object, TProperty>> CreatePropertyGetter<TProperty>(System.Type modelType, string propertyName) { }
-        public static System.Linq.Expressions.Expression<System.Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
-        public static System.Linq.Expressions.Expression<System.Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>>? CreatePropertyGetter<T>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>>? CreatePropertyGetter<T>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Func<object, TProperty>>? CreatePropertyGetter<TProperty>(System.Type modelType, string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, TProperty>>? CreatePropertyGetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, TProperty>>? CreatePropertyGetter<T, TProperty>(string propertyName) { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, object>>> CreatePropertyGetters<T>() { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, TProperty>>> CreatePropertyGetters<T, TProperty>() { }
-        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreatePropertySetter<T>(System.Reflection.PropertyInfo propertyInfo) { }
-        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreatePropertySetter<T>(string propertyName) { }
-        public static System.Linq.Expressions.Expression<System.Action<object, TProperty>> CreatePropertySetter<TProperty>(System.Type modelType, string propertyName) { }
-        public static System.Linq.Expressions.Expression<System.Action<T, TProperty>> CreatePropertySetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
-        public static System.Linq.Expressions.Expression<System.Action<T, TProperty>> CreatePropertySetter<T, TProperty>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>>? CreatePropertySetter<T>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>>? CreatePropertySetter<T>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Action<object, TProperty>>? CreatePropertySetter<TProperty>(System.Type modelType, string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TProperty>>? CreatePropertySetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TProperty>>? CreatePropertySetter<T, TProperty>(string propertyName) { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, object>>> CreatePropertySetters<T>() { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, TProperty>>> CreatePropertySetters<T, TProperty>() { }
     }
@@ -2605,10 +2328,6 @@ namespace Catel.Logging
         System.Threading.Tasks.Task FlushAsync();
     }
     public static class IBatchLogListenerExtensions { }
-    public interface IJsonLogFormatter
-    {
-        string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, System.DateTime time);
-    }
     public interface ILog
     {
         int IndentLevel { get; set; }
@@ -2617,7 +2336,7 @@ namespace Catel.Logging
         string Name { get; }
         object Tag { get; set; }
         System.Type TargetType { get; }
-        event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
+        event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         void Indent();
         void Unindent();
         void WriteWithData(string message, Catel.Logging.LogData logData, Catel.Logging.LogEvent logEvent);
@@ -2632,20 +2351,13 @@ namespace Catel.Logging
         bool IsStatusEnabled { get; set; }
         bool IsWarningEnabled { get; set; }
         Catel.Logging.TimeDisplay TimeDisplay { get; set; }
-        event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
+        event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         void Debug(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
         void Error(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
         void Info(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
         void Status(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
         void Warning(Catel.Logging.ILog log, string message, object extraData, Catel.Logging.LogData logData, System.DateTime time);
         void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time);
-    }
-    public class JsonLogFormatter : Catel.Logging.IJsonLogFormatter
-    {
-        protected static readonly System.Collections.Generic.IDictionary<System.Type, System.Action<object, bool, System.IO.TextWriter>> LiteralWriters;
-        protected static readonly System.Collections.Generic.Dictionary<Catel.Logging.LogEvent, string> LogEventStrings;
-        public JsonLogFormatter() { }
-        public string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, System.DateTime time) { }
     }
     public class Log : Catel.Logging.ILog
     {
@@ -2869,7 +2581,7 @@ namespace Catel.Logging
         public LogListenerConfiguration() { }
         [System.Configuration.ConfigurationProperty("type", IsRequired=true)]
         public string Type { get; set; }
-        public Catel.Logging.ILogListener GetLogListener(System.Reflection.Assembly assembly = null) { }
+        public Catel.Logging.ILogListener GetLogListener(System.Reflection.Assembly? assembly = null) { }
         protected override bool OnDeserializeUnrecognizedAttribute(string name, string value) { }
     }
     public sealed class LogListenerConfigurationCollection : System.Configuration.ConfigurationElementCollection
@@ -2889,7 +2601,7 @@ namespace Catel.Logging
         public static bool? IsInfoEnabled { get; set; }
         public static bool? IsStatusEnabled { get; set; }
         public static bool? IsWarningEnabled { get; set; }
-        public  static  event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
+        public  static  event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         public static Catel.Logging.ILogListener AddDebugListener(bool ignoreCatelLogging = false) { }
         public static void AddListener(Catel.Logging.ILogListener listener) { }
         public static void ClearListeners() { }
@@ -2901,8 +2613,8 @@ namespace Catel.Logging
         public static Catel.Logging.ILog GetLogger(string name, System.Type type) { }
         public static Catel.Logging.ILog GetLogger<T>() { }
         public static bool IsListenerRegistered(Catel.Logging.ILogListener listener) { }
-        public static void LoadListenersFromConfiguration(System.Configuration.Configuration configuration, System.Reflection.Assembly assembly = null) { }
-        public static void LoadListenersFromConfigurationFile(string configurationFilePath, System.Reflection.Assembly assembly = null) { }
+        public static void LoadListenersFromConfiguration(System.Configuration.Configuration configuration, System.Reflection.Assembly? assembly = null) { }
+        public static void LoadListenersFromConfigurationFile(string configurationFilePath, System.Reflection.Assembly? assembly = null) { }
         public static void RemoveListener(Catel.Logging.ILogListener listener) { }
         public static class LogInfo
         {
@@ -2934,7 +2646,7 @@ namespace Catel.Logging
         public LoggingConfigurationSection() { }
         [System.Configuration.ConfigurationProperty("listeners", IsDefaultCollection=false)]
         public Catel.Logging.LogListenerConfigurationCollection LogListenerConfigurationCollection { get; }
-        public System.Collections.Generic.IEnumerable<Catel.Logging.ILogListener> GetLogListeners(System.Reflection.Assembly assembly = null) { }
+        public System.Collections.Generic.IEnumerable<Catel.Logging.ILogListener> GetLogListeners(System.Reflection.Assembly? assembly = null) { }
     }
     public class RollingInMemoryLogListener : Catel.Logging.LogListenerBase
     {
@@ -2962,20 +2674,26 @@ namespace Catel.Messaging
     public class CombinedMessage : Catel.Messaging.MessageBase<Catel.Messaging.CombinedMessage, bool>
     {
         public CombinedMessage() { }
-        public System.Exception Exception { get; }
-        public static void SendWith(bool data, System.Exception exception, object tag = null) { }
+        public System.Exception? Exception { get; }
+        public static void SendWith(bool data, System.Exception exception, object? tag = null) { }
     }
     public interface IMessage { }
     public interface IMessageMediator
     {
         void CleanUp();
-        bool IsMessageRegistered(System.Type messageType, object tag = null);
-        bool IsMessageRegistered<TMessage>(object tag = null);
-        bool Register<TMessage>(object recipient, System.Action<TMessage> handler, object tag = null);
-        bool SendMessage<TMessage>(TMessage message, object tag = null);
-        bool Unregister<TMessage>(object recipient, System.Action<TMessage> handler, object tag = null);
-        bool UnregisterRecipient(object recipient, object tag = null);
+        bool IsMessageRegistered(System.Type messageType, object? tag = null);
+        bool Register<TMessage>(object recipient, System.Action<TMessage> handler, object? tag = null)
+            where TMessage :  notnull;
+        bool SendMessage<TMessage>(TMessage message, object? tag = null)
+            where TMessage :  notnull;
+        bool Unregister<TMessage>(object recipient, System.Action<TMessage> handler, object? tag = null)
+            where TMessage :  notnull;
+        bool UnregisterRecipient(object recipient, object? tag = null);
         bool UnregisterRecipientAndIgnoreTags(object recipient);
+    }
+    public static class IMessageMediatorExtensions
+    {
+        public static bool IsMessageRegistered<TMessage>(this Catel.Messaging.IMessageMediator messageMediator, object? tag = null) { }
     }
     public abstract class MessageBase : Catel.Messaging.IMessage
     {
@@ -2987,11 +2705,11 @@ namespace Catel.Messaging
         protected MessageBase() { }
         protected MessageBase(TData data) { }
         public TData Data { get; set; }
-        public static void Register(object recipient, System.Action<TMessage> handler, object tag = null) { }
-        protected static void Send(TMessage message, object tag = null) { }
-        public static void SendWith(TData data, object tag = null) { }
-        public static void SendWith(TData data, System.Action<TMessage> initializer, object tag = null) { }
-        public static void Unregister(object recipient, System.Action<TMessage> handler, object tag = null) { }
+        public static void Register(object recipient, System.Action<TMessage> handler, object? tag = null) { }
+        protected static void Send(TMessage message, object? tag = null) { }
+        public static void SendWith(TData data, object? tag = null) { }
+        public static void SendWith(TData data, System.Action<TMessage>? initializer, object? tag = null) { }
+        public static void Unregister(object recipient, System.Action<TMessage> handler, object? tag = null) { }
         public static TMessage With(TData data) { }
     }
     public class MessageMediator : Catel.Messaging.IMessageMediator
@@ -2999,112 +2717,61 @@ namespace Catel.Messaging
         public MessageMediator() { }
         public static Catel.Messaging.IMessageMediator Default { get; }
         public void CleanUp() { }
-        public bool IsMessageRegistered(System.Type messageType, object tag = null) { }
-        public bool IsMessageRegistered<TMessage>(object tag = null) { }
-        public bool IsRegistered<TMessage>(object recipient, System.Action<TMessage> handler, object tag = null) { }
-        public bool Register<TMessage>(object recipient, System.Action<TMessage> handler, object tag = null) { }
-        public bool SendMessage<TMessage>(TMessage message, object tag = null) { }
-        public bool Unregister<TMessage>(object recipient, System.Action<TMessage> handler, object tag = null) { }
-        public bool UnregisterRecipient(object recipient, object tag = null) { }
-        public bool UnregisterRecipient(object recipient, object tag, bool ignoreTag) { }
+        public bool IsMessageRegistered(System.Type messageType, object? tag = null) { }
+        public bool IsRegistered<TMessage>(object recipient, System.Action<TMessage> handler, object? tag = null) { }
+        public bool Register<TMessage>(object recipient, System.Action<TMessage> handler, object? tag = null)
+            where TMessage :  notnull { }
+        public bool SendMessage<TMessage>(TMessage message, object? tag = null)
+            where TMessage :  notnull { }
+        public bool Unregister<TMessage>(object recipient, System.Action<TMessage> handler, object? tag = null)
+            where TMessage :  notnull { }
+        public bool UnregisterRecipient(object recipient, object? tag = null) { }
+        public bool UnregisterRecipient(object recipient, object? tag, bool ignoreTag) { }
         public bool UnregisterRecipientAndIgnoreTags(object recipient) { }
     }
     public static class MessageMediatorHelper
     {
-        public static void SubscribeRecipient(object instance, Catel.Messaging.IMessageMediator messageMediator = null) { }
-        public static void UnsubscribeRecipient(object instance, Catel.Messaging.IMessageMediator messageMediator = null) { }
+        public static void SubscribeRecipient(object instance, Catel.Messaging.IMessageMediator? messageMediator = null) { }
+        public static void UnsubscribeRecipient(object instance, Catel.Messaging.IMessageMediator? messageMediator = null) { }
     }
     [System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
     public sealed class MessageRecipientAttribute : System.Attribute
     {
         public MessageRecipientAttribute() { }
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
     }
     public class SimpleMessage : Catel.Messaging.MessageBase<Catel.Messaging.SimpleMessage, string>
     {
         public SimpleMessage() { }
     }
 }
-namespace Catel.Pooling
-{
-    public class Buffer4096Poolable : Catel.Pooling.BufferPoolableBase
-    {
-        public Buffer4096Poolable() { }
-    }
-    public abstract class BufferPoolableBase : Catel.Pooling.PoolableBase
-    {
-        protected BufferPoolableBase(int size) { }
-        public byte[] Data { get; }
-        public override int Size { get; }
-        public override void Reset() { }
-    }
-    public interface IPoolManager
-    {
-        int Count { get; }
-        void ReturnObject(object value);
-    }
-    public interface IPoolManager<TPoolable> : Catel.Pooling.IPoolManager
-        where TPoolable :  class, Catel.Pooling.IPoolable, new ()
-    {
-        int CurrentSize { get; }
-        TPoolable GetObject();
-    }
-    public interface IPoolable : System.IDisposable
-    {
-        int Size { get; }
-        void Reset();
-        void SetPoolManager(Catel.Pooling.IPoolManager poolManager);
-    }
-    public class PoolManager<TPoolable> : Catel.Pooling.IPoolManager, Catel.Pooling.IPoolManager<TPoolable>
-        where TPoolable :  class, Catel.Pooling.IPoolable, new ()
-    {
-        public PoolManager() { }
-        public int Count { get; }
-        public int CurrentSize { get; }
-        public int MaxSize { get; set; }
-        public TPoolable GetObject() { }
-        public void ReturnObject(TPoolable value) { }
-    }
-    public abstract class PoolableBase : Catel.IUniqueIdentifyable, Catel.Pooling.IPoolable, System.IDisposable
-    {
-        protected Catel.Pooling.IPoolManager _poolManager;
-        protected PoolableBase() { }
-        public abstract int Size { get; }
-        public int UniqueIdentifier { get; }
-        public void Dispose() { }
-        protected virtual void Dispose(bool disposing) { }
-        public abstract void Reset();
-    }
-}
 namespace Catel.Reflection
 {
     public static class AppDomainExtensions
     {
-        public static T CreateInstanceAndUnwrap<T>(this System.AppDomain appDomain)
-            where T : new() { }
         public static void LoadAssemblyIntoAppDomain(this System.AppDomain appDomain, System.Reflection.Assembly assembly, bool includeReferencedAssemblies = true) { }
         public static void LoadAssemblyIntoAppDomain(this System.AppDomain appDomain, System.Reflection.AssemblyName assemblyName, bool includeReferencedAssemblies = true) { }
         public static void LoadAssemblyIntoAppDomain(this System.AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies = true) { }
         public static void LoadAssemblyIntoAppDomain(this System.AppDomain appDomain, System.Reflection.Assembly assembly, bool includeReferencedAssemblies, System.Collections.Generic.HashSet<string> alreadyLoadedAssemblies) { }
-        public static void PreloadAssemblies(this System.AppDomain appDomain, string directory = null) { }
+        public static void PreloadAssemblies(this System.AppDomain appDomain, string? directory = null) { }
     }
     public static class AssemblyExtensions
     {
-        public static string Company(this System.Reflection.Assembly assembly) { }
-        public static string Copyright(this System.Reflection.Assembly assembly) { }
-        public static string Description(this System.Reflection.Assembly assembly) { }
+        public static string? Company(this System.Reflection.Assembly assembly) { }
+        public static string? Copyright(this System.Reflection.Assembly assembly) { }
+        public static string? Description(this System.Reflection.Assembly assembly) { }
         public static System.DateTime GetBuildDateTime(this System.Reflection.Assembly assembly) { }
         public static string GetDirectory(this System.Reflection.Assembly assembly) { }
-        public static string InformationalVersion(this System.Reflection.Assembly assembly) { }
-        public static string Product(this System.Reflection.Assembly assembly) { }
-        public static string Title(this System.Reflection.Assembly assembly) { }
+        public static string? InformationalVersion(this System.Reflection.Assembly assembly) { }
+        public static string? Product(this System.Reflection.Assembly assembly) { }
+        public static string? Title(this System.Reflection.Assembly assembly) { }
         public static string Version(this System.Reflection.Assembly assembly, int separatorCount = 3) { }
     }
     public static class AssemblyHelper
     {
         public static System.Type[] GetAllTypesSafely(this System.Reflection.Assembly assembly, bool logLoaderExceptions = true) { }
-        public static string GetAssemblyNameWithVersion(string assemblyNameWithoutVersion) { }
-        public static System.Reflection.Assembly GetEntryAssembly() { }
+        public static string? GetAssemblyNameWithVersion(string assemblyNameWithoutVersion) { }
+        public static System.Reflection.Assembly? GetEntryAssembly() { }
         public static System.DateTime GetLinkerTimestamp(string fileName) { }
         public static System.Collections.Generic.List<System.Reflection.Assembly> GetLoadedAssemblies() { }
         public static System.Collections.Generic.List<System.Reflection.Assembly> GetLoadedAssemblies(this System.AppDomain appDomain) { }
@@ -3183,9 +2850,9 @@ namespace Catel.Reflection
     public static class DelegateHelper
     {
         public static System.Delegate CreateDelegate(System.Type delegateType, System.Reflection.MethodInfo methodInfo) { }
-        public static System.Delegate CreateDelegate(System.Type delegateType, object target, System.Reflection.MethodInfo methodInfo) { }
         public static System.Delegate CreateDelegate(System.Type delegateType, object target, string methodName) { }
         public static System.Delegate CreateDelegate(System.Type delegateType, System.Type targetType, string methodName) { }
+        public static System.Delegate CreateDelegate(System.Type delegateType, object? target, System.Reflection.MethodInfo methodInfo) { }
     }
     public class FastMemberInvoker<TEntity> : Catel.Reflection.IFastMemberInvoker
     {
@@ -3277,7 +2944,7 @@ namespace Catel.Reflection
         public static string GetSignature(this System.Reflection.ConstructorInfo constructorInfo) { }
         public static string GetSignature(this System.Reflection.MethodInfo methodInfo) { }
         public static bool IsStatic(this System.Reflection.PropertyInfo propertyInfo) { }
-        public static System.Collections.Generic.IEnumerable<System.Reflection.ConstructorInfo> SortByParametersMatchDistance(this System.Collections.Generic.List<System.Reflection.ConstructorInfo> constructors, object[] parameters) { }
+        public static System.Collections.Generic.IEnumerable<System.Reflection.ConstructorInfo> SortByParametersMatchDistance(this System.Collections.Generic.List<System.Reflection.ConstructorInfo> constructors, object?[] parameters) { }
         public static bool TryGetConstructorDistanceByParametersMatch(this System.Reflection.ConstructorInfo constructor, object[] parameters, out int distance) { }
     }
     public static class ObjectExtensions
@@ -3287,7 +2954,7 @@ namespace Catel.Reflection
     public static class PropertyHelper
     {
         public static TValue GetHiddenPropertyValue<TValue>(object obj, string property, System.Type baseType) { }
-        public static System.Reflection.PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase = false) { }
+        public static System.Reflection.PropertyInfo? GetPropertyInfo(object obj, string property, bool ignoreCase = false) { }
         public static string GetPropertyName(System.Linq.Expressions.Expression propertyExpression, bool allowNested = false) { }
         public static string GetPropertyName<TValue>(System.Linq.Expressions.Expression<System.Func<TValue>> propertyExpression, bool allowNested = false) { }
         public static string GetPropertyName<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, bool allowNested = false) { }
@@ -3295,12 +2962,12 @@ namespace Catel.Reflection
         public static TValue GetPropertyValue<TValue>(object obj, string property, bool ignoreCase = false) { }
         public static bool IsPropertyAvailable(object obj, string property, bool ignoreCase = false) { }
         public static bool IsPublicProperty(object obj, string property, bool ignoreCase = false) { }
-        public static void SetPropertyValue(object obj, string property, object value, bool ignoreCase = false) { }
+        public static void SetPropertyValue(object obj, string property, object? value, bool ignoreCase = false) { }
         public static bool TryGetPropertyValue(object obj, string property, out object value) { }
         public static bool TryGetPropertyValue(object obj, string property, bool ignoreCase, out object value) { }
         public static bool TryGetPropertyValue<TValue>(object obj, string property, out TValue value) { }
         public static bool TryGetPropertyValue<TValue>(object obj, string property, bool ignoreCase, out TValue value) { }
-        public static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase = false) { }
+        public static bool TrySetPropertyValue(object obj, string property, object? value, bool ignoreCase = false) { }
     }
     public class PropertyNotFoundException : System.Exception
     {
@@ -3311,21 +2978,21 @@ namespace Catel.Reflection
     {
         public static bool ContainsGenericParametersEx(this System.Type type) { }
         public static System.Reflection.Assembly GetAssemblyEx(this System.Type type) { }
-        public static string GetAssemblyFullNameEx(this System.Type type) { }
-        public static System.Attribute GetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType) { }
-        public static System.Attribute GetAttribute(this System.Type type, System.Type attributeType) { }
-        public static TAttribute GetAttribute<TAttribute>(this System.Reflection.MemberInfo memberInfo)
+        public static string? GetAssemblyFullNameEx(this System.Type type) { }
+        public static System.Attribute? GetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType) { }
+        public static System.Attribute? GetAttribute(this System.Type type, System.Type attributeType) { }
+        public static TAttribute? GetAttribute<TAttribute>(this System.Reflection.MemberInfo memberInfo)
             where TAttribute : System.Attribute { }
-        public static TAttribute GetAttribute<TAttribute>(this System.Type type)
+        public static TAttribute? GetAttribute<TAttribute>(this System.Type type)
             where TAttribute : System.Attribute { }
-        public static System.Type GetBaseTypeEx(this System.Type type) { }
-        public static System.Reflection.ConstructorInfo GetConstructorEx(this System.Type type, System.Type[] types) { }
+        public static System.Type? GetBaseTypeEx(this System.Type type) { }
+        public static System.Reflection.ConstructorInfo? GetConstructorEx(this System.Type type, System.Type[] types) { }
         public static System.Reflection.ConstructorInfo[] GetConstructorsEx(this System.Type type) { }
-        public static System.Attribute GetCustomAttributeEx(this System.Reflection.Assembly assembly, System.Type attributeType) { }
-        public static System.Attribute GetCustomAttributeEx(this System.Reflection.MethodInfo methodInfo, System.Type attributeType, bool inherit) { }
-        public static System.Attribute GetCustomAttributeEx(this System.Reflection.PropertyInfo propertyInfo, System.Type attributeType, bool inherit) { }
-        public static System.Attribute GetCustomAttributeEx(this System.Type type, System.Type attributeType, bool inherit) { }
-        public static TAttribute GetCustomAttributeEx<TAttribute>(this System.Reflection.PropertyInfo propertyInfo, bool inherit)
+        public static System.Attribute? GetCustomAttributeEx(this System.Reflection.Assembly assembly, System.Type attributeType) { }
+        public static System.Attribute? GetCustomAttributeEx(this System.Reflection.MethodInfo methodInfo, System.Type attributeType, bool inherit) { }
+        public static System.Attribute? GetCustomAttributeEx(this System.Reflection.PropertyInfo propertyInfo, System.Type attributeType, bool inherit) { }
+        public static System.Attribute? GetCustomAttributeEx(this System.Type type, System.Type attributeType, bool inherit) { }
+        public static TAttribute? GetCustomAttributeEx<TAttribute>(this System.Reflection.PropertyInfo propertyInfo, bool inherit)
             where TAttribute : System.Attribute { }
         public static System.Attribute[] GetCustomAttributesEx(this System.Reflection.Assembly assembly, System.Type attributeType) { }
         public static System.Attribute[] GetCustomAttributesEx(this System.Reflection.MethodInfo methodInfo, bool inherit) { }
@@ -3334,27 +3001,27 @@ namespace Catel.Reflection
         public static System.Attribute[] GetCustomAttributesEx(this System.Reflection.MethodInfo methodInfo, System.Type attributeType, bool inherit) { }
         public static System.Attribute[] GetCustomAttributesEx(this System.Reflection.PropertyInfo propertyInfo, System.Type attributeType, bool inherit) { }
         public static System.Attribute[] GetCustomAttributesEx(this System.Type type, System.Type attributeType, bool inherit) { }
-        public static System.Type GetElementTypeEx(this System.Type type) { }
-        public static System.Reflection.EventInfo GetEventEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.EventInfo GetEventEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Type? GetElementTypeEx(this System.Type type) { }
+        public static System.Reflection.EventInfo? GetEventEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.EventInfo? GetEventEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.EventInfo[] GetEventsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.EventInfo[] GetEventsEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Type[] GetExportedTypesEx(this System.Reflection.Assembly assembly) { }
-        public static System.Reflection.FieldInfo GetFieldEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.FieldInfo GetFieldEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Reflection.FieldInfo? GetFieldEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.FieldInfo? GetFieldEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.FieldInfo[] GetFieldsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.FieldInfo[] GetFieldsEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.FieldInfo[] GetFieldsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags, bool flattenMembers) { }
         public static System.Type[] GetGenericArgumentsEx(this System.Type type) { }
         public static System.Type GetGenericTypeDefinitionEx(this System.Type type) { }
-        public static System.Type GetInterfaceEx(this System.Type type, string name, bool ignoreCase) { }
+        public static System.Type? GetInterfaceEx(this System.Type type, string name, bool ignoreCase) { }
         public static System.Type[] GetInterfacesEx(this System.Type type) { }
         public static System.Reflection.MemberInfo[] GetMemberEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.MemberInfo[] GetMemberEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
-        public static System.Reflection.MethodInfo GetMethodEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MethodInfo GetMethodEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
-        public static System.Reflection.MethodInfo GetMethodEx(this System.Type type, string name, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MethodInfo GetMethodEx(this System.Type type, string name, System.Type[] types, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Reflection.MethodInfo? GetMethodEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.MethodInfo? GetMethodEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Reflection.MethodInfo? GetMethodEx(this System.Type type, string name, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.MethodInfo? GetMethodEx(this System.Type type, string name, System.Type[] types, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags, bool flattenMembers) { }
@@ -3362,9 +3029,9 @@ namespace Catel.Reflection
         public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, System.Reflection.BindingFlags bindingFlags, bool flattenMembers) { }
-        public static System.Reflection.PropertyInfo GetPropertyEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags, bool allowExplicitInterfaceProperties = true) { }
-        public static System.Reflection.PropertyInfo GetPropertyEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false, bool allowExplicitInterfaceProperties = true) { }
-        public static string GetSafeFullName(this System.Type type, bool fullyQualifiedAssemblyName) { }
+        public static System.Reflection.PropertyInfo? GetPropertyEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags, bool allowExplicitInterfaceProperties = true) { }
+        public static System.Reflection.PropertyInfo? GetPropertyEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false, bool allowExplicitInterfaceProperties = true) { }
+        public static string GetSafeFullName(this System.Type type, bool fullyQualifiedAssemblyName = false) { }
         public static int GetTypeDistance(this System.Type fromType, System.Type toType) { }
         public static System.Type[] GetTypesEx(this System.Reflection.Assembly assembly) { }
         public static bool HasBaseTypeEx(this System.Type type, System.Type typeToCheck) { }
@@ -3393,16 +3060,16 @@ namespace Catel.Reflection
         public static bool IsValueTypeEx(this System.Type type) { }
         public static System.Type MakeGenericTypeEx(this System.Type type, System.Type typeArgument) { }
         public static System.Type MakeGenericTypeEx(this System.Type type, params System.Type[] typeArguments) { }
-        public static bool TryGetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType, out System.Attribute attribute) { }
-        public static bool TryGetAttribute(this System.Type type, System.Type attributeType, out System.Attribute attribute) { }
-        public static bool TryGetAttribute<TAttribute>(this System.Reflection.MemberInfo memberInfo, out TAttribute attribute)
+        public static bool TryGetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType, out System.Attribute? attribute) { }
+        public static bool TryGetAttribute(this System.Type type, System.Type attributeType, out System.Attribute? attribute) { }
+        public static bool TryGetAttribute<TAttribute>(this System.Reflection.MemberInfo memberInfo, out TAttribute? attribute)
             where TAttribute : System.Attribute { }
-        public static bool TryGetAttribute<TAttribute>(this System.Type type, out TAttribute attribute)
+        public static bool TryGetAttribute<TAttribute>(this System.Type type, out TAttribute? attribute)
             where TAttribute : System.Attribute { }
     }
     public static class StaticHelper
     {
-        public static System.Type GetCallingType() { }
+        public static System.Type? GetCallingType() { }
     }
     public static class TypeArray
     {
@@ -3417,15 +3084,15 @@ namespace Catel.Reflection
         public static System.Collections.Generic.List<string> InitializedAssemblies { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> ShouldIgnoreTypeEvaluators { get; }
-        public  static  event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs> AssemblyLoaded;
+        public  static  event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs>? AssemblyLoaded;
         public static void Clear() { }
-        public static System.Type GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true) { }
-        public static System.Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true) { }
-        public static System.Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true) { }
-        public static System.Type[] GetTypes(System.Func<System.Type, bool> predicate = null, bool allowInitialization = true) { }
+        public static System.Type? GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true) { }
+        public static System.Type? GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true) { }
+        public static System.Type? GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true) { }
+        public static System.Type[] GetTypes(System.Func<System.Type, bool>? predicate = null, bool allowInitialization = true) { }
         public static System.Type[] GetTypesImplementingInterface(System.Type interfaceType) { }
-        public static System.Type[] GetTypesOfAssembly(System.Reflection.Assembly assembly, System.Func<System.Type, bool> predicate = null) { }
-        public static void InitializeTypes(System.Reflection.Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false) { }
+        public static System.Type[] GetTypesOfAssembly(System.Reflection.Assembly assembly, System.Func<System.Type, bool>? predicate = null) { }
+        public static void InitializeTypes(System.Reflection.Assembly? assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false) { }
         public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = false) { }
     }
     public static class TypeCacheEvaluator
@@ -3435,7 +3102,7 @@ namespace Catel.Reflection
     }
     public static class TypeExtensions
     {
-        public static System.Type GetCollectionElementType(this System.Type type) { }
+        public static System.Type? GetCollectionElementType(this System.Type type) { }
         public static bool IsBasicType(this System.Type type) { }
         public static bool IsClassType(this System.Type type) { }
         public static bool IsCollection(this System.Type type) { }
@@ -3446,39 +3113,39 @@ namespace Catel.Reflection
     public static class TypeHelper
     {
         public static System.Collections.Generic.IEnumerable<string> MicrosoftPublicKeyTokens { get; }
-        public static TOutput Cast<TOutput>(object value) { }
-        public static TOutput Cast<TOutput, TInput>(TInput value) { }
-        public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue) { }
+        public static TOutput Cast<TOutput>(object? value) { }
+        public static TOutput Cast<TOutput, TInput>(TInput? value) { }
+        public static TOutput Cast<TOutput, TInput>(TInput? value, TOutput whenNullValue) { }
         public static string ConvertTypeToVersionIndependentType(string type, bool stripAssemblies = false) { }
         public static string FormatInnerTypes(System.Collections.Generic.IEnumerable<string> innerTypes, bool stripAssemblies = false) { }
         public static string FormatType(string assembly, string type) { }
-        public static string GetAssemblyName(string fullTypeName) { }
+        public static string? GetAssemblyName(string fullTypeName) { }
         public static string GetAssemblyNameWithoutOverhead(string fullyQualifiedAssemblyName) { }
         public static string[] GetInnerTypes(string type) { }
         public static string GetTypeName(string fullTypeName) { }
         public static string GetTypeNameWithAssembly(string fullTypeName) { }
         public static string GetTypeNameWithoutNamespace(string fullTypeName) { }
         public static string GetTypeNamespace(string fullTypeName) { }
-        public static TTargetType GetTypedInstance<TTargetType>(object instance)
+        public static TTargetType? GetTypedInstance<TTargetType>(object instance)
             where TTargetType :  class { }
         public static bool IsSubclassOfRawGeneric(System.Type generic, System.Type toCheck) { }
-        public static bool TryCast<TOutput, TInput>(TInput value, out TOutput output) { }
+        public static bool TryCast<TOutput, TInput>(TInput? value, out TOutput output) { }
     }
     public static class TypeInfoExtensions
     {
-        public static System.Reflection.ConstructorInfo GetConstructor(this System.Reflection.TypeInfo typeInfo, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.ConstructorInfo? GetConstructor(this System.Reflection.TypeInfo typeInfo, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.ConstructorInfo[] GetConstructors(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.EventInfo GetEvent(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.EventInfo? GetEvent(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.EventInfo[] GetEvents(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.FieldInfo GetField(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.FieldInfo? GetField(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.FieldInfo[] GetFields(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.MemberInfo[] GetMember(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.MemberInfo[] GetMembers(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MethodInfo GetMethod(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MethodInfo GetMethod(this System.Reflection.TypeInfo typeInfo, string name, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.MethodInfo? GetMethod(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.MethodInfo? GetMethod(this System.Reflection.TypeInfo typeInfo, string name, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.MethodInfo[] GetMethods(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.PropertyInfo[] GetProperties(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.PropertyInfo GetProperty(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
+        public static System.Reflection.PropertyInfo? GetProperty(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
     }
 }
 namespace Catel.Runtime
@@ -3487,8 +3154,8 @@ namespace Catel.Runtime
         where TObject :  class
     {
         public ReferenceEqualityComparer() { }
-        public bool Equals(TObject x, TObject y) { }
-        public int GetHashCode(TObject obj) { }
+        public bool Equals(TObject? x, TObject? y) { }
+        public int GetHashCode(TObject? obj) { }
     }
     public class ReferenceInfo
     {
@@ -3501,15 +3168,10 @@ namespace Catel.Runtime
     {
         public ReferenceManager() { }
         public int Count { get; }
-        public Catel.Runtime.ReferenceInfo GetInfo(object instance, bool autoAssignId = true) { }
+        public Catel.Runtime.ReferenceInfo? GetInfo(object instance, bool autoAssignId = true) { }
         public Catel.Runtime.ReferenceInfo GetInfoAt(int index) { }
-        public Catel.Runtime.ReferenceInfo GetInfoById(int id) { }
-        public void RegisterManually(int id, object instance) { }
-    }
-    public class RuntimeBindingRedirect
-    {
-        public RuntimeBindingRedirect() { }
-        public RuntimeBindingRedirect(System.AppDomain appDomain) { }
+        public Catel.Runtime.ReferenceInfo? GetInfoById(int id) { }
+        public void RegisterManually(int id, object? instance) { }
     }
 }
 namespace Catel.Runtime.Serialization
@@ -3552,7 +3214,7 @@ namespace Catel.Runtime.Serialization
     }
     public interface ISerializationContext : System.IDisposable
     {
-        Catel.Runtime.Serialization.ISerializationConfiguration Configuration { get; }
+        Catel.Runtime.Serialization.ISerializationConfiguration? Configuration { get; }
         Catel.Runtime.Serialization.SerializationContextMode ContextMode { get; }
         int Depth { get; }
         object Model { get; set; }
@@ -3568,7 +3230,7 @@ namespace Catel.Runtime.Serialization
     }
     public static class ISerializationContextExtensions
     {
-        public static System.Type FindParentType(this Catel.Runtime.Serialization.ISerializationContext serializationContext, System.Func<System.Type, bool> predicate, int maxLevels = -1) { }
+        public static System.Type? FindParentType(this Catel.Runtime.Serialization.ISerializationContext serializationContext, System.Func<System.Type, bool> predicate, int maxLevels = -1) { }
     }
     public interface ISerializationContextInfo
     {
@@ -3582,7 +3244,7 @@ namespace Catel.Runtime.Serialization
         where TSerializationContext :  class, Catel.Runtime.Serialization.ISerializationContextInfo
     {
         TSerializationContext Context { get; }
-        Catel.Runtime.Serialization.ISerializationContext<TSerializationContext> Parent { get; }
+        Catel.Runtime.Serialization.ISerializationContext<TSerializationContext>? Parent { get; }
     }
     public interface ISerializationManager
     {
@@ -3612,30 +3274,30 @@ namespace Catel.Runtime.Serialization
     }
     public interface ISerializer
     {
-        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Deserialized;
-        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> DeserializedMember;
-        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Deserializing;
-        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> DeserializingMember;
-        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Serialized;
-        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> SerializedMember;
-        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Serializing;
-        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> SerializingMember;
-        object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        object Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
+        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Deserialized;
+        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? DeserializedMember;
+        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Deserializing;
+        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? DeserializingMember;
+        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Serialized;
+        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? SerializedMember;
+        event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Serializing;
+        event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? SerializingMember;
+        object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        object Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
         object Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        object Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        void Serialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        void Serialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
-        void SerializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration, params string[] membersToIgnore);
-        void Warmup(System.Collections.Generic.IEnumerable<System.Type> types = null, int typesPerThread = 1000);
+        object Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        void Serialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        void Serialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null);
+        void SerializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration, params string[] membersToIgnore);
+        void Warmup(System.Collections.Generic.IEnumerable<System.Type>? types = null, int typesPerThread = 1000);
     }
     public static class ISerializerExtensions
     {
-        public static TModel Deserialize<TModel>(this Catel.Runtime.Serialization.ISerializer serializer, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
+        public static TModel? Deserialize<TModel>(this Catel.Runtime.Serialization.ISerializer serializer, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
     }
     public interface ISerializerModifier
     {
@@ -3672,7 +3334,7 @@ namespace Catel.Runtime.Serialization
         public string MemberName { get; }
         public string MemberNameForSerialization { get; set; }
         public System.Type MemberType { get; }
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
     }
     public class MemberSerializationEventArgs : Catel.Runtime.Serialization.SerializationEventArgs
     {
@@ -3682,8 +3344,8 @@ namespace Catel.Runtime.Serialization
     [System.Diagnostics.DebuggerDisplay("{Name} => {Value} ({ActualMemberType})")]
     public class MemberValue
     {
-        public MemberValue(Catel.Runtime.Serialization.SerializationMemberGroup memberGroup, System.Type modelType, System.Type memberType, string name, string nameForSerialization, object value) { }
-        public System.Type ActualMemberType { get; }
+        public MemberValue(Catel.Runtime.Serialization.SerializationMemberGroup memberGroup, System.Type modelType, System.Type memberType, string name, string nameForSerialization, object? value) { }
+        public System.Type? ActualMemberType { get; }
         public Catel.Runtime.Serialization.SerializationMemberGroup MemberGroup { get; }
         public System.Type MemberType { get; }
         public string MemberTypeName { get; }
@@ -3691,7 +3353,7 @@ namespace Catel.Runtime.Serialization
         public string ModelTypeName { get; }
         public string Name { get; }
         public string NameForSerialization { get; }
-        public object Value { get; set; }
+        public object? Value { get; set; }
         public System.Type GetBestMemberType() { }
     }
     public class ObjectAdapter : Catel.Runtime.Serialization.IObjectAdapter
@@ -3705,14 +3367,14 @@ namespace Catel.Runtime.Serialization
     {
         public SerializableKeyValuePair() { }
         public SerializableKeyValuePair(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-        public object Key { get; set; }
+        public object? Key { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerialization]
         [System.Xml.Serialization.XmlIgnore]
-        public System.Type KeyType { get; set; }
-        public object Value { get; set; }
+        public System.Type? KeyType { get; set; }
+        public object? Value { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerialization]
         [System.Xml.Serialization.XmlIgnore]
-        public System.Type ValueType { get; set; }
+        public System.Type? ValueType { get; set; }
         public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public class SerializationConfiguration : Catel.Runtime.Serialization.ISerializationConfiguration
@@ -3728,7 +3390,7 @@ namespace Catel.Runtime.Serialization
         where TSerializationContextInfo :  class, Catel.Runtime.Serialization.ISerializationContextInfo
     {
         protected SerializationContextInfoBase() { }
-        public Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> Context { get; }
+        public Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo>? Context { get; }
         protected virtual void OnContextUpdated(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
         public virtual bool ShouldAutoGenerateGraphIds(Catel.Runtime.Serialization.ISerializationContext context) { }
     }
@@ -3748,8 +3410,8 @@ namespace Catel.Runtime.Serialization
     public class SerializationContext<TSerializationContextInfo> : Catel.Disposable, Catel.Runtime.Serialization.ISerializationContext, Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo>, System.IDisposable
         where TSerializationContextInfo :  class, Catel.Runtime.Serialization.ISerializationContextInfo
     {
-        public SerializationContext(object model, System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public Catel.Runtime.Serialization.ISerializationConfiguration Configuration { get; }
+        public SerializationContext(object model, System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public Catel.Runtime.Serialization.ISerializationConfiguration? Configuration { get; }
         public TSerializationContextInfo Context { get; }
         public Catel.Runtime.Serialization.SerializationContextMode ContextMode { get; }
         public System.Collections.Generic.Stack<Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo>> Contexts { get; }
@@ -3757,9 +3419,9 @@ namespace Catel.Runtime.Serialization
         public object Model { get; set; }
         public System.Type ModelType { get; }
         public string ModelTypeName { get; }
-        public Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> Parent { get; }
+        public Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo>? Parent { get; }
         public Catel.Runtime.ReferenceManager ReferenceManager { get; }
-        public System.Runtime.Serialization.SerializationInfo SerializationInfo { get; set; }
+        public System.Runtime.Serialization.SerializationInfo? SerializationInfo { get; set; }
         public System.Collections.Generic.Stack<System.Type> TypeStack { get; }
         protected override void DisposeManaged() { }
     }
@@ -3775,7 +3437,7 @@ namespace Catel.Runtime.Serialization
     public class SerializationManager : Catel.Runtime.Serialization.ISerializationManager
     {
         public SerializationManager() { }
-        public event System.EventHandler<Catel.Runtime.Serialization.CacheInvalidatedEventArgs> CacheInvalidated;
+        public event System.EventHandler<Catel.Runtime.Serialization.CacheInvalidatedEventArgs>? CacheInvalidated;
         public void AddSerializerModifier(System.Type type, System.Type serializerModifierType) { }
         public void Clear(System.Type type) { }
         protected virtual System.Collections.Generic.List<System.Type> FindSerializerModifiers(System.Type type) { }
@@ -3820,10 +3482,10 @@ namespace Catel.Runtime.Serialization
         public bool IsSuccessful { get; }
         public Catel.Runtime.Serialization.SerializationMemberGroup MemberGroup { get; }
         public string MemberName { get; }
-        public object MemberValue { get; }
+        public object? MemberValue { get; }
         public System.Type ModelType { get; }
         public static Catel.Runtime.Serialization.SerializationObject FailedToDeserialize(System.Type modelType, Catel.Runtime.Serialization.SerializationMemberGroup memberGroup, string memberName) { }
-        public static Catel.Runtime.Serialization.SerializationObject SucceededToDeserialize(System.Type modelType, Catel.Runtime.Serialization.SerializationMemberGroup memberGroup, string memberName, object memberValue) { }
+        public static Catel.Runtime.Serialization.SerializationObject SucceededToDeserialize(System.Type modelType, Catel.Runtime.Serialization.SerializationMemberGroup memberGroup, string memberName, object? memberValue) { }
     }
     public class SerializationScope
     {
@@ -3856,14 +3518,14 @@ namespace Catel.Runtime.Serialization
         protected Catel.Runtime.Serialization.IObjectAdapter ObjectAdapter { get; }
         protected Catel.Runtime.Serialization.ISerializationManager SerializationManager { get; }
         protected Catel.IoC.ITypeFactory TypeFactory { get; }
-        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Deserialized;
-        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> DeserializedMember;
-        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Deserializing;
-        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> DeserializingMember;
-        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Serialized;
-        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> SerializedMember;
-        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs> Serializing;
-        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs> SerializingMember;
+        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Deserialized;
+        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? DeserializedMember;
+        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Deserializing;
+        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? DeserializingMember;
+        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Serialized;
+        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? SerializedMember;
+        public event System.EventHandler<Catel.Runtime.Serialization.SerializationEventArgs>? Serializing;
+        public event System.EventHandler<Catel.Runtime.Serialization.MemberSerializationEventArgs>? SerializingMember;
         protected virtual void AfterDeserialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
         protected virtual void AfterDeserializeMember(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected virtual void AfterSerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
@@ -3873,49 +3535,49 @@ namespace Catel.Runtime.Serialization
         protected virtual void BeforeDeserializeMember(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected virtual void BeforeSerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
         protected virtual void BeforeSerializeMember(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
-        protected System.Collections.Generic.List<Catel.Runtime.Serialization.SerializableKeyValuePair> ConvertDictionaryToCollection(object memberValue) { }
-        protected virtual object CreateModelInstance(System.Type type) { }
+        protected System.Collections.Generic.List<Catel.Runtime.Serialization.SerializableKeyValuePair> ConvertDictionaryToCollection(object? memberValue) { }
+        protected virtual object? CreateModelInstance(System.Type type) { }
         protected virtual object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
-        public object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual object Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public object Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual object Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual object Deserialize(System.Type modelType, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
+        public object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object Deserialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public object Deserialize(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object Deserialize(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual object Deserialize(System.Type modelType, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
         protected abstract Catel.Runtime.Serialization.SerializationObject DeserializeMember(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue);
         protected virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
-        public System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContextInfo, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContextInfo, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        protected virtual object DeserializeUsingObjectParse(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
-        protected virtual Catel.Runtime.Serialization.MemberValue EndMemberDeserialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationObject serializationObject, System.Collections.Generic.IEnumerable<Catel.Runtime.Serialization.ISerializerModifier> serializerModifiers) { }
+        public System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, Catel.Runtime.Serialization.ISerializationContextInfo serializationContextInfo, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, Catel.Runtime.Serialization.ISerializationContextInfo serializationContextInfo, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(System.Type modelType, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        protected virtual object? DeserializeUsingObjectParse(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
+        protected virtual Catel.Runtime.Serialization.MemberValue? EndMemberDeserialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationObject serializationObject, System.Collections.Generic.IEnumerable<Catel.Runtime.Serialization.ISerializerModifier> serializerModifiers) { }
         protected void EndMemberSerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member) { }
-        protected Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        protected Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        protected virtual Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(object model, System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        protected virtual Catel.Runtime.Serialization.ISerializationConfiguration GetCurrentSerializationConfiguration(Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
-        protected virtual Catel.Scoping.ScopeManager<Catel.Runtime.Serialization.SerializationScope> GetCurrentSerializationScopeManager(Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
+        protected Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        protected Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        protected virtual Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(object model, System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        protected virtual Catel.Runtime.Serialization.ISerializationConfiguration GetCurrentSerializationConfiguration(Catel.Runtime.Serialization.ISerializationConfiguration? configuration) { }
+        protected virtual Catel.Scoping.ScopeManager<Catel.Runtime.Serialization.SerializationScope> GetCurrentSerializationScopeManager(Catel.Runtime.Serialization.ISerializationConfiguration? configuration) { }
         protected Catel.Runtime.Serialization.SerializationMemberGroup GetMemberGroup(System.Type modelType, string memberName) { }
-        protected System.Type GetMemberType(System.Type modelType, string memberName) { }
-        protected virtual System.Reflection.MethodInfo GetObjectParseMethod(System.Type memberType) { }
-        protected virtual System.Reflection.MethodInfo GetObjectToStringMethod(System.Type memberType) { }
+        protected System.Type? GetMemberType(System.Type modelType, string memberName) { }
+        protected virtual System.Reflection.MethodInfo? GetObjectParseMethod(System.Type memberType) { }
+        protected virtual System.Reflection.MethodInfo? GetObjectToStringMethod(System.Type memberType) { }
         public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> GetSerializableMembers(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, object model, params string[] membersToIgnore) { }
-        protected abstract Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration);
+        protected abstract Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration? configuration);
         protected virtual bool IsRootCollection(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected virtual bool IsRootDictionary(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected virtual bool IsRootObject(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue, System.Func<Catel.Runtime.Serialization.MemberValue, bool> predicate) { }
         protected virtual void PopulateModel(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> members) { }
         protected virtual void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
-        public void Serialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo context, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual void Serialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
-        public virtual void Serialize(object model, TSerializationContextInfo context, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
+        public void Serialize(object model, Catel.Runtime.Serialization.ISerializationContextInfo context, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual void Serialize(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
+        public virtual void Serialize(object model, TSerializationContextInfo context, Catel.Runtime.Serialization.ISerializationConfiguration? configuration = null) { }
         protected abstract void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue);
         protected virtual void SerializeMembers(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> membersToSerialize) { }
-        public virtual void SerializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration configuration, params string[] membersToIgnore) { }
-        protected virtual string SerializeUsingObjectToString(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
+        public virtual void SerializeMembers(object model, System.IO.Stream stream, Catel.Runtime.Serialization.ISerializationConfiguration? configuration, params string[] membersToIgnore) { }
+        protected virtual string? SerializeUsingObjectToString(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected virtual bool ShouldExternalSerializerHandleMember(Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected virtual bool ShouldExternalSerializerHandleMember(System.Type memberType) { }
         protected virtual bool ShouldIgnoreMember(object model, string propertyName) { }
@@ -3929,7 +3591,7 @@ namespace Catel.Runtime.Serialization
         protected virtual void StartMemberDeserialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member) { }
         protected bool StartMemberSerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.ISerializerModifier[] serializerModifiers) { }
         protected abstract void Warmup(System.Type type);
-        public void Warmup(System.Collections.Generic.IEnumerable<System.Type> types, int typesPerThread = 1000) { }
+        public void Warmup(System.Collections.Generic.IEnumerable<System.Type>? types = null, int typesPerThread = 1000) { }
     }
     [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
     public class SerializerModifierAttribute : System.Attribute
@@ -3970,18 +3632,18 @@ namespace Catel.Runtime.Serialization.Xml
     public class DataContractSerializerFactory : Catel.Runtime.Serialization.Xml.IDataContractSerializerFactory
     {
         public DataContractSerializerFactory() { }
-        public System.Runtime.Serialization.DataContractResolver DataContractResolver { get; set; }
+        public System.Runtime.Serialization.DataContractResolver? DataContractResolver { get; set; }
         protected virtual bool AddTypeToKnownTypesIfSerializable(System.Type typeToAdd, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected virtual bool AllowNonPublicReflection(System.Type type) { }
-        public virtual System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string rootNamespace = null, System.Collections.Generic.List<System.Type> additionalKnownTypes = null) { }
-        public virtual System.Collections.Generic.List<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.List<System.Type> additionalKnownTypes = null) { }
+        public virtual System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string? rootNamespace = null, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null) { }
+        public virtual System.Collections.Generic.List<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null) { }
         protected virtual void GetKnownTypes(System.Type type, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo, bool resolveAbstractClassesAndInterfaces = true) { }
         protected virtual System.Type[] GetKnownTypesViaAttributes(System.Type type) { }
         protected virtual bool IsTypeSerializable(System.Type type, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected virtual bool ShouldTypeBeIgnored(System.Type type, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected class XmlSerializerTypeInfo
         {
-            public XmlSerializerTypeInfo(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.IEnumerable<System.Type> additionalKnownTypes = null) { }
+            public XmlSerializerTypeInfo(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.IEnumerable<System.Type>? additionalKnownTypes = null) { }
             public System.Collections.Generic.IEnumerable<System.Type> KnownTypes { get; }
             public System.Type SerializingType { get; }
             public System.Collections.Generic.IEnumerable<System.Type> SpecialCollectionTypes { get; }
@@ -4005,19 +3667,19 @@ namespace Catel.Runtime.Serialization.Xml
     }
     public interface IDataContractSerializerFactory
     {
-        System.Runtime.Serialization.DataContractResolver DataContractResolver { get; set; }
-        System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string rootNamespace = null, System.Collections.Generic.List<System.Type> additionalKnownTypes = null);
-        System.Collections.Generic.List<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.List<System.Type> additionalKnownTypes = null);
+        System.Runtime.Serialization.DataContractResolver? DataContractResolver { get; set; }
+        System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string? rootNamespace = null, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null);
+        System.Collections.Generic.List<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null);
     }
     public interface IXmlNamespaceManager
     {
-        Catel.Runtime.Serialization.Xml.XmlNamespace GetNamespace(System.Type type, string preferredPrefix);
+        Catel.Runtime.Serialization.Xml.XmlNamespace? GetNamespace(System.Type type, string preferredPrefix);
     }
     public interface IXmlSerializer : Catel.Runtime.Serialization.ISerializer { }
     public static class XmlHelper
     {
-        public static object ConvertToObject(System.Xml.Linq.XElement element, System.Type objectType, System.Func<object> createDefaultValue) { }
-        public static System.Xml.Linq.XElement ConvertToXml(string elementName, System.Type objectType, object objectValue) { }
+        public static object? ConvertToObject(System.Xml.Linq.XElement element, System.Type objectType, System.Func<object> createDefaultValue) { }
+        public static System.Xml.Linq.XElement? ConvertToXml(string elementName, System.Type objectType, object objectValue) { }
     }
     public class XmlNamespace
     {
@@ -4029,24 +3691,13 @@ namespace Catel.Runtime.Serialization.Xml
     public class XmlNamespaceManager : Catel.Runtime.Serialization.Xml.IXmlNamespaceManager
     {
         public XmlNamespaceManager() { }
-        public Catel.Runtime.Serialization.Xml.XmlNamespace GetNamespace(System.Type type, string preferredPrefix) { }
-    }
-    public static class XmlSchemaHelper
-    {
-        public const string Xmlns = "http://www.w3.org/2001/XMLSchema";
-        public static System.Xml.XmlQualifiedName GetXmlSchema(System.Type type, System.Xml.Schema.XmlSchemaSet schemaSet, bool generateFlatSchema) { }
-    }
-    public class XmlSchemaManager
-    {
-        public XmlSchemaManager() { }
-        public static bool GenerateFlatSchemas { get; set; }
-        public static System.Xml.XmlQualifiedName GetXmlSchema(System.Type type, System.Xml.Schema.XmlSchemaSet schemaSet) { }
+        public Catel.Runtime.Serialization.Xml.XmlNamespace? GetNamespace(System.Type type, string preferredPrefix) { }
     }
     public class XmlSerializationConfiguration : Catel.Runtime.Serialization.SerializationConfiguration
     {
         public XmlSerializationConfiguration() { }
-        public System.Xml.XmlReaderSettings ReaderSettings { get; set; }
-        public System.Xml.XmlWriterSettings WriterSettings { get; set; }
+        public System.Xml.XmlReaderSettings? ReaderSettings { get; set; }
+        public System.Xml.XmlWriterSettings? WriterSettings { get; set; }
     }
     public class XmlSerializationContextInfo : Catel.Runtime.Serialization.SerializationContextInfoBase<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo>
     {
@@ -4055,9 +3706,9 @@ namespace Catel.Runtime.Serialization.Xml
         public bool AllowCustomXmlSerialization { get; set; }
         public bool IsRootObject { get; }
         public System.Collections.Generic.HashSet<System.Type> KnownTypes { get; }
-        public object Model { get; }
-        public System.Xml.XmlReader XmlReader { get; }
-        public System.Xml.XmlWriter XmlWriter { get; }
+        public object? Model { get; }
+        public System.Xml.XmlReader? XmlReader { get; }
+        public System.Xml.XmlWriter? XmlWriter { get; }
         protected override void OnContextUpdated(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
     }
     public class XmlSerializationContextInfoFactory : Catel.Runtime.Serialization.ISerializationContextInfoFactory
@@ -4077,9 +3728,9 @@ namespace Catel.Runtime.Serialization.Xml
         protected override System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected virtual string GetNamespacePrefix() { }
         protected virtual string GetNamespaceUrl() { }
-        protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
-        protected string GetXmlElementName(System.Type modelType, object model, string memberName) { }
-        protected virtual object ReadXmlObject(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Xml.XmlReader xmlReader, System.Runtime.Serialization.DataContractSerializer serializer, string namespacePrefix, string xmlName, System.Type modelType) { }
+        protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration? configuration) { }
+        protected string GetXmlElementName(System.Type modelType, object model, string? memberName) { }
+        protected virtual object? ReadXmlObject(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Xml.XmlReader xmlReader, System.Runtime.Serialization.DataContractSerializer serializer, string namespacePrefix, string xmlName, System.Type modelType) { }
         protected override void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected override void SerializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> membersToSerialize) { }
@@ -4097,19 +3748,19 @@ namespace Catel.Scoping
 {
     public class ScopeClosedEventArgs : System.EventArgs
     {
-        public ScopeClosedEventArgs(object scopeObject, string scopeName) { }
+        public ScopeClosedEventArgs(object? scopeObject, string scopeName) { }
         public string ScopeName { get; }
-        public object ScopeObject { get; }
+        public object? ScopeObject { get; }
     }
     public class ScopeManager<T> : System.IDisposable
         where T :  class
     {
-        protected ScopeManager(string scopeName, System.Func<T> createScopeFunction) { }
+        protected ScopeManager(string scopeName, System.Func<T>? createScopeFunction) { }
         public int RefCount { get; }
         public T ScopeObject { get; }
-        public event System.EventHandler<Catel.Scoping.ScopeClosedEventArgs> ScopeClosed;
+        public event System.EventHandler<Catel.Scoping.ScopeClosedEventArgs>? ScopeClosed;
         public virtual void Dispose() { }
-        public static Catel.Scoping.ScopeManager<T> GetScopeManager(string scopeName = "", System.Func<T> createScopeFunction = null) { }
+        public static Catel.Scoping.ScopeManager<T> GetScopeManager(string scopeName = "", System.Func<T>? createScopeFunction = null) { }
         public static bool ScopeExists(string scopeName = "") { }
     }
 }
@@ -4157,11 +3808,11 @@ namespace Catel.Services
         bool CacheResults { get; set; }
         System.Globalization.CultureInfo FallbackCulture { get; set; }
         System.Globalization.CultureInfo PreferredCulture { get; set; }
-        event System.EventHandler<System.EventArgs> LanguageUpdated;
+        event System.EventHandler<System.EventArgs>? LanguageUpdated;
         void ClearLanguageResources();
-        string GetString(string resourceName);
-        string GetString(string resourceName, System.Globalization.CultureInfo cultureInfo);
-        string GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo);
+        string? GetString(string resourceName);
+        string? GetString(string resourceName, System.Globalization.CultureInfo cultureInfo);
+        string? GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo);
         void PreloadLanguageSources();
         void RegisterLanguageSource(Catel.Services.ILanguageSource languageSource);
     }
@@ -4172,9 +3823,9 @@ namespace Catel.Services
     public interface IObjectConverterService
     {
         System.Globalization.CultureInfo DefaultCulture { get; set; }
-        object ConvertFromObjectToObject(object value, System.Type targetType);
-        string ConvertFromObjectToString(object value);
-        string ConvertFromObjectToString(object value, System.Globalization.CultureInfo culture);
+        object ConvertFromObjectToObject(object? value, System.Type targetType);
+        string ConvertFromObjectToString(object? value);
+        string ConvertFromObjectToString(object? value, System.Globalization.CultureInfo culture);
         object ConvertFromStringToObject(string value, System.Type targetType);
         object ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture);
     }
@@ -4199,7 +3850,7 @@ namespace Catel.Services
         int MaximumNumberOfErrorLogEntries { get; set; }
         int MaximumNumberOfLogEntries { get; set; }
         int MaximumNumberOfWarningLogEntries { get; set; }
-        event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
+        event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetErrorLogEntries();
         System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetLogEntries();
         System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetWarningLogEntries();
@@ -4219,8 +3870,8 @@ namespace Catel.Services
         public LanguageResourceKey(string resourceName, System.Globalization.CultureInfo cultureInfo) { }
         public System.Globalization.CultureInfo CultureInfo { get; }
         public string ResourceName { get; }
-        public bool Equals(Catel.Services.LanguageResourceKey other) { }
-        public override bool Equals(object obj) { }
+        public bool Equals(Catel.Services.LanguageResourceKey? other) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
     }
@@ -4239,11 +3890,11 @@ namespace Catel.Services
         public bool CacheResults { get; set; }
         public System.Globalization.CultureInfo FallbackCulture { get; set; }
         public System.Globalization.CultureInfo PreferredCulture { get; set; }
-        public event System.EventHandler<System.EventArgs> LanguageUpdated;
+        public event System.EventHandler<System.EventArgs>? LanguageUpdated;
         public void ClearLanguageResources() { }
-        public string GetString(string resourceName) { }
-        public string GetString(string resourceName, System.Globalization.CultureInfo cultureInfo) { }
-        public override string GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
+        public string? GetString(string resourceName) { }
+        public string? GetString(string resourceName, System.Globalization.CultureInfo cultureInfo) { }
+        public override string? GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
         protected override void PreloadLanguageSource(Catel.Services.ILanguageSource languageSource) { }
         public virtual void PreloadLanguageSources() { }
         public void RegisterLanguageSource(Catel.Services.ILanguageSource languageSource) { }
@@ -4251,7 +3902,7 @@ namespace Catel.Services
     public abstract class LanguageServiceBase
     {
         protected LanguageServiceBase() { }
-        public abstract string GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo);
+        public abstract string? GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo);
         protected abstract void PreloadLanguageSource(Catel.Services.ILanguageSource languageSource);
     }
     public sealed class LongObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, long>
@@ -4262,6 +3913,7 @@ namespace Catel.Services
     }
     public abstract class NumericBasedObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.ObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType :  class
+        where TUniqueIdentifier :  notnull
     {
         protected NumericBasedObjectIdGenerator() { }
         protected static TUniqueIdentifier Value { get; set; }
@@ -4270,9 +3922,9 @@ namespace Catel.Services
     {
         public ObjectConverterService() { }
         public System.Globalization.CultureInfo DefaultCulture { get; set; }
-        public virtual object ConvertFromObjectToObject(object value, System.Type targetType) { }
-        public virtual string ConvertFromObjectToString(object value) { }
-        public string ConvertFromObjectToString(object value, System.Globalization.CultureInfo culture) { }
+        public virtual object ConvertFromObjectToObject(object? value, System.Type targetType) { }
+        public virtual string ConvertFromObjectToString(object? value) { }
+        public string ConvertFromObjectToString(object? value, System.Globalization.CultureInfo culture) { }
         public virtual object ConvertFromStringToObject(string value, System.Type targetType) { }
         public object ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture) { }
     }
@@ -4294,7 +3946,7 @@ namespace Catel.Services
         public int MaximumNumberOfErrorLogEntries { get; set; }
         public int MaximumNumberOfLogEntries { get; set; }
         public int MaximumNumberOfWarningLogEntries { get; set; }
-        public event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
+        public event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetErrorLogEntries() { }
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetLogEntries() { }
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetWarningLogEntries() { }

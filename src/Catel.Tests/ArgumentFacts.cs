@@ -454,13 +454,13 @@
             [TestCase]
             public void ThrowsArgumentExceptionForNullValue()
             {
-                Assert.Throws<ArgumentNullException>(() => Argument.IsNotMatch("myParam", null, ".+"));
+                Assert.Throws<ArgumentException>(() => Argument.IsNotMatch("myParam", null, ".+"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullPattern()
             {
-                Assert.Throws<ArgumentNullException>(() => Argument.IsNotMatch("myParam", string.Empty, null));
+                Assert.Throws<ArgumentException>(() => Argument.IsNotMatch("myParam", string.Empty, null));
             }
 
             [TestCase]
@@ -482,13 +482,13 @@
             [TestCase]
             public void ThrowsArgumentExceptionForNullValue()
             {
-                Assert.Throws<ArgumentNullException>(() => Argument.IsMatch("myParam", null, ".+"));
+                Assert.Throws<ArgumentException>(() => Argument.IsMatch("myParam", null, ".+"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullPattern()
             {
-                Assert.Throws<ArgumentNullException>(() => Argument.IsMatch("myParam", string.Empty, null));
+                Assert.Throws<ArgumentException>(() => Argument.IsMatch("myParam", string.Empty, null));
             }
 
             [TestCase]

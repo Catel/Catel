@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
     using Policies;
@@ -244,6 +245,8 @@
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
         public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default)
         {
+            ArgumentNullException.ThrowIfNull(code);
+
             return GetFromCacheOrFetch(key, code, ExpirationPolicy.Duration(expiration), @override);
         }
 
@@ -261,6 +264,8 @@
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
         public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy? expirationPolicy, bool @override = false)
         {
+            ArgumentNullException.ThrowIfNull(code);
+
             return ExecuteInLockAsync(key, async () =>
             {
                 if (!@override && _dictionary.TryGetValue(key, out var cacheStorageValueInfo))

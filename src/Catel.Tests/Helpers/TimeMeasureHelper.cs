@@ -6,7 +6,7 @@
 
     public static class TimeMeasureHelper
     {
-        public static double MeasureAction(int timesToInvoke, string description, Action action, Action initializationAction = null)
+        public static double MeasureAction(int timesToInvoke, string description, Action action, Action? initializationAction = null)
         {
             Argument.IsNotNullOrWhitespace(() => description);
             Argument.IsNotNull(() => action);

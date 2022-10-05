@@ -38,6 +38,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public ValidationSummary(IValidationContext validationContext)
         {
+            ArgumentNullException.ThrowIfNull(validationContext);
+
             _fieldWarnings = validationContext.GetFieldWarnings();
             _fieldErrors = validationContext.GetFieldErrors();
             _businessRuleWarnings = validationContext.GetBusinessRuleWarnings();
@@ -55,6 +57,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public ValidationSummary(IValidationContext validationContext, object tag)
         {
+            ArgumentNullException.ThrowIfNull(validationContext);
+
             _fieldWarnings = validationContext.GetFieldWarnings(tag);
             _fieldErrors = validationContext.GetFieldErrors(tag);
             _businessRuleWarnings = validationContext.GetBusinessRuleWarnings(tag);
