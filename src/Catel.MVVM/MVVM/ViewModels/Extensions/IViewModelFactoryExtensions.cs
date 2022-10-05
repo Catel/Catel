@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelFactoryExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -26,13 +19,13 @@ namespace Catel.MVVM
         /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <c>TViewModel</c> does not implement the <see cref="IViewModel" /> interface.</exception>
-        public static TViewModel CreateViewModel<TViewModel>(this IViewModelFactory viewModelFactory, object dataContext, object tag = null)
+        public static TViewModel? CreateViewModel<TViewModel>(this IViewModelFactory viewModelFactory, object? dataContext, object? tag = null)
             where TViewModel : IViewModel
         {
-            Argument.IsNotNull("viewModelFactory", viewModelFactory);
+            ArgumentNullException.ThrowIfNull(viewModelFactory);
 
             var viewModelType = typeof(TViewModel);
-            return (TViewModel)viewModelFactory.CreateViewModel(viewModelType, dataContext, tag);
+            return (TViewModel?)viewModelFactory.CreateViewModel(viewModelType, dataContext, tag);
         }
     }
 }

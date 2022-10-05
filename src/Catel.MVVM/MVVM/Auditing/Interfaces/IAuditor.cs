@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAuditor.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing
 {
     using System;
     using System.Collections.Generic;
@@ -44,7 +38,7 @@ namespace Catel.MVVM.Auditing
         /// <param name="viewModel">The view model.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="newValue">The new property value.</param>
-        void OnPropertyChanged(IViewModel viewModel, string propertyName, object newValue);
+        void OnPropertyChanged(IViewModel viewModel, string propertyName, object? newValue);
 
         /// <summary>
         /// Called when a command of a view model has just been executed.
@@ -53,7 +47,7 @@ namespace Catel.MVVM.Auditing
         /// <param name="commandName">Name of the command, which is the name of the command property.</param>
         /// <param name="command">The command that has been executed.</param>
         /// <param name="commandParameter">The command parameter.</param>
-        void OnCommandExecuted(IViewModel viewModel, string commandName, ICatelCommand command, object commandParameter);
+        void OnCommandExecuted(IViewModel? viewModel, string commandName, ICatelCommand command, object? commandParameter);
 
         /// <summary>
         /// Called when a view model is about to be saved.

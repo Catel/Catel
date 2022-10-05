@@ -2,6 +2,7 @@
 {
     using Catel.IoC;
     using Logging;
+    using System;
     using System.Windows;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -23,7 +24,7 @@
         /// <param name="commandManager">The command manager.</param>
         public CommandManagerWrapper(FrameworkElement view, ICommandManager commandManager = null)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             _commandManager = commandManager ?? ServiceLocator.Default.ResolveType<ICommandManager>();
 

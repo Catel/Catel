@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.ComponentModel;
@@ -16,7 +10,6 @@ namespace Catel.MVVM
     /// </summary>
     public interface IViewModel : IValidatable, INotifyPropertyChanged
     {
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
         /// <see cref="CancelViewModelAsync"/>, <see cref="SaveViewModelAsync"/> or <see cref="CloseViewModelAsync"/>
@@ -48,51 +41,47 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The unique identifier.</value>
         int UniqueIdentifier { get; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
-        event AsyncEventHandler<EventArgs> InitializedAsync;
+        event AsyncEventHandler<EventArgs>? InitializedAsync;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
         /// </summary>
-        event AsyncEventHandler<CommandExecutedEventArgs> CommandExecutedAsync;
+        event AsyncEventHandler<CommandExecutedEventArgs>? CommandExecutedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be saved.
         /// </summary>
-        event AsyncEventHandler<SavingEventArgs> SavingAsync;
+        event AsyncEventHandler<SavingEventArgs>? SavingAsync;
 
         /// <summary>
         /// Occurs when the view model is saved successfully.
         /// </summary>
-        event AsyncEventHandler<EventArgs> SavedAsync;
+        event AsyncEventHandler<EventArgs>? SavedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be canceled.
         /// </summary>
-        event AsyncEventHandler<CancelingEventArgs> CancelingAsync;
+        event AsyncEventHandler<CancelingEventArgs>? CancelingAsync;
 
         /// <summary>
         /// Occurrs when the view model is canceled.
         /// </summary>
-        event AsyncEventHandler<EventArgs> CanceledAsync;
+        event AsyncEventHandler<EventArgs>? CanceledAsync;
 
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
-        event AsyncEventHandler<EventArgs> ClosingAsync;
+        event AsyncEventHandler<EventArgs>? ClosingAsync;
 
         /// <summary>
         /// Occurs when the view model has been closed.
         /// </summary>
-        event AsyncEventHandler<ViewModelClosedEventArgs> ClosedAsync;
-        #endregion
+        event AsyncEventHandler<ViewModelClosedEventArgs>? ClosedAsync;
 
-        #region Methods
         /// <summary>
         /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
         /// to a state where the associated UI element (user control, window, ...) is actually loaded.
@@ -127,6 +116,5 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         Task CloseViewModelAsync(bool? result);
-        #endregion
     }
 }

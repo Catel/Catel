@@ -19,7 +19,7 @@
         /// </summary>
         /// <param name="parameter">The parameter to check. Can be <c>null</c>.</param>
         /// <returns><c>true</c> if the converter should be inverted; otherwise <c>false</c>.</returns>
-        public static bool ShouldInvert(object parameter)
+        public static bool ShouldInvert(object? parameter)
         {
             var invert = false;
 

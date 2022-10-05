@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
+    using System.Windows.Media.Media3D;
     using Auditing;
     using Collections;
     using Data;
@@ -16,29 +17,12 @@
     using Services;
 
     /// <summary>
-    /// Available clean up models for a model.
-    /// </summary>
-    public enum ModelCleanUpMode
-    {
-        /// <summary>
-        /// Call <see cref="IEditableObject.CancelEdit"/>.
-        /// </summary>
-        CancelEdit,
-
-        /// <summary>
-        /// Call <see cref="IEditableObject.EndEdit"/>.
-        /// </summary>
-        EndEdit
-    }
-    
-    /// <summary>
     /// View model base for MVVM implementations. This class is based on the <see cref="ModelBase" />, and supports all
     /// common interfaces used by WPF.
     /// </summary>
     /// <remarks>This view model base does not add any services.</remarks>
     public abstract partial class ViewModelBase : ValidatableModelBase, IRelationalViewModel, IUniqueIdentifyable
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -74,7 +58,7 @@
         /// <summary>
         /// Dictionary of available models inside the view model.
         /// </summary>
-        private readonly Dictionary<string, object> _modelObjects = new Dictionary<string, object>();
+        private readonly Dictionary<string, object?> _modelObjects = new Dictionary<string, object?>();
 
         /// <summary>
         /// Dictionary with info about the available models inside the view model.
@@ -113,9 +97,7 @@
         private string _title;
 
         private readonly IObjectIdGenerator<int> _objectIdGenerator;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="ViewModelBase" /> class.
         /// </summary>
@@ -123,7 +105,7 @@
         {
             var serviceLocator = IoC.ServiceLocator.Default;
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
-            ViewModelManager = serviceLocator.ResolveType<IViewModelManager>();
+            ViewModelManager = serviceLocator.ResolveRequiredType<IViewModelManager>();
         }
 
         /// <summary>
@@ -165,7 +147,9 @@
         /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.</param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        protected ViewModelBase(IServiceLocator? serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             ViewModelConstructionTime = FastDateTime.Now;
 
@@ -181,9 +165,9 @@
                 serviceLocator = ServiceLocator.Default;
             }
 
-            DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-            _objectAdapter = DependencyResolver.Resolve<IObjectAdapter>();
-            _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
+            DependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
+            _objectAdapter = DependencyResolver.ResolveRequired<IObjectAdapter>();
+            _dispatcherService = DependencyResolver.ResolveRequired<IDispatcherService>();
 
             var type = GetType();
 
@@ -193,7 +177,7 @@
             var objectGeneratorType = GetObjectIdGeneratorType();
             serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
 
-            _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
+            _objectIdGenerator = DependencyResolver.ResolveRequired<IObjectIdGenerator<int>>(type);
             UniqueIdentifier = GetObjectId(_objectIdGenerator);
 
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
@@ -228,51 +212,47 @@
             // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
             AuditingHelper.RegisterViewModel(this);
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
-        public event AsyncEventHandler<EventArgs> InitializedAsync;
+        public event AsyncEventHandler<EventArgs>? InitializedAsync;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
         /// </summary>
-        public event AsyncEventHandler<CommandExecutedEventArgs> CommandExecutedAsync;
+        public event AsyncEventHandler<CommandExecutedEventArgs>? CommandExecutedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be saved.
         /// </summary>
-        public event AsyncEventHandler<SavingEventArgs> SavingAsync;
+        public event AsyncEventHandler<SavingEventArgs>? SavingAsync;
 
         /// <summary>
         /// Occurs when the view model is saved successfully.
         /// </summary>
-        public event AsyncEventHandler<EventArgs> SavedAsync;
+        public event AsyncEventHandler<EventArgs>? SavedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be canceled.
         /// </summary>
-        public event AsyncEventHandler<CancelingEventArgs> CancelingAsync;
+        public event AsyncEventHandler<CancelingEventArgs>? CancelingAsync;
 
         /// <summary>
         /// Occurrs when the view model is canceled.
         /// </summary>
-        public event AsyncEventHandler<EventArgs> CanceledAsync;
+        public event AsyncEventHandler<EventArgs>? CanceledAsync;
 
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
-        public event AsyncEventHandler<EventArgs> ClosingAsync;
+        public event AsyncEventHandler<EventArgs>? ClosingAsync;
 
         /// <summary>
         /// Occurs when the view model has just been closed.
         /// </summary>
-        public event AsyncEventHandler<ViewModelClosedEventArgs> ClosedAsync;
-        #endregion
+        public event AsyncEventHandler<ViewModelClosedEventArgs>? ClosedAsync;
 
-        #region Properties
         /// <summary>
         /// Gets the unique identifier of the view model.
         /// </summary>
@@ -292,7 +272,7 @@
         /// </summary>
         /// <value>The parent view model.</value>
         [ExcludeFromValidation]
-        public IViewModel ParentViewModel { get; private set; }
+        public IViewModel? ParentViewModel { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ViewModelCommandManager"/> of this view model.
@@ -436,9 +416,7 @@
         /// <value>The dependency resolver.</value>
         [ExcludeFromValidation]
         protected IDependencyResolver DependencyResolver { get; private set; }
-        #endregion
 
-        #region Methods
         partial void InitializeThrottling();
 
         partial void UninitializeThrottling();
@@ -449,7 +427,7 @@
         /// <returns>System.String.</returns>
         public override string ToString()
         {
-            return $"{GetType().FullName} (ID = {UniqueIdentifier.ToString()})";
+            return $"{GetType().FullName} (ID = {UniqueIdentifier})";
         }
 
         /// <summary>
@@ -622,10 +600,13 @@
                         {
                             if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                             {
-                                var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
-                                if ((modelKeyValuePairValueAsModelBaseBase is null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                                if (modelKeyValuePair.Value is not null)
                                 {
-                                    EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
+                                    var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
+                                    if ((modelKeyValuePairValueAsModelBaseBase is null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                                    {
+                                        EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
+                                    }
                                 }
                             }
                         }
@@ -651,7 +632,7 @@
         /// Sets the new parent view model of this view model.
         /// </summary>
         /// <param name="parentViewModel">The parent view model.</param>
-        void IRelationalViewModel.SetParentViewModel(IViewModel parentViewModel)
+        void IRelationalViewModel.SetParentViewModel(IViewModel? parentViewModel)
         {
             if (!ObjectHelper.AreEqualReferences(ParentViewModel, parentViewModel))
             {
@@ -683,7 +664,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="childViewModel"/> is <c>null</c>.</exception>
         void IRelationalViewModel.RegisterChildViewModel(IViewModel childViewModel)
         {
-            Argument.IsNotNull("childViewModel", childViewModel);
+            ArgumentNullException.ThrowIfNull(childViewModel);
 
             lock (ChildViewModels)
             {
@@ -734,7 +715,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnChildViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnChildViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(HasErrors) || e.PropertyName == nameof(HasWarnings))
             {
@@ -752,9 +733,13 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private Task OnChildViewModelClosedAsync(object sender, EventArgs e)
+        private Task OnChildViewModelClosedAsync(object? sender, EventArgs e)
         {
-            ((IRelationalViewModel)this).UnregisterChildViewModel((IViewModel)sender);
+            var viewModel = sender as IViewModel;
+            if (viewModel is not null)
+            {
+                ((IRelationalViewModel)this).UnregisterChildViewModel(viewModel);
+            }
 
             return Task.CompletedTask;
         }
@@ -767,11 +752,11 @@
         /// <exception cref="ArgumentNullException">The <paramref name="childViewModel"/> is <c>null</c>.</exception>
         void IRelationalViewModel.UnregisterChildViewModel(IViewModel childViewModel)
         {
-            Argument.IsNotNull("childViewModel", childViewModel);
+            ArgumentNullException.ThrowIfNull(childViewModel);
 
             lock (ChildViewModels)
             {
-                int index = ChildViewModels.IndexOf(childViewModel);
+                var index = ChildViewModels.IndexOf(childViewModel);
                 if (index == -1)
                 {
                     return;
@@ -804,7 +789,7 @@
         {
             lock (_modelLock)
             {
-                return _modelObjects.Values.ToArray();
+                return _modelObjects.Values.Where(x => x is not null).Cast<object>().ToArray();
             }
         }
 
@@ -887,7 +872,8 @@
                         var converter = mapping.Converter;
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
-                            var values = new object[mapping.ValueProperties.Length];
+                            var values = new object?[mapping.ValueProperties.Length];
+
                             if (newModelValue is not null)
                             {
                                 // We have a new model, ignore OneWayToSource
@@ -1011,7 +997,7 @@
         /// <remarks>
         /// This method will also raise for properties that are not mapped on the view model.
         /// </remarks>
-        protected virtual void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
         }
 
@@ -1020,7 +1006,7 @@
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnModelPropertyChangedInternal(object sender, PropertyChangedEventArgs e)
+        private void OnModelPropertyChangedInternal(object? sender, PropertyChangedEventArgs e)
         {
             foreach (var map in _viewModelToModelMap)
             {
@@ -1029,8 +1015,14 @@
                 var converter = mapping.Converter;
                 if (converter.ShouldConvert(e.PropertyName))
                 {
+                    var model = _modelObjects[mapping.ModelProperty];
+                    if (model is null)
+                    {
+                        continue;
+                    }
+
                     // Check if this is the right model (duplicate mappings might exist)
-                    if (ReferenceEquals(_modelObjects[mapping.ModelProperty], sender))
+                    if (ReferenceEquals(model, sender))
                     {
                         var propertyName = e.PropertyName ?? string.Empty;
                         if (mapping.IgnoredProperties.Contains(propertyName))
@@ -1044,11 +1036,12 @@
                             (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
                             var values = new object[mapping.ValueProperties.Length];
+
                             for (var index = 0; index < mapping.ValueProperties.Length; index++)
                             {
                                 var property = mapping.ValueProperties[index];
 
-                                if (_objectAdapter.GetMemberValue(sender, property, out object modelValue))
+                                if (_objectAdapter.GetMemberValue(model, property, out object modelValue))
                                 {
                                     values[index] = modelValue;
                                 }
@@ -1091,10 +1084,12 @@
         /// <param name="model">The model.</param>
         private void InitializeModelInternal(string modelProperty, object model)
         {
-            if (model is not null)
+            if (model is null)
             {
-                ViewModelManager.RegisterModel(this, model);
+                return;
             }
+
+            ViewModelManager.RegisterModel(this, model);
 
             var modelAsINotifyPropertyChanged = model as INotifyPropertyChanged;
             if (modelAsINotifyPropertyChanged is not null)
@@ -1125,10 +1120,7 @@
             {
                 if (modelInfo.SupportIEditableObject)
                 {
-                    if (model is not null)
-                    {
-                        EditableObjectHelper.BeginEditObject(model);
-                    }
+                    EditableObjectHelper.BeginEditObject(model);
                 }
             }
 
@@ -1152,10 +1144,12 @@
         /// <param name="modelCleanUpMode">The model clean up mode.</param>
         private void UninitializeModelInternal(string modelProperty, object model, ModelCleanUpMode modelCleanUpMode)
         {
-            if (model is not null)
+            if (model is null)
             {
-                ViewModelManager.UnregisterModel(this, model);
+                return;
             }
+
+            ViewModelManager.UnregisterModel(this, model);
 
             if (_modelErrorInfo.TryGetValue(modelProperty, out var modelErrorInfo))
             {
@@ -1227,7 +1221,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnModelErrorInfoUpdated(object sender, EventArgs e)
+        private void OnModelErrorInfoUpdated(object? sender, EventArgs e)
         {
             Validate(true);
         }
@@ -1300,21 +1294,17 @@
 
             return _modelObjects.ContainsKey(name);
         }
-        #endregion
 
-        #region Services
         /// <summary>
         /// Registers the default view model services.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
-        protected void RegisterViewModelServices(IServiceLocator serviceLocator)
+        protected virtual void RegisterViewModelServices(IServiceLocator serviceLocator)
         {
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
         }
-        #endregion
 
-        #region IViewModel Members
         /// <summary>
         /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
         /// to a state where the associated UI element (user control, window, ...) is actually loaded.
@@ -1397,7 +1387,11 @@
             {
                 foreach (var modelKeyValuePair in _modelObjects)
                 {
-                    UninitializeModelInternal(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
+                    var model = modelKeyValuePair.Value;
+                    if (model is not null)
+                    {
+                        UninitializeModelInternal(modelKeyValuePair.Key, model, ModelCleanUpMode.CancelEdit);
+                    }
                 }
             }
 
@@ -1462,9 +1456,13 @@
             {
                 lock (_modelLock)
                 {
-                    foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
+                    foreach (var modelKeyValuePair in _modelObjects)
                     {
-                        UninitializeModelInternal(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
+                        var model = modelKeyValuePair.Value;
+                        if (model is not null)
+                        {
+                            UninitializeModelInternal(modelKeyValuePair.Key, model, ModelCleanUpMode.EndEdit);
+                        }
                     }
                 }
 
@@ -1536,6 +1534,5 @@
         {
             return objectIdGenerator.GetUniqueIdentifier();
         }
-        #endregion
     }
 }

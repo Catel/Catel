@@ -23,7 +23,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public bool IsWrapped(IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             return IsViewWrapped(view);
         }
@@ -38,7 +38,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="view" /> is <c>null</c>.</exception>
         public IViewModelWrapper Wrap(IView view, object viewModelSource, WrapOptions wrapOptions)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
             Argument.IsNotNull("viewModelSource", viewModelSource);
 
             if (!_wrappers.TryGetValue(view, out var wrapper))

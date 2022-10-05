@@ -21,7 +21,7 @@
         /// <param name="method">The method.</param>
         /// <param name="args">The arguments to pass into the method.</param>
         /// <returns>The task representing the action.</returns>
-        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, params object[] args)
+        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, params object?[] args)
         {
             return InvokeAsync(dispatcher, method, DispatcherPriority.Normal, args);
         }
@@ -34,7 +34,7 @@
         /// <param name="priority">The priority.</param>
         /// <param name="args">The arguments to pass into the method.</param>
         /// <returns>The task representing the action.</returns>
-        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
+        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object?[] args)
         {
             return RunAsync(dispatcher, () =>
             {
@@ -166,7 +166,7 @@
             await dispatcher.RunWithResultAsync(async token =>
             {
                 await actionAsync();
-                return (object)null;
+                return (object?)null;
             }, CancellationToken.None, priority);
         }
 
@@ -176,7 +176,7 @@
             await dispatcher.RunWithResultAsync(async token =>
             {
                 await actionAsync(cancellationToken);
-                return (object)null;
+                return (object?)null;
             }, cancellationToken, priority);
         }
 
@@ -214,7 +214,7 @@
 
             await tcs.Task;
 
-            return result;
+            return result!;
         }
 
         private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<Task<T>> functionAsync, DispatcherPriority priority)
@@ -280,7 +280,7 @@
 
             if (!tcs.TrySetResult(result))
             {
-                Log.Warning($"Failed to set the task result to '{result.ToString()}', task was already completed. Current status is '{Enum<TaskStatus>.ToString(tcs.Task.Status)}'");
+                Log.Warning($"Failed to set the task result to '{result}', task was already completed. Current status is '{Enum<TaskStatus>.ToString(tcs.Task.Status)}'");
                 return false;
             }
 

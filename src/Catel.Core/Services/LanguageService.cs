@@ -29,8 +29,8 @@
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
 
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Resources"));
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Exceptions"));
+            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
+            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));
 
             _fallbackCulture = CultureInfo.CurrentUICulture;
             _preferredCulture = CultureInfo.CurrentUICulture;

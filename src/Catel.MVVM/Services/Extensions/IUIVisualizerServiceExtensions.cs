@@ -38,7 +38,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         public static bool IsRegistered(this IUIVisualizerService uiVisualizerService, Type viewModelType)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
             return uiVisualizerService.IsRegistered(viewModelType.FullName);
         }
@@ -71,7 +71,7 @@
         /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement <see cref="IViewModel" />.</exception>
         public static void Register(this IUIVisualizerService uiVisualizerService, Type viewModelType, Type windowType, bool throwExceptionIfExists = true)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
             if (viewModelType.GetInterfaceEx(typeof(IViewModel).FullName, false) is null)
             {
@@ -100,7 +100,7 @@
         /// <returns><c>true</c> if the view model is unregistered; otherwise <c>false</c>.</returns>
         public static bool Unregister(this IUIVisualizerService uiVisualizerService, Type viewModelType)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
             return uiVisualizerService.Unregister(viewModelType.FullName);
         }

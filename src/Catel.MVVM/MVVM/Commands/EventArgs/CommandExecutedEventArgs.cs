@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandExecutedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -20,9 +14,9 @@ namespace Catel.MVVM
         /// <param name="commandParameter">The command parameter that was used for the execution.</param>
         /// <param name="commandPropertyName">The property name under which the command is registered.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        public CommandExecutedEventArgs(ICatelCommand command, object commandParameter = null, string commandPropertyName = null)
+        public CommandExecutedEventArgs(ICatelCommand command, object? commandParameter = null, string? commandPropertyName = null)
         {
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             Command = command;
             CommandParameter = commandParameter;
@@ -39,12 +33,12 @@ namespace Catel.MVVM
         /// Gets the command parameter used for the execution.
         /// </summary>
         /// <value>The command parameter.</value>
-        public object CommandParameter { get; private set; }
+        public object? CommandParameter { get; private set; }
 
         /// <summary>
         /// Gets the property name under which the command is registered
         /// </summary>
         /// <value>The name of the command property.</value>
-        public string CommandPropertyName { get; private set; }
+        public string? CommandPropertyName { get; private set; }
     }
 }

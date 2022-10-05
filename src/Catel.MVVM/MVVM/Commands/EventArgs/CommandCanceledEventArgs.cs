@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandCanceledEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     /// <summary>
     /// CommandCanceledEventArgs, just like above but allows the event to 
@@ -16,7 +10,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="CommandCanceledEventArgs"/> class.
         /// </summary>
         /// <param name="commandParameter">The command parameter.</param>
-        public CommandCanceledEventArgs(object commandParameter = null)
+        public CommandCanceledEventArgs(object? commandParameter = null)
         {
             CommandParameter = commandParameter;
         }

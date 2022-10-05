@@ -37,7 +37,7 @@
         /// <value>
         /// Converter that implements <see cref="IEventArgsConverter"/> that will be passed should <see cref="PassEventArgsToCommand"/> be <c>true</c>; otherwise <c>false</c>.
         /// </value>
-        public IEventArgsConverter EventArgsConverter { get; set; }
+        public IEventArgsConverter? EventArgsConverter { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the invocation of the command should be prevented when the
@@ -103,7 +103,7 @@
         /// Invokes the action.
         /// </summary>
         /// <param name="parameter">The parameter to the action. If the Action does not require a parameter, the parameter may be set to a null reference.</param>
-        protected override void Invoke(object parameter)
+        protected override void Invoke(object? parameter)
         {
             if (PreventInvocationIfAssociatedObjectIsDisabled && IsAssociatedObjectDisabled())
             {

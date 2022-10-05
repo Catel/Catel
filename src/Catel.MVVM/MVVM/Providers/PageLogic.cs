@@ -1,15 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationPageLogic.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
-    using Navigation;
     using Views;
-    using MVVM;
 
     /// <summary>
     /// MVVM Provider behavior implementation for a navigation page.
@@ -24,7 +16,7 @@ namespace Catel.MVVM.Providers
         /// <param name="targetPage">The page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
-        public PageLogic(IPage targetPage, Type viewModelType = null)
+        public PageLogic(IPage targetPage, Type? viewModelType = null)
             : base(targetPage, viewModelType)
         {
         }
@@ -38,7 +30,11 @@ namespace Catel.MVVM.Providers
         /// <param name="newDataContext">The new data context.</param>
         protected override void SetDataContext(object newDataContext)
         {
-            TargetView.DataContext = newDataContext;
+            var targetView = TargetView;
+            if (targetView is not null)
+            {
+                targetView.DataContext = newDataContext;
+            }
         }
 
         /// <summary>
@@ -64,7 +60,11 @@ namespace Catel.MVVM.Providers
         {
             if (ViewModel is null)
             {
-                TargetView.DataContext = null;
+                var targetView = TargetView;
+                if (targetView is not null)
+                {
+                    targetView.DataContext = null;
+                }
             }
 
             base.OnViewModelChanged();

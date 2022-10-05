@@ -17,9 +17,9 @@
         /// <value>
         /// The password.
         /// </value>
-        public string Password
+        public string? Password
         {
-            get { return (string) GetValue(PasswordProperty); }
+            get { return (string?) GetValue(PasswordProperty); }
             set { SetValue(PasswordProperty, value); }
         }
 

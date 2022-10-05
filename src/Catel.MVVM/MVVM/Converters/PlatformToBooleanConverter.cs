@@ -15,7 +15,7 @@
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <returns>System.Object.</returns>
-        protected override object Convert(object value, System.Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var parameterAsString = ObjectToStringHelper.ToString(parameter);
 

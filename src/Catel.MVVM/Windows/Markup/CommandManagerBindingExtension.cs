@@ -3,7 +3,6 @@
     using System;
     using Catel.MVVM;
     using IoC;
-    using System.Windows.Data;
     using System.Windows.Markup;
 
     /// <summary>
@@ -17,9 +16,9 @@
         /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
         /// </summary>
         public CommandManagerBindingExtension()
+            : this(string.Empty)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            _commandManager = dependencyResolver.Resolve<ICommandManager>();
+            // Leave empty
         }
 
         /// <summary>
@@ -27,9 +26,11 @@
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         public CommandManagerBindingExtension(string commandName)
-            : this()
         {
             CommandName = commandName;
+
+            var dependencyResolver = this.GetDependencyResolver();
+            _commandManager = dependencyResolver.ResolveRequired<ICommandManager>();
         }
 
         /// <summary>
@@ -62,7 +63,7 @@
             base.OnTargetObjectUnloaded();
         }
 
-        private void OnCommandManagerCommandCreated(object sender, CommandCreatedEventArgs e)
+        private void OnCommandManagerCommandCreated(object? sender, CommandCreatedEventArgs e)
         {
             if (string.Equals(CommandName, e.Name))
             {
@@ -75,7 +76,7 @@
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <returns>System.Object.</returns>
-        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
+        protected override object? ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             if (_commandManager is null)
             {

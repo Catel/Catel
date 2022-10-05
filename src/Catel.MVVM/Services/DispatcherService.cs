@@ -133,7 +133,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
         public virtual void Invoke(Action action, bool onlyInvokeWhenNoAccess = true)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.Invoke(dispatcher, action, onlyInvokeWhenNoAccess);
@@ -147,7 +147,7 @@
         /// <c>Dispatcher.BeginInvoke</c> will be used.</param>
         public virtual void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess = true)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.BeginInvoke(dispatcher, action, onlyBeginInvokeWhenNoAccess);

@@ -22,7 +22,7 @@ namespace Catel.MVVM.Providers
         public static void SetValue<TLogic>(this LogicBase logic, Action<TLogic> action)
             where TLogic : LogicBase
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (logic is null)
             {

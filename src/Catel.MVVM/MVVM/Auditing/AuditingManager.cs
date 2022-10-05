@@ -162,7 +162,7 @@ namespace Catel.MVVM.Auditing
         /// <param name="viewModel">The view model.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="newValue">The new property value.</param>
-        internal static void OnPropertyChanged(IViewModel viewModel, string propertyName, object newValue)
+        internal static void OnPropertyChanged(IViewModel viewModel, string? propertyName, object? newValue)
         {
             lock (_instance._auditors)
             {
@@ -188,7 +188,7 @@ namespace Catel.MVVM.Auditing
         /// <param name="commandName">Name of the command, which is the name of the command property.</param>
         /// <param name="command">The command that has been executed.</param>
         /// <param name="commandParameter">The command parameter.</param>
-        internal static void OnCommandExecuted(IViewModel viewModel, string commandName, ICatelCommand command, object commandParameter)
+        internal static void OnCommandExecuted(IViewModel? viewModel, string? commandName, ICatelCommand command, object? commandParameter)
         {
             lock (_instance._auditors)
             {

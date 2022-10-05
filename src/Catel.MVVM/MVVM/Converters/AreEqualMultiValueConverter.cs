@@ -38,7 +38,7 @@
         /// <param name="parameter">Not supported.</param>
         /// <param name="culture">Not supported.</param>
         /// <returns>Not supported.</returns>
-        public object[] ConvertBack(object? value, Type[] targetTypes, object? parameter, System.Globalization.CultureInfo? culture)
+        public object[]? ConvertBack(object? value, Type[] targetTypes, object? parameter, System.Globalization.CultureInfo? culture)
         {
             // Not supported (and IMultiValueConverter must return null if no conversion is supported)
             return null;

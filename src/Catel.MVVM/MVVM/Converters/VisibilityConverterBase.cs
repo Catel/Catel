@@ -37,7 +37,7 @@
         /// <param name="targetType">The type of the binding target property.</param>
         /// <param name="parameter">The converter parameter to use.</param>
         /// <returns><c>true</c> if the specified value is visible; otherwise, <c>false</c>.</returns>
-        protected abstract bool IsVisible(object value, Type targetType, object parameter);
+        protected abstract bool IsVisible(object? value, Type targetType, object? parameter);
 
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -46,7 +46,7 @@
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var isVisible = IsVisible(value, targetType, parameter);
 

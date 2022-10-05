@@ -14,7 +14,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="contentToWrap" /> is <c>null</c>.</exception>
         public ViewModelWrapper(object contentToWrap)
         {
-            Argument.IsNotNull("contentToWrap", contentToWrap);
+            ArgumentNullException.ThrowIfNull(contentToWrap);
 
             CreateWrapper(contentToWrap);
         }

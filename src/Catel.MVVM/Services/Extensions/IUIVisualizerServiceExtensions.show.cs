@@ -19,7 +19,7 @@
         public static async Task<UIVisualizerResult> ShowAsync(this IUIVisualizerService uiVisualizerService, IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var result = await uiVisualizerService.ShowContextAsync(new UIVisualizerContext
             {

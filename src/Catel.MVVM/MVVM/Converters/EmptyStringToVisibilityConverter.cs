@@ -11,7 +11,6 @@
     [System.Windows.Data.ValueConversion(typeof(string), typeof(Visibility))]
     public class EmptyStringToCollapsingVisibilityConverter : VisibilityConverterBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EmptyStringToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -29,7 +28,6 @@
             : base(notVisibleVisibility)
         {
         }
-        #endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -40,7 +38,7 @@
         /// <returns>
         /// 	<c>true</c> if the specified value is visible; otherwise, <c>false</c>.
         /// </returns>
-        protected override bool IsVisible(object value, Type targetType, object parameter)
+        protected override bool IsVisible(object? value, Type targetType, object? parameter)
         {
             var stringValue = value as string;
 

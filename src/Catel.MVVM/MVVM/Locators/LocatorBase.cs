@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LocatorBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -18,16 +12,13 @@ namespace Catel.MVVM
     /// </summary>
     public abstract class LocatorBase : ILocator
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly Dictionary<string, HashSet<string>> _cache = new Dictionary<string, HashSet<string>>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
@@ -35,9 +26,7 @@ namespace Catel.MVVM
         {
             NamingConventions = new List<string>(GetDefaultNamingConventions());
         }
-        #endregion
-
-        #region Properties
+ 
         /// <summary>
         /// Gets or sets the naming conventions to use to locate types.
         /// <para/>
@@ -48,9 +37,7 @@ namespace Catel.MVVM
         /// <value>The naming conventions.</value>
         /// <remarks></remarks>
         public List<string> NamingConventions { get; private set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the specified type in the local cache. This cache will also be used by the <see cref="Resolve"/>
         /// method.
@@ -93,14 +80,23 @@ namespace Catel.MVVM
                     }
                 }
 
-                Type resolvedType = null;
+                Type? resolvedType = null;
 
                 var assembly = TypeHelper.GetAssemblyName(valueToResolve);
+                if (assembly is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Cannot resolve value '{valueToResolve}', assembly name returned null");
+                }
+
                 var typeToResolveName = TypeHelper.GetTypeName(valueToResolve);
 
-                foreach (string namingConvention in NamingConventions)
+                foreach (var namingConvention in NamingConventions)
                 {
                     var resolvedTypeName = ResolveNamingConvention(assembly, typeToResolveName, namingConvention);
+                    if (resolvedTypeName is null)
+                    {
+                        continue;
+                    }
 
                     // First try to retrieve the type without assembly (this allows types in other assemblies)
                     resolvedType = TypeCache.GetTypeWithoutAssembly(resolvedTypeName, allowInitialization: false);
@@ -118,12 +114,16 @@ namespace Catel.MVVM
                     }
                 }
 
-                var fullResolvedTypeName = (resolvedType is not null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.AssemblyQualifiedName) : null;
+                var fullResolvedTypeName = (resolvedType is not null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.GetSafeFullName(true)) : null;
 
                 Log.Debug("Resolved type '{0}' for type '{1}'", fullResolvedTypeName, valueToResolve);
 
                 var newSet = new HashSet<string>();
-                newSet.Add(fullResolvedTypeName);
+
+                if (!string.IsNullOrWhiteSpace(fullResolvedTypeName))
+                {
+                    newSet.Add(fullResolvedTypeName);
+                }
 
                 _cache.Add(valueToResolve, newSet);
 
@@ -146,7 +146,7 @@ namespace Catel.MVVM
         /// method manually.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="valueToResolve"/> is <c>null</c> or whitespace.</exception>
-        protected virtual string Resolve(string valueToResolve)
+        protected virtual string? Resolve(string valueToResolve)
         {
             var values = ResolveValues(valueToResolve);
             return values.LastOrDefault();
@@ -158,7 +158,7 @@ namespace Catel.MVVM
         /// <param name="valueToResolve">The value to resolve.</param>
         /// <returns>The item or <c>null</c> if the item was not found in the cache.</returns>
         /// <exception cref="ArgumentException">The <paramref name="valueToResolve"/> is <c>null</c> or whitespace.</exception>
-        protected string GetItemFromCache(string valueToResolve)
+        protected string? GetItemFromCache(string valueToResolve)
         {
             Argument.IsNotNullOrWhitespace("valueToResolve", valueToResolve);
 
@@ -189,9 +189,7 @@ namespace Catel.MVVM
 
             lock (_cache)
             {
-                HashSet<string> set = null;
-
-                if (!_cache.TryGetValue(valueToResolve, out set))
+                if (!_cache.TryGetValue(valueToResolve, out var set))
                 {
                     set = new HashSet<string>();
 
@@ -228,13 +226,12 @@ namespace Catel.MVVM
         /// <param name="typeToResolveName">The full type name of the type to resolve.</param>
         /// <param name="namingConvention">The naming convention to use for resolving.</param>
         /// <returns>The resolved naming convention.</returns>
-        protected abstract string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention);
+        protected abstract string? ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention);
 
         /// <summary>
         /// Gets the default naming conventions.
         /// </summary>
         /// <returns>An enumerable of default naming conventions.</returns>
         protected abstract IEnumerable<string> GetDefaultNamingConventions();
-        #endregion
     }
 }

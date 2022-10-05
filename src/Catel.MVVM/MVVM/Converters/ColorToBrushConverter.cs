@@ -16,7 +16,7 @@
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(Color value, Type targetType, object parameter)
+        protected override object? Convert(Color value, Type targetType, object? parameter)
         {
             return new SolidColorBrush(value);
         }
@@ -32,7 +32,7 @@
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected override object ConvertBack(Brush value, Type targetType, object parameter)
+        protected override object? ConvertBack(Brush? value, Type targetType, object? parameter)
         {
             var color = Colors.Black;
             var brush = value as SolidColorBrush;

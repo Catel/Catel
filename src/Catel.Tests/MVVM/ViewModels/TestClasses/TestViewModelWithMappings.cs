@@ -9,6 +9,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using Catel.Data;
     using Catel.MVVM;
+    using Catel.MVVM.MVVM.ViewModels.Mappings;
 
     public class TestViewModelWithMappings : ViewModelBase
     {

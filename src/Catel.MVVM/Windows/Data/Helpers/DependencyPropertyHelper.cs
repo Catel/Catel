@@ -60,7 +60,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static List<DependencyPropertyInfo> GetDependencyProperties(Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             EnsureItemInCache(viewType);
 
@@ -123,7 +123,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static string GetDependencyPropertyCacheKeyPrefix(Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             return _cacheKeyCache.GetFromCacheOrFetch(viewType, () => viewType.FullName.Replace(".", "_"));
         }
@@ -138,7 +138,7 @@
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         public static string GetDependencyPropertyCacheKey(Type viewType, string propertyName)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             return string.Format("{0}_{1}", GetDependencyPropertyCacheKeyPrefix(viewType), propertyName);

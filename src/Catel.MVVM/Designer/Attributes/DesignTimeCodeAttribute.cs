@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DesignTimeCodeAttribute.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Collections.Generic;
@@ -24,6 +17,8 @@ namespace Catel
         /// <param name="typeToConstruct">The type to construct.</param>
         public DesignTimeCodeAttribute(Type typeToConstruct)
         {
+            ArgumentNullException.ThrowIfNull(typeToConstruct);
+
             if (InitializedTypes.ContainsKey(typeToConstruct))
             {
                 return;

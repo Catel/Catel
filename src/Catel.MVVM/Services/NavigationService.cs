@@ -102,7 +102,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
         public virtual Task NavigateAsync(Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             return NavigateToUriAsync(uri);
         }
@@ -135,7 +135,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         public virtual async Task NavigateAsync(Type viewModelType, Dictionary<string, object> parameters = null)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
             var viewModelTypeName = viewModelType.FullName;
             string uri = null;
@@ -163,7 +163,7 @@
         public virtual void Register(Type viewModelType, Uri uri)
         {
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             Register(viewModelType.FullName, uri);
         }
@@ -180,7 +180,7 @@
         public virtual void Register(string name, Uri uri)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             lock (RegisteredUris)
             {

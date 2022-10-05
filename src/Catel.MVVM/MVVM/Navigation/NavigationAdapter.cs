@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationAdapterBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Navigation
+﻿namespace Catel.MVVM.Navigation
 {
     using System;
     using Logging;
@@ -30,7 +23,7 @@ namespace Catel.MVVM.Navigation
         /// <param name="navigationRoot">The navigation root.</param>
         public NavigationAdapter(IView navigationTarget, object navigationRoot)
         {
-            Argument.IsNotNull("navigationTarget", navigationTarget);
+            ArgumentNullException.ThrowIfNull(navigationRoot);
 
             NavigationTarget = navigationTarget;
             NavigationTargetType = navigationTarget.GetType();
@@ -44,7 +37,6 @@ namespace Catel.MVVM.Navigation
             NavigationTarget.Loaded += OnNavigationTargetLoaded;
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the navigated event should be invoked on the loaded event.
         /// </summary>
@@ -76,31 +68,27 @@ namespace Catel.MVVM.Navigation
         /// </summary>
         /// <value>The navigation context.</value>
         public NavigationContext NavigationContext { get; private set; }
-        #endregion
-
-        #region Events
+        
         /// <summary>
         /// Occurs when the app has navigated to this view.
         /// </summary>
-        public event EventHandler<NavigatedEventArgs> NavigatedTo;
+        public event EventHandler<NavigatedEventArgs>? NavigatedTo;
 
         /// <summary>
         /// Occurs when the app is about to navigate away from this view.
         /// </summary>
-        public event EventHandler<NavigatingEventArgs> NavigatingAway;
+        public event EventHandler<NavigatingEventArgs>? NavigatingAway;
 
         /// <summary>
         /// Occurs when the app has navigated away from this view.
         /// </summary>
-        public event EventHandler<NavigatedEventArgs> NavigatedAway;
-        #endregion
+        public event EventHandler<NavigatedEventArgs>? NavigatedAway;
 
-        #region Methods
         partial void DetermineNavigationContext();
         partial void Initialize();
         partial void Uninitialize();
 
-        private void OnNavigationTargetLoaded(object sender, EventArgs e)
+        private void OnNavigationTargetLoaded(object? sender, EventArgs e)
         {
             InitializeNavigationService(true);
 
@@ -144,7 +132,7 @@ namespace Catel.MVVM.Navigation
         /// Gets the navigation URI for the target page.
         /// </summary>
         /// <returns>System.String.</returns>
-        public string GetNavigationUriForTargetPage()
+        public string? GetNavigationUriForTargetPage()
         {
             return GetNavigationUri(NavigationTarget);
         }
@@ -154,9 +142,9 @@ namespace Catel.MVVM.Navigation
         /// </summary>
         /// <typeparam name="T">The type of the navigation target.</typeparam>
         /// <returns>The type.</returns>
-        private T GetNavigationTarget<T>()
+        private T? GetNavigationTarget<T>()
         {
-            return (T) NavigationTarget;
+            return (T?) NavigationTarget;
         }
 
         private void HandleNavigatedEvent(NavigatedEventArgs e)
@@ -189,7 +177,7 @@ namespace Catel.MVVM.Navigation
         /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
         private static string GetUriWithoutParameters(Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             return GetUriWithoutParameters(uri.ToString());
         }
@@ -276,6 +264,5 @@ namespace Catel.MVVM.Navigation
 
             NavigatedAway?.Invoke(this, e);
         }
-        #endregion
     }
 }

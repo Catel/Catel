@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -17,7 +11,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="CommandEventArgs"/> class.
         /// </summary>
         /// <param name="commandParameter">The command parameter.</param>
-        public CommandEventArgs(object commandParameter = null)
+        public CommandEventArgs(object? commandParameter = null)
         {
             CommandParameter = commandParameter;
         }
@@ -26,6 +20,6 @@ namespace Catel.MVVM
         /// Gets the command parameter used for the execution.
         /// </summary>
         /// <value>The command parameter.</value>
-        public object CommandParameter { get;  set; }
+        public object? CommandParameter { get;  set; }
     }
 }

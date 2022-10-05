@@ -1,9 +1,8 @@
 ﻿namespace Catel.MVVM.Views
 {
     using MVVM;
-    using ViewType = System.Windows.DependencyObject;
-
     using Windows.Controls;
+    using System.Windows;
 
     /// <summary>
     /// Interface defining functionality for user controls.
@@ -65,6 +64,6 @@
         /// Gets the parent of the view.
         /// </summary>
         /// <value>The parent.</value>
-        ViewType Parent { get; }
+        DependencyObject? Parent { get; }
     }
 }

@@ -234,7 +234,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
         public static DependencyObject GetLogicalParent(this DependencyObject element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             try
             {
@@ -254,7 +254,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
         public static DependencyObject GetVisualParent(this DependencyObject element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             try
             {

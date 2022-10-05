@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewToViewModelMappingContainer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +12,6 @@ namespace Catel.MVVM.Views
     /// </summary>
     internal class ViewToViewModelMappingContainer
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -33,9 +26,7 @@ namespace Catel.MVVM.Views
         /// Dictionary containing all the view model to view mappings.
         /// </summary>
         private readonly Dictionary<string, ViewToViewModelMapping> _viewModelToViewMappings = new Dictionary<string, ViewToViewModelMapping>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewToViewModelMappingContainer" /> class.
         /// </summary>
@@ -43,9 +34,10 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainerType" /> is <c>null</c>.</exception>
         public ViewToViewModelMappingContainer(Type viewModelContainerType)
         {
-            Argument.IsNotNull("viewModelContainerType", viewModelContainerType);
+            ArgumentNullException.ThrowIfNull(viewModelContainerType);
 
             var properties = viewModelContainerType.GetPropertiesEx();
+
             foreach (var property in properties)
             {
                 var viewToViewModelAttributes = property.GetCustomAttributesEx(typeof(ViewToViewModelAttribute), false);
@@ -66,9 +58,7 @@ namespace Catel.MVVM.Views
                 }
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets all the <see cref="ViewToViewModelMapping"/> that are registered.
         /// </summary>
@@ -121,6 +111,5 @@ namespace Catel.MVVM.Views
         {
             return _viewModelToViewMappings[viewModelPropertyName];
         }
-        #endregion
     }
 }

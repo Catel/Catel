@@ -4,7 +4,7 @@
 
     public partial class ViewModelWrapper
     {
-        private Grid _grid;
+        private Grid? _grid;
 
         partial void CreateWrapper(object viewModelWrapper)
         {
@@ -13,7 +13,11 @@
 
         partial void SetViewModel(IViewModel viewModel)
         {
-            _grid.DataContext = viewModel;
+            var grid = _grid;
+            if (grid is not null)
+            {
+                grid.DataContext = viewModel;
+            }
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Threading.Tasks;
@@ -27,7 +20,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         /// <returns><c>true</c> if the view model is saved; <c>false</c> if the view model is canceled; otherwise <c>null</c>.</returns>
-        public static bool? GetResult(this IViewModel viewModel)
+        public static bool? GetResult(this IViewModel? viewModel)
         {
             if (viewModel is not null)
             {
@@ -74,7 +67,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static async Task<bool> SaveAndCloseViewModelAsync(this IViewModel viewModel, int timeout)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var viewModelBase = viewModel as ViewModelBase;
             if (viewModelBase is not null)
@@ -131,7 +124,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static async Task<bool> CancelAndCloseViewModelAsync(this IViewModel viewModel, int timeout)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var viewModelBase = viewModel as ViewModelBase;
             if (viewModelBase is not null)

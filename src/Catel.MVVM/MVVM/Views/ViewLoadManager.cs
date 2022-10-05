@@ -1,40 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewLoadedManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
-
-    /// <summary>
-    /// Available view load state events.
-    /// </summary>
-    public enum ViewLoadStateEvent
-    {
-        /// <summary>
-        /// The view is about to be loaded.
-        /// </summary>
-        Loading,
-
-        /// <summary>
-        /// The view has just been loaded.
-        /// </summary>
-        Loaded,
-
-        /// <summary>
-        /// The view is about to be unloaded.
-        /// </summary>
-        Unloading,
-
-        /// <summary>
-        /// The view has just been unloaded.
-        /// </summary>
-        Unloaded
-    }
+    using Catel.Logging;
 
     /// <summary>
     /// Manager that handles top =&gt; bottom loaded events for all views inside an application.
@@ -66,7 +35,8 @@ namespace Catel.MVVM.Views
     /// </summary>
     public class ViewLoadManager : IViewLoadManager
     {
-        #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly List<WeakViewInfo> _views = new List<WeakViewInfo>();
 
         private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
@@ -74,9 +44,7 @@ namespace Catel.MVVM.Views
 #pragma warning disable IDISP006 // Implement IDisposable.
         private readonly Timer _cleanUpTimer;
 #pragma warning restore IDISP006 // Implement IDisposable.
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewLoadManager"/> class.
         /// </summary>
@@ -84,31 +52,27 @@ namespace Catel.MVVM.Views
         {
             _cleanUpTimer = new Timer(x => CleanUp(), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when any of the subscribed views are about to be loaded.
         /// </summary>
-        public event EventHandler<ViewLoadEventArgs> ViewLoading;
+        public event EventHandler<ViewLoadEventArgs>? ViewLoading;
 
         /// <summary>
         /// Occurs when any of the subscribed views are loaded.
         /// </summary>
-        public event EventHandler<ViewLoadEventArgs> ViewLoaded;
+        public event EventHandler<ViewLoadEventArgs>? ViewLoaded;
 
         /// <summary>
         /// Occurs when any of the subscribed views are about to be unloaded.
         /// </summary>
-        public event EventHandler<ViewLoadEventArgs> ViewUnloading;
+        public event EventHandler<ViewLoadEventArgs>? ViewUnloading;
 
         /// <summary>
         /// Occurs when any of the subscribed views are unloaded.
         /// </summary>
-        public event EventHandler<ViewLoadEventArgs> ViewUnloaded;
-        #endregion
+        public event EventHandler<ViewLoadEventArgs>? ViewUnloaded;
 
-        #region Methods
         /// <summary>
         /// Adds the view load state.
         /// </summary>
@@ -116,7 +80,7 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
         public void AddView(IViewLoadState viewLoadState)
         {
-            Argument.IsNotNull("viewLoadState", viewLoadState);
+            ArgumentNullException.ThrowIfNull(viewLoadState);
 
             var viewInfo = new WeakViewInfo(viewLoadState.View);
             viewInfo.Loaded += OnViewInfoLoaded;
@@ -125,16 +89,28 @@ namespace Catel.MVVM.Views
             _views.Add(viewInfo);
         }
 
-        private void OnViewInfoLoaded(object sender, EventArgs e)
+        private void OnViewInfoLoaded(object? sender, EventArgs e)
         {
+            var weakViewInfo = sender as WeakViewInfo;
+            if (weakViewInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
+            }
+
             // Just forward
-            RaiseLoaded(((WeakViewInfo)sender).View);
+            RaiseLoaded(weakViewInfo.View);
         }
 
-        private void OnViewInfoUnloaded(object sender, EventArgs e)
+        private void OnViewInfoUnloaded(object? sender, EventArgs e)
         {
+            var weakViewInfo = sender as WeakViewInfo;
+            if (weakViewInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
+            }
+
             // Just forward
-            RaiseUnloaded(((WeakViewInfo)sender).View);
+            RaiseUnloaded(weakViewInfo.View);
         }
 
         /// <summary>
@@ -142,7 +118,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         public void CleanUp()
         {
-            for (int i = 0; i < _views.Count; i++)
+            for (var i = 0; i < _views.Count; i++)
             {
                 var view = _views[i];
                 if (!view.IsAlive)
@@ -218,6 +194,5 @@ namespace Catel.MVVM.Views
 
             _lastInvokedViewLoadStateEvent = viewLoadStateEvent;
         }
-        #endregion
     }
 }

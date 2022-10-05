@@ -33,7 +33,7 @@
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ObservableCollection<System.Windows.Data.IValueConverter> _converters = new ObservableCollection<System.Windows.Data.IValueConverter>();
-        private readonly Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute> _cachedAttributes = new Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute>();
+        private readonly Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute?> _cachedAttributes = new Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute?>();
         #endregion
 
         #region Constructors
@@ -67,11 +67,11 @@
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            object output = value;
+            object? output = value;
             
-            for (int i = 0; i < Converters.Count; ++i)
+            for (var i = 0; i < Converters.Count; ++i)
             {
                 var converter = Converters[i];
                 var currentTargetType = GetTargetType(i, targetType, true);
@@ -97,9 +97,9 @@
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            object output = value;
+            object? output = value;
 
             for (int i = Converters.Count - 1; i > -1; --i)
             {
@@ -127,7 +127,7 @@
         {
             // If the current converter is not the last/first in the list, 
             // get a reference to the next/previous converter.
-            System.Windows.Data.IValueConverter nextConverter = null;
+            System.Windows.Data.IValueConverter? nextConverter = null;
             if (convert)
             {
                 if (converterIndex < Converters.Count - 1)
@@ -153,11 +153,13 @@
 
             if (nextConverter is not null)
             {
-                ValueConversionAttribute conversionAttribute = _cachedAttributes[nextConverter];
-
-                // If the Convert method is going to be called, we need to use the SourceType of the next 
-                // converter in the list.  If ConvertBack is called, use the TargetType.
-                return convert ? conversionAttribute.SourceType : conversionAttribute.TargetType;
+                var conversionAttribute = _cachedAttributes[nextConverter];
+                if (conversionAttribute is not null)
+                {
+                    // If the Convert method is going to be called, we need to use the SourceType of the next 
+                    // converter in the list.  If ConvertBack is called, use the TargetType.
+                    return convert ? conversionAttribute.SourceType : conversionAttribute.TargetType;
+                }
             }
 
             // If the current converter is the last one to be executed return the target type passed into the conversion method.
@@ -174,16 +176,20 @@
             // The 'Converters' collection has been modified, so validate that each value converter it now
             // contains is decorated with ValueConversionAttribute and then cache the attribute value.
 
-            IList convertersToProcess = null;
+            IList? convertersToProcess = null;
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 convertersToProcess = e.NewItems;
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                foreach (IValueConverter converter in e.OldItems)
+                var oldItems = e.OldItems;
+                if (oldItems is not null)
                 {
-                    _cachedAttributes.Remove(converter);
+                    foreach (IValueConverter converter in oldItems)
+                    {
+                        _cachedAttributes.Remove(converter);
+                    }
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)

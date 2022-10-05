@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherObservableObject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System.ComponentModel;
     using IoC;
@@ -29,7 +23,7 @@ namespace Catel.Data
             var serviceLocator = IoCConfiguration.DefaultServiceLocator;
             serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
 
-            _dispatcherService = serviceLocator.ResolveType<IDispatcherService>();
+            _dispatcherService = serviceLocator.ResolveRequiredType<IDispatcherService>();
         }
 
         /// <summary>
@@ -40,7 +34,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanged(sender, e));
         }

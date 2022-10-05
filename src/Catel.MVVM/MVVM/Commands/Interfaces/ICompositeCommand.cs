@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompositeCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -61,7 +54,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// Note that if the view model is not specified, the command must be unregistered manually in order to prevent memory leaks.
         /// </remarks>
-        void RegisterCommand(ICommand command, IViewModel viewModel = null);
+        void RegisterCommand(ICommand command, IViewModel? viewModel = null);
 
         /// <summary>
         /// Registers the specified action.
@@ -89,13 +82,13 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void RegisterAction(Action<object> action);
+        void RegisterAction(Action<object?> action);
 
         /// <summary>
         /// Unregisters the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void UnregisterAction(Action<object> action);        
+        void UnregisterAction(Action<object?> action);        
     }
 }

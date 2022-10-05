@@ -84,7 +84,7 @@
         /// <summary>
         /// Gets the main window of the application.
         /// </summary>
-        public static Window MainWindow
+        public static Window? MainWindow
         {
             get
             {

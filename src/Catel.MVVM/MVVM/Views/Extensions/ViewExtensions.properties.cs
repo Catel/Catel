@@ -15,9 +15,22 @@
         /// <returns>List of properties.</returns>
         public static string[] GetProperties(this IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             var viewProperties = ((FrameworkElement)view).GetDependencyProperties();
+            return viewProperties.Select(x => x.PropertyName).ToArray();
+        }
+
+        /// <summary>
+        /// Gets the properties of the view.
+        /// </summary>
+        /// <param name="viewType">The view type.</param>
+        /// <returns>List of properties.</returns>
+        public static string[] GetProperties(Type viewType)
+        {
+            ArgumentNullException.ThrowIfNull(viewType);
+
+            var viewProperties = Catel.Windows.Data.DependencyPropertyHelper.GetDependencyProperties(viewType);
             return viewProperties.Select(x => x.PropertyName).ToArray();
         }
 
@@ -29,16 +42,19 @@
         /// <param name="handler">The handler.</param>
         public static void SubscribeToPropertyChanged(this IView view, string propertyName, EventHandler<PropertyChangedEventArgs> handler)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             ((FrameworkElement)view).SubscribeToDependencyProperty(propertyName, (sender, e) =>
             {
-                if (!((FrameworkElement)sender).IsRealDependencyProperty(e.PropertyName))
+                if (sender is FrameworkElement senderFx)
                 {
-                    // Ignore, this is a wrapper
-                    return;
+                    if (!senderFx.IsRealDependencyProperty(e.PropertyName))
+                    {
+                        // Ignore, this is a wrapper
+                        return;
+                    }
                 }
 
                 handler(sender, new PropertyChangedEventArgs(e.PropertyName));

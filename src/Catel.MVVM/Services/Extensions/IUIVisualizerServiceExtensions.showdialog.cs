@@ -22,7 +22,7 @@
         public static async Task<UIVisualizerResult> ShowDialogAsync(this IUIVisualizerService uiVisualizerService, IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var result = await uiVisualizerService.ShowContextAsync(new UIVisualizerContext
             {

@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandContainerBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
+    using System;
     using System.Threading.Tasks;
     using Auditing;
 
@@ -15,7 +9,6 @@ namespace Catel.MVVM
     /// </summary>
     public abstract class CommandContainerBase : CommandContainerBase<object>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandContainerBase"/> class.
         /// </summary>
@@ -25,7 +18,6 @@ namespace Catel.MVVM
             : base(commandName, commandManager)
         {
         }
-        #endregion
     }
 
     /// <summary>
@@ -34,7 +26,6 @@ namespace Catel.MVVM
     /// <typeparam name="TParameter">The type of the command parameter.</typeparam>
     public abstract class CommandContainerBase<TParameter> : CommandContainerBase<TParameter, TParameter, ITaskProgressReport>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandContainerBase{TParameter}"/> class.
         /// </summary>
@@ -44,7 +35,6 @@ namespace Catel.MVVM
             : base(commandName, commandManager)
         {
         }
-        #endregion
     }
 
     /// <summary>
@@ -54,7 +44,6 @@ namespace Catel.MVVM
     /// <typeparam name="TCanExecuteParameter">The type of the command can execute parameter.</typeparam>
     public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter> : CommandContainerBase<TExecuteParameter, TCanExecuteParameter, ITaskProgressReport>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandContainerBase{TExecuteParameter, TCanExecuteParameter}"/> class.
         /// </summary>
@@ -64,7 +53,6 @@ namespace Catel.MVVM
             : base(commandName, commandManager)
         {
         }
-        #endregion
     }
 
     /// <summary>
@@ -76,13 +64,10 @@ namespace Catel.MVVM
     public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TPogress> 
         where TPogress : ITaskProgressReport
     {
-        #region Fields
         private readonly ICatelCommand _command;
         private readonly ICommandManager _commandManager;
         private readonly ICompositeCommand _compositeCommand;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandContainerBase{TExecuteParameter, TCanExecuteParameter, TPogress}"/> class.
         /// </summary>
@@ -91,7 +76,7 @@ namespace Catel.MVVM
         protected CommandContainerBase(string commandName, ICommandManager commandManager)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("commandManager", commandManager);
+            ArgumentNullException.ThrowIfNull(commandManager);
 
             CommandName = commandName;
             _commandManager = commandManager;
@@ -101,17 +86,13 @@ namespace Catel.MVVM
 
             _commandManager.RegisterCommand(commandName, _command);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the command.
         /// </summary>
         /// <value>The name of the command.</value>
         public string CommandName { get; private set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Invalidates the command.
         /// </summary>
@@ -125,7 +106,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns><c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanExecute(TCanExecuteParameter parameter)
+        protected virtual bool CanExecute(TCanExecuteParameter? parameter)
         {
             return true;
         }
@@ -135,7 +116,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>Task.</returns>
-        private async Task ExecuteInternalAsync(TExecuteParameter parameter)
+        private async Task ExecuteInternalAsync(TExecuteParameter? parameter)
         {
             await ExecuteAsync(parameter);
 
@@ -149,7 +130,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>Task.</returns>
-        protected virtual async Task ExecuteAsync(TExecuteParameter parameter)
+        protected virtual async Task ExecuteAsync(TExecuteParameter? parameter)
         {
             Execute(parameter);
         }
@@ -158,10 +139,8 @@ namespace Catel.MVVM
         /// Executes the command.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
-        protected virtual void Execute(TExecuteParameter parameter)
+        protected virtual void Execute(TExecuteParameter? parameter)
         {
         }
-        
-        #endregion
     }
 }

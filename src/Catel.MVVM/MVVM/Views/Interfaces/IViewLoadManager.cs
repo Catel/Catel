@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewLoadManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
 
@@ -32,21 +26,21 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Occurs when any of the subscribed framework elements are about to be loaded.
         /// </summary>
-        event EventHandler<ViewLoadEventArgs> ViewLoading;
+        event EventHandler<ViewLoadEventArgs>? ViewLoading;
 
         /// <summary>
         /// Occurs when any of the subscribed framework elements are loaded.
         /// </summary>
-        event EventHandler<ViewLoadEventArgs> ViewLoaded;
+        event EventHandler<ViewLoadEventArgs>? ViewLoaded;
 
         /// <summary>
         /// Occurs when any of the subscribed framework elements are about to be unloaded.
         /// </summary>
-        event EventHandler<ViewLoadEventArgs> ViewUnloading;
+        event EventHandler<ViewLoadEventArgs>? ViewUnloading;
 
         /// <summary>
         /// Occurs when any of the subscribed framework elements are unloaded.
         /// </summary>
-        event EventHandler<ViewLoadEventArgs> ViewUnloaded;
+        event EventHandler<ViewLoadEventArgs>? ViewUnloaded;
     }
 }

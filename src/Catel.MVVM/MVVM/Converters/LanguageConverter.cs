@@ -18,7 +18,7 @@
         /// </summary>
         public LanguageConverter()
         {
-            _languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            _languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
         }
 
         /// <summary>
@@ -28,18 +28,18 @@
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <returns>System.Object.</returns>
-        protected override object Convert(string value, Type targetType, object parameter)
+        protected override object? Convert(string? value, Type targetType, object? parameter)
         {
             var translatedValue = string.Empty;
 
             var culture = parameter as CultureInfo;
             if (culture is not null)
             {
-                translatedValue = _languageService.GetString(value, culture);
+                translatedValue = _languageService.GetString(value ?? string.Empty, culture);
             }
             else
             {
-                translatedValue = _languageService.GetString(value);
+                translatedValue = _languageService.GetString(value ?? string.Empty);
             }
 
             return translatedValue;

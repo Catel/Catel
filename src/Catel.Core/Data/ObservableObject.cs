@@ -47,7 +47,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChangedDirect(sender, e); 
             
@@ -68,7 +68,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected void RaisePropertyChangedDirect(object sender, PropertyChangedEventArgs e)
+        protected void RaisePropertyChangedDirect(object? sender, PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(sender, e);
         }

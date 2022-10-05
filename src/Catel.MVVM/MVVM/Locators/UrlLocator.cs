@@ -29,10 +29,10 @@
         /// <exception cref="ArgumentException">The <paramref name="url"/> is <c>null</c> or whitespace.</exception>
         public void Register(Type viewModelType, string url)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
             Argument.IsNotNullOrWhitespace("url", url);
 
-            var typeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
+            var typeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.GetSafeFullName(true));
 
             Register(typeName, url);
         }
@@ -49,14 +49,19 @@
         /// <see cref="ILocator.NamingConventions"/> are changed. If the <see cref="ILocator.NamingConventions"/> are changed,
         /// the cache must be cleared manually.
         /// </remarks>
-        public virtual string ResolveUrl(Type viewModelType, bool ensurePageExists = true)
+        public virtual string? ResolveUrl(Type viewModelType, bool ensurePageExists = true)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
-            string assembly = TypeHelper.GetAssemblyName(viewModelType.AssemblyQualifiedName);
-            string viewModelTypeName = viewModelType.Name;
+            var assembly = TypeHelper.GetAssemblyName(viewModelType.GetSafeFullName(true));
+            if (assembly is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Cannot resolve value '{viewModelType.GetSafeFullName()}', assembly name returned null");
+            }
 
-            var viewModelTypeNameWithAssembly = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
+            var viewModelTypeName = viewModelType.Name;
+
+            var viewModelTypeNameWithAssembly = TypeHelper.GetTypeNameWithAssembly(viewModelType.GetSafeFullName(true));
 
             var itemInCache = GetItemFromCache(viewModelTypeNameWithAssembly);
             if (itemInCache is not null)
@@ -66,7 +71,7 @@
 
             foreach (var convention in NamingConventions)
             {
-                string viewUri = NamingConvention.ResolveViewByViewModelName(assembly, viewModelTypeName, convention);
+                var viewUri = NamingConvention.ResolveViewByViewModelName(assembly, viewModelTypeName, convention);
 
                 if (!ensurePageExists)
                 {
@@ -74,7 +79,7 @@
                     return viewUri;
                 }
 
-                var shortAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(viewModelType.GetAssemblyFullNameEx());
+                var shortAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(viewModelType.GetAssemblyFullNameEx() ?? string.Empty);
                 var viewAsResourceUri = ResourceHelper.GetResourceUri(viewUri, shortAssemblyName);
 
                 if (ResourceHelper.XamlPageExists(viewAsResourceUri))
@@ -96,7 +101,7 @@
         /// <param name="typeToResolveName">The full type name of the type to resolve.</param>
         /// <param name="namingConvention">The naming convention to use for resolving.</param>
         /// <returns>Nothing, this method throws a <see cref="NotSupportedException"/>.</returns>
-        protected override string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention)
+        protected override string? ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention)
         {
             throw new NotSupportedException();
         }

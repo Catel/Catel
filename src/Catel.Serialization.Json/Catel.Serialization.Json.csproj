@@ -8,7 +8,6 @@
     <PackageVersion>5.10.0-beta0013</PackageVersion>
     <Description>Catel.Serialization.Json library.</Description>
     <PackageTags>catel;serialization;json</PackageTags>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -31,6 +30,7 @@
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
   </ItemGroup>
 
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props')" />
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />
 </Project>

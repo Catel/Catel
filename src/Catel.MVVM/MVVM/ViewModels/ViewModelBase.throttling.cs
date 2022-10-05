@@ -136,13 +136,13 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (_isThrottlingEnabled && !_isHandlingThrottlingNotifications)
             {
                 lock (_throttlingLockObject)
                 {
-                    _throttlingQueue[e.PropertyName] = FastDateTime.Now;
+                    _throttlingQueue[e.PropertyName ?? string.Empty] = FastDateTime.Now;
                 }
 
                 return;

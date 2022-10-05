@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICatelTaskCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Windows.Input;
@@ -17,7 +11,6 @@ namespace Catel.MVVM
     public interface ICatelTaskCommand<TProgress> : ICatelCommand
         where TProgress : ITaskProgressReport
     {
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether this instance is executing.
         /// </summary>
@@ -34,29 +27,26 @@ namespace Catel.MVVM
         /// Gets the cancel command.
         /// </summary>
         /// <value>The cancel command.</value>
-        Command CancelCommand { get; }
-        #endregion
+        Command? CancelCommand { get; }
 
-        #region Methods
         /// <summary>
         /// Requests cancellation of the command.
         /// </summary>
         void Cancel();
-        #endregion
 
         /// <summary>
         /// Occurs when the command is about to execute.
         /// </summary>
-        event EventHandler<CommandCanceledEventArgs> Executing;
+        event EventHandler<CommandCanceledEventArgs>? Executing;
 
         /// <summary>
         /// Occurs when the command is canceled.
         /// </summary>
-        event EventHandler<CommandEventArgs> Canceled;
+        event EventHandler<CommandEventArgs>? Canceled;
 
         /// <summary>
         /// Raised for each reported progress value.
         /// </summary>
-        event EventHandler<CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
+        event EventHandler<CommandProgressChangedEventArgs<TProgress>>? ProgressChanged;
     }
 }
