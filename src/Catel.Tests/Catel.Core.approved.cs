@@ -85,8 +85,8 @@ namespace Catel
     }
     public static class AsyncEventHandlerExtensions
     {
-        public static System.Threading.Tasks.Task<bool> SafeInvokeAsync(this Catel.AsyncEventHandler<System.EventArgs> handler, object sender, bool allowParallelExecution = true) { }
-        public static System.Threading.Tasks.Task<bool> SafeInvokeAsync<TEventArgs>(this Catel.AsyncEventHandler<TEventArgs> handler, object sender, TEventArgs e, bool allowParallelExecution = true)
+        public static System.Threading.Tasks.Task<bool> SafeInvokeAsync(this Catel.AsyncEventHandler<System.EventArgs>? handler, object sender, bool allowParallelExecution = true) { }
+        public static System.Threading.Tasks.Task<bool> SafeInvokeAsync<TEventArgs>(this Catel.AsyncEventHandler<TEventArgs>? handler, object sender, TEventArgs e, bool allowParallelExecution = true)
             where TEventArgs : System.EventArgs { }
     }
     public delegate System.Threading.Tasks.Task AsyncEventHandler<TEventArgs>(object sender, TEventArgs e);
@@ -322,10 +322,10 @@ namespace Catel
     public static class ObjectToStringHelper
     {
         public static System.Globalization.CultureInfo DefaultCulture { get; set; }
-        public static string ToFullTypeString(object instance) { }
+        public static string ToFullTypeString(object? instance) { }
         public static string ToString(object? instance) { }
         public static string ToString(object? instance, System.Globalization.CultureInfo cultureInfo) { }
-        public static string ToTypeString(object instance) { }
+        public static string ToTypeString(object? instance) { }
     }
     public delegate void OpenInstanceActionHandler<TTarget>(TTarget @this);
     public delegate void OpenInstanceEventHandler<TTarget, TEventArgs>(TTarget @this, object sender, TEventArgs e);
@@ -1510,9 +1510,9 @@ namespace Catel.Data
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaisePropertyChanged(string propertyName) { }
-        protected virtual void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected virtual void RaisePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
-        protected void RaisePropertyChangedDirect(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected void RaisePropertyChangedDirect(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
     }
     public static class ObservableObjectExtensions
     {
