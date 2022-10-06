@@ -32,7 +32,7 @@
         /// <remarks>Keep in mind that all results are cached. The cache itself is not automatically cleared when the
         /// <see cref="ILocator.NamingConventions" /> are changed. If the <see cref="ILocator.NamingConventions" /> are changed,
         /// the cache must be cleared manually.</remarks>
-        public static Type ResolveViewModel<TView>(this IViewModelLocator viewModelLocator)
+        public static Type? ResolveViewModel<TView>(this IViewModelLocator viewModelLocator)
         {
             ArgumentNullException.ThrowIfNull(viewModelLocator);
 

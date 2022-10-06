@@ -310,7 +310,7 @@
         public void UnregisterCommand(string commandName, ICommand command)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             if (CatelEnvironment.IsInDesignMode)
             {

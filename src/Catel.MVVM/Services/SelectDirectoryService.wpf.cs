@@ -1,5 +1,6 @@
 ﻿namespace Catel.Services
 {
+    using System;
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
@@ -11,7 +12,7 @@
         /// <inheritdoc />
         public virtual async Task<DetermineDirectoryResult> DetermineDirectoryAsync(DetermineDirectoryContext context)
         {
-            Argument.IsNotNull(nameof(context), context);
+            ArgumentNullException.ThrowIfNull(context);
 
             using (var browserDialog = new FolderBrowserDialog())
             {

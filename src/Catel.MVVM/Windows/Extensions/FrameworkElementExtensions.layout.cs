@@ -65,7 +65,7 @@
         public static bool IsVisibleToUser(this FrameworkElement element, FrameworkElement container)
         {
             ArgumentNullException.ThrowIfNull(element);
-            Argument.IsNotNull("container", container);
+            ArgumentNullException.ThrowIfNull(container);
 
             if (!container.IsVisible() || !element.IsVisible())
             {
@@ -87,7 +87,7 @@
         /// <typeparam name="T">Type of the relevant parent</typeparam>
         /// <param name="obj">The object.</param>
         /// <returns>The relevant parent.</returns>
-        private static FrameworkElement GetRelevantParent<T>(FrameworkElement obj)
+        private static T? GetRelevantParent<T>(FrameworkElement obj)
             where T : FrameworkElement
         {
             var container = VisualTreeHelper.GetParent(obj) as FrameworkElement;
@@ -109,7 +109,7 @@
                 container = GetRelevantParent<T>(container);
             }
 
-            return container;
+            return container as T;
         }
     }
 }

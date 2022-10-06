@@ -21,7 +21,7 @@
         /// </summary>
         public DispatcherService(IDispatcherProviderService dispatcherProviderService)
         {
-            Argument.IsNotNull(nameof(dispatcherProviderService), dispatcherProviderService);
+            ArgumentNullException.ThrowIfNull(dispatcherProviderService);
 
             _dispatcherProviderService = dispatcherProviderService;
         }
@@ -33,7 +33,13 @@
         {
             get
             {
-                return _dispatcherProviderService.GetApplicationDispatcher() as Dispatcher;
+                var dispatcher = _dispatcherProviderService.GetApplicationDispatcher() as Dispatcher;
+                if (dispatcher is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Cannot find application dispatcher");
+                }
+
+                return dispatcher;
             }
         }
 
@@ -44,6 +50,8 @@
         /// <returns>The task representing the action.</returns>
         public virtual Task InvokeAsync(Action action)
         {
+            ArgumentNullException.ThrowIfNull(action);
+
             return CurrentDispatcher.InvokeAsync(action).Task;
         }
 
@@ -55,6 +63,8 @@
         /// <returns>The task representing the action.</returns>
         public virtual Task InvokeAsync(Delegate method, params object[] args)
         {
+            ArgumentNullException.ThrowIfNull(method);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
@@ -68,6 +78,8 @@
         /// <returns>The task representing the action.</returns>
         public virtual Task<T> InvokeAsync<T>(Func<T> func)
         {
+            ArgumentNullException.ThrowIfNull(func);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, func);
@@ -80,6 +92,8 @@
         /// <returns>The task representing the asynchronous operation</returns>
         public virtual Task InvokeTaskAsync(Func<Task> actionAsync)
         {
+            ArgumentNullException.ThrowIfNull(actionAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
@@ -93,6 +107,8 @@
         /// <returns>The task representing the asynchronous operation</returns>
         public virtual Task InvokeTaskAsync(Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(actionAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
@@ -105,6 +121,8 @@
         /// <returns>The task representing the asynchronous operation with the returning value</returns>
         public virtual Task<T> InvokeTaskAsync<T>(Func<Task<T>> funcAsync)
         {
+            ArgumentNullException.ThrowIfNull(funcAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
@@ -119,6 +137,8 @@
         /// <returns>The task representing the asynchronous operation with the returning value</returns>
         public virtual Task<T> InvokeTaskAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(funcAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);

@@ -11,7 +11,7 @@
         /// Initializes a new instance of the <see cref="BindingEvaluator"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        public BindingEvaluator(object dataContext = null)
+        public BindingEvaluator(object? dataContext = null)
         {
             DataContext = dataContext;
         }
@@ -20,9 +20,9 @@
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public object Value
+        public object? Value
         {
-            get { return (object)GetValue(ValueProperty); }
+            get { return (object?)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 

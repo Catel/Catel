@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelWrapperService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using Catel.MVVM.Views;
@@ -53,13 +46,13 @@ namespace Catel.Services
         /// <param name="wrapOptions">The wrap options.</param>
         /// <returns>The <see cref="IViewModelWrapper" />.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="view" /> is <c>null</c>.</exception>
-        IViewModelWrapper Wrap(IView view, object viewModelSource, WrapOptions wrapOptions);
+        IViewModelWrapper? Wrap(IView view, object viewModelSource, WrapOptions wrapOptions);
 
         /// <summary>
         /// Gets the existing view model wrapper for the view. If there is none, this method will return <c>null</c>.
         /// </summary>
         /// <param name="view">The view to get the wrapper for.</param>
         /// <returns>The existing view model wrapper or <c>null</c> if there is no wrapper.</returns>
-        IViewModelWrapper GetWrapper(IView view);
+        IViewModelWrapper? GetWrapper(IView view);
     }
 }

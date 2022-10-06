@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ContentReadyEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.IO;
@@ -21,7 +15,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="imageStream"/> is <c>null</c>.</exception>
         public ContentReadyEventArgs(Stream imageStream)
         {
-            Argument.IsNotNull("imageStream", imageStream);
+            ArgumentNullException.ThrowIfNull(imageStream);
 
             ImageStream = imageStream;
         }

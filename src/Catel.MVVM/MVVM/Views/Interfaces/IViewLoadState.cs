@@ -11,7 +11,7 @@
         /// <summary>
         /// Gets the view object.
         /// </summary>
-        IView View { get; }
+        IView? View { get; }
 
         /// <summary>
         /// Occurs when the view is loaded.

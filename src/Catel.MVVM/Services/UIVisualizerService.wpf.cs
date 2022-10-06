@@ -22,7 +22,7 @@
         /// The default implementation returns the active window of the application.
         /// </summary>
         /// <returns>The active window.</returns>
-        protected virtual FrameworkElement GetActiveWindow()
+        protected virtual FrameworkElement? GetActiveWindow()
         {
             return Application.Current.GetActiveWindow();
         }
@@ -31,7 +31,7 @@
         /// Gets the main window to use as parent window for new non-modal windows.
         /// </summary>
         /// <returns>The main window.</returns>
-        protected virtual FrameworkElement GetMainWindow()
+        protected virtual FrameworkElement? GetMainWindow()
         {
             var mainWindow = Application.Current.MainWindow;
 
@@ -48,14 +48,13 @@
             return GetActiveWindow();
         }
 
-        protected virtual void SetOwnerWindow(FrameworkElement window, System.Windows.Window ownerWindow)
+        protected virtual void SetOwnerWindow(FrameworkElement window, System.Windows.Window? ownerWindow)
         {
             if (!ReferenceEquals(window, ownerWindow))
             {
                 PropertyHelper.TrySetPropertyValue(window, "Owner", ownerWindow);
             }
         }
-
 
         /// <summary>
         /// This creates the window of the specified type.
@@ -64,13 +63,13 @@
         /// <returns>The created window.</returns>
         protected virtual async Task<FrameworkElement> CreateWindowAsync(UIVisualizerContext context)
         {
-            Type windowType;
+            Type? windowType = null;
 
             lock (RegisteredWindows)
             {
                 if (!RegisteredWindows.TryGetValue(context.Name, out windowType))
                 {
-                    return null;
+                    throw Log.ErrorAndCreateException<CatelException>($"Cannot create window, no window is registered for name '{context.Name}'");
                 }
             }
 
@@ -95,6 +94,10 @@
                 try
                 {
                     var window = ViewHelper.ConstructViewWithViewModel(windowType, context.Data);
+                    if (window is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot create window '{windowType.GetSafeFullName()}'");
+                    }
 
                     // Important: don't set owner window here. Whenever this owner gets closed between this moment and the actual
                     // showing, this window will be diposed automatically too. For more information, see https://github.com/Catel/Catel/issues/1794
@@ -111,8 +114,7 @@
 
                     var completedCallback = context.CompletedCallback;
 
-                    if (window is not null &&
-                        completedCallback is not null)
+                    if (completedCallback is not null)
                     {
                         HandleCloseSubscription(window, context, null);
                     }
@@ -136,14 +138,19 @@
         /// <param name="window">The window.</param>
         /// <param name="context">The context.</param>
         /// <param name="additionalCompletedCallback">An additional completed callback, which allows internal handling of the completed callback.</param>
-        protected virtual void HandleCloseSubscription(object window, UIVisualizerContext context, EventHandler<UICompletedEventArgs> additionalCompletedCallback)
+        protected virtual void HandleCloseSubscription(object window, UIVisualizerContext context, EventHandler<UICompletedEventArgs>? additionalCompletedCallback)
         {
             var eventInfo = window.GetType().GetEvent("Closed");
-            var addMethod = eventInfo?.AddMethod;
+            if (eventInfo is null)
+            {
+                return;
+            }
+
+            var addMethod = eventInfo.AddMethod;
             if (addMethod is not null)
             {
-                EventHandler eventHandler = null;
-                void Closed(object s, EventArgs e)
+                EventHandler? eventHandler = null;
+                void Closed(object? s, EventArgs e)
                 {
                     if (!ReferenceEquals(window, s))
                     {
@@ -178,7 +185,7 @@
                             var removeMethod = eventInfo.RemoveMethod;
                             if (removeMethod is not null)
                             {
-                                removeMethod.Invoke(window, new object[] { eventHandler });
+                                removeMethod.Invoke(window, new object[] { eventHandler! });
                             }
                         }
                     }
@@ -247,7 +254,7 @@
                     catch (Exception ex)
                     {
                         Log.Error(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
-                        tcs.TrySetResult(null);
+                        tcs.TrySetException(ex);
                     }
                 }, DispatcherPriority.Input);
             }

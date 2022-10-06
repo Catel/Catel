@@ -13,7 +13,7 @@
         /// <summary>
         /// <see cref="ToString"/> method result cache.
         /// </summary>
-        private string _string;
+        private string? _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InputGesture"/> class.
@@ -83,7 +83,7 @@
         /// </summary>
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Keep this check to prevent == comparison troubles on the same object
             if (!(obj is InputGesture))

@@ -38,7 +38,11 @@
                 var commandInputGesture = commandManager.GetInputGesture(commandName);
                 if (inputGesture.Equals(commandInputGesture))
                 {
-                    commands[commandName] = commandManager.GetCommand(commandName);
+                    var command = commandManager.GetCommand(commandName);
+                    if (command is not null)
+                    {
+                        commands[commandName] = command;
+                    }
                 }
             }
 

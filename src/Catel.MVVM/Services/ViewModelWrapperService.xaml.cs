@@ -39,7 +39,7 @@
             return false;
         }
 
-        private IViewModelWrapper CreateViewModelGrid(IView view, object viewModelSource, WrapOptions wrapOptions)
+        private IViewModelWrapper? CreateViewModelGrid(IView view, object viewModelSource, WrapOptions wrapOptions)
         {
             var content = GetContent(view) as FrameworkElement;
             if (!Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.Force) && content is null)
@@ -49,7 +49,7 @@
 
             var viewTypeName = view.GetType().Name;
 
-            Grid vmGrid = null;
+            Grid? vmGrid = null;
 
             var existingGrid = GetContent(view) as Grid;
             if (existingGrid is not null)
@@ -102,7 +102,7 @@
             return new ViewModelWrapper(vmGrid);
         }
 
-        private object GetContent(IView view)
+        private UIElement? GetContent(IView view)
         {
             var userControl = view as UserControl;
             if (userControl is not null)
@@ -125,16 +125,16 @@
                 return content;
             }
 
-            var lastResortContent = PropertyHelper.GetPropertyValue(view, "Content", false);
+            var lastResortContent = PropertyHelper.GetPropertyValue(view, "Content", false) as UIElement;
             return lastResortContent;
         }
 
-        private void SetContent(IView view, object content)
+        private void SetContent(IView view, UIElement? content)
         {
             var userControl = view as UserControl;
             if (userControl is not null)
             {
-                userControl.Content = (UIElement)content;
+                userControl.Content = content;
                 return;
             }
 
@@ -149,7 +149,7 @@
             if (page is not null)
             {
                 // Note: cast required or SL
-                page.Content = (UIElement)content;
+                page.Content = content;
                 return;
             }
 

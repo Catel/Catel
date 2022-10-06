@@ -27,8 +27,13 @@
         /// </summary>
         /// <param name="propertyName">The name of changed property</param>
         /// <returns><c>true</c> if the property name should be converted, <c>false</c> otherwise.</returns>
-        public bool ShouldConvert(string propertyName)
+        public bool ShouldConvert(string? propertyName)
         {
+            if (propertyName is null)
+            {
+                return false;
+            }
+
             foreach (var x in PropertyNames)
             {
                 if (string.CompareOrdinal(propertyName, x) == 0)

@@ -41,7 +41,7 @@ namespace Catel.MVVM.Providers
         public static TValue GetValue<TLogic, TValue>(this LogicBase logic, Func<TLogic, TValue> function)
             where TLogic : LogicBase
         {
-            return GetValue(logic, function, default(TValue));
+            return GetValue(logic, function, default)!;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Catel.MVVM.Providers
         public static TValue GetValue<TLogic, TValue>(this LogicBase logic, Func<TLogic, TValue> function, TValue defaultValue)
             where TLogic : LogicBase
         {
-            Argument.IsNotNull("function", function);
+            ArgumentNullException.ThrowIfNull(function);
 
             if (logic is null)
             {

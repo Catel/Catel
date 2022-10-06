@@ -62,7 +62,7 @@
         /// <summary>
         /// Specifies the name of the Event this EventTriggerBase is listening for.
         /// </summary>
-        protected override string GetEventName()
+        protected override string? GetEventName()
         {
             throw new InvalidOperationException("This method MUST be overriden and the base cannot be called");
         }

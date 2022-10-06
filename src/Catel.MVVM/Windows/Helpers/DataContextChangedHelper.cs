@@ -42,7 +42,7 @@
         private static DataContextSubscriptionMode GetDataContextSubscriptionMode(FrameworkElement element)
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dataContextSubscriptionService = dependencyResolver.Resolve<IDataContextSubscriptionService>();
+            var dataContextSubscriptionService = dependencyResolver.ResolveRequired<IDataContextSubscriptionService>();
 
             return dataContextSubscriptionService.GetDataContextSubscriptionMode(element.GetType());
         }

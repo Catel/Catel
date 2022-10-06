@@ -38,7 +38,7 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private Catel.IWeakEventListener _weakEventListener;
+        private Catel.IWeakEventListener? _weakEventListener;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Focus"/> class.
@@ -76,9 +76,9 @@
         /// <see cref="Interactivity.FocusMoment.PropertyChanged" /> or <see cref="Interactivity.FocusMoment.Event" />.
         /// </summary>
         /// <value>The source.</value>
-        public object Source
+        public object? Source
         {
-            get { return (object)GetValue(SourceProperty); }
+            get { return (object?)GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
         }
 
@@ -93,9 +93,9 @@
         /// <see cref="Interactivity.FocusMoment.PropertyChanged" />.
         /// </summary>
         /// <value>The name of the property.</value>
-        public string PropertyName
+        public string? PropertyName
         {
-            get { return (string)GetValue(PropertyNameProperty); }
+            get { return (string?)GetValue(PropertyNameProperty); }
             set { SetValue(PropertyNameProperty, value); }
         }
 
@@ -110,9 +110,9 @@
         /// <see cref="Interactivity.FocusMoment.Event" />.
         /// </summary>
         /// <value>The name of the event.</value>
-        public string EventName
+        public string? EventName
         {
-            get { return (string)GetValue(EventNameProperty); }
+            get { return (string?)GetValue(EventNameProperty); }
             set { SetValue(EventNameProperty, value); }
         }
 
@@ -146,7 +146,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSourcePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == PropertyName)
             {
@@ -160,7 +160,8 @@
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnSourceChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is not null)
+            var oldSource = e.OldValue;
+            if (oldSource is not null)
             {
                 switch (FocusMoment)
                 {
@@ -170,7 +171,7 @@
                         break;
 
                     case FocusMoment.PropertyChanged:
-                        var sourceAsPropertyChanged = e.OldValue as INotifyPropertyChanged;
+                        var sourceAsPropertyChanged = oldSource as INotifyPropertyChanged;
                         if (sourceAsPropertyChanged is not null)
                         {
                             sourceAsPropertyChanged.PropertyChanged -= OnSourcePropertyChanged;
@@ -183,7 +184,8 @@
                 }
             }
 
-            if (e.NewValue is not null)
+            var newSource = e.NewValue;
+            if (newSource is not null)
             {
                 switch (FocusMoment)
                 {
@@ -193,7 +195,7 @@
                             throw new InvalidOperationException("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
                         }
 
-                        _weakEventListener = this.SubscribeToWeakEvent(Source, EventName, OnSourceEventOccurred);
+                        _weakEventListener = this.SubscribeToWeakEvent(newSource, EventName, OnSourceEventOccurred);
                         break;
 
                     case FocusMoment.PropertyChanged:
@@ -202,7 +204,7 @@
                             throw new InvalidOperationException("Property 'PropertyName' is required when FocusMode is 'FocusMode.PropertyChanged'");
                         }
 
-                        var sourceAsPropertyChanged = e.NewValue as INotifyPropertyChanged;
+                        var sourceAsPropertyChanged = newSource as INotifyPropertyChanged;
                         if (sourceAsPropertyChanged is null)
                         {
                             throw new InvalidOperationException("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");

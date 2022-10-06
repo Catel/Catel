@@ -76,7 +76,7 @@
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <returns>System.Object.</returns>
-        protected override object? ProvideDynamicValue(IServiceProvider serviceProvider)
+        protected override object? ProvideDynamicValue(IServiceProvider? serviceProvider)
         {
             if (_commandManager is null)
             {

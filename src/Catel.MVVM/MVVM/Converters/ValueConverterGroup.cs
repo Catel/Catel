@@ -29,14 +29,11 @@
     [ContentProperty(nameof(Converters))]
     public class ValueConverterGroup : IValueConverter
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ObservableCollection<System.Windows.Data.IValueConverter> _converters = new ObservableCollection<System.Windows.Data.IValueConverter>();
         private readonly Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute?> _cachedAttributes = new Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute?>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueConverterGroup"/> class.
         /// </summary>
@@ -44,9 +41,7 @@
         {
             _converters.CollectionChanged += OnConvertersCollectionChanged;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Returns the list of IValueConverters contained in this converter.
         /// </summary>
@@ -54,9 +49,7 @@
         {
             get { return _converters; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Converts a value.
         /// </summary>
@@ -171,7 +164,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        private void OnConvertersCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnConvertersCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             // The 'Converters' collection has been modified, so validate that each value converter it now
             // contains is decorated with ValueConversionAttribute and then cache the attribute value.
@@ -214,6 +207,5 @@
                 }
             }
         }
-        #endregion
     }
 }

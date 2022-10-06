@@ -22,7 +22,6 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        #region Current process main window
         /// <summary>
         /// Sets the owner window to the main window of the current process.
         /// </summary>
@@ -63,9 +62,7 @@
         {
             SetOwnerWindow(window, forceNewOwner, focusFirstControl);
         }
-        #endregion
 
-        #region Specific window - Window
         /// <summary>
         /// Sets the owner window of a specific window via the Window class.
         /// </summary>
@@ -103,9 +100,7 @@
         {
             SetOwnerWindow(window, owner, IntPtr.Zero, forceNewOwner, focusFirstControl);
         }
-        #endregion
 
-        #region Specific window - IntPtr
         /// <summary>
         /// Sets the owner window of a specific window via the window handle.
         /// </summary>
@@ -143,7 +138,6 @@
         {
             SetOwnerWindow(window, null, owner, forceNewOwner, focusFirstControl);
         }
-        #endregion
 
         /// <summary>
         /// Determines whether the <see cref="SystemWindow.DialogResult"/> property can be set.

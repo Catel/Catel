@@ -148,10 +148,16 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>        
-        private void OnAssociatedObjectKeyDown(object sender, UIKeyEventArgs e)
+        private void OnAssociatedObjectKeyDown(object? sender, UIKeyEventArgs e)
         {
-            bool notAllowed = true;
-            string keyValue = GetKeyValue(e);
+            var textBox = sender as TextBox;
+            if (textBox is null)
+            {
+                return;
+            }
+
+            var notAllowed = true;
+            var keyValue = GetKeyValue(e);
 
             var numberDecimalSeparator = GetDecimalSeparator();
 
@@ -161,11 +167,11 @@
             }
             else if (keyValue == MinusCharacter && IsNegativeAllowed)
             {
-                notAllowed = ((TextBox)sender).CaretIndex > 0;
+                notAllowed = textBox.CaretIndex > 0;
             }
             else if (AllowedKeys.Contains(e.Key) || IsDigit(e.Key))
             {
-                notAllowed = (e.Key == Key.OemMinus && ((TextBox)sender).CaretIndex > 0 && IsNegativeAllowed);
+                notAllowed = (e.Key == Key.OemMinus && textBox.CaretIndex > 0 && IsNegativeAllowed);
             }
 
             e.Handled = notAllowed;
@@ -176,7 +182,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The text change event args instance containing the event data.</param>
-        private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
+        private void OnAssociatedObjectTextChanged(object? sender, TextChangedEventArgs e)
         {
             if (!UpdateBindingOnTextChanged)
             {
@@ -247,7 +253,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="DataObjectPastingEventArgs"/> instance containing the event data.</param>
-        private void OnPaste(object sender, DataObjectPastingEventArgs e)
+        private void OnPaste(object? sender, DataObjectPastingEventArgs e)
         {
             if (e.DataObject.GetDataPresent(typeof(string)))
             {
@@ -265,8 +271,7 @@
                     e.CancelCommand();
                 }
 
-                var tempDouble = 0d;
-                if (!double.TryParse(text, NumberStyles.Any, Culture, out tempDouble))
+                if (!double.TryParse(text, NumberStyles.Any, Culture, out var tempDouble))
                 {
                     Log.Warning("Pasted text '{0}' could not be parsed as double (wrong culture?), paste is not allowed", text);
 
@@ -295,9 +300,9 @@
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns><c>true</c> if the input string only consists of digits; otherwise, <c>false</c>.</returns>
-        private bool IsDigitsOnly(string input)
+        private static bool IsDigitsOnly(string input)
         {
-            foreach (char c in input)
+            foreach (var c in input)
             {
                 if (c < '0' || c > '9')
                 {
@@ -315,11 +320,11 @@
         /// <returns>
         ///   <c>true</c> if the specified key is digit; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsDigit(Key key)
+        private static bool IsDigit(Key key)
         {
             bool isDigit;
 
-            bool isShiftKey = KeyboardHelper.AreKeyboardModifiersPressed(ModifierKeys.Shift);
+            var isShiftKey = KeyboardHelper.AreKeyboardModifiersPressed(ModifierKeys.Shift);
 
             if (key >= Key.D0 && key <= Key.D9 && !isShiftKey)
             {

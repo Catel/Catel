@@ -65,7 +65,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="UIEventArgs"/> instance containing the event data.</param>
-        private void OnPasswordChanged(object sender, RoutedEventArgs e)
+        private void OnPasswordChanged(object? sender, RoutedEventArgs e)
         {
             if (!IsEnabled)
             {

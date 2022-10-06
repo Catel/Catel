@@ -20,7 +20,7 @@
         /// </summary>
         public AutoCompletionService(IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull(nameof(objectAdapter), objectAdapter);
+            ArgumentNullException.ThrowIfNull(objectAdapter);
 
             _objectAdapter = objectAdapter;
         }

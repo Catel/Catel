@@ -11,6 +11,7 @@ namespace Catel.Tests.IoC
     using System.Threading;
     using Catel.IoC;
     using Catel.Messaging;
+    using Catel.MVVM;
     using Catel.Services;
     using Data;
     using NUnit.Framework;
@@ -533,6 +534,7 @@ namespace Catel.Tests.IoC
                     serviceLocator.RegisterType<IDispatcherProviderService, DispatcherProviderService>();
                     serviceLocator.RegisterType<IDispatcherService, DispatcherService>();
                     serviceLocator.RegisterType<IMessageService, MessageService>();
+                    serviceLocator.RegisterType<IUrlLocator, UrlLocator>();
                     serviceLocator.RegisterType<INavigationService, NavigationService>();
                     serviceLocator.RegisterType<INavigationRootService, NavigationRootService>();
                     serviceLocator.RegisterType<ILanguageService, LanguageService>();

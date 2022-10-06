@@ -34,10 +34,10 @@
         /// <param name="dependencyProperty">Dependency property.</param>
         /// <param name="oldValue">Old value.</param>
         /// <param name="newValue">New value.</param>
-        public DependencyPropertyValueChangedEventArgs(string propertyName, DependencyProperty dependencyProperty, object oldValue, object newValue)
+        public DependencyPropertyValueChangedEventArgs(string propertyName, DependencyProperty dependencyProperty, object? oldValue, object? newValue)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("dependencyProperty", dependencyProperty);
+            ArgumentNullException.ThrowIfNull(dependencyProperty);
 
             FxEventArgs = new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue);
             PropertyName = propertyName;
@@ -66,11 +66,11 @@
         /// <summary>
         ///  Gets the value of the property before the change.
         /// </summary>
-        public object OldValue { get; private set; }
+        public object? OldValue { get; private set; }
 
         /// <summary>
         /// Gets the value of the property after the change.
         /// </summary>
-        public object NewValue { get; private set; }
+        public object? NewValue { get; private set; }
     }
 }

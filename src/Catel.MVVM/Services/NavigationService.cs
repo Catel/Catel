@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Security.Policy;
     using System.Threading.Tasks;
     using Catel.MVVM;
+    using Catel.Reflection;
     using Logging;
 
     /// <summary>
@@ -25,17 +27,15 @@
         /// The navigation root service.
         /// </summary>
         protected readonly INavigationRootService NavigationRootService;
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationService" /> class.
-        /// </summary>
-        /// <param name="navigationRootService">The navigation root service.</param>
+        protected readonly IUrlLocator UrlLocator;
 
-        public NavigationService(INavigationRootService navigationRootService)
+        public NavigationService(INavigationRootService navigationRootService, IUrlLocator urlLocator)
         {
-            Argument.IsNotNull(nameof(navigationRootService), navigationRootService);
+            ArgumentNullException.ThrowIfNull(navigationRootService);
+            ArgumentNullException.ThrowIfNull(urlLocator);
 
             NavigationRootService = navigationRootService;
+            UrlLocator = urlLocator;
 
             Initialize();
         }
@@ -43,12 +43,12 @@
         /// <summary>
         /// Occurs when the application is about to be closed.
         /// </summary>
-        public event EventHandler<ApplicationClosingEventArgs> ApplicationClosing;
+        public event EventHandler<ApplicationClosingEventArgs>? ApplicationClosing;
 
         /// <summary>
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed.
         /// </summary>
-        public event EventHandler<EventArgs> ApplicationClosed;
+        public event EventHandler<EventArgs>? ApplicationClosed;
 
         partial void Initialize();
 
@@ -114,7 +114,7 @@
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
         /// <exception cref="ArgumentException">The <paramref name="uri"/> is <c>null</c> or whitespace.</exception>
-        public virtual Task NavigateAsync(string uri, Dictionary<string, object> parameters = null)
+        public virtual Task NavigateAsync(string uri, Dictionary<string, object>? parameters = null)
         {
             Argument.IsNotNullOrWhitespace("uri", uri);
 
@@ -133,20 +133,29 @@
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        public virtual async Task NavigateAsync(Type viewModelType, Dictionary<string, object> parameters = null)
+        public virtual async Task NavigateAsync(Type viewModelType, Dictionary<string, object>? parameters = null)
         {
             ArgumentNullException.ThrowIfNull(viewModelType);
 
-            var viewModelTypeName = viewModelType.FullName;
-            string uri = null;
+            var viewModelTypeName = viewModelType.GetSafeFullName();
+            string? uri = null;
 
             lock (RegisteredUris)
             {
                 if (!RegisteredUris.TryGetValue(viewModelTypeName, out uri))
                 {
                     uri = ResolveNavigationTarget(viewModelType);
-                    RegisteredUris.Add(viewModelTypeName, uri);
+
+                    if (uri is not null)
+                    {
+                        RegisteredUris.Add(viewModelTypeName, uri);
+                    }
                 }
+            }
+
+            if (uri is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Cannot navigate to '{viewModelType.GetSafeFullName()}', could not resolve the uri");
             }
 
             await NavigateAsync(uri, parameters);
@@ -165,7 +174,7 @@
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
             ArgumentNullException.ThrowIfNull(uri);
 
-            Register(viewModelType.FullName, uri);
+            Register(viewModelType.GetSafeFullName(), uri);
         }
 
         /// <summary>
@@ -204,7 +213,9 @@
         /// </returns>
         public virtual bool Unregister(Type viewModelType)
         {
-            return Unregister(viewModelType.FullName);
+            ArgumentNullException.ThrowIfNull(viewModelType);
+
+            return Unregister(viewModelType.GetSafeFullName());
         }
 
         /// <summary>
@@ -218,7 +229,7 @@
         {
             lock (RegisteredUris)
             {
-                bool result = RegisteredUris.Remove(name);
+                var result = RegisteredUris.Remove(name);
                 if (result)
                 {
                     Log.Debug("Unregistered view model '{0}' in NavigationService", name);

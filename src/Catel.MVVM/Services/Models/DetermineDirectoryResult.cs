@@ -14,6 +14,6 @@
         /// Gets the directory name.
         /// </summary>
         /// <value>The name of the directory.</value>
-        public string DirectoryName { get; set; }
+        public string? DirectoryName { get; set; }
     }
 }

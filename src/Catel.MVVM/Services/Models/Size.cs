@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Size.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
 
@@ -16,7 +9,7 @@ namespace Catel.Services
     {
         private double _width;
         private double _height;
-        private string _string;
+        private string? _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Size"/> class.
@@ -71,7 +64,7 @@ namespace Catel.Services
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object? obj)
         {
-            if (ReferenceEquals(obj, null))
+            if (obj is null)
             {
                 return false;
             }
@@ -145,7 +138,7 @@ namespace Catel.Services
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return _string ?? (_string =  $"{Width.ToString()}x{Height.ToString()}");
+            return _string ?? (_string =  $"{Width}x{Height}");
         }
     }
 }

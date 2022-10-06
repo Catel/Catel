@@ -5,12 +5,12 @@
     using Windows;
 
     using Catel.Windows.Controls;
-    using Collections;
     using Reflection;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Documents;
+    using Catel.Windows.Interactivity;
 
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.
@@ -58,7 +58,7 @@
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl parentContentControl = null)
+        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl? parentContentControl = null)
         {
             return Wrap(frameworkElement, wrapOptions, Array.Empty<DataWindowButton>(), parentContentControl);
         }
@@ -77,10 +77,10 @@
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl)
+        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl? parentContentControl = null)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("buttons", buttons);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(buttons);
 
             if (!string.IsNullOrWhiteSpace(frameworkElement.Name))
             {
@@ -263,7 +263,6 @@
         /// <summary>
         /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
         /// </summary>
-        /// <typeparam name="T">Type of the control to return.</typeparam>
         /// <param name="wrappedGrid">The wrapped grid.</param>
         /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
         /// <returns>
@@ -271,25 +270,9 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
-        public T GetWrappedElement<T>(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
-            where T : FrameworkElement
+        public FrameworkElement? GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
         {
-            return GetWrappedElement(wrappedGrid, wrapOption) as T;
-        }
-
-        /// <summary>
-        /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
-        /// </summary>
-        /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
-        /// <returns>
-        /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
-        public FrameworkElement GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
-        {
-            Argument.IsNotNull("wrappedGrid", wrappedGrid);
+            ArgumentNullException.ThrowIfNull(wrappedGrid);
 
             if (wrapOption == WrapControlServiceWrapOptions.All)
             {
@@ -311,7 +294,6 @@
         /// <summary>
         /// Gets a wrapped element by name.
         /// </summary>
-        /// <typeparam name="T">Type of the control to return.</typeparam>
         /// <param name="wrappedGrid">The wrapped grid.</param>
         /// <param name="controlName">Name of the control.</param>
         /// <returns>
@@ -320,26 +302,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="controlName"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="controlName"/> is not a valid control name.</exception>
-        public T GetWrappedElement<T>(Grid wrappedGrid, string controlName)
-            where T : FrameworkElement
+        public FrameworkElement? GetWrappedElement(Grid wrappedGrid, string controlName)
         {
-            return GetWrappedElement(wrappedGrid, controlName) as T;
-        }
-
-        /// <summary>
-        /// Gets a wrapped element by name.
-        /// </summary>
-        /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="controlName">Name of the control.</param>
-        /// <returns>
-        /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="controlName"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="controlName"/> is not a valid control name.</exception>
-        public FrameworkElement GetWrappedElement(Grid wrappedGrid, string controlName)
-        {
-            Argument.IsNotNull("wrappedGrid", wrappedGrid);
+            ArgumentNullException.ThrowIfNull(wrappedGrid);
             Argument.IsNotNullOrEmpty("controlName", controlName);
 
             if ((controlName != WrapControlServiceControlNames.DefaultOkButtonName) &&
@@ -359,12 +324,12 @@
         /// <param name="contentControl">The content control.</param>
         /// <param name="element">The element.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="contentControl"/> is <c>null</c>.</exception>
-        private static void SetControlContent(object contentControl, FrameworkElement element)
+        private static void SetControlContent(object contentControl, FrameworkElement? element)
         {
-            Argument.IsNotNull("contentControl", contentControl);
+            ArgumentNullException.ThrowIfNull(contentControl);
 
             var propertyInfo = contentControl.GetType().GetPropertyEx("Content");
-            propertyInfo.SetValue(contentControl, element, null);
+            propertyInfo?.SetValue(contentControl, element, null);
         }
     }
 }

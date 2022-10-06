@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Auditing;
+    using Catel.Logging;
 
     /// <summary>
     /// Container for application-wide commands.
@@ -64,6 +65,8 @@
     public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TPogress> 
         where TPogress : ITaskProgressReport
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly ICatelCommand _command;
         private readonly ICommandManager _commandManager;
         private readonly ICompositeCommand _compositeCommand;
@@ -81,7 +84,13 @@
             CommandName = commandName;
             _commandManager = commandManager;
 
-            _compositeCommand = (ICompositeCommand) _commandManager.GetCommand(commandName);
+            var compositeCommand = _commandManager.GetCommand(commandName) as ICompositeCommand;
+            if (compositeCommand is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Cannot find composite command command '{commandName}'");
+            }
+
+            _compositeCommand = compositeCommand;
             _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteInternalAsync, CanExecute);
 
             _commandManager.RegisterCommand(commandName, _command);

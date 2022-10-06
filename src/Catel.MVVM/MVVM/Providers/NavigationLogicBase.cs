@@ -53,6 +53,10 @@
 
                 var navigationService = serviceLocator.ResolveRequiredType<INavigationRootService>();
                 var navigationRoot = navigationService.GetNavigationRoot();
+                if (navigationRoot is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Navigation root is null, cannot create navigation adapter");
+                }
 
                 var targetPage = TargetPage;
                 if (targetPage is null)
@@ -67,7 +71,13 @@
 
                 if (comingFromLoadedEvent)
                 {
-                    OnNavigatedTo(this, new NavigatedEventArgs(_navigationAdapter.GetNavigationUriForTargetPage(), NavigationMode.New));
+                    var uri = _navigationAdapter.GetNavigationUriForTargetPage();
+                    if (uri is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
+                    }
+
+                    OnNavigatedTo(this, new NavigatedEventArgs(uri, NavigationMode.New));
                 }
             }
         }
@@ -119,7 +129,13 @@
                 var navigationAdapter = _navigationAdapter;
                 if (navigationAdapter is not null)
                 {
-                    OnNavigatingAway(this, new NavigatingEventArgs(navigationAdapter.GetNavigationUriForTargetPage(), NavigationMode.New));
+                    var uri = navigationAdapter.GetNavigationUriForTargetPage();
+                    if (uri is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
+                    }
+
+                    OnNavigatingAway(this, new NavigatingEventArgs(uri, NavigationMode.New));
                 }
 
                 _hasHandledNavigatingAway = true;

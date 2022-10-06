@@ -1,12 +1,11 @@
 ﻿namespace Catel.Services
 {
     using System.Windows.Input;
-    using Catel.Windows;
     using Logging;
 
     public partial class BusyIndicatorService
     {
-        private Cursor _previousCursor;
+        private Cursor? _previousCursor;
 
         partial void SetStatus(string status)
         {

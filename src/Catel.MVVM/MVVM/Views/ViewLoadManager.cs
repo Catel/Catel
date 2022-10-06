@@ -81,6 +81,7 @@
         public void AddView(IViewLoadState viewLoadState)
         {
             ArgumentNullException.ThrowIfNull(viewLoadState);
+            ArgumentNullException.ThrowIfNull(viewLoadState.View);
 
             var viewInfo = new WeakViewInfo(viewLoadState.View);
             viewInfo.Loaded += OnViewInfoLoaded;
@@ -92,7 +93,7 @@
         private void OnViewInfoLoaded(object? sender, EventArgs e)
         {
             var weakViewInfo = sender as WeakViewInfo;
-            if (weakViewInfo is null)
+            if (weakViewInfo is null || weakViewInfo.View is null)
             {
                 throw Log.ErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
             }
@@ -104,7 +105,7 @@
         private void OnViewInfoUnloaded(object? sender, EventArgs e)
         {
             var weakViewInfo = sender as WeakViewInfo;
-            if (weakViewInfo is null)
+            if (weakViewInfo is null || weakViewInfo.View is null)
             {
                 throw Log.ErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
             }
@@ -163,7 +164,7 @@
                 return;
             }
 
-            EventHandler<ViewLoadEventArgs> handler;
+            EventHandler<ViewLoadEventArgs>? handler;
 
             switch (viewLoadStateEvent)
             {

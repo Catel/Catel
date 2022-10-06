@@ -10,7 +10,7 @@
         /// <returns>IDisposable.</returns>
         public static IDisposable HideTemporarily(this IBusyIndicatorService busyIndicatorService)
         {
-            Argument.IsNotNull("busyIndicatorService", busyIndicatorService);
+            ArgumentNullException.ThrowIfNull(busyIndicatorService);
 
             var showCounter = busyIndicatorService.ShowCounter;
 
@@ -47,7 +47,7 @@
         /// </example>
         public static IDisposable PushInScope(this IBusyIndicatorService busyIndicatorService, string status = "")
         {
-            Argument.IsNotNull("busyIndicatorService", busyIndicatorService);
+            ArgumentNullException.ThrowIfNull(busyIndicatorService);
 
             return new DisposableToken<IBusyIndicatorService>(busyIndicatorService, token => token.Instance.Push(status), token => token.Instance.Pop());
         }

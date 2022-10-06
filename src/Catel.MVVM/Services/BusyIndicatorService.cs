@@ -17,8 +17,8 @@
 
         public BusyIndicatorService(ILanguageService languageService, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull("languageService", languageService);
-            Argument.IsNotNull("dispatcherService", dispatcherService);
+            ArgumentNullException.ThrowIfNull(languageService);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _languageService = languageService;
             _dispatcherService = dispatcherService;
@@ -37,7 +37,7 @@
 
             if (string.IsNullOrEmpty(status))
             {
-                status = _languageService.GetString("PleaseWait");
+                status = _languageService.GetString("PleaseWait") ?? string.Empty;
             }
 
             UpdateStatus(status);
@@ -47,7 +47,7 @@
 
         public void Show(BusyIndicatorWorkDelegate workDelegate, string status = "")
         {
-            Argument.IsNotNull("workDelegate", workDelegate);
+            ArgumentNullException.ThrowIfNull(workDelegate);
 
             InitializeBusyIndicator();
 
@@ -60,7 +60,7 @@
 
         public async void Show(BusyIndicatorWorkAsyncDelegate workDelegate, string status = "")
         {
-            Argument.IsNotNull("workDelegate", workDelegate);
+            ArgumentNullException.ThrowIfNull(workDelegate);
 
             InitializeBusyIndicator();
 

@@ -114,7 +114,7 @@
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl parentContentControl = null);
+        Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl? parentContentControl = null);
 
         /// <summary>
         /// Wraps the specified framework element.
@@ -130,21 +130,7 @@
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl);
-
-        /// <summary>
-        /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
-        /// </summary>
-        /// <typeparam name="T">Type of the control to return.</typeparam>
-        /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
-        /// <returns>
-        /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
-        T GetWrappedElement<T>(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
-            where T : FrameworkElement;
+        Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl? parentContentControl = null);
 
         /// <summary>
         /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
@@ -156,22 +142,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
-        FrameworkElement GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption);
-
-        /// <summary>
-        /// Gets a wrapped element by name.
-        /// </summary>
-        /// <typeparam name="T">Type of the control to return.</typeparam>
-        /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="controlName">Name of the control.</param>
-        /// <returns>
-        /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="controlName"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="controlName"/> is not a valid control name.</exception>
-        T GetWrappedElement<T>(Grid wrappedGrid, string controlName)
-            where T : FrameworkElement;
+        FrameworkElement? GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption);
 
         /// <summary>
         /// Gets a wrapped element by name.
@@ -184,6 +155,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="controlName"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="controlName"/> is not a valid control name.</exception>
-        FrameworkElement GetWrappedElement(Grid wrappedGrid, string controlName);
+        FrameworkElement? GetWrappedElement(Grid wrappedGrid, string controlName);
     }
 }

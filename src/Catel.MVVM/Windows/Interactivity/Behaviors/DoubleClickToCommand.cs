@@ -23,8 +23,8 @@
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly DispatcherTimer _timer;
-
-        private readonly Action _action;
+        
+        private readonly Action? _action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DoubleClickToCommand"/> class.
@@ -38,7 +38,7 @@
         /// <param name="action">The action to execute on double click. This is very useful when the behavior is added
         /// via code and an action must be invoked instead of a command.</param>
         /// <param name="doubleClickMilliseconds">The double click acceptance window in milliseconds.</param>
-        public DoubleClickToCommand(Action action, int doubleClickMilliseconds = 500)
+        public DoubleClickToCommand(Action? action, int doubleClickMilliseconds = 500)
         {
             if (doubleClickMilliseconds < 0)
             {
@@ -198,7 +198,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTimerTick(object sender, TimerTickEventArgs e)
+        private void OnTimerTick(object? sender, TimerTickEventArgs e)
         {
             _timer.Stop();
         }

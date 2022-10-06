@@ -18,13 +18,16 @@
         public ViewModelToModelAttribute(string model = "", string property = "")
         {
             ArgumentNullException.ThrowIfNull(model);
-            Argument.IsNotNull("property", property);
+            ArgumentNullException.ThrowIfNull(property);
 
             Model = model;
             Property = property;
 
             Mode = ViewModelToModelMode.TwoWay;
             ConverterType = typeof(DefaultViewModelToModelMappingConverter);
+
+            AdditionalConstructorArgs = Array.Empty<object>();
+            AdditionalPropertiesToWatch = Array.Empty<string>();
         }
 
         /// <summary>

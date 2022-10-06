@@ -19,7 +19,7 @@
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         public DependencyPropertyInfo(DependencyProperty dependencyProperty, string propertyName)
         {
-            Argument.IsNotNull("dependencyProperty", dependencyProperty);
+            ArgumentNullException.ThrowIfNull(dependencyProperty);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             DependencyProperty = dependencyProperty;

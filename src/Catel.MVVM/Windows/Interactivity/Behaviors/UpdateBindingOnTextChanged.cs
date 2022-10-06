@@ -4,7 +4,6 @@
     using System.Windows.Controls;
     using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
-    using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;
 
     /// <summary>
@@ -65,7 +64,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The text change event args instance containing the event data.</param>
-        private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
+        private void OnAssociatedObjectTextChanged(object? sender, TextChangedEventArgs e)
         {
             if (!IsEnabled)
             {
@@ -97,7 +96,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTimerTick(object sender, TimerTickEventArgs e)
+        private void OnTimerTick(object? sender, TimerTickEventArgs e)
         {
             _timer.Stop();
 
