@@ -2389,7 +2389,7 @@ namespace Catel.Logging
     {
         public LogEntry(Catel.Logging.LogMessageEventArgs eventArgs) { }
         public LogEntry(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object? extraData, Catel.Logging.LogData? logData, System.DateTime time) { }
-        public Catel.Logging.LogData? Data { get; }
+        public Catel.Logging.LogData Data { get; }
         public object? ExtraData { get; }
         public Catel.Logging.ILog Log { get; }
         public Catel.Logging.LogEvent LogEvent { get; }
@@ -2634,7 +2634,7 @@ namespace Catel.Logging
         public LogMessageEventArgs(Catel.Logging.ILog log, string message, object? extraData, Catel.Logging.LogData? logData, Catel.Logging.LogEvent logEvent, System.DateTime time) { }
         public object? ExtraData { get; }
         public Catel.Logging.ILog Log { get; }
-        public Catel.Logging.LogData? LogData { get; }
+        public Catel.Logging.LogData LogData { get; }
         public Catel.Logging.LogEvent LogEvent { get; }
         public string Message { get; }
         public object? Tag { get; }

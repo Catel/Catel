@@ -91,11 +91,17 @@
         /// Gets the log data attached to this log entry.
         /// </summary>
         /// <value>The data.</value>
-        public LogData? Data
+        public LogData Data
         {
             get
             {
-                return _logData;
+                var data = _logData;
+                if (data is null)
+                {
+                    data = _logData = new LogData();
+                }
+
+                return data;
             }
         }
 

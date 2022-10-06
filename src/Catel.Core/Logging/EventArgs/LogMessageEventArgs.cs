@@ -7,6 +7,8 @@
     /// </summary>
     public class LogMessageEventArgs : EventArgs
     {
+        private LogData? _logData;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogMessageEventArgs" /> class.
         /// </summary>
@@ -34,7 +36,8 @@
             Message = message;
             ExtraData = extraData;
             LogEvent = logEvent;
-            LogData = logData;
+
+            _logData = logData;
         }
 
         /// <summary>
@@ -65,7 +68,19 @@
         /// Gets the log data attached to this log entry.
         /// </summary>
         /// <value>The data.</value>
-        public LogData? LogData { get; private set; }
+        public LogData LogData
+        {
+            get
+            {
+                var data = _logData;
+                if (data is null)
+                {
+                    data = _logData = new LogData();
+                }
+
+                return data;
+            }
+        }
 
         /// <summary>
         ///   Gets the log event.
