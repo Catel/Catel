@@ -88,7 +88,7 @@
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <returns>A <see cref="string"/> that represents the type of the instance.</returns>
-        public static string ToTypeString(object instance)
+        public static string ToTypeString(object? instance)
         {
             if (instance is null)
             {
@@ -112,7 +112,7 @@
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <returns>A <see cref="string"/> that represents the type of the instance.</returns>
-        public static string ToFullTypeString(object instance)
+        public static string ToFullTypeString(object? instance)
         {
             if (instance is null)
             {

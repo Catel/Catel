@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AuditingManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +11,6 @@ namespace Catel.MVVM.Auditing
     /// </summary>
     public class AuditingManager
     {
-        #region Fields
         /// <summary>
         /// Instance of this singleton class.
         /// </summary>
@@ -27,9 +20,7 @@ namespace Catel.MVVM.Auditing
         /// List of currently registered auditors.
         /// </summary>
         private readonly List<IAuditor> _auditors = new List<IAuditor>();
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether auditing is enabled. Auditing is enabled when at least 1 auditor is registered.
         /// </summary>
@@ -44,9 +35,7 @@ namespace Catel.MVVM.Auditing
         {
             get { return _instance._auditors.Count; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Clears all the current auditors.
         /// </summary>
@@ -68,7 +57,7 @@ namespace Catel.MVVM.Auditing
             where TAuditor : class, IAuditor
         {
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
-            var auditor = typeFactory.CreateInstance<TAuditor>();
+            var auditor = typeFactory.CreateRequiredInstance<TAuditor>();
 
             RegisterAuditor(auditor);
         }
@@ -80,7 +69,7 @@ namespace Catel.MVVM.Auditing
         /// <exception cref="ArgumentNullException">The <paramref name="auditor"/> is <c>null</c>.</exception>
         public static void RegisterAuditor(IAuditor auditor)
         {
-            Argument.IsNotNull("auditor", auditor);
+            ArgumentNullException.ThrowIfNull(auditor);
 
             lock (_instance._auditors)
             {
@@ -101,7 +90,7 @@ namespace Catel.MVVM.Auditing
         /// <exception cref="ArgumentNullException">The <paramref name="auditor"/> is <c>null</c>.</exception>
         public static void UnregisterAuditor(IAuditor auditor)
         {
-            Argument.IsNotNull("auditor", auditor);
+            ArgumentNullException.ThrowIfNull(auditor);
 
             lock (_instance._auditors)
             {
@@ -162,13 +151,13 @@ namespace Catel.MVVM.Auditing
         /// <param name="viewModel">The view model.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="newValue">The new property value.</param>
-        internal static void OnPropertyChanged(IViewModel viewModel, string propertyName, object newValue)
+        internal static void OnPropertyChanged(IViewModel viewModel, string? propertyName, object? newValue)
         {
             lock (_instance._auditors)
             {
                 foreach (var auditor in _instance._auditors)
                 {
-                    if (auditor.PropertiesToIgnore is not null)
+                    if (propertyName is not null && auditor.PropertiesToIgnore is not null)
                     {
                         if (auditor.PropertiesToIgnore.Contains(propertyName))
                         {
@@ -188,7 +177,7 @@ namespace Catel.MVVM.Auditing
         /// <param name="commandName">Name of the command, which is the name of the command property.</param>
         /// <param name="command">The command that has been executed.</param>
         /// <param name="commandParameter">The command parameter.</param>
-        internal static void OnCommandExecuted(IViewModel viewModel, string commandName, ICatelCommand command, object commandParameter)
+        internal static void OnCommandExecuted(IViewModel? viewModel, string? commandName, ICatelCommand command, object? commandParameter)
         {
             lock (_instance._auditors)
             {
@@ -299,6 +288,5 @@ namespace Catel.MVVM.Auditing
                 IsAuditingEnabled = _instance._auditors.Count > 0;
             }
         }
-        #endregion
     }
 }

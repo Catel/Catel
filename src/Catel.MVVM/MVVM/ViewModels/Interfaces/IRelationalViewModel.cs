@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IRelationalViewModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -17,13 +11,13 @@ namespace Catel.MVVM
         /// Gets the parent view model.
         /// </summary>
         /// <value>The parent view model.</value>
-        IViewModel ParentViewModel { get; }
+        IViewModel? ParentViewModel { get; }
 
         /// <summary>
         /// Sets the new parent view model of this view model.
         /// </summary>
         /// <param name="parentViewModel">The parent view model.</param>
-        void SetParentViewModel(IViewModel parentViewModel);
+        void SetParentViewModel(IViewModel? parentViewModel);
 
         /// <summary>
         /// Registers a child view model to this view model. When a view model is registered as a child view model, it will

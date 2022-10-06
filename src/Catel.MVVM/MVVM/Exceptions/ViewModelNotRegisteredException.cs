@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelNotRegisteredException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -18,7 +12,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModelType">Type of the view model.</param>
         public ViewModelNotRegisteredException(Type viewModelType)
-            : base(string.Format(ResourceHelper.GetString("ViewModelNotRegistered"), viewModelType.Name))
+            : base(string.Format(ResourceHelper.GetString("ViewModelNotRegistered") ?? string.Empty, viewModelType.Name))
         {
             ViewModelType = viewModelType;
         }

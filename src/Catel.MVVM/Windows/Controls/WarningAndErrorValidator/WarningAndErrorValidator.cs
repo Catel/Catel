@@ -28,7 +28,7 @@
         private readonly object _objectValidationLock = new object();
 
         private bool _isLoaded;
-        private InfoBarMessageControl _infoBarMessageControl;
+        private InfoBarMessageControl? _infoBarMessageControl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WarningAndErrorValidator"/> class.
@@ -52,7 +52,7 @@
         /// <remarks>
         /// Wrapper for the Source dependency property.
         /// </remarks>
-        public object Source
+        public object? Source
         {
             get { return GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
@@ -89,14 +89,14 @@
         /// <summary>
         /// Occurs when validation is triggered.
         /// </summary>
-        public event EventHandler<ValidationEventArgs> Validation;
+        public event EventHandler<ValidationEventArgs>? Validation;
 
         /// <summary>
         /// Called when the control is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="UIEventArgs"/> instance containing the event data.</param>
-        private void OnLoaded(object sender, UIEventArgs e)
+        private void OnLoaded(object? sender, UIEventArgs e)
         {
             if (_isLoaded)
             {
@@ -113,7 +113,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="UIEventArgs"/> instance containing the event data.</param>
-        private void OnUnloaded(object sender, UIEventArgs e)
+        private void OnUnloaded(object? sender, UIEventArgs e)
         {
             _isLoaded = false;
 
@@ -159,9 +159,9 @@
 
             foreach (var obj in objects)
             {
-                if (obj is IEnumerable)
+                if (obj is IEnumerable enumerable)
                 {
-                    RemoveObjectsFromWatchList(obj as IEnumerable);
+                    RemoveObjectsFromWatchList(enumerable);
                 }
                 else if (obj is INotifyPropertyChanged)
                 {
@@ -183,7 +183,7 @@
         /// </summary>
         /// <param name="oldValue">The old value.</param>
         /// <param name="newValue">The new value.</param>
-        private void UpdateSource(object oldValue, object newValue)
+        private void UpdateSource(object? oldValue, object? newValue)
         {
             var oldValueAsIEnumerable = oldValue as IEnumerable;
             if (oldValueAsIEnumerable is not null)
@@ -217,9 +217,9 @@
         /// <param name="values">The values to add to the watch list.</param>
         /// <param name="parentEnumerable">The parent enumerable. <c>Null</c> if the object does not belong to an enumerable.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="values"/> is <c>null</c>.</exception>
-        private void AddObjectsToWatchList(IEnumerable values, IEnumerable parentEnumerable)
+        private void AddObjectsToWatchList(IEnumerable values, IEnumerable? parentEnumerable)
         {
-            Argument.IsNotNull("values", values);
+            ArgumentNullException.ThrowIfNull(values);
 
             foreach (var value in values)
             {
@@ -232,7 +232,9 @@
             {
                 iNotifyCollectionChanged.CollectionChanged += iNotifyCollectionChanged_CollectionChanged;
 
-                AddObjectToWatchList(parentEnumerable);
+                // Use to be AddObjectToWatchList(parentEnumerable);, but seems wrong so fixed, but in case there are issues,
+                // this is probably the place to fix it
+                AddObjectToWatchList(iNotifyCollectionChanged);
             }
         }
 
@@ -241,7 +243,7 @@
         /// </summary>
         /// <param name="value">The object to add to the watch list.</param>
         /// <param name="parentEnumerable">The parent enumerable. <c>Null</c> if the object does not belong to an enumerable.</param>
-        private void AddObjectToWatchList(object value, IEnumerable parentEnumerable = null)
+        private void AddObjectToWatchList(object value, IEnumerable? parentEnumerable = null)
         {
             if (value is null)
             {
@@ -319,14 +321,14 @@
         /// <remarks>
         /// Internally calls the generic method with the same name.
         /// </remarks>
-        private void CheckObjectValidation(object value, string propertyChanged, IEnumerable parentEnumerable)
+        private void CheckObjectValidation(object? value, string? propertyChanged, IEnumerable? parentEnumerable)
         {
             if (value is null)
             {
                 return;
             }
 
-            ValidationData oldValidationData = null;
+            ValidationData? oldValidationData = null;
             ValidationData newValidationData;
 
             lock (_objectValidationLock)
@@ -344,7 +346,7 @@
             RaiseEventsForDifferences(value, oldValidationData, newValidationData);
         }
 
-        private ValidationData CreateValidationData(object value, string propertyChanged, IEnumerable parentEnumerable)
+        private ValidationData CreateValidationData(object value, string? propertyChanged, IEnumerable? parentEnumerable)
         {
             var validationData = new ValidationData(parentEnumerable);
 
@@ -415,7 +417,7 @@
         /// <param name="propertyChanged">The property changed.</param>
         /// <param name="infoList">The info list containing the warning or error info.</param>
         /// <param name="validationType">Type of the validation.</param>
-        private static void CheckObjectValidationForFields(object value, string propertyChanged, IList<FieldWarningOrErrorInfo> infoList,
+        private static void CheckObjectValidationForFields(object value, string? propertyChanged, IList<FieldWarningOrErrorInfo> infoList,
             ValidationType validationType)
         {
             if (string.IsNullOrEmpty(propertyChanged))
@@ -453,7 +455,7 @@
         /// <returns>
         /// List of warnings or errors returned by the object.
         /// </returns>
-        private static Dictionary<string, string> CheckFieldWarningsOrErrors(object value, string propertyChanged, ValidationType validationType)
+        private static Dictionary<string, string> CheckFieldWarningsOrErrors(object value, string? propertyChanged, ValidationType validationType)
         {
             var warningsOrErrors = new Dictionary<string, string>();
 
@@ -519,18 +521,21 @@
             foreach (var property in propertiesToCheck)
             {
                 var warningOrError = string.Empty;
+
                 switch (validationType)
                 {
                     case ValidationType.Warning:
-                        // ReSharper disable PossibleNullReferenceException
-                        warningOrError = iDataWarningInfo[property];
-                        // ReSharper restore PossibleNullReferenceException
+                        if (iDataWarningInfo is not null)
+                        {
+                            warningOrError = iDataWarningInfo[property];
+                        }
                         break;
 
                     case ValidationType.Error:
-                        // ReSharper disable PossibleNullReferenceException
-                        warningOrError = iDataErrorInfo[property];
-                        // ReSharper restore PossibleNullReferenceException
+                        if (iDataErrorInfo is not null)
+                        {
+                            warningOrError = iDataErrorInfo[property];
+                        }
                         break;
                 }
 
@@ -553,7 +558,7 @@
         /// </returns>
         private static string GetWarningOrError(object value, ValidationType type)
         {
-            string message = null;
+            var message = string.Empty;
 
             switch (type)
             {
@@ -574,7 +579,7 @@
                     break;
             }
 
-            return !string.IsNullOrEmpty(message) ? message : null;
+            return message;
         }
 
         /// <summary>
@@ -583,7 +588,7 @@
         /// <param name="value">The value.</param>
         /// <param name="oldValidationData">The old validation data.</param>
         /// <param name="newValidationData">The new validation data.</param>
-        private void RaiseEventsForDifferences(object value, ValidationData oldValidationData, ValidationData newValidationData)
+        private void RaiseEventsForDifferences(object value, ValidationData? oldValidationData, ValidationData newValidationData)
         {
             // Warnings - fields
             RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldWarnings ?? (IEnumerable<FieldWarningOrErrorInfo>)Array.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldWarnings, ValidationType.Warning);
@@ -669,7 +674,7 @@
         /// </summary>
         /// <param name="sender">A sender.</param>
         /// <param name="e">The event args.</param>
-        private void iNotifyPropertyChanged_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void iNotifyPropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             CheckObjectValidation(sender, e.PropertyName, null);
         }
@@ -679,7 +684,7 @@
         /// </summary>
         /// <param name="sender">A sender.</param>
         /// <param name="e">Event args.</param>
-        private void iNotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void iNotifyCollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             // If the action is "reset", no OldItems will be available, so clear all items manually
             if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -705,8 +710,8 @@
                 return;
             }
 
-            IEnumerable newItems = e.NewItems;
-            IEnumerable oldItems = e.OldItems;
+            var newItems = e.NewItems;
+            var oldItems = e.OldItems;
 
             if (oldItems is not null)
             {

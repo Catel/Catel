@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewLoadState.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
 
@@ -18,16 +11,16 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Gets the view object.
         /// </summary>
-        IView View { get; }
+        IView? View { get; }
 
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> Loaded;
+        event EventHandler<EventArgs>? Loaded;
 
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> Unloaded;
+        event EventHandler<EventArgs>? Unloaded;
     }
 }

@@ -28,9 +28,9 @@
 
         private readonly DispatcherTimer _timer;
 
-        private Binding _originalBinding;
+        private Binding? _originalBinding;
 
-        private DependencyProperty _dependencyPropertyCache;
+        private DependencyProperty? _dependencyPropertyCache;
 
         static DelayBindingUpdate()
         {
@@ -70,7 +70,7 @@
         /// This property does not reflect to any changes, so this property must be set when the 
         /// <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </remarks>
-        public string PropertyName { get; set; }
+        public string? PropertyName { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the dependency property. This property is used before the <see cref="PropertyName"/>. By
@@ -85,17 +85,17 @@
         /// <para />
         /// This property should only be used as backup if the <see cref="PropertyName"/> property does not work.
         /// </remarks>
-        public string DependencyPropertyName { get; set; }
+        public string? DependencyPropertyName { get; set; }
 
         /// <summary>
         /// Gets the name of the used dependency property.
         /// </summary>
         /// <value>The name of the used property or <c>null</c> if no property is used.</value>
-        private string UsedDependencyPropertyName
+        private string? UsedDependencyPropertyName
         {
             get
             {
-                DependencyProperty property;
+                DependencyProperty? property;
 
                 // Fallback first
                 if (!string.IsNullOrEmpty(DependencyPropertyName))
@@ -139,14 +139,14 @@
             var dependencyProperty = GetDependencyProperty();
             if (dependencyProperty is null)
             {
-                Log.Error("No dependency property found on '{0}'", dependencyPropertyName);
+                Log.Error($"No dependency property found on '{dependencyPropertyName}'");
                 return;
             }
 
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
             if (bindingExpression is null)
             {
-                Log.Error("No binding expression found on '{0}'", dependencyPropertyName);
+                Log.Error($"No binding expression found on '{dependencyPropertyName}'");
                 return;
             }
 
@@ -163,6 +163,12 @@
             Log.Debug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", dependencyPropertyName);
 
             var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
+            if (finalDependencyPropertyName is null)
+            {
+                Log.Error($"Dependency property '{dependencyPropertyName}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
+                return;
+            }
+
             AssociatedObject.SubscribeToDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
             Log.Debug("Subscribed to property changes of the original object");
@@ -185,6 +191,12 @@
                 Log.Debug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
 
                 var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
+                if (finalDependencyPropertyName is null)
+                {
+                    Log.Error($"Dependency property '{dependencyProperty}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
+                    return;
+                }
+
                 AssociatedObject.UnsubscribeFromDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
                 Log.Debug("Unsubscribed from property changes of the original object");
@@ -197,7 +209,7 @@
         /// <summary>
         /// Called when the associated dependency property has changed.
         /// </summary>
-        private void OnDependencyPropertyChanged(object sender, DependencyPropertyValueChangedEventArgs e)
+        private void OnDependencyPropertyChanged(object? sender, DependencyPropertyValueChangedEventArgs e)
         {
             if (UpdateDelay < 50)
             {
@@ -224,7 +236,7 @@
         /// </summary>
         /// <param name = "sender">The sender.</param>
         /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
-        private void OnTimerTick(object sender, TimerTickEventArgs e)
+        private void OnTimerTick(object? sender, TimerTickEventArgs e)
         {
             _timer.Stop();
 
@@ -264,14 +276,14 @@
         /// Gets the dependency property based on the properties of this behavior.
         /// </summary>
         /// <returns>The <see cref="DependencyProperty"/> of <c>null</c> if the dependency property is not found.</returns>
-        private DependencyProperty GetDependencyProperty()
+        private DependencyProperty? GetDependencyProperty()
         {
             if (_dependencyPropertyCache is not null)
             {
                 return _dependencyPropertyCache;
             }
 
-            DependencyProperty property;
+            DependencyProperty? property;
 
             // Fallback first
             if (!string.IsNullOrEmpty(DependencyPropertyName))
@@ -299,7 +311,7 @@
         /// </summary>
         /// <param name="dependencyPropertyName">Name of the property.</param>
         /// <returns>The <see cref="DependencyProperty"/> or <c>null</c> if the dependency property is not found.</returns>
-        private DependencyProperty GetDependencyProperty(string dependencyPropertyName)
+        private DependencyProperty? GetDependencyProperty(string dependencyPropertyName)
         {
             if (dependencyPropertyName.EndsWith("Property"))
             {
@@ -327,7 +339,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="binding"/> is <c>null</c>.</exception>
         private static Binding CreateBindingCopy(Binding binding)
         {
-            Argument.IsNotNull("binding", binding);
+            ArgumentNullException.ThrowIfNull(binding);
 
             // Copy all properties with a setter via reflection
             // only copy when value is not null, otherwise exceptions will be thrown

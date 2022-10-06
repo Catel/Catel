@@ -9,6 +9,6 @@
         /// Gets the navigation root.
         /// </summary>
         /// <returns>System.Object.</returns>
-        object GetNavigationRoot();
+        object? GetNavigationRoot();
     }
 }

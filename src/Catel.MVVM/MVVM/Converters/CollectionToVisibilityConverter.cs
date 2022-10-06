@@ -33,7 +33,7 @@
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <returns><c>true</c> if the specified value is visible; otherwise, <c>false</c>.</returns>
-        protected override bool IsVisible(object value, Type targetType, object parameter)
+        protected override bool IsVisible(object? value, Type targetType, object? parameter)
         {
             var isVisible = false;
 

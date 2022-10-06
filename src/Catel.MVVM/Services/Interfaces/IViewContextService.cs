@@ -4,6 +4,6 @@
 
     public interface IViewContextService
     {
-        object GetContext(IView view);
+        object? GetContext(IView view);
     }
 }

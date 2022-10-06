@@ -14,7 +14,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="trigger"/> is <c>null</c>.</exception>
         public TriggerEventArgs(ITrigger trigger)
         {
-            Argument.IsNotNull("trigger", trigger);
+            ArgumentNullException.ThrowIfNull(trigger);
 
             Trigger = trigger;
         }

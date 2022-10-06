@@ -11,7 +11,6 @@
     [System.Windows.Data.ValueConversion(typeof (object), typeof (Visibility))]
     public class ReferenceToCollapsingVisibilityConverter : VisibilityConverterBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -29,7 +28,6 @@
             : base(notVisibleVisibility)
         {
         }
-        #endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -40,9 +38,9 @@
         /// <returns>
         /// 	<c>true</c> if the specified value is visible; otherwise, <c>false</c>.
         /// </returns>
-        protected override bool IsVisible(object value, Type targetType, object parameter)
+        protected override bool IsVisible(object? value, Type targetType, object? parameter)
         {
-            var isNull = ReferenceEquals(value, null);
+            var isNull = value is null;
 
             // Note: base class will invert if needed
 

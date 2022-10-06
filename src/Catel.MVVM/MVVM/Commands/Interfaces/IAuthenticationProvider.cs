@@ -27,7 +27,7 @@ namespace Catel.MVVM
         /// it is not aware of role or identity changes. If caching is required, this must be implemented in the class implementing
         /// the <see cref="IAuthenticationProvider"/> interface.a
         /// </remarks>
-        bool CanCommandBeExecuted(ICatelCommand command, object commandParameter);
+        bool CanCommandBeExecuted(ICatelCommand command, object? commandParameter);
 
         /// <summary>
         /// Determines whether the user has access to the specified <paramref name="element"/>. This method is invoked
@@ -43,6 +43,6 @@ namespace Catel.MVVM
         /// 	<c>true</c> if the user has access to the specified UI element; otherwise, <c>false</c>.
         /// </returns>
         [CLSCompliant(false)]
-        bool HasAccessToUIElement(View element, object tag, object authenticationTag);
+        bool HasAccessToUIElement(View element, object? tag, object? authenticationTag);
     }
 }

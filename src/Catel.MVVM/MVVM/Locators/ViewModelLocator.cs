@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -30,11 +24,11 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         public void Register(Type viewType, Type viewModelType)
         {
-            Argument.IsNotNull("viewType", viewType);
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
-            var viewTypeName = TypeHelper.GetTypeNameWithAssembly(viewType.AssemblyQualifiedName);
-            var viewModelTypeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
+            var viewTypeName = TypeHelper.GetTypeNameWithAssembly(viewType.GetSafeFullName(true));
+            var viewModelTypeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.GetSafeFullName(true));
 
             Register(viewTypeName, viewModelTypeName);
         }
@@ -50,11 +44,11 @@ namespace Catel.MVVM
         /// </returns>
         public virtual bool IsCompatible(Type viewType, Type viewModelType)
         {
-            Argument.IsNotNull("viewType", viewType);
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
-            var viewTypeName = TypeHelper.GetTypeNameWithAssembly(viewType.AssemblyQualifiedName);
-            var viewModelTypeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
+            var viewTypeName = TypeHelper.GetTypeNameWithAssembly(viewType.GetSafeFullName(true));
+            var viewModelTypeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.GetSafeFullName(true));
 
             var values = ResolveValues(viewTypeName);
             return values.Contains(viewModelTypeName);
@@ -66,11 +60,11 @@ namespace Catel.MVVM
         /// <param name="viewType">Type of the view to resolve the view model for.</param>
         /// <returns>The resolved view model or <c>null</c> if the view model could not be resolved.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
-        public virtual Type ResolveViewModel(Type viewType)
+        public virtual Type? ResolveViewModel(Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
-            var viewTypeName = TypeHelper.GetTypeNameWithAssembly(viewType.AssemblyQualifiedName);
+            var viewTypeName = TypeHelper.GetTypeNameWithAssembly(viewType.GetSafeFullName(true));
 
             var resolvedType = Resolve(viewTypeName);
             if (!string.IsNullOrWhiteSpace(resolvedType))
@@ -92,7 +86,7 @@ namespace Catel.MVVM
         /// <param name="typeToResolveName">The full type name of the type to resolve.</param>
         /// <param name="namingConvention">The naming convention to use for resolving.</param>
         /// <returns>The resolved naming convention.</returns>
-        protected override string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention)
+        protected override string? ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention)
         {
             return NamingConvention.ResolveViewModelByViewName(assembly, typeToResolveName, namingConvention);
         }

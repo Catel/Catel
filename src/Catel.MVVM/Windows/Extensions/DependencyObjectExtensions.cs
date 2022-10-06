@@ -18,8 +18,10 @@
         /// <param name="condition">The condition.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static object FindLogicalOrVisualAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
+        public static object? FindLogicalOrVisualAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
         {
+            ArgumentNullException.ThrowIfNull(startElement);
+
             // Try to be super fast, simple mode (just 1 level)
 
             // Try to find logical ancestor one level up
@@ -72,7 +74,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="startElement">The start element.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static T FindLogicalOrVisualAncestorByType<T>(this DependencyObject startElement)
+        public static T? FindLogicalOrVisualAncestorByType<T>(this DependencyObject startElement)
         {
             return FindLogicalOrVisualAncestorByType<T>(startElement, -1);
         }
@@ -84,9 +86,9 @@
         /// <param name="startElement">The start element.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static T FindLogicalOrVisualAncestorByType<T>(this DependencyObject startElement, int maxDepth)
+        public static T? FindLogicalOrVisualAncestorByType<T>(this DependencyObject startElement, int maxDepth)
         {
-            return (T)FindLogicalOrVisualAncestor(startElement, o => o is T, maxDepth);
+            return (T?)FindLogicalOrVisualAncestor(startElement, o => o is T, maxDepth);
         }
 
         /// <summary>
@@ -96,9 +98,10 @@
         /// <param name="condition">The condition.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static object FindLogicalAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
+        public static object? FindLogicalAncestor(this DependencyObject? startElement, Predicate<object> condition, int maxDepth = -1)
         {
             var obj = startElement;
+
             while ((obj is not null) && !condition(obj))
             {
                 if (maxDepth == 0)
@@ -124,9 +127,10 @@
         /// <param name="condition">The condition.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static object FindVisualAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
+        public static object? FindVisualAncestor(this DependencyObject? startElement, Predicate<object> condition, int maxDepth = -1)
         {
             var obj = startElement;
+
             while ((obj is not null) && !condition(obj))
             {
                 if (maxDepth == 0)
@@ -150,7 +154,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="startElement">The start element.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static T FindLogicalAncestorByType<T>(this DependencyObject startElement)
+        public static T? FindLogicalAncestorByType<T>(this DependencyObject startElement)
         {
             return FindLogicalAncestorByType<T>(startElement, -1);
         }
@@ -162,9 +166,9 @@
         /// <param name="startElement">The start element.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static T FindLogicalAncestorByType<T>(this DependencyObject startElement, int maxDepth)
+        public static T? FindLogicalAncestorByType<T>(this DependencyObject startElement, int maxDepth)
         {
-            return (T)FindLogicalAncestor(startElement, o => o is T, maxDepth);
+            return (T?)FindLogicalAncestor(startElement, o => o is T, maxDepth);
         }
 
         /// <summary>
@@ -173,7 +177,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="startElement">The start element.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static T FindVisualAncestorByType<T>(this DependencyObject startElement)
+        public static T? FindVisualAncestorByType<T>(this DependencyObject startElement)
         {
             return FindVisualAncestorByType<T>(startElement, -1);
         }
@@ -185,9 +189,9 @@
         /// <param name="startElement">The start element.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static T FindVisualAncestorByType<T>(this DependencyObject startElement, int maxDepth)
+        public static T? FindVisualAncestorByType<T>(this DependencyObject startElement, int maxDepth)
         {
-            return (T)FindVisualAncestor(startElement, o => o is T, maxDepth);
+            return (T?)FindVisualAncestor(startElement, o => o is T, maxDepth);
         }
 
         /// <summary>
@@ -195,9 +199,10 @@
         /// </summary>
         /// <param name="startElement">The start element.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static DependencyObject FindLogicalRoot(this DependencyObject startElement)
+        public static DependencyObject? FindLogicalRoot(this DependencyObject? startElement)
         {
             var obj = startElement;
+
             while (startElement is not null)
             {
                 obj = startElement;
@@ -212,7 +217,7 @@
         /// </summary>
         /// <param name="startElement">The start element.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static object FindVisualRoot(this DependencyObject startElement)
+        public static object? FindVisualRoot(this DependencyObject? startElement)
         {
             return FindVisualAncestor(startElement, delegate (object o)
             {
@@ -232,9 +237,9 @@
         /// <param name="element">The element to retrieve the parent from.</param>
         /// <returns>The parent or <c>null</c> if the parent could not be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
-        public static DependencyObject GetLogicalParent(this DependencyObject element)
+        public static DependencyObject? GetLogicalParent(this DependencyObject element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             try
             {
@@ -252,9 +257,9 @@
         /// <param name="element">The element to retrieve the parent from.</param>
         /// <returns>The parent or <c>null</c> if the parent could not be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
-        public static DependencyObject GetVisualParent(this DependencyObject element)
+        public static DependencyObject? GetVisualParent(this DependencyObject element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             try
             {
@@ -272,7 +277,7 @@
         /// <param name="startElement">The start element.</param>
         /// <param name="condition">The condition.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static DependencyObject FindVisualDescendant(this DependencyObject startElement, Predicate<object> condition)
+        public static DependencyObject? FindVisualDescendant(this DependencyObject? startElement, Predicate<object> condition)
         {
             if (startElement is not null)
             {
@@ -342,7 +347,7 @@
         /// <param name="startElement">The start element.</param>
         /// <param name="name">The name of the element to search for.</param>
         /// <returns>object or <c>null</c> if the descendant is not found.</returns>
-        public static DependencyObject FindVisualDescendantByName(this DependencyObject startElement, string name)
+        public static DependencyObject? FindVisualDescendantByName(this DependencyObject startElement, string name)
         {
             return FindVisualDescendant(startElement, o => (o is FrameworkElement) && string.Equals(((FrameworkElement)o).Name, name));
         }
@@ -353,10 +358,10 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="startElement">The start element.</param>
         /// <returns>object or <c>null</c> if the descendant is not found.</returns>
-        public static T FindVisualDescendantByType<T>(this DependencyObject startElement)
+        public static T? FindVisualDescendantByType<T>(this DependencyObject startElement)
             where T : DependencyObject
         {
-            return (T)FindVisualDescendant(startElement, o => (o is T));
+            return (T?)FindVisualDescendant(startElement, o => (o is T));
         }
 
         /// <summary>
@@ -369,6 +374,7 @@
         public static IEnumerable<DependencyObject> GetChildren(this DependencyObject parent)
         {
             var count = VisualTreeHelper.GetChildrenCount(parent);
+
             for (var i = 0; i < count; ++i)
             {
                 yield return VisualTreeHelper.GetChild(parent, i);
@@ -387,7 +393,7 @@
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static bool IsElementWithName(this DependencyObject dependencyObject, string name)
         {
-            Argument.IsNotNull("dependencyObject", dependencyObject);
+            ArgumentNullException.ThrowIfNull(dependencyObject);
             Argument.IsNotNullOrWhitespace("name", name);
 
             var frameworkElement = dependencyObject as FrameworkElement;

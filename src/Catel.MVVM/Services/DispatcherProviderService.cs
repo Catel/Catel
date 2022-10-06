@@ -7,7 +7,7 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private object _appDispatcher;
+        private object? _appDispatcher;
 
         public virtual object GetApplicationDispatcher()
         {

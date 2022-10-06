@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICatelCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Windows.Input;
@@ -21,7 +15,7 @@ namespace Catel.MVVM
         /// By default, the value is <c>null</c>.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; }
+        object? Tag { get; }
 
         /// <summary>
         /// Occurs when the command has just been executed successfully.

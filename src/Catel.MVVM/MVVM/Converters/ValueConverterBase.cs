@@ -36,6 +36,7 @@
         /// </summary>
         public ValueConverterBase()
         {
+            CurrentCulture = CultureInfo.CurrentUICulture;
             SupportInversionUsingCommandParameter = true;
         }
 
@@ -57,7 +58,7 @@
         /// Gets or sets the linked value converter. This way it is possible to chain up several converters.
         /// </summary>
         /// <value>The link.</value>
-        public IValueConverter Link { get; set; }
+        public IValueConverter? Link { get; set; }
 
         /// <summary>
         /// Gets or sets an optional <see cref="System.Type"/> value to pass to the <see cref="Convert(TConvert,System.Type,object)"/> method of the chained converter if the <see cref="Link"/>
@@ -67,7 +68,7 @@
         /// Normally this value is ignored as it is in most implementations of <c>Convert</c>.
         /// </remarks>
         [TypeConverter(typeof(StringToTypeConverter))]
-        public Type OverrideType { get; set; }
+        public Type? OverrideType { get; set; }
 
         /// <summary>
         /// Gets or sets an optional <see cref="System.Type"/> value to pass to the <see cref="ConvertBack(TConvertBack,System.Type,object)"/> method of this instance if the <see cref="Link"/>
@@ -77,7 +78,7 @@
         /// Normally this value is ignored as it is in most implementations of <c>ConvertBack</c>.
         /// </remarks>
         [TypeConverter(typeof(StringToTypeConverter))]
-        public Type BackOverrideType { get; set; }
+        public Type? BackOverrideType { get; set; }
 
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -87,9 +88,12 @@
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <param name="culture">The culture of the conversion.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        public virtual object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
+        public virtual object? Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
-            CurrentCulture = culture;
+            if (culture is not null)
+            {
+                CurrentCulture = culture;
+            }
 
             var returnValue = value;
 
@@ -110,7 +114,7 @@
                 return ConverterHelper.UnsetValue;
             }
 
-            returnValue = Convert((TConvert)returnValue, targetType, parameter);
+            returnValue = Convert((TConvert?)returnValue, targetType, parameter);
 
             return returnValue;
         }
@@ -123,9 +127,12 @@
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <param name="culture">The culture of the conversion.</param>
         /// <returns>The value to be passed to the source object.</returns>
-        public virtual object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
+        public virtual object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
-            CurrentCulture = culture;
+            if (culture is not null)
+            {
+                CurrentCulture = culture;
+            }
 
             var returnValue = value;
 
@@ -138,7 +145,7 @@
             }
 
             // Call ConvertBack first because we are doing this in reverse order
-            returnValue = ConvertBack((TConvertBack)returnValue, targetType, parameter);
+            returnValue = ConvertBack((TConvertBack?)returnValue, targetType, parameter);
 
             if (Link is not null)
             {
@@ -157,7 +164,7 @@
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected abstract object Convert(TConvert value, Type targetType, object? parameter);
+        protected abstract object? Convert(TConvert? value, Type targetType, object? parameter);
 
         /// <summary>
         /// Determines whether the specified value is convertable.
@@ -194,7 +201,7 @@
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected virtual object ConvertBack(TConvertBack value, Type targetType, object? parameter)
+        protected virtual object? ConvertBack(TConvertBack? value, Type targetType, object? parameter)
         {
             return ConverterHelper.UnsetValue;
         }
@@ -204,7 +211,7 @@
         /// </summary>
         /// <param name="serviceProvider">Object that can provide services for the markup extension.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        public override object? ProvideValue(IServiceProvider serviceProvider)
         {
             return this;
         }

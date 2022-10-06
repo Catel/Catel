@@ -2,8 +2,6 @@
 {
     using System;
     using System.Windows;
-    using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
 
     /// <summary>
     /// Trigger base class that handles a safe unsubscribe and clean up because the default
@@ -64,7 +62,7 @@
         /// <summary>
         /// Specifies the name of the Event this EventTriggerBase is listening for.
         /// </summary>
-        protected override string GetEventName()
+        protected override string? GetEventName()
         {
             throw new InvalidOperationException("This method MUST be overriden and the base cannot be called");
         }
@@ -154,7 +152,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectLoadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectLoadedInternal(object? sender, EventArgs e)
         {
             _loadCounter++;
 
@@ -186,7 +184,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectUnloadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectUnloadedInternal(object? sender, EventArgs e)
         {
             _loadCounter--;
 

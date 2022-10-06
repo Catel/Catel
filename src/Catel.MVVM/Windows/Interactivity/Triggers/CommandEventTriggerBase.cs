@@ -15,8 +15,8 @@
     public abstract class CommandEventTriggerBase<T> : EventTriggerBase<T>
         where T : FrameworkElement
     {
-        private ICommand _command;
-        private object _commandParameter;
+        private ICommand? _command;
+        private object? _commandParameter;
         private bool _isSubscribed;
         
         /// <summary>
@@ -39,9 +39,9 @@
         /// Gets or sets the command to execute when the key is pressed.
         /// </summary>
         /// <value>The command.</value>
-        public ICommand Command
+        public ICommand? Command
         {
-            get { return (ICommand)GetValue(CommandProperty); }
+            get { return (ICommand?)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         }
 
@@ -55,7 +55,7 @@
         /// Gets or sets the command parameter, which will override the parameter defined in the direct command binding.
         /// </summary>
         /// <value>The command parameter.</value>
-        public object CommandParameter
+        public object? CommandParameter
         {
             get { return GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
@@ -72,7 +72,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnCommandCanExecuteChangedInternal(object sender, System.EventArgs e)
+        private void OnCommandCanExecuteChangedInternal(object? sender, System.EventArgs e)
         {
             OnCommandCanExecuteChanged();
         }
@@ -148,7 +148,7 @@
         /// Called when the <see cref="Command"/> property has changed.
         /// </summary>
         /// <param name="newValue">The new value.</param>
-        private void OnCommandChangedInternal(ICommand newValue)
+        private void OnCommandChangedInternal(ICommand? newValue)
         {
             UpdateCommandSubscriptions();
         }
@@ -184,7 +184,7 @@
         /// Called when the <see cref="CommandParameter"/> property has changed.
         /// </summary>
         /// <param name="newValue">The new value.</param>
-        private void OnCommandParameterChangedInternal(object newValue)
+        private void OnCommandParameterChangedInternal(object? newValue)
         {
             _commandParameter = newValue;
 
@@ -215,7 +215,7 @@
         /// If the <see cref="CommandParameter"/> should be used, use the <see cref="CanExecuteCommand()"/> instead.
         /// </summary>
         /// <returns><c>true</c> if the command can be invoked; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanExecuteCommand(object parameter)
+        protected virtual bool CanExecuteCommand(object? parameter)
         {
             var command = _command;
             if (command is null)
@@ -245,7 +245,7 @@
         /// If the <see cref="CommandParameter"/> should be used, use the <see cref="ExecuteCommand()"/> instead.
         /// </summary>
         /// <param name="parameter">The parameter that will override the <see cref="CommandParameter"/>.</param>
-        protected virtual void ExecuteCommand(object parameter)
+        protected virtual void ExecuteCommand(object? parameter)
         {
             // CTL-638
             if (Modifiers != ModifierKeys.None)
@@ -258,7 +258,7 @@
 
             if (CanExecuteCommand(parameter))
             {
-                _command.Execute(parameter);
+                _command?.Execute(parameter);
             }
         }
     }

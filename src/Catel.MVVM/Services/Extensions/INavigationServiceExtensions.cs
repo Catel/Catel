@@ -1,5 +1,6 @@
 ﻿namespace Catel.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -12,9 +13,9 @@
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
-        public static Task NavigateAsync<TViewModel>(INavigationService navigationService, Dictionary<string, object> parameters = null)
+        public static Task NavigateAsync<TViewModel>(INavigationService navigationService, Dictionary<string, object>? parameters = null)
         {
-            Argument.IsNotNull("navigationService", navigationService);
+            ArgumentNullException.ThrowIfNull(navigationService);
 
             return navigationService.NavigateAsync(typeof(TViewModel), parameters);
         }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelToModelConverterBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -14,7 +7,6 @@ namespace Catel.MVVM
     /// </summary>
     public abstract class ViewModelToModelConverterBase : IViewModelToModelConverter
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelToModelConverterBase"/> class.
         /// </summary>
@@ -23,24 +15,25 @@ namespace Catel.MVVM
         {
             PropertyNames = propertyNames;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the property names.
         /// </summary>
         /// <value>The property names.</value>
         public string[] PropertyNames { get; private set; }
-        #endregion
 
-        #region IViewModelToModelConverter Members
         /// <summary>
         /// Determines whether the property name should be converted.
         /// </summary>
         /// <param name="propertyName">The name of changed property</param>
         /// <returns><c>true</c> if the property name should be converted, <c>false</c> otherwise.</returns>
-        public bool ShouldConvert(string propertyName)
+        public bool ShouldConvert(string? propertyName)
         {
+            if (propertyName is null)
+            {
+                return false;
+            }
+
             foreach (var x in PropertyNames)
             {
                 if (string.CompareOrdinal(propertyName, x) == 0)
@@ -67,7 +60,7 @@ namespace Catel.MVVM
         /// <param name="values">The values.</param>
         /// <param name="viewModel">Owner VM</param>
         /// <returns>System.Object.</returns>
-        public abstract object Convert(object[] values, IViewModel viewModel);
+        public abstract object? Convert(object?[] values, IViewModel viewModel);
 
         /// <summary>
         /// Determines whether this instance can convert back the specified in type.
@@ -84,8 +77,6 @@ namespace Catel.MVVM
         /// <param name="value">Property value</param>
         /// <param name="viewModel">Owner VM</param>
         /// <returns>System.Object[].</returns>
-        public abstract object[] ConvertBack(object value, IViewModel viewModel);
-        
-        #endregion
+        public abstract object?[] ConvertBack(object? value, IViewModel viewModel);
     }
 }

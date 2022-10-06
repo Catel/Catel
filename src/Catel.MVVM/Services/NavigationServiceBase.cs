@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="viewModelType">The view model type.</param>
         /// <returns>The target to navigate to.</returns>
-        protected abstract string ResolveNavigationTarget(Type viewModelType);
+        protected abstract string? ResolveNavigationTarget(Type viewModelType);
 
         /// <summary>
         /// Returns the number of total back entries (which is the navigation history).

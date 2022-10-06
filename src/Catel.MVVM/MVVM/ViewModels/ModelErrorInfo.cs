@@ -47,7 +47,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public ModelErrorInfo(object model)
         {
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(model);
 
             _model = model;
 
@@ -73,7 +73,7 @@
         /// <summary>
         /// Raised when the errors or warnings are updated.
         /// </summary>
-        public event EventHandler Updated;
+        public event EventHandler? Updated;
 
         /// <summary>
         /// Synchronizes the validation state of the specified properties.
@@ -105,7 +105,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.PropertyName))
             {
@@ -130,7 +130,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.DataErrorsChangedEventArgs"/> instance containing the event data.</param>
-        private void OnModelErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        private void OnModelErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
         {
             var notifyDataErrorInfo = ((INotifyDataErrorInfo)_model);
             var errors = notifyDataErrorInfo.GetErrors(e.PropertyName);
@@ -203,7 +203,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.DataErrorsChangedEventArgs"/> instance containing the event data.</param>
-        private void OnModelWarningsChanged(object sender, DataErrorsChangedEventArgs e)
+        private void OnModelWarningsChanged(object? sender, DataErrorsChangedEventArgs e)
         {
             var notifyDataWarningInfo = ((INotifyDataWarningInfo)_model);
             var warnings = notifyDataWarningInfo.GetWarnings(e.PropertyName);
@@ -368,7 +368,7 @@
         /// </summary>
         /// <param name="obj">The object to convert to a string.</param>
         /// <returns>The string retrieved from the object or <c>null</c> if the object is not supported.</returns>
-        private string GetValidationString(object obj)
+        private string? GetValidationString(object? obj)
         {
             var objAsString = obj as string;
             if (objAsString is not null)

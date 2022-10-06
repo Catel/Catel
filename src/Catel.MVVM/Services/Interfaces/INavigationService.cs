@@ -10,7 +10,6 @@
     /// </summary>
     public interface INavigationService
     {
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether it is possible to navigate back.
         /// </summary>
@@ -26,21 +25,17 @@
         /// 	<c>true</c> if it is possible to navigate forward otherwise, <c>false</c>.
         /// </value>
         bool CanGoForward { get; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the application is about to be closed.
         /// </summary>
-        event EventHandler<ApplicationClosingEventArgs> ApplicationClosing;
+        event EventHandler<ApplicationClosingEventArgs>? ApplicationClosing;
 
         /// <summary>
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed. 
         /// </summary>
-        event EventHandler<EventArgs> ApplicationClosed;
-        #endregion
+        event EventHandler<EventArgs>? ApplicationClosed;
 
-        #region Methods
         /// <summary>
         /// Closes the current application. The actual implementation depends on the final target framework.
         /// </summary>
@@ -64,7 +59,7 @@
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
         /// <exception cref="ArgumentException">The <paramref name="uri"/> is <c>null</c> or whitespace.</exception>
-        Task NavigateAsync(string uri, Dictionary<string, object> parameters = null);
+        Task NavigateAsync(string uri, Dictionary<string, object>? parameters = null);
 
         /// <summary>
         /// Navigates the specified location registered using the view model type.
@@ -73,7 +68,7 @@
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        Task NavigateAsync(Type viewModelType, Dictionary<string, object> parameters = null);
+        Task NavigateAsync(Type viewModelType, Dictionary<string, object>? parameters = null);
 
         /// <summary>
         /// Navigates to a specific location.
@@ -135,6 +130,5 @@
         /// Removes all the back entries from the navigation history.
         /// </summary>
         void RemoveAllBackEntries();
-        #endregion
     }
 }

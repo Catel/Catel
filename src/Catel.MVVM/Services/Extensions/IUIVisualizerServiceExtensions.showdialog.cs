@@ -1,9 +1,6 @@
 ﻿namespace Catel.Services
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Catel.MVVM;
 
@@ -19,10 +16,10 @@
         /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        public static async Task<UIVisualizerResult> ShowDialogAsync(this IUIVisualizerService uiVisualizerService, IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static async Task<UIVisualizerResult> ShowDialogAsync(this IUIVisualizerService uiVisualizerService, IViewModel viewModel, EventHandler<UICompletedEventArgs>? completedProc = null)
         {
-            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var result = await uiVisualizerService.ShowContextAsync(new UIVisualizerContext
             {
@@ -45,9 +42,9 @@
         /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static async Task<UIVisualizerResult> ShowDialogAsync(this IUIVisualizerService uiVisualizerService, string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static async Task<UIVisualizerResult> ShowDialogAsync(this IUIVisualizerService uiVisualizerService, string name, object data, EventHandler<UICompletedEventArgs>? completedProc = null)
         {
-            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
             Argument.IsNotNullOrWhitespace("name", name);
 
             var result = await uiVisualizerService.ShowContextAsync(new UIVisualizerContext

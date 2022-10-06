@@ -47,7 +47,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
         public static List<DependencyPropertyInfo> GetDependencyProperties(this FrameworkElement frameworkElement)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
 
             return GetDependencyProperties(frameworkElement.GetType());
         }
@@ -60,7 +60,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static List<DependencyPropertyInfo> GetDependencyProperties(Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             EnsureItemInCache(viewType);
 
@@ -75,9 +75,9 @@
         /// <returns>The <see cref="DependencyProperty"/> or <c>null</c> if the property cannot be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public static DependencyProperty GetDependencyPropertyByName(this FrameworkElement frameworkElement, string propertyName)
+        public static DependencyProperty? GetDependencyPropertyByName(this FrameworkElement frameworkElement, string propertyName)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             var viewType = frameworkElement.GetType();
@@ -100,10 +100,10 @@
         /// <param name="frameworkElement">The framework element containing the dependency property.</param>
         /// <param name="dependencyProperty">The dependency property.</param>
         /// <returns>The name of the dependency property or <c>null</c> if the name could not be found.</returns>
-        public static string GetDependencyPropertyName(this FrameworkElement frameworkElement, DependencyProperty dependencyProperty)
+        public static string? GetDependencyPropertyName(this FrameworkElement frameworkElement, DependencyProperty dependencyProperty)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("dependencyProperty", dependencyProperty);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(dependencyProperty);
 
             EnsureItemInCache(frameworkElement.GetType());
 
@@ -123,9 +123,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static string GetDependencyPropertyCacheKeyPrefix(Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
-            return _cacheKeyCache.GetFromCacheOrFetch(viewType, () => viewType.FullName.Replace(".", "_"));
+            return _cacheKeyCache.GetFromCacheOrFetch(viewType, () => viewType.GetSafeFullName().Replace(".", "_"));
         }
 
         /// <summary>
@@ -138,7 +138,7 @@
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         public static string GetDependencyPropertyCacheKey(Type viewType, string propertyName)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             return string.Format("{0}_{1}", GetDependencyPropertyCacheKeyPrefix(viewType), propertyName);
@@ -199,7 +199,7 @@
                         continue;
                     }
 
-                    DependencyProperty dependencyProperty;
+                    DependencyProperty? dependencyProperty;
                     if (fieldInfo is not null)
                     {
                         var fieldValue = fieldInfo.GetValue(null);

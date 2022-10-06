@@ -35,7 +35,7 @@
             _timer.Change(TimerDuration, Timeout.InfiniteTimeSpan);
         }
 
-        private void OnTimerTick(object e)
+        private void OnTimerTick(object? e)
         {
             _dispatcherService.BeginInvokeIfRequired(() =>
             {

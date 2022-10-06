@@ -96,12 +96,14 @@
             var viewModelWithoutViewModel = TypeHelper.GetTypeNameWithoutNamespace(fullViewModelName);
             viewModelWithoutViewModel = RemoveAllPostfixes(viewModelWithoutViewModel, new[] { "ViewModel" });
 
-            var constantsWithValues = new Dictionary<string, string>();
-            constantsWithValues.Add(Assembly, assembly);
-            constantsWithValues.Add(Current, TypeHelper.GetTypeNamespace(fullViewModelName));
-            constantsWithValues.Add(ViewModelName, viewModelWithoutViewModel);
+            var constantsWithValues = new Dictionary<string, string>
+            {
+                { Assembly, assembly },
+                { Current, TypeHelper.GetTypeNamespace(fullViewModelName) },
+                { ViewModelName, viewModelWithoutViewModel }
+            };
 
-            return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewModelName); 
+            return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewModelName);
         }
 
         /// <summary>
@@ -130,10 +132,12 @@
             var viewWithoutView = TypeHelper.GetTypeNameWithoutNamespace(fullViewName);
             viewWithoutView = RemoveAllPostfixes(viewWithoutView, new[] { "View", "Control", "UserControl", "Window", "Page", "Activity" });
 
-            var constantsWithValues = new Dictionary<string, string>();
-            constantsWithValues.Add(Assembly, assembly);
-            constantsWithValues.Add(Current, TypeHelper.GetTypeNamespace(fullViewName));
-            constantsWithValues.Add(ViewName, viewWithoutView);
+            var constantsWithValues = new Dictionary<string, string>
+            {
+                { Assembly, assembly },
+                { Current, TypeHelper.GetTypeNamespace(fullViewName) },
+                { ViewName, viewWithoutView }
+            };
 
             return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewName);
         }
@@ -151,7 +155,7 @@
         /// <exception cref="ArgumentException">If <paramref name="conventionToUse"/> is <c>null</c> or whitespace.</exception>
         public static string ResolveNamingConvention(Dictionary<string, string> constantsWithValues, string conventionToUse)
         {
-            Argument.IsNotNull("constantsWithValues", constantsWithValues);
+            ArgumentNullException.ThrowIfNull(constantsWithValues);
             Argument.IsNotNullOrWhitespace("conventionToUse", conventionToUse);
 
             return constantsWithValues.Aggregate(conventionToUse, (current, constantWithValue) => current.Replace(constantWithValue.Key, constantWithValue.Value));
@@ -171,17 +175,18 @@
         /// <exception cref="ArgumentException">If <paramref name="conventionToUse"/> is <c>null</c> or whitespace.</exception>
         public static string ResolveNamingConvention(Dictionary<string, string> constantsWithValues, string conventionToUse, string value)
         {
-            Argument.IsNotNull("constantsWithValues", constantsWithValues);
+            ArgumentNullException.ThrowIfNull(constantsWithValues);
             Argument.IsNotNullOrWhitespace("conventionToUse", conventionToUse);
             Argument.IsNotNullOrWhitespace("value", value);
 
             var fullnamespace = GetParentPath(value);
             var separator = GetParentSeparator(fullnamespace);
-            var namespaces = fullnamespace.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var namespaces = fullnamespace.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             var occurrences = Regex.Matches(conventionToUse, "UP", RegexOptions.IgnoreCase).Count;
 
             var prefix = string.Empty;
+
             for (var i = 0; i < namespaces.Count - occurrences; i++)
             {
                 if (i > 0)
@@ -280,7 +285,7 @@
 
             var knownSeparators = new[] { "\\", "/", "|", "." };
 
-            return knownSeparators.FirstOrDefault(path.Contains);
+            return knownSeparators.FirstOrDefault(path.Contains) ?? ".";
         }
 
         /// <summary>
@@ -293,7 +298,7 @@
         /// <exception cref="ArgumentException">The <paramref name="postfixesToRemove"/> is <c>null</c> or an empty array.</exception>
         private static string RemoveAllPostfixes(string value, string[] postfixesToRemove)
         {
-            Argument.IsNotNull("value", value);
+            ArgumentNullException.ThrowIfNull(value);
             Argument.IsNotNullOrEmptyArray("postfixesToRemove", postfixesToRemove);
 
             foreach (var postfix in postfixesToRemove)

@@ -15,7 +15,7 @@
     using Controls;
     using Logging;
     using MVVM;
-    using Exceptions = MVVM.Properties.Exceptions;
+    using Exceptions = Properties.Exceptions;
     using MVVM.Providers;
     using Catel.Services;
     using IoC;
@@ -27,15 +27,15 @@
     public class DataWindow : System.Windows.Window, IDataWindow
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
+        private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveRequiredType<IWrapControlService>();
 
         private readonly bool _focusFirstControl;
         private bool _isWrapped;
         private bool _forceClose;
 
-        private ICommand _defaultOkCommand;
-        private ButtonBase _defaultOkElement;
-        private ICommand _defaultCancelCommand;
+        private ICommand? _defaultOkCommand;
+        private ButtonBase? _defaultOkElement;
+        private ICommand? _defaultCancelCommand;
 
         private readonly Collection<DataWindowButton> _buttons = new Collection<DataWindowButton>();
         private readonly Collection<ICommand> _commands = new Collection<ICommand>();
@@ -43,9 +43,9 @@
 
         private readonly WindowLogic _logic;
 
-        private event EventHandler<EventArgs> _viewLoaded;
-        private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<DataContextChangedEventArgs> _viewDataContextChanged;
+        private event EventHandler<EventArgs>? _viewLoaded;
+        private event EventHandler<EventArgs>? _viewUnloaded;
+        private event EventHandler<DataContextChangedEventArgs>? _viewDataContextChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Windows.FrameworkElement"/> class.
@@ -66,7 +66,7 @@
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
         /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
-        public DataWindow(DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
+        public DataWindow(DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
             : this(null, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode, focusFirstControl)
@@ -80,7 +80,7 @@
         /// Explicit constructor with view model injection, required for <see cref="Activator.CreateInstance(System.Type)"/> which
         /// does not seem to support default parameter values.
         /// </remarks>
-        public DataWindow(IViewModel viewModel)
+        public DataWindow(IViewModel? viewModel)
             : this(viewModel, DataWindowMode.OkCancel)
         {
             // Do not remove this constructor, see remarks
@@ -96,12 +96,14 @@
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
         /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
-        public DataWindow(IViewModel viewModel, DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public DataWindow(IViewModel? viewModel, DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
         {
             if (CatelEnvironment.IsInDesignMode)
-            {
+            { 
                 return;
             }
 
@@ -197,9 +199,9 @@
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
-        public Type ViewModelType
+        public Type? ViewModelType
         {
-            get { return _logic.GetValue<WindowLogic, Type>(x => x.ViewModelType); }
+            get { return _logic.GetValue<WindowLogic, Type?>(x => x.ViewModelType); }
         }
 
         /// <summary>
@@ -220,9 +222,9 @@
         /// Gets the view model that is contained by the container.
         /// </summary>
         /// <value>The view model.</value>
-        public IViewModel ViewModel
+        public IViewModel? ViewModel
         {
-            get { return _logic.GetValue<WindowLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<WindowLogic, IViewModel?>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -483,22 +485,22 @@
         /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
         /// (mostly the container of a view model) because the .NET Framework does not allows us to.
         /// </remarks>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> property has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ViewModelChanged;
+        public event EventHandler<EventArgs>? ViewModelChanged;
 
         /// <summary>
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
 
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Loaded
+        event EventHandler<EventArgs>? IView.Loaded
         {
             add { _viewLoaded += value; }
             remove { _viewLoaded -= value; }
@@ -507,7 +509,7 @@
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Unloaded
+        event EventHandler<EventArgs>? IView.Unloaded
         {
             add { _viewUnloaded += value; }
             remove { _viewUnloaded -= value; }
@@ -516,7 +518,7 @@
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<DataContextChangedEventArgs> IView.DataContextChanged
+        event EventHandler<DataContextChangedEventArgs>? IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
@@ -702,41 +704,47 @@
             }
 
             var newContentAsFrameworkElement = Content as FrameworkElement;
-            if (_isWrapped || !WrapControlService.CanBeWrapped(newContentAsFrameworkElement))
+            if (newContentAsFrameworkElement is not null)
             {
-                return;
+                if (_isWrapped || !WrapControlService.CanBeWrapped(newContentAsFrameworkElement))
+                {
+                    return;
+                }
             }
 
-            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
 
             if (IsOKButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("OK"), OnOkExecuteAsync, OnOkCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.OK;
                 _buttons.Add(button);
             }
             if (IsCancelButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("Cancel"), OnCancelExecuteAsync, OnCancelCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
             if (IsApplyButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("Apply"), OnApplyExecuteAsync, OnApplyCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Apply;
                 _buttons.Add(button);
             }
             if (IsCloseButtonAvailable)
             {
-                var button = DataWindowButton.FromSync(languageService.GetString("Close"), OnCloseExecute, OnCloseCanExecute);
+                var button = DataWindowButton.FromSync(languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Close;
                 _buttons.Add(button);
             }
 
             foreach (var button in _buttons)
             {
-                _commands.Add(button.Command);
+                if (button.Command is not null)
+                {
+                    _commands.Add(button.Command);
+                }
             }
 
             var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext | WrapControlServiceWrapOptions.GenerateAdornerDecorator | WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary;
@@ -757,30 +765,33 @@
 
             _isWrapped = true;
 
-            var contentGrid = WrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
-
-            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlServiceControlNames.InternalGridName)) as Grid;
-            if (internalGrid is not null)
+            if (newContentAsFrameworkElement is not null)
             {
-                internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
+                var contentGrid = WrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
 
-                if (_focusFirstControl)
+                var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlServiceControlNames.InternalGridName)) as Grid;
+                if (internalGrid is not null)
                 {
-                    newContentAsFrameworkElement.FocusFirstControl();
-                }
+                    internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
-                _defaultOkCommand = (from button in _buttons
-                                     where button.IsDefault
-                                     select button.Command).FirstOrDefault();
-                _defaultOkElement = WrapControlService.GetWrappedElement<ButtonBase>(contentGrid, WrapControlServiceControlNames.DefaultOkButtonName);
+                    if (_focusFirstControl)
+                    {
+                        newContentAsFrameworkElement.FocusFirstControl();
+                    }
 
-                _defaultCancelCommand = (from button in _buttons
-                                         where button.IsCancel
+                    _defaultOkCommand = (from button in _buttons
+                                         where button.IsDefault
                                          select button.Command).FirstOrDefault();
+                    _defaultOkElement = WrapControlService.GetWrappedElement<ButtonBase>(contentGrid, WrapControlServiceControlNames.DefaultOkButtonName);
 
-                InternalGrid = internalGrid;
+                    _defaultCancelCommand = (from button in _buttons
+                                             where button.IsCancel
+                                             select button.Command).FirstOrDefault();
 
-                OnInternalGridChanged();
+                    InternalGrid = internalGrid;
+
+                    OnInternalGridChanged();
+                }
             }
         }
 
@@ -798,7 +809,7 @@
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnDataWindowClosing(object sender, CancelEventArgs args)
+        private async void OnDataWindowClosing(object? sender, CancelEventArgs args)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (args.Cancel)
@@ -913,7 +924,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             RaiseCanExecuteChangedForAllCommands();
 
@@ -934,7 +945,7 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 
-        protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
+        protected virtual Task OnViewModelClosedAsync(object? sender, ViewModelClosedEventArgs e)
         {
             return Task.CompletedTask;
         }

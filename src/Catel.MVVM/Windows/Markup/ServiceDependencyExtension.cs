@@ -13,7 +13,9 @@
         /// Initializes a new instance of the <see cref="ServiceDependencyExtension"/> class.
         /// </summary>
         public ServiceDependencyExtension()
+            : this(typeof(object))
         {
+            // Keep empty
         }
 
         /// <summary>
@@ -36,14 +38,14 @@
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         /// When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension.
         /// </summary>
         /// <param name="serviceProvider">Object that can provide services for the markup extension.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        public override object? ProvideValue(IServiceProvider? serviceProvider)
         {
             if (CatelEnvironment.IsInDesignMode)
             {

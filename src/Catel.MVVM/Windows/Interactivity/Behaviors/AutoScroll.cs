@@ -29,8 +29,8 @@
     public class AutoScroll : BehaviorBase<ItemsControl>
     {
         private bool _isScrollbarAtEnd;
-        private ScrollViewer _scrollViewer;
-        private INotifyCollectionChanged _collection;
+        private ScrollViewer? _scrollViewer;
+        private INotifyCollectionChanged? _collection;
 
         /// <summary>
         /// A boolean that determines whether the behavior should automatically scroll as soon as the 
@@ -114,7 +114,7 @@
             base.OnAssociatedObjectUnloaded();
         }
 
-        private void OnItemsSourceChanged(object sender, DependencyPropertyValueChangedEventArgs e)
+        private void OnItemsSourceChanged(object? sender, DependencyPropertyValueChangedEventArgs e)
         {
             UnsubscribeFromCollection();
             SubscribeToCollection();
@@ -146,7 +146,7 @@
             }
         }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (_isScrollbarAtEnd)
             {
@@ -181,8 +181,13 @@
             }
         }
 
-        private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
+        private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
         {
+            if (_scrollViewer is null)
+            {
+                return;
+            }
+
             switch (ScrollDirection)
             {
                 case ScrollDirection.Top:

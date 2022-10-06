@@ -30,7 +30,7 @@
         /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand compositeCommand = null,
+        void CreateCommand(string commandName, InputGesture? inputGesture = null, ICompositeCommand? compositeCommand = null,
             bool throwExceptionWhenCommandIsAlreadyCreated = true);
 
         /// <summary>
@@ -50,7 +50,7 @@
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void RegisterCommand(string commandName, ICommand command, IViewModel viewModel = null);
+        void RegisterCommand(string commandName, ICommand command, IViewModel? viewModel = null);
 
         /// <summary>
         /// Unregisters a command with the specified command name.
@@ -82,7 +82,7 @@
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The <see cref="ICommand"/> or <c>null</c> if the command is not created.</returns>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        ICommand GetCommand(string commandName);
+        ICommand? GetCommand(string commandName);
 
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
@@ -90,7 +90,7 @@
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        InputGesture GetOriginalInputGesture(string commandName);
+        InputGesture? GetOriginalInputGesture(string commandName);
 
         /// <summary>
         /// Gets the input gesture for the specified command.
@@ -98,7 +98,7 @@
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        InputGesture GetInputGesture(string commandName);
+        InputGesture? GetInputGesture(string commandName);
 
         /// <summary>
         /// Updates the input gesture for the specified command.
@@ -107,7 +107,7 @@
         /// <param name="inputGesture">The new input gesture.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        void UpdateInputGesture(string commandName, InputGesture inputGesture = null);
+        void UpdateInputGesture(string commandName, InputGesture? inputGesture = null);
 
         /// <summary>
         /// Resets the input gestures to the original input gestures with which the commands were registered.
@@ -159,7 +159,7 @@
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void RegisterAction(string commandName, Action<object> action);
+        void RegisterAction(string commandName, Action<object?> action);
 
         /// <summary>
         /// Unregisters the action with the specified command name.
@@ -169,11 +169,11 @@
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void UnregisterAction(string commandName, Action<object> action);
+        void UnregisterAction(string commandName, Action<object?> action);
 
         /// <summary>
         /// Occurs when a command has been created.
         /// </summary>
-        event EventHandler<CommandCreatedEventArgs> CommandCreated;
+        event EventHandler<CommandCreatedEventArgs>? CommandCreated;
     }
 }

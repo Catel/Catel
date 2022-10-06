@@ -120,7 +120,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
+        private void OnAssociatedObjectLoadedInternal(object? sender, UIEventArgs e)
         {
             _loadCounter++;
 
@@ -152,7 +152,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
+        private void OnAssociatedObjectUnloadedInternal(object? sender, UIEventArgs e)
         {
             _loadCounter--;
 

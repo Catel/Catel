@@ -15,7 +15,7 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private FrameworkElement _layoutRoot;
+        private FrameworkElement? _layoutRoot;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FocusOnKeyPress"/> class.

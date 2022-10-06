@@ -32,9 +32,9 @@
     {
         private readonly UserControlLogic _logic;
 
-        private event EventHandler<EventArgs> _viewLoaded;
-        private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
+        private event EventHandler<EventArgs>? _viewLoaded;
+        private event EventHandler<EventArgs>? _viewUnloaded;
+        private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs>? _viewDataContextChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserControl"/> class.
@@ -49,7 +49,9 @@
         /// Initializes a new instance of the <see cref="UserControl"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        public UserControl(IViewModel viewModel)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public UserControl(IViewModel? viewModel)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -110,9 +112,9 @@
         /// Gets the view model that is contained by the container.
         /// </summary>
         /// <value>The view model.</value>
-        public IViewModel ViewModel
+        public IViewModel? ViewModel
         {
-            get { return _logic.GetValue<UserControlLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<UserControlLogic, IViewModel?>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -269,22 +271,22 @@
         /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
         /// (mostly the container of a view model) because the .NET Framework does not allows us to.
         /// </remarks>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> property has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ViewModelChanged;
+        public event EventHandler<EventArgs>? ViewModelChanged;
 
         /// <summary>
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
 
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Loaded
+        event EventHandler<EventArgs>? IView.Loaded
         {
             add { _viewLoaded += value; }
             remove { _viewLoaded -= value; }
@@ -293,7 +295,7 @@
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Unloaded
+        event EventHandler<EventArgs>? IView.Unloaded
         {
             add { _viewUnloaded += value; }
             remove { _viewUnloaded -= value; }
@@ -302,7 +304,7 @@
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> IView.DataContextChanged
+        event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs>? IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }

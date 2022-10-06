@@ -18,10 +18,10 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private WeakReference<object> _targetObject;
-        private object _targetProperty;
+        private WeakReference<object>? _targetObject;
+        private object? _targetProperty;
         private bool _isFrameworkElementLoaded;
-        private IServiceProvider _serviceProvider;
+        private IServiceProvider? _serviceProvider;
 
         private bool _hasBeenLoadedOnce = false;
 
@@ -37,7 +37,7 @@
         /// Gets the target object.
         /// </summary>
         /// <value>The target object.</value>
-        protected object TargetObject
+        protected object? TargetObject
         {
             get
             {
@@ -63,7 +63,7 @@
         /// Gets the target property.
         /// </summary>
         /// <value>The target property.</value>
-        protected object TargetProperty
+        protected object? TargetProperty
         {
             get { return _targetProperty; }
         }
@@ -71,7 +71,7 @@
         /// <summary>
         /// Gets the value of this markup extension.
         /// </summary>
-        public object Value
+        public object? Value
         {
             get
             {
@@ -79,14 +79,14 @@
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
         /// </summary>
         /// <param name="serviceProvider">A service provider helper that can provide services for the markup extension.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public sealed override object ProvideValue(IServiceProvider serviceProvider)
+        public sealed override object? ProvideValue(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
 
@@ -152,7 +152,7 @@
             return value;
         }
 
-        private void OnTargetObjectLoadedInternal(object sender, RoutedEventArgs e)
+        private void OnTargetObjectLoadedInternal(object? sender, RoutedEventArgs e)
         {
             if (_isFrameworkElementLoaded)
             {
@@ -180,7 +180,7 @@
         {
         }
 
-        private void OnTargetObjectUnloadedInternal(object sender, RoutedEventArgs e)
+        private void OnTargetObjectUnloadedInternal(object? sender, RoutedEventArgs? e)
         {
             if (!_isFrameworkElementLoaded)
             {
@@ -267,7 +267,7 @@
         /// Gets the value by combining the rights methods (so we don't have to repeat ourselves).
         /// </summary>
         /// <returns>System.Object.</returns>
-        private object GetValue()
+        private object? GetValue()
         {
             var value = ProvideDynamicValue(_serviceProvider);
             return value;
@@ -278,7 +278,7 @@
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <returns>System.Object.</returns>
-        protected virtual object ProvideDynamicValue(IServiceProvider serviceProvider)
+        protected virtual object? ProvideDynamicValue(IServiceProvider? serviceProvider)
         {
             return null;
         }

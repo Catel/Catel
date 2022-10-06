@@ -413,9 +413,9 @@ namespace Catel.Tests.Services
             }
 
             [TestCase]
-            public void ReturnsNullWhenNoKnownSeparatorIsUsed()
+            public void ReturnsDefaultWhenNoKnownSeparatorIsUsed()
             {
-                Assert.AreEqual(null, NamingConvention.GetParentSeparator("noknownseparators"));
+                Assert.AreEqual(".", NamingConvention.GetParentSeparator("noknownseparators"));
             }
 
             [TestCase]

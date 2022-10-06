@@ -1,5 +1,6 @@
 ﻿namespace Catel.MVVM.Views
 {
+    using System;
     using System.Windows.Controls;
 
     public static partial class ViewExtensions
@@ -10,7 +11,7 @@
         /// <param name="view">The view.</param>
         public static void EnsureVisualTree(this IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             // According to the documentation, no visual tree is garantueed in the Loaded event of the user control.
             // However, as a solution the documentation says you need to manually call ApplyTemplate, so let's do that.
@@ -18,7 +19,7 @@
             var targetControl = view as Control;
             if (targetControl is not null)
             {
-                (targetControl).ApplyTemplate();
+                targetControl.ApplyTemplate();
             }
         }
 
@@ -27,7 +28,7 @@
         /// </summary>
         /// <param name="view">The view.</param>
         /// <returns>The IViewModelContainer or <c>null</c> if the container is not found.</returns>
-        public static IViewModelContainer FindParentViewModelContainer(this IView view)
+        public static IViewModelContainer? FindParentViewModelContainer(this IView view)
         {
             return FindParentByPredicate(view, o => o is IViewModelContainer) as IViewModelContainer;
         }

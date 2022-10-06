@@ -20,7 +20,7 @@
         /// <param name="sender">The sender.</param>
         /// <param name="allowParallelExecution">if set to <c>true</c>, allow parallel invocation of the handlers.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public static Task<bool> SafeInvokeAsync(this AsyncEventHandler<EventArgs> handler, object sender, bool allowParallelExecution = true)
+        public static Task<bool> SafeInvokeAsync(this AsyncEventHandler<EventArgs>? handler, object sender, bool allowParallelExecution = true)
         {
             return SafeInvokeAsync(handler, sender, EventArgs.Empty, allowParallelExecution);
         }
@@ -34,7 +34,7 @@
         /// <param name="e">The event args.</param>
         /// <param name="allowParallelExecution">if set to <c>true</c>, allow parallel invocation of the handlers.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public static async Task<bool> SafeInvokeAsync<TEventArgs>(this AsyncEventHandler<TEventArgs> handler, object sender, TEventArgs e, bool allowParallelExecution = true)
+        public static async Task<bool> SafeInvokeAsync<TEventArgs>(this AsyncEventHandler<TEventArgs>? handler, object sender, TEventArgs e, bool allowParallelExecution = true)
             where TEventArgs : EventArgs
         {
             if (handler is null)

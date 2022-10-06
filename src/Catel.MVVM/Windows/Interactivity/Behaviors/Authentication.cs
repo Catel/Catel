@@ -41,7 +41,13 @@
         /// <summary>
         /// The authentication provider.
         /// </summary>
-        private static IAuthenticationProvider _authenticationProvider;
+        private static readonly IAuthenticationProvider _authenticationProvider;
+
+        static Authentication()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            _authenticationProvider = dependencyResolver.ResolveRequired<IAuthenticationProvider>();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Authentication"/> class.
@@ -51,17 +57,6 @@
             if (IsInDesignMode)
             {
                 return;
-            }
-
-            if (_authenticationProvider is null)
-            {
-                var dependencyResolver = this.GetDependencyResolver();
-                _authenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
-            }
-
-            if (_authenticationProvider is null)
-            {
-                throw Log.ErrorAndCreateException<NotSupportedException>("No IAuthenticationProvider is registered, cannot use the Authentication behavior without an IAuthenticationProvider");
             }
         }
 
@@ -85,7 +80,7 @@
         /// Gets or sets the authentication tag which can be used to provide additional information to the <see cref="IAuthenticationProvider"/>.
         /// </summary>
         /// <value>The authentication tag.</value>
-        public object AuthenticationTag
+        public object? AuthenticationTag
         {
             get { return GetValue(AuthenticationTagProperty); }
             set { SetValue(AuthenticationTagProperty, value); }

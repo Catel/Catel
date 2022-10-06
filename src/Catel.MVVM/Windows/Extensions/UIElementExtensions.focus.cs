@@ -16,9 +16,9 @@
         /// <param name="element">The element to check and all childs.</param>
         /// <returns>The focused <see cref="UIElement"/> or <c>null</c> if none if the children has the focus.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
-        public static UIElement GetFocusedControl(this UIElement element)
+        public static UIElement? GetFocusedControl(this UIElement element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             return element.FindVisualDescendant(obj =>
             {
@@ -69,7 +69,7 @@
                 else
                 {
                     // Get handler (so we can nicely unsubscribe)
-                    RoutedEventHandler onFrameworkElementLoaded = null;
+                    RoutedEventHandler? onFrameworkElementLoaded = null;
                     onFrameworkElementLoaded = delegate
                     {
                         FocusNextControl(elementAsFrameworkElement, focusParentsFirst);
@@ -187,18 +187,18 @@
             }
 
             var frameworkElement = element as FrameworkElement;
-            bool delayMove = ((frameworkElement is not null) && !frameworkElement.IsLoaded);
+            var delayMove = (frameworkElement is not null) && !frameworkElement.IsLoaded;
 
             if (delayMove)
             {
-                RoutedEventHandler onFrameworkElementLoaded = null;
+                RoutedEventHandler? onFrameworkElementLoaded = null;
                 onFrameworkElementLoaded = delegate
                 {
-                    MoveFocus((object)frameworkElement, direction, hops);
-                    frameworkElement.Loaded -= onFrameworkElementLoaded;
+                    MoveFocus(frameworkElement!, direction, hops);
+                    frameworkElement!.Loaded -= onFrameworkElementLoaded;
                 };
 
-                frameworkElement.Loaded += onFrameworkElementLoaded;
+                frameworkElement!.Loaded += onFrameworkElementLoaded;
             }
             else
             {

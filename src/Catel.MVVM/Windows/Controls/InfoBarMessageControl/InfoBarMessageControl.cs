@@ -10,24 +10,7 @@
     using Logging;
     using System.ComponentModel;
     using System.Windows.Data;
-    using Exceptions = MVVM.Properties.Exceptions;
-
-    /// <summary>
-    /// The display mode for the <see cref="InfoBarMessageControl"/>.
-    /// </summary>
-    public enum InfoBarMessageControlMode
-    {
-        /// <summary>
-        /// Displays the control inline, which means all controls below are moved down a bit when the
-        /// control becomes visible.
-        /// </summary>
-        Inline,
-
-        /// <summary>
-        /// Displays the control as an overlay, which might lead to overlapping of existing controls.
-        /// </summary>
-        Overlay
-    }
+    using Exceptions = Properties.Exceptions;
 
     /// <summary>
     /// Control for displaying messages to the user.
@@ -69,8 +52,8 @@
         /// </summary>
         static InfoBarMessageControl()
         {
-            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
-            DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle");
+            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
+            DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle") ?? string.Empty;
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InfoBarMessageControl), new FrameworkPropertyMetadata(typeof(InfoBarMessageControl)));
         }
 
@@ -195,7 +178,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object? sender, RoutedEventArgs e)
         {
             SubscribeToEvents();
 
@@ -207,7 +190,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnUnloaded(object sender, RoutedEventArgs e)
+        private void OnUnloaded(object? sender, RoutedEventArgs e)
         {
             UnsubscribeFromEvents();
         }
@@ -341,8 +324,8 @@
         {
             object realBindingObject = bindingObject;
 
-            ProcessValidationMessage(realBindingObject, null, ValidationEventAction.ClearAll, ValidationType.Warning);
-            ProcessValidationMessage(realBindingObject, null, ValidationEventAction.ClearAll, ValidationType.Error);
+            ProcessValidationMessage(realBindingObject, string.Empty, ValidationEventAction.ClearAll, ValidationType.Warning);
+            ProcessValidationMessage(realBindingObject, string.Empty, ValidationEventAction.ClearAll, ValidationType.Error);
 
             UpdateMessages();
         }
@@ -365,7 +348,7 @@
         /// </summary>
         /// <param name="sender">A sender.</param>
         /// <param name="e">The event arguments</param>
-        private void OnInfoBarMessageErrorValidation(object sender, ValidationErrorEventArgs e)
+        private void OnInfoBarMessageErrorValidation(object? sender, ValidationErrorEventArgs e)
         {
             e.Handled = true;
 
@@ -380,13 +363,13 @@
             }
 
             object bindingObject = GetBindingObject(e.Error.BindingInError);
-            string message = (e.Error is not null) ? e.Error.ErrorContent.ToString() : string.Empty;
+            string message = (e.Error is not null) ? e.Error.ErrorContent.ToString() ?? string.Empty : string.Empty;
 
             // There seems to be an issue where validations are removed, even when 
             // ((IDataErrorInfo)bindingObject)["property"] has a value, so check for that
 
             var bindingObjectAsIDataErrorInfo = bindingObject as IDataErrorInfo;
-            var bindingInErrorAsBindingExpression = e.Error.BindingInError as BindingExpression;
+            var bindingInErrorAsBindingExpression = e.Error?.BindingInError as BindingExpression;
             if ((validationEventAction == ValidationEventAction.Removed) && (bindingObjectAsIDataErrorInfo is not null) &&
                 (bindingInErrorAsBindingExpression is not null))
             {
@@ -407,7 +390,7 @@
         /// </summary>
         /// <param name="sender">A sender.</param>
         /// <param name="e">The event arguments</param>
-        private void OnInfoBarMessageValidation(object sender, ValidationEventArgs e)
+        private void OnInfoBarMessageValidation(object? sender, ValidationEventArgs e)
         {
             ProcessValidationMessage(e.Value, e.Message, e.Action, e.Type);
 
@@ -421,7 +404,7 @@
         /// <returns>object from the binding.</returns>
         private static object GetBindingObject(object bindingObject)
         {
-            object result;
+            object? result;
 
             // Check whether the data error is throwed on an single binding or a bindinggroup and process the error message
             if (bindingObject as BindingExpression is not null)

@@ -13,22 +13,21 @@
         /// <summary>
         /// Will be executed instead of the command if set.
         /// </summary>
-        private readonly Action<Window> _action;
+        private readonly Action<Window>? _action;
 
         /// <summary>
         /// Stores a reference to the window the event handler is registered on.
         /// <para />
         /// Will be used to deregister the event handler.
         /// </summary>
-        private Window _currentWindow = null;
+        private Window? _currentWindow = null;
 
-        private Catel.IWeakEventListener _weakEventListener;
+        private Catel.IWeakEventListener? _weakEventListener;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowEventToCommand"/> class.
         /// </summary>
         public WindowEventToCommand()
-            : this(null)
         {
         }
 
@@ -46,7 +45,7 @@
         /// Gets or sets the name of the event to subscribe to.
         /// </summary>
         /// <value>The name of the event.</value>
-        public string EventName { get; set; }
+        public string? EventName { get; set; }
 
         /// <summary>
         /// Called when the associated object is loaded.<br />
@@ -116,7 +115,12 @@
         /// <param name="window">The window instance the eventhandler has to be registered to.</param>
         protected void RegisterEventHandler(Window window)
         {
-            _weakEventListener = this.SubscribeToWeakEvent(window, EventName, (Action) OnEventOccurred);
+            if (EventName is null)
+            {
+                return;
+            }
+
+            _weakEventListener = this.SubscribeToWeakEvent(window, EventName, OnEventOccurred);
         }
 
         /// <summary>
@@ -157,16 +161,18 @@
         /// Invokes the Action or executes the Command.
         /// The given window instance is used as parameter.
         /// </summary>
-        protected override void ExecuteCommand(object parameter)
+        protected override void ExecuteCommand(object? parameter)
         {
             var window = parameter as Window;
-            if (_action is not null)
+
+            if (_action is not null &&
+                window is not null)
             {
                 _action(window);
             }
             else
             {
-                base.ExecuteCommand(window);
+                base.ExecuteCommand(parameter);
             }
         }
 

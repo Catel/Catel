@@ -2,6 +2,7 @@
 {
     using Catel.IoC;
     using Logging;
+    using System;
     using System.Windows;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -21,11 +22,11 @@
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="commandManager">The command manager.</param>
-        public CommandManagerWrapper(FrameworkElement view, ICommandManager commandManager = null)
+        public CommandManagerWrapper(FrameworkElement view, ICommandManager? commandManager = null)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
-            _commandManager = commandManager ?? ServiceLocator.Default.ResolveType<ICommandManager>();
+            _commandManager = commandManager ?? ServiceLocator.Default.ResolveRequiredType<ICommandManager>();
 
             View = view;
 
@@ -76,12 +77,12 @@
             _subscribed = false;
         }
 
-        private void OnViewLoaded(object sender, RoutedEventArgs e)
+        private void OnViewLoaded(object? sender, RoutedEventArgs e)
         {
             Subscribe();
         }
 
-        private void OnViewUnloaded(object sender, RoutedEventArgs e)
+        private void OnViewUnloaded(object? sender, RoutedEventArgs e)
         {
             Unsubscribe();
         }

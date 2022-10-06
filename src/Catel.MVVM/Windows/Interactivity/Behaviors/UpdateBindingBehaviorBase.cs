@@ -33,7 +33,7 @@
         /// <para />
         /// This property can only be used when the associated object is attached.
         /// </summary>
-        protected DependencyProperty DependencyProperty { get { return AssociatedObject.GetDependencyPropertyByName(DependencyPropertyName); } }
+        protected DependencyProperty? DependencyProperty { get { return AssociatedObject.GetDependencyPropertyByName(DependencyPropertyName); } }
 
         /// <summary>
         ///   Updates the binding value.
@@ -41,6 +41,12 @@
         protected virtual void UpdateBinding()
         {
             if (!IsEnabled)
+            {
+                return;
+            }
+
+            var dependencyPropery = DependencyProperty;
+            if (dependencyPropery is null)
             {
                 return;
             }

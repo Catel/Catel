@@ -17,7 +17,7 @@
         /// Initializes a new instance of the <see cref="BindingWithValidation" /> class with an initial path.
         /// </summary>
         /// <param name="path">The initial <see cref="P:System.Windows.Data.Binding.Path" /> for the binding.</param>
-        public BindingWithValidation(string path)
+        public BindingWithValidation(string? path)
             : base(path)
         {
             NotifyOnValidationError = true;

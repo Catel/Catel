@@ -1,5 +1,6 @@
 ﻿namespace Catel.MVVM.Views
 {
+    using System;
     using Logging;
 
     public static partial class ViewExtensions
@@ -11,9 +12,9 @@
         /// </summary>
         /// <param name="view">The view.</param>
         /// <returns></returns>
-        public static object GetParent(this IView view)
+        public static object? GetParent(this IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             return ((System.Windows.FrameworkElement)view).GetParent();
         }

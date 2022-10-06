@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -14,14 +8,11 @@ namespace Catel.MVVM
     /// </summary>
     public interface IViewModelManager : IDisposable
     {
-        #region Properties
         /// <summary>
         /// Gets the active view models presently registered.
         /// </summary>
         IEnumerable<IViewModel> ActiveViewModels { get; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the model of a view model.
         /// </summary>
@@ -60,15 +51,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="uniqueIdentifier">The unique identifier.</param>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
-        IViewModel GetViewModel(int uniqueIdentifier);
-
-        /// <summary>
-        /// Gets the first or default instance of the specified view model.
-        /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
-        TViewModel GetFirstOrDefaultInstance<TViewModel>() 
-            where TViewModel : IViewModel;
+        IViewModel? GetViewModel(int uniqueIdentifier);
 
         /// <summary>
         /// Gets the first or default instance of the specified view model.
@@ -76,7 +59,7 @@ namespace Catel.MVVM
         /// <param name="viewModelType">Type of the view model.</param>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
         /// <exception cref="System.ArgumentException">The <paramref name="viewModelType"/> is not of type <see cref="IViewModel"/>.</exception>
-        IViewModel GetFirstOrDefaultInstance(Type viewModelType);
+        IViewModel? GetFirstOrDefaultInstance(Type viewModelType);
 
         /// <summary>
         /// Gets the child view models of the specified view model.
@@ -92,7 +75,6 @@ namespace Catel.MVVM
         /// <param name="parentUniqueIdentifier">The parent unique identifier.</param>
         /// <returns>The child view models.</returns>
         IEnumerable<IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier);
-        #endregion
 
         /// <summary>
         /// Registers a view model instance with the manager. All view models must register themselves to the manager.

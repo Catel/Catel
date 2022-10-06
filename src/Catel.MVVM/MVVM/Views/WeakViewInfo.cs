@@ -3,7 +3,6 @@
     using System;
     using Logging;
     using LoadedEventArgs = System.EventArgs;
-    using LayoutUpdatedEventArgs = System.EventArgs;
 
     /// <summary>
     /// Class containing weak events for a <see cref="IView"/>. This way it is safe to subscribe
@@ -13,7 +12,7 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private WeakReference _view;
+        private readonly WeakReference _view;
 
         private bool _isViewLoadState;
 
@@ -25,8 +24,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public WeakViewInfo(IView view, bool isViewLoaded = false)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
+            _view = new WeakReference(view);
             Initialize(view, isViewLoaded);
         }
 
@@ -38,8 +38,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
         public WeakViewInfo(IViewLoadState viewLoadState, bool isViewLoaded = false)
         {
-            Argument.IsNotNull("viewLoadState", viewLoadState);
+            ArgumentNullException.ThrowIfNull(viewLoadState);
 
+            _view = new WeakReference(viewLoadState);
             Initialize(viewLoadState, isViewLoaded);
         }
 
@@ -56,22 +57,26 @@
         /// Gets the view.
         /// </summary>
         /// <value>The view.</value>
-        public IView View
+        public IView? View
         {
             get
             {
+                IView? view = null;
+
                 if (_isViewLoadState)
                 {
                     var viewLoadState = _view.Target as IViewLoadState;
                     if (viewLoadState is not null)
                     {
-                        return viewLoadState.View;
+                        view = viewLoadState.View;
                     }
-
-                    return null;
+                }
+                else
+                {
+                    view = _view.Target as IView;
                 }
 
-                return _view.Target as IView;
+                return view;
             }
         }
 
@@ -84,29 +89,26 @@
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        public event EventHandler<EventArgs> Loaded;
+        public event EventHandler<EventArgs>? Loaded;
 
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        public event EventHandler<EventArgs> Unloaded;
+        public event EventHandler<EventArgs>? Unloaded;
 
         private void Initialize(object viewObject, bool isViewLoaded)
         {
-            _view = new WeakReference(viewObject);
-            _isViewLoadState = true;
-
             IsLoaded = isViewLoaded;
             _isViewLoadState = viewObject is IViewLoadState;
 
-            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Loaded", OnViewLoadStateLoaded, false) is null)
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, nameof(View.Loaded), OnViewLoadStateLoaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
                 ((IView) viewObject).Loaded += OnViewLoadStateLoaded;
             }
 
-            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Unloaded", OnViewLoadStateUnloaded, false) is null)
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, nameof(View.Unloaded), OnViewLoadStateUnloaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 
@@ -119,7 +121,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewLoaded(object sender, EventArgs e)
+        public void OnViewLoaded(object? sender, EventArgs e)
         {
             OnLoaded();
         }
@@ -129,7 +131,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewUnloaded(object sender, EventArgs e)
+        public void OnViewUnloaded(object? sender, EventArgs e)
         {
             OnUnloaded();
         }
@@ -139,7 +141,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewLoadStateLoaded(object sender, LoadedEventArgs e)
+        public void OnViewLoadStateLoaded(object? sender, LoadedEventArgs e)
         {
             OnLoaded();
         }
@@ -149,7 +151,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewLoadStateUnloaded(object sender, LoadedEventArgs e)
+        public void OnViewLoadStateUnloaded(object? sender, LoadedEventArgs e)
         {
             OnUnloaded();
         }

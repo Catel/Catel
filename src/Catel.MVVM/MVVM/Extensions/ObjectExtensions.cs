@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     /// <summary>
     /// Object extensions class.
@@ -20,7 +14,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="dataContext">The data context.</param>
         /// <returns><c>true</c> if the data context is a sentinel; otherwise, <c>false</c>.</returns>
-        public static bool IsSentinelBindingObject(this object dataContext)
+        public static bool IsSentinelBindingObject(this object? dataContext)
         {
             if (dataContext is null)
             {

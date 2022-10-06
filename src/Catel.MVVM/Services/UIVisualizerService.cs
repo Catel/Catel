@@ -3,15 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using System.Windows;
     using MVVM;
-
-    using IoC;
     using Logging;
-    using Reflection;
-    using Catel.Windows.Threading;
-    using Threading;
-    using System.Windows.Controls;
+    using Catel.Reflection;
 
     /// <summary>
     /// Service to show modal or non-modal popup windows.
@@ -36,8 +30,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
         public UIVisualizerService(IViewLocator viewLocator, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull("viewLocator", viewLocator);
-            Argument.IsNotNull("dispatcherService", dispatcherService);
+            ArgumentNullException.ThrowIfNull(viewLocator);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _viewLocator = viewLocator;
             _dispatcherService = dispatcherService;
@@ -71,7 +65,7 @@
         public virtual void Register(string name, Type windowType, bool throwExceptionIfExists = true)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("windowType", windowType);
+            ArgumentNullException.ThrowIfNull(windowType);
 
             lock (RegisteredWindows)
             {
@@ -117,7 +111,7 @@
         /// <returns>The dialog result.</returns>
         public virtual async Task<UIVisualizerResult> ShowContextAsync(UIVisualizerContext context)
         {
-            Argument.IsNotNull("context", context);
+            ArgumentNullException.ThrowIfNull(context);
 
             var viewModel = context.Data as IViewModel;
             if (viewModel is not null)
@@ -128,7 +122,7 @@
 
                 if (string.IsNullOrWhiteSpace(context.Name))
                 {
-                    context.Name = viewModelType.FullName;
+                    context.Name = viewModelType.GetSafeFullName();
                 }
             }
 
@@ -158,7 +152,7 @@
             {
                 if (!RegisteredWindows.ContainsKey(name))
                 {
-                    throw new WindowNotRegisteredException(name);
+                    throw Log.ErrorAndCreateException<WindowNotRegisteredException>(name);
                 }
             }
         }
@@ -171,12 +165,14 @@
         {
             lock (RegisteredWindows)
             {
-                if (!RegisteredWindows.ContainsKey(viewModelType.FullName))
+                var fullName = viewModelType.GetSafeFullName();
+
+                if (!RegisteredWindows.ContainsKey(fullName))
                 {
                     var viewType = _viewLocator.ResolveView(viewModelType);
                     if (viewType is not null)
                     {
-                        Register(viewModelType.FullName, viewType);
+                        Register(fullName, viewType);
                     }
                 }
             }

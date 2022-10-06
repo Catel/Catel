@@ -45,9 +45,9 @@
         /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
-        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, params object[] args)
+        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, params object?[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), false);
         }
@@ -61,9 +61,9 @@
         /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
-        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
+        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object?[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), priority, false);
         }
@@ -113,7 +113,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static DispatcherOperation BeginInvokeIfRequired(this Dispatcher dispatcher, Delegate method, params object[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), true);
         }
@@ -131,7 +132,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static DispatcherOperation BeginInvokeIfRequired(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), priority, true);
         }
@@ -146,14 +148,12 @@
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Action action, bool onlyBeginInvokeWhenNoAccess)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(action);
 
-            if (dispatcher is not null)
+            if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
             {
-                if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
-                {
-                    return dispatcher.BeginInvoke(action, null);
-                }
+                return dispatcher.BeginInvoke(action, null);
             }
 
             action.Invoke();
@@ -171,14 +171,12 @@
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Action action, DispatcherPriority priority, bool onlyBeginInvokeWhenNoAccess)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(action);
 
-            if (dispatcher is not null)
+            if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
             {
-                if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
-                {
-                    return dispatcher.BeginInvoke(action, priority, null);
-                }
+                return dispatcher.BeginInvoke(action, priority, null);
             }
 
             action.Invoke();

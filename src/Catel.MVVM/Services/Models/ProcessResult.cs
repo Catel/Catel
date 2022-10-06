@@ -1,10 +1,12 @@
 ﻿namespace Catel.Services
 {
+    using System;
+
     public class ProcessResult
     {
         public ProcessResult(ProcessContext context)
         {
-            Argument.IsNotNull(nameof(context), context);
+            ArgumentNullException.ThrowIfNull(context);
 
             Context = context;
         }

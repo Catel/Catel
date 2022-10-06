@@ -44,7 +44,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public void SubscribeToKeyboardEvents(FrameworkElement view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             if (!_subscribedViews.TryGetValue(view, out var commandManagerWrapper))
             {

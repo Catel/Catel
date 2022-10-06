@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +15,6 @@ namespace Catel.MVVM
     /// </summary>
     public class ViewModelManager : IViewModelManager
     {
-        #region Fields
         /// <summary>
         /// The <see cref="ILog">log</see> object.
         /// </summary>
@@ -62,9 +55,6 @@ namespace Catel.MVVM
         private readonly Dictionary<int, List<object>> _viewModelModels = new Dictionary<int, List<object>>();
 
         private bool _disposedValue;
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes static members of <see cref="ViewModelManager"/> class
@@ -87,12 +77,8 @@ namespace Catel.MVVM
             _managedViewModels = new Dictionary<Type, ManagedViewModel>();
 
             _instancesLock.PerformWrite(() => _instances.Add(this));
-
-            Log.Debug("ViewModelManager instantiated");
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the view model count.
         /// </summary>
@@ -129,9 +115,7 @@ namespace Catel.MVVM
                 });
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the model of a view model.
         /// </summary>
@@ -141,8 +125,8 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public void RegisterModel(IViewModel viewModel, object model)
         {
-            Argument.IsNotNull("viewModel", viewModel);
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(viewModel);
+            ArgumentNullException.ThrowIfNull(model);
 
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
@@ -172,8 +156,8 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public void UnregisterModel(IViewModel viewModel, object model)
         {
-            Argument.IsNotNull("viewModel", viewModel);
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(viewModel);
+            ArgumentNullException.ThrowIfNull(model);
 
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
@@ -208,7 +192,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public void UnregisterAllModels(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             int modelCount = 0;
@@ -235,7 +219,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public IViewModel[] GetViewModelsOfModel(object model)
         {
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(model);
 
             var modelType = ObjectToStringHelper.ToTypeString(model);
 
@@ -272,7 +256,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="uniqueIdentifier">The unique identifier.</param>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
-        public IViewModel GetViewModel(int uniqueIdentifier)
+        public IViewModel? GetViewModel(int uniqueIdentifier)
         {
             var boxedUniqueIdentifier = BoxingCache.GetBoxedValue(uniqueIdentifier);
 
@@ -300,27 +284,12 @@ namespace Catel.MVVM
         /// <summary>
         /// Gets the first or default instance of the specified view model.
         /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <returns>
-        /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
-        /// </returns>
-        public TViewModel GetFirstOrDefaultInstance<TViewModel>()
-            where TViewModel : IViewModel
-        {
-            var viewModelType = typeof(TViewModel);
-
-            return (TViewModel)GetFirstOrDefaultInstance(viewModelType);
-        }
-
-        /// <summary>
-        /// Gets the first or default instance of the specified view model.
-        /// </summary>
         /// <param name="viewModelType">Type of the view mode.</param>
         /// <returns>
         /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
         /// </returns>
         /// <exception cref="System.ArgumentException">The <paramref name="viewModelType"/> is not of type <see cref="IViewModel"/>.</exception>
-        public IViewModel GetFirstOrDefaultInstance(Type viewModelType)
+        public IViewModel? GetFirstOrDefaultInstance(Type viewModelType)
         {
             Argument.IsOfType("viewModelType", viewModelType, typeof(IViewModel));
 
@@ -416,7 +385,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         private void RegisterViewModelInstanceInternal(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var managedViewModel = GetManagedViewModel(viewModel.GetType());
             managedViewModel.AddViewModelInstance(viewModel);
@@ -439,7 +408,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         private void UnregisterViewModelInstanceInternal(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var managedViewModel = GetManagedViewModel(viewModel.GetType());
             managedViewModel.RemoveViewModelInstance(viewModel);
@@ -499,6 +468,5 @@ namespace Catel.MVVM
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-        #endregion
     }
 }

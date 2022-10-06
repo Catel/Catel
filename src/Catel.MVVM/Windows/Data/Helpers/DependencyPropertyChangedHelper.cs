@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Logging;
     using System.Windows;
     using System.Windows.Data;
 
@@ -41,12 +40,17 @@
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         public static bool IsRealDependencyProperty(this FrameworkElement frameworkElement, string propertyName)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+
+            return IsRealDependencyProperty(frameworkElement.GetType(), propertyName);
+        }
+
+        public static bool IsRealDependencyProperty(Type frameworkElementType, string propertyName)
+        {
+            ArgumentNullException.ThrowIfNull(frameworkElementType);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
-            var type = frameworkElement.GetType();
-
-            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
+            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(frameworkElementType, propertyName);
 
             if (!_realDependencyPropertiesCache.TryGetValue(key, out var isRealDependencyProperty))
             {
@@ -56,7 +60,7 @@
                 {
                     isRealDependencyProperty = false;
                 }
-                else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(type)))
+                else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(frameworkElementType)))
                 {
                     isRealDependencyProperty = false;
                 }
@@ -76,8 +80,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void SubscribeToAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var dependencyProperties = frameworkElement.GetDependencyProperties();
             foreach (var dependencyProperty in dependencyProperties)
@@ -97,8 +101,8 @@
         public static void SubscribeToDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler,
             bool inherited)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var propertyName = inherited ? InheritedDataContextName : "DataContext";
 
@@ -114,8 +118,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void UnsubscribeFromAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var dependencyProperties = frameworkElement.GetDependencyProperties();
             foreach (var dependencyProperty in dependencyProperties)
@@ -134,8 +138,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void UnsubscribeFromDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler, bool inherited)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var propertyName = inherited ? InheritedDataContextName : "DataContext";
 
@@ -153,9 +157,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void SubscribeToDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             //Log.Debug("Subscribing to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
@@ -196,9 +200,9 @@
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void UnsubscribeFromDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             //Log.Debug("Unsubscribing from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
@@ -230,9 +234,13 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        private static void OnDependencyPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private static void OnDependencyPropertyChanged(object? sender, DependencyPropertyChangedEventArgs e)
         {
-            var frameworkElement = ((FrameworkElement)sender);
+            if (sender is not FrameworkElement frameworkElement)
+            {
+                return;
+            }
+
             var propertyName = _wrapperDependencyProperties[e.Property];
 
             if (!IsRealDependencyProperty(frameworkElement, propertyName))

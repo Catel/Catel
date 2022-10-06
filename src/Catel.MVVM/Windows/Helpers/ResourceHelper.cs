@@ -45,7 +45,7 @@
         /// If used, this must be the short name of the assembly.</param>
         /// <returns>The resource uri.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceUri"/> is <c>null</c> or whitespace.</exception>
-        public static string GetResourceUri(string resourceUri, string shortAssemblyName = null)
+        public static string GetResourceUri(string resourceUri, string? shortAssemblyName = null)
         {
             Argument.IsNotNullOrWhitespace("resourceUri", resourceUri);
 
@@ -92,7 +92,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
         public static bool XamlPageExists(Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             try
             {

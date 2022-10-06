@@ -64,10 +64,10 @@ namespace Catel.MVVM
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
-        private Func<bool> _canExecuteWithoutParameter;
-        private Action<TExecuteParameter> _executeWithParameter;
-        private Action _executeWithoutParameter;
+        private Func<TCanExecuteParameter?, bool>? _canExecuteWithParameter;
+        private Func<bool>? _canExecuteWithoutParameter;
+        private Action<TExecuteParameter?>? _executeWithParameter;
+        private Action? _executeWithoutParameter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
@@ -75,7 +75,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(Action execute, Func<bool> canExecute = null, object tag = null)
+        public Command(Action execute, Func<bool>? canExecute = null, object? tag = null)
             : this(null, execute, null, canExecute, tag) { }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(Action<TExecuteParameter> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
+        public Command(Action<TExecuteParameter?> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : this(execute, null, canExecute, null, tag) { }
 
         /// <summary>
@@ -95,9 +95,9 @@ namespace Catel.MVVM
         /// <param name="canExecuteWithParameter">The function to call to determine wether the command can be executed with parameter.</param>
         /// <param name="canExecuteWithoutParameter">The function to call to determine wether the command can be executed without parameter.</param>
         /// <param name="tag">The tag of the command.</param>
-        internal Command(Action<TExecuteParameter> executeWithParameter, Action executeWithoutParameter,
-            Func<TCanExecuteParameter, bool> canExecuteWithParameter, Func<bool> canExecuteWithoutParameter,
-            object tag)
+        internal Command(Action<TExecuteParameter?>? executeWithParameter, Action? executeWithoutParameter,
+            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter,
+            object? tag)
         {
             InitializeActions(executeWithParameter, executeWithoutParameter, canExecuteWithParameter, canExecuteWithoutParameter);
 
@@ -122,7 +122,7 @@ namespace Catel.MVVM
         /// By default, the value is <c>null</c>.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object? Tag { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
@@ -134,8 +134,8 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes the actions.
         /// </summary>
-        protected void InitializeActions(Action<TExecuteParameter>? executeWithParameter, Action? executeWithoutParameter,
-            Func<TCanExecuteParameter, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter)
+        protected void InitializeActions(Action<TExecuteParameter?>? executeWithParameter, Action? executeWithoutParameter,
+            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter)
         {
             _canExecuteWithParameter = canExecuteWithParameter;
             _canExecuteWithoutParameter = canExecuteWithoutParameter;
@@ -172,7 +172,7 @@ namespace Catel.MVVM
                 parameter = default(TCanExecuteParameter);
             }
 
-            return CanExecute((TCanExecuteParameter)parameter);
+            return CanExecute((TCanExecuteParameter?)parameter);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool CanExecute(TCanExecuteParameter parameter)
+        public virtual bool CanExecute(TCanExecuteParameter? parameter)
         {
             var authenticationProvider = AuthenticationProvider;
             if (authenticationProvider is not null)
@@ -229,14 +229,14 @@ namespace Catel.MVVM
                 parameter = default(TExecuteParameter);
             }
 
-            Execute((TExecuteParameter)parameter);
+            Execute((TExecuteParameter?)parameter);
         }
 
         /// <summary>
         /// Defines the method to be called when the command is invoked.
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
-        public void Execute(TExecuteParameter parameter)
+        public void Execute(TExecuteParameter? parameter)
         {
             Execute(parameter, false);
         }
@@ -246,7 +246,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
-        protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected virtual void Execute(TExecuteParameter? parameter, bool ignoreCanExecuteCheck)
         {
             // Double check whether execution is allowed, some controls directly call Execute
             if (!ignoreCanExecuteCheck && !CanExecute(parameter))
@@ -304,9 +304,11 @@ namespace Catel.MVVM
 
         private void AutoDispatchIfRequired(Action action)
         {
-            if (AutomaticallyDispatchEvents)
+            var dispatcherService = DispatcherService;
+
+            if (dispatcherService is not null && AutomaticallyDispatchEvents)
             {
-                DispatcherService.BeginInvokeIfRequired(action);
+                dispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {
@@ -336,7 +338,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(Action<TExecuteParameter> execute, Func<TExecuteParameter, bool>? canExecute = null, object? tag = null)
+        public Command(Action<TExecuteParameter?> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : base(execute, null, canExecute, null, tag) { }
     }
 

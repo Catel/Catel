@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewToViewModelMapping.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using Logging;
@@ -14,14 +8,11 @@ namespace Catel.MVVM.Views
     /// </summary>
     internal class ViewToViewModelMapping
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewToViewModelMapping"/> class.
         /// </summary>
@@ -41,9 +32,7 @@ namespace Catel.MVVM.Views
 
             Log.Debug("Created a '{0}' view to viewmodel mapping from '{1}' to '{2}'", Enum<ViewToViewModelMappingType>.ToString(mapping), viewPropertyName, viewModelPropertyName);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the view property.
         /// </summary>
@@ -61,6 +50,5 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <value>The mapping type.</value>
         public ViewToViewModelMappingType MappingType { get; private set; }
-        #endregion
     }
 }

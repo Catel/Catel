@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnGotFocus(object sender, RoutedEventArgs e)
+        private void OnGotFocus(object? sender, RoutedEventArgs e)
         {
             SelectAllText();
         }
@@ -48,7 +48,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnPreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        private void OnPreviewMouseLeftButtonDown(object? sender, RoutedEventArgs e)
         {
             if (!AssociatedObject.IsKeyboardFocusWithin)
             {
@@ -63,7 +63,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnGotMouseCapture(object sender, RoutedEventArgs e)
+        private void OnGotMouseCapture(object? sender, RoutedEventArgs e)
         {
             SelectAllText();
         }
@@ -73,7 +73,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnGotKeyboardFocus(object sender, RoutedEventArgs e)
+        private void OnGotKeyboardFocus(object? sender, RoutedEventArgs e)
         {
             SelectAllText();
         }

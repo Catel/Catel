@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.CompilerServices;
+    using System.Windows.Controls;
     using Logging;
     using MVVM.Views;
 
@@ -12,7 +13,7 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly IViewModelWrapper _tempObject = default(IViewModelWrapper);
+        private readonly IViewModelWrapper _tempObject = new ViewModelWrapper(new Grid());
         private readonly ConditionalWeakTable<IView, IViewModelWrapper> _wrappers = new ConditionalWeakTable<IView, IViewModelWrapper>();
 
         /// <summary>
@@ -23,7 +24,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public bool IsWrapped(IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             return IsViewWrapped(view);
         }
@@ -36,10 +37,10 @@
         /// <param name="wrapOptions">The wrap options.</param>
         /// <returns>The <see cref="IViewModelWrapper" />.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="view" /> is <c>null</c>.</exception>
-        public IViewModelWrapper Wrap(IView view, object viewModelSource, WrapOptions wrapOptions)
+        public IViewModelWrapper? Wrap(IView view, object viewModelSource, WrapOptions wrapOptions)
         {
-            Argument.IsNotNull("view", view);
-            Argument.IsNotNull("viewModelSource", viewModelSource);
+            ArgumentNullException.ThrowIfNull(view);
+            ArgumentNullException.ThrowIfNull(viewModelSource);
 
             if (!_wrappers.TryGetValue(view, out var wrapper))
             {
@@ -71,7 +72,7 @@
         /// </summary>
         /// <param name="view">The view to get the wrapper for.</param>
         /// <returns>The existing view model wrapper or <c>null</c> if there is no wrapper.</returns>
-        public IViewModelWrapper GetWrapper(IView view)
+        public IViewModelWrapper? GetWrapper(IView view)
         {
             if (_wrappers.TryGetValue(view, out var wrapper))
             {

@@ -16,7 +16,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
         public static bool IsNavigationToExternal(this Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             return IsNavigationToExternal(uri.ToString());
         }
@@ -44,8 +44,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static bool IsNavigationForView(this NavigatingCancelEventArgs e, Type viewType)
         {
-            Argument.IsNotNull("e", e);
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(e);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             var uriString = GetUriWithoutQueryInfo(e);
             return IsNavigationForView(uriString, viewType);
@@ -61,8 +61,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static bool IsNavigationForView(this NavigationEventArgs e, Type viewType)
         {
-            Argument.IsNotNull("e", e);
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(e);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             var uriString = GetUriWithoutQueryInfo(e);
             return IsNavigationForView(uriString, viewType);
@@ -79,7 +79,7 @@
         public static bool IsNavigationForView(this string uriString, Type viewType)
         {
             Argument.IsNotNullOrWhitespace("uriString", uriString);
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             return uriString.ContainsIgnoreCase(viewType.Name + ".xaml");
         }
@@ -92,7 +92,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="e"/> is <c>null</c>.</exception>
         public static string GetUriWithoutQueryInfo(this NavigatingCancelEventArgs e)
         {
-            Argument.IsNotNull("e", e);
+            ArgumentNullException.ThrowIfNull(e);
 
             var uriString = UriExtensions.GetSafeUriString(e.Uri);
             return uriString;
@@ -106,7 +106,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="e"/> is <c>null</c>.</exception>
         public static string GetUriWithoutQueryInfo(this NavigationEventArgs e)
         {
-            Argument.IsNotNull("e", e);
+            ArgumentNullException.ThrowIfNull(e);
 
             var uriString = UriExtensions.GetSafeUriString(e.Uri);
             return uriString;
@@ -120,7 +120,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="uri" /> is <c>null</c> or whitespace.</exception>
         public static string GetUriWithoutQueryInfo(this string uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             var uriString = uri;
             return uriString;

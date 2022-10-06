@@ -20,7 +20,7 @@
         /// <param name="viewType">The view type.</param>
         public static void AutoDetectViewPropertiesToSubscribe(this Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             lock (_autoDetectedViewtypes)
             {
@@ -30,7 +30,7 @@
                 }
 
                 var serviceLocator = ServiceLocator.Default;
-                var viewPropertySelector = serviceLocator.ResolveType<IViewPropertySelector>();
+                var viewPropertySelector = serviceLocator.ResolveRequiredType<IViewPropertySelector>();
 
                 var dependencyProperties = Catel.Windows.Data.DependencyPropertyHelper.GetDependencyProperties(viewType);
                 foreach (var dependencyProperty in dependencyProperties)
@@ -54,9 +54,9 @@
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns>The parent <see cref="FrameworkElement"/> or <c>null</c> if there is no parent.</returns>
-        public static FrameworkElement GetParent(this FrameworkElement element)
+        public static FrameworkElement? GetParent(this FrameworkElement element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             return GetPossibleParents(element).FirstOrDefault();
         }
@@ -68,7 +68,7 @@
         /// <returns>The possible parents <see cref="FrameworkElement"/> or <c>null</c> if there is no parent.</returns>
         public static FrameworkElement[] GetPossibleParents(this FrameworkElement element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             var parents = new List<FrameworkElement>();
 
@@ -102,7 +102,7 @@
         /// <returns>
         /// <see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
-        public static DependencyObject FindParentByPredicate(this IView view, Predicate<object> predicate)
+        public static DependencyObject? FindParentByPredicate(this IView view, Predicate<object> predicate)
         {
             return FindParentByPredicate((FrameworkElement)view, predicate, -1);
         }
@@ -117,12 +117,12 @@
         /// <returns>
         /// <see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
-        public static DependencyObject FindParentByPredicate(this FrameworkElement view, Predicate<object> predicate, int maxDepth)
+        public static DependencyObject? FindParentByPredicate(this FrameworkElement view, Predicate<object> predicate, int maxDepth)
         {
-            Argument.IsNotNull("view", view);
-            Argument.IsNotNull("predicate", predicate);
+            ArgumentNullException.ThrowIfNull(view);
+            ArgumentNullException.ThrowIfNull(predicate);
 
-            object foundParent = null;
+            object? foundParent = null;
 
             var parents = GetPossibleParents(view);
             foreach (var parent in parents)

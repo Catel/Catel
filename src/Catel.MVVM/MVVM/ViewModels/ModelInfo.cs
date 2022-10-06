@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.ComponentModel;
@@ -23,7 +17,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="propertyInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attribute"/> is <c>null</c>.</exception>
         public ModelInfo(PropertyInfo propertyInfo, ModelAttribute attribute)
-            : this(propertyInfo?.Name, propertyInfo?.PropertyType, attribute)
+            : this(propertyInfo.Name, propertyInfo.PropertyType, attribute)
         {
         }
 
@@ -39,8 +33,8 @@ namespace Catel.MVVM
         public ModelInfo(string name, Type propertyType, ModelAttribute attribute)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("propertyType", propertyType);
-            Argument.IsNotNull("attribute", attribute);
+            ArgumentNullException.ThrowIfNull(propertyType);
+            ArgumentNullException.ThrowIfNull(attribute);
 
             Name = name;
             PropertyType = propertyType;

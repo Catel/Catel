@@ -13,7 +13,7 @@
         /// </summary>
         /// <value>The routed event.</value>
 #pragma warning disable WPF0107
-        public RoutedEvent RoutedEvent { get; set; }
+        public RoutedEvent? RoutedEvent { get; set; }
 #pragma warning restore WPF0107
 
         /// <summary>
@@ -56,7 +56,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnRoutedEvent(object sender, RoutedEventArgs args)
+        private void OnRoutedEvent(object? sender, RoutedEventArgs args)
         {
             base.OnEvent(args);
         }
@@ -64,9 +64,9 @@
         /// <summary>
         /// Gets the name of the event.
         /// </summary>
-        protected override string GetEventName()
+        protected override string? GetEventName()
         {
-            return RoutedEvent.Name;
+            return RoutedEvent?.Name;
         }
     }
 }

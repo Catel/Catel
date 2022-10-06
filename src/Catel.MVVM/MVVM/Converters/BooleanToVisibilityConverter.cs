@@ -39,7 +39,7 @@
         /// <returns>
         /// <c>true</c> if the specified value is visible; otherwise, <c>false</c>.
         /// </returns>
-        protected override bool IsVisible(object value, Type targetType, object parameter)
+        protected override bool IsVisible(object? value, Type targetType, object? parameter)
         {
             if (value is bool)
             {
@@ -62,7 +62,7 @@
         /// <returns>
         /// When value is Visibility.Visible then true else false.
         /// </returns>
-        protected override object ConvertBack(object value, Type targetType, object parameter)
+        protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
             if (value is Visibility)
             {

@@ -91,7 +91,7 @@
         /// <summary>
         /// Called when the <see cref="DispatcherTimer.Tick" /> event occurs on the timer.
         /// </summary>
-        private void OnTimerTick(object sender, TimerTickEventArgs e)
+        private void OnTimerTick(object? sender, TimerTickEventArgs e)
         {
             IsFocusAlreadySet = true;
 

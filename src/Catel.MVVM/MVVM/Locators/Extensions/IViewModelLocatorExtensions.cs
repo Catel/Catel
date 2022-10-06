@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelLocatorExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -24,7 +17,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelLocator" /> is <c>null</c>.</exception>
         public static void Register<TView, TViewModel>(this IViewModelLocator viewModelLocator)
         {
-            Argument.IsNotNull("viewModelLocator", viewModelLocator);
+            ArgumentNullException.ThrowIfNull(viewModelLocator);
 
             viewModelLocator.Register(typeof(TView), typeof(TViewModel));
         }
@@ -39,9 +32,9 @@ namespace Catel.MVVM
         /// <remarks>Keep in mind that all results are cached. The cache itself is not automatically cleared when the
         /// <see cref="ILocator.NamingConventions" /> are changed. If the <see cref="ILocator.NamingConventions" /> are changed,
         /// the cache must be cleared manually.</remarks>
-        public static Type ResolveViewModel<TView>(this IViewModelLocator viewModelLocator)
+        public static Type? ResolveViewModel<TView>(this IViewModelLocator viewModelLocator)
         {
-            Argument.IsNotNull("viewModelLocator", viewModelLocator);
+            ArgumentNullException.ThrowIfNull(viewModelLocator);
 
             return viewModelLocator.ResolveViewModel(typeof(TView));
         }

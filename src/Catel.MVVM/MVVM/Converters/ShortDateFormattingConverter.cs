@@ -28,7 +28,7 @@
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected override object ConvertBack(object value, Type targetType, object parameter)
+        protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
             var parsed = DateTime.TryParse(value as string, CurrentCulture, DateTimeStyles.None, out var dateTimeValue);
 

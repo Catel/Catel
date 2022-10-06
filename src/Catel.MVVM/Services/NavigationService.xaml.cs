@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
-    using Catel.IoC;
-    using Catel.MVVM;
     using Logging;
     using RootFrameType = System.Windows.Controls.Frame;
 
@@ -49,6 +47,11 @@
             {
                 // Note: don't cache, it might change dynamically
                 var rootFrame = NavigationRootService.GetNavigationRoot() as RootFrameType;
+                if (rootFrame is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("No root frame is available for the navigation service");
+                }
+
                 return rootFrame;
             }
         }
@@ -120,7 +123,7 @@
             RootFrame.Navigate(uri);
         }
 
-        private async Task NavigateWithParametersAsync(string uri, Dictionary<string, object> parameters)
+        private async Task NavigateWithParametersAsync(string uri, Dictionary<string, object>? parameters)
         {
             Log.Debug($"Navigating to '{uri}'");
 
@@ -132,14 +135,9 @@
         /// </summary>
         /// <param name="viewModelType">The view model type.</param>
         /// <returns>The target to navigate to.</returns>
-        protected override string ResolveNavigationTarget(Type viewModelType)
+        protected override string? ResolveNavigationTarget(Type viewModelType)
         {
-            string navigationTarget = null;
-            var dependencyResolver = this.GetDependencyResolver();
-
-            var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
-            navigationTarget = urlLocator.ResolveUrl(viewModelType);
-
+            var navigationTarget = UrlLocator.ResolveUrl(viewModelType);
             return navigationTarget;
         }
 

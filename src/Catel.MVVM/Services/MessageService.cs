@@ -21,8 +21,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="languageService"/> is <c>null</c>.</exception>
         public MessageService(IDispatcherService dispatcherService, ILanguageService languageService)
         {
-            Argument.IsNotNull("dispatcherService", dispatcherService);
-            Argument.IsNotNull("languageService", languageService);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
+            ArgumentNullException.ThrowIfNull(languageService);
 
             _dispatcherService = dispatcherService;
             _languageService = languageService;
@@ -66,18 +66,6 @@
         /// <summary>
         /// Shows an error message to the user and allows a callback operation when the message is completed.
         /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        public virtual Task<MessageResult> ShowErrorAsync(Exception exception)
-        {
-            Argument.IsNotNull("exception", exception);
-
-            return ShowErrorAsync(exception.Message, string.Empty);
-        }
-
-        /// <summary>
-        /// Shows an error message to the user and allows a callback operation when the message is completed.
-        /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
@@ -85,7 +73,7 @@
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("ErrorTitle");
+                caption = Catel.ResourceHelper.GetString("ErrorTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;
@@ -104,7 +92,7 @@
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("WarningTitle");
+                caption = Catel.ResourceHelper.GetString("WarningTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;
@@ -123,7 +111,7 @@
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("InfoTitle");
+                caption = Catel.ResourceHelper.GetString("InfoTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;

@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
     using Logging;
     using System.Windows.Input;
-    using Threading;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -23,23 +22,20 @@
         private readonly object _lock = new object();
         private readonly List<CommandInfo> _commandInfo = new List<CommandInfo>();
         private readonly List<Action> _actions = new List<Action>();
-        private readonly List<Action<object>> _actionsWithParameter = new List<Action<object>>();
+        private readonly List<Action<object?>> _actionsWithParameter = new List<Action<object?>>();
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}" /> class.
         /// </summary>
         public CompositeCommand()
-            : base(null)
+            : base(() => { }) // dummy action
         {
             AllowPartialExecution = false;
             AtLeastOneMustBeExecutable = true;
 
             InitializeActions(ExecuteCompositeCommand, null, CanExecuteCompositeCommand, null);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets whether this command should check the can execute of all commands to determine can execute for composite command.
         /// <para />
@@ -70,10 +66,8 @@
         /// </summary>
         /// <value><c>true</c> if at least one command must be executed; otherwise, <c>false</c>.</value>
         public bool AtLeastOneMustBeExecutable { get; set; }
-        #endregion
-
-        #region Methods
-        private void ExecuteCompositeCommand(object parameter)
+        
+        private void ExecuteCompositeCommand(object? parameter)
         {
             lock (_lock)
             {
@@ -115,6 +109,7 @@
                 }
 
                 var actionsWithParameter = _actionsWithParameter.ToList();
+
                 foreach (var actionWithParameter in actionsWithParameter)
                 {
                     try
@@ -132,7 +127,7 @@
             }
         }
 
-        private bool CanExecuteCompositeCommand(object parameter)
+        private bool CanExecuteCompositeCommand(object? parameter)
         {
             lock (_lock)
             {
@@ -229,9 +224,9 @@
         /// <remarks>
         /// Note that if the view model is not specified, the command must be unregistered manually in order to prevent memory leaks.
         /// </remarks>
-        public void RegisterCommand(ICommand command, IViewModel viewModel = null)
+        public void RegisterCommand(ICommand command, IViewModel? viewModel = null)
         {
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             lock (_lock)
             {
@@ -251,7 +246,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         public void RegisterAction(Action action)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             lock (_lock)
             {
@@ -266,9 +261,9 @@
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public void RegisterAction(Action<object> action)
+        public void RegisterAction(Action<object?> action)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             lock (_lock)
             {
@@ -285,7 +280,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         public void UnregisterCommand(ICommand command)
         {
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             lock (_lock)
             {
@@ -311,7 +306,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         public void UnregisterAction(Action action)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             lock (_lock)
             {
@@ -335,7 +330,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         public void UnregisterAction(Action<object> action)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             lock (_lock)
             {
@@ -351,19 +346,16 @@
             }
         }
 
-        private void OnCommandCanExecuteChanged(object sender, EventArgs e)
+        private void OnCommandCanExecuteChanged(object? sender, EventArgs e)
         {
             RaiseCanExecuteChanged();
         }
-        #endregion
 
-        #region Nested type: CommandInfo
         private class CommandInfo
         {
             private readonly CompositeCommand _compositeCommand;
 
-            #region Constructors
-            public CommandInfo(CompositeCommand compositeCommand, ICommand command, IViewModel viewModel)
+            public CommandInfo(CompositeCommand compositeCommand, ICommand command, IViewModel? viewModel)
             {
                 _compositeCommand = compositeCommand;
 
@@ -375,25 +367,25 @@
                     viewModel.ClosedAsync += OnViewModelClosedAsync;
                 }
             }
-            #endregion
 
-            #region Properties
             public ICommand Command { get; private set; }
-            public IViewModel ViewModel { get; private set; }
-            #endregion
+            public IViewModel? ViewModel { get; private set; }
 
-            private Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
+            private Task OnViewModelClosedAsync(object? sender, ViewModelClosedEventArgs e)
             {
                 Log.Debug("ViewModel '{0}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
 
                 _compositeCommand.UnregisterCommand(Command);
 
-                ViewModel.ClosedAsync -= OnViewModelClosedAsync;
-                ViewModel = null;
+                var viewModel = ViewModel;
+                if (viewModel is not null)
+                {
+                    viewModel.ClosedAsync -= OnViewModelClosedAsync;
+                    ViewModel = null;
+                }
 
                 return Task.CompletedTask;
             }
         }
-        #endregion
     }
 }

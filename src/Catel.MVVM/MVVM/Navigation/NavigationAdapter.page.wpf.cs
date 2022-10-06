@@ -9,8 +9,8 @@
 
     public partial class NavigationAdapter
     {
-        private static Dictionary<string, object> _lastGlobalNavigationContext;
-        private Dictionary<string, object> _lastNavigationContext;
+        private static Dictionary<string, object>? _lastGlobalNavigationContext;
+        private Dictionary<string, object>? _lastNavigationContext;
 
         partial void Initialize()
         {
@@ -83,7 +83,7 @@
         /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigation()
         {
-            object content = null;
+            object? content = null;
 
             var navigationFrame = NavigationRoot as Frame;
             if (navigationFrame is not null)
@@ -103,15 +103,15 @@
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns>System.String.</returns>
-        protected override string GetNavigationUri(object target)
+        protected override string? GetNavigationUri(object target)
         {
             var dependencyResolver = this.GetDependencyResolver();
-            var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
+            var urlLocator = dependencyResolver.ResolveRequired<IUrlLocator>();
 
             return urlLocator.ResolveUrl(NavigationTargetType);
         }
 
-        private void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)
+        private void OnNavigatingEvent(object? sender, NavigatingCancelEventArgs e)
         {
             // We are navigating away
             var eventArgs = new NavigatingEventArgs(e.Uri.ToString(), e.NavigationMode.Convert());
@@ -120,7 +120,7 @@
             e.Cancel = eventArgs.Cancel;
         }
 
-        private void OnNavigatedEvent(object sender, NavigationEventArgs e)
+        private void OnNavigatedEvent(object? sender, NavigationEventArgs e)
         {
             // CTL-906: clear current navication context if (re) navigating to the same view
             if (e.IsNavigationForView(NavigationTargetType))

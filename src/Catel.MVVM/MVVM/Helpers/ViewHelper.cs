@@ -30,7 +30,7 @@
         /// <remarks>
         /// Internally uses the <see cref="ConstructViewWithViewModel" /> method and casts the result.
         /// </remarks>
-        public static T ConstructViewWithViewModel<T>(Type viewType, object dataContext)
+        public static T? ConstructViewWithViewModel<T>(Type viewType, object? dataContext)
             where T : FrameworkElement
         {
             return ConstructViewWithViewModel(viewType, dataContext) as T;
@@ -47,9 +47,9 @@
         /// The constructed view or <c>null</c> if it was not possible to construct the view.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType" /> is <c>null</c>.</exception>
-        public static FrameworkElement ConstructViewWithViewModel(Type viewType, object dataContext)
+        public static FrameworkElement? ConstructViewWithViewModel(Type viewType, object? dataContext)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             Log.Debug("Constructing view for view type '{0}'", viewType.Name);
 

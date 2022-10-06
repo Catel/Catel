@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelToModelMapping.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +15,6 @@ namespace Catel.MVVM
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
         /// </summary>
@@ -68,7 +60,7 @@ namespace Catel.MVVM
             ViewModelToModelMode mode, Type converterType, object[] additionalConstructorArgs, string[] additionalPropertiesToWatch)
         {
             Argument.IsNotNullOrWhitespace("viewModelProperty", viewModelProperty);
-            Argument.IsNotNull("viewModelPropertyType", viewModelPropertyType);
+            ArgumentNullException.ThrowIfNull(viewModelPropertyType);
 
             IgnoredProperties = new HashSet<string>();
             ViewModelProperty = viewModelProperty;
@@ -100,7 +92,7 @@ namespace Catel.MVVM
             var typeFactory = this.GetTypeFactory();
 #pragma warning restore IDISP001 // Dispose created.
 
-            var converter = (IViewModelToModelConverter)typeFactory.CreateInstanceWithParameters(ConverterType, args);
+            var converter = typeFactory.CreateInstanceWithParameters(ConverterType, args) as IViewModelToModelConverter;
             if (converter is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to create converter '{ConverterType}'");
@@ -108,9 +100,7 @@ namespace Catel.MVVM
 
             Converter = converter;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the ignored properties.
         /// </summary>
@@ -173,7 +163,6 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The converter.</value>
         public IViewModelToModelConverter Converter { get; private set; }
-        #endregion
 
         public override string ToString()
         {

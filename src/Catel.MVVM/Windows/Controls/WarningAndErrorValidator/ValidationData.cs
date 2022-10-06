@@ -13,7 +13,7 @@
         /// Initializes a new instance of the <see cref="ValidationData"/> class.
         /// </summary>
         /// <param name="parentEnumerable">The parent ParentEnumerable. <c>Null</c> if the object does not belong to an enumerable.</param>
-        public ValidationData(IEnumerable parentEnumerable)
+        public ValidationData(IEnumerable? parentEnumerable)
         {
             FieldWarnings = new List<FieldWarningOrErrorInfo>();
             BusinessWarnings = new List<BusinessWarningOrErrorInfo>();
@@ -27,7 +27,7 @@
         /// Gets or sets the parent enumerable.
         /// </summary>
         /// <value>The parent enumerable.</value>
-        public IEnumerable ParentEnumerable { get; private set; }
+        public IEnumerable? ParentEnumerable { get; private set; }
 
         /// <summary>
         /// Gets the field warnings.

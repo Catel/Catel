@@ -20,7 +20,7 @@
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            _processService = dependencyResolver.Resolve<IProcessService>();
+            _processService = dependencyResolver.ResolveRequired<IProcessService>();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@
             base.OnDetaching();
         }
 
-        private void AssociatedObjectRequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void AssociatedObjectRequestNavigate(object? sender, RequestNavigateEventArgs e)
         {
             var uri = AssociatedObject.NavigateUri;
             if (uri is not null)

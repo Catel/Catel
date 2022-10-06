@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -38,7 +32,7 @@ namespace Catel.MVVM
         /// <returns>
         ///   <c>true</c> if the specified view model instance ben be reused by the view; otherwise, <c>false</c>.
         /// </returns>
-        bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel viewModelAsDataContext);
+        bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel? viewModelAsDataContext);
 
         /// <summary>
         /// Creates a new view model.
@@ -49,6 +43,6 @@ namespace Catel.MVVM
         /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
-        IViewModel CreateViewModel(Type viewModelType, object dataContext, object tag = null);
+        IViewModel? CreateViewModel(Type viewModelType, object? dataContext, object? tag = null);
     }
 }

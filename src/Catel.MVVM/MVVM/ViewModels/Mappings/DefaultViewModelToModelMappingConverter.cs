@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DefaultViewModelToModelMappingConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using Reflection;
@@ -15,7 +8,6 @@ namespace Catel.MVVM
     /// </summary>
     public class DefaultViewModelToModelMappingConverter : ViewModelToModelConverterBase
     {
-        #region Constructors
         /// <summary>
         /// Creates an instance of converter
         /// </summary>
@@ -24,9 +16,7 @@ namespace Catel.MVVM
             : base(propertyNames)
         {
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines whether this instance can convert the specified types.
         /// </summary>
@@ -45,7 +35,7 @@ namespace Catel.MVVM
         /// <param name="values">The values.</param>
         /// <param name="viewModel">The view model.</param>
         /// <returns>System.Object.</returns>
-        public override object Convert(object[] values, IViewModel viewModel)
+        public override object? Convert(object?[] values, IViewModel viewModel)
         {
             return values[0];
         }
@@ -68,10 +58,9 @@ namespace Catel.MVVM
         /// <param name="value">Property value</param>
         /// <param name="viewModel">Owner VM</param>
         /// <returns>System.Object[].</returns>
-        public override object[] ConvertBack(object value, IViewModel viewModel)
+        public override object?[] ConvertBack(object? value, IViewModel viewModel)
         {
             return new[] {value};
         }
-        #endregion
     }
 }

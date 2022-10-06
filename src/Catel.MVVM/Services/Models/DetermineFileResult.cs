@@ -14,6 +14,6 @@
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
     }
 }

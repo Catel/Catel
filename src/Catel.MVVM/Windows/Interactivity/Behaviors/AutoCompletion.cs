@@ -16,14 +16,14 @@
     public class AutoCompletion : BehaviorBase<TextBox>
     {
         private readonly IAutoCompletionService _autoCompletionService;
-        private readonly ListBox _suggestionListBox;
-        private readonly Popup _popup;
+        private readonly ListBox? _suggestionListBox;
+        private readonly Popup? _popup;
 
         private bool _isUpdatingAssociatedObject;
 
         private bool _subscribed;
-        private string _valueAtSuggestionBoxOpen;
-        private string[] _availableSuggestions;
+        private string? _valueAtSuggestionBoxOpen;
+        private string[]? _availableSuggestions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoCompletion"/> class.
@@ -31,7 +31,7 @@
         public AutoCompletion()
         {
             var dependencyResolver = this.GetDependencyResolver();
-            _autoCompletionService = dependencyResolver.Resolve<IAutoCompletionService>();
+            _autoCompletionService = dependencyResolver.ResolveRequired<IAutoCompletionService>();
 
             _suggestionListBox = new ListBox();
             _suggestionListBox.Margin = new Thickness(0d);
@@ -61,9 +61,9 @@
         /// Gets or sets the items source.
         /// </summary>
         /// <value>The items source.</value>
-        public IEnumerable ItemsSource
+        public IEnumerable? ItemsSource
         {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            get { return (IEnumerable?)GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
 
@@ -128,8 +128,12 @@
                 associatedObject.TextChanged += OnTextChanged;
                 associatedObject.PreviewKeyDown += OnPreviewKeyDown;
 
-                _suggestionListBox.SelectionChanged += OnSuggestionListBoxSelectionChanged;
-                _suggestionListBox.MouseLeftButtonUp += OnSuggestionListBoxMouseLeftButtonUp;
+                var suggestionListBox = _suggestionListBox;
+                if (suggestionListBox is not null)
+                {
+                    suggestionListBox.SelectionChanged += OnSuggestionListBoxSelectionChanged;
+                    suggestionListBox.MouseLeftButtonUp += OnSuggestionListBoxMouseLeftButtonUp;
+                }
 
                 UpdateSuggestionBox(false);
             }
@@ -148,8 +152,12 @@
                 associatedObject.TextChanged -= OnTextChanged;
                 associatedObject.PreviewKeyDown -= OnPreviewKeyDown;
 
-                _suggestionListBox.SelectionChanged -= OnSuggestionListBoxSelectionChanged;
-                _suggestionListBox.MouseLeftButtonUp -= OnSuggestionListBoxMouseLeftButtonUp;
+                var suggestionListBox = _suggestionListBox;
+                if (suggestionListBox is not null)
+                {
+                    suggestionListBox.SelectionChanged -= OnSuggestionListBoxSelectionChanged;
+                    suggestionListBox.MouseLeftButtonUp -= OnSuggestionListBoxMouseLeftButtonUp;
+                }
 
                 _subscribed = false;
             }
@@ -159,15 +167,21 @@
         {
             var textBox = AssociatedObject;
 
-            if (isVisible && !_popup.IsOpen)
+            var popup = _popup;
+            if (popup is null)
+            {
+                return;
+            }
+
+            if (isVisible && !popup.IsOpen)
             {
                 _valueAtSuggestionBoxOpen = textBox.Text;
             }
 
-            _popup.Width = textBox.ActualWidth;
-            _popup.PlacementTarget = textBox;
-            _popup.Placement = PlacementMode.Bottom;
-            _popup.IsOpen = isVisible;
+            popup.Width = textBox.ActualWidth;
+            popup.PlacementTarget = textBox;
+            popup.Placement = PlacementMode.Bottom;
+            popup.IsOpen = isVisible;
         }
 
         private void UpdateSuggestions()
@@ -184,7 +198,7 @@
             }
 
             var text = AssociatedObject.Text;
-            string[] availableSuggestions = null;
+            string[]? availableSuggestions = null;
 
             if (ItemsSource is not null)
             {
@@ -195,6 +209,7 @@
                 else
                 {
                     var items = new List<string>();
+
                     foreach (var item in ItemsSource)
                     {
                         var itemAsString = item as string;
@@ -209,7 +224,12 @@
             }
 
             _availableSuggestions = availableSuggestions;
-            _suggestionListBox.ItemsSource = _availableSuggestions;
+
+            var suggestionListBox = _suggestionListBox;
+            if (suggestionListBox is not null)
+            {
+                suggestionListBox.ItemsSource = _availableSuggestions;
+            }
         }
 
         private void OnPropertyNameChanged()
@@ -259,6 +279,12 @@
 
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            var suggestionListBox = _suggestionListBox;
+            if (suggestionListBox is null)
+            {
+                return;
+            }
+
             if (e.Key == Key.Space)
             {
                 if (KeyboardHelper.AreKeyboardModifiersPressed(ModifierKeys.Control))
@@ -270,17 +296,17 @@
 
             if (e.Key == Key.Down)
             {
-                if (_suggestionListBox.SelectedIndex < _suggestionListBox.Items.Count)
+                if (suggestionListBox.SelectedIndex < suggestionListBox.Items.Count)
                 {
-                    _suggestionListBox.SelectedIndex = _suggestionListBox.SelectedIndex + 1;
+                    suggestionListBox.SelectedIndex = suggestionListBox.SelectedIndex + 1;
                 }
             }
 
             if (e.Key == Key.Up)
             {
-                if (_suggestionListBox.SelectedIndex > -1)
+                if (suggestionListBox.SelectedIndex > -1)
                 {
-                    _suggestionListBox.SelectedIndex = _suggestionListBox.SelectedIndex - 1;
+                    suggestionListBox.SelectedIndex = suggestionListBox.SelectedIndex - 1;
                 }
             }
 
@@ -299,37 +325,46 @@
 
             if (e.Key == Key.Escape)
             {
-                if (_popup.IsOpen)
+                var popup = _popup;
+                if (popup is not null)
                 {
-                    // Cancel the selection
-                    UpdateSuggestionBox(false);
+                    if (popup.IsOpen)
+                    {
+                        // Cancel the selection
+                        UpdateSuggestionBox(false);
 
-                    _isUpdatingAssociatedObject = true;
+                        _isUpdatingAssociatedObject = true;
 
-                    AssociatedObject.Text = _valueAtSuggestionBoxOpen;
-                    e.Handled = true;
+                        AssociatedObject.Text = _valueAtSuggestionBoxOpen;
+                        e.Handled = true;
+                    }
                 }
             }
         }
 
-        private void OnSuggestionListBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void OnSuggestionListBoxMouseLeftButtonUp(object? sender, MouseButtonEventArgs e)
         {
             UpdateSuggestionBox(false);
         }
 
-        private void OnSuggestionListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnSuggestionListBoxSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            var textBox = AssociatedObject;
-
-            if (_suggestionListBox.ItemsSource is not null)
+            var suggestionListBox = _suggestionListBox;
+            if (suggestionListBox is null)
             {
+                return;
+            }
+
+            if (suggestionListBox.ItemsSource is not null)
+            {
+                var textBox = AssociatedObject;
                 textBox.TextChanged -= OnTextChanged;
 
-                if (_suggestionListBox.SelectedIndex != -1)
+                if (suggestionListBox.SelectedIndex != -1)
                 {
                     _isUpdatingAssociatedObject = true;
 
-                    textBox.Text = _suggestionListBox.SelectedItem.ToString();
+                    textBox.Text = suggestionListBox.SelectedItem.ToString();
                 }
 
                 textBox.TextChanged += OnTextChanged;

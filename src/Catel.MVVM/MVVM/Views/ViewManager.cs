@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
@@ -18,23 +11,18 @@ namespace Catel.MVVM.Views
     /// </summary>
     public class ViewManager : IViewManager
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
         /// <summary>
         /// List of views and the unique identifyer of the view models they own.
         /// </summary>
         private readonly Dictionary<IView, int?> _registeredViews = new Dictionary<IView, int?>();
 
         private readonly object _syncObj = new object();
-        #endregion
 
-        #region IViewManager Members
         /// <summary>
         /// Gets the active views presently registered.
         /// </summary>
@@ -56,7 +44,7 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public virtual void RegisterView(IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             var viewType = view.GetType().FullName;
 
@@ -85,7 +73,7 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public virtual void UnregisterView(IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             var viewType = view.GetType().FullName;
 
@@ -115,7 +103,7 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public virtual IView[] GetViewsOfViewModel(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             Log.Debug("Getting the views of view model '{0}'", BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
@@ -141,23 +129,26 @@ namespace Catel.MVVM.Views
         /// The <see cref="IViewModel" /> or <c>null</c> if the view model is not registered.
         /// </returns>
         /// <exception cref="System.ArgumentException">The <paramref name="viewType"/> is not of type <see cref="IView"/>.</exception>
-        public IView GetFirstOrDefaultInstance(Type viewType)
+        public IView? GetFirstOrDefaultInstance(Type viewType)
         {
             Argument.IsOfType("viewType", viewType, typeof (IView));
 
             return ActiveViews.FirstOrDefault(view => ObjectHelper.AreEqual(view.GetType(), viewType));
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the view model of a view has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The <see cref="EventArgs" /> instance containing the event data.</param>
-        private void OnViewModelChanged(object sender, EventArgs eventArgs)
+        private void OnViewModelChanged(object? sender, EventArgs eventArgs)
         {
-            var view = ((IView) sender);
+            var view = sender as IView;
+            if (view is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Received ViewModelChanged event from a view without valid sender, cannot handle events correctly");
+            }
+
             SyncViewModelOfView(view);
         }
 
@@ -174,6 +165,5 @@ namespace Catel.MVVM.Views
                 _registeredViews[view] = (activeViewModel is not null) ? activeViewModel.UniqueIdentifier : (int?) null;
             }
         }
-        #endregion
     }
 }

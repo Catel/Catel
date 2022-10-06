@@ -1,23 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogicBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using Caching;
     using Data;
     using IoC;
     using Logging;
     using MVVM;
     using Views;
     using Reflection;
-    using Threading;
     using Catel.Services;
 
     /// <summary>
@@ -63,10 +55,11 @@ namespace Catel.MVVM.Providers
     /// </summary>
     public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
     {
-        #region Fields
+        private const string DataContextPropertyName = "DataContext";
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static IViewModelFactory _viewModelFactory;
+        private static IViewModelFactory? _viewModelFactory;
         private static readonly IViewModelLocator _viewModelLocator;
         private static readonly IViewManager _viewManager;
         private static readonly IViewPropertySelector _viewPropertySelector;
@@ -79,7 +72,7 @@ namespace Catel.MVVM.Providers
         /// inside the <see cref="ViewModel"/> property. For accessing the view model, use the 
         /// <see cref="ViewModel"/> property.
         /// </summary>
-        private IViewModel _viewModel;
+        private IViewModel? _viewModel;
 
         private bool _isFirstValidationAfterLoaded = true;
 
@@ -93,10 +86,8 @@ namespace Catel.MVVM.Providers
         /// </summary>
         protected readonly object _lockObject = new object();
 
-        private IView _targetView;
-        #endregion
+        private IView? _targetView;
 
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="LogicBase"/> class.
         /// </summary>
@@ -104,12 +95,12 @@ namespace Catel.MVVM.Providers
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
-            _viewManager = dependencyResolver.Resolve<IViewManager>();
-            _viewPropertySelector = dependencyResolver.Resolve<IViewPropertySelector>();
-            _viewContextService = dependencyResolver.Resolve<IViewContextService>();
-            _objectAdapter = dependencyResolver.Resolve<IObjectAdapter>();
-            ViewLoadManager = dependencyResolver.Resolve<IViewLoadManager>();
+            _viewModelLocator = dependencyResolver.ResolveRequired<IViewModelLocator>();
+            _viewManager = dependencyResolver.ResolveRequired<IViewManager>();
+            _viewPropertySelector = dependencyResolver.ResolveRequired<IViewPropertySelector>();
+            _viewContextService = dependencyResolver.ResolveRequired<IViewContextService>();
+            _objectAdapter = dependencyResolver.ResolveRequired<IObjectAdapter>();
+            ViewLoadManager = dependencyResolver.ResolveRequired<IViewLoadManager>();
         }
 
         /// <summary>
@@ -121,14 +112,15 @@ namespace Catel.MVVM.Providers
         /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        protected LogicBase(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
+        protected LogicBase(IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
         {
             if (CatelEnvironment.IsInDesignMode)
             {
+                ViewModelType = typeof(IViewModel);
                 return;
             }
 
-            Argument.IsNotNull("targetView", targetView);
+            ArgumentNullException.ThrowIfNull(targetView);
 
             var targetViewType = targetView.GetType();
 
@@ -214,7 +206,6 @@ namespace Catel.MVVM.Providers
 
             Log.Debug($"Constructed behavior '{GetType().Name}' for '{TargetViewType?.Name}'");
         }
-        #endregion
 
         #region Properties
         /// <summary>
@@ -227,7 +218,7 @@ namespace Catel.MVVM.Providers
                 if (_viewModelFactory is null)
                 {
                     var dependencyResolver = this.GetDependencyResolver();
-                    _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
+                    _viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
                 }
 
                 return _viewModelFactory;
@@ -237,7 +228,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Gets the weak reference to the last known data context.
         /// </summary>
-        protected WeakReference LastKnownDataContext { get; private set; }
+        protected WeakReference? LastKnownDataContext { get; private set; }
 
         /// <summary>
         /// Gets or sets the view model.
@@ -246,7 +237,7 @@ namespace Catel.MVVM.Providers
         /// <remarks>
         /// When a new value is set, the old view model will be disposed.
         /// </remarks>
-        public IViewModel ViewModel
+        public IViewModel? ViewModel
         {
             get
             {
@@ -347,7 +338,7 @@ namespace Catel.MVVM.Providers
         /// Gets the target control of this MVVM provider.
         /// </summary>
         /// <value>The target control.</value>
-        protected internal IView TargetView
+        protected internal IView? TargetView
         {
             get { return _targetView; }
             set
@@ -361,7 +352,7 @@ namespace Catel.MVVM.Providers
         /// Gets the type of the target control.
         /// </summary>
         /// <value>The type of the target control.</value>
-        protected Type TargetViewType { get; private set; }
+        protected Type? TargetViewType { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether a <c>null</c> DataContext should be ignored and no new view
@@ -457,7 +448,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// The view.
         /// </summary>
-        IView IViewLoadState.View
+        IView? IViewLoadState.View
         {
             get { return TargetView; }
         }
@@ -468,53 +459,53 @@ namespace Catel.MVVM.Providers
         /// Occurs when the view model is about to construct a new view model. This event can be used to
         /// intercept and inject a dynamically instantiated view model.
         /// </summary>
-        public event EventHandler<DetermineViewModelInstanceEventArgs> DetermineViewModelInstance;
+        public event EventHandler<DetermineViewModelInstanceEventArgs>? DetermineViewModelInstance;
 
         /// <summary>
         /// Occurs when the view model is about to construct a new view model. This event can be used to
         /// intercept and inject a dynamically determined view model type.
         /// </summary>
-        public event EventHandler<DetermineViewModelTypeEventArgs> DetermineViewModelType;
+        public event EventHandler<DetermineViewModelTypeEventArgs>? DetermineViewModelType;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> property has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ViewModelChanged;
+        public event EventHandler<EventArgs>? ViewModelChanged;
 
         /// <summary>
         /// Occurs when a property on the current <see cref="ViewModel"/> has changed.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been canceled.
         /// </summary>
-        public event AsyncEventHandler<EventArgs> ViewModelCanceledAsync;
+        public event AsyncEventHandler<EventArgs>? ViewModelCanceledAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been saved.
         /// </summary>
-        public event AsyncEventHandler<EventArgs> ViewModelSavedAsync;
+        public event AsyncEventHandler<EventArgs>? ViewModelSavedAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been closed.
         /// </summary>
-        public event AsyncEventHandler<ViewModelClosedEventArgs> ViewModelClosedAsync;
+        public event AsyncEventHandler<ViewModelClosedEventArgs>? ViewModelClosedAsync;
 
         /// <summary>
         /// Occurs when a property on the <see cref="TargetView"/> has changed.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> TargetViewPropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? TargetViewPropertyChanged;
 
         /// <summary>
         /// Occurs when the view model container is loaded.
         /// </summary>
-        public event EventHandler<EventArgs> Loaded;
+        public event EventHandler<EventArgs>? Loaded;
 
         /// <summary>
         /// Occurs when the view model container is unloaded.
         /// </summary>
-        public event EventHandler<EventArgs> Unloaded;
+        public event EventHandler<EventArgs>? Unloaded;
         #endregion
 
         #region Methods
@@ -524,21 +515,25 @@ namespace Catel.MVVM.Providers
         /// <returns>A list of names with view properties to subscribe to.</returns>
         private List<string> DetermineInterestingViewProperties()
         {
-            var targetViewType = TargetViewType;
-
             var finalProperties = new List<string>();
+
+            var targetViewType = TargetViewType;
+            if (targetViewType is null)
+            {
+                return finalProperties;
+            }
 
             if ((_viewPropertySelector is null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
             {
-                var viewProperties = TargetView.GetProperties();
+                var viewProperties = ViewExtensions.GetProperties(targetViewType);
                 finalProperties.AddRange(viewProperties);
             }
             else
             {
                 var propertiesToSubscribe = new HashSet<string>(_viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType));
-                if (!propertiesToSubscribe.Contains("DataContext"))
+                if (!propertiesToSubscribe.Contains(DataContextPropertyName))
                 {
-                    propertiesToSubscribe.Add("DataContext");
+                    propertiesToSubscribe.Add(DataContextPropertyName);
                 }
 
                 foreach (var propertyToSubscribe in propertiesToSubscribe)
@@ -558,7 +553,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="view">The view to retrieve the data context from.</param>
         /// <returns>The data context.</returns>
-        protected virtual object GetDataContext(IView view)
+        protected virtual object? GetDataContext(IView? view)
         {
             if (view is null)
             {
@@ -580,7 +575,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Creates a view model by using data context or, if that is not possible, the constructor of the view model.
         /// </summary>
-        protected IViewModel CreateViewModelByUsingDataContextOrConstructor()
+        protected IViewModel? CreateViewModelByUsingDataContextOrConstructor()
         {
             var dataContext = GetDataContext(TargetView);
 
@@ -615,7 +610,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerLoadingInternal(object sender, ViewLoadEventArgs e)
+        public void OnViewLoadedManagerLoadingInternal(object? sender, ViewLoadEventArgs e)
         {
             OnViewLoadedManagerLoading(sender, e);
         }
@@ -625,7 +620,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerLoading(object sender, ViewLoadEventArgs e)
+        protected virtual void OnViewLoadedManagerLoading(object? sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
@@ -640,7 +635,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerLoadedInternal(object sender, ViewLoadEventArgs e)
+        public void OnViewLoadedManagerLoadedInternal(object? sender, ViewLoadEventArgs e)
         {
             OnViewLoadedManagerLoaded(sender, e);
         }
@@ -650,7 +645,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerLoaded(object sender, ViewLoadEventArgs e)
+        protected virtual void OnViewLoadedManagerLoaded(object? sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
@@ -665,7 +660,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerUnloadingInternal(object sender, ViewLoadEventArgs e)
+        public void OnViewLoadedManagerUnloadingInternal(object? sender, ViewLoadEventArgs e)
         {
             OnViewLoadedManagerUnloading(sender, e);
         }
@@ -675,7 +670,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerUnloading(object sender, ViewLoadEventArgs e)
+        protected virtual void OnViewLoadedManagerUnloading(object? sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
@@ -690,7 +685,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerUnloadedInternal(object sender, ViewLoadEventArgs e)
+        public void OnViewLoadedManagerUnloadedInternal(object? sender, ViewLoadEventArgs e)
         {
             OnViewLoadedManagerUnloaded(sender, e);
         }
@@ -700,7 +695,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerUnloaded(object sender, ViewLoadEventArgs e)
+        protected virtual void OnViewLoadedManagerUnloaded(object? sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
@@ -713,7 +708,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewLoadingInternal(object sender, EventArgs e)
+        private void OnTargetViewLoadingInternal(object? sender, EventArgs e)
         {
             if (!CanLoad)
             {
@@ -735,7 +730,7 @@ namespace Catel.MVVM.Providers
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnTargetViewLoadedInternal(object sender, EventArgs e)
+        private async void OnTargetViewLoadedInternal(object? sender, EventArgs e)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (!CanLoad)
@@ -746,10 +741,12 @@ namespace Catel.MVVM.Providers
             Log.Debug($"Target view '{TargetViewType?.Name}' has been loaded");
 
             var view = TargetView;
-            if (view is not null)
+            if (view is null)
             {
-                _viewManager.RegisterView(view);
+                return;
             }
+
+            _viewManager.RegisterView(view);
 
             IsTargetViewLoaded = true;
 
@@ -758,15 +755,15 @@ namespace Catel.MVVM.Providers
 
             await OnTargetViewLoadedAsync(sender, e);
 
-            TargetView.EnsureVisualTree();
+            view.EnsureVisualTree();
 
-            var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
+            var targetViewAsViewModelContainer = view as IViewModelContainer;
             if (targetViewAsViewModelContainer is not null)
             {
                 ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
             }
 
-            TargetView.Dispatch(() =>
+            view.Dispatch(() =>
             {
 #pragma warning disable 4014
                 // No need to await
@@ -780,7 +777,7 @@ namespace Catel.MVVM.Providers
         private async Task InitializeViewModelAsync()
         {
             var viewModel = ViewModel;
-            if (ViewModel is not null)
+            if (viewModel is not null)
             {
                 // Initialize the view model. The view model itself is responsible to prevent double initialization
                 await viewModel.InitializeViewModelAsync();
@@ -811,7 +808,7 @@ namespace Catel.MVVM.Providers
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         /// <returns>Task.</returns>
-        public virtual async Task OnTargetViewLoadedAsync(object sender, EventArgs e)
+        public virtual async Task OnTargetViewLoadedAsync(object? sender, EventArgs e)
         {
             await CompleteViewModelClosingAsync();
 
@@ -832,7 +829,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewUnloadingInternal(object sender, EventArgs e)
+        private void OnTargetViewUnloadingInternal(object? sender, EventArgs e)
         {
             if (!CanUnload)
             {
@@ -854,7 +851,7 @@ namespace Catel.MVVM.Providers
         /// behavior. This method is required to protect from duplicate unloaded events.
         /// </remarks>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnTargetViewUnloadedInternal(object sender, EventArgs e)
+        private async void OnTargetViewUnloadedInternal(object? sender, EventArgs e)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (!CanUnload)
@@ -890,7 +887,7 @@ namespace Catel.MVVM.Providers
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         /// <returns>Task.</returns>
-        public virtual Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
+        public virtual Task OnTargetViewUnloadedAsync(object? sender, EventArgs e)
         {
             return Task.CompletedTask;
         }
@@ -925,16 +922,25 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnTargetViewDataContextChanged(object sender, DataContextChangedEventArgs e)
+        public virtual void OnTargetViewDataContextChanged(object? sender, DataContextChangedEventArgs e)
         {
             if (IsCurrentDataContext(e))
             {
                 return;
             }
 
-            var dataContext = GetDataContext(TargetView);
+            var targetView = TargetView;
+            if (targetView is null)
+            {
+                Log.Warning($"Target view is null, cannot handle DataContextChanged event");
+                return;
+            }
 
-            Log.Debug($"DataContext of TargetView '{TargetViewType?.Name}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
+            var targetViewType = TargetViewType ?? targetView.GetType();
+
+            var dataContext = GetDataContext(targetView);
+
+            Log.Debug($"DataContext of TargetView '{targetViewType.GetSafeFullName()}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
 
             LastKnownDataContext = null;
 
@@ -957,7 +963,7 @@ namespace Catel.MVVM.Providers
             }
 
             // Check if the VM is compatible
-            if (_viewModelLocator.IsCompatible(TargetViewType, dataContext.GetType()))
+            if (_viewModelLocator.IsCompatible(targetViewType, dataContext.GetType()))
             {
                 // Use the view model from the data context, probably set manually
                 ViewModel = (IViewModel)dataContext;
@@ -969,7 +975,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewPropertyChangedInternal(object sender, PropertyChangedEventArgs e)
+        private void OnTargetViewPropertyChangedInternal(object? sender, PropertyChangedEventArgs e)
         {
             OnTargetViewPropertyChanged(sender, e);
         }
@@ -979,7 +985,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        public virtual void OnTargetViewPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public virtual void OnTargetViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             TargetViewPropertyChanged?.Invoke(this, e);
         }
@@ -989,7 +995,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public virtual void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             ViewModelPropertyChanged?.Invoke(this, e);
         }
@@ -999,7 +1005,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual Task OnViewModelCanceledAsync(object sender, EventArgs e)
+        public virtual Task OnViewModelCanceledAsync(object? sender, EventArgs e)
         {
             return ViewModelCanceledAsync.SafeInvokeAsync(this, e);
         }
@@ -1009,7 +1015,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual Task OnViewModelSavedAsync(object sender, EventArgs e)
+        public virtual Task OnViewModelSavedAsync(object? sender, EventArgs e)
         {
             return ViewModelSavedAsync.SafeInvokeAsync(this, e);
         }
@@ -1188,7 +1194,7 @@ namespace Catel.MVVM.Providers
         /// <returns>
         /// Constructed view model or <c>null</c> if the view model could not be constructed.
         /// </returns>
-        protected IViewModel ConstructViewModelUsingArgumentOrDefaultConstructor(object injectionObject)
+        protected IViewModel? ConstructViewModelUsingArgumentOrDefaultConstructor(object? injectionObject)
         {
             return ConstructViewModelUsingArgumentOrDefaultConstructor(injectionObject, ViewModelType);
         }
@@ -1201,18 +1207,25 @@ namespace Catel.MVVM.Providers
         /// <param name="viewModelType">Type of the view model.</param>
         /// <returns>Constructed view model or <c>null</c> if the view model could not be constructed.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        private IViewModel ConstructViewModelUsingArgumentOrDefaultConstructor(object injectionObject, Type viewModelType)
+        private IViewModel? ConstructViewModelUsingArgumentOrDefaultConstructor(object? injectionObject, Type viewModelType)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
             if (ViewModelBehavior == LogicViewModelBehavior.Injected)
             {
                 return ViewModel;
             }
 
+            var targetViewtype = TargetViewType;
+            if (targetViewtype is null)
+            {
+                Log.Debug($"Target view type is null, preventing view model creation");
+                return null;
+            }
+
             if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', preventing view model creation for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', preventing view model creation for '{targetViewtype.Name}'");
                 return null;
             }
 
@@ -1259,18 +1272,18 @@ namespace Catel.MVVM.Providers
             var injectionObjectAsViewModel = injectionObject as IViewModel;
             if (injectionObjectAsViewModel is not null)
             {
-                var injectionObjectViewModelType = injectionObject.GetType();
+                var injectionObjectViewModelType = injectionObjectAsViewModel.GetType();
 
-                if (ViewModelFactory.CanReuseViewModel(TargetViewType, viewModelType, injectionObjectViewModelType, injectionObject as IViewModel))
+                if (ViewModelFactory.CanReuseViewModel(targetViewtype, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
                 {
                     Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
-                             viewModelType.FullName, TargetViewType.FullName);
+                             viewModelType.GetSafeFullName(), targetViewtype.GetSafeFullName());
 
-                    return (IViewModel)injectionObject;
+                    return injectionObjectAsViewModel;
                 }
             }
 
-            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", ViewModelFactory.GetType().FullName);
+            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", ViewModelFactory.GetType().GetSafeFullName());
 
             var viewModelInstance = ViewModelFactory.CreateViewModel(viewModelType, injectionObject);
 

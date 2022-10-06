@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationLogicBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
     using System.Threading.Tasks;
@@ -22,40 +16,33 @@ namespace Catel.MVVM.Providers
     public abstract class NavigationLogicBase<T> : LogicBase
         where T : class, IView
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private NavigationAdapter _navigationAdapter;
+        private NavigationAdapter? _navigationAdapter;
 
         private bool _hasHandledNavigatingAway;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="PageLogic"/> class.
         /// </summary>
         /// <param name="targetPage">The page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
-        protected NavigationLogicBase(T targetPage, Type viewModelType = null)
+        protected NavigationLogicBase(T targetPage, Type? viewModelType = null)
             : base(targetPage, viewModelType)
         {
             CreateNavigationAdapter(false);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the target page.
         /// </summary>
         /// <value>The target page.</value>
-        public T TargetPage
+        public T? TargetPage
         {
-            get { return (T)TargetView; }
+            get { return (T?)TargetView; }
         }
-        #endregion
 
-        #region Methods
         private void CreateNavigationAdapter(bool comingFromLoadedEvent)
         {
             if (_navigationAdapter is null)
@@ -64,17 +51,33 @@ namespace Catel.MVVM.Providers
                 var serviceLocator = this.GetServiceLocator();
 #pragma warning restore IDISP001 // Dispose created.
 
-                var navigationService = serviceLocator.ResolveType<INavigationRootService>();
+                var navigationService = serviceLocator.ResolveRequiredType<INavigationRootService>();
                 var navigationRoot = navigationService.GetNavigationRoot();
+                if (navigationRoot is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Navigation root is null, cannot create navigation adapter");
+                }
 
-                _navigationAdapter = new NavigationAdapter(TargetPage, navigationRoot);
+                var targetPage = TargetPage;
+                if (targetPage is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Target page is null, cannot create navigation adapter");
+                }
+
+                _navigationAdapter = new NavigationAdapter(targetPage, navigationRoot);
                 _navigationAdapter.NavigatedTo += OnNavigatedTo;
                 _navigationAdapter.NavigatingAway += OnNavigatingAway;
                 _navigationAdapter.NavigatedAway += OnNavigatedAway;
 
                 if (comingFromLoadedEvent)
                 {
-                    OnNavigatedTo(this, new NavigatedEventArgs(_navigationAdapter.GetNavigationUriForTargetPage(), NavigationMode.New));
+                    var uri = _navigationAdapter.GetNavigationUriForTargetPage();
+                    if (uri is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
+                    }
+
+                    OnNavigatedTo(this, new NavigatedEventArgs(uri, NavigationMode.New));
                 }
             }
         }
@@ -96,7 +99,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async Task OnTargetViewLoadedAsync(object sender, EventArgs e)
+        public override async Task OnTargetViewLoadedAsync(object? sender, EventArgs e)
         {
             _hasHandledNavigatingAway = false;
 
@@ -119,11 +122,21 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
+        public override async Task OnTargetViewUnloadedAsync(object? sender, EventArgs e)
         {
             if (!_hasHandledNavigatingAway)
             {
-                OnNavigatingAway(this, new NavigatingEventArgs(_navigationAdapter.GetNavigationUriForTargetPage(), NavigationMode.New));
+                var navigationAdapter = _navigationAdapter;
+                if (navigationAdapter is not null)
+                {
+                    var uri = navigationAdapter.GetNavigationUriForTargetPage();
+                    if (uri is null)
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
+                    }
+
+                    OnNavigatingAway(this, new NavigatingEventArgs(uri, NavigationMode.New));
+                }
 
                 _hasHandledNavigatingAway = true;
             }
@@ -133,12 +146,12 @@ namespace Catel.MVVM.Providers
             DestroyNavigationAdapter();
         }
 
-        private void OnNavigatedTo(object sender, NavigatedEventArgs e)
+        private void OnNavigatedTo(object? sender, NavigatedEventArgs e)
         {
             OnNavigatedToPage(e);
         }
 
-        private void OnNavigatingAway(object sender, NavigatingEventArgs e)
+        private void OnNavigatingAway(object? sender, NavigatingEventArgs e)
         {
             OnNavigatingAwayFromPage(e);
 
@@ -148,7 +161,7 @@ namespace Catel.MVVM.Providers
             }
         }
 
-        private void OnNavigatedAway(object sender, NavigatedEventArgs e)
+        private void OnNavigatedAway(object? sender, NavigatedEventArgs e)
         {
             OnNavigatedAwayFromPage(e);
         }
@@ -171,7 +184,7 @@ namespace Catel.MVVM.Providers
             var viewModelAsViewModelBase = ViewModel as ViewModelBase;
             if (viewModelAsViewModelBase is not null)
             {
-                var navigationContext = _navigationAdapter.NavigationContext;
+                var navigationContext = _navigationAdapter?.NavigationContext;
                 viewModelAsViewModelBase.UpdateNavigationContext(navigationContext);
             }
         }
@@ -233,6 +246,5 @@ namespace Catel.MVVM.Providers
                 ViewModel = vm;
             }
         }
-        #endregion
     }
 }

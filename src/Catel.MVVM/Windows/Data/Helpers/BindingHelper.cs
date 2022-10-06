@@ -17,14 +17,14 @@
         /// <returns>The actual binding value.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="binding"/> is <c>null</c>.</exception>
-        public static object GetBindingValue(FrameworkElement frameworkElement, BindingBase binding)
+        public static object? GetBindingValue(FrameworkElement frameworkElement, BindingBase binding)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("binding", binding);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(binding);
 
             var evaluator = new BindingEvaluator(frameworkElement.DataContext);
             BindingOperations.SetBinding(evaluator, BindingEvaluator.ValueProperty, binding);
-            object value = evaluator.Value;
+            var value = evaluator.Value;
             ClearBinding(evaluator, BindingEvaluator.ValueProperty);
 
             return value;

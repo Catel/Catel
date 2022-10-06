@@ -3,7 +3,6 @@
     using System;
     using System.Globalization;
     using System.Windows;
-    using System.Windows.Threading;
     using Catel.IoC;
     using Catel.Services;
     using System.Windows.Markup;
@@ -14,15 +13,15 @@
     public class LanguageBindingExtension : UpdatableMarkupExtension
     {
         private readonly ILanguageService _languageService;
-        private Catel.IWeakEventListener _onLanguageUpdatedWeakListener;
+        private Catel.IWeakEventListener? _onLanguageUpdatedWeakListener;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageBindingExtension"/> class.
         /// </summary>
         public LanguageBindingExtension()
+            : this(string.Empty)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            _languageService = dependencyResolver.Resolve<ILanguageService>();
+            // Keep empty
         }
 
         /// <summary>
@@ -30,9 +29,11 @@
         /// </summary>
         /// <param name="resourceName">Name of the resource.</param>
         public LanguageBindingExtension(string resourceName)
-            : this()
         {
             ResourceName = resourceName;
+
+            var dependencyResolver = this.GetDependencyResolver();
+            _languageService = dependencyResolver.ResolveRequired<ILanguageService>();
         }
 
         /// <summary>
@@ -52,7 +53,7 @@
         /// Gets or sets the culture. If set to <c>null</c>, it will be determined automatically.
         /// </summary>
         /// <value>The culture.</value>
-        public CultureInfo Culture { get; set; }
+        public CultureInfo? Culture { get; set; }
 
         /// <summary>
         /// The language updated event.
@@ -62,7 +63,7 @@
         /// <remarks>
         /// Must be public because this uses weak events.
         /// </remarks>
-        public void OnLanguageUpdated(object sender, EventArgs e)
+        public void OnLanguageUpdated(object? sender, EventArgs e)
         {
             UpdateValue();
         }
@@ -72,7 +73,7 @@
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
+        protected override object? ProvideDynamicValue(IServiceProvider? serviceProvider)
         {
             if (_languageService is null)
             {

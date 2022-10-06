@@ -122,13 +122,6 @@
         /// <summary>
         /// Shows an error message to the user and allows a callback operation when the message is completed.
         /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        Task<MessageResult> ShowErrorAsync(Exception exception);
-
-        /// <summary>
-        /// Shows an error message to the user and allows a callback operation when the message is completed.
-        /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>

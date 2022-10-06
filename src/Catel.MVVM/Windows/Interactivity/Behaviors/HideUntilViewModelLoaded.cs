@@ -48,7 +48,7 @@
             base.Uninitialize();
         }
 
-        private void OnViewModelChanged(object sender, EventArgs e)
+        private void OnViewModelChanged(object? sender, EventArgs e)
         {
             UpdateVisibility();
         }

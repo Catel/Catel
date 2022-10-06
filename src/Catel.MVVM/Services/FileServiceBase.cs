@@ -15,18 +15,18 @@
         /// </summary>
         protected FileServiceBase()
         {
-
         }
 
         /// <summary>
         /// Gets the initial directory used for the file dialog.
         /// </summary>
         /// <returns>The inital directory.</returns>
-        protected virtual string GetInitialDirectory(DetermineFileContext context)
+        protected virtual string? GetInitialDirectory(DetermineFileContext context)
         {
-            Argument.IsNotNull(nameof(context), context);
+            ArgumentNullException.ThrowIfNull(context);
 
             var initialDirectory = context.InitialDirectory;
+
             if (!string.IsNullOrWhiteSpace(initialDirectory))
             {
                 if (!Directory.Exists(initialDirectory))
@@ -50,8 +50,8 @@
         /// <exception cref="ArgumentNullException">The <paramref name="fileDialog"/> is <c>null</c>.</exception>
         protected virtual async Task ConfigureFileDialogAsync(FileDialog fileDialog, DetermineFileContext context)
         {
-            Argument.IsNotNull("fileDialog", fileDialog);
-            Argument.IsNotNull("context", context);
+            ArgumentNullException.ThrowIfNull(fileDialog);
+            ArgumentNullException.ThrowIfNull(context);
 
             fileDialog.Filter = context.Filter;
             fileDialog.FileName = context.FileName;

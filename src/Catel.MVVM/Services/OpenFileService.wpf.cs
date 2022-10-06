@@ -1,5 +1,6 @@
 ﻿namespace Catel.Services
 {
+    using System;
     using System.Threading.Tasks;
     using Microsoft.Win32;
 
@@ -11,7 +12,7 @@
         /// <inheritdoc/>
         public virtual async Task<DetermineOpenFileResult> DetermineFileAsync(DetermineOpenFileContext context)
         {
-            Argument.IsNotNull("context", context);
+            ArgumentNullException.ThrowIfNull(context);
 
             var fileDialog = new OpenFileDialog();
 

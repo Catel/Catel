@@ -11,6 +11,7 @@
     using Reflection;
     using System.Windows;
     using Windows.Controls;
+    using Catel.Data;
 
     /// <summary>
     /// MVVM Provider behavior implementation for a user control.
@@ -22,9 +23,9 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private IViewModelContainer _parentViewModelContainer;
-        private IViewModel _parentViewModel;
-        private InfoBarMessageControl _infoBarMessageControl;
+        private IViewModelContainer? _parentViewModelContainer;
+        private IViewModel? _parentViewModel;
+        private InfoBarMessageControl? _infoBarMessageControl;
         
         /// <summary>
         /// Initializes static members of the <see cref="UserControlLogic" /> class.
@@ -43,7 +44,7 @@
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
-        public UserControlLogic(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
+        public UserControlLogic(IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
             : base(targetView, viewModelType, viewModel)
         {
             if (CatelEnvironment.IsInDesignMode)
@@ -171,7 +172,7 @@
         /// <remarks>
         /// For internal usage only.
         /// </remarks>
-        internal IViewModelContainer ParentViewModelContainer
+        internal IViewModelContainer? ParentViewModelContainer
         {
             get { return _parentViewModelContainer; }
         }
@@ -203,12 +204,16 @@
         /// Creates the view model wrapper.
         /// </summary>
         /// <param name="force">If set the <c>true</c>, this will add the <see cref="WrapOptions.Force"/> flag.</param>
-        public IViewModelWrapper CreateViewModelWrapper(bool force = false)
+        public IViewModelWrapper? CreateViewModelWrapper(bool force = false)
         {
             var targetView = TargetView;
+            if (targetView is null)
+            {
+                return null;
+            }
 
             var dependencyResolver = this.GetDependencyResolver();
-            var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
+            var viewModelWrapperService = dependencyResolver.ResolveRequired<IViewModelWrapperService>();
 
             var wrapper = viewModelWrapperService.GetWrapper(targetView);
             if (wrapper is null)
@@ -235,14 +240,21 @@
         /// Gets the view model wrapper. If the view is not wrapped, this method will return <c>null</c>.
         /// </summary>
         /// <returns>The view model wrapper or <c>null</c>.</returns>
-        public object GetViewModelWrapper()
+        public object? GetViewModelWrapper()
         {
+            var targetView = TargetView;
+            if (targetView is null)
+            {
+                return null;
+            }
+
             var dependencyResolver = this.GetDependencyResolver();
-            var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
-            return viewModelWrapperService.GetWrapper(TargetView);
+            var viewModelWrapperService = dependencyResolver.ResolveRequired<IViewModelWrapperService>();
+
+            return viewModelWrapperService.GetWrapper(targetView);
         }
 
-        private void OnTargetViewInitialized(object sender, EventArgs e)
+        private void OnTargetViewInitialized(object? sender, EventArgs e)
         {
             // Note: we can't use Content changed property notification (x:Name is not yet set), but Loaded event is too late,
             // this event should be in-between: https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/object-lifetime-events
@@ -254,7 +266,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async Task OnTargetViewLoadedAsync(object sender, EventArgs e)
+        public override async Task OnTargetViewLoadedAsync(object? sender, EventArgs e)
         {
             await CompleteViewModelClosingAsync();
 
@@ -270,7 +282,7 @@
             {
                 Log.Debug("Searching for an instance of the InfoBarMessageControl");
 
-                _infoBarMessageControl = TargetView.FindParentByPredicate(o => o is InfoBarMessageControl) as InfoBarMessageControl;
+                _infoBarMessageControl = TargetView?.FindParentByPredicate(o => o is InfoBarMessageControl) as InfoBarMessageControl;
 
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
 
@@ -307,7 +319,11 @@
 
             if (DisableWhenNoViewModel)
             {
-                TargetView.IsEnabled = (ViewModel is not null);
+                var targetView = TargetView;
+                if (targetView is not null)
+                {
+                    targetView.IsEnabled = (ViewModel is not null);
+                }
             }
         }
 
@@ -316,7 +332,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
+        public override async Task OnTargetViewUnloadedAsync(object? sender, EventArgs e)
         {
             await base.OnTargetViewUnloadedAsync(sender, e);
 
@@ -355,7 +371,11 @@
 
             if (DisableWhenNoViewModel)
             {
-                TargetView.IsEnabled = (ViewModel is not null);
+                var targetView = TargetView;
+                if (targetView is not null)
+                {
+                    targetView.IsEnabled = (ViewModel is not null);
+                }
             }
         }
 
@@ -365,7 +385,7 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        public override async void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
+        public override async void OnTargetViewDataContextChanged(object? sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (IsCurrentDataContext(e))
@@ -382,7 +402,7 @@
             CreateViewModelWrapper();
 
             // Fix for CTL-307: DataContextChanged is invoked before Unloaded because Parent is set to null
-            var targetControlParent = TargetView.GetParent();
+            var targetControlParent = TargetView?.GetParent();
             if (targetControlParent is null)
             {
                 return;
@@ -409,7 +429,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected override void OnViewLoadedManagerLoading(object sender, ViewLoadEventArgs e)
+        protected override void OnViewLoadedManagerLoading(object? sender, ViewLoadEventArgs e)
         {
             base.OnViewLoadedManagerLoading(sender, e);
 
@@ -424,7 +444,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected override void OnViewLoadedManagerUnloading(object sender, ViewLoadEventArgs e)
+        protected override void OnViewLoadedManagerUnloading(object? sender, ViewLoadEventArgs e)
         {
             base.OnViewLoadedManagerUnloading(sender, e);
 
@@ -449,21 +469,29 @@
                 return;
             }
 
-            _parentViewModelContainer = TargetView.FindParentViewModelContainer();
-            if (_parentViewModelContainer is not null)
+            var parentViewModelContainer = TargetView?.FindParentViewModelContainer();
+
+            // Always update the parent view model container
+            _parentViewModelContainer = parentViewModelContainer;
+
+            if (parentViewModelContainer is not null)
             {
-                Log.Debug("Found the parent view model container '{0}' for '{1}'", _parentViewModelContainer.GetType().Name, TargetView.GetType().Name);
+                Log.Debug("Found the parent view model container '{0}' for '{1}'", parentViewModelContainer.GetType().Name, TargetView?.GetType().Name);
             }
             else
             {
                 Log.Debug("Couldn't find parent view model container");
             }
 
-            if (_parentViewModelContainer is not null)
+            if (parentViewModelContainer is not null)
             {
-                _parentViewModelContainer.ViewModelChanged += OnParentViewModelContainerViewModelChanged;
+                parentViewModelContainer.ViewModelChanged += OnParentViewModelContainerViewModelChanged;
 
-                SubscribeToParentViewModel(_parentViewModelContainer.ViewModel);
+                var parentViewModel = parentViewModelContainer.ViewModel;
+                if (parentViewModel is not null)
+                {
+                    SubscribeToParentViewModel(parentViewModel);
+                }
             }
         }
 
@@ -490,15 +518,15 @@
         /// <param name="parentViewModel">The parent view model.</param>
         private void SubscribeToParentViewModel(IViewModel parentViewModel)
         {
-            if ((parentViewModel is not null) && !ObjectHelper.AreEqualReferences(parentViewModel, ViewModel))
+            if (!ObjectHelper.AreEqualReferences(parentViewModel, ViewModel))
             {
                 _parentViewModel = parentViewModel;
 
                 RegisterViewModelAsChild();
 
-                _parentViewModel.SavingAsync += OnParentViewModelSavingAsync;
-                _parentViewModel.CancelingAsync += OnParentViewModelCancelingAsync;
-                _parentViewModel.ClosingAsync += OnParentViewModelClosingAsync;
+                parentViewModel.SavingAsync += OnParentViewModelSavingAsync;
+                parentViewModel.CancelingAsync += OnParentViewModelCancelingAsync;
+                parentViewModel.ClosingAsync += OnParentViewModelClosingAsync;
 
                 Log.Debug("Subscribed to parent view model '{0}'", parentViewModel.GetType());
             }
@@ -509,13 +537,14 @@
         /// </summary>
         private void UnsubscribeFromParentViewModel()
         {
-            if (_parentViewModel is not null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is not null)
             {
                 UnregisterViewModelAsChild();
 
-                _parentViewModel.SavingAsync -= OnParentViewModelSavingAsync;
-                _parentViewModel.CancelingAsync -= OnParentViewModelCancelingAsync;
-                _parentViewModel.ClosingAsync -= OnParentViewModelClosingAsync;
+                parentViewModel.SavingAsync -= OnParentViewModelSavingAsync;
+                parentViewModel.CancelingAsync -= OnParentViewModelCancelingAsync;
+                parentViewModel.ClosingAsync -= OnParentViewModelClosingAsync;
 
                 _parentViewModel = null;
 
@@ -546,7 +575,7 @@
             }
 
             parentViewModel.RegisterChildViewModel(viewModel);
-            viewModel.SetParentViewModel(_parentViewModel);
+            viewModel.SetParentViewModel(parentViewModel);
         }
 
         /// <summary>
@@ -579,7 +608,7 @@
         /// Updates the data context to use view model.
         /// </summary>
         /// <param name="newDataContext">The new data context.</param>
-        private async Task UpdateDataContextToUseViewModelAsync(object newDataContext)
+        private async Task UpdateDataContextToUseViewModelAsync(object? newDataContext)
         {
             SubscribeToParentViewModelContainer();
 
@@ -590,7 +619,7 @@
             }
 
             var currentViewModel = ViewModel;
-            object modelToInject = null;
+            object? modelToInject = null;
             var constructNewViewModel = false;
 
             if (newDataContext is not null)
@@ -700,11 +729,11 @@
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private void OnParentViewModelContainerViewModelChanged(object sender, EventArgs e)
+        private void OnParentViewModelContainerViewModelChanged(object? sender, EventArgs e)
         {
             UnsubscribeFromParentViewModel();
 
-            IViewModelContainer viewModelContainer;
+            IViewModelContainer? viewModelContainer;
 
             var senderAsLogic = sender as LogicBase;
             if (senderAsLogic is not null)
@@ -719,11 +748,14 @@
             if (viewModelContainer is not null)
             {
                 var parentVm = viewModelContainer.ViewModel;
-                SubscribeToParentViewModel(parentVm);
+                if (parentVm is not null)
+                {
+                    SubscribeToParentViewModel(parentVm);
+                }
             }
         }
 
-        private void OnParentViewModelContainerUnloading(object sender, EventArgs e)
+        private void OnParentViewModelContainerUnloading(object? sender, EventArgs e)
         {
             if (!IgnoreNullDataContext)
             {
@@ -733,7 +765,7 @@
             }
         }
 
-        private void OnParentViewModelContainerLoading(object sender, EventArgs e)
+        private void OnParentViewModelContainerLoading(object? sender, EventArgs e)
         {
             if (IgnoreNullDataContext)
             {
@@ -748,12 +780,19 @@
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="CancelingEventArgs"/> instance containing the event data.</param>
-        private async Task OnParentViewModelCancelingAsync(object sender, CancelingEventArgs e)
+        private async Task OnParentViewModelCancelingAsync(object? sender, CancelingEventArgs e)
         {
-            // The parent view model is canceled, cancel our view model as well
-            if (ViewModel is not null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is null)
             {
-                if (ReferenceEquals(sender, ViewModel))
+                return;
+            }
+
+            // The parent view model is canceled, cancel our view model as well
+            var viewModel = ViewModel;
+            if (viewModel is not null)
+            {
+                if (ReferenceEquals(sender, viewModel))
                 {
                     Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Canceling event", sender.GetType().FullName);
                     return;
@@ -761,15 +800,15 @@
 
                 if (e.Cancel)
                 {
-                    Log.Info("Parent view model '{0}' is canceling, but canceling is canceled by another view model, canceling of view model '{1}' will not continue", _parentViewModel.GetType(), ViewModel.GetType());
+                    Log.Info("Parent view model '{0}' is canceling, but canceling is canceled by another view model, canceling of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                     return;
                 }
 
-                Log.Info("Parent view model '{0}' is canceled, cancelling view model '{1}' as well", _parentViewModel.GetType(), ViewModel.GetType());
+                Log.Info("Parent view model '{0}' is canceled, cancelling view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
 
-                if (!ViewModel.IsClosed)
+                if (!viewModel.IsClosed)
                 {
-                    e.Cancel = !await ViewModel.CancelViewModelAsync();
+                    e.Cancel = !await viewModel.CancelViewModelAsync();
                 }
             }
         }
@@ -779,12 +818,19 @@
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="SavingEventArgs"/> instance containing the event data.</param>
-        private async Task OnParentViewModelSavingAsync(object sender, SavingEventArgs e)
+        private async Task OnParentViewModelSavingAsync(object? sender, SavingEventArgs e)
         {
-            // The parent view model is saved, save our view model as well
-            if (ViewModel is not null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is null)
             {
-                if (ReferenceEquals(sender, ViewModel))
+                return;
+            }
+
+            // The parent view model is saved, save our view model as well
+            var viewModel = ViewModel;
+            if (viewModel is not null)
+            {
+                if (ReferenceEquals(sender, viewModel))
                 {
                     Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Saving event", sender.GetType().FullName);
                     return;
@@ -792,15 +838,15 @@
 
                 if (e.Cancel)
                 {
-                    Log.Info("Parent view model '{0}' is saving, but saving is canceled by another view model, saving of view model '{1}' will not continue", _parentViewModel.GetType(), ViewModel.GetType());
+                    Log.Info("Parent view model '{0}' is saving, but saving is canceled by another view model, saving of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                     return;
                 }
 
-                Log.Info("Parent view model '{0}' is saving, saving view model '{1}' as well", _parentViewModel.GetType(), ViewModel.GetType());
+                Log.Info("Parent view model '{0}' is saving, saving view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
 
-                if (!ViewModel.IsClosed)
+                if (!viewModel.IsClosed)
                 {
-                    e.Cancel = !await ViewModel.SaveViewModelAsync();
+                    e.Cancel = !await viewModel.SaveViewModelAsync();
                 }
             }
         }
@@ -810,11 +856,18 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private async Task OnParentViewModelClosingAsync(object sender, EventArgs e)
+        private async Task OnParentViewModelClosingAsync(object? sender, EventArgs e)
         {
-            if (ViewModel is not null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is null)
             {
-                if (ReferenceEquals(sender, ViewModel))
+                return;
+            }
+
+            var viewModel = ViewModel;
+            if (viewModel is not null)
+            {
+                if (ReferenceEquals(sender, viewModel))
                 {
                     Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
                     return;

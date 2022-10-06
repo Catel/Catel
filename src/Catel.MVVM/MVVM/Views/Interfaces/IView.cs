@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IView.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
 
@@ -14,14 +7,13 @@ namespace Catel.MVVM.Views
     /// </summary>
     public interface IView : IViewModelContainer
     {
-        #region Properties
         /// <summary>
         /// Gets or sets the data context.
         /// </summary>
         /// <value>
         /// The data context.
         /// </value>
-        object DataContext { get; set; }
+        object? DataContext { get; set; }
 
         /// <summary>
         /// Gets or sets the tag.
@@ -29,30 +21,27 @@ namespace Catel.MVVM.Views
         /// <value>
         /// The tag.
         /// </value>
-        object Tag { get; set; }
+        object? Tag { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the view is enabled.
         /// </summary>
         /// <value><c>true</c> if the view is enabled; otherwise, <c>false</c>.</value>
         bool IsEnabled { get; set; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> Loaded;
+        event EventHandler<EventArgs>? Loaded;
 
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> Unloaded;
+        event EventHandler<EventArgs>? Unloaded;
 
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<DataContextChangedEventArgs> DataContextChanged;
-        #endregion
+        event EventHandler<DataContextChangedEventArgs>? DataContextChanged;
     }
 }

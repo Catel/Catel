@@ -1,19 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using Data;
 
     public partial class ViewModelBase
     {
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModelAsync"/>.
         /// <para />
@@ -67,9 +59,7 @@ namespace Catel.MVVM
         /// </value>
         [ExcludeFromValidation]
         protected bool ValidateModelsOnInitialization { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Validates the current object for field and business rule errors.
         /// </summary>
@@ -100,19 +90,20 @@ namespace Catel.MVVM
 
             lock (_modelLock)
             {
-                foreach (KeyValuePair<string, object> model in _modelObjects)
+                foreach (var modelKeyValuePair in _modelObjects)
                 {
-                    if (model.Value is null)
+                    var model = modelKeyValuePair.Value;
+                    if (model is null)
                     {
                         continue;
                     }
 
-                    if (!_modelObjectsInfo[model.Key].SupportValidation)
+                    if (!_modelObjectsInfo[modelKeyValuePair.Key].SupportValidation)
                     {
                         continue;
                     }
 
-                    var validatable = model.Value as IValidatable;
+                    var validatable = model as IValidatable;
                     if (validatable is not null)
                     {
                         validatable.Validate();
@@ -278,7 +269,5 @@ namespace Catel.MVVM
                 }
             }
         }
-
-        #endregion
     }
 }

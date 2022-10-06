@@ -52,7 +52,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The key event args instance containing the event data.</param>
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object? sender, KeyEventArgs e)
         {
             if (!IsEnabled)
             {

@@ -6,13 +6,13 @@
 
     public partial class NavigationRootService
     {
-        private object _rootFrame;
+        private object? _rootFrame;
 
         /// <summary>
         /// Gets the navigation root.
         /// </summary>
         /// <returns>System.Object.</returns>
-        public virtual object GetNavigationRoot()
+        public virtual object? GetNavigationRoot()
         {
             return GetApplicationRootFrame();
         }
@@ -20,7 +20,7 @@
         /// <summary>
         /// Gets the application root frame.
         /// </summary>
-        protected virtual Frame GetApplicationRootFrame()
+        protected virtual Frame? GetApplicationRootFrame()
         {
             if (_rootFrame is null)
             {

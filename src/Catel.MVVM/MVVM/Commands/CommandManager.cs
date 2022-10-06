@@ -17,8 +17,8 @@
 
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
-        private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
-        private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
+        private readonly Dictionary<string, InputGesture?> _originalCommandGestures = new Dictionary<string, InputGesture?>();
+        private readonly Dictionary<string, InputGesture?> _commandGestures = new Dictionary<string, InputGesture?>();
 
         private bool _suspendedKeyboardEvents;
 
@@ -29,7 +29,6 @@
         {
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the keyboard events are suspended.
         /// </summary>
@@ -56,14 +55,11 @@
                 }
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a command has been created.
         /// </summary>
-        public event EventHandler<CommandCreatedEventArgs> CommandCreated;
-        #endregion
+        public event EventHandler<CommandCreatedEventArgs>? CommandCreated;
 
         /// <summary>
         /// Creates the command inside the command manager.
@@ -77,7 +73,7 @@
         /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand" /> method.</exception>
-        public void CreateCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand compositeCommand = null,
+        public void CreateCommand(string commandName, InputGesture? inputGesture = null, ICompositeCommand? compositeCommand = null,
             bool throwExceptionWhenCommandIsAlreadyCreated = true)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -149,7 +145,7 @@
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The <see cref="ICommand"/> or <c>null</c> if the command is not created.</returns>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        public ICommand GetCommand(string commandName)
+        public ICommand? GetCommand(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
@@ -212,10 +208,10 @@
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void RegisterCommand(string commandName, ICommand command, IViewModel viewModel = null)
+        public void RegisterCommand(string commandName, ICommand command, IViewModel? viewModel = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -248,7 +244,7 @@
         public void RegisterAction(string commandName, Action action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -278,10 +274,10 @@
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void RegisterAction(string commandName, Action<object> action)
+        public void RegisterAction(string commandName, Action<object?> action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -314,7 +310,7 @@
         public void UnregisterCommand(string commandName, ICommand command)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -347,7 +343,7 @@
         public void UnregisterAction(string commandName, Action action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -377,10 +373,10 @@
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void UnregisterAction(string commandName, Action<object> action)
+        public void UnregisterAction(string commandName, Action<object?> action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -408,7 +404,7 @@
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public InputGesture GetOriginalInputGesture(string commandName)
+        public InputGesture? GetOriginalInputGesture(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
@@ -429,7 +425,7 @@
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public InputGesture GetInputGesture(string commandName)
+        public InputGesture? GetInputGesture(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
@@ -451,7 +447,7 @@
         /// <param name="inputGesture">The new input gesture.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void UpdateInputGesture(string commandName, InputGesture inputGesture = null)
+        public void UpdateInputGesture(string commandName, InputGesture? inputGesture = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 

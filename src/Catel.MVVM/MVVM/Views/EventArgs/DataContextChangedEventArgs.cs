@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataContextChangedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
 
@@ -19,7 +12,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="oldContext">The old context.</param>
         /// <param name="newContext">The new context.</param>
-        public DataContextChangedEventArgs(object oldContext, object newContext)
+        public DataContextChangedEventArgs(object? oldContext, object? newContext)
         {
             OldContext = oldContext;
             NewContext = newContext;
@@ -29,13 +22,13 @@ namespace Catel.MVVM.Views
         /// Gets the old context.
         /// </summary>
         /// <value>The old context.</value>
-        public object OldContext { get; private set; }
+        public object? OldContext { get; private set; }
 
         /// <summary>
         /// Gets the new context.
         /// </summary>
         /// <value>The new context.</value>
-        public object NewContext { get; private set; }
+        public object? NewContext { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the old and new context are equal.

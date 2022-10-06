@@ -26,7 +26,6 @@
         /// <value>The show counter.</value>
         int ShowCounter { get; }
         
-        #region Methods
         /// <summary>
         /// Shows the busy indicator window with the specified status text.
         /// </summary>
@@ -102,6 +101,5 @@
         /// call to <see cref="Hide"/> will reset the internal counter to zero (0) and thus hide the window.
         /// </summary>
         void Pop();
-        #endregion
     }
 }

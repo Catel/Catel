@@ -42,7 +42,7 @@
         /// <returns>
         /// <c>true</c> if the specified value is visible; otherwise, <c>false</c>.
         /// </returns>
-        protected override bool IsVisible(object value, Type targetType, object parameter)
+        protected override bool IsVisible(object? value, Type targetType, object? parameter)
         {
             if (value is null)
             {
@@ -74,6 +74,10 @@
             var bindingFlags = BindingFlags.Public | BindingFlags.Static;
 
             var parseMethod = genericEnumType.GetMethodEx("Parse", TypeArray.From<string, bool>(), bindingFlags);
+            if (parseMethod is null)
+            {
+                return false;
+            }
 
             var allowedEnumValues = stringParameter.Split(SplitChars, StringSplitOptions.RemoveEmptyEntries);
             foreach (var allowedEnumValueAsString in allowedEnumValues)

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.models.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System.Threading.Tasks;
     using Catel.Data;
@@ -16,7 +9,7 @@ namespace Catel.Tests.MVVM.ViewModels
     public partial class ViewModelBaseFacts
     {
         [TestCase]
-        public void GetAllModels()
+        public void GetAllModels_With_Null()
         {
             var person = new Person();
             person.FirstName = "first_name";
@@ -26,8 +19,27 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var models = viewModel.GetAllModelsForTest();
 
+            Assert.AreEqual(1, models.Length);
+            Assert.AreEqual(person, models[0]);
+        }
+
+        [TestCase]
+        public void GetAllModels()
+        {
+            var person = new Person();
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
+
+            var viewModel = new TestViewModel(person);
+
+            var specialValidationModel = new SpecialValidationModel();
+            viewModel.SpecialValidationModel = specialValidationModel;
+
+            var models = viewModel.GetAllModelsForTest();
+
             Assert.AreEqual(2, models.Length);
             Assert.AreEqual(person, models[0]);
+            Assert.AreEqual(specialValidationModel, models[1]);
         }
 
         [TestCase]

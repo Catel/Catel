@@ -7,9 +7,8 @@
     using System.Windows.Input;
     using Logging;
     using Reflection;
-    using Threading;
-    using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object>;
-    using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object, System.Threading.Tasks.Task>;
+    using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object?>;
+    using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object?, System.Threading.Tasks.Task>;
     using Catel.Data;
 
     /// <summary>
@@ -17,7 +16,6 @@
     /// </summary>
     public class ViewModelCommandManager : IViewModelCommandManager
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -27,9 +25,7 @@
         /// Dictionary containing all instances of all view model command managers.
         /// </summary>
         private static readonly Dictionary<int, ViewModelCommandManager> _instances = new Dictionary<int, ViewModelCommandManager>();
-        #endregion
 
-        #region Fields
         /// <summary>
         /// The lock object.
         /// </summary>
@@ -57,7 +53,7 @@
         /// <summary>
         /// The view model.
         /// </summary>
-        private IViewModel _viewModel;
+        private readonly IViewModel _viewModel;
 
         /// <summary>
         /// The view model type;
@@ -68,9 +64,7 @@
         /// A list of reflection properties for the commands.
         /// </summary>
         private readonly List<PropertyInfo> _commandProperties = new List<PropertyInfo>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelCommandManager" /> class.
         /// </summary>
@@ -78,7 +72,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         private ViewModelCommandManager(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             Log.Debug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
@@ -102,9 +96,7 @@
 
             Log.Debug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the commands in a specific <see cref="IViewModel" /> instance. By subscribing
         /// to all commands, the <see cref="IViewModel.CommandExecutedAsync" /> can be intercepted.
@@ -116,7 +108,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public static IViewModelCommandManager Create(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             lock (_instances)
             {
@@ -124,8 +116,7 @@
                 // in the meantime
                 if (viewModel.IsClosed)
                 {
-                    Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
-                    return null;
+                    throw Log.ErrorAndCreateException<CatelException>($"View model '{viewModel.GetType().GetSafeFullName()}' with unique identifier '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}' is already closed, cannot manage commands of a closed view model");
                 }
 
                 if (!_instances.TryGetValue(viewModel.UniqueIdentifier, out var commandManager))
@@ -265,7 +256,7 @@
         }
 
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
+        private async void OnViewModelCommandExecuted(object? sender, CommandExecutedEventArgs e)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             CommandHandler[] syncHandlers;
@@ -300,14 +291,14 @@
             }
         }
 
-        private Task OnViewModelInitializedAsync(object sender, EventArgs e)
+        private Task OnViewModelInitializedAsync(object? sender, EventArgs e)
         {
             InvalidateCommands(true);
 
             return Task.CompletedTask;
         }
 
-        private Task OnViewModelClosedAsync(object sender, EventArgs e)
+        private Task OnViewModelClosedAsync(object? sender, EventArgs e)
         {
             lock (_lock)
             {
@@ -322,11 +313,9 @@
 
                 _viewModel.InitializedAsync -= OnViewModelInitializedAsync;
                 _viewModel.ClosedAsync -= OnViewModelClosedAsync;
-                _viewModel = null;
             }
 
             return Task.CompletedTask;
         }
-        #endregion
     }
 }

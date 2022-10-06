@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.navigation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using Catel.Data;
@@ -12,14 +6,8 @@ namespace Catel.MVVM
 
     public partial class ViewModelBase
     {
-        #region Fields
         private readonly NavigationContext _navigationContext = new NavigationContext();
-        #endregion
 
-        #region Constructors
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Gets the navigation context.
         /// </summary>
@@ -30,9 +18,7 @@ namespace Catel.MVVM
         /// </remarks>
         [ExcludeFromValidation]
         protected NavigationContext NavigationContext { get { return _navigationContext; } }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the navigation is completed.
         /// </summary>
@@ -45,22 +31,20 @@ namespace Catel.MVVM
         /// It is also possible to use the <see cref="OnNavigationCompleted"/> event.
         /// </remarks>
         public event EventHandler NavigationCompleted;
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Updates the navigation context. The navigation context provided by this class is different
         /// from the <see cref="NavigationContext"/>. Therefore, this method updates the navigation context
         /// to match it to the values of the <paramref name="navigationContext"/>.
         /// </summary>
         /// <param name="navigationContext">The navigation context.</param>
-        public void UpdateNavigationContext(NavigationContext navigationContext)
+        public void UpdateNavigationContext(NavigationContext? navigationContext)
         {
             lock (_navigationContext)
             {
                 if (navigationContext is not null)
                 {
-                    foreach (string key in navigationContext.Values.Keys)
+                    foreach (var key in navigationContext.Values.Keys)
                     {
                         _navigationContext.Values[key] = navigationContext.Values[key];
                     }
@@ -84,6 +68,5 @@ namespace Catel.MVVM
         /// It is also possible to use the <see cref="NavigationCompleted"/> event.
         /// </remarks>
         protected virtual void OnNavigationCompleted() { }
-        #endregion
     }
 }
