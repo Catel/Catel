@@ -46,6 +46,27 @@
             return model;
         }
 
+
+        public static T CreateRequiredInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object?[] parameters)
+        {
+            return (T)CreateRequiredInstanceWithParametersAndAutoCompletion(typeFactory, typeof(T), parameters);
+        }
+
+        public static object CreateRequiredInstanceWithParametersAndAutoCompletion(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(typeToConstruct);
+
+            var model = typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeToConstruct, parameters);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
+            }
+
+            return model;
+        }
+
+
         /// <summary>
         /// Creates an instance of the specified type using dependency injection.
         /// </summary>
