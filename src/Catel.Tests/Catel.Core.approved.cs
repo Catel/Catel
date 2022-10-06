@@ -2180,6 +2180,8 @@ namespace Catel.IoC
         public static T CreateRequiredInstance<T>(this Catel.IoC.ITypeFactory typeFactory) { }
         public static object CreateRequiredInstanceWithParameters(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
         public static T CreateRequiredInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
+        public static object CreateRequiredInstanceWithParametersAndAutoCompletion(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
+        public static T CreateRequiredInstanceWithParametersAndAutoCompletion<T>(this Catel.IoC.ITypeFactory typeFactory, params object?[] parameters) { }
     }
     public class TypeInstantiatedEventArgs : System.EventArgs
     {
@@ -3814,6 +3816,12 @@ namespace Catel.Services
         string? GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo);
         void PreloadLanguageSources();
         void RegisterLanguageSource(Catel.Services.ILanguageSource languageSource);
+    }
+    public static class ILanguageServiceExtensions
+    {
+        public static string GetRequiredString(this Catel.Services.ILanguageService languageService, string resourceName) { }
+        public static string GetRequiredString(this Catel.Services.ILanguageService languageService, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
+        public static string GetRequiredString(this Catel.Services.ILanguageService languageService, Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
     }
     public interface ILanguageSource
     {
