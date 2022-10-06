@@ -1898,8 +1898,6 @@ namespace Catel.IO
     {
         public static string AppendTrailingSlash(string path) { }
         public static string AppendTrailingSlash(string path, char slash) { }
-        [System.Obsolete("Use System.IO.Path instead. Will be removed in version 7.0.0.", true)]
-        public static string Combine(params string[] paths) { }
         public static string CombineUrls(params string[] urls) { }
         public static string GetApplicationDataDirectory() { }
         public static string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget applicationDataTarget) { }

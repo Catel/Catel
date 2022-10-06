@@ -392,38 +392,6 @@
         }
 
         /// <summary>
-        /// Returns a combination of multiple paths.
-        /// </summary>
-        /// <param name="paths">Paths to combine.</param>
-        /// <returns>Combination of all the paths passed.</returns>
-        [ObsoleteEx(Message = "Use System.IO.Path instead", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "7.0")]
-        public static string Combine(params string[] paths)
-        {
-            var result = string.Empty;
-
-            // Make sure we have any values
-            if (paths.Length == 0)
-            {
-                return string.Empty;
-            }
-
-            if (paths.Length == 1)
-            {
-                return paths[0];
-            }
-
-            for (var i = 0; i < paths.Length; i++)
-            {
-                if (!string.IsNullOrEmpty(paths[i]))
-                {
-                    result = System.IO.Path.Combine(result, paths[i]);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Returns a combination of multiple urls.
         /// </summary>
         /// <param name="urls">Urls to combine.</param>
