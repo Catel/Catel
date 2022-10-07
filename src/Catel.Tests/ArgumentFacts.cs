@@ -293,9 +293,15 @@
             }
 
             [TestCase]
-            public void SucceedsForTypeImplementingInterface()
+            public void SucceedsForTypeImplementingInterface_1()
             {
                 Argument.ImplementsInterface("myParam", typeof(List<int>), typeof(IList));
+            }
+
+            [TestCase]
+            public void SucceedsForTypeImplementingInterface_2()
+            {
+                Argument.ImplementsInterface<IList>("myParam", typeof(List<int>));
             }
         }
 

@@ -371,7 +371,14 @@
 
             var interfaceType = typeof(TInterface);
 
-            ImplementsInterface(paramName, instance, interfaceType);
+            if (instance is Type type)
+            {
+                ImplementsInterface(paramName, type, interfaceType);
+            }
+            else
+            {
+                ImplementsInterface(paramName, instance, interfaceType);
+            }
         }
 
         /// <summary>
