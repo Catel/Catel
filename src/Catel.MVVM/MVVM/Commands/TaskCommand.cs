@@ -20,15 +20,16 @@
 
         private readonly Action<TProgress>? _reportProgress;
 
-        private readonly Func<TExecuteParameter?, CancellationToken, IProgress<TProgress>?, Task>? _executeAsync;
-
         private readonly Progress<TProgress>? _progress;
 
 #pragma warning disable IDISP006 // Implement IDisposable.
         private CancellationTokenSource? _cancellationTokenSource;
 #pragma warning restore IDISP006 // Implement IDisposable.
         private readonly object _cancellationTokenSourceResultObject = new object();
-        
+
+
+        private Func<TExecuteParameter?, CancellationToken, IProgress<TProgress>?, Task>? _executeAsync;
+
         private Task? _task;
 
         /// <summary>
@@ -117,7 +118,7 @@
         /// parameter.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        private TaskCommand(Func<TCanExecuteParameter?, bool>? canExecuteWithParameter = null, Func<bool>? canExecuteWithoutParameter = null,
+        protected TaskCommand(Func<TCanExecuteParameter?, bool>? canExecuteWithParameter = null, Func<bool>? canExecuteWithoutParameter = null,
             Action<TProgress>? reportProgress = null, object? tag = null)
             : base(null, null, canExecuteWithParameter, canExecuteWithoutParameter, tag)
         {
@@ -194,6 +195,25 @@
         /// Raised for each reported progress value.
         /// </summary>
         public event EventHandler<CommandProgressChangedEventArgs<TProgress>>? ProgressChanged;
+
+        /// <summary>
+        /// Initializes the actions.
+        /// </summary>
+        protected void InitializeAsyncActions(Func<TExecuteParameter?, Task>? executeWithParameter, Func<Task>? executeWithoutParameter,
+            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter)
+        {
+            if (executeWithoutParameter is not null)
+            {
+                _executeAsync = async (parameter, cancellationToken, progress) => await executeWithoutParameter();
+            }
+
+            if (executeWithParameter is not null)
+            {
+                _executeAsync = async (parameter, cancellationToken, progress) => await executeWithParameter(parameter);
+            }
+
+            InitializeActions(null, null, canExecuteWithParameter, canExecuteWithoutParameter);
+        }
 
         /// <summary>
         /// Determines whether this instance can execute the specified parameter.

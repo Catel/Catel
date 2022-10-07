@@ -262,20 +262,26 @@ namespace Catel.MVVM
         public virtual void RaiseCanExecuteChanged() { }
         protected virtual void RaiseExecuted(object? parameter) { }
     }
-    public class CompositeCommand : Catel.MVVM.Command, Catel.MVVM.ICatelCommand, Catel.MVVM.ICompositeCommand, System.Windows.Input.ICommand
+    public class CompositeCommand : Catel.MVVM.TaskCommand<object?, object?, Catel.MVVM.ITaskProgressReport>, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand<Catel.MVVM.ITaskProgressReport>, Catel.MVVM.ICompositeCommand, System.Windows.Input.ICommand
     {
         public CompositeCommand() { }
         public bool AllowPartialExecution { get; set; }
         public bool AtLeastOneMustBeExecutable { get; set; }
         public bool CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand { get; set; }
         public System.Collections.Generic.IEnumerable<System.Action> GetActions() { }
-        public System.Collections.Generic.IEnumerable<System.Action<object>> GetActionsWithParameter() { }
+        public System.Collections.Generic.IEnumerable<System.Action<object?>> GetActionsWithParameter() { }
+        public System.Collections.Generic.IEnumerable<System.Func<System.Threading.Tasks.Task>> GetAsyncActions() { }
+        public System.Collections.Generic.IEnumerable<System.Func<object?, System.Threading.Tasks.Task>> GetAsyncActionsWithParameter() { }
         public System.Collections.Generic.IEnumerable<System.Windows.Input.ICommand> GetCommands() { }
         public void RegisterAction(System.Action action) { }
         public void RegisterAction(System.Action<object?> action) { }
+        public void RegisterAction(System.Func<System.Threading.Tasks.Task> action) { }
+        public void RegisterAction(System.Func<object?, System.Threading.Tasks.Task> action) { }
         public void RegisterCommand(System.Windows.Input.ICommand command, Catel.MVVM.IViewModel? viewModel = null) { }
         public void UnregisterAction(System.Action action) { }
-        public void UnregisterAction(System.Action<object> action) { }
+        public void UnregisterAction(System.Action<object?> action) { }
+        public void UnregisterAction(System.Func<System.Threading.Tasks.Task> action) { }
+        public void UnregisterAction(System.Func<object?, System.Threading.Tasks.Task> action) { }
         public void UnregisterCommand(System.Windows.Input.ICommand command) { }
     }
     public enum DataContextSubscriptionMode
@@ -351,18 +357,24 @@ namespace Catel.MVVM
         void UnregisterCommand(string commandName, System.Windows.Input.ICommand command);
         void UpdateInputGesture(string commandName, Catel.Windows.Input.InputGesture? inputGesture = null);
     }
-    public interface ICompositeCommand : Catel.MVVM.ICatelCommand, System.Windows.Input.ICommand
+    public interface ICompositeCommand : Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand<Catel.MVVM.ITaskProgressReport>, System.Windows.Input.ICommand
     {
         bool AllowPartialExecution { get; set; }
         bool AtLeastOneMustBeExecutable { get; set; }
         System.Collections.Generic.IEnumerable<System.Action> GetActions();
-        System.Collections.Generic.IEnumerable<System.Action<object>> GetActionsWithParameter();
+        System.Collections.Generic.IEnumerable<System.Action<object?>> GetActionsWithParameter();
+        System.Collections.Generic.IEnumerable<System.Func<System.Threading.Tasks.Task>> GetAsyncActions();
+        System.Collections.Generic.IEnumerable<System.Func<object?, System.Threading.Tasks.Task>> GetAsyncActionsWithParameter();
         System.Collections.Generic.IEnumerable<System.Windows.Input.ICommand> GetCommands();
         void RegisterAction(System.Action action);
         void RegisterAction(System.Action<object?> action);
+        void RegisterAction(System.Func<System.Threading.Tasks.Task> action);
+        void RegisterAction(System.Func<object?, System.Threading.Tasks.Task> action);
         void RegisterCommand(System.Windows.Input.ICommand command, Catel.MVVM.IViewModel? viewModel = null);
         void UnregisterAction(System.Action action);
         void UnregisterAction(System.Action<object?> action);
+        void UnregisterAction(System.Func<System.Threading.Tasks.Task> action);
+        void UnregisterAction(System.Func<object?, System.Threading.Tasks.Task> action);
         void UnregisterCommand(System.Windows.Input.ICommand command);
     }
     public interface IDataContextSubscriptionService
@@ -580,6 +592,7 @@ namespace Catel.MVVM
         public TaskCommand(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<bool>? canExecute = null, object? tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter?, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter?, System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null) { }
+        protected TaskCommand(System.Func<TCanExecuteParameter?, bool>? canExecuteWithParameter = null, System.Func<bool>? canExecuteWithoutParameter = null, System.Action<TProgress>? reportProgress = null, object? tag = null) { }
         public TaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>?, System.Threading.Tasks.Task> execute, System.Func<bool>? canExecute = null, System.Action<TProgress>? reportProgress = null, object? tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter?, System.Threading.CancellationToken, System.IProgress<TProgress>?, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter?, bool>? canExecute = null, System.Action<TProgress>? reportProgress = null, object? tag = null) { }
         public Catel.MVVM.Command CancelCommand { get; }
@@ -593,6 +606,7 @@ namespace Catel.MVVM
         public override bool CanExecute(TCanExecuteParameter? parameter) { }
         public void Cancel() { }
         protected override void Execute(TExecuteParameter? parameter, bool ignoreCanExecuteCheck) { }
+        protected void InitializeAsyncActions(System.Func<TExecuteParameter?, System.Threading.Tasks.Task>? executeWithParameter, System.Func<System.Threading.Tasks.Task>? executeWithoutParameter, System.Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, System.Func<bool>? canExecuteWithoutParameter) { }
         public override void RaiseCanExecuteChanged() { }
     }
     public class UrlLocator : Catel.MVVM.LocatorBase, Catel.MVVM.ILocator, Catel.MVVM.IUrlLocator

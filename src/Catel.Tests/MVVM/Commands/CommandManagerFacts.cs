@@ -8,6 +8,7 @@
 namespace Catel.Tests.MVVM
 {
     using System;
+    using System.Threading.Tasks;
     using Catel.MVVM;
     using NUnit.Framework;
 
@@ -245,7 +246,7 @@ namespace Catel.Tests.MVVM
         public class TheRegisterAndUnregisterActionFunctionality
         {
             [TestCase]
-            public void RegisteredActionsCanBeInvoked()
+            public async Task RegisteredActionsCanBeInvokedAsync()
             {
                 var invoked = false;
                 Action action = () => invoked = true;
