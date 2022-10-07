@@ -35,10 +35,17 @@
                     serviceLocator.RegisterInstance(MessageMediator.Default);
                 }
 
+                // Always overwrite the dispatcher service since we know Catel.Core registers a shim
+                var registrationInfo = serviceLocator.GetRegistrationInfo(typeof(IDispatcherService));
+                if (registrationInfo is null || registrationInfo.ImplementingType == typeof(ShimDispatcherService))
+                {
+                    serviceLocator.RegisterType<IDispatcherService, DispatcherService>();
+                }
+
+                // Only register if not yet registered
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, FastViewPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherProviderService, DispatcherProviderService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
