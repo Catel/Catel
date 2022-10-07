@@ -2130,6 +2130,11 @@ namespace Catel.IoC
         public static object ResolveRequiredType(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object? tag = null) { }
         public static TService ResolveRequiredType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null)
             where TService :  notnull { }
+        public static TService ResolveRequiredTypeUsingFactory<TService>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.ITypeFactory typeFactory, object? tag = null)
+            where TService :  notnull { }
+        public static object ResolveRequiredTypeUsingParameters(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object[] parameters, object? tag = null) { }
+        public static T ResolveRequiredTypeUsingParameters<T>(this Catel.IoC.IServiceLocator serviceLocator, object[] parameters, object? tag = null)
+            where T :  notnull { }
         public static TService? ResolveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object? tag = null)
             where TService :  notnull { }
         public static TService? ResolveTypeUsingFactory<TService>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.ITypeFactory typeFactory, object? tag = null)

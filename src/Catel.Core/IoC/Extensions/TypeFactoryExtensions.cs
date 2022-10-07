@@ -8,9 +8,10 @@
     /// </summary>
     public static class TypeFactoryExtensions
     {
+
         public static T CreateRequiredInstance<T>(this ITypeFactory typeFactory)
         {
-            return (T)CreateRequiredInstance(typeFactory, typeof(T)); 
+            return (T)CreateRequiredInstance(typeFactory, typeof(T));
         }
 
         public static object CreateRequiredInstance(this ITypeFactory typeFactory, Type typeToConstruct)
@@ -26,46 +27,6 @@
 
             return model;
         }
-
-        public static T CreateRequiredInstanceWithParameters<T>(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
-        {
-            return (T)CreateRequiredInstanceWithParameters(typeFactory, typeToConstruct, parameters);
-        }
-
-        public static object CreateRequiredInstanceWithParameters(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
-        {
-            ArgumentNullException.ThrowIfNull(typeFactory);
-            ArgumentNullException.ThrowIfNull(typeToConstruct);
-
-            var model = typeFactory.CreateInstanceWithParameters(typeToConstruct, parameters);
-            if (model is null)
-            {
-                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
-            }
-
-            return model;
-        }
-
-
-        public static T CreateRequiredInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object?[] parameters)
-        {
-            return (T)CreateRequiredInstanceWithParametersAndAutoCompletion(typeFactory, typeof(T), parameters);
-        }
-
-        public static object CreateRequiredInstanceWithParametersAndAutoCompletion(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
-        {
-            ArgumentNullException.ThrowIfNull(typeFactory);
-            ArgumentNullException.ThrowIfNull(typeToConstruct);
-
-            var model = typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeToConstruct, parameters);
-            if (model is null)
-            {
-                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
-            }
-
-            return model;
-        }
-
 
         /// <summary>
         /// Creates an instance of the specified type using dependency injection.
@@ -94,6 +55,25 @@
             ArgumentNullException.ThrowIfNull(typeFactory);
 
             return (T?)typeFactory.CreateInstanceWithTag(typeof(T), tag);
+        }
+
+        public static T CreateRequiredInstanceWithParameters<T>(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
+        {
+            return (T)CreateRequiredInstanceWithParameters(typeFactory, typeToConstruct, parameters);
+        }
+
+        public static object CreateRequiredInstanceWithParameters(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(typeToConstruct);
+
+            var model = typeFactory.CreateInstanceWithParameters(typeToConstruct, parameters);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
+            }
+
+            return model;
         }
 
         /// <summary>
@@ -125,6 +105,25 @@
             ArgumentNullException.ThrowIfNull(typeFactory);
 
             return (T?)typeFactory.CreateInstanceWithParametersWithTag(typeof(T), tag, parameters);
+        }
+
+        public static T CreateRequiredInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object?[] parameters)
+        {
+            return (T)CreateRequiredInstanceWithParametersAndAutoCompletion(typeFactory, typeof(T), parameters);
+        }
+
+        public static object CreateRequiredInstanceWithParametersAndAutoCompletion(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(typeToConstruct);
+
+            var model = typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeToConstruct, parameters);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
+            }
+
+            return model;
         }
 
         /// <summary>

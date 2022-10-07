@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using Catel.Reflection;
     using Logging;
@@ -16,6 +15,53 @@
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Resolves the type using parameters. This method combines the <see cref="IServiceLocator.GetRegistrationInfo" /> and
+        /// the <see cref="ITypeFactory.CreateInstanceWithParameters" /> to provide the functionality.
+        /// </summary>
+        /// <typeparam name="T">The type of the interface to resolve.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The instantiated type constructed with the specified parameters.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameters" /> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The type is not registered in the container as transient type.</exception>
+        public static T ResolveRequiredTypeUsingParameters<T>(this IServiceLocator serviceLocator, object[] parameters, object? tag = null)
+            where T : notnull
+        {
+            var instance = (T?)ResolveTypeUsingParameters(serviceLocator, typeof(T), parameters, tag);
+            if (instance is null)
+            {
+                throw CreateExceptionForRequiredType(typeof(T));
+            }
+
+            return instance;
+        }
+
+        /// <summary>
+        /// Resolves the type using parameters. This method combines the <see cref="IServiceLocator.GetRegistrationInfo" /> and
+        /// the <see cref="ITypeFactory.CreateInstanceWithParameters" /> to provide the functionality.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="serviceType">The service type.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The instantiated type constructed with the specified parameters.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameters" /> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The type is not registered in the container as transient type.</exception>
+        public static object ResolveRequiredTypeUsingParameters(this IServiceLocator serviceLocator, Type serviceType, object[] parameters, object? tag = null)
+        {
+            var instance = ResolveTypeUsingParameters(serviceLocator, serviceType, parameters, tag);
+            if (instance is null)
+            {
+                throw CreateExceptionForRequiredType(serviceType);
+            }
+
+            return instance;
+        }
 
         /// <summary>
         /// Resolves the type using parameters. This method combines the <see cref="IServiceLocator.GetRegistrationInfo" /> and
@@ -304,6 +350,21 @@
         }
 
         /// <summary>
+        /// Resolve the required type or throw an exception when it fails to do so.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>An instance of the type registered on the service or <c>null</c> if missing.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static TService ResolveRequiredType<TService>(this IServiceLocator serviceLocator, object? tag = null)
+            where TService : notnull
+        {
+            return (TService)ResolveRequiredType(serviceLocator, typeof(TService), tag);
+        }
+
+        /// <summary>
         /// Resolves an instance of the type registered on the service.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
@@ -321,18 +382,26 @@
         }
 
         /// <summary>
-        /// Resolve the required type or throw an exception when it fails to do so.
+        /// Resolves an instance of the type registered on the service.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="typeFactory">The type factory to use when the object needs to be created.</param>
         /// <param name="tag">The tag.</param>
-        /// <returns>An instance of the type registered on the service or <c>null</c> if missing.</returns>
+        /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static TService ResolveRequiredType<TService>(this IServiceLocator serviceLocator, object? tag = null)
+        public static TService ResolveRequiredTypeUsingFactory<TService>(this IServiceLocator serviceLocator, ITypeFactory typeFactory, object? tag = null)
             where TService : notnull
         {
-            return (TService)ResolveRequiredType(serviceLocator, typeof(TService), tag);
+            var instance = ResolveTypeUsingFactory<TService>(serviceLocator, typeFactory, tag);
+            if (instance is null)
+            {
+                throw CreateExceptionForRequiredType(typeof(TService));
+            }
+
+            return instance;
         }
 
         /// <summary>
@@ -351,7 +420,7 @@
                 var instance = serviceLocator.ResolveType(serviceType, tag);
                 if (instance is null)
                 {
-                    throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(serviceType, msg), $"Type '{serviceType.GetSafeFullName(true)}' cannot be instantiated");
+                    throw CreateExceptionForRequiredType(serviceType);
                 }
 
                 return instance;
@@ -416,6 +485,11 @@
             RegisterTypeWithTag<TService, TServiceImplementation>(serviceLocator, tag, RegistrationType.Singleton);
 
             return ResolveType<TService>(serviceLocator, tag);
+        }
+
+        private static Exception CreateExceptionForRequiredType(Type serviceType)
+        {
+            return Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(serviceType, msg), $"Type '{serviceType.GetSafeFullName(true)}' cannot be instantiated");
         }
     }
 }
