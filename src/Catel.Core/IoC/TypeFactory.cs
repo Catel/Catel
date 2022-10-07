@@ -787,39 +787,29 @@ namespace Catel.IoC
 
             public List<ConstructorInfo> GetConstructors(int parameterCount, bool mustMatchExactCount)
             {
-                var key = $"{parameterCount.ToString()}_{mustMatchExactCount.ToString()}";
+                var key = $"{parameterCount}_{mustMatchExactCount}";
 
                 return _callCache.GetFromCacheOrFetch(key, () =>
                 {
-                    var constructors = new List<ConstructorInfo>();
+                    List<ConstructorInfo> constructors;
 
-                    constructors.AddRange(GetConstructors(parameterCount, mustMatchExactCount, true));
-                    constructors.AddRange(GetConstructors(parameterCount, mustMatchExactCount, false));
+                    if (mustMatchExactCount)
+                    {
+                        constructors = (from ctor in Type.GetConstructorsEx()
+                                        where ctor.GetParameters().Length == parameterCount
+                                        orderby ctor.GetParameters().Length descending, CountSpecialObjects(ctor)
+                                        select ctor).ToList();
+                    }
+                    else
+                    {
+                        constructors = (from ctor in Type.GetConstructorsEx()
+                                        where ctor.GetParameters().Length >= parameterCount
+                                        orderby ctor.GetParameters().Length descending, CountSpecialObjects(ctor)
+                                        select ctor).ToList();
+                    }
 
                     return constructors;
                 });
-            }
-
-            private List<ConstructorInfo> GetConstructors(int parameterCount, bool mustMatchExactCount, bool decoratedWithInjectionConstructorAttribute)
-            {
-                List<ConstructorInfo> constructors;
-
-                if (mustMatchExactCount)
-                {
-                    constructors = (from ctor in Type.GetConstructorsEx()
-                                    where ctor.GetParameters().Length == parameterCount
-                                    orderby ctor.GetParameters().Length descending, CountSpecialObjects(ctor)
-                                    select ctor).ToList();
-                }
-                else
-                {
-                    constructors = (from ctor in Type.GetConstructorsEx()
-                                    where ctor.GetParameters().Length >= parameterCount
-                                    orderby ctor.GetParameters().Length descending, CountSpecialObjects(ctor)
-                                    select ctor).ToList();
-                }
-
-                return constructors;
             }
         }
 
