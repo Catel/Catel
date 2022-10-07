@@ -8,7 +8,7 @@
     /// <summary>
     /// Container for application-wide commands.
     /// </summary>
-    public abstract class CommandContainerBase : CommandContainerBase<object>
+    public abstract class CommandContainerBase : CommandContainerBase<object?>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandContainerBase"/> class.

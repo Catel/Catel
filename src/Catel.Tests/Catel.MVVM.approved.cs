@@ -157,7 +157,7 @@ namespace Catel.MVVM
         public CommandCanceledEventArgs(object? commandParameter = null) { }
         public bool Cancel { get; set; }
     }
-    public abstract class CommandContainerBase : Catel.MVVM.CommandContainerBase<object>
+    public abstract class CommandContainerBase : Catel.MVVM.CommandContainerBase<object?>
     {
         protected CommandContainerBase(string commandName, Catel.MVVM.ICommandManager commandManager) { }
     }
