@@ -1049,7 +1049,7 @@ namespace Catel.Tests.Logging
 
                 var logData = eventArgs.LogData;
 
-                Assert.IsNull(logData);
+                Assert.IsNotNull(logData);
             }
 
             [Test]
