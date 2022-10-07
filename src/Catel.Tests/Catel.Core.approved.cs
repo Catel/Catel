@@ -492,7 +492,6 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : Catel.IWeakEventListener
         where TTarget :  class
         where TSource :  class
-        where TEventArgs :  class
     {
         public System.Type EventArgsType { get; }
         public bool IsSourceAlive { get; }

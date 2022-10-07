@@ -30,7 +30,7 @@
     public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListener
         where TTarget : class
         where TSource : class
-        where TEventArgs : class
+        //where TEventArgs : class // Note: don't require class since DependencyPropertyChangedEventArgs is a struct
     {
         /// <summary>
         /// The log.
