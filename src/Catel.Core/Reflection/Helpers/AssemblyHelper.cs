@@ -27,6 +27,17 @@
         private static readonly HashSet<Assembly> _registeredAssemblies = new HashSet<Assembly>();
         private static readonly Dictionary<string, string> _assemblyMappings = new Dictionary<string, string>();
 
+        public static Assembly GetRequiredEntryAssembly()
+        {
+            var assembly = GetEntryAssembly();
+            if (assembly is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Could not automatically determine the entry assembly");
+            }
+
+            return assembly;
+        }
+
         /// <summary>
         /// Gets the entry assembly.
         /// </summary>

@@ -120,7 +120,6 @@
         public static string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget)
         {
             var assembly = AssemblyHelper.GetEntryAssembly();
-
             if (assembly is null)
             {
                 assembly = Assembly.GetCallingAssembly();

@@ -2785,6 +2785,7 @@ namespace Catel.Reflection
         public static System.Collections.Generic.List<System.Reflection.Assembly> GetLoadedAssemblies() { }
         public static System.Collections.Generic.List<System.Reflection.Assembly> GetLoadedAssemblies(this System.AppDomain appDomain) { }
         public static System.Collections.Generic.List<System.Reflection.Assembly> GetLoadedAssemblies(this System.AppDomain appDomain, bool ignoreDynamicAssemblies) { }
+        public static System.Reflection.Assembly GetRequiredEntryAssembly() { }
         public static bool IsDynamicAssembly(this System.Reflection.Assembly assembly) { }
     }
     public class AssemblyLoadedEventArgs : System.EventArgs
