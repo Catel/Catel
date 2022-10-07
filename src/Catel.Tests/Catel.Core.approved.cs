@@ -2187,7 +2187,7 @@ namespace Catel.IoC
         public static object CreateRequiredInstance(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct) { }
         public static T CreateRequiredInstance<T>(this Catel.IoC.ITypeFactory typeFactory) { }
         public static object CreateRequiredInstanceWithParameters(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
-        public static T CreateRequiredInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
+        public static T CreateRequiredInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, params object?[] parameters) { }
         public static object CreateRequiredInstanceWithParametersAndAutoCompletion(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
         public static T CreateRequiredInstanceWithParametersAndAutoCompletion<T>(this Catel.IoC.ITypeFactory typeFactory, params object?[] parameters) { }
     }

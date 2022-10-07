@@ -57,9 +57,9 @@
             return (T?)typeFactory.CreateInstanceWithTag(typeof(T), tag);
         }
 
-        public static T CreateRequiredInstanceWithParameters<T>(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
+        public static T CreateRequiredInstanceWithParameters<T>(this ITypeFactory typeFactory, params object?[] parameters)
         {
-            return (T)CreateRequiredInstanceWithParameters(typeFactory, typeToConstruct, parameters);
+            return (T)CreateRequiredInstanceWithParameters(typeFactory, typeof(T), parameters);
         }
 
         public static object CreateRequiredInstanceWithParameters(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
