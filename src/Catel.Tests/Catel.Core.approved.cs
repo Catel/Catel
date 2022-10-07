@@ -301,6 +301,11 @@ namespace Catel
         NET7 = 3,
         NET8 = 4,
     }
+    public static class LanguageHelper
+    {
+        public static string GetRequiredString(string resourceName) { }
+        public static string? GetString(string resourceName) { }
+    }
     public class MustBeImplementedException : System.Exception
     {
         public MustBeImplementedException() { }
