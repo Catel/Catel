@@ -237,7 +237,8 @@
         {
             if (string.IsNullOrWhiteSpace(e.PropertyName))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
+                return;
+                //throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
             }
 
             var viewModel = CurrentViewModel;
@@ -277,7 +278,8 @@
         {
             if (string.IsNullOrWhiteSpace(e.PropertyName))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
+                return;
+                //throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
             }
 
             var viewModel = CurrentViewModel;
