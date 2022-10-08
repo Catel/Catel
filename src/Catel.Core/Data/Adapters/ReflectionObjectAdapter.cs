@@ -20,7 +20,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The member value to update.</param>
         /// <returns><c>true</c> if the member was retrieved; otherwise <c>false</c>.</returns>
-        public virtual bool GetMemberValue<TValue>(object instance, string memberName, out TValue value)
+        public virtual bool TryGetMemberValue<TValue>(object instance, string memberName, out TValue? value)
         {
             try
             {
@@ -31,12 +31,12 @@
                     return true;
                 }
 
-                if (GetPropertyValue(instance, memberName, out value))
+                if (TryGetPropertyValue(instance, memberName, out value))
                 {
                     return true;
                 }
 
-                if (GetFieldValue(instance, memberName, out value))
+                if (TryGetFieldValue(instance, memberName, out value))
                 {
                     return true;
                 }
@@ -58,14 +58,14 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The value which will be updated if the member was read.</param>
         /// <returns><c>true</c> if the member value was retrieved; otherwise <c>false</c>.</returns>
-        protected virtual bool GetPropertyValue<TValue>(object instance, string memberName, out TValue value)
+        protected virtual bool TryGetPropertyValue<TValue>(object instance, string memberName, out TValue? value)
         {
             if (instance is IPropertySerializable serializable)
             {
                 object? objectValue = null;
                 if (serializable.GetPropertyValue(memberName, ref objectValue))
                 {
-                    value = (TValue)objectValue!;
+                    value = (TValue?)objectValue;
                     return true;
                 }
             }
@@ -73,11 +73,11 @@
             var propertyInfo = instance.GetType().GetPropertyEx(memberName);
             if (propertyInfo is not null)
             {
-                value = (TValue)propertyInfo.GetValue(instance, null)!;
+                value = (TValue?)propertyInfo.GetValue(instance, null);
                 return true;
             }
 
-            value = default!;
+            value = default;
             return false;
         }
 
@@ -89,14 +89,14 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The value which will be updated if the member was read.</param>
         /// <returns><c>true</c> if the member value was retrieved; otherwise <c>false</c>.</returns>
-        protected virtual bool GetFieldValue<TValue>(object instance, string memberName, out TValue value)
+        protected virtual bool TryGetFieldValue<TValue>(object instance, string memberName, out TValue? value)
         {
             if (instance is IFieldSerializable serializable)
             {
                 object? objectValue = null;
                 if (serializable.GetFieldValue(memberName, ref objectValue))
                 {
-                    value = (TValue)objectValue!;
+                    value = (TValue?)objectValue;
                     return true; 
                 }
             }
@@ -104,11 +104,11 @@
             var fieldInfo = instance.GetType().GetFieldEx(memberName);
             if (fieldInfo is not null)
             {
-                value = (TValue)fieldInfo.GetValue(instance)!;
+                value = (TValue?)fieldInfo.GetValue(instance);
                 return true;
             }
 
-            value = default!;
+            value = default;
             return false;
         }
 
@@ -119,7 +119,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the member was set successfully; otherwise <c>false</c>.</returns>
-        public virtual bool SetMemberValue<TValue>(object instance, string memberName, TValue value)
+        public virtual bool TrySetMemberValue<TValue>(object instance, string memberName, TValue? value)
         {
             try
             {
@@ -130,12 +130,12 @@
                     return true;
                 }
 
-                if (SetPropertyValue(instance, memberName, value))
+                if (TrySetPropertyValue(instance, memberName, value))
                 {
                     return true;
                 }
 
-                if (SetFieldValue(instance, memberName, value))
+                if (TrySetFieldValue(instance, memberName, value))
                 {
                     return true;
                 }
@@ -158,9 +158,9 @@
         /// <param name="memberName">The name of the member.</param>
         /// <param name="value">The value to set the member to.</param>
         /// <returns><c>true</c> if the value as successfully set; otherwise <c>false</c>.</returns>
-        protected virtual bool SetPropertyValue<TValue>(object instance, string memberName, TValue value)
+        protected virtual bool TrySetPropertyValue<TValue>(object instance, string memberName, TValue value)
         {
-            var objectValue = BoxingCache<TValue>.Default.GetBoxedValue(value);
+            var objectValue = BoxingCache.GetBoxedValue(value);
 
             if (instance is IPropertySerializable serializable)
             {
@@ -188,9 +188,9 @@
         /// <param name="memberName">The name of the member.</param>
         /// <param name="value">The value to set the member to.</param>
         /// <returns><c>true</c> if the value as successfully set; otherwise <c>false</c>.</returns>
-        protected virtual bool SetFieldValue<TValue>(object instance, string memberName, TValue value)
+        protected virtual bool TrySetFieldValue<TValue>(object instance, string memberName, TValue value)
         {
-            var objectValue = BoxingCache<TValue>.Default.GetBoxedValue(value);
+            var objectValue = BoxingCache.GetBoxedValue(value);
 
             if (instance is IFieldSerializable serializable)
             {

@@ -114,7 +114,7 @@
             object? propertyValue = null;
             if (!string.IsNullOrEmpty(e.PropertyName) && !KnownIgnoredPropertyNames.Contains(e.PropertyName))
             {
-                ObjectAdapter.GetMemberValue(viewModel, e.PropertyName, out propertyValue);
+                ObjectAdapter.TryGetMemberValue(viewModel, e.PropertyName, out propertyValue);
             }
 
             AuditingManager.OnPropertyChanged(viewModel, e.PropertyName, propertyValue);

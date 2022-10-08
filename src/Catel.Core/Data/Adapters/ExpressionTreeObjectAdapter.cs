@@ -23,7 +23,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The member value to update.</param>
         /// <returns><c>true</c> if the member was retrieved; otherwise <c>false</c>.</returns>
-        public virtual bool GetMemberValue<TValue>(object instance, string memberName, out TValue value)
+        public virtual bool TryGetMemberValue<TValue>(object instance, string memberName, out TValue? value)
         {
             try
             {
@@ -94,7 +94,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the member was set successfully; otherwise <c>false</c>.</returns>
-        public virtual bool SetMemberValue<TValue>(object instance, string memberName, TValue value)
+        public virtual bool TrySetMemberValue<TValue>(object instance, string memberName, TValue? value)
         {
             try
             {
@@ -134,12 +134,12 @@
                     }
                 }
 
-                if (fastMemberInvoker.SetPropertyValue(instance, memberName, value))
+                if (fastMemberInvoker.TrySetPropertyValue(instance, memberName, value))
                 {
                     return true;
                 }
 
-                if (fastMemberInvoker.SetFieldValue(instance, memberName, value))
+                if (fastMemberInvoker.TrySetFieldValue(instance, memberName, value))
                 {
                     return true;
                 }

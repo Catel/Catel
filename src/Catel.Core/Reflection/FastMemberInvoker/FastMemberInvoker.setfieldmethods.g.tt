@@ -19,15 +19,14 @@
 namespace Catel.Reflection
 {
     using System;
-    using Catel.Data;
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-        public bool SetFieldValue<TValue>(object entity, string fieldName, TValue value)
+        public bool TrySetFieldValue<TValue>(object entity, string fieldName, TValue value)
         {
             if (!typeof(TValue).IsValueTypeEx())
             {
-                return SetFieldValue((TEntity)entity, fieldName, (object)value);
+                return TrySetFieldValue((TEntity)entity, fieldName, (object)value);
             }
 
 <# 
@@ -42,7 +41,7 @@ foreach (TypeCode typeCode in typeCodes)
             if (typeof(TValue) == typeof(<#= typeCode #>))
             {
                 var finalValue = Convert.To<#= typeCode #>(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
 <#
@@ -61,7 +60,7 @@ foreach (TypeCode typeCode in typeCodes)
 
 	string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldSettersCache";
 #>
-        public bool SetFieldValue(TEntity entity, string fieldName, <#= typeCode #> value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, <#= typeCode #> value)
         {
             var setter = Get<#= typeCode #>FieldSetter(fieldName);
             if (setter is not null)

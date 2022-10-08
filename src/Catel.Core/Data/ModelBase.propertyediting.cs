@@ -23,7 +23,7 @@
 
             if (typeof(TValue).IsValueTypeEx())
             {
-                objectValue = BoxingCache<TValue>.Default.GetBoxedValue(value);
+                objectValue = BoxingCache.GetBoxedValue(value);
             }
             else
             {

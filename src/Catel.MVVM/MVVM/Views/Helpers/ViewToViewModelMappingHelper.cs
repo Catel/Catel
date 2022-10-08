@@ -409,14 +409,14 @@
             Argument.IsNotNullOrWhitespace("sourcePropertyName", sourcePropertyName);
             Argument.IsNotNullOrWhitespace("targetPropertyName", targetPropertyName);
 
-            if (!ObjectAdapter.GetMemberValue(source, sourcePropertyName, out object valueToTransfer))
+            if (!ObjectAdapter.TryGetMemberValue(source, sourcePropertyName, out object? valueToTransfer))
             {
                 return;
             }
 
             Log.Debug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
 
-            if (!ObjectAdapter.SetMemberValue(target, targetPropertyName, valueToTransfer))
+            if (!ObjectAdapter.TrySetMemberValue(target, targetPropertyName, valueToTransfer))
             {
                 Log.Warning($"Failed to transfer value, is the property not writeable?");
                 return;

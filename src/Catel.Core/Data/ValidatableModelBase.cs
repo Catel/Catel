@@ -551,7 +551,7 @@
 
                             value = PropertyHelper.GetPropertyValue(this, propertyName);
                         }
-                        else if (!objectAdapter.GetMemberValue(this, propertyName, out value))
+                        else if (!objectAdapter.TryGetMemberValue(this, propertyName, out value))
                         {
                             Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 

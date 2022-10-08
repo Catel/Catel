@@ -194,7 +194,7 @@
         }
 
         [TestFixture]
-        public class TheSetFieldValueMethod
+        public class TheTrySetFieldValueMethod
         {
             [TestCase]
             public void UpdatesStringField()
@@ -203,7 +203,7 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(fastMemberInvoker.SetFieldValue<string>(testClass, nameof(TestClassWithRegularMembers.StringField), "John"));
+                Assert.IsTrue(fastMemberInvoker.TrySetFieldValue<string>(testClass, nameof(TestClassWithRegularMembers.StringField), "John"));
                 Assert.AreEqual("John", testClass.StringField);
             }
 
@@ -214,12 +214,12 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsFalse(fastMemberInvoker.SetFieldValue<string>(testClass, "NonExistingField", "John"));
+                Assert.IsFalse(fastMemberInvoker.TrySetFieldValue<string>(testClass, "NonExistingField", "John"));
             }
         }
 
         [TestFixture]
-        public class TheSetPropertyValueMethod
+        public class TheTrySetPropertyValueMethod
         {
             [TestCase]
             public void UpdatesStringProperty()
@@ -228,7 +228,7 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(fastMemberInvoker.SetPropertyValue<string>(testClass, nameof(TestClassWithRegularMembers.StringProperty), "John"));
+                Assert.IsTrue(fastMemberInvoker.TrySetPropertyValue<string>(testClass, nameof(TestClassWithRegularMembers.StringProperty), "John"));
                 Assert.AreEqual("John", testClass.StringProperty);
             }
 
@@ -239,7 +239,7 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsFalse(fastMemberInvoker.SetPropertyValue<string>(testClass, "NonExistingProperty", "John"));
+                Assert.IsFalse(fastMemberInvoker.TrySetPropertyValue<string>(testClass, "NonExistingProperty", "John"));
             }
         }
     }

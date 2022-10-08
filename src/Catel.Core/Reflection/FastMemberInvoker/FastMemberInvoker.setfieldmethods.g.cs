@@ -10,111 +10,110 @@
 namespace Catel.Reflection
 {
     using System;
-    using Catel.Data;
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-        public bool SetFieldValue<TValue>(object entity, string fieldName, TValue value)
+        public bool TrySetFieldValue<TValue>(object entity, string fieldName, TValue value)
         {
             if (!typeof(TValue).IsValueTypeEx())
             {
-                return SetFieldValue((TEntity)entity, fieldName, (object)value);
+                return TrySetFieldValue((TEntity)entity, fieldName, (object)value);
             }
 
             if (typeof(TValue) == typeof(Boolean))
             {
                 var finalValue = Convert.ToBoolean(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Char))
             {
                 var finalValue = Convert.ToChar(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(SByte))
             {
                 var finalValue = Convert.ToSByte(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Byte))
             {
                 var finalValue = Convert.ToByte(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int16))
             {
                 var finalValue = Convert.ToInt16(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt16))
             {
                 var finalValue = Convert.ToUInt16(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int32))
             {
                 var finalValue = Convert.ToInt32(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt32))
             {
                 var finalValue = Convert.ToUInt32(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int64))
             {
                 var finalValue = Convert.ToInt64(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt64))
             {
                 var finalValue = Convert.ToUInt64(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Single))
             {
                 var finalValue = Convert.ToSingle(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Double))
             {
                 var finalValue = Convert.ToDouble(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Decimal))
             {
                 var finalValue = Convert.ToDecimal(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(DateTime))
             {
                 var finalValue = Convert.ToDateTime(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(String))
             {
                 var finalValue = Convert.ToString(value);
-                return SetFieldValue((TEntity)entity, fieldName, finalValue);
+                return TrySetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Object value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Object value)
         {
             var setter = GetObjectFieldSetter(fieldName);
             if (setter is not null)
@@ -126,7 +125,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Boolean value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Boolean value)
         {
             var setter = GetBooleanFieldSetter(fieldName);
             if (setter is not null)
@@ -138,7 +137,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Char value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Char value)
         {
             var setter = GetCharFieldSetter(fieldName);
             if (setter is not null)
@@ -150,7 +149,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, SByte value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, SByte value)
         {
             var setter = GetSByteFieldSetter(fieldName);
             if (setter is not null)
@@ -162,7 +161,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Byte value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Byte value)
         {
             var setter = GetByteFieldSetter(fieldName);
             if (setter is not null)
@@ -174,7 +173,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Int16 value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Int16 value)
         {
             var setter = GetInt16FieldSetter(fieldName);
             if (setter is not null)
@@ -186,7 +185,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, UInt16 value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, UInt16 value)
         {
             var setter = GetUInt16FieldSetter(fieldName);
             if (setter is not null)
@@ -198,7 +197,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Int32 value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Int32 value)
         {
             var setter = GetInt32FieldSetter(fieldName);
             if (setter is not null)
@@ -210,7 +209,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, UInt32 value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, UInt32 value)
         {
             var setter = GetUInt32FieldSetter(fieldName);
             if (setter is not null)
@@ -222,7 +221,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Int64 value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Int64 value)
         {
             var setter = GetInt64FieldSetter(fieldName);
             if (setter is not null)
@@ -234,7 +233,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, UInt64 value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, UInt64 value)
         {
             var setter = GetUInt64FieldSetter(fieldName);
             if (setter is not null)
@@ -246,7 +245,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Single value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Single value)
         {
             var setter = GetSingleFieldSetter(fieldName);
             if (setter is not null)
@@ -258,7 +257,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Double value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Double value)
         {
             var setter = GetDoubleFieldSetter(fieldName);
             if (setter is not null)
@@ -270,7 +269,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, Decimal value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, Decimal value)
         {
             var setter = GetDecimalFieldSetter(fieldName);
             if (setter is not null)
@@ -282,7 +281,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, DateTime value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, DateTime value)
         {
             var setter = GetDateTimeFieldSetter(fieldName);
             if (setter is not null)
@@ -294,7 +293,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        public bool SetFieldValue(TEntity entity, string fieldName, String value)
+        public bool TrySetFieldValue(TEntity entity, string fieldName, String value)
         {
             var setter = GetStringFieldSetter(fieldName);
             if (setter is not null)

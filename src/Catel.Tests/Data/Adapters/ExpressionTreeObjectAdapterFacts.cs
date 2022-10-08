@@ -1,10 +1,5 @@
 ﻿namespace Catel.Tests.Data.Adapters
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Data;
     using NUnit.Framework;
 
@@ -18,7 +13,7 @@
         }
 
         [TestFixture]
-        public class TheSetValueMethod
+        public class TheTrySetValueMethod
         {
             [TestCase]
             public void SetsCatelModelPropertyValue()
@@ -26,7 +21,7 @@
                 var adapter = new ExpressionTreeObjectAdapter();
                 var model = new PersonTestModel();
 
-                Assert.IsTrue(adapter.SetMemberValue(model, nameof(PersonTestModel.FirstName), "John"));
+                Assert.IsTrue(adapter.TrySetMemberValue(model, nameof(PersonTestModel.FirstName), "John"));
                 Assert.AreEqual("John", model.FirstName);
             }
 
@@ -36,7 +31,7 @@
                 var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(adapter.SetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), "John"));
+                Assert.IsTrue(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), "John"));
                 Assert.AreEqual("John", model.StringProperty);
             }
 
@@ -46,7 +41,7 @@
                 var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(adapter.SetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), "John"));
+                Assert.IsTrue(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), "John"));
                 Assert.AreEqual("John", model.StringField);
             }
 
@@ -56,12 +51,12 @@
                 var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsFalse(adapter.SetMemberValue(model, "NotExistingMember", "John"));
+                Assert.IsFalse(adapter.TrySetMemberValue(model, "NotExistingMember", "John"));
             }
         }
 
         [TestFixture]
-        public class TheGetValueMethod
+        public class TheTryGetValueMethod
         {
             [TestCase]
             public void GetsCatelModelPropertyValue()
@@ -74,7 +69,7 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.GetMemberValue(model, nameof(PersonTestModel.FirstName), out value));
+                Assert.IsTrue(adapter.TryGetMemberValue(model, nameof(PersonTestModel.FirstName), out value));
                 Assert.AreEqual("John", model.FirstName);
             }
 
@@ -89,7 +84,7 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.GetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), out value));
+                Assert.IsTrue(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), out value));
                 Assert.AreEqual("John", value);
             }
 
@@ -104,7 +99,7 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.GetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), out value));
+                Assert.IsTrue(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), out value));
                 Assert.AreEqual("John", value);
             }
 
@@ -115,7 +110,7 @@
                 var model = new TestClassWithRegularMembers();
                 string value = string.Empty;
 
-                Assert.IsFalse(adapter.GetMemberValue(model, "NotExistingMember", out value));
+                Assert.IsFalse(adapter.TryGetMemberValue(model, "NotExistingMember", out value));
             }
         }
     }

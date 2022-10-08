@@ -83,7 +83,7 @@
 
         private string GetPropertyValue(object obj, string propertyName)
         {
-            _objectAdapter.GetMemberValue(obj, propertyName, out object value);
+            _objectAdapter.TryGetMemberValue(obj, propertyName, out object? value);
 
             return ObjectToStringHelper.ToString(value);
         }

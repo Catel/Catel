@@ -813,7 +813,7 @@
                     var modelValues = mapping.Converter.ConvertBack(value, this);
                     for (var i = 0; i < mapping.ValueProperties.Length; i++)
                     {
-                        if (_objectAdapter.SetMemberValue(model, mapping.ValueProperties[i], modelValues[i]))
+                        if (_objectAdapter.TrySetMemberValue(model, mapping.ValueProperties[i], modelValues[i]))
                         {
                             Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
                         }
@@ -886,7 +886,7 @@
                                 {
                                     var property = mapping.ValueProperties[index];
 
-                                    if (_objectAdapter.GetMemberValue(newModelValue, property, out object memberValue))
+                                    if (_objectAdapter.TryGetMemberValue(newModelValue, property, out object? memberValue))
                                     {
                                         values[index] = memberValue;
                                     }
@@ -946,7 +946,7 @@
                                         {
                                             mapping.IgnoredProperties.AddRange(propertiesToSet);
 
-                                            if (_objectAdapter.SetMemberValue(model, propertiesToSet[index], valuesToSet[index]))
+                                            if (_objectAdapter.TrySetMemberValue(model, propertiesToSet[index], valuesToSet[index]))
                                             {
                                                 Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
 
@@ -1035,13 +1035,13 @@
                             (mapping.Mode == ViewModelToModelMode.OneWay) ||
                             (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
-                            var values = new object[mapping.ValueProperties.Length];
+                            var values = new object?[mapping.ValueProperties.Length];
 
                             for (var index = 0; index < mapping.ValueProperties.Length; index++)
                             {
                                 var property = mapping.ValueProperties[index];
 
-                                if (_objectAdapter.GetMemberValue(model, property, out object modelValue))
+                                if (_objectAdapter.TryGetMemberValue(model, property, out object? modelValue))
                                 {
                                     values[index] = modelValue;
                                 }

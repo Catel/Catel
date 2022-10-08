@@ -38,7 +38,7 @@
                 if (modelEditor is not null && modelInfo.CatelPropertyNames.Contains(memberName))
                 {
                     var memberMetadata = modelInfo.CatelPropertiesByName[memberName];
-                    if (_objectAdapter.GetMemberValue(model, memberName, out value))
+                    if (_objectAdapter.TryGetMemberValue(model, memberName, out value))
                     {
                         var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, memberMetadata.MemberType,
                             memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, value);
@@ -49,7 +49,7 @@
 
                 if (modelInfo.PropertiesByName.TryGetValue(memberName, out var propertyMemberMetadata))
                 {
-                    if (_objectAdapter.GetMemberValue(model, memberName, out value))
+                    if (_objectAdapter.TryGetMemberValue(model, memberName, out value))
                     {
                         var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyMemberMetadata.MemberType,
                             propertyMemberMetadata.MemberName, propertyMemberMetadata.MemberNameForSerialization, value);
@@ -60,7 +60,7 @@
 
                 if (modelInfo.FieldsByName.TryGetValue(memberName, out var fieldMemberMetadata))
                 {
-                    if (_objectAdapter.GetMemberValue(model, memberName, out value))
+                    if (_objectAdapter.TryGetMemberValue(model, memberName, out value))
                     {
                         var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, fieldMemberMetadata.MemberType,
                             fieldMemberMetadata.MemberName, fieldMemberMetadata.MemberNameForSerialization, value);
@@ -100,7 +100,7 @@
                     return;
                 }
 
-                _objectAdapter.SetMemberValue(model, member.Name, finalValue);
+                _objectAdapter.TrySetMemberValue(model, member.Name, finalValue);
             }
             catch (Exception ex)
             {
