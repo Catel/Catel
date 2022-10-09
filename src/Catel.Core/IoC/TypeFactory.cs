@@ -386,8 +386,18 @@ namespace Catel.IoC
                             }
                         }
 
-                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag) &&
-                            !_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
+                        // Prefer with tag
+                        if (tag is not null)
+                        {
+                            if (_serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag))
+                            {
+                                // Valid
+                                continue;
+                            }
+                        }
+
+                        // Fallback to no tag
+                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
                         {
                             if (logDebug)
                             {
