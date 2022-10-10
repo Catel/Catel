@@ -338,7 +338,7 @@
         ///   </example>
         /// <exception cref="ArgumentNullException">The <paramref name="log"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException">The <typeparamref name="TException"/> does not have a constructor accepting a string.</exception>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object arg1)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object? arg1)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, (Exception?)null, string.Format(messageFormat, arg1));
@@ -364,7 +364,7 @@
         ///   </example>
         /// <exception cref="ArgumentNullException">The <paramref name="log"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException">The <typeparamref name="TException"/> does not have a constructor accepting a string.</exception>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object arg1, object arg2)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object? arg1, object? arg2)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, (Exception?)null, string.Format(messageFormat, arg1, arg2));
@@ -391,7 +391,7 @@
         ///   </example>
         /// <exception cref="ArgumentNullException">The <paramref name="log"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException">The <typeparamref name="TException"/> does not have a constructor accepting a string.</exception>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object arg1, object arg2, object arg3)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, object? arg1, object? arg2, object arg3)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, (Exception?)null, string.Format(messageFormat, arg1, arg2, arg3));
@@ -441,7 +441,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, object arg1)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, object? arg1)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, null, createExceptionCallback, string.Format(messageFormat, arg1));
@@ -467,7 +467,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, object arg1, object arg2)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, object? arg1, object? arg2)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, null, createExceptionCallback, string.Format(messageFormat, arg1, arg2));
@@ -494,7 +494,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, object arg1, object arg2, object arg3)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, object? arg1, object? arg2, object? arg3)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, null, createExceptionCallback, string.Format(messageFormat, arg1, arg2, arg3));
@@ -519,7 +519,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Func<string, TException> createExceptionCallback, string messageFormat, params object?[] args)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, null, createExceptionCallback, messageFormat, args);
@@ -545,7 +545,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object arg0)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object? arg0)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, innerException, string.Format(messageFormat, arg0));
@@ -572,7 +572,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object arg0, object arg1)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object? arg0, object? arg1)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, innerException, string.Format(messageFormat, arg0, arg1));
@@ -600,7 +600,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object arg0, object arg1, object arg2)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object? arg0, object? arg1, object? arg2)
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, innerException, string.Format(messageFormat, arg0, arg1, arg2));
@@ -626,7 +626,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception? innerException, string messageFormat, params object[] args)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception? innerException, string messageFormat, params object?[] args)
             where TException : Exception
         {
             ArgumentNullException.ThrowIfNull(log);
@@ -668,7 +668,7 @@
         /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
         /// ]]></code>
         /// </example>
-        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception? innerException, Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception? innerException, Func<string, TException> createExceptionCallback, string messageFormat, params object?[] args)
             where TException : Exception
         {
             ArgumentNullException.ThrowIfNull(log);

@@ -706,7 +706,7 @@ namespace Catel.Runtime.Serialization.Json
                             }
                             else
                             {
-                                var enumName = Enum.GetName(valueType, BoxingCache.GetBoxedValue((int)jsonValue));
+                                var enumName = Enum.GetName(valueType, (int)jsonValue);
                                 if (!string.IsNullOrWhiteSpace(enumName))
                                 {
                                     valueToConvert = enumName;

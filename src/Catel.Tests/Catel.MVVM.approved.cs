@@ -855,7 +855,7 @@ namespace Catel.MVVM.Converters
     public class AreEqualMultiValueConverter : System.Windows.Markup.MarkupExtension, System.Windows.Data.IMultiValueConverter
     {
         public AreEqualMultiValueConverter() { }
-        public object Convert(object?[] values, System.Type targetType, object? parameter, System.Globalization.CultureInfo? culture) { }
+        public object? Convert(object?[] values, System.Type targetType, object? parameter, System.Globalization.CultureInfo? culture) { }
         public object[]? ConvertBack(object? value, System.Type[] targetTypes, object? parameter, System.Globalization.CultureInfo? culture) { }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
     }

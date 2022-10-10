@@ -6,14 +6,13 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Reflection;
 
     public static partial class ExpressionBuilder
     {
         public static Expression<Action<object, TField>>? CreateFieldSetter<TField>(Type modelType, string fieldName)
         {
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
             var field = modelType.GetFieldEx(fieldName);

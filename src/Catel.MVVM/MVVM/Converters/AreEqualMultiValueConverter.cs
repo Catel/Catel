@@ -20,7 +20,7 @@
         /// <param name="parameter">Not supported.</param>
         /// <param name="culture">Not supported.</param>
         /// <returns>True if the values are equal, otherwise false.</returns>
-        public object Convert(object?[] values, Type targetType, object? parameter, System.Globalization.CultureInfo? culture)
+        public object? Convert(object?[] values, Type targetType, object? parameter, System.Globalization.CultureInfo? culture)
         {
             if (values.Length != 2)
             {

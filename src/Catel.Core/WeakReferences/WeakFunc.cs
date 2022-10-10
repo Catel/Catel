@@ -195,9 +195,7 @@
                 {
                     try
                     {
-#pragma warning disable HAA0101 // Array allocation for params parameter
-                        result = (TResult)_action.DynamicInvoke(Target, BoxingCache.GetBoxedValue(parameter))!;
-#pragma warning restore HAA0101 // Array allocation for params parameter
+                        result = (TResult)_action.DynamicInvoke(Target, parameter)!;
                     }
                     catch (TargetInvocationException ex)
                     {

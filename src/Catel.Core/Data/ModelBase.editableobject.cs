@@ -37,7 +37,7 @@
             /// <summary>
             /// Backup of the object values.
             /// </summary>
-            private readonly Dictionary<string, object> _objectValuesBackup;
+            private readonly Dictionary<string, object?> _objectValuesBackup;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ModelBase.BackupData" /> class.
@@ -61,7 +61,7 @@
                     _propertyValuesBackup = stream.ToByteArray();
                 }
 
-                _objectValuesBackup = new Dictionary<string, object>
+                _objectValuesBackup = new Dictionary<string, object?>
                 {
                     { nameof(IsDirty), BoxingCache.GetBoxedValue(_object.IsDirty) }
                 };
@@ -107,7 +107,11 @@
                     }
                 }
 
-                _object.IsDirty = (bool)_objectValuesBackup[nameof(IsDirty)];
+                var isDirty = _objectValuesBackup[nameof(IsDirty)] as bool?;
+                if (isDirty is not null)
+                {
+                    _object.IsDirty = isDirty.Value;
+                }
             }
         }
 

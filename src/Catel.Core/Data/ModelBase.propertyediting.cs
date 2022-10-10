@@ -19,17 +19,7 @@
         /// <returns>An object representing the value.</returns>
         protected static object? GetObjectValue<TValue>(TValue value)
         {
-            object? objectValue = null;
-
-            if (typeof(TValue).IsValueTypeEx())
-            {
-                objectValue = BoxingCache.GetBoxedValue(value);
-            }
-            else
-            {
-                objectValue = value;
-            }
-
+            object? objectValue = (object?)value;
             return objectValue;
         }
 
@@ -94,7 +84,7 @@
                 if (!value.GetType().IsCOMObjectEx())
                 {
                     throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
-                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", BoxingCache.GetBoxedValue(value), property.Name, GetType().GetSafeFullName());
+                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().GetSafeFullName());
                 }
             }
 
@@ -106,7 +96,7 @@
                 var changeNotificationsSuspensionContext = _changeNotificationsSuspensionContext;
 
                 oldValue = GetValueFromPropertyBag<TValue>(property.Name);
-                var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(BoxingCache.GetBoxedValue(oldValue), BoxingCache.GetBoxedValue(value));
+                var areOldAndNewValuesEqual = ObjectHelper.AreEqual(oldValue, value);
 
                 if (!areOldAndNewValuesEqual)
                 {

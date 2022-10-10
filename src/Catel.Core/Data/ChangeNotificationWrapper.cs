@@ -101,7 +101,7 @@
         /// </summary>
         /// <param name="obj">The object to check.</param>
         /// <returns><c>true</c> if it is useful to create a <see cref="ChangeNotificationWrapper"/>; otherwise, <c>false</c>.</returns>
-        public static bool IsUsefulForObject(object obj)
+        public static bool IsUsefulForObject(object? obj)
         {
             if (obj is INotifyPropertyChanged)
             {

@@ -160,11 +160,9 @@
         /// <returns><c>true</c> if the value as successfully set; otherwise <c>false</c>.</returns>
         protected virtual bool TrySetPropertyValue<TValue>(object instance, string memberName, TValue value)
         {
-            var objectValue = BoxingCache.GetBoxedValue(value);
-
             if (instance is IPropertySerializable serializable)
             {
-                if (serializable.SetPropertyValue(memberName, objectValue))
+                if (serializable.SetPropertyValue(memberName, value))
                 {
                     return true;
                 }
@@ -173,7 +171,7 @@
             var propertyInfo = instance.GetType().GetPropertyEx(memberName);
             if (propertyInfo is not null)
             {
-                propertyInfo.SetValue(instance, objectValue, null);
+                propertyInfo.SetValue(instance, value, null);
                 return true;
             }
 
@@ -190,11 +188,9 @@
         /// <returns><c>true</c> if the value as successfully set; otherwise <c>false</c>.</returns>
         protected virtual bool TrySetFieldValue<TValue>(object instance, string memberName, TValue value)
         {
-            var objectValue = BoxingCache.GetBoxedValue(value);
-
             if (instance is IFieldSerializable serializable)
             {
-                if (serializable.SetFieldValue(memberName, objectValue))
+                if (serializable.SetFieldValue(memberName, value))
                 {
                     return true;
                 }
@@ -203,7 +199,7 @@
             var fieldInfo = instance.GetType().GetFieldEx(memberName);
             if (fieldInfo is not null)
             {
-                fieldInfo.SetValue(instance, objectValue);
+                fieldInfo.SetValue(instance, value);
                 return true;
             }
 

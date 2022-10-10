@@ -1064,33 +1064,49 @@ namespace Catel.Data
     }
     public static class BoxingCache
     {
-        public static object GetBoxedValue(bool value) { }
-        public static object GetBoxedValue(byte value) { }
-        public static object GetBoxedValue(char value) { }
-        public static object GetBoxedValue(System.DateTime value) { }
-        public static object GetBoxedValue(decimal value) { }
-        public static object GetBoxedValue(double value) { }
-        public static object GetBoxedValue(short value) { }
-        public static object GetBoxedValue(int value) { }
-        public static object GetBoxedValue(long value) { }
-        public static object GetBoxedValue(object value) { }
-        public static object GetBoxedValue(sbyte value) { }
-        public static object GetBoxedValue(float value) { }
-        public static object GetBoxedValue(string value) { }
-        public static object GetBoxedValue(ushort value) { }
-        public static object GetBoxedValue(uint value) { }
-        public static object GetBoxedValue(ulong value) { }
-        public static object GetBoxedValue<TValue>(TValue value) { }
+        public static object? GetBoxedValue(bool value) { }
+        public static object? GetBoxedValue(byte value) { }
+        public static object? GetBoxedValue(char value) { }
+        public static object? GetBoxedValue(System.Char? value) { }
+        public static object? GetBoxedValue(System.DateTime value) { }
+        public static object? GetBoxedValue(System.DateTime? value) { }
+        public static object? GetBoxedValue(decimal value) { }
+        public static object? GetBoxedValue(double value) { }
+        public static object? GetBoxedValue(short value) { }
+        public static object? GetBoxedValue(int value) { }
+        public static object? GetBoxedValue(long value) { }
+        public static object? GetBoxedValue(sbyte value) { }
+        public static object? GetBoxedValue(float value) { }
+        public static object? GetBoxedValue(string value) { }
+        public static object? GetBoxedValue(ushort value) { }
+        public static object? GetBoxedValue(uint value) { }
+        public static object? GetBoxedValue(ulong value) { }
+        public static object? GetBoxedValue(bool? value) { }
+        public static object? GetBoxedValue(byte? value) { }
+        public static object? GetBoxedValue(decimal? value) { }
+        public static object? GetBoxedValue(double? value) { }
+        public static object? GetBoxedValue(float? value) { }
+        public static object? GetBoxedValue(int? value) { }
+        public static object? GetBoxedValue(long? value) { }
+        public static object? GetBoxedValue(object? value) { }
+        public static object? GetBoxedValue(sbyte? value) { }
+        public static object? GetBoxedValue(short? value) { }
+        public static object? GetBoxedValue(uint? value) { }
+        public static object? GetBoxedValue(ulong? value) { }
+        public static object? GetBoxedValue(ushort? value) { }
+        public static object? GetBoxedValue<TValue>(TValue value)
+            where TValue :  notnull { }
     }
     public class BoxingCache<T>
+        where T :  notnull
     {
         public BoxingCache() { }
         public System.TimeSpan CleanUpInterval { get; set; }
         public static Catel.Data.BoxingCache<T> Default { get; }
-        protected T AddBoxedValue(object boxedValue) { }
+        protected T AddBoxedValue(object? boxedValue) { }
         protected object? AddUnboxedValue(T value) { }
         public void CleanUp() { }
-        public object? GetBoxedValue(T? value) { }
+        public object? GetBoxedValue(T value) { }
         public T GetUnboxedValue(object boxedValue) { }
     }
     public class BusinessRuleValidationResult : Catel.Data.ValidationResult, Catel.Data.IBusinessRuleValidationResult, Catel.Data.IValidationResult
@@ -1131,7 +1147,7 @@ namespace Catel.Data
         public void UnsubscribeFromAllEvents() { }
         public void UnsubscribeNotifyChangedEvents(object? value, System.Collections.ICollection? parentCollection) { }
         public void UpdateCollectionSubscriptions(System.Collections.ICollection collection) { }
-        public static bool IsUsefulForObject(object obj) { }
+        public static bool IsUsefulForObject(object? obj) { }
     }
     public abstract class ChildAwareModelBase : Catel.Data.ValidatableModelBase
     {
@@ -2449,31 +2465,31 @@ namespace Catel.Logging
         public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4) { }
         public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5) { }
         public static void Error(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others) { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1)
-            where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, params object[] args)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object? arg1)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception? innerException, string messageFormat, params object[] args)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object? arg0)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception? innerException, string messageFormat, params object?[] args)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object? arg1)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1, object arg2)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, params object?[] args)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0, object arg1)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object? arg1, object? arg2)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception? innerException, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object? arg0, object? arg1)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1, object arg2)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception? innerException, System.Func<string, TException> createExceptionCallback, string messageFormat, params object?[] args)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1, object arg2, object arg3)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object? arg1, object? arg2)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0, object arg1, object arg2)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object? arg1, object? arg2, object arg3)
             where TException : System.Exception { }
-        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1, object arg2, object arg3)
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object? arg0, object? arg1, object? arg2)
+            where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object? arg1, object? arg2, object? arg3)
             where TException : System.Exception { }
         public static void ErrorAndStatus(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void ErrorWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }

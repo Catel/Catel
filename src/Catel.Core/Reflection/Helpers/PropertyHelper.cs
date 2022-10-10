@@ -325,6 +325,7 @@
         /// <exception cref="System.ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         public static TValue GetHiddenPropertyValue<TValue>(object obj, string property, Type baseType)
         {
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
             Argument.IsOfType("obj", obj, baseType);
 
@@ -348,6 +349,9 @@
         /// <returns>PropertyInfo.</returns>
         public static PropertyInfo? GetPropertyInfo(object obj, string property, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+            ArgumentNullException.ThrowIfNull(property);
+
             var cacheKey = $"{obj.GetType().FullName}_{property}_{BoxingCache.GetBoxedValue(ignoreCase)}";
             return _availableProperties.GetFromCacheOrFetch(cacheKey, () =>
             {

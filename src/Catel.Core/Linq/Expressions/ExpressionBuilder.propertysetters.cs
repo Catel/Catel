@@ -12,6 +12,7 @@
     {
         public static Expression<Action<object, TProperty>>? CreatePropertySetter<TProperty>(Type modelType, string propertyName)
         {
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
             var property = modelType.GetPropertyEx(propertyName);
@@ -41,6 +42,8 @@
 
         public static Expression<Action<T, object>>? CreatePropertySetter<T>(PropertyInfo propertyInfo)
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo);
+
             return propertyInfo.SetMethod is null ? null : CreatePropertySetterExpression<T, object>(propertyInfo);
         }
 

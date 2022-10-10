@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using Catel.Reflection;
 
     /// <summary>
     /// Class that is aware of changes of child objects by using the <see cref="ChangeNotificationWrapper"/>.
@@ -72,7 +73,7 @@
         {
             base.SetValueToPropertyBag<TValue>(propertyName, value);
 
-            HandleObjectEventsSubscription(propertyName, BoxingCache.GetBoxedValue(value));
+            HandleObjectEventsSubscription(propertyName, value);
         }
 
         /// <summary>
@@ -81,7 +82,7 @@
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="propertyValue">The property value.</param>
-        private void HandleObjectEventsSubscription(string propertyName, object propertyValue)
+        private void HandleObjectEventsSubscription(string propertyName, object? propertyValue)
         {
             if (DisableEventSubscriptionsOfChildValues)
             {
@@ -110,7 +111,7 @@
                         _propertyValueChangeNotificationWrappers.Remove(propertyName);
                     }
                 }
-                else
+                else if (propertyValue is not null)
                 {
                     var wrapper = new ChangeNotificationWrapper(propertyValue);
                     wrapper.PropertyChanged += OnPropertyObjectPropertyChanged;

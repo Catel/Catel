@@ -117,7 +117,8 @@
 
             lock (_lockObject)
             {
-                if (!_properties.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, BoxingCache.GetBoxedValue(value)))
+                if (!_properties.TryGetValue(name, out var propertyValue) || 
+                    !ObjectHelper.AreEqual(propertyValue, value))
                 {
                     _properties[name] = value;
                     raisePropertyChanged = true;

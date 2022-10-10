@@ -17,13 +17,10 @@
     /// Caches boxed objects to minimize the memory footprint for boxed value types.
     /// </summary>
     public class BoxingCache<T>
+        where T : notnull
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
-        private readonly Dictionary<T, object> _boxedValues = new();
-#pragma warning restore CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
-
+        private readonly Dictionary<T, object?> _boxedValues = new();
         private TimeSpan _cleanUpInterval = TimeSpan.FromMinutes(5);
 
 #pragma warning disable IDISP006 // Implement IDisposable.
@@ -73,12 +70,7 @@
         /// <param name="value">The value to add to the cache.</param>
         protected object? AddUnboxedValue(T value)
         {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var boxedValue = (object)value;
+            var boxedValue = (object?)value;
 
             lock (_boxedValues)
             {
@@ -99,8 +91,14 @@
         /// Adds the value to the cache.
         /// </summary>
         /// <param name="boxedValue">The value to add to the cache.</param>
-        protected T AddBoxedValue(object boxedValue)
+        protected T AddBoxedValue(object? boxedValue)
         {
+            if (boxedValue is null)
+            {
+                // Don't store
+                return default!;
+            }
+
             var unboxedValue = (T)boxedValue;
 
             lock (_boxedValues)
@@ -123,13 +121,8 @@
         /// </summary>
         /// <param name="value">The value to box.</param>
         /// <returns>The boxed value.</returns>
-        public object? GetBoxedValue(T? value)
+        public object? GetBoxedValue(T value)
         {
-            if (value is null)
-            {
-                return null;
-            }
-
             lock (_boxedValues)
             {
                 if (!_boxedValues.TryGetValue(value, out var boxedValue))
@@ -149,6 +142,7 @@
         public T GetUnboxedValue(object boxedValue)
         {
             return (T)boxedValue;
+
             //lock (_unboxedValues)
             //{
             //    if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))

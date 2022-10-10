@@ -218,7 +218,7 @@
                 if (IsTargetAlive)
                 {
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                    _action.DynamicInvoke(Target, BoxingCache.GetBoxedValue<TParameter>(parameter));
+                    _action.DynamicInvoke(Target, parameter);
 #pragma warning restore HAA0101 // Array allocation for params parameter
                     return true;
                 }

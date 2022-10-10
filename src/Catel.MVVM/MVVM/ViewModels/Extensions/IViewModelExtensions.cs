@@ -275,11 +275,11 @@
             // on the vm, so we will listen to events
             //
             // To "solve" this, we'll give the VM only 50ms to save itself, which is extremely reasonable
-            var tcs = new TaskCompletionSource<object>();
+            var tcs = new TaskCompletionSource<bool>();
 
             var closedHandler = new AsyncEventHandler<ViewModelClosedEventArgs>(async (sender, e) =>
             {
-                tcs.TrySetResult(BoxingCache.GetBoxedValue(true));
+                tcs.TrySetResult(true);
             });
 
             viewModel.ClosedAsync += closedHandler;

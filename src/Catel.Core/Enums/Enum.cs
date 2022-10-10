@@ -100,7 +100,13 @@
         /// <returns>The name of the value.</returns>
         public static string? GetName(int value)
         {
-            return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
+            var boxedValue = BoxingCache.GetBoxedValue(value);
+            if (boxedValue is null)
+            {
+                return null;
+            }
+
+            return Enum.GetName(typeof(TEnum), boxedValue);
         }
 
         /// <summary>
@@ -110,7 +116,13 @@
         /// <returns>The name of the value.</returns>
         public static string? GetName(long value)
         {
-            return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
+            var boxedValue = BoxingCache.GetBoxedValue(value);
+            if (boxedValue is null)
+            {
+                return null;
+            }
+
+            return Enum.GetName(typeof(TEnum), boxedValue);
         }
 
         /// <summary>
@@ -239,7 +251,13 @@
         /// <returns>The name of the value.</returns>
         private static string? GetName(TEnum value)
         {
-            return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
+            var boxedValue = BoxingCache.GetBoxedValue(value);
+            if (boxedValue is null)
+            {
+                return null;
+            }
+
+            return Enum.GetName(typeof(TEnum), boxedValue);
         }
 
         /// <summary>
