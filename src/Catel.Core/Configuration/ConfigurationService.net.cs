@@ -117,6 +117,8 @@
 
         private async Task SaveLocalConfigurationAsync()
         {
+            _localSaveConfigurationTimer.Stop();
+
             var container = ConfigurationContainer.Local;
 
             var lockObject = GetLockObject(container);
@@ -147,6 +149,8 @@
 
         private async Task SaveRoamingConfigurationAsync()
         {
+            _roamingSaveConfigurationTimer.Stop();
+
             var container = ConfigurationContainer.Roaming;
 
             var lockObject = GetLockObject(container);
