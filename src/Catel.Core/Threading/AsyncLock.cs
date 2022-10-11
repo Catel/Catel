@@ -24,9 +24,6 @@
         /// </summary>
         private readonly object _mutex;
 
-        /// <summary>
-        /// The queue of TCSs that other tasks are awaiting to acquire the lock.
-        /// </summary>
         private readonly IAsyncWaitQueue<IDisposable> _queue;
 
         /// <summary>
@@ -99,11 +96,18 @@
         /// <summary>
         /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
         /// </summary>
+        /// <returns>A disposable that releases the lock when disposed.</returns>
+        public AwaitableDisposable<IDisposable> LockAsync()
+        {
+            return LockAsync(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
+        /// </summary>
         /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>
         /// <returns>A disposable that releases the lock when disposed.</returns>
-#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
         public AwaitableDisposable<IDisposable> LockAsync(CancellationToken cancellationToken)
-#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             Task<IDisposable> ret;
 
@@ -132,6 +136,14 @@
         /// <summary>
         /// Synchronously acquires the lock. Returns a disposable that releases the lock when disposed. This method may block the calling thread.
         /// </summary>
+        public IDisposable Lock()
+        {
+            return Lock(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Synchronously acquires the lock. Returns a disposable that releases the lock when disposed. This method may block the calling thread.
+        /// </summary>
         /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>
         public IDisposable Lock(CancellationToken cancellationToken)
         {
@@ -146,32 +158,13 @@
                     _allowTakeoverByTask = false;
 
                     _cachedKeyTasks.Push(_cacheKeyReleaseTask);
-                    return _cacheKeyReleaseTask;
+                    return _cacheKeyReleaseTask.Result;
                 }
 
                 enqueuedTask = _queue.EnqueueAsync(_mutex, () => _allowTakeoverByTask = true, cancellationToken);
             }
 
             return enqueuedTask.WaitAndUnwrapException();
-        }
-
-        /// <summary>
-        /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
-        /// </summary>
-        /// <returns>A disposable that releases the lock when disposed.</returns>
-#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
-        public AwaitableDisposable<IDisposable> LockAsync()
-#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
-        {
-            return LockAsync(CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Synchronously acquires the lock. Returns a disposable that releases the lock when disposed. This method may block the calling thread.
-        /// </summary>
-        public IDisposable Lock()
-        {
-            return Lock(CancellationToken.None);
         }
 
         /// <summary>

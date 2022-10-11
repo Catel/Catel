@@ -123,36 +123,40 @@
 
             key = GetFinalKey(key);
 
-            var lockObject = GetLockObject(container);
-            using (lockObject.Lock())
+            try
             {
-                try
+                var value = string.Empty;
+
+                var lockObject = GetLockObject(container);
+                using (lockObject.Lock())
                 {
                     if (!ValueExists(container, key))
                     {
                         return defaultValue;
                     }
 
-                    var value = GetValueFromStore(container, key);
-                    if (value is null)
-                    {
-                        return defaultValue;
-                    }
-
-                    // ObjectConverterService doesn't support object, but just return the value as is
-                    if (typeof(T) == typeof(object))
-                    {
-                        return (T)(object)value;
-                    }
-
-                    return (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture)!;
+                    value = GetValueFromStore(container, key);
                 }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
 
+                if (value is null)
+                {
                     return defaultValue;
                 }
+
+                // ObjectConverterService doesn't support object, but just return the value as is
+                if (typeof(T) == typeof(object))
+                {
+                    return (T)(object)value;
+                }
+
+                var finalValue = (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture)!;
+                return finalValue;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
+
+                return defaultValue;
             }
         }
 
@@ -163,23 +167,19 @@
 
             var originalKey = key;
             key = GetFinalKey(key);
-            var raiseEvent = false;
+
+            var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
+            var existingValue = string.Empty;
 
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
             {
-                var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
-                var existingValue = GetValueFromStore(container, key);
+                existingValue = GetValueFromStore(container, key);
 
                 SetValueToStore(container, key, stringValue);
-
-                if (!string.Equals(stringValue, existingValue))
-                {
-                    raiseEvent = true;
-                }
             }
 
-            if (raiseEvent)
+            if (!string.Equals(stringValue, existingValue))
             {
                 RaiseConfigurationChanged(container, originalKey, value);
             }
@@ -350,7 +350,7 @@
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
             {
-                var settings = GetSettingsContainer(container); 
+                var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
                     return string.Empty;

@@ -16,6 +16,33 @@
 
             public int ExecutionCount { get; private set; }
 
+            public void MethodA()
+            {
+                using (_asyncLock.Lock())
+                {
+                    MethodB();
+                }
+            }
+
+            public void MethodB()
+            {
+                using (_asyncLock.Lock())
+                {
+                    ExecutionCount++;
+                    ExecutedSuccessfully = true;
+                }
+            }
+
+            public async Task MethodACombinedAsync()
+            {
+                using (await _asyncLock.LockAsync())
+                {
+                    await Task.Delay(200);
+
+                    MethodB();
+                }
+            }
+
             public async Task MethodAAsync()
             {
                 using (await _asyncLock.LockAsync())
@@ -36,6 +63,40 @@
                     ExecutedSuccessfully = true;
                 }
             }
+        }
+
+        [Test]
+        public async Task Allow_Recursive_Locks_NonAsync()
+        {
+            var testClass = new AsyncLockTestClass();
+
+#pragma warning disable CL0001 // Use async overload inside this async method
+            var tasksList = new List<Task>(new[]
+            {
+                Task.Run(() => testClass.MethodA())
+            });
+#pragma warning restore CL0001 // Use async overload inside this async method
+
+            Task.WaitAll(tasksList.ToArray(), 500);
+
+            Assert.IsTrue(testClass.ExecutedSuccessfully);
+        }
+
+        [Test]
+        public async Task Allow_Recursive_Locks_CombinedAsync()
+        {
+            var testClass = new AsyncLockTestClass();
+
+#pragma warning disable CL0001 // Use async overload inside this async method
+            var tasksList = new List<Task>(new[]
+            {
+                Task.Run(async () => await testClass.MethodACombinedAsync())
+            });
+#pragma warning restore CL0001 // Use async overload inside this async method
+
+            Task.WaitAll(tasksList.ToArray(), 500);
+
+            Assert.IsTrue(testClass.ExecutedSuccessfully);
         }
 
         [Test]
