@@ -983,23 +983,25 @@ namespace Catel.Configuration
         protected virtual string GetFinalKey(string key) { }
         protected Catel.Threading.AsyncLock GetLockObject(Catel.Configuration.ConfigurationContainer container) { }
         protected virtual double GetSaveSettingsSchedulerIntervalInMilliseconds() { }
-        protected virtual System.Threading.Tasks.Task<Catel.Configuration.DynamicConfiguration?> GetSettingsContainerAsync(Catel.Configuration.ConfigurationContainer container) { }
-        public virtual System.Threading.Tasks.Task<T> GetValueAsync<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
-        protected virtual System.Threading.Tasks.Task<string> GetValueFromStoreAsync(Catel.Configuration.ConfigurationContainer container, string key) { }
-        public virtual System.Threading.Tasks.Task InitializeValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue) { }
-        public virtual System.Threading.Tasks.Task<bool> IsValueAvailableAsync(Catel.Configuration.ConfigurationContainer container, string key) { }
-        protected virtual System.Threading.Tasks.Task<Catel.Configuration.DynamicConfiguration> LoadConfigurationAsync(string fileName) { }
+        protected virtual Catel.Configuration.DynamicConfiguration GetSettingsContainer(Catel.Configuration.ConfigurationContainer container) { }
+        public virtual T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
+        protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
+        public virtual void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue) { }
+        public virtual bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
+        public virtual System.Threading.Tasks.Task LoadAsync(Catel.Configuration.ConfigurationContainer configuration) { }
+        protected virtual System.Threading.Tasks.Task<Catel.Configuration.DynamicConfiguration> LoadConfigurationAsync(string source) { }
         protected void RaiseConfigurationChanged(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
+        public virtual System.Threading.Tasks.Task SaveAsync(Catel.Configuration.ConfigurationContainer configuration) { }
         protected virtual System.Threading.Tasks.Task SaveConfigurationAsync(Catel.Configuration.ConfigurationContainer container, Catel.Configuration.DynamicConfiguration configuration, string fileName) { }
         protected void ScheduleLocalConfigurationSave() { }
         protected void ScheduleRoamingConfigurationSave() { }
         protected virtual void ScheduleSaveConfiguration(Catel.Configuration.ConfigurationContainer container) { }
         public virtual System.Threading.Tasks.Task SetLocalConfigFilePathAsync(string filePath) { }
         public virtual System.Threading.Tasks.Task SetRoamingConfigFilePathAsync(string filePath) { }
-        public virtual System.Threading.Tasks.Task SetValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
-        protected virtual System.Threading.Tasks.Task SetValueToStoreAsync(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
+        public virtual void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
+        protected virtual void SetValueToStore(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
         public System.IDisposable SuspendNotifications() { }
-        protected virtual System.Threading.Tasks.Task<bool> ValueExistsAsync(Catel.Configuration.ConfigurationContainer container, string key) { }
+        protected virtual bool ValueExists(Catel.Configuration.ConfigurationContainer container, string key) { }
     }
     [Catel.Runtime.Serialization.SerializerModifier(typeof(Catel.Configuration.DynamicConfigurationSerializerModifier))]
     public class DynamicConfiguration : Catel.Data.ModelBase, Catel.Runtime.Serialization.Xml.ICustomXmlSerializable
@@ -1028,24 +1030,28 @@ namespace Catel.Configuration
     public interface IConfigurationService
     {
         event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs>? ConfigurationChanged;
-        System.Threading.Tasks.Task<T> GetValueAsync<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default);
-        System.Threading.Tasks.Task InitializeValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue);
-        System.Threading.Tasks.Task<bool> IsValueAvailableAsync(Catel.Configuration.ConfigurationContainer container, string key);
+        T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default);
+        void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue);
+        bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key);
+        System.Threading.Tasks.Task LoadAsync(Catel.Configuration.ConfigurationContainer container);
+        System.Threading.Tasks.Task SaveAsync(Catel.Configuration.ConfigurationContainer container);
         System.Threading.Tasks.Task SetLocalConfigFilePathAsync(string filePath);
         System.Threading.Tasks.Task SetRoamingConfigFilePathAsync(string filePath);
-        System.Threading.Tasks.Task SetValueAsync(Catel.Configuration.ConfigurationContainer container, string key, object? value);
+        void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object? value);
         System.IDisposable SuspendNotifications();
     }
     public static class IConfigurationServiceExtensions
     {
-        public static System.Threading.Tasks.Task<T> GetLocalValueAsync<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
-        public static System.Threading.Tasks.Task<T> GetRoamingValueAsync<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
-        public static System.Threading.Tasks.Task InitializeLocalValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? defaultValue) { }
-        public static System.Threading.Tasks.Task InitializeRoamingValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? defaultValue) { }
-        public static System.Threading.Tasks.Task<bool> IsLocalValueAvailableAsync(this Catel.Configuration.IConfigurationService configurationService, string key) { }
-        public static System.Threading.Tasks.Task<bool> IsRoamingValueAvailableAsync(this Catel.Configuration.IConfigurationService configurationService, string key) { }
-        public static System.Threading.Tasks.Task SetLocalValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? value) { }
-        public static System.Threading.Tasks.Task SetRoamingValueAsync(this Catel.Configuration.IConfigurationService configurationService, string key, object? value) { }
+        public static T GetLocalValue<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
+        public static T GetRoamingValue<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
+        public static void InitializeLocalValue(this Catel.Configuration.IConfigurationService configurationService, string key, object? defaultValue) { }
+        public static void InitializeRoamingValue(this Catel.Configuration.IConfigurationService configurationService, string key, object? defaultValue) { }
+        public static bool IsLocalValueAvailable(this Catel.Configuration.IConfigurationService configurationService, string key) { }
+        public static bool IsRoamingValueAvailable(this Catel.Configuration.IConfigurationService configurationService, string key) { }
+        public static System.Threading.Tasks.Task LoadAsync(this Catel.Configuration.IConfigurationService configurationService) { }
+        public static System.Threading.Tasks.Task SaveAsync(this Catel.Configuration.IConfigurationService configurationService) { }
+        public static void SetLocalValue(this Catel.Configuration.IConfigurationService configurationService, string key, object? value) { }
+        public static void SetRoamingValue(this Catel.Configuration.IConfigurationService configurationService, string key, object? value) { }
     }
 }
 namespace Catel.Core

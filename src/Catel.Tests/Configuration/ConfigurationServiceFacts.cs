@@ -51,105 +51,109 @@
             }
         }
 
-        private static TestConfigurationService GetConfigurationService(string name = null)
+        private static async Task<TestConfigurationService> GetConfigurationServiceAsync(string name = null)
         {
-            return new TestConfigurationService(name, new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService());
+            var configurationService = new TestConfigurationService(name, new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService());
+
+            await configurationService.LoadAsync();
+
+            return configurationService;
         }
 
         [TestFixture]
-        public class The_GetValueAsync_Method
+        public class The_GetValue_Method
         {
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task ThrowsArgumentExceptionForNullKeyAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                Assert.ThrowsAsync<ArgumentException>(async () => await configurationService.GetValueAsync<string>(container, null));
+                Assert.Throws<ArgumentException>(() => configurationService.GetValue<string>(container, null));
             }
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task ThrowsArgumentExceptionForEmptyKeyAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                Assert.ThrowsAsync<ArgumentException>(async () => await configurationService.GetValueAsync<string>(container, string.Empty));
+                Assert.Throws<ArgumentException>(() => configurationService.GetValue<string>(container, string.Empty));
             }
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task ReturnsExistingValueAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                await configurationService.SetValueAsync(container, "myKey", "myValue");
+                configurationService.SetValue(container, "myKey", "myValue");
 
-                Assert.AreEqual("myValue", await configurationService.GetValueAsync<string>(container, "myKey"));
+                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "myKey"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task ReturnsDefaultValueForNonExistingValueAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                Assert.AreEqual("nonExistingValue", await configurationService.GetValueAsync(container, "nonExistingKey", "nonExistingValue"));
+                Assert.AreEqual("nonExistingValue", configurationService.GetValue(container, "nonExistingKey", "nonExistingValue"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task ReturnsValueForKeyWithSpecialCharactersAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                await configurationService.SetValueAsync(container, "key with special chars", "myValue");
+                configurationService.SetValue(container, "key with special chars", "myValue");
 
-                Assert.AreEqual("myValue", await configurationService.GetValueAsync(container, "key with special chars", "nonExistingValue"));
+                Assert.AreEqual("myValue", configurationService.GetValue(container, "key with special chars", "nonExistingValue"));
             }
         }
 
         [TestFixture]
-        public class The_SetValueAsync_Method
+        public class The_SetValue_Method
         {
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task ThrowsArgumentExceptionForNullKeyAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                Assert.ThrowsAsync<ArgumentException>(async () => await configurationService.SetValueAsync(container, null, "value"));
+                Assert.Throws<ArgumentException>(() => configurationService.SetValue(container, null, "value"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task ThrowsArgumentExceptionForEmptyKeyAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                Assert.ThrowsAsync<ArgumentException>(async () => await configurationService.SetValueAsync(container, string.Empty, "value"));
+                Assert.Throws<ArgumentException>(() => configurationService.SetValue(container, string.Empty, "value"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task SetsValueCorrectlyAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
  
-                await configurationService.SetValueAsync(container, "myKey", "myValue");
+                configurationService.SetValue(container, "myKey", "myValue");
 
-                Assert.AreEqual("myValue", await configurationService.GetValueAsync<string>(container, "myKey"));
+                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "myKey"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task SetsValueCorrectlyForKeyWithSpecialCharactersAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
-                await configurationService.SetValueAsync(container, "key with special chars", "myValue");
+                configurationService.SetValue(container, "key with special chars", "myValue");
 
-                Assert.AreEqual("myValue", await configurationService.GetValueAsync<string>(container, "key with special chars"));
+                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "key with special chars"));
             }
         }
 
@@ -160,7 +164,7 @@
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task IsInvokedDuringSetValueMethodAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
 
                 var invoked = false;
                 var receivedContainer = ConfigurationContainer.Roaming;
@@ -177,7 +181,7 @@
 
                 var guid = Guid.NewGuid();
 
-                await configurationService.SetValueAsync(container, "key", guid.ToString());
+                configurationService.SetValue(container, "key", guid.ToString());
 
                 Assert.IsTrue(invoked);
                 Assert.AreEqual(container, receivedContainer);
@@ -189,17 +193,17 @@
             [TestCase(ConfigurationContainer.Roaming)]
             public async Task IsNotInvokedDuringSetValueMethodForEqualValuesAsync(ConfigurationContainer container)
             {
-                var configurationService = GetConfigurationService();
+                var configurationService = await GetConfigurationServiceAsync();
                 var invoked = false;
 
-                await configurationService.SetValueAsync(container, "key", "value");
+                configurationService.SetValue(container, "key", "value");
 
                 configurationService.ConfigurationChanged += (sender, e) =>
                 {
                     invoked = true;
                 };
 
-                await configurationService.SetValueAsync(container, "key", "value");
+                configurationService.SetValue(container, "key", "value");
 
                 Assert.IsFalse(invoked);
             }

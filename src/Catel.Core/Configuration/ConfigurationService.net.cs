@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="container">The settings container.</param>
         /// <returns>The settings container.</returns>
-        protected virtual async Task<DynamicConfiguration?> GetSettingsContainerAsync(ConfigurationContainer container)
+        protected virtual DynamicConfiguration GetSettingsContainer(ConfigurationContainer container)
         {
             DynamicConfiguration? settings = null;
 
@@ -34,35 +34,7 @@
 
             if (settings is null)
             {
-                switch (container)
-                {
-                    case ConfigurationContainer.Local:
-                        var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-                        await SetLocalConfigFilePathAsync(defaultLocalConfigFilePath);
-                        break;
-
-                    case ConfigurationContainer.Roaming:
-                        var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-                        await SetRoamingConfigFilePathAsync(defaultRoamingConfigFilePath);
-                        break;
-                }
-
-                // Let's try again
-                settings = await GetSettingsContainerAsync(container);
-
-                if (settings is not null)
-                {
-                    switch (container)
-                    {
-                        case ConfigurationContainer.Local:
-                            await SaveLocalConfigurationAsync();
-                            break;
-
-                        case ConfigurationContainer.Roaming:
-                            await SaveRoamingConfigurationAsync();
-                            break;
-                    }
-                }
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Configuration is not yet initialized for '{container}' container, make sure to call LoadAsync first");
             }
 
             return settings;
@@ -126,12 +98,14 @@
 
         private async Task SaveLocalConfigurationAsync()
         {
+            _localSaveConfigurationTimer.Stop();
+
             var container = ConfigurationContainer.Local;
 
             var lockObject = GetLockObject(container);
             using (await lockObject.LockAsync())
             {
-                var settings = await GetSettingsContainerAsync(container);
+                var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
                     return;
@@ -156,12 +130,14 @@
 
         private async Task SaveRoamingConfigurationAsync()
         {
+            _roamingSaveConfigurationTimer.Stop();
+
             var container = ConfigurationContainer.Roaming;
 
             var lockObject = GetLockObject(container);
             using (await lockObject.LockAsync())
             {
-                var settings = await GetSettingsContainerAsync(container);
+                var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
                     return;
