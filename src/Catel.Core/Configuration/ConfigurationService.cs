@@ -116,32 +116,24 @@
                 });
         }
 
-        /// <summary>
-        /// Gets the configuration value.
-        /// </summary>
-        /// <typeparam name="T">The type of the value to retrieve.</typeparam>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
-        /// <returns>The configuration value.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual async Task<T> GetValueAsync<T>(ConfigurationContainer container, string key, T defaultValue = default!)
+        /// <inheritdoc />
+        public virtual T GetValue<T>(ConfigurationContainer container, string key, T defaultValue = default!)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             key = GetFinalKey(key);
 
             var lockObject = GetLockObject(container);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
                 try
                 {
-                    if (!await ValueExistsAsync(container, key))
+                    if (!ValueExists(container, key))
                     {
                         return defaultValue;
                     }
 
-                    var value = await GetValueFromStoreAsync(container, key);
+                    var value = GetValueFromStore(container, key);
                     if (value is null)
                     {
                         return defaultValue;
@@ -164,14 +156,8 @@
             }
         }
 
-        /// <summary>
-        /// Sets the configuration value.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual async Task SetValueAsync(ConfigurationContainer container, string key, object? value)
+        /// <inheritdoc />
+        public virtual void SetValue(ConfigurationContainer container, string key, object? value)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
@@ -180,12 +166,12 @@
             var raiseEvent = false;
 
             var lockObject = GetLockObject(container);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
                 var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
-                var existingValue = await GetValueFromStoreAsync(container, key);
+                var existingValue = GetValueFromStore(container, key);
 
-                await SetValueToStoreAsync(container, key, stringValue);
+                SetValueToStore(container, key, stringValue);
 
                 if (!string.Equals(stringValue, existingValue))
                 {
@@ -199,76 +185,88 @@
             }
         }
 
-        /// <summary>
-        /// Determines whether the specified value is available.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual async Task<bool> IsValueAvailableAsync(ConfigurationContainer container, string key)
+        /// <inheritdoc />
+        public virtual bool IsValueAvailable(ConfigurationContainer container, string key)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             key = GetFinalKey(key);
 
-            return await ValueExistsAsync(container, key);
+            return ValueExists(container, key);
         }
 
-        /// <summary>
-        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual async Task InitializeValueAsync(ConfigurationContainer container, string key, object? defaultValue)
+        /// <inheritdoc />
+        public virtual void InitializeValue(ConfigurationContainer container, string key, object? defaultValue)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             var lockObject = GetLockObject(container);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
-                if (!await IsValueAvailableAsync(container, key))
+                if (!IsValueAvailable(container, key))
                 {
-                    await SetValueAsync(container, key, defaultValue);
+                    SetValue(container, key, defaultValue);
                 }
             }
         }
 
-        /// <summary>
-        /// Sets the roaming config file path.
-        /// </summary>
-        /// <param name="filePath">The file path. </param>
-        public virtual async Task SetRoamingConfigFilePathAsync(string filePath)
+        /// <inheritdoc />
+        public virtual async void SetRoamingConfigFilePath(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting roaming config file path to '{filePath}'");
 
             var lockObject = GetLockObject(ConfigurationContainer.Roaming);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
                 _roamingConfigFilePath = filePath;
                 _roamingConfiguration = await LoadConfigurationAsync(filePath);
             }
         }
 
-        /// <summary>
-        /// Sets the roaming config file path.
-        /// </summary>
-        /// <param name="filePath">The file path. </param>
-        public virtual async Task SetLocalConfigFilePathAsync(string filePath)
+        /// <inheritdoc />
+        public virtual async void SetLocalConfigFilePath(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting local config file path to '{filePath}'");
 
             var lockObject = GetLockObject(ConfigurationContainer.Local);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
                 _localConfigFilePath = filePath;
                 _localConfiguration = await LoadConfigurationAsync(filePath);
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual async Task SaveAsync(ConfigurationContainer configuration)
+        {
+            switch (configuration)
+            {
+                case ConfigurationContainer.Local:
+                    await SaveLocalConfigurationAsync();
+                    break;
+
+                case ConfigurationContainer.Roaming:
+                    await SaveRoamingConfigurationAsync();
+                    break;
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual async Task LoadAsync(ConfigurationContainer configuration)
+        {
+            switch (configuration)
+            {
+                case ConfigurationContainer.Local:
+                    await LoadConfigurationAsync(configuration);
+                    break;
+
+                case ConfigurationContainer.Roaming:
+                    await LoadConfigurationAsync(configuration);
+                    break;
             }
         }
 
@@ -318,12 +316,12 @@
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> ValueExistsAsync(ConfigurationContainer container, string key)
+        protected virtual bool ValueExists(ConfigurationContainer container, string key)
         {
             var lockObject = GetLockObject(container);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
-                var settings = await GetSettingsContainerAsync(container);
+                var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
                     return false;
@@ -339,12 +337,12 @@
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns>The value.</returns>
-        protected virtual async Task<string> GetValueFromStoreAsync(ConfigurationContainer container, string key)
+        protected virtual string GetValueFromStore(ConfigurationContainer container, string key)
         {
             var lockObject = GetLockObject(container);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
-                var settings = await GetSettingsContainerAsync(container); 
+                var settings = GetSettingsContainer(container); 
                 if (settings is null)
                 {
                     return string.Empty;
@@ -360,12 +358,12 @@
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        protected virtual async Task SetValueToStoreAsync(ConfigurationContainer container, string key, string value)
+        protected virtual void SetValueToStore(ConfigurationContainer container, string key, string value)
         {
             var lockObject = GetLockObject(container);
-            using (await lockObject.LockAsync())
+            using (lockObject.Lock())
             {
-                var settings = await GetSettingsContainerAsync(container);
+                var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
                     return;

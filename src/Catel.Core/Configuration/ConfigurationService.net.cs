@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="container">The settings container.</param>
         /// <returns>The settings container.</returns>
-        protected virtual async Task<DynamicConfiguration?> GetSettingsContainerAsync(ConfigurationContainer container)
+        protected virtual DynamicConfiguration? GetSettingsContainer(ConfigurationContainer container)
         {
             DynamicConfiguration? settings = null;
 
@@ -38,30 +38,21 @@
                 {
                     case ConfigurationContainer.Local:
                         var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-                        await SetLocalConfigFilePathAsync(defaultLocalConfigFilePath);
+                        SetLocalConfigFilePath(defaultLocalConfigFilePath);
                         break;
 
                     case ConfigurationContainer.Roaming:
                         var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-                        await SetRoamingConfigFilePathAsync(defaultRoamingConfigFilePath);
+                        SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
                         break;
                 }
 
                 // Let's try again
-                settings = await GetSettingsContainerAsync(container);
+                settings = GetSettingsContainer(container);
 
                 if (settings is not null)
                 {
-                    switch (container)
-                    {
-                        case ConfigurationContainer.Local:
-                            await SaveLocalConfigurationAsync();
-                            break;
-
-                        case ConfigurationContainer.Roaming:
-                            await SaveRoamingConfigurationAsync();
-                            break;
-                    }
+                    ScheduleSaveConfiguration(container);
                 }
             }
 
@@ -131,7 +122,7 @@
             var lockObject = GetLockObject(container);
             using (await lockObject.LockAsync())
             {
-                var settings = await GetSettingsContainerAsync(container);
+                var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
                     return;
@@ -161,7 +152,7 @@
             var lockObject = GetLockObject(container);
             using (await lockObject.LockAsync())
             {
-                var settings = await GetSettingsContainerAsync(container);
+                var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
                     return;

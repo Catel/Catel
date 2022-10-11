@@ -18,9 +18,9 @@
                 {
                 }
 
-                protected override async Task SetValueToStoreAsync(ConfigurationContainer container, string key, string value)
+                protected override void SetValueToStore(ConfigurationContainer container, string key, string value)
                 {
-                    await base.SetValueToStoreAsync(container, key, value);
+                    base.SetValueToStore(container, key, value);
 
                     switch (container)
                     {
@@ -67,7 +67,7 @@
                 // 3. Process C is launched, but B reset the configuration and configuration has been reset to default values
                 var configServiceA = GetConfigurationService("GH1840");
                 configServiceA.CreateDelayDuringSave = true;
-                await configServiceA.SetRoamingValueAsync("NAME", "A");
+                configServiceA.SetRoamingValue("NAME", "A");
 
                 // The save should be ready, but the additional delay will lock the file and mimic process A from locking the file
                 // and thus not allowing process B to correctly load the config
@@ -76,13 +76,13 @@
                 // This code must be called *while service A is writing* so we added a delay. It should have waited until
                 // the config value of A was released, then set value and overwrite the file instead of resetting it
                 var configServiceB = GetConfigurationService("GH1840");
-                await configServiceB.SetRoamingValueAsync("ANOTHER VALUE", "B");
+                configServiceB.SetRoamingValue("ANOTHER VALUE", "B");
 
                 // Close both files, wait long enough (longer than 5 seconds)
                 await Task.Delay(7000);
 
                 var configServiceC = GetConfigurationService("GH1840");
-                var value = await configServiceC.GetRoamingValueAsync<string>("NAME", string.Empty);
+                var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);
 
                 Assert.AreEqual("A", value);
             }
@@ -94,7 +94,7 @@
 
                 for (int j = 0; j < 50; j++)
                 {
-                    await configurationService.SetRoamingValueAsync($"Key_{j:D2}", j);
+                    configurationService.SetRoamingValue($"Key_{j:D2}", j);
 
                     await Task.Delay(10);
                 }
@@ -117,7 +117,7 @@
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        await configurationService.SetLocalValueAsync($"Key_{i:D2}_{j:D2}", i + j);
+                        configurationService.SetLocalValue($"Key_{i:D2}_{j:D2}", i + j);
 
                         await Task.Delay(25);
                     }
@@ -142,7 +142,7 @@
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        await configurationService.SetRoamingValueAsync($"Key_{i:D2}_{j:D2}", i + j);
+                        configurationService.SetRoamingValue($"Key_{i:D2}_{j:D2}", i + j);
 
                         await Task.Delay(25);
                     }
