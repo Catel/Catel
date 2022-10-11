@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="container">The settings container.</param>
         /// <returns>The settings container.</returns>
-        protected virtual DynamicConfiguration? GetSettingsContainer(ConfigurationContainer container)
+        protected virtual DynamicConfiguration GetSettingsContainer(ConfigurationContainer container)
         {
             DynamicConfiguration? settings = null;
 
@@ -34,26 +34,7 @@
 
             if (settings is null)
             {
-                switch (container)
-                {
-                    case ConfigurationContainer.Local:
-                        var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-                        SetLocalConfigFilePath(defaultLocalConfigFilePath);
-                        break;
-
-                    case ConfigurationContainer.Roaming:
-                        var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-                        SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
-                        break;
-                }
-
-                // Let's try again
-                settings = GetSettingsContainer(container);
-
-                if (settings is not null)
-                {
-                    ScheduleSaveConfiguration(container);
-                }
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Configuration is not yet initialized for '{container}' container, make sure to call LoadAsync first");
             }
 
             return settings;

@@ -65,7 +65,7 @@
                 // 1. Process A and B are launched at the same time, process A is allowed to run and loads the correct config, but process B resets the config and writes to disk
                 // 2. If process A makes no changes, it will happily close
                 // 3. Process C is launched, but B reset the configuration and configuration has been reset to default values
-                var configServiceA = GetConfigurationService("GH1840");
+                var configServiceA = await GetConfigurationServiceAsync("GH1840");
                 configServiceA.CreateDelayDuringSave = true;
                 configServiceA.SetRoamingValue("NAME", "A");
 
@@ -75,13 +75,13 @@
 
                 // This code must be called *while service A is writing* so we added a delay. It should have waited until
                 // the config value of A was released, then set value and overwrite the file instead of resetting it
-                var configServiceB = GetConfigurationService("GH1840");
+                var configServiceB = await GetConfigurationServiceAsync("GH1840");
                 configServiceB.SetRoamingValue("ANOTHER VALUE", "B");
 
                 // Close both files, wait long enough (longer than 5 seconds)
                 await Task.Delay(7000);
 
-                var configServiceC = GetConfigurationService("GH1840");
+                var configServiceC = await GetConfigurationServiceAsync("GH1840");
                 var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);
 
                 Assert.AreEqual("A", value);
@@ -91,6 +91,8 @@
             public async Task DoesNotCallSaveMultipleTimesAsync()
             {
                 var configurationService = new SerializationConfigurationService();
+
+                await configurationService.LoadAsync();
 
                 for (int j = 0; j < 50; j++)
                 {
@@ -104,14 +106,15 @@
                     await Task.Delay(200);
                 }
 
-                // Note: we expect +1 because an initial write is done when initializing the configuration
-                Assert.AreEqual(2, configurationService.RoamingSaveCount);
+                Assert.AreEqual(1, configurationService.RoamingSaveCount);
             }
 
             [Test]
             public async Task CorrectlySchedulesLocalSerializationAsync()
             {
                 var configurationService = new SerializationConfigurationService();
+
+                await configurationService.LoadAsync();
 
                 for (int i = 0; i < 5; i++)
                 {
@@ -128,15 +131,16 @@
                 Assert.AreEqual(0, configurationService.RoamingChangeCount);
                 Assert.AreEqual(0, configurationService.RoamingSaveCount);
 
-                // Note: we expect +1 because an initial write is done when initializing the configuration
                 Assert.AreEqual(5 * 50, configurationService.LocalChangeCount);
-                Assert.AreEqual(6, configurationService.LocalSaveCount);
+                Assert.AreEqual(5, configurationService.LocalSaveCount);
             }
 
             [Test]
             public async Task CorrectlySchedulesRoamingSerializationAsync()
             {
                 var configurationService = new SerializationConfigurationService();
+
+                await configurationService.LoadAsync();
 
                 for (int i = 0; i < 5; i++)
                 {
@@ -153,9 +157,8 @@
                 Assert.AreEqual(0, configurationService.LocalChangeCount);
                 Assert.AreEqual(0, configurationService.LocalSaveCount);
 
-                // Note: we expect +1 because an initial write is done when initializing the configuration
                 Assert.AreEqual(5 * 50, configurationService.RoamingChangeCount);
-                Assert.AreEqual(6, configurationService.RoamingSaveCount);
+                Assert.AreEqual(5, configurationService.RoamingSaveCount);
             }
         }
     }

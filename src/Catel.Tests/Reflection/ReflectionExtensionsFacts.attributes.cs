@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensionsFacts.attributes.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-// Required since we are testing obsolete attribute retrievals
+﻿// Required since we are testing obsolete attribute retrievals
 #pragma warning disable 612
 
 namespace Catel.Tests.Reflection

@@ -62,13 +62,22 @@
         /// Sets the roaming config file path.
         /// </summary>
         /// <param name="filePath">The file path. </param>
-        void SetRoamingConfigFilePath(string filePath);
+        Task SetRoamingConfigFilePathAsync(string filePath);
 
         /// <summary>
         /// Sets the local config file path.
         /// </summary>
         /// <param name="filePath">The file path. </param>
-        void SetLocalConfigFilePath(string filePath);
+        Task SetLocalConfigFilePathAsync(string filePath);
+
+        /// <summary>
+        /// Explicitly loads the specified configuration container.
+        /// <para />
+        /// This call can be useful when the loading of the configuration should not be done in the background.
+        /// </summary>
+        /// <param name="container">The configuration container to load.</param>
+        /// <returns>The task that can be awaited.</returns>
+        Task LoadAsync(ConfigurationContainer container);
 
         /// <summary>
         /// Explicitly saves the specific configuration container.
@@ -78,14 +87,5 @@
         /// <param name="container">The configuration container to save.</param>
         /// <returns>The task that can be awaited.</returns>
         Task SaveAsync(ConfigurationContainer container);
-
-        /// <summary>
-        /// Explicitly loads the specified configuration container.
-        /// <para />
-        /// This call can be useful when the saving of the configuration should not be done in the background.
-        /// </summary>
-        /// <param name="container">The configuration container to load.</param>
-        /// <returns>The task that can be awaited.</returns>
-        Task LoadAsync(ConfigurationContainer container);
     }
 }

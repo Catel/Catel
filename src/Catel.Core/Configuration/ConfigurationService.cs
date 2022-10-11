@@ -211,14 +211,14 @@
         }
 
         /// <inheritdoc />
-        public virtual async void SetRoamingConfigFilePath(string filePath)
+        public virtual async Task SetRoamingConfigFilePathAsync(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting roaming config file path to '{filePath}'");
 
             var lockObject = GetLockObject(ConfigurationContainer.Roaming);
-            using (lockObject.Lock())
+            using (await lockObject.LockAsync())
             {
                 _roamingConfigFilePath = filePath;
                 _roamingConfiguration = await LoadConfigurationAsync(filePath);
@@ -226,17 +226,40 @@
         }
 
         /// <inheritdoc />
-        public virtual async void SetLocalConfigFilePath(string filePath)
+        public virtual async Task SetLocalConfigFilePathAsync(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting local config file path to '{filePath}'");
 
             var lockObject = GetLockObject(ConfigurationContainer.Local);
-            using (lockObject.Lock())
+            using (await lockObject.LockAsync())
             {
                 _localConfigFilePath = filePath;
                 _localConfiguration = await LoadConfigurationAsync(filePath);
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual async Task LoadAsync(ConfigurationContainer configuration)
+        {
+            switch (configuration)
+            {
+                case ConfigurationContainer.Local:
+                    if (_localConfiguration is null)
+                    {
+                        var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
+                        await SetLocalConfigFilePathAsync(defaultLocalConfigFilePath);
+                    }
+                    break;
+
+                case ConfigurationContainer.Roaming:
+                    if (_roamingConfiguration is null)
+                    {
+                        var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
+                        await SetRoamingConfigFilePathAsync(defaultRoamingConfigFilePath);
+                    }
+                    break;
             }
         }
 
@@ -255,26 +278,11 @@
             }
         }
 
-        /// <inheritdoc />
-        public virtual async Task LoadAsync(ConfigurationContainer configuration)
-        {
-            switch (configuration)
-            {
-                case ConfigurationContainer.Local:
-                    await LoadConfigurationAsync(configuration);
-                    break;
-
-                case ConfigurationContainer.Roaming:
-                    await LoadConfigurationAsync(configuration);
-                    break;
-            }
-        }
-
-        protected virtual async Task<DynamicConfiguration> LoadConfigurationAsync(string fileName)
+        protected virtual async Task<DynamicConfiguration> LoadConfigurationAsync(string source)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            if (!File.Exists(fileName))
+            if (!File.Exists(source))
             {
                 // No file, we can really start from scratch
                 return new DynamicConfiguration();
@@ -285,7 +293,7 @@
             {
                 try
                 {
-                    using (var fileStream = File.Open(fileName, FileMode.Open))
+                    using (var fileStream = File.Open(source, FileMode.Open))
                     {
                         if (!fileStream.CanRead)
                         {
@@ -307,7 +315,7 @@
                 }
             }
 
-            throw Log.ErrorAndCreateException<InvalidOperationException>($"File '{fileName}' could not be used to load the configuration, it was locked for too long");
+            throw Log.ErrorAndCreateException<InvalidOperationException>($"File '{source}' could not be used to load the configuration, it was locked for too long");
         }
 
         /// <summary>
@@ -348,7 +356,7 @@
                     return string.Empty;
                 }
 
-                return settings.GetConfigurationValue<string>(key, string.Empty);
+                return settings.GetConfigurationValue(key, string.Empty);
             }
         }
 
