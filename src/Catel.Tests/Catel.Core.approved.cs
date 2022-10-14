@@ -1010,13 +1010,13 @@ namespace Catel.Configuration
         public DynamicConfiguration() { }
         protected override Catel.Data.IPropertyBag CreatePropertyBag() { }
         public virtual void Deserialize(System.Xml.XmlReader xmlReader) { }
-        public virtual object GetConfigurationValue(string name) { }
+        public virtual object? GetConfigurationValue(string name) { }
         protected virtual Catel.Runtime.Serialization.Xml.IXmlSerializer GetXmlSerializer() { }
         public virtual bool IsConfigurationValueSet(string name) { }
         public virtual void MarkConfigurationValueAsSet(string name) { }
         public virtual void RegisterConfigurationKey(string name) { }
         public virtual void Serialize(System.Xml.XmlWriter xmlWriter) { }
-        public virtual void SetConfigurationValue(string name, object value) { }
+        public virtual void SetConfigurationValue(string name, object? value) { }
     }
     public static class DynamicConfigurationExtensions
     {

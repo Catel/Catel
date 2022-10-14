@@ -53,7 +53,7 @@
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>System.String.</returns>
-        public virtual object GetConfigurationValue(string name)
+        public virtual object? GetConfigurationValue(string name)
         {
             RegisterConfigurationKey(name);
 
@@ -65,7 +65,7 @@
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        public virtual void SetConfigurationValue(string name, object value)
+        public virtual void SetConfigurationValue(string name, object? value)
         {
             RegisterConfigurationKey(name);
 
