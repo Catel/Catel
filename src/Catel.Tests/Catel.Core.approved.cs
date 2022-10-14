@@ -626,10 +626,10 @@ namespace Catel.Caching.Policies
         protected bool IsResting { get; }
         protected virtual void OnReset() { }
         public void Reset() { }
-        public static Catel.Caching.Policies.ExpirationPolicy? Absolute(System.DateTime absoluteExpirationDateTime, bool force = false) { }
-        public static Catel.Caching.Policies.ExpirationPolicy? Custom(System.Func<bool>? isExpiredFunc, System.Action? resetAction = null, bool force = false) { }
-        public static Catel.Caching.Policies.ExpirationPolicy? Duration(System.TimeSpan durationTimeSpan, bool force = false) { }
-        public static Catel.Caching.Policies.ExpirationPolicy? Sliding(System.TimeSpan durationTimeSpan, bool force = false) { }
+        public static Catel.Caching.Policies.ExpirationPolicy Absolute(System.DateTime absoluteExpirationDateTime) { }
+        public static Catel.Caching.Policies.ExpirationPolicy Custom(System.Func<bool> isExpiredFunc, System.Action? resetAction = null) { }
+        public static Catel.Caching.Policies.ExpirationPolicy Duration(System.TimeSpan durationTimeSpan) { }
+        public static Catel.Caching.Policies.ExpirationPolicy Sliding(System.TimeSpan durationTimeSpan) { }
     }
     public sealed class SlidingExpirationPolicy : Catel.Caching.Policies.DurationExpirationPolicy
     {

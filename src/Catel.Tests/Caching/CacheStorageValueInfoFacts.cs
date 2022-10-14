@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CacheStorageValueInfoFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Caching
+﻿namespace Catel.Tests.Caching
 {
     using System;
     using Catel.Caching;
@@ -17,14 +11,6 @@ namespace Catel.Tests.Caching
         [TestFixture]
         public class TheCanExpireProperty
         {
-            [TestCase]
-            public void ReturnsFalseWhenTimeSpanIsZero()
-            {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0));
-
-                Assert.IsFalse(valueInfo.CanExpire);
-            }
-
             [TestCase]
             public void ReturnsTrueWhenTimeSpanIsNotZero()
             {

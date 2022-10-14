@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.Configuration
 {
+    using System.IO;
     using System.Threading.Tasks;
     using Catel.Configuration;
     using Catel.Runtime.Serialization;
@@ -11,6 +12,18 @@
         [TestFixture]
         public class Serialization
         {
+            [SetUp()]
+            public void Setup()
+            {
+                var appDataService = new AppDataService();
+
+                var localConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
+                File.Delete(localConfigurationFile);
+
+                var roamingConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
+                File.Delete(roamingConfigurationFile);
+            }
+
             private class SerializationConfigurationService : ConfigurationService
             {
                 public SerializationConfigurationService()

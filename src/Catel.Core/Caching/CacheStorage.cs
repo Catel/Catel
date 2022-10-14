@@ -4,7 +4,6 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
     using Policies;
@@ -205,7 +204,7 @@
                 }
 
                 var value = code();
-                if (!(value is null) || _storeNullValues)
+                if (value is not null || _storeNullValues)
                 {
                     if (expirationPolicy is null && _defaultExpirationPolicyInitCode is not null)
                     {
@@ -275,7 +274,7 @@
 
                 var value = await code();
 
-                if (!(value is null) || _storeNullValues)
+                if (value is not null || _storeNullValues)
                 {
                     if (expirationPolicy is null && _defaultExpirationPolicyInitCode is not null)
                     {

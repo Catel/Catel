@@ -38,36 +38,33 @@
         /// Creates a <see cref="AbsoluteExpirationPolicy" /> instance.
         /// </summary>
         /// <param name="absoluteExpirationDateTime">The absolute expiration <see cref="DateTime" />.</param>
-        /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="AbsoluteExpirationPolicy" /> or <c>null</c> if <paramref name="absoluteExpirationDateTime" /> is in the pass.</returns>
         /// <remarks>The cache item will expire on the absolute expiration date time.</remarks>
-        public static ExpirationPolicy? Absolute(DateTime absoluteExpirationDateTime, bool force = false)
+        public static ExpirationPolicy Absolute(DateTime absoluteExpirationDateTime)
         {
-            return force || FastDateTime.Now < absoluteExpirationDateTime ? new AbsoluteExpirationPolicy(absoluteExpirationDateTime) : null;
+            return new AbsoluteExpirationPolicy(absoluteExpirationDateTime);
         }
 
         /// <summary>
         /// Creates a <see cref="DurationExpirationPolicy" /> instance.
         /// </summary>
         /// <param name="durationTimeSpan">The duration <see cref="TimeSpan" />.</param>
-        /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="DurationExpirationPolicy" /> or <c>null</c> if <paramref name="durationTimeSpan" /> is less than 0 ticks.</returns>
         /// <remarks>The cache item will expire using the duration to calculate the absolute expiration from now.</remarks>
-        public static ExpirationPolicy? Duration(TimeSpan durationTimeSpan, bool force = false)
+        public static ExpirationPolicy Duration(TimeSpan durationTimeSpan)
         {
-            return force || durationTimeSpan.Ticks > 0 ? new DurationExpirationPolicy(durationTimeSpan) : null;
+            return new DurationExpirationPolicy(durationTimeSpan);
         }
 
         /// <summary>
         /// Creates a <see cref="SlidingExpirationPolicy" /> instance.
         /// </summary>
         /// <param name="durationTimeSpan">The duration <see cref="TimeSpan" />.</param>
-        /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="SlidingExpirationPolicy" /> or <c>null</c> if <paramref name="durationTimeSpan" /> is less than 0 ticks.</returns>
         /// <remarks>The cache item will expire using the duration property as the sliding expiration.</remarks>
-        public static ExpirationPolicy? Sliding(TimeSpan durationTimeSpan, bool force = false)
+        public static ExpirationPolicy Sliding(TimeSpan durationTimeSpan)
         {
-            return force || durationTimeSpan.Ticks > 0 ? new SlidingExpirationPolicy(durationTimeSpan) : null;
+            return new SlidingExpirationPolicy(durationTimeSpan);
         }
 
         /// <summary>
@@ -75,12 +72,13 @@
         /// </summary>
         /// <param name="isExpiredFunc">The function to check if the policy is expired.</param>
         /// <param name="resetAction">The action that will be executed if the item is read before expiration.</param>
-        /// <param name="force">Indicates whether the policy will be created even if the policy will be created expired.</param>
         /// <returns>The <see cref="CustomExpirationPolicy" />.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="isExpiredFunc" /> is <c>null</c>.</exception>
-        public static ExpirationPolicy? Custom(Func<bool>? isExpiredFunc, Action? resetAction = null, bool force = false)
+        public static ExpirationPolicy Custom(Func<bool> isExpiredFunc, Action? resetAction = null)
         {
-            return force || (isExpiredFunc is not null && !isExpiredFunc.Invoke()) ? new CustomExpirationPolicy(isExpiredFunc, resetAction) : null;
+            ArgumentNullException.ThrowIfNull(isExpiredFunc);
+
+            return new CustomExpirationPolicy(isExpiredFunc, resetAction);
         }
 
         /// <summary>

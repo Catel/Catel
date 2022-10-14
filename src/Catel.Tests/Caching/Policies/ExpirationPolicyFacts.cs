@@ -24,15 +24,13 @@ namespace Catel.Tests.Caching.Policies
         [TestFixture]
         public class TheAbsoluteMethod
         {
-            #region Methods
-
             /// <summary>
             /// Returns null if expiration date time is in the pass.
             /// </summary>
             [TestCase]
-            public void ReturnsNullIfExpirationDateTimeIsInThePass()
+            public void NotReturnsNullIfExpirationDateTimeIsInThePass()
             {
-                Assert.IsNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)));
+                Assert.IsNotNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)));
             }
             
             
@@ -42,10 +40,8 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void NotReturnsNullIfExpirationDateTimeIsInThePassIfForceIsEqualsTrue()
             {
-                Assert.IsNotNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1), true));
+                Assert.IsNotNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)));
             }
-
-            #endregion
         }
         #endregion
 
@@ -63,9 +59,9 @@ namespace Catel.Tests.Caching.Policies
             /// Returns null if ticks of time span is less or equals to zero.
             /// </summary>
             [TestCase]
-            public void ReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
+            public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
             {
-                Assert.IsNull(ExpirationPolicy.Duration(new TimeSpan(0)));
+                Assert.IsNotNull(ExpirationPolicy.Duration(new TimeSpan(0)));
             }
             
             /// <summary>
@@ -74,7 +70,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZeroIfForceIsEqualsTrue()
             {
-                Assert.IsNotNull(ExpirationPolicy.Duration(new TimeSpan(0), true));
+                Assert.IsNotNull(ExpirationPolicy.Duration(new TimeSpan(0)));
             }
 
             #endregion
@@ -95,9 +91,9 @@ namespace Catel.Tests.Caching.Policies
             /// The returns null if ticks of time span is less or equals to zero.
             /// </summary>
             [TestCase]
-            public void ReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
+            public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
             {
-                Assert.IsNull(ExpirationPolicy.Sliding(new TimeSpan(0)));
+                Assert.IsNotNull(ExpirationPolicy.Sliding(new TimeSpan(0)));
             }
             
             /// <summary>
@@ -106,7 +102,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZeroIfForceIsEqualsTrue()
             {
-                Assert.IsNotNull(ExpirationPolicy.Sliding(new TimeSpan(0), true));
+                Assert.IsNotNull(ExpirationPolicy.Sliding(new TimeSpan(0)));
             }
 
             #endregion
@@ -124,23 +120,17 @@ namespace Catel.Tests.Caching.Policies
             #region Methods
 
             [TestCase]
-            public void ReturnsNullIfFunctionReturnsTrue()
+            public void NotReturnsNullIfFunctionReturnsTrue()
             {
-                Assert.IsNull(ExpirationPolicy.Custom(() => true));
+                Assert.IsNotNull(ExpirationPolicy.Custom(() => true));
             }        
             
             [TestCase]
-            public void ReturnsNullIfFunctionIsNull()
+            public void Throws_ArgumentNullException_If_Function_Is_Null()
             {
-                Assert.IsNull(ExpirationPolicy.Custom(null));
+                Assert.Throws<ArgumentNullException>(() => ExpirationPolicy.Custom(null));
             }
-            
-            [TestCase]
-            public void NotReturnsNullIfFunctionIsNullIfForceIsEqualsTrue()
-            {
-                Assert.IsNotNull(ExpirationPolicy.Custom(null, null, true));
-            }
-            
+
             [TestCase]
             public void NotReturnsNullIfFunctionReturnsFalse()
             {
