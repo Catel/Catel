@@ -304,7 +304,9 @@ namespace Catel
     public static class LanguageHelper
     {
         public static string GetRequiredString(string resourceName) { }
+        public static string GetRequiredString(string resourceName, System.Globalization.CultureInfo cultureInfo) { }
         public static string? GetString(string resourceName) { }
+        public static string? GetString(string resourceName, System.Globalization.CultureInfo cultureInfo) { }
     }
     public class MustBeImplementedException : System.Exception
     {
