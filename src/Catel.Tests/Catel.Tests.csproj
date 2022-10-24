@@ -32,7 +32,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="PublicApiGenerator" Version="10.3.0" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="17.10.2" />
+    <PackageReference Include="Verify.NUnit" Version="18.0.0" />
   </ItemGroup>
 
   <ItemGroup>
