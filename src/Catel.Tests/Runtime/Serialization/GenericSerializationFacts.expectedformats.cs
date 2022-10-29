@@ -2,10 +2,9 @@
 {
     using System.IO;
     using System.Runtime.CompilerServices;
-    using ApprovalTests;
     using Catel.Runtime.Serialization;
-    using Catel.Tests.Data;
     using NUnit.Framework;
+    using VerifyNUnit;
 
     public partial class GenericSerializationFacts
     {
@@ -41,7 +40,7 @@
                     fileStream.Flush();
                 }
 
-                Approvals.VerifyFile(fileName);
+                Verifier.VerifyFile(fileName);
             }
         }
     }
