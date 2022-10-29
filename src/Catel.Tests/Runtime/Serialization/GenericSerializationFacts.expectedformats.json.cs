@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
     using Catel.Runtime.Serialization;
     using Catel.Tests.Data;
     using Catel.Tests.Runtime.Serialization.TestModels;
@@ -16,45 +17,45 @@
         {
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_GraphDepth_1()
+            public async Task Json_GraphDepth_1_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(1);
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_GraphDepth_2()
+            public async Task Json_GraphDepth_2_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(2);
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_GraphDepth_3()
+            public async Task Json_GraphDepth_3_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(3);
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_Collection()
+            public async Task Json_Collection_Async()
             {
                 var originalObject = new List<Country>();
                 originalObject.Add(new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425ae"), IsoCode = "AF", Description = "Afghanistan" });
                 originalObject.Add(new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425af"), IsoCode = "AG", Description = "Agypt" });
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_Array()
+            public async Task Json_Array_Async()
             {
                 var originalObject = new[]
                 {
@@ -62,52 +63,52 @@
                     new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425af"), IsoCode = "AG", Description = "Agypt"},
                 };
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_Dictionary()
+            public async Task Json_Dictionary_Async()
             {
                 var originalObject = new Dictionary<string, int>();
                 originalObject.Add("skip", 1);
                 originalObject.Add("take", 2);
                 originalObject.Add("some other string", 3);
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_ComplexHierarchyWithInheritance()
+            public async Task Json_ComplexHierarchyWithInheritance_Async()
             {
                 var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_ComplexHierarchyNonCatel()
+            public async Task Json_ComplexHierarchyNonCatel_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateComplexNonCatelHierarchy();
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_SerializationWithPrivateMembers()
+            public async Task Json_SerializationWithPrivateMembers_Async()
             {
                 var originalObject = new ObjectWithPrivateMembers("My private member");
                 originalObject.PublicMember = "My public member";
 
-                TestJsonSerializationWithExpectedFormat(originalObject);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Json_ModelsWithParsableObjectsAndSerializerModifierNotUsingParse()
+            public async Task Json_ModelsWithParsableObjectsAndSerializerModifierNotUsingParse_Async()
             {
                 var originalObject = new TestModelWithParsableMembersWithoutAttributes();
                 originalObject.Vector = new Vector(1, 2, 3);
@@ -115,7 +116,7 @@
                 var serializationManager = new SerializationManager();
                 serializationManager.AddSerializerModifier<TestModelWithParsableMembersWithoutAttributes, TestModelWithParsableMembersNotUsingParseSerializerModifier>();
 
-                TestJsonSerializationWithExpectedFormat(originalObject, serializationManager);
+                await TestJsonSerializationWithExpectedFormatAsync(originalObject, serializationManager);
             }
         }
     }

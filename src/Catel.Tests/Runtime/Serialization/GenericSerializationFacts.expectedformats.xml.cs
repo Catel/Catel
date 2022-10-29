@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
     using Catel.Runtime.Serialization;
     using Catel.Tests.Data;
     using Catel.Tests.Runtime.Serialization.TestModels;
@@ -16,45 +17,45 @@
         {
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_GraphDepth_1()
+            public async Task Xml_GraphDepth_1_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(1);
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_GraphDepth_2()
+            public async Task Xml_GraphDepth_2_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(2);
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_GraphDepth_3()
+            public async Task Xml_GraphDepth_3_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(3);
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_Collection()
+            public async Task Xml_Collection_Async()
             {
                 var originalObject = new List<Country>();
                 originalObject.Add(new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425ae"), IsoCode = "AF", Description = "Afghanistan" });
                 originalObject.Add(new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425af"), IsoCode = "AG", Description = "Agypt" });
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_Array()
+            public async Task Xml_Array_Async()
             {
                 var originalObject = new[]
                 {
@@ -62,52 +63,52 @@
                     new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425af"), IsoCode = "AG", Description = "Agypt"},
                 };
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_Dictionary()
+            public async Task Xml_Dictionary_Async()
             {
                 var originalObject = new Dictionary<string, int>();
                 originalObject.Add("skip", 1);
                 originalObject.Add("take", 2);
                 originalObject.Add("some other string", 3);
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_ComplexHierarchyWithInheritance()
+            public async Task Xml_ComplexHierarchyWithInheritance_Async()
             {
                 var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_ComplexHierarchyNonCatel()
+            public async Task Xml_ComplexHierarchyNonCatel_Async()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateComplexNonCatelHierarchy();
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_SerializationWithPrivateMembers()
+            public async Task Xml_SerializationWithPrivateMembers_Async()
             {
                 var originalObject = new ObjectWithPrivateMembers("My private member");
                 originalObject.PublicMember = "My public member";
 
-                TestXmlSerializationWithExpectedFormat(originalObject);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
 
             [Test]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public void Xml_ModelsWithParsableObjectsAndSerializerModifierNotUsingParse()
+            public async Task Xml_ModelsWithParsableObjectsAndSerializerModifierNotUsingParse_Async()
             {
                 var originalObject = new TestModelWithParsableMembersWithoutAttributes();
                 originalObject.Vector = new Vector(1, 2, 3);
@@ -115,7 +116,7 @@
                 var serializationManager = new SerializationManager();
                 serializationManager.AddSerializerModifier<TestModelWithParsableMembersWithoutAttributes, TestModelWithParsableMembersNotUsingParseSerializerModifier>();
 
-                TestXmlSerializationWithExpectedFormat(originalObject, serializationManager);
+                await TestXmlSerializationWithExpectedFormatAsync(originalObject, serializationManager);
             }
         }
     }
