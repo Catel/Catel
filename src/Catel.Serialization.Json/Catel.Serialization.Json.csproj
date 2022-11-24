@@ -22,7 +22,7 @@
     </PackageReference>
     <PackageReference Include="MethodTimer.Fody" Version="3.2.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="NewtonSoft.Json" Version="13.0.1" />
+    <PackageReference Include="NewtonSoft.Json" Version="13.0.2" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
   </ItemGroup>
   
