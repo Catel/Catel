@@ -328,10 +328,10 @@ namespace Catel
     }
     public static class ObjectToStringHelper
     {
-        public static System.Globalization.CultureInfo DefaultCulture { get; set; }
+        public static System.Globalization.CultureInfo? DefaultCulture { get; set; }
         public static string ToFullTypeString(object? instance) { }
         public static string ToString(object? instance) { }
-        public static string ToString(object? instance, System.Globalization.CultureInfo cultureInfo) { }
+        public static string ToString(object? instance, System.Globalization.CultureInfo? cultureInfo) { }
         public static string ToTypeString(object? instance) { }
     }
     public delegate void OpenInstanceActionHandler<TTarget>(TTarget @this);
@@ -387,39 +387,39 @@ namespace Catel
     }
     public static class StringToObjectHelper
     {
-        public static System.Globalization.CultureInfo DefaultCulture { get; set; }
+        public static System.Globalization.CultureInfo? DefaultCulture { get; set; }
         public static bool ToBool(string value) { }
         public static byte ToByte(string value) { }
         public static byte[] ToByteArray(string value) { }
         public static System.DateTime ToDateTime(string value) { }
-        public static System.DateTime ToDateTime(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static System.DateTime ToDateTime(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static decimal ToDecimal(string value) { }
-        public static decimal ToDecimal(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static decimal ToDecimal(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static double ToDouble(string value) { }
-        public static double ToDouble(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static double ToDouble(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static TEnumValue ToEnum<TEnumValue>(string value, TEnumValue defaultValue)
             where TEnumValue :  struct, System.IComparable, System.IFormattable { }
         public static float ToFloat(string value) { }
-        public static float ToFloat(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static float ToFloat(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static System.Guid ToGuid(string value) { }
         public static int ToInt(string value) { }
-        public static int ToInt(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static int ToInt(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static long ToLong(string value) { }
-        public static long ToLong(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static long ToLong(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static object? ToRightType(System.Type targetType, string value) { }
-        public static object? ToRightType(System.Type targetType, string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static object? ToRightType(System.Type targetType, string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static short ToShort(string value) { }
-        public static short ToShort(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static short ToShort(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static string? ToString(string value) { }
         public static System.TimeSpan ToTimeSpan(string value) { }
-        public static System.TimeSpan ToTimeSpan(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static System.TimeSpan ToTimeSpan(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static System.Type? ToType(string value) { }
         public static uint ToUInt(string value) { }
-        public static uint ToUInt(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static uint ToUInt(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static ulong ToULong(string value) { }
-        public static ulong ToULong(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static ulong ToULong(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static ushort ToUShort(string value) { }
-        public static ushort ToUShort(string value, System.Globalization.CultureInfo cultureInfo) { }
+        public static ushort ToUShort(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static System.Uri? ToUri(string value) { }
     }
     public enum SupportedPlatforms

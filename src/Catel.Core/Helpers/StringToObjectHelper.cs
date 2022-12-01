@@ -27,7 +27,7 @@
         /// Gets or sets the default culture to use for parsing.
         /// </summary>
         /// <value>The default culture.</value>
-        public static CultureInfo DefaultCulture { get; set; }
+        public static CultureInfo? DefaultCulture { get; set; }
 
         /// <summary>
         /// Converts a string to a boolean.
@@ -109,7 +109,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The date/time value of the string.</returns>
-        public static DateTime ToDateTime(string value, CultureInfo cultureInfo)
+        public static DateTime ToDateTime(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -137,7 +137,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The timespan value of the string.</returns>
-        public static TimeSpan ToTimeSpan(string value, CultureInfo cultureInfo)
+        public static TimeSpan ToTimeSpan(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -165,7 +165,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The decimal value of the string.</returns>
-        public static decimal ToDecimal(string value, CultureInfo cultureInfo)
+        public static decimal ToDecimal(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -193,7 +193,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The double value of the string.</returns>
-        public static double ToDouble(string value, CultureInfo cultureInfo)
+        public static double ToDouble(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -221,7 +221,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The float value of the string.</returns>
-        public static float ToFloat(string value, CultureInfo cultureInfo)
+        public static float ToFloat(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -266,7 +266,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The short value of the string.</returns>
-        public static short ToShort(string value, CultureInfo cultureInfo)
+        public static short ToShort(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -294,7 +294,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The unsigned short value of the string.</returns>
-        public static ushort ToUShort(string value, CultureInfo cultureInfo)
+        public static ushort ToUShort(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -322,7 +322,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The integer value of the string.</returns>
-        public static int ToInt(string value, CultureInfo cultureInfo)
+        public static int ToInt(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -350,7 +350,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The unsigned integer value of the string.</returns>
-        public static uint ToUInt(string value, CultureInfo cultureInfo)
+        public static uint ToUInt(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -378,7 +378,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The long value of the string.</returns>
-        public static long ToLong(string value, CultureInfo cultureInfo)
+        public static long ToLong(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -406,7 +406,7 @@
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The unsigned long value of the string.</returns>
-        public static ulong ToULong(string value, CultureInfo cultureInfo)
+        public static ulong ToULong(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -482,7 +482,7 @@
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The converted value. If the <paramref name="value" /> is <c>null</c>, this method will return <c>null</c>.</returns>
         /// <exception cref="NotSupportedException">The specified <paramref name="targetType" /> is not supported.</exception>
-        public static object? ToRightType(Type targetType, string value, CultureInfo cultureInfo)
+        public static object? ToRightType(Type targetType, string value, CultureInfo? cultureInfo)
         {
             if (value is null)
             {

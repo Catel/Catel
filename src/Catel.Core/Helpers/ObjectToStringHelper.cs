@@ -21,7 +21,7 @@
         /// Gets or sets the default culture to use for parsing.
         /// </summary>
         /// <value>The default culture.</value>
-        public static CultureInfo DefaultCulture { get; set; }
+        public static CultureInfo? DefaultCulture { get; set; }
 
         /// <summary>
         /// Returns a <see cref="string"/> that represents the instance.
@@ -45,7 +45,7 @@
         /// <param name="instance">The instance, can be <c>null</c>.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>A <see cref="string" /> that represents the instance.</returns>
-        public static string ToString(object? instance, CultureInfo cultureInfo)
+        public static string ToString(object? instance, CultureInfo? cultureInfo)
         {
             if (instance is null)
             {
@@ -70,7 +70,7 @@
             var toStringMethod = instanceType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>());
             if (toStringMethod is not null)
             {
-                var toStringResult = (string?)toStringMethod.Invoke(instance, new object[] { cultureInfo });
+                var toStringResult = (string?)toStringMethod.Invoke(instance, new object?[] { cultureInfo });
                 if (toStringResult is not null)
                 {
                     return toStringResult;
