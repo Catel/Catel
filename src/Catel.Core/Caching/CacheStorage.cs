@@ -344,7 +344,7 @@
         {
             if (!_storeNullValues)
             {
-                Argument.IsNotNull("value", value);
+                ArgumentNullException.ThrowIfNull(value);
             }
 
             GetFromCacheOrFetch(key, () => @value, expirationPolicy, @override);

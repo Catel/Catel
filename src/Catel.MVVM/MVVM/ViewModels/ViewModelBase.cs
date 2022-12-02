@@ -1069,7 +1069,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="modelProperty"/> is <c>null</c>.</exception>
         protected void ResetModel(string modelProperty, ModelCleanUpMode modelCleanUpMode)
         {
-            Argument.IsNotNull("modelProperty", modelProperty);
+            ArgumentNullException.ThrowIfNull(modelProperty);
 
             var model = GetValue<IModel>(modelProperty);
 

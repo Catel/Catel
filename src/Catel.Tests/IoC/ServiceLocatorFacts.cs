@@ -1271,7 +1271,7 @@ namespace Catel.Tests.IoC
             {
                 public ClassA(InterfaceB b)
                 {
-                    Argument.IsNotNull(() => b);
+                    ArgumentNullException.ThrowIfNull(b);
                 }
             }
 
@@ -1283,7 +1283,7 @@ namespace Catel.Tests.IoC
             {
                 public ClassB(InterfaceA a)
                 {
-                    Argument.IsNotNull(() => a);
+                    ArgumentNullException.ThrowIfNull(a);
                 }
             }
 

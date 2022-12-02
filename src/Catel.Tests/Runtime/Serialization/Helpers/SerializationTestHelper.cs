@@ -79,7 +79,7 @@ namespace Catel.Tests.Runtime.Serialization
 
         public static string ToXmlString(this object model)
         {
-            Argument.IsNotNull(() => model);
+            ArgumentNullException.ThrowIfNull(model);
 
             using (var memoryStream = new MemoryStream())
             {

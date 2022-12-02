@@ -130,7 +130,7 @@
         public DataWindowButton(string text, string commandBindingPath, string? contentBindingPath = null, IValueConverter? contentValueConverter = null, 
             string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
         {
-            Argument.IsNotNull("bindingPath", commandBindingPath);
+            ArgumentNullException.ThrowIfNull(commandBindingPath);
 
             Text = text;
             CommandBindingPath = commandBindingPath;

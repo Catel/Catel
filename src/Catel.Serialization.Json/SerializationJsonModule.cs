@@ -14,7 +14,7 @@
         /// <param name="serviceLocator">The service locator.</param>
         public void Initialize(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             serviceLocator.RegisterType<IJsonSerializer, JsonSerializer>();
         }

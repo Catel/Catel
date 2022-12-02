@@ -85,8 +85,8 @@ namespace Catel.Tests.IoC
         {
             public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, INavigationService navigationService)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
 
                 IntValue = intValue;
             }
@@ -94,9 +94,9 @@ namespace Catel.Tests.IoC
             public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, INavigationService navigationService,
                 IDummyDependency dependency)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
-                Argument.IsNotNull(() => dependency);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
+                ArgumentNullException.ThrowIfNull(dependency);
 
                 IntValue = intValue;
                 Dependency = dependency;
@@ -105,8 +105,8 @@ namespace Catel.Tests.IoC
             public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService,
                 INavigationService navigationService)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
 
                 StringValue = stringValue;
                 IntValue = intValue;
@@ -116,9 +116,9 @@ namespace Catel.Tests.IoC
             public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService,
                 INavigationService navigationService, IDummyDependency dependency)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
-                Argument.IsNotNull(() => dependency);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
+                ArgumentNullException.ThrowIfNull(dependency);
 
                 StringValue = stringValue;
                 IntValue = intValue;

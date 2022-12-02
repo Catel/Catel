@@ -1,9 +1,10 @@
-﻿namespace Catel
+﻿#pragma warning disable CTL0011 // Use Log.ErrorAndCreationException for throwing Exception to provide log information
+
+namespace Catel
 {
     using System;
     using System.Diagnostics;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Text;
     using System.Text.RegularExpressions;
 
