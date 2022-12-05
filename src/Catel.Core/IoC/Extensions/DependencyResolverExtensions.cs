@@ -2,12 +2,15 @@
 {
     using System;
     using Catel.Reflection;
+    using Catel.Logging;
 
     /// <summary>
     /// Extensions for the <see cref="IDependencyResolver"/>.
     /// </summary>
     public static class DependencyResolverExtensions
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Determines whether the specified type with the specified tag can be resolved.
         /// </summary>
@@ -46,7 +49,7 @@
             var service = dependencyResolver.Resolve(type, tag);
             if (service is null)
             {
-                throw new CatelException($"Cannot resolve type '{type.GetSafeFullName()}'");
+                throw Log.ErrorAndCreateException<CatelException>($"Cannot resolve type '{type.GetSafeFullName()}'");
             }
 
             return service;
@@ -65,7 +68,7 @@
             var service = (T?)dependencyResolver.Resolve(typeof(T), tag);
             if (service is null)
             {
-                throw new CatelException($"Cannot resolve type '{typeof(T).GetSafeFullName()}'");
+                throw Log.ErrorAndCreateException<CatelException>($"Cannot resolve type '{typeof(T).GetSafeFullName()}'");
             }
 
             return service;

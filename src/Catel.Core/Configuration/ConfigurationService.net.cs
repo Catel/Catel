@@ -29,7 +29,7 @@
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException("container");
+                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>("container");
             }
 
             if (settings is null)

@@ -950,7 +950,7 @@ namespace Catel.Runtime.Serialization.Json
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException("contextMode");
+                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(contextMode));
             }
 
             var culture = configuration?.Culture ?? CultureInfo.InvariantCulture;

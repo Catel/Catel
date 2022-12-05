@@ -1,5 +1,6 @@
 ﻿namespace Catel
 {
+    using System;
     using IoC;
     using Runtime.Serialization.Json;
 
