@@ -195,7 +195,7 @@
             {
                 if (RegisteredUris.ContainsKey(name))
                 {
-                    throw new Exception(Catel.ResourceHelper.GetString("ViewModelAlreadyRegistered"));
+                    throw Log.ErrorAndCreateException<Exception>(LanguageHelper.GetRequiredString("ViewModelAlreadyRegistered"));
                 }
 
                 RegisteredUris.Add(name, uri.ToString());

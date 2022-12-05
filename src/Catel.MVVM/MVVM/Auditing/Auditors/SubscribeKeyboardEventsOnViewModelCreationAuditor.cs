@@ -1,5 +1,6 @@
 ﻿namespace Catel.MVVM.Auditing
 {
+    using System;
     using Catel.Services;
 
     public class SubscribeKeyboardEventsOnViewModelCreationAuditor : AuditorBase
@@ -9,8 +10,8 @@
 
         public SubscribeKeyboardEventsOnViewModelCreationAuditor(ICommandManager commandManager, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(nameof(commandManager), commandManager);
-            Argument.IsNotNull(nameof(dispatcherService), dispatcherService);
+            ArgumentNullException.ThrowIfNull(commandManager);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _commandManager = commandManager;
             _dispatcherService = dispatcherService;

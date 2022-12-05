@@ -204,7 +204,7 @@
 
             if (GetTemplateChild(ElementMessageBar) is null)
             {
-                throw new NotSupportedException(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
+                throw Log.ErrorAndCreateException<NotSupportedException>(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
             }
 
             OnModeChanged();

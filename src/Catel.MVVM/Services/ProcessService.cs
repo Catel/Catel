@@ -21,7 +21,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
         public virtual async Task<ProcessResult> RunAsync(ProcessContext processContext)
         {
-            Argument.IsNotNull(nameof(processContext), processContext);
+            ArgumentNullException.ThrowIfNull(processContext);
             Argument.IsNotNullOrWhitespace(nameof(processContext.FileName), processContext.FileName);
 
             var fileName = processContext.FileName;

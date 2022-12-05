@@ -89,7 +89,9 @@
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
                     {
+#pragma warning disable CTL0011 // Provide log on throwing exception
                         throw new InvalidOperationException(error);
+#pragma warning restore CTL0011 // Provide log on throwing exception
                     }
 
                     _commandGestures[commandName] = inputGesture;

@@ -23,10 +23,8 @@
             var viewModelContainer = AssociatedObject as IViewModelContainer;
             if (viewModelContainer is null)
             {
-                string error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName(false));
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                var error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName(false));
+                throw Log.ErrorAndCreateException<InvalidOperationException>(error);
             }
 
             viewModelContainer.ViewModelChanged += OnViewModelChanged;

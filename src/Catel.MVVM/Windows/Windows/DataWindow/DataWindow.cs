@@ -684,7 +684,7 @@
         {
             if (InternalGrid is not null)
             {
-                throw new InvalidOperationException(Exceptions.DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded);
+                throw Log.ErrorAndCreateException<InvalidOperationException>(Exceptions.DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded);
             }
 
             _buttons.Add(dataWindowButton);

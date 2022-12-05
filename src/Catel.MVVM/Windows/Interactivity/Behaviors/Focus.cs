@@ -192,7 +192,7 @@
                     case FocusMoment.Event:
                         if (string.IsNullOrEmpty(EventName))
                         {
-                            throw new InvalidOperationException("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
                         }
 
                         _weakEventListener = this.SubscribeToWeakEvent(newSource, EventName, OnSourceEventOccurred);
@@ -201,13 +201,13 @@
                     case FocusMoment.PropertyChanged:
                         if (string.IsNullOrEmpty(PropertyName))
                         {
-                            throw new InvalidOperationException("Property 'PropertyName' is required when FocusMode is 'FocusMode.PropertyChanged'");
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("Property 'PropertyName' is required when FocusMode is 'FocusMode.PropertyChanged'");
                         }
 
                         var sourceAsPropertyChanged = newSource as INotifyPropertyChanged;
                         if (sourceAsPropertyChanged is null)
                         {
-                            throw new InvalidOperationException("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");
                         }
 
                         sourceAsPropertyChanged.PropertyChanged += OnSourcePropertyChanged;
