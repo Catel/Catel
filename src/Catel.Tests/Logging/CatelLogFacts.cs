@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CatelLogFacts.cs" company="Catel development team">
-//   Copyright (c) 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Logging
+﻿namespace Catel.Tests.Logging
 {
     using Catel.Logging;
     using NUnit.Framework;
@@ -15,7 +9,7 @@ namespace Catel.Tests.Logging
         private CatelLog _logger;
         private CatelLog Logger
         {
-            get { return _logger ?? (_logger = (CatelLog) LogManager.GetCatelLogger(typeof(CatelLogFacts), AlwaysLog)); }
+            get { return _logger ?? (_logger = (CatelLog)LogManager.GetCatelLogger(typeof(CatelLogFacts), AlwaysLog)); }
             set { _logger = value; }
         }
 
@@ -69,7 +63,7 @@ namespace Catel.Tests.Logging
             // ASSERT
             Assert.IsTrue(receivedLog);
         }
-        
+
         [Test]
         public void Debug_AlwaysLogIsFalse_IgnoreCatelLogsIsTrue_DoesNotWriteLog()
         {

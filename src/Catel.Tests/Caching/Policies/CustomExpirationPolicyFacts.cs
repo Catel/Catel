@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SlidingExpirationPolicyFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Caching.Policies
+﻿namespace Catel.Tests.Caching.Policies
 {
     using Catel.Caching.Policies;
 
@@ -28,8 +23,8 @@ namespace Catel.Tests.Caching.Policies
             public void ReturnsTrueIfAnActionIsSpecified()
             {
                 Assert.IsTrue(new CustomExpirationPolicy(() => true, () => ThreadHelper.Sleep(0)).CanReset);
-            }         
-            
+            }
+
             [TestCase]
             public void ReturnsFalseIfAnActionNotIsSpecified()
             {
@@ -54,8 +49,8 @@ namespace Catel.Tests.Caching.Policies
             public void ReturnsTrueIfFunctionRetursTrue()
             {
                 Assert.IsTrue(new CustomExpirationPolicy(() => true).IsExpired);
-            }         
-            
+            }
+
             [TestCase]
             public void ReturnsTrueIfActionIsNull()
             {
@@ -92,7 +87,7 @@ namespace Catel.Tests.Caching.Policies
 
                 var customExpirationPolicy = new CustomExpirationPolicy(() => true, () => actionInvoked = true);
                 customExpirationPolicy.Reset();
-                
+
                 Assert.IsTrue(actionInvoked);
             }
 

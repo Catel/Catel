@@ -28,7 +28,7 @@
 
                 using (var scopeManager = ScopeManager<string>.GetScopeManager(createScopeFunction: () => string.Empty))
                 {
-                    Assert.IsTrue(ScopeManager<string>.ScopeExists());    
+                    Assert.IsTrue(ScopeManager<string>.ScopeExists());
                 }
 
                 Assert.IsFalse(ScopeManager<string>.ScopeExists());

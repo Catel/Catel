@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeExpirationPolicyFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Caching.Policies
+﻿namespace Catel.Tests.Caching.Policies
 {
     using System;
     using System.Threading;
@@ -46,10 +41,10 @@ namespace Catel.Tests.Caching.Policies
             public void DoesNotCauseDeathLock()
             {
                 CompositeExpirationPolicy policy = new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true));
-                var events = new [] { new AutoResetEvent(false), new AutoResetEvent(false)};
+                var events = new[] { new AutoResetEvent(false), new AutoResetEvent(false) };
 
-                new Thread(() => 
-                { 
+                new Thread(() =>
+                {
                     Assert.IsFalse(policy.CanReset);
                     events[0].Set();
                 }).Start();

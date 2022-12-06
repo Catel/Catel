@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SuspensionContextFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Linq;
     using Catel.Data;
@@ -18,7 +11,7 @@ namespace Catel.Tests.Data
         public void CorrectlyAddsProperties()
         {
             var suspensionContext = new SuspensionContext();
-            
+
             suspensionContext.Add(null);
             suspensionContext.Add("A");
             suspensionContext.Add("B");

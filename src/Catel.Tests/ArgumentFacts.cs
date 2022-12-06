@@ -1,4 +1,6 @@
-﻿namespace Catel.Tests
+﻿#pragma warning disable CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
+
+namespace Catel.Tests
 {
     using System;
     using System.Collections;
@@ -518,7 +520,7 @@
             {
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", "value", false));
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", (string)null, false));
-            }            
+            }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNotValidValidator()
@@ -527,7 +529,7 @@
                 validatorMock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(false);
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", "value", validatorMock.Object));
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", (string)null, validatorMock.Object));
-            }  
+            }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNotValidFunc()
@@ -536,7 +538,7 @@
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", "value", s => s.Length > 10));
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", (string)null, s => s is not null));
             }
-            
+
             [TestCase]
             public void ThrowsArgumentNullExceptionIfFuncIsNull()
             {
@@ -550,14 +552,14 @@
                 Assert.Throws<ArgumentNullException>(() => Argument.IsValid("myParam", "value", (IValueValidator<string>)null));
                 Assert.Throws<ArgumentNullException>(() => Argument.IsValid("myParam", (string)null, (IValueValidator<string>)null));
             }
-            
+
             [TestCase]
             public void SucceedsForValid()
             {
                 Argument.IsValid("myParam", "value", true);
                 Argument.IsValid("myParam", (string)null, true);
-            }       
-            
+            }
+
             [TestCase]
             public void SucceedsForValid_Validator()
             {

@@ -66,7 +66,7 @@
         {
             IniFileCollection = InitializeDefaultIniFileCollection();
         }
-        
+
         /// <summary>
         ///   Gets or sets the computer name.
         /// </summary>

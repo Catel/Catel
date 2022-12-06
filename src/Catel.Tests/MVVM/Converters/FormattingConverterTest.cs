@@ -13,28 +13,28 @@
         public void Convert_Null_NoFormatting()
         {
             var converter = new FormattingConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), null, (CultureInfo)null));
+            Assert.AreEqual(string.Empty, converter.Convert(null, typeof(string), null, (CultureInfo)null));
         }
 
         [TestCase]
         public void Convert_Null_Formatting()
         {
             var converter = new FormattingConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), "d", (CultureInfo)null));
+            Assert.AreEqual(string.Empty, converter.Convert(null, typeof(string), "d", (CultureInfo)null));
         }
 
         [TestCase]
         public void Convert_Integer_NoFormatting()
         {
             var converter = new FormattingConverter();
-            Assert.AreEqual("5", converter.Convert(5, typeof (string), null, (CultureInfo)null));
+            Assert.AreEqual("5", converter.Convert(5, typeof(string), null, (CultureInfo)null));
         }
 
         [TestCase]
         public void Convert_Integer_Formatting()
         {
             var converter = new FormattingConverter();
-            Assert.AreEqual("5", converter.Convert(5, typeof (string), "d", (CultureInfo)null));
+            Assert.AreEqual("5", converter.Convert(5, typeof(string), "d", (CultureInfo)null));
         }
 
         [TestCase]
@@ -73,7 +73,7 @@
         public void ConvertBack()
         {
             var converter = new FormattingConverter();
-            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (object), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof(object), null, (CultureInfo)null));
         }
     }
 }

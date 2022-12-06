@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ListDictionaryFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Caching
+﻿namespace Catel.Tests.Caching
 {
     using System;
     using System.Linq;
@@ -96,7 +89,7 @@ namespace Catel.Tests.Caching
                 }
             }
 
-           #endregion
+            #endregion
         }
 
         [TestFixture]

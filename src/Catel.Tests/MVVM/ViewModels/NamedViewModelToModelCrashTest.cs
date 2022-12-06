@@ -126,7 +126,7 @@
                     SetValue(IdentifierProperty, value);
                 }
             }
-           [ViewModelToModel("CurrentDummy")]
+            [ViewModelToModel("CurrentDummy")]
             public string Comment
             {
                 get

@@ -17,7 +17,7 @@
         {
             private readonly string _name;
 
-            public TestConfigurationService(string name, IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService) 
+            public TestConfigurationService(string name, IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
                 : base(objectConverterService, serializer, appDataService)
             {
                 _name = name;
@@ -139,7 +139,7 @@
             public async Task SetsValueCorrectlyAsync(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
- 
+
                 configurationService.SetValue(container, "myKey", "myValue");
 
                 Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "myKey"));

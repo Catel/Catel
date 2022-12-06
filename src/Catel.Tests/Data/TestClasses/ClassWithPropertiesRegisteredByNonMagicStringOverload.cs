@@ -5,10 +5,10 @@
     public class ClassWithPropertiesRegisteredByNonMagicStringOverload : ModelBase
     {
         public static readonly IPropertyData StringPropertyProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, string>(instance => instance.StringProperty);
-        
+
         public static readonly IPropertyData StringPropertyWithSpecifiedDefaultValueProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, string>(instance => instance.StringPropertyWithSpecifiedDefaultValue, "NonNullOrEmptyDefaultValue");
 
-        public static readonly IPropertyData IntPropertyWithPropertyChangeNoticationProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyWithPropertyChangeNotication , default(int), (s, e) => s.OnIntPropertyWithPropertyChangeNoticationChanged());
+        public static readonly IPropertyData IntPropertyWithPropertyChangeNoticationProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyWithPropertyChangeNotication, default(int), (s, e) => s.OnIntPropertyWithPropertyChangeNoticationChanged());
 
         public static readonly IPropertyData IntPropertyExcludedFromSerializationAndBackupProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyExcludedFromSerializationAndBackup, default(int), null, false, false);
 

@@ -12,7 +12,7 @@
         public void Convert_Null()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(null, converter.Convert(null, typeof (bool), null, (CultureInfo)null));
+            Assert.AreEqual(null, converter.Convert(null, typeof(bool), null, (CultureInfo)null));
         }
 
         [TestCase]

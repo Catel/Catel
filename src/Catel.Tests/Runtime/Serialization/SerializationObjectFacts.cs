@@ -13,7 +13,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                Assert.Throws<ArgumentNullException>(() => SerializationObject.FailedToDeserialize(null, SerializationMemberGroup.CatelProperty,  "property"));
+                Assert.Throws<ArgumentNullException>(() => SerializationObject.FailedToDeserialize(null, SerializationMemberGroup.CatelProperty, "property"));
             }
 
             [TestCase]

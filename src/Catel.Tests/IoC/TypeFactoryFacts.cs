@@ -1,11 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeFactoryFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
+    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading;
@@ -497,7 +492,7 @@ namespace Catel.Tests.IoC
                         typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(AdvancedDependencyInjectionTestClass), 30);
                     });
                 }
-                
+
                 for (int i = 0; i < threadAmount; i++)
                 {
                     threads[i].Start(i);
@@ -508,7 +503,7 @@ namespace Catel.Tests.IoC
                     threads[i].Join();
                 }
                 paralellStopWatch.Stop();
-                
+
                 Assert.That(paralellStopWatch.ElapsedMilliseconds, Is.LessThan(serialStopWatch.ElapsedMilliseconds / 5));
             }
         }

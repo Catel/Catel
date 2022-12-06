@@ -17,21 +17,21 @@
         public void Convert_Null_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), null, new CultureInfo("nl-NL")));
+            Assert.AreEqual(string.Empty, converter.Convert(null, typeof(string), null, new CultureInfo("nl-NL")));
         }
 
         [TestCase]
         public void Convert_Null_Formatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), "d", new CultureInfo("nl-NL")));
+            Assert.AreEqual(string.Empty, converter.Convert(null, typeof(string), "d", new CultureInfo("nl-NL")));
         }
 
         [TestCase]
         public void Convert_Date_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual("16-12-2010", converter.Convert(new DateTime(2010, 12, 16), typeof (string), null, new CultureInfo("nl-NL")));
+            Assert.AreEqual("16-12-2010", converter.Convert(new DateTime(2010, 12, 16), typeof(string), null, new CultureInfo("nl-NL")));
         }
 
         [TestCase]
@@ -54,28 +54,28 @@
         public void ConvertBack_Null_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (DateTime), null, new CultureInfo("nl-NL")));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof(DateTime), null, new CultureInfo("nl-NL")));
         }
 
         [TestCase]
         public void ConvertBack_Null_Formatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (DateTime), "G", new CultureInfo("nl-NL")));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof(DateTime), "G", new CultureInfo("nl-NL")));
         }
 
         [TestCase]
         public void ConvertBack_Date_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(new DateTime(2010, 12, 16), converter.ConvertBack("16-12-2010", typeof (DateTime), null, new CultureInfo("nl-NL")));
+            Assert.AreEqual(new DateTime(2010, 12, 16), converter.ConvertBack("16-12-2010", typeof(DateTime), null, new CultureInfo("nl-NL")));
         }
 
         [TestCase]
         public void ConvertBack_Date_Formatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(new DateTime(2010, 12, 16), converter.ConvertBack("16-12-2010 0:00:00", typeof (DateTime), "G", new CultureInfo("nl-NL")));
+            Assert.AreEqual(new DateTime(2010, 12, 16), converter.ConvertBack("16-12-2010 0:00:00", typeof(DateTime), "G", new CultureInfo("nl-NL")));
         }
     }
 }

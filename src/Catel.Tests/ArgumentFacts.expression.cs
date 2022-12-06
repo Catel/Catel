@@ -289,7 +289,7 @@
                 ImplementsInterfaceInvokation(typeof(List<int>), typeof(IList));
             }
 
-            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType) 
+            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType)
                 where T : class
             {
                 Argument.ImplementsInterface(() => param, interfaceType);
@@ -317,7 +317,7 @@
                 IsOfTypeInvokation(typeof(PersonViewModel), typeof(ViewModelBase));
             }
 
-            public void IsOfTypeInvokation<T>(T param, Type interfaceType) 
+            public void IsOfTypeInvokation<T>(T param, Type interfaceType)
                 where T : class
             {
                 Argument.IsOfType(() => param, interfaceType);

@@ -327,8 +327,8 @@
                 collection.Add(new Derived1
                 {
                     Name = "4"
-                }); 
-                
+                });
+
                 collection.Add(new Derived2
                 {
                     Name = "5"

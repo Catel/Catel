@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System.ComponentModel;
     using System.Threading.Tasks;
@@ -47,7 +40,7 @@ namespace Catel.Tests.MVVM.ViewModels
             testViewModel.SpecialValidationModel.FieldErrorWhenEmpty = string.Empty;
 
             Assert.IsTrue(testViewModel.HasErrors);
-            Assert.AreNotEqual(string.Empty, ((IDataErrorInfo) testViewModel)["FieldErrorWhenEmpty"]);
+            Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)testViewModel)["FieldErrorWhenEmpty"]);
 
             testViewModel.SpecialValidationModel.FieldErrorWhenEmpty = "no error";
 
@@ -68,7 +61,7 @@ namespace Catel.Tests.MVVM.ViewModels
             testViewModel.SpecialValidationModel.BusinessRuleErrorWhenEmpty = string.Empty;
 
             Assert.IsTrue(testViewModel.HasErrors);
-            Assert.AreNotEqual(string.Empty, ((IDataErrorInfo) testViewModel).Error);
+            Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)testViewModel).Error);
 
             testViewModel.SpecialValidationModel.BusinessRuleErrorWhenEmpty = "no error";
 
@@ -90,7 +83,7 @@ namespace Catel.Tests.MVVM.ViewModels
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = string.Empty;
 
             Assert.IsTrue(validation.HasWarnings);
-            Assert.AreNotEqual(string.Empty, ((IDataWarningInfo) testViewModel)["FieldWarningWhenEmpty"]);
+            Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel)["FieldWarningWhenEmpty"]);
 
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = "no warning";
 
@@ -112,7 +105,7 @@ namespace Catel.Tests.MVVM.ViewModels
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = string.Empty;
 
             Assert.IsTrue(validation.HasWarnings);
-            Assert.AreNotEqual(string.Empty, ((IDataWarningInfo) testViewModel).Warning);
+            Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel).Warning);
 
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = "no warning";
 

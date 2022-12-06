@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyDataManagerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Linq;
@@ -24,7 +17,7 @@ namespace Catel.Tests.Data
             public void ReturnsNoPropertiesForOpenGenericTypes()
             {
                 var propertyDataManager = new PropertyDataManager();
-                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof (GenericClass<>));
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof(GenericClass<>));
 
                 Assert.AreEqual(0, catelTypeInfo.GetCatelProperties().Count);
             }
@@ -46,7 +39,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the FirstName property so it is known in the class.
                 /// </summary>
-                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), null);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
                 #endregion
 
                 #region Properties
@@ -75,7 +68,7 @@ namespace Catel.Tests.Data
         /// <param name="defaultValue">The default value.</param>
         private static void RegisterProperty<T>(PropertyDataManager propertyDataManager, string name, T defaultValue)
         {
-            propertyDataManager.RegisterProperty(typeof (PropertyDataManagerFacts), name,
+            propertyDataManager.RegisterProperty(typeof(PropertyDataManagerFacts), name,
                 new PropertyData<T>(name, defaultValue, null, false, false, false, false, false));
         }
         #endregion
@@ -101,7 +94,7 @@ namespace Catel.Tests.Data
                 RegisterProperty(propertyDataManager, "objectProperty", new object());
                 RegisterProperty(propertyDataManager, "intProperty", 1);
 
-                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof (PropertyDataManagerFacts));
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof(PropertyDataManagerFacts));
                 var properties = catelTypeInfo.GetCatelProperties();
                 var keys = properties.Keys.ToArray();
                 Assert.AreEqual(3, properties.Count);
@@ -135,8 +128,8 @@ namespace Catel.Tests.Data
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                Assert.Throws<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), null));
-                Assert.Throws<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), string.Empty));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), null));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), string.Empty));
             }
 
             [TestCase]
@@ -144,7 +137,7 @@ namespace Catel.Tests.Data
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
 
-                Assert.Throws<PropertyNotRegisteredException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), "stringProperty"));
+                Assert.Throws<PropertyNotRegisteredException>(() => propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), "stringProperty"));
             }
 
             [TestCase]
@@ -154,7 +147,7 @@ namespace Catel.Tests.Data
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                var propertyData = propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), "stringProperty");
+                var propertyData = propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), "stringProperty");
                 Assert.IsNotNull(propertyData);
                 Assert.AreEqual("stringProperty", propertyData.Name);
             }
@@ -184,8 +177,8 @@ namespace Catel.Tests.Data
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                Assert.Throws<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), null));
-                Assert.Throws<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), string.Empty));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), null));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), string.Empty));
             }
 
             [TestCase]
@@ -195,7 +188,7 @@ namespace Catel.Tests.Data
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                Assert.IsTrue(propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), "stringProperty"));
+                Assert.IsTrue(propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), "stringProperty"));
             }
 
             [TestCase]
@@ -203,7 +196,7 @@ namespace Catel.Tests.Data
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
 
-                Assert.IsFalse(propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), "stringProperty"));
+                Assert.IsFalse(propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), "stringProperty"));
             }
             #endregion
         }
@@ -231,8 +224,8 @@ namespace Catel.Tests.Data
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                Assert.Throws<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof (PropertyDataManagerFacts), null));
-                Assert.Throws<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof (PropertyDataManagerFacts), string.Empty));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof(PropertyDataManagerFacts), null));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof(PropertyDataManagerFacts), string.Empty));
             }
 
             [TestCase]
@@ -242,7 +235,7 @@ namespace Catel.Tests.Data
                 var objectWithXmlMappings = new ObjectWithXmlMappings();
                 objectWithXmlMappings.ToString();
 
-                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof (ObjectWithXmlMappings), "PropertyWithoutMapping");
+                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof(ObjectWithXmlMappings), "PropertyWithoutMapping");
                 Assert.AreEqual("PropertyWithoutMapping", xmlName);
             }
 
@@ -253,7 +246,7 @@ namespace Catel.Tests.Data
                 var objectWithXmlMappings = new ObjectWithXmlMappings();
                 objectWithXmlMappings.ToString();
 
-                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof (ObjectWithXmlMappings), "PropertyWithMapping");
+                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof(ObjectWithXmlMappings), "PropertyWithMapping");
                 Assert.AreEqual("MappedXmlProperty", xmlName);
             }
             #endregion
@@ -282,8 +275,8 @@ namespace Catel.Tests.Data
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                Assert.Throws<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof (PropertyDataManagerFacts), null));
-                Assert.Throws<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof (PropertyDataManagerFacts), string.Empty));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof(PropertyDataManagerFacts), null));
+                Assert.Throws<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof(PropertyDataManagerFacts), string.Empty));
             }
 
             [TestCase]
@@ -293,7 +286,7 @@ namespace Catel.Tests.Data
                 var objectWithXmlMappings = new ObjectWithXmlMappings();
                 objectWithXmlMappings.ToString();
 
-                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof (ObjectWithXmlMappings), "PropertyWithoutMapping");
+                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof(ObjectWithXmlMappings), "PropertyWithoutMapping");
                 Assert.AreEqual("PropertyWithoutMapping", propertyName);
             }
 
@@ -304,7 +297,7 @@ namespace Catel.Tests.Data
                 var objectWithXmlMappings = new ObjectWithXmlMappings();
                 objectWithXmlMappings.ToString();
 
-                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof (ObjectWithXmlMappings), "MappedXmlProperty");
+                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof(ObjectWithXmlMappings), "MappedXmlProperty");
                 Assert.AreEqual("PropertyWithMapping", propertyName);
             }
             #endregion
@@ -323,7 +316,7 @@ namespace Catel.Tests.Data
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof (PropertyDataManagerFacts));
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof(PropertyDataManagerFacts));
                 Assert.AreEqual(1, catelTypeInfo.GetCatelProperties().Count);
                 Assert.AreEqual("defaultValue", catelTypeInfo.GetPropertyData("stringProperty").GetDefaultValue());
             }

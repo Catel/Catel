@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogMessageEventArgsTest.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Logging
+﻿namespace Catel.Tests.Logging
 {
     using System;
 

@@ -34,7 +34,7 @@
                 set { SetValue(PresetsProperty, value); }
             }
 
-            public static readonly IPropertyData PresetsProperty = RegisterProperty< FastObservableCollection<Preset>>(nameof(Presets), () => new FastObservableCollection<Preset>());
+            public static readonly IPropertyData PresetsProperty = RegisterProperty<FastObservableCollection<Preset>>(nameof(Presets), () => new FastObservableCollection<Preset>());
 
             public void ClearDirty()
             {

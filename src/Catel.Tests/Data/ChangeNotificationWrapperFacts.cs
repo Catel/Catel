@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeNotificationWrapperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -61,7 +56,7 @@ namespace Catel.Tests.Data
                 var model = new object();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                Assert.IsFalse(wrapper.SupportsNotifyPropertyChanged);                
+                Assert.IsFalse(wrapper.SupportsNotifyPropertyChanged);
             }
         }
 
@@ -165,7 +160,7 @@ namespace Catel.Tests.Data
         }
 
         [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
-        public class ThePropertyChangesLogic 
+        public class ThePropertyChangesLogic
         {
             [TestCase]
             public void HandlesPropertyChangesCorrectly()
@@ -254,7 +249,7 @@ namespace Catel.Tests.Data
 
                 using (collection.SuspendChangeNotifications(SuspensionMode.MixedConsolidate))
                 {
-                    collection.ReplaceRange(new [] { new TestModel() });
+                    collection.ReplaceRange(new[] { new TestModel() });
                 }
 
                 Assert.IsTrue(itemsAdded, "Items should be added");
@@ -301,7 +296,7 @@ namespace Catel.Tests.Data
                 wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
 
                 collection.Clear();
-                
+
                 model.FirstName = "Geert";
 
                 Assert.IsFalse(collectionItemPropertyChanged);
@@ -395,7 +390,7 @@ namespace Catel.Tests.Data
             public void DoesNotLeakForCollectionChanged()
             {
                 var model = new TestModel();
-                var collectionModel = new ObservableCollection<TestModel>(new[] {model});
+                var collectionModel = new ObservableCollection<TestModel>(new[] { model });
                 var wrapper = new ChangeNotificationWrapper(collectionModel);
 
                 Assert.IsTrue(wrapper.IsObjectAlive);

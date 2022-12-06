@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageMediatorFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging
 {
     using System;
     using Catel.Messaging;
@@ -143,7 +137,7 @@ namespace Catel.Tests.Messaging
             {
                 var mediator = new MessageMediator();
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof (string)));
+                Assert.IsFalse(mediator.IsMessageRegistered(typeof(string)));
             }
 
             [TestCase]
@@ -154,7 +148,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof (string)));
+                Assert.IsTrue(mediator.IsMessageRegistered(typeof(string)));
             }
 
             [TestCase]
@@ -165,7 +159,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof (string), "myTag"));
+                Assert.IsFalse(mediator.IsMessageRegistered(typeof(string), "myTag"));
             }
 
             [TestCase]
@@ -176,7 +170,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof (string), "myTag"));
+                Assert.IsTrue(mediator.IsMessageRegistered(typeof(string), "myTag"));
             }
 
             [TestCase]
@@ -389,11 +383,11 @@ namespace Catel.Tests.Messaging
         }
         #endregion
 
-    
+
         [TestFixture]
         public class TheIsRegisteredMethod
         {
- 
+
             [Test]
             public void ReturnsTrueAfterRegistration()
             {
@@ -458,7 +452,7 @@ namespace Catel.Tests.Messaging
             m.Register<Message>(b, b.OnMessageReceived);
             m.Unregister<Message>(b, b.OnMessageReceived); // this actually unregisters a's handler, not b's handler.
 
-            m.SendMessage(new Message {Text = "hello"});
+            m.SendMessage(new Message { Text = "hello" });
             Assert.That(a.Received, Is.EqualTo("hello"));
         }
     }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.ObjectModel;
     using Catel.Data;
@@ -25,7 +18,7 @@ namespace Catel.Tests.Data
 
                     for (int j = 0; j < 3; j++)
                     {
-                        innerCollection.Add(new CollectionModel(false) {Name = string.Format("Subitem {0}", j + 1)});
+                        innerCollection.Add(new CollectionModel(false) { Name = string.Format("Subitem {0}", j + 1) });
                     }
                 }
             }

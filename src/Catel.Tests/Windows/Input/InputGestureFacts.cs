@@ -27,7 +27,7 @@
 
                     memoryStream.Position = 0L;
 
-                    var finalInputGesture = xmlSerializer.Deserialize(typeof (InputGesture), memoryStream, null);
+                    var finalInputGesture = xmlSerializer.Deserialize(typeof(InputGesture), memoryStream, null);
 
                     Assert.AreEqual(inputGesture, finalInputGesture);
                 }

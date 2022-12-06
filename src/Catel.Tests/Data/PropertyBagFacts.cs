@@ -107,7 +107,7 @@
             {
                 _propertyBag.SetValue("StringProperty", "test");
                 _propertyBag.SetValue("IntProperty", 1);
-                
+
                 Assert.AreEqual("test", _propertyBag.GetValue<string>("StringProperty"));
                 Assert.AreEqual(1, _propertyBag.GetValue<int>("IntProperty"));
             }

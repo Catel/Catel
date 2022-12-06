@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogTest.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Logging
+﻿namespace Catel.Tests.Logging
 {
     using System;
     using Catel.Logging;
@@ -176,7 +170,7 @@ namespace Catel.Tests.Logging
             [Test]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                Assert.Throws<ArgumentNullException>(() => new Log((Type) null));
+                Assert.Throws<ArgumentNullException>(() => new Log((Type)null));
             }
 
             [Test]
@@ -333,7 +327,7 @@ namespace Catel.Tests.Logging
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
 
-                var exception = new AggregateException("log test", new []
+                var exception = new AggregateException("log test", new[]
                 {
                     new ArgumentNullException("arg1"),
                     new ArgumentNullException("arg2"),

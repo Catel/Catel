@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -66,7 +59,7 @@ namespace Catel.Tests.Reflection
 
         public class MyModel : ModelBase
         {
-            
+
         }
 
         [TestCase(typeof(object), false)]
@@ -82,7 +75,7 @@ namespace Catel.Tests.Reflection
 
         public class MyCollection : ObservableCollection<int>
         {
-            
+
         }
 
         [TestCase(typeof(int[]), typeof(int))]

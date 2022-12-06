@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelLocatorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
@@ -46,7 +40,7 @@ namespace Catel.Tests.MVVM
 
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel));
 
-                var resolvedViewModel = viewModelLocator.ResolveViewModel(typeof (FollowingNoNamingConventionView));
+                var resolvedViewModel = viewModelLocator.ResolveViewModel(typeof(FollowingNoNamingConventionView));
                 Assert.AreEqual(typeof(NoNamingConventionViewModel), resolvedViewModel);
             }
 

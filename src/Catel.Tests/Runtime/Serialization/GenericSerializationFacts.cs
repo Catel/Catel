@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenericSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -66,7 +59,7 @@ namespace Catel.Tests.Runtime.Serialization
             TestSerializationOnSerializers(serializers, action, serializationManager);
         }
 
-        private static void TestSerializationOnSerializers(List<ISerializer> serializers, Action<ISerializer, ISerializationConfiguration, string> action, 
+        private static void TestSerializationOnSerializers(List<ISerializer> serializers, Action<ISerializer, ISerializationConfiguration, string> action,
             ISerializationManager serializationManager = null)
         {
             var serializerConfigurations = new Dictionary<Type, List<ISerializationConfiguration>>();

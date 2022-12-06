@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReusedCollectionsModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization.TestModels
+﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System.Collections.Generic;
     using Catel.Data;

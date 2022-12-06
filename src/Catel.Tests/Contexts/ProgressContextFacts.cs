@@ -1,16 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProgressContextFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Contexts
+﻿namespace Catel.Tests.Contexts
 {
     using NUnit.Framework;
 
     [TestFixture]
-    public class ProgressContextFacts 
+    public class ProgressContextFacts
     {
         [TestCase(10, 0, 10, 0d)]
         [TestCase(10, 1, 10, 10d)]

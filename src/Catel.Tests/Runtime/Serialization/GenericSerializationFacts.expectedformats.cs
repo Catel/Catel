@@ -13,13 +13,13 @@
         public partial class ExpectedFormats
         {
             [MethodImpl(MethodImplOptions.NoInlining)]
-            private async Task TestXmlSerializationWithExpectedFormatAsync(object obj, ISerializationManager serializationManager = null, [CallerMemberName]string name = null)
+            private async Task TestXmlSerializationWithExpectedFormatAsync(object obj, ISerializationManager serializationManager = null, [CallerMemberName] string name = null)
             {
                 await TestSerializationWithExpectedFormatAsync(SerializationTestHelper.GetXmlSerializer(serializationManager), name, obj);
             }
 
             [MethodImpl(MethodImplOptions.NoInlining)]
-            private async Task TestJsonSerializationWithExpectedFormatAsync(object obj, ISerializationManager serializationManager = null, [CallerMemberName]string name = null)
+            private async Task TestJsonSerializationWithExpectedFormatAsync(object obj, ISerializationManager serializationManager = null, [CallerMemberName] string name = null)
             {
                 await TestSerializationWithExpectedFormatAsync(SerializationTestHelper.GetJsonSerializer(serializationManager), name, obj);
             }

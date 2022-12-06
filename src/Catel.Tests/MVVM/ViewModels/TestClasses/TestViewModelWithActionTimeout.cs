@@ -10,8 +10,8 @@
 
         protected override async Task<bool> CancelAsync()
         {
-            await Task.Delay(TimeSpan.FromMilliseconds(ActionDuration)); 
-            
+            await Task.Delay(TimeSpan.FromMilliseconds(ActionDuration));
+
             return await base.CancelAsync();
         }
 

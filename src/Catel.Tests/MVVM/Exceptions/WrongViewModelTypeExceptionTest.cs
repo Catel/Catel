@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WrongViewModelTypeExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Exceptions
+﻿namespace Catel.Tests.MVVM.Exceptions
 {
     using Catel.MVVM;
 
@@ -22,12 +16,12 @@ namespace Catel.Tests.MVVM.Exceptions
             {
                 try
                 {
-                    throw new WrongViewModelTypeException(typeof (int), typeof (string));
+                    throw new WrongViewModelTypeException(typeof(int), typeof(string));
                 }
                 catch (WrongViewModelTypeException ex)
                 {
-                    Assert.AreEqual(typeof (int), ex.ActualType);
-                    Assert.AreEqual(typeof (string), ex.ExpectedType);
+                    Assert.AreEqual(typeof(int), ex.ActualType);
+                    Assert.AreEqual(typeof(string), ex.ExpectedType);
                 }
             }
             #endregion

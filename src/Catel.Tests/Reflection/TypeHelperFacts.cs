@@ -59,7 +59,7 @@
             [TestCase]
             public void ReturnsVersionIndependentTypeForSimpleVersionDependentType()
             {
-                string input = typeof (ObservableObject).AssemblyQualifiedName;
+                string input = typeof(ObservableObject).AssemblyQualifiedName;
                 const string output = "Catel.Data.ObservableObject, Catel.Core";
 
                 var realOutput = TypeHelper.ConvertTypeToVersionIndependentType(input);
@@ -98,7 +98,7 @@
             {
                 string expectedValue = "[string],[string],[int]";
 
-                string actualValue = TypeHelper.FormatInnerTypes((IEnumerable<string>)new[] {"string", "string", "int"});
+                string actualValue = TypeHelper.FormatInnerTypes((IEnumerable<string>)new[] { "string", "string", "int" });
 
                 Assert.AreEqual(expectedValue, actualValue);
             }
@@ -488,19 +488,19 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullGeneric()
             {
-                Assert.Throws<ArgumentNullException>(() => TypeHelper.IsSubclassOfRawGeneric(null, typeof (bool)));
+                Assert.Throws<ArgumentNullException>(() => TypeHelper.IsSubclassOfRawGeneric(null, typeof(bool)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullToCheck()
             {
-                Assert.Throws<ArgumentNullException>(() => TypeHelper.IsSubclassOfRawGeneric(typeof (bool), null));
+                Assert.Throws<ArgumentNullException>(() => TypeHelper.IsSubclassOfRawGeneric(typeof(bool), null));
             }
 
             [TestCase]
             public void ReturnsFalseForNonDerivingClass()
             {
-                var genericType = typeof (SavableModelBase<>);
+                var genericType = typeof(SavableModelBase<>);
                 var toCheck = new List<string>();
 
                 Assert.IsFalse(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()));
@@ -509,7 +509,7 @@
             [TestCase]
             public void ReturnsTrueForDerivingClass()
             {
-                var genericType = typeof (List<>);
+                var genericType = typeof(List<>);
                 var toCheck = new List<string>();
 
                 Assert.IsTrue(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()));

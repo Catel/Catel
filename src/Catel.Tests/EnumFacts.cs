@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
 
@@ -32,7 +26,7 @@ namespace Catel.Tests
         [TestFixture]
         public class TheGetValuesFromFlagsMethod
         {
-            [TestCase(Enum1.MySecondValue | Enum1.MyThirdValue, new[] {Enum1.MySecondValue, Enum1.MyThirdValue})]
+            [TestCase(Enum1.MySecondValue | Enum1.MyThirdValue, new[] { Enum1.MySecondValue, Enum1.MyThirdValue })]
             [TestCase(Enum1.MyThirdValue, new[] { Enum1.MyThirdValue })]
             public void ReturnsCorrectFlags(Enum1 flags, Enum1[] expectedValues)
             {

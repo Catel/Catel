@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ComplexSerializationHierarchy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -270,7 +264,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// GroupingOrder property data.
         /// </summary>
-        public static readonly IPropertyData GroupingOrderProperty = RegisterProperty< List<string>>("GroupingOrder", () => new List<string>());
+        public static readonly IPropertyData GroupingOrderProperty = RegisterProperty<List<string>>("GroupingOrder", () => new List<string>());
 
         #endregion
 

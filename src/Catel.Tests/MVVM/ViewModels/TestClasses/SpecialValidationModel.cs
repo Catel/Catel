@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SpecialValidationModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using System;
     using System.Collections;

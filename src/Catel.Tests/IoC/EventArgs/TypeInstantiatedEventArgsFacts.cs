@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeInstantiatedEventArgsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2019 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.IoC.EventArgs
+﻿namespace Catel.Tests.IoC.EventArgs
 {
     using Catel.IoC;
     using NUnit.Framework;

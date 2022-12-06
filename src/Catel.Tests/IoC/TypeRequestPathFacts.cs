@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRequestPathFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using System.Linq;
@@ -28,13 +23,13 @@ namespace Catel.Tests.IoC
         {
             public Z(Y y) { }
         }
-        
+
         private static TypeRequestInfo[] CreateArrayWithOnlyReferenceTypes()
         {
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(X)),
-                new TypeRequestInfo(typeof(Y)), 
+                new TypeRequestInfo(typeof(Y)),
                 new TypeRequestInfo(typeof(Z))
             };
         }
@@ -44,7 +39,7 @@ namespace Catel.Tests.IoC
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(int)),
-                new TypeRequestInfo(typeof(double)), 
+                new TypeRequestInfo(typeof(double)),
                 new TypeRequestInfo(typeof(DateTime))
             };
         }
@@ -54,7 +49,7 @@ namespace Catel.Tests.IoC
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(X)),
-                new TypeRequestInfo(typeof(Y)), 
+                new TypeRequestInfo(typeof(Y)),
                 new TypeRequestInfo(typeof(Z))
             };
         }
@@ -64,7 +59,7 @@ namespace Catel.Tests.IoC
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(X)),
-                new TypeRequestInfo(typeof(Y)), 
+                new TypeRequestInfo(typeof(Y)),
                 new TypeRequestInfo(typeof(Z)),
                 new TypeRequestInfo(typeof(X))
             };
@@ -125,7 +120,7 @@ namespace Catel.Tests.IoC
                 {
                     Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
                 }
-                    
+
                 Assert.AreEqual(typeArray[0], path.FirstType);
                 Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
             }

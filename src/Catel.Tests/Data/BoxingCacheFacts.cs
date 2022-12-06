@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BoxingCacheFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using Catel.Data;
     using NUnit.Framework;
@@ -50,7 +43,7 @@ namespace Catel.Tests.Data
         {
             var boxingCache = new BoxingCache<bool>();
 
-            var boxedBoolValue_True = (object) true;
+            var boxedBoolValue_True = (object)true;
             var unboxedBoolValue_True = boxingCache.GetUnboxedValue(boxedBoolValue_True);
 
             Assert.AreEqual(true, unboxedBoolValue_True);

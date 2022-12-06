@@ -22,7 +22,7 @@
             public void DoesNotCallBeginEditOnNonEditableObject()
             {
                 var objectMock = new Mock<object>();
-                EditableObjectHelper.BeginEditObject(objectMock.Object);                
+                EditableObjectHelper.BeginEditObject(objectMock.Object);
             }
 
             [TestCase]

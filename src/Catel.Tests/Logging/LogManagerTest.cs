@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogManagerTest.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Logging
+﻿namespace Catel.Tests.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -214,13 +208,13 @@ namespace Catel.Tests.Logging
         [TestCase]
         public void GetLogger_NullType()
         {
-            Assert.Throws<ArgumentNullException>(() => LogManager.GetLogger((Type) null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.GetLogger((Type)null));
         }
 
         [TestCase]
         public void GetLogger_NullString()
         {
-            Assert.Throws<ArgumentException>(() => LogManager.GetLogger((string) null));
+            Assert.Throws<ArgumentException>(() => LogManager.GetLogger((string)null));
         }
 
         [TestCase]

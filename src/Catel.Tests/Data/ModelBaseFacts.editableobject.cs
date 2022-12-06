@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.editableobject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -33,7 +27,7 @@ namespace Catel.Tests.Data
             }
 
             public static readonly IPropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), string.Empty);
-            
+
         }
 
         public class EditableObject : ModelBase
