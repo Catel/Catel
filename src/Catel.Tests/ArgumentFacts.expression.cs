@@ -21,7 +21,9 @@
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
+#pragma warning disable CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
                 Assert.Throws<ArgumentNullException>(() => Argument.IsNotNull<object>(null));
+#pragma warning restore CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
             }
 
             [TestCase]
@@ -38,7 +40,9 @@
 
             private void IsNotNullInvokation(object param01)
             {
+#pragma warning disable CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
                 Argument.IsNotNull(() => param01);
+#pragma warning restore CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
             }
         }
 
@@ -285,7 +289,7 @@
                 ImplementsInterfaceInvokation(typeof(List<int>), typeof(IList));
             }
 
-            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType) 
+            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType)
                 where T : class
             {
                 Argument.ImplementsInterface(() => param, interfaceType);
@@ -313,7 +317,7 @@
                 IsOfTypeInvokation(typeof(PersonViewModel), typeof(ViewModelBase));
             }
 
-            public void IsOfTypeInvokation<T>(T param, Type interfaceType) 
+            public void IsOfTypeInvokation<T>(T param, Type interfaceType)
                 where T : class
             {
                 Argument.IsOfType(() => param, interfaceType);
@@ -395,22 +399,22 @@
             [TestCase]
             public void SucceedsForIsValidInvokation1()
             {
-                this.IsValidInvokation("myValue", () => true);
-                this.IsValidInvokation((string)null, () => true);
+                IsValidInvokation("myValue", () => true);
+                IsValidInvokation((string)null, () => true);
             }
 
             [TestCase]
             public void SucceedsForIsValidInvokation2()
             {
-                this.IsValidInvokation("myValue", s => s.Length < 10);
-                this.IsValidInvokation((string)null, s => s is null);
+                IsValidInvokation("myValue", s => s.Length < 10);
+                IsValidInvokation((string)null, s => s is null);
             }
 
             [TestCase]
             public void SucceedsForIsValidInvokation3()
             {
-                this.IsValidInvokation("myValue", true);
-                this.IsValidInvokation((string)null, true);
+                IsValidInvokation("myValue", true);
+                IsValidInvokation((string)null, true);
             }
 
             [TestCase]
@@ -418,29 +422,29 @@
             {
                 var mock = new Mock<IValueValidator<string>>();
                 mock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(true);
-                this.IsValidInvokation("myValue", mock.Object);
-                this.IsValidInvokation((string)null, mock.Object);
+                IsValidInvokation("myValue", mock.Object);
+                IsValidInvokation((string)null, mock.Object);
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation1()
             {
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation("myValue", () => false));
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, () => false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", () => false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, () => false));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation2()
             {
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation("myValue", s => s.Length > 10));
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, s => s is not null));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", s => s.Length > 10));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, s => s is not null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation3()
             {
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation("myValue", false));
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, false));
             }
 
             [TestCase]
@@ -448,8 +452,8 @@
             {
                 var mock = new Mock<IValueValidator<string>>();
                 mock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(false);
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation("myValue", mock.Object));
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, mock.Object));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", mock.Object));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, mock.Object));
             }
 
             public void IsValidInvokation<T>(T value, Func<T, bool> validation)

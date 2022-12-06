@@ -18,8 +18,8 @@
         public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager,
             IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(nameof(commandManager), commandManager);
-            Argument.IsNotNull(nameof(dispatcherService), dispatcherService);
+            ArgumentNullException.ThrowIfNull(commandManager);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _commandManager = commandManager;
             _dispatcherService = dispatcherService;

@@ -308,7 +308,7 @@
         /// <returns>The child view models.</returns>
         public IEnumerable<IRelationalViewModel> GetChildViewModels(IViewModel parentViewModel)
         {
-            Argument.IsNotNull("parentViewModel", parentViewModel);
+            ArgumentNullException.ThrowIfNull(parentViewModel);
 
             var childViewModels = GetChildViewModels(parentViewModel.UniqueIdentifier);
 

@@ -185,7 +185,7 @@
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException("viewLoadStateEvent");
+                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(viewLoadStateEvent));
             }
 
             if (handler is not null)

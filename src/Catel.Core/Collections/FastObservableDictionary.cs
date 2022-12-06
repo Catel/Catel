@@ -749,7 +749,7 @@
         {
             if (array.Length - arrayIndex < Count)
             {
-                throw new IndexOutOfRangeException("Array doesn't have enough space to copy all the elements");
+                throw Log.ErrorAndCreateException<IndexOutOfRangeException>("Array doesn't have enough space to copy all the elements");
             }
 
             for (var i = 0; i < Count; i++)
@@ -925,7 +925,11 @@
 
         public void CopyTo(Array array, int arrayIndex)
         {
-            if (array.Length - arrayIndex < Count) throw new IndexOutOfRangeException("Array doesn't have enough space to copy all the elements");
+            if (array.Length - arrayIndex < Count)
+            {
+                throw Log.ErrorAndCreateException<IndexOutOfRangeException>("Array doesn't have enough space to copy all the elements");
+            }
+
             for (var i = 0; i < Count; i++)
             {
                 var key = _list[i];

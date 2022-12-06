@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionHelperTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Collections
+﻿namespace Catel.Tests.Collections
 {
     using System.Collections.ObjectModel;
     using Catel.Collections;
@@ -19,8 +13,8 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ReturnsFalseForDifferentCollections()
             {
-                var collectionA = new Collection<int> {1};
-                var collectionB = new Collection<int> {1, 2};
+                var collectionA = new Collection<int> { 1 };
+                var collectionB = new Collection<int> { 1, 2 };
 
                 Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
             }
@@ -37,8 +31,8 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ReturnsTrueForEqualCollections()
             {
-                var collectionA = new Collection<int> {1};
-                var collectionB = new Collection<int> {1};
+                var collectionA = new Collection<int> { 1 };
+                var collectionB = new Collection<int> { 1 };
 
                 Assert.IsTrue(CollectionHelper.IsEqualTo(collectionA, collectionB));
             }
@@ -57,7 +51,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ReturnsTrueForEqualObjects()
             {
-                var collection = new Collection<int> {1};
+                var collection = new Collection<int> { 1 };
 
                 Assert.IsTrue(CollectionHelper.IsEqualTo(collection, collection));
             }
@@ -66,7 +60,7 @@ namespace Catel.Tests.Collections
             public void ReturnsFalseForNullFirstCollection()
             {
                 Collection<int> collectionA = null;
-                var collectionB = new Collection<int> {1};
+                var collectionB = new Collection<int> { 1 };
 
                 Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
             }
@@ -74,7 +68,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ReturnsFalseForNullSecondCollection()
             {
-                var collectionA = new Collection<int> {1};
+                var collectionA = new Collection<int> { 1 };
                 Collection<int> collectionB = null;
 
                 Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SuspendableTestModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data.TestClasses
+﻿namespace Catel.Tests.Data.TestClasses
 {
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
@@ -19,7 +12,7 @@ namespace Catel.Tests.Data.TestClasses
             set { SetValue(FirstNameProperty, value); }
         }
 
-        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty, (sender, e) => ((SuspendableTestModel) sender).OnFirstNameChanged());
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty, (sender, e) => ((SuspendableTestModel)sender).OnFirstNameChanged());
 
         public bool IsFirstNameCallbackInvoked { get; private set; }
 

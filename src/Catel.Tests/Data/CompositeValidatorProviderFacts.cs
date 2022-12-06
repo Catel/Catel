@@ -39,10 +39,10 @@
                 var compositeValidatorProvider = new CompositeValidatorProvider();
                 var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
                 var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
-                
+
                 compositeValidatorProvider.Add(validatorProviderMock1.Object);
                 compositeValidatorProvider.Add(validatorProviderMock2.Object);
-                
+
                 compositeValidatorProvider.Remove(validatorProviderMock1.Object);
                 Assert.IsFalse(compositeValidatorProvider.Contains(validatorProviderMock1.Object));
             }
@@ -53,7 +53,7 @@
         {
             public class FooViewModel : ViewModelBase
             {
-                 
+
             }
 
             [TestCase]
@@ -117,7 +117,7 @@
 
                 var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
                 validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
-                
+
                 var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
                 validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock2.Object);
 

@@ -74,10 +74,10 @@
                 {
                     serviceLocator.MissingType += (s, e) =>
                     {
-                    var tagString = (string)e.Tag;
-                    IInterfaceA instance = (tagString == Tag) ? new ClassATag() as IInterfaceA : new ClassA() as IInterfaceA;
-                    e.ImplementingInstance = instance;
-                    e.RegistrationType = RegistrationType.Singleton;
+                        var tagString = (string)e.Tag;
+                        IInterfaceA instance = (tagString == Tag) ? new ClassATag() as IInterfaceA : new ClassA() as IInterfaceA;
+                        e.ImplementingInstance = instance;
+                        e.RegistrationType = RegistrationType.Singleton;
                     };
 
                     var classA = serviceLocator.ResolveType<IInterfaceA>();
@@ -96,10 +96,10 @@
                 {
                     serviceLocator.MissingType += (s, e) =>
                     {
-                    var tagString = (string)e.Tag;
-                    IInterfaceA instance = (tagString == Tag) ? new ClassATag() as IInterfaceA : new ClassA() as IInterfaceA;
-                    e.ImplementingInstance = instance;
-                    e.RegistrationType = RegistrationType.Singleton;
+                        var tagString = (string)e.Tag;
+                        IInterfaceA instance = (tagString == Tag) ? new ClassATag() as IInterfaceA : new ClassA() as IInterfaceA;
+                        e.ImplementingInstance = instance;
+                        e.RegistrationType = RegistrationType.Singleton;
                     };
 
                     var classATag = serviceLocator.ResolveType<IInterfaceA>(Tag);

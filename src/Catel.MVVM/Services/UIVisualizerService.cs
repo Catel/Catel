@@ -73,7 +73,7 @@
                 {
                     if (existingRegistration != windowType && throwExceptionIfExists)
                     {
-                        throw new InvalidOperationException($"View model '{name}' already registered");
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"View model '{name}' already registered");
                     }
                 }
 

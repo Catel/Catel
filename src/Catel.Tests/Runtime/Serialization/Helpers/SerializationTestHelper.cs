@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationTestHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -79,7 +73,7 @@ namespace Catel.Tests.Runtime.Serialization
 
         public static string ToXmlString(this object model)
         {
-            Argument.IsNotNull(() => model);
+            ArgumentNullException.ThrowIfNull(model);
 
             using (var memoryStream = new MemoryStream())
             {

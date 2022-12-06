@@ -34,7 +34,7 @@
     public class ChangeNotificationWrapper
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        
+
         private readonly object _lockObject = new object();
 
         private readonly WeakReference _weakReference;
@@ -44,7 +44,7 @@
         private ConditionalWeakTable<object, IWeakEventListener>? _weakPropertyChangedListenersTable;
 
         private ConditionalWeakTable<object, List<WeakReference>>? _collectionItems;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeNotificationWrapper"/> class.
         /// </summary>
@@ -72,7 +72,7 @@
 
             SubscribeNotifyChangedEvents(value, null);
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether <see cref="INotifyPropertyChanged"/> is supported by the target object.
         /// </summary>
@@ -381,7 +381,7 @@
                         break;
 
                     default:
-                        throw new ArgumentOutOfRangeException("eventChangeType");
+                        throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>("eventChangeType");
                 }
 
                 if (eventsTable is not null && eventsTable.TryGetValue(value, out var oldSubscription))
@@ -403,7 +403,7 @@
                             {
                                 Log.Debug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
 
-                                ((INotifyPropertyChanged) value).PropertyChanged += OnObjectCollectionItemPropertyChanged;
+                                ((INotifyPropertyChanged)value).PropertyChanged += OnObjectCollectionItemPropertyChanged;
                             }
 
                             if (_collectionItems is null)
@@ -437,7 +437,7 @@
                         break;
 
                     default:
-                        throw new ArgumentOutOfRangeException("eventChangeType");
+                        throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(eventChangeType));
                 }
 
                 if (weakListener is not null)
@@ -493,7 +493,7 @@
                         break;
 
                     default:
-                        throw new ArgumentOutOfRangeException("eventChangeType");
+                        throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(eventChangeType));
                 }
 
                 if (eventsTable is not null && eventsTable.TryGetValue(value, out var oldSubscription))

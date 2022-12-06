@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AuditorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Auditing
+﻿namespace Catel.Tests.MVVM.Auditing
 {
     using System.Threading.Tasks;
     using Catel.MVVM.Auditing;
@@ -24,7 +18,7 @@ namespace Catel.Tests.MVVM.Auditing
             var viewModel = new TestViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelCreatingCalled);
-            Assert.AreEqual(typeof (TestViewModel), auditor.OnViewModelCreatingType);
+            Assert.AreEqual(typeof(TestViewModel), auditor.OnViewModelCreatingType);
         }
 
         [TestCase]
@@ -38,7 +32,7 @@ namespace Catel.Tests.MVVM.Auditing
             var viewModel = new TestViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelCreatedCalled);
-            Assert.AreEqual(typeof (TestViewModel), auditor.OnViewModelCreatedType);
+            Assert.AreEqual(typeof(TestViewModel), auditor.OnViewModelCreatedType);
         }
 
         [TestCase]

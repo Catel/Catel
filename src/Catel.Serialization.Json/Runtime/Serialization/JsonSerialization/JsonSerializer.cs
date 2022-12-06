@@ -131,7 +131,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="configuration">The configuration.</param>
         public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(model);
 
             using (GetCurrentSerializationScopeManager(configuration))
             {
@@ -950,7 +950,7 @@ namespace Catel.Runtime.Serialization.Json
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException("contextMode");
+                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(contextMode));
             }
 
             var culture = configuration?.Culture ?? CultureInfo.InvariantCulture;

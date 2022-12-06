@@ -9,7 +9,7 @@
     {
         public class TestModel : ObservableObject
         {
-            
+
         }
 
         [TestFixture]

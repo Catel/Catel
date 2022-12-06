@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -33,7 +27,7 @@ namespace Catel.Tests.Data
 
                 Assert.IsTrue(validationObject.IsValidated);
 
-                var modelEditor = (IModelEditor) validationObject;
+                var modelEditor = (IModelEditor)validationObject;
                 modelEditor.SetValue(propertyName, propertyValue);
 
                 Assert.IsTrue(validationObject.IsValidated);
@@ -115,7 +109,7 @@ namespace Catel.Tests.Data
             public void IDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTestModel();
-                var validation = (IValidatableModel) obj;
+                var validation = (IValidatableModel)obj;
 
                 obj.ErrorWhenEmpty = string.Empty;
 
@@ -134,7 +128,7 @@ namespace Catel.Tests.Data
             public void INotifyDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTestModel();
-                var validation = (IValidatableModel) obj;
+                var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
 

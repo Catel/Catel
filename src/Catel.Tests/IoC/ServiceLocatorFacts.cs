@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceLocatorFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using System.Collections.Generic;
@@ -1271,7 +1264,7 @@ namespace Catel.Tests.IoC
             {
                 public ClassA(InterfaceB b)
                 {
-                    Argument.IsNotNull(() => b);
+                    ArgumentNullException.ThrowIfNull(b);
                 }
             }
 
@@ -1283,7 +1276,7 @@ namespace Catel.Tests.IoC
             {
                 public ClassB(InterfaceA a)
                 {
-                    Argument.IsNotNull(() => a);
+                    ArgumentNullException.ThrowIfNull(a);
                 }
             }
 

@@ -102,8 +102,7 @@
                         return string.Empty;
                     }
 
-                    Log.Error(NoMemberExpression);
-                    throw new NotSupportedException(NoMemberExpression);
+                    throw Log.ErrorAndCreateException<NotSupportedException>(NoMemberExpression);
                 }
 
                 var propertyInfo = memberExpression.Member as PropertyInfo;
@@ -114,8 +113,7 @@
                         return string.Empty;
                     }
 
-                    Log.Error(NoMemberExpression);
-                    throw new NotSupportedException(NoMemberExpression);
+                    throw Log.ErrorAndCreateException<NotSupportedException>(NoMemberExpression);
                 }
 
                 if (allowNested && (memberExpression.Expression is not null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))

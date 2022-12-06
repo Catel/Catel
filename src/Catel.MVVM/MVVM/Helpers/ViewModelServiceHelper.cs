@@ -65,9 +65,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to configure IoC container");
-
-                throw new Exception(Catel.ResourceHelper.GetString("FailedToConfigureIoCContainer"), ex);
+                throw Log.ErrorAndCreateException<Exception>(s => new Exception(s, ex), LanguageHelper.GetRequiredString("FailedToConfigureIoCContainer"));
             }            
         }
     }

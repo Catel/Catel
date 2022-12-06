@@ -237,7 +237,7 @@
         {
             // Declare variables
             string input = @"abse";
-            string expectedOutput = @"";
+            string expectedOutput = string.Empty;
 
             // Call method
             string output = Path.GetParentDirectory(input);
@@ -250,8 +250,8 @@
         public void GetParentDirectory_EmptyInput()
         {
             // Declare variables
-            string input = @"";
-            string expectedOutput = @"";
+            string input = string.Empty;
+            string expectedOutput = string.Empty;
 
             // Call method
             string output = Path.GetParentDirectory(input);
@@ -491,7 +491,7 @@
         {
             // Declare variables
             string file = @"..\Windows\notepad.exe";
-            string path = @"";
+            string path = string.Empty;
 
             // Set current environment path
             string oldEnvironmentDirectory = Environment.CurrentDirectory;

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationContextTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -1560,7 +1554,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        public static ValidationContext CreateValidationContextSimple(bool createFieldWarning = true, bool createFieldError = true, 
+        public static ValidationContext CreateValidationContextSimple(bool createFieldWarning = true, bool createFieldError = true,
             bool createBusinessRuleWarning = true, bool createBusinessRuleError = true)
         {
             return CreateValidationContext(createFieldWarning, createFieldWarning, createFieldError, createFieldError,

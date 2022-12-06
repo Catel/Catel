@@ -1,11 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeFactoryFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
+    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading;
@@ -85,8 +80,8 @@ namespace Catel.Tests.IoC
         {
             public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, INavigationService navigationService)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
 
                 IntValue = intValue;
             }
@@ -94,9 +89,9 @@ namespace Catel.Tests.IoC
             public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, INavigationService navigationService,
                 IDummyDependency dependency)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
-                Argument.IsNotNull(() => dependency);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
+                ArgumentNullException.ThrowIfNull(dependency);
 
                 IntValue = intValue;
                 Dependency = dependency;
@@ -105,8 +100,8 @@ namespace Catel.Tests.IoC
             public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService,
                 INavigationService navigationService)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
 
                 StringValue = stringValue;
                 IntValue = intValue;
@@ -116,9 +111,9 @@ namespace Catel.Tests.IoC
             public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService,
                 INavigationService navigationService, IDummyDependency dependency)
             {
-                Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => navigationService);
-                Argument.IsNotNull(() => dependency);
+                ArgumentNullException.ThrowIfNull(messageService);
+                ArgumentNullException.ThrowIfNull(navigationService);
+                ArgumentNullException.ThrowIfNull(dependency);
 
                 StringValue = stringValue;
                 IntValue = intValue;
@@ -497,7 +492,7 @@ namespace Catel.Tests.IoC
                         typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(AdvancedDependencyInjectionTestClass), 30);
                     });
                 }
-                
+
                 for (int i = 0; i < threadAmount; i++)
                 {
                     threads[i].Start(i);
@@ -508,7 +503,7 @@ namespace Catel.Tests.IoC
                     threads[i].Join();
                 }
                 paralellStopWatch.Stop();
-                
+
                 Assert.That(paralellStopWatch.ElapsedMilliseconds, Is.LessThan(serialStopWatch.ElapsedMilliseconds / 5));
             }
         }

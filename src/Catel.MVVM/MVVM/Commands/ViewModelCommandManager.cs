@@ -201,7 +201,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public void AddHandler(AsyncCommandHandler handler)
         {
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             lock (_lock)
             {

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionExtensionsTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Collections
+﻿namespace Catel.Tests.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -28,7 +22,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ReturnsFalseForNullItem()
             {
-                var list = new List<int> {};
+                var list = new List<int> { };
 
                 Assert.IsFalse(list.CanMoveItemUp(null));
             }
@@ -46,7 +40,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2 };
 
-                Assert.IsFalse(list.CanMoveItemUp(3));                
+                Assert.IsFalse(list.CanMoveItemUp(3));
             }
 
             [TestCase]
@@ -270,7 +264,7 @@ namespace Catel.Tests.Collections
                 Assert.AreEqual(1, list[0]);
                 Assert.AreEqual(3, list[1]);
                 Assert.AreEqual(2, list[2]);
-            }            
+            }
         }
 
         [TestFixture]
@@ -318,7 +312,7 @@ namespace Catel.Tests.Collections
                 Assert.AreEqual(1, list[0]);
                 Assert.AreEqual(3, list[1]);
                 Assert.AreEqual(2, list[2]);
-            }            
+            }
         }
 
         [TestFixture]
@@ -341,7 +335,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void RemovesFirstItemFromList()
             {
-                var list = new List<int>(new [] { 1, 2, 3 });
+                var list = new List<int>(new[] { 1, 2, 3 });
 
                 list.RemoveFirst();
 
@@ -443,7 +437,7 @@ namespace Catel.Tests.Collections
                 Assert.AreEqual(1, collection[0]);
                 Assert.AreEqual(2, collection[1]);
                 Assert.AreEqual(3, collection[2]);
-            }    
+            }
         }
 
         [TestFixture]

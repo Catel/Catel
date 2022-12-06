@@ -147,7 +147,7 @@
 
                     AssertSerializationCalls(clonedObject,
                         serializer.GetType().Name,
-                        new []
+                        new[]
                         {
                             nameof(ComputerSettings._onDeserializingCalls),
                             nameof(ComputerSettings._onDeserializedCalls)

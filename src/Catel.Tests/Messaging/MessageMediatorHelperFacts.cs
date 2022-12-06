@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageMediatorHelperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging
 {
     using System;
     using Catel.Messaging;
@@ -55,7 +49,7 @@ namespace Catel.Tests.Messaging
                 messageMediator.SendMessage("test 2", "tag");
 
                 Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);              
+                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);
             }
         }
 

@@ -155,17 +155,17 @@
 
             public class GrantParentViewModel : DeferViewModelBase
             {
-                
+
             }
 
             public class ParentViewModel : DeferViewModelBase
             {
-                
+
             }
 
             public class ChildViewModel : DeferViewModelBase
             {
-                
+
             }
 
             [TestCase]

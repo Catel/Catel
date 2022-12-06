@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyDataTypeInfoFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Linq;
@@ -38,7 +31,7 @@ namespace Catel.Tests.Data
         [TestCase]
         public void CorrectlyRegistersCatelProperties()
         {
-            var catelTypeInfo = new CatelTypeInfo(typeof (CatelTypeInfoTestModel));
+            var catelTypeInfo = new CatelTypeInfo(typeof(CatelTypeInfoTestModel));
 
             var properties = catelTypeInfo.GetCatelProperties();
             Assert.AreNotEqual(0, properties.Count);

@@ -27,7 +27,7 @@
             public ComplexSetting()
                 : base()
             {
-                
+
             }
 
             /// <summary>
@@ -156,7 +156,7 @@
             var complexSetting = new ComplexSetting
             {
                 FirstName = "John",
-                MiddleName = "",
+                MiddleName = string.Empty,
                 LastName = "Doe"
             };
 

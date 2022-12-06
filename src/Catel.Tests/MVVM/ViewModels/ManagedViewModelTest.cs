@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ManagedViewModelTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using Catel.MVVM;
@@ -21,8 +15,8 @@ namespace Catel.Tests.MVVM.ViewModels
         [TestCase]
         public void Constructor()
         {
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
-            Assert.AreEqual(typeof (TestViewModel), viewModel.ViewModelType);
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
+            Assert.AreEqual(typeof(TestViewModel), viewModel.ViewModelType);
         }
 
         [TestCase]
@@ -30,7 +24,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
             Assert.Throws<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
         }
@@ -40,7 +34,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
             try
             {
@@ -50,8 +44,8 @@ namespace Catel.Tests.MVVM.ViewModels
             }
             catch (WrongViewModelTypeException ex)
             {
-                Assert.AreEqual(ex.ActualType, typeof (TestViewModelWithDeferredValidation));
-                Assert.AreEqual(ex.ExpectedType, typeof (TestViewModel));
+                Assert.AreEqual(ex.ActualType, typeof(TestViewModelWithDeferredValidation));
+                Assert.AreEqual(ex.ExpectedType, typeof(TestViewModel));
             }
         }
 
@@ -60,7 +54,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
             viewModel.AddViewModelInstance(new TestViewModel());
         }
 
@@ -69,7 +63,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
             Assert.Throws<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
         }
@@ -79,7 +73,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
             viewModel.RemoveViewModelInstance(new TestViewModel());
         }
 
@@ -88,7 +82,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
             var interestingViewModel = new TestViewModel();
             viewModel.AddViewModelInstance(interestingViewModel);

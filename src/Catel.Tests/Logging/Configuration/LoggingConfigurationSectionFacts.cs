@@ -31,7 +31,7 @@
             Assert.AreEqual(logListeners.Count(), 1);
 
             var fileLogListener = (FileLogListener)logListeners.First();
-            
+
             Assert.IsTrue(fileLogListener.IgnoreCatelLogging);
             Assert.IsFalse(fileLogListener.IsDebugEnabled);
             Assert.IsTrue(fileLogListener.IsInfoEnabled);

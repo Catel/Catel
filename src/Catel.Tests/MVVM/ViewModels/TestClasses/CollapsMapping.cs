@@ -1,10 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollapsMapping.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
 namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using System;
@@ -46,7 +39,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
 
         public override object Convert(object[] values, IViewModel viewModel)
         {
-            return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string) x)));
+            return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string)x)));
         }
 
         public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
@@ -56,7 +49,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
 
         public override object[] ConvertBack(object value, IViewModel viewModel)
         {
-            return ((string) value).Split(Separator);
+            return ((string)value).Split(Separator);
         }
         #endregion
     }

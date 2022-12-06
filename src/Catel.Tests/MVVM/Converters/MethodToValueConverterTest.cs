@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MethodToValueConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System;
     using System.Globalization;
@@ -21,8 +15,8 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new MethodToValueConverter();
 
-            Assert.AreEqual("1234", converter.Convert(1234, typeof (string), "ToString", (CultureInfo)null));
-            Assert.AreEqual("ABCD", converter.Convert(" ABCD ", typeof (string), "Trim", (CultureInfo)null));
+            Assert.AreEqual("1234", converter.Convert(1234, typeof(string), "ToString", (CultureInfo)null));
+            Assert.AreEqual("ABCD", converter.Convert(" ABCD ", typeof(string), "Trim", (CultureInfo)null));
         }
 
         [TestCase]
@@ -30,7 +24,7 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new MethodToValueConverter();
 
-            Assert.IsNull(converter.Convert(null, typeof (string), "ToString", (CultureInfo)null));
+            Assert.IsNull(converter.Convert(null, typeof(string), "ToString", (CultureInfo)null));
         }
 
         [TestCase]
@@ -38,7 +32,7 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new MethodToValueConverter();
 
-            Assert.AreEqual("Pineapple", converter.Convert("Pineapple", typeof (string), "InvalidMethodName", (CultureInfo)null));
+            Assert.AreEqual("Pineapple", converter.Convert("Pineapple", typeof(string), "InvalidMethodName", (CultureInfo)null));
         }
 
         [TestCase]
@@ -46,7 +40,7 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new MethodToValueConverter();
 
-            Assert.Throws<NotSupportedException>(() => converter.ConvertBack("ABCD", typeof (string), "ToString", (CultureInfo)null));
+            Assert.Throws<NotSupportedException>(() => converter.ConvertBack("ABCD", typeof(string), "ToString", (CultureInfo)null));
         }
         #endregion
     }

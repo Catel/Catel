@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpirationPolicyFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Caching.Policies
+﻿namespace Catel.Tests.Caching.Policies
 {
     using System;
 
@@ -32,8 +27,8 @@ namespace Catel.Tests.Caching.Policies
             {
                 Assert.IsNotNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)));
             }
-            
-            
+
+
             /// <summary>
             /// Not returns null if expiration date time is in the pass if force is equals true.
             /// </summary>
@@ -63,7 +58,7 @@ namespace Catel.Tests.Caching.Policies
             {
                 Assert.IsNotNull(ExpirationPolicy.Duration(new TimeSpan(0)));
             }
-            
+
             /// <summary>
             /// Not returns null if ticks of time span is less or equals to zero if force is equals true.
             /// </summary>
@@ -95,7 +90,7 @@ namespace Catel.Tests.Caching.Policies
             {
                 Assert.IsNotNull(ExpirationPolicy.Sliding(new TimeSpan(0)));
             }
-            
+
             /// <summary>
             /// Not returns null if ticks of time span is less or equals to zero if force is equals true.
             /// </summary>
@@ -123,8 +118,8 @@ namespace Catel.Tests.Caching.Policies
             public void NotReturnsNullIfFunctionReturnsTrue()
             {
                 Assert.IsNotNull(ExpirationPolicy.Custom(() => true));
-            }        
-            
+            }
+
             [TestCase]
             public void Throws_ArgumentNullException_If_Function_Is_Null()
             {

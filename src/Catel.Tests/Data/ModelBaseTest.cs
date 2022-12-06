@@ -9,7 +9,7 @@
 
     [TestFixture]
     public class ModelBaseTest
-    {       
+    {
         private FilesHelper _filesHelper;
 
         [SetUp]
@@ -153,7 +153,7 @@
 
             bool isInvoked = false;
 
-            obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            obj.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
                                     {
                                         if (!isInvoked)
                                         {
@@ -181,7 +181,7 @@
 
             bool isInvoked = false;
 
-            obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            obj.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (!isInvoked)
                 {
@@ -209,7 +209,7 @@
 
             bool isInvoked = false;
 
-            obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            obj.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (!isInvoked)
                 {
@@ -242,7 +242,7 @@
             expectedProperties.Add(IniEntry.IniEntryTypeProperty.Name);
 
             var obj = ModelBaseTestHelper.CreateIniEntryObject();
-            obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            obj.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
                                        {
                                            actualProperties.Add(e.PropertyName);
                                        };

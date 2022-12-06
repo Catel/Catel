@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPleaseWaitServiceExtensionsTests.cs" company="Catel development team">
-//   Copyright (c) 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Services
+﻿namespace Catel.Tests.Services
 {
     using System;
     using System.Threading;
@@ -42,7 +35,7 @@ namespace Catel.Tests.Services
         {
             Target = null;
         }
-        
+
         [Test]
         public void PushInScope_CodeThrowsException_Hides()
         {
@@ -71,7 +64,7 @@ namespace Catel.Tests.Services
         {
             // ARRANGE
             Assert.AreEqual(0, Target.ShowCounter);
-            
+
             // ACT
             try
             {

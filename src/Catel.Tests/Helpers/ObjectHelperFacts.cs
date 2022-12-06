@@ -112,6 +112,6 @@
                 Assert.IsFalse(ObjectHelper.AreEqualReferences(obj1, obj2));
                 Assert.IsFalse(ObjectHelper.AreEqualReferences(obj2, obj1));
             }
-        }        
+        }
     }
 }

@@ -505,7 +505,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
         public void AddSerializerModifier(Type type, Type serializerModifierType)
         {
-            Argument.IsNotNull("serializerModifierType", serializerModifierType);
+            ArgumentNullException.ThrowIfNull(serializerModifierType);
 
             if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var serializerModifierTypes))
             {

@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeCacheFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -89,18 +84,18 @@ namespace Catel.Tests.Reflection
         {
             public interface IMySpecialInterface
             {
-                
+
             }
 
             public class MySpecialClass : IMySpecialInterface
             {
-                
+
             }
 
             [TestCase]
             public void ReturnsRightTypes()
             {
-                var interfaces = TypeCache.GetTypesImplementingInterface(typeof (IMySpecialInterface));
+                var interfaces = TypeCache.GetTypesImplementingInterface(typeof(IMySpecialInterface));
 
                 Assert.AreEqual(1, interfaces.Length);
                 Assert.AreEqual(typeof(MySpecialClass), interfaces[0]);
@@ -112,7 +107,7 @@ namespace Catel.Tests.Reflection
         {
             TypeCache.InitializeTypes();
 
-            Task<Type>[] tasks = { LoadABAsync(), LoadACAsync()};
+            Task<Type>[] tasks = { LoadABAsync(), LoadACAsync() };
 
             // ReSharper disable once CoVariantArrayConversion
             Assert.IsTrue(Task.WaitAll(tasks, 5000));

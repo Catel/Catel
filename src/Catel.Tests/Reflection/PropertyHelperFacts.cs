@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyHelperTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using Catel.Reflection;
@@ -317,7 +311,7 @@ namespace Catel.Tests.Reflection
             public void SetPropertyValue_StringValue_IgnoreCase(string property, bool ignoreCase, bool expectedResult)
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                
+
                 if (!expectedResult)
                 {
                     Assert.Throws<PropertyNotFoundException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, property, "FourtyTwo", ignoreCase));

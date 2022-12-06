@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensionsFacts.type.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -22,17 +16,17 @@ namespace Catel.Tests.Reflection
         {
             public interface ISomeInterface
             {
-                
+
             }
 
             public class A : ISomeInterface
             {
-                
+
             }
 
             public class B : A
             {
-                
+
             }
 
             [TestCase]
@@ -46,7 +40,7 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ReturnsTrueForTypeDerivetiveImplementingInterface()
             {
-                var type = typeof (B);
+                var type = typeof(B);
 
                 Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
             }
@@ -61,7 +55,7 @@ namespace Catel.Tests.Reflection
             [TestCase(typeof(TypeFactory), true, "Catel.IoC.typeFactory, Catel.Core")]
             public void ReturnsFullName(Type type, bool includeAssembly, string expected)
             {
-                
+
             }
         }
 
@@ -83,7 +77,7 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ReturnsTrueForEqualReferenceType()
             {
-                var type = typeof (InvalidOperationException);
+                var type = typeof(InvalidOperationException);
                 var instance = new InvalidOperationException();
 
                 Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
@@ -95,7 +89,7 @@ namespace Catel.Tests.Reflection
                 var type = typeof(Exception);
                 var instance = new InvalidOperationException();
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));              
+                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
             }
 
             [TestCase]
@@ -132,7 +126,7 @@ namespace Catel.Tests.Reflection
                 var instance = 32;
 
                 Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
-            }            
+            }
         }
 
         [TestFixture]
@@ -152,7 +146,7 @@ namespace Catel.Tests.Reflection
 
             public interface IPerson : INameProvider
             {
-                
+
             }
 
             public interface INameProvider
@@ -179,7 +173,7 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ReturnsNoExplicitInterfacePropertiesWhenDisabled()
             {
-                var propertyInfo = typeof (Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: false);
+                var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: false);
 
                 Assert.IsNull(propertyInfo);
             }

@@ -70,9 +70,9 @@
                                 startEvent.Set();
                                 alterEvent.WaitOne();
 
-                            // Try add a validator during a validation loop execution to the composition.
+                                // Try add a validator during a validation loop execution to the composition.
 
-                            compositeValidator.Add(validatorMock2.Object);
+                                compositeValidator.Add(validatorMock2.Object);
 
                                 syncEvents[1].Set();
                             });

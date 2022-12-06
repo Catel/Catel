@@ -5,7 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
-   
+
     using Catel.MVVM;
     using MVVM.Auditing;
 
@@ -434,7 +434,7 @@
                 var listener = new EventListener();
 
                 // ObservableCollection implements ICollectionChanged explicitly
-                var source = new ListCollectionView(new List<int>(new [] { 1, 2, 3 }));
+                var source = new ListCollectionView(new List<int>(new[] { 1, 2, 3 }));
 
                 WeakEventListener.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent);
 

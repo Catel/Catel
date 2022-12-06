@@ -22,7 +22,7 @@
             {
                 var change = new ValidationContextChange(FieldValidationResult.CreateError("Property", "Error"), ValidationContextChangeType.Added);
 
-                Assert.AreEqual("Property", ((FieldValidationResult) change.ValidationResult).PropertyName);
+                Assert.AreEqual("Property", ((FieldValidationResult)change.ValidationResult).PropertyName);
                 Assert.AreEqual("Error", change.ValidationResult.Message);
                 Assert.AreEqual(ValidationContextChangeType.Added, change.ChangeType);
             }
@@ -32,7 +32,7 @@
             {
                 var change = new ValidationContextChange(FieldValidationResult.CreateError("Property", "Error"), ValidationContextChangeType.Removed);
 
-                Assert.AreEqual("Property", ((FieldValidationResult) change.ValidationResult).PropertyName);
+                Assert.AreEqual("Property", ((FieldValidationResult)change.ValidationResult).PropertyName);
                 Assert.AreEqual("Error", change.ValidationResult.Message);
                 Assert.AreEqual(ValidationContextChangeType.Removed, change.ChangeType);
             }
@@ -105,7 +105,7 @@
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
                 Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult) changes[0].ValidationResult).PropertyName);
+                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldWarning", changes[0].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Warning, changes[0].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
@@ -134,7 +134,7 @@
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
                 Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult) changes[0].ValidationResult).PropertyName);
+                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldWarning", changes[0].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Warning, changes[0].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
@@ -163,7 +163,7 @@
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
                 Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult) changes[0].ValidationResult).PropertyName);
+                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldError", changes[0].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Error, changes[0].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
@@ -192,7 +192,7 @@
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
                 Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult) changes[0].ValidationResult).PropertyName);
+                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldError", changes[0].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Error, changes[0].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
@@ -337,28 +337,28 @@
 
                 // Field warning text has changed, thus removed
                 counter = 0;
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult) changes[counter].ValidationResult).PropertyName);
+                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldWarning", changes[counter].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Warning, changes[counter].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[counter].ChangeType);
 
                 // Field error has been removed
                 counter++;
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult) changes[counter].ValidationResult).PropertyName);
+                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldError", changes[counter].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Error, changes[counter].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[counter].ChangeType);
 
                 // Field warning text has changed, thus added
                 counter++;
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult) changes[counter].ValidationResult).PropertyName);
+                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldWarningTextHasChanged", changes[counter].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Warning, changes[counter].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[counter].ChangeType);
 
                 // Field error added
                 counter++;
-                Assert.AreEqual("NewProperty", ((IFieldValidationResult) changes[counter].ValidationResult).PropertyName);
+                Assert.AreEqual("NewProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
                 Assert.AreEqual("FieldErrorForNewProperty", changes[counter].ValidationResult.Message);
                 Assert.AreEqual(ValidationResultType.Error, changes[counter].ValidationResult.ValidationResultType);
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[counter].ChangeType);

@@ -204,7 +204,7 @@
 
             if (GetTemplateChild(ElementMessageBar) is null)
             {
-                throw new NotSupportedException(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
+                throw Log.ErrorAndCreateException<NotSupportedException>(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
             }
 
             OnModeChanged();
@@ -246,7 +246,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="validator"/> is <c>null</c>.</exception>
         public void SubscribeWarningAndErrorValidator(WarningAndErrorValidator validator)
         {
-            Argument.IsNotNull("validator", validator);
+            ArgumentNullException.ThrowIfNull(validator);
 
             if (!_warningAndErrorValidators.ContainsKey(validator.UniqueIdentifier))
             {
@@ -266,7 +266,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="validator"/> is <c>null</c>.</exception>
         public void UnsubscribeWarningAndErrorValidator(WarningAndErrorValidator validator)
         {
-            Argument.IsNotNull("validator", validator);
+            ArgumentNullException.ThrowIfNull(validator);
 
             if (_warningAndErrorValidators.ContainsKey(validator.UniqueIdentifier))
             {
