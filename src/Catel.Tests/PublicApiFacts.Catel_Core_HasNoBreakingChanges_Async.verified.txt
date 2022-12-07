@@ -2204,15 +2204,16 @@ namespace Catel.IoC
         public static T? CreateInstance<T>(this Catel.IoC.ITypeFactory typeFactory) { }
         public static T? CreateInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, params object[] parameters) { }
         public static T? CreateInstanceWithParametersAndAutoCompletion<T>(this Catel.IoC.ITypeFactory typeFactory, params object[] parameters) { }
-        public static T? CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
-        public static T? CreateInstanceWithParametersWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag, params object[] parameters) { }
-        public static T? CreateInstanceWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object tag) { }
+        public static T? CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object? tag, params object[] parameters) { }
+        public static T? CreateInstanceWithParametersWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object? tag, params object[] parameters) { }
+        public static T? CreateInstanceWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object? tag) { }
         public static object CreateRequiredInstance(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct) { }
         public static T CreateRequiredInstance<T>(this Catel.IoC.ITypeFactory typeFactory) { }
         public static object CreateRequiredInstanceWithParameters(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
         public static T CreateRequiredInstanceWithParameters<T>(this Catel.IoC.ITypeFactory typeFactory, params object?[] parameters) { }
         public static object CreateRequiredInstanceWithParametersAndAutoCompletion(this Catel.IoC.ITypeFactory typeFactory, System.Type typeToConstruct, params object?[] parameters) { }
         public static T CreateRequiredInstanceWithParametersAndAutoCompletion<T>(this Catel.IoC.ITypeFactory typeFactory, params object?[] parameters) { }
+        public static T CreateRequiredInstanceWithParametersAndAutoCompletionWithTag<T>(this Catel.IoC.ITypeFactory typeFactory, object? tag, params object[] parameters) { }
     }
     public class TypeInstantiatedEventArgs : System.EventArgs
     {

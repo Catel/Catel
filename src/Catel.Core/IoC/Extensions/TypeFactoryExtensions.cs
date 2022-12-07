@@ -50,7 +50,7 @@
         /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public static T? CreateInstanceWithTag<T>(this ITypeFactory typeFactory, object tag)
+        public static T? CreateInstanceWithTag<T>(this ITypeFactory typeFactory, object? tag)
         {
             ArgumentNullException.ThrowIfNull(typeFactory);
 
@@ -100,7 +100,7 @@
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public static T? CreateInstanceWithParametersWithTag<T>(this ITypeFactory typeFactory, object tag, params object[] parameters)
+        public static T? CreateInstanceWithParametersWithTag<T>(this ITypeFactory typeFactory, object? tag, params object[] parameters)
         {
             ArgumentNullException.ThrowIfNull(typeFactory);
 
@@ -143,6 +143,19 @@
             return (T?)typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(T), parameters);
         }
 
+        public static T CreateRequiredInstanceWithParametersAndAutoCompletionWithTag<T>(this ITypeFactory typeFactory, object? tag, params object[] parameters)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+
+            var model = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<T>(tag, parameters);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeof(T));
+            }
+
+            return model;
+        }
+
         /// <summary>
         /// Creates an instance of the specified type using the specified parameters as injection values.
         /// <para />
@@ -154,7 +167,7 @@
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public static T? CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this ITypeFactory typeFactory, object tag, params object[] parameters)
+        public static T? CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this ITypeFactory typeFactory, object? tag, params object[] parameters)
         {
             ArgumentNullException.ThrowIfNull(typeFactory);
 
