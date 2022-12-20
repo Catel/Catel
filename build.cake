@@ -24,10 +24,10 @@ Parameters["UseVisualStudioPrerelease"] = "true";
 // DEFINE COMPONENTS TO BUILD / PACKAGE
 //=======================================================
 
-// Catel.Core is a dependency of the test references
+// All catel libraries are  a dependency of the test references
 Dependencies.Add("Catel.Core");
-Dependencies.Add("Catel.Tests");
-
+Dependencies.Add("Catel.MVVM");
+Dependencies.Add("Catel.Serialization.Json");
 Dependencies.Add("Catel.Tests.TestReferenceB", new [] 
 {
     "Catel.Tests.TestReferenceA",
@@ -42,6 +42,7 @@ Dependencies.Add("Catel.Tests.TestReferenceA", new []
 {
     "Catel.Tests"
 });
+Dependencies.Add("Catel.Tests");
 
 Components.Add("Catel.Core");
 Components.Add("Catel.MVVM");
