@@ -22,7 +22,7 @@
             var model = typeFactory.CreateInstance(typeToConstruct);
             if (model is null)
             {
-                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, null);
             }
 
             return model;
@@ -57,6 +57,24 @@
             return (T?)typeFactory.CreateInstanceWithTag(typeof(T), tag);
         }
 
+        public static object CreateRequiredInstanceWithTag(this ITypeFactory typeFactory, Type typeToConstruct, object? tag)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+
+            var model = typeFactory.CreateInstanceWithTag(typeToConstruct, tag);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, tag);
+            }
+
+            return model;
+        }
+
+        public static T CreateRequiredInstanceWithTag<T>(this ITypeFactory typeFactory, object? tag)
+        {
+            return (T)CreateRequiredInstanceWithTag(typeFactory, typeof(T), tag);
+        }
+
         public static T CreateRequiredInstanceWithParameters<T>(this ITypeFactory typeFactory, params object?[] parameters)
         {
             return (T)CreateRequiredInstanceWithParameters(typeFactory, typeof(T), parameters);
@@ -70,7 +88,7 @@
             var model = typeFactory.CreateInstanceWithParameters(typeToConstruct, parameters);
             if (model is null)
             {
-                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, null);
             }
 
             return model;
@@ -120,7 +138,7 @@
             var model = typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeToConstruct, parameters);
             if (model is null)
             {
-                throw CreateFailedToCreateRequiredTypeException(typeToConstruct);
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, null);
             }
 
             return model;
@@ -150,7 +168,7 @@
             var model = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<T>(tag, parameters);
             if (model is null)
             {
-                throw CreateFailedToCreateRequiredTypeException(typeof(T));
+                throw CreateFailedToCreateRequiredTypeException(typeof(T), tag);
             }
 
             return model;
@@ -174,9 +192,9 @@
             return (T?)typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(typeof(T), tag, parameters);
         }
 
-        private static Exception CreateFailedToCreateRequiredTypeException(Type type)
+        private static Exception CreateFailedToCreateRequiredTypeException(Type type, object? tag)
         {
-            return new CatelException($"Cannot create instance of type '{type.GetSafeFullName()}'");
+            return new CatelException($"Cannot create instance of type '{type.GetSafeFullName()}' (tag = '{tag}')");
         }
     }
 }
