@@ -44,13 +44,8 @@
         /// <param name="str">The string.</param>
         /// <param name="valueToCheck">The value to check.</param>
         /// <returns><c>true</c> if the strings are equal, <c>false</c> otherwise.</returns>
-        public static bool EqualsIgnoreCase(this string str, string valueToCheck)
+        public static bool EqualsIgnoreCase(this string? str, string? valueToCheck)
         {
-            if (str is null)
-            {
-                return false;
-            }
-
             return string.Equals(str, valueToCheck, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -137,7 +132,7 @@
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>The search filter.</returns>
-        public static string PrepareAsSearchFilter(this string filter)
+        public static string PrepareAsSearchFilter(this string? filter)
         {
             var filterText = filter;
             if (string.IsNullOrWhiteSpace(filterText))
@@ -155,16 +150,11 @@
         /// <param name="str">The string.</param>
         /// <param name="values">The values to check for.</param>
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
-        public static bool EqualsAny(this string str, params string[] values)
+        public static bool EqualsAny(this string? str, params string?[] values)
         {
-            if (str is null)
-            {
-                return false;
-            }
-
             foreach (var value in values)
             {
-                if (str.Equals(value))
+                if (string.Equals(str, value))
                 {
                     return true;
                 }
@@ -179,13 +169,8 @@
         /// <param name="str">The string.</param>
         /// <param name="values">The values to check for.</param>
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
-        public static bool EqualsAnyIgnoreCase(this string str, params string[] values)
+        public static bool EqualsAnyIgnoreCase(this string? str, params string?[] values)
         {
-            if (str is null)
-            {
-                return false;
-            }
-
             foreach (var value in values)
             {
                 if (str.EqualsIgnoreCase(value))
