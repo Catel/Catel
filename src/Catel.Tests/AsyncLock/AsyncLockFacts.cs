@@ -53,12 +53,12 @@ internal class AsyncLockFacts
         Debug.Flush();
 
         var tasks = new List<Task>();
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < 10; i++)
         {
             tasks.Add(Task.Run(MethodAsync));
         }
 
-        Task.WaitAll(tasks.ToArray(), 2000);
+        Task.WaitAll(tasks.ToArray(), 3000);
 
         Assert.IsTrue(tasks.All(x => x.IsCompletedSuccessfully));
     }
