@@ -305,7 +305,7 @@
                             continue;
                         }
 
-                        if (fileStream.Position == 0)
+                        if (fileStream.Length == 0)
                         {
                             return new DynamicConfiguration();
                         }
