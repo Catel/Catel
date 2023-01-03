@@ -1,10 +1,15 @@
-﻿namespace Catel.Threading
+﻿#if DEBUG
+#define EXTREME_LOGGING
+#endif
+
+namespace Catel.Threading
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
+    using Catel.Logging;
 
     /// <summary>
     /// A mutual exclusion lock that is compatible with async.
@@ -13,9 +18,11 @@
     /// This code originally comes from AsyncEx: https://github.com/StephenCleary/AsyncEx
     /// </remarks>
     [DebuggerDisplay("Id = {Id}, Taken = {_taken}")]
-    [DebuggerTypeProxy(typeof (DebugView))]
+    [DebuggerTypeProxy(typeof(DebugView))]
     public sealed class AsyncLock
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly Stack<Task<IDisposable>> _cachedKeyTasks;
         private readonly Task<IDisposable> _cacheKeyReleaseTask;
 
@@ -111,10 +118,18 @@
         {
             Task<IDisposable> ret;
 
+#if EXTREME_LOGGING
+            Log.Debug($"[{_id}] [ASYNC] Requesting lock");
+#endif
+
             lock (_mutex)
             {
                 if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
                 {
+#if EXTREME_LOGGING
+                    Log.Debug($"[{_id}] [ASYNC] Lock was not yet taken, taking lock");
+#endif
+
                     // If the lock is available, take it immediately.
                     _taken = true;
                     _takenByCurrentTask.Value = true;
@@ -125,8 +140,15 @@
                 }
                 else
                 {
+#if EXTREME_LOGGING
+                    Log.Debug($"[{_id}] [ASYNC] Lock was already taken, queueing lock request");
+#endif
+
                     // Wait for the lock to become available or cancellation.
-                    ret = _queue.EnqueueAsync(_mutex, () => _allowTakeoverByTask = true, cancellationToken);
+                    ret = _queue.EnqueueAsync(_mutex, () =>
+                    {
+                        _allowTakeoverByTask = true;
+                    }, cancellationToken);
                 }
             }
 
@@ -149,10 +171,18 @@
         {
             Task<IDisposable> enqueuedTask;
 
+#if EXTREME_LOGGING
+            Log.Debug($"[{_id}] [SYNC] Requesting lock");
+#endif
+
             lock (_mutex)
             {
                 if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
                 {
+#if EXTREME_LOGGING
+                    Log.Debug($"[{_id}] [SYNC] Lock was not yet taken, taking lock");
+#endif
+
                     _taken = true;
                     _takenByCurrentTask.Value = true;
                     _allowTakeoverByTask = false;
@@ -161,7 +191,10 @@
                     return _cacheKeyReleaseTask.Result;
                 }
 
-                enqueuedTask = _queue.EnqueueAsync(_mutex, () => _allowTakeoverByTask = true, cancellationToken);
+                enqueuedTask = _queue.EnqueueAsync(_mutex, () =>
+                {
+                    _allowTakeoverByTask = true;
+                }, cancellationToken);
             }
 
             return enqueuedTask.WaitAndUnwrapException();
@@ -174,13 +207,23 @@
         {
             IDisposable? queuedLocker = null;
 
+#if EXTREME_LOGGING
+            Log.Debug($"[{_id}] [SYNC] Releasing lock");
+#endif
+
             lock (_mutex)
             {
                 // Step 1: clear current task locks
                 if (_cachedKeyTasks.Count > 0)
                 {
+#if EXTREME_LOGGING
+                    Log.Debug($"[{_id}] [SYNC] Releasing cached key lock");
+#endif
+
                     var finish = _cachedKeyTasks.Pop();
-                    finish?.Dispose();
+
+                    // Important: dispose the task result, not the task itself
+                    finish?.Result.Dispose();
                 }
 
                 // Step 2: check if there are pending locks left
@@ -190,18 +233,31 @@
 
                     if (!_queue.IsEmpty)
                     {
+#if EXTREME_LOGGING
+                        Log.Debug($"[{_id}] [SYNC] Queue is not yet empty, dequeueing next");
+#endif
+
                         queuedLocker = _queue.Dequeue(_cacheKeyReleaseTask);
                     }
                     else
                     {
+#if EXTREME_LOGGING
+                        Log.Debug($"[{_id}] [SYNC] Lock has no pending requests left, now fully free");
+#endif
+
                         // No lock and no queue, fully free
                         _taken = false;
                     }
                 }
             }
 
+            // Outside scope to allow new locks to be taken
             if (queuedLocker is not null)
             {
+#if EXTREME_LOGGING
+                Log.Debug($"[{_id}] [SYNC] Disposing queued locker");
+#endif
+
                 queuedLocker.Dispose();
             }
         }
@@ -230,6 +286,10 @@
             /// </summary>
             public void Dispose()
             {
+#if EXTREME_LOGGING
+                Log.Debug($"[{_asyncLock._id}] Releasing key");
+#endif
+
                 _asyncLock.ReleaseLock();
             }
         }

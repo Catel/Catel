@@ -1,6 +1,10 @@
 ﻿namespace Catel.Tests.Threading
 {
+    using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Catel.Threading;
     using NUnit.Framework;
@@ -61,6 +65,44 @@
 
                     ExecutionCount++;
                     ExecutedSuccessfully = true;
+                }
+            }
+        }
+
+        private class DeadlockTestClass
+        {
+            private readonly AsyncLock _asyncLock = new();
+
+            private int _startedThreads;
+
+            private readonly object _lock = new();
+
+            public async Task MethodAsync()
+            {
+                var threadIndex = 0;
+
+                lock (_lock)
+                {
+                    threadIndex = ++_startedThreads;
+                    Debug.WriteLine($"------started: {threadIndex}");
+                }
+
+                try
+                {
+                    using (await _asyncLock.LockAsync())
+                    {
+                        Thread.Sleep(300);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"ex: {ex}");
+
+                    throw;
+                }
+                finally
+                {
+                    Debug.WriteLine($"finished: {threadIndex}");
                 }
             }
         }
@@ -182,6 +224,33 @@
 
             Assert.IsTrue(testClass.ExecutedSuccessfully);
             Assert.IsFalse(testClass._asyncLock.IsTaken);
+        }
+
+        [Test]
+        public async Task Does_Not_Deadlock_Async()
+        {
+            Debug.Flush();
+
+            var deadlockClass = new DeadlockTestClass();
+
+            var tasks = new List<Task>();
+
+            for (var i = 0; i < 10; i++)
+            {
+                var task = Task.Run(deadlockClass.MethodAsync);
+                tasks.Add(task);
+            }
+
+            var timeout = 10 * 1000;
+
+            if (Debugger.IsAttached)
+            {
+                timeout = 2 * 60 * 1000;
+            }
+
+            Task.WaitAll(tasks.ToArray(), timeout);
+
+            Assert.IsTrue(tasks.All(x => x.IsCompletedSuccessfully));
         }
     }
 }
