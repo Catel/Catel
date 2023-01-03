@@ -24,7 +24,13 @@ namespace Catel.Threading
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly Stack<Task<IDisposable>> _cachedKeyTasks;
-        private readonly Task<IDisposable> _cacheKeyReleaseTask;
+
+        // Note: don't cache the Task<IDisposable>, it will cause deadlocks. Only
+        // cache the key which can be disposed multiple times
+        //private readonly Task<IDisposable> _cacheKeyReleaseTask;
+#pragma warning disable IDISP006 // Implement IDisposable
+        private readonly Key _cachedKey;
+#pragma warning restore IDISP006 // Implement IDisposable
 
         /// <summary>
         /// The object used for mutual exclusion.
@@ -59,7 +65,7 @@ namespace Catel.Threading
         {
             _queue = queue;
             _cachedKeyTasks = new Stack<Task<IDisposable>>();
-            _cacheKeyReleaseTask = Task.FromResult<IDisposable>(new Key(this));
+            _cachedKey = new Key(this);
             _mutex = new object();
         }
 
@@ -135,8 +141,8 @@ namespace Catel.Threading
                     _takenByCurrentTask.Value = true;
                     _allowTakeoverByTask = false;
 
-                    _cachedKeyTasks.Push(_cacheKeyReleaseTask);
-                    ret = _cacheKeyReleaseTask;
+                    ret = Task.FromResult<IDisposable>(_cachedKey);
+                    _cachedKeyTasks.Push(ret);
                 }
                 else
                 {
@@ -187,8 +193,9 @@ namespace Catel.Threading
                     _takenByCurrentTask.Value = true;
                     _allowTakeoverByTask = false;
 
-                    _cachedKeyTasks.Push(_cacheKeyReleaseTask);
-                    return _cacheKeyReleaseTask.Result;
+                    var task = Task.FromResult<IDisposable>(_cachedKey);
+                    _cachedKeyTasks.Push(task);
+                    return task.Result;
                 }
 
                 enqueuedTask = _queue.EnqueueAsync(_mutex, () =>
@@ -237,7 +244,7 @@ namespace Catel.Threading
                         Log.Debug($"[{_id}] [SYNC] Queue is not yet empty, dequeueing next");
 #endif
 
-                        queuedLocker = _queue.Dequeue(_cacheKeyReleaseTask);
+                        queuedLocker = _queue.Dequeue(_cachedKey);
                     }
                     else
                     {

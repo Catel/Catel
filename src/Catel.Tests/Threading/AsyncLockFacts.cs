@@ -63,8 +63,12 @@
                 {
                     await Task.Delay(200);
 
-                    ExecutionCount++;
-                    ExecutedSuccessfully = true;
+                    // Lock so the counter does not screw up
+                    lock (this)
+                    {
+                        ExecutionCount++;
+                        ExecutedSuccessfully = true;
+                    }
                 }
             }
         }
@@ -74,6 +78,7 @@
             private readonly AsyncLock _asyncLock = new();
 
             private int _startedThreads;
+            private bool _isTaken;
 
             private readonly object _lock = new();
 
@@ -91,7 +96,13 @@
                 {
                     using (await _asyncLock.LockAsync())
                     {
+                        Assert.IsFalse(_isTaken);
+
+                        _isTaken = true;
+
                         Thread.Sleep(300);
+
+                        _isTaken = false;
                     }
                 }
                 catch (Exception ex)
