@@ -10,6 +10,7 @@
     using Catel.IO;
     using System.IO;
     using System.Threading.Tasks;
+    using System.ComponentModel;
 
     public partial class ConfigurationServiceFacts
     {
@@ -49,6 +50,11 @@
                     }
                 }
             }
+
+            public async Task<DynamicConfiguration> PublicLoadConfigurationAsync(string fileName)
+            {
+                return await base.LoadConfigurationAsync(fileName);
+            }
         }
 
         private static async Task<TestConfigurationService> GetConfigurationServiceAsync(string name = null)
@@ -58,6 +64,32 @@
             await configurationService.LoadAsync();
 
             return configurationService;
+        }
+
+        [TestFixture]
+        public class The_LoadConfigurationAsync_Method
+        {
+            [Test]
+            public async Task IgnoresEmptyFilesAsync()
+            {
+                var configurationService = await GetConfigurationServiceAsync();
+                var fileName = System.IO.Path.GetTempFileName();
+
+                try
+                {
+                    using (File.Create(fileName))
+                    {
+                    }
+
+                    var config = await configurationService.PublicLoadConfigurationAsync(fileName);
+
+                    Assert.IsNotNull(config);
+                }
+                finally
+                {
+                    File.Delete(fileName);
+                }
+            }
         }
 
         [TestFixture]

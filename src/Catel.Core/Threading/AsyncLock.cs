@@ -19,7 +19,7 @@ namespace Catel.Threading
     /// </remarks>
     [DebuggerDisplay("Id = {Id}, Taken = {_taken}")]
     [DebuggerTypeProxy(typeof(DebugView))]
-    public sealed class AsyncLock
+    public sealed partial class AsyncLock
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -68,6 +68,10 @@ namespace Catel.Threading
             _cachedKey = new Key(this);
             _mutex = new object();
         }
+
+#if EXTREME_LOGGING
+        public bool EnableExtremeLogging { get; set; }
+#endif
 
         /// <summary>
         /// Gets a semi-unique identifier for this asynchronous lock.
@@ -124,17 +128,13 @@ namespace Catel.Threading
         {
             Task<IDisposable> ret;
 
-#if EXTREME_LOGGING
-            Log.Debug($"[{_id}] [ASYNC] Requesting lock");
-#endif
+            LogDebug($"[ASYNC] Requesting lock");
 
             lock (_mutex)
             {
                 if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
                 {
-#if EXTREME_LOGGING
-                    Log.Debug($"[{_id}] [ASYNC] Lock was not yet taken, taking lock");
-#endif
+                    LogDebug($"[ASYNC] Lock was not yet taken, taking lock");
 
                     // If the lock is available, take it immediately.
                     _taken = true;
@@ -146,9 +146,7 @@ namespace Catel.Threading
                 }
                 else
                 {
-#if EXTREME_LOGGING
-                    Log.Debug($"[{_id}] [ASYNC] Lock was already taken, queueing lock request");
-#endif
+                    LogDebug($"[ASYNC] Lock was already taken, queueing lock request");
 
                     // Wait for the lock to become available or cancellation.
                     ret = _queue.EnqueueAsync(_mutex, () =>
@@ -177,17 +175,13 @@ namespace Catel.Threading
         {
             Task<IDisposable> enqueuedTask;
 
-#if EXTREME_LOGGING
-            Log.Debug($"[{_id}] [SYNC] Requesting lock");
-#endif
+            LogDebug($"[SYNC] Requesting lock");
 
             lock (_mutex)
             {
                 if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
                 {
-#if EXTREME_LOGGING
-                    Log.Debug($"[{_id}] [SYNC] Lock was not yet taken, taking lock");
-#endif
+                    LogDebug($"[SYNC] Lock was not yet taken, taking lock");
 
                     _taken = true;
                     _takenByCurrentTask.Value = true;
@@ -197,6 +191,8 @@ namespace Catel.Threading
                     _cachedKeyTasks.Push(task);
                     return task.Result;
                 }
+
+                LogDebug($"[SYNC] Lock was already taken, queueing lock request");
 
                 enqueuedTask = _queue.EnqueueAsync(_mutex, () =>
                 {
@@ -214,18 +210,14 @@ namespace Catel.Threading
         {
             IDisposable? queuedLocker = null;
 
-#if EXTREME_LOGGING
-            Log.Debug($"[{_id}] [SYNC] Releasing lock");
-#endif
+            LogDebug($"[SYNC] Releasing lock");
 
             lock (_mutex)
             {
                 // Step 1: clear current task locks
                 if (_cachedKeyTasks.Count > 0)
                 {
-#if EXTREME_LOGGING
-                    Log.Debug($"[{_id}] [SYNC] Releasing cached key lock");
-#endif
+                    LogDebug($"[SYNC] Releasing cached key lock");
 
                     var finish = _cachedKeyTasks.Pop();
 
@@ -240,17 +232,13 @@ namespace Catel.Threading
 
                     if (!_queue.IsEmpty)
                     {
-#if EXTREME_LOGGING
-                        Log.Debug($"[{_id}] [SYNC] Queue is not yet empty, dequeueing next");
-#endif
+                        LogDebug($"[SYNC] Queue is not yet empty, dequeueing next");
 
                         queuedLocker = _queue.Dequeue(_cachedKey);
                     }
                     else
                     {
-#if EXTREME_LOGGING
-                        Log.Debug($"[{_id}] [SYNC] Lock has no pending requests left, now fully free");
-#endif
+                        LogDebug($"[SYNC] Lock has no pending requests left, now fully free");
 
                         // No lock and no queue, fully free
                         _taken = false;
@@ -261,13 +249,23 @@ namespace Catel.Threading
             // Outside scope to allow new locks to be taken
             if (queuedLocker is not null)
             {
-#if EXTREME_LOGGING
-                Log.Debug($"[{_id}] [SYNC] Disposing queued locker");
-#endif
+                LogDebug($"[SYNC] Disposing queued locker");
 
                 queuedLocker.Dispose();
             }
         }
+
+        partial void LogDebug(string message);
+
+#if DEBUG && EXTREME_LOGGING
+        partial void LogDebug(string message)
+        {
+            if (EnableExtremeLogging)
+            {
+                Log.Debug($"[{_id}] {message}");
+            }
+        }
+#endif
 
         /// <summary>
         /// The disposable which releases the lock.
@@ -293,9 +291,7 @@ namespace Catel.Threading
             /// </summary>
             public void Dispose()
             {
-#if EXTREME_LOGGING
-                Log.Debug($"[{_asyncLock._id}] Releasing key");
-#endif
+                _asyncLock.LogDebug($"[{_asyncLock._id}] Releasing key");
 
                 _asyncLock.ReleaseLock();
             }

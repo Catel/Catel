@@ -71,6 +71,11 @@
 
             _roamingSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _roamingSaveConfigurationTimer.Elapsed += OnRoamingSaveConfigurationTimerElapsed;
+
+#if DEBUG
+            _localConfigurationLock.EnableExtremeLogging = true;
+            _roamingConfigurationLock.EnableExtremeLogging = true;
+#endif
         }
 
         /// <summary>
@@ -300,10 +305,15 @@
                             continue;
                         }
 
+                        if (fileStream.Position == 0)
+                        {
+                            return new DynamicConfiguration();
+                        }
+
                         var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
                         if (configuration is null)
                         {
-                            configuration = new DynamicConfiguration();
+                            return new DynamicConfiguration();
                         }
 
                         return configuration;
