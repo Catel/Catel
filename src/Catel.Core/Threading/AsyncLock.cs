@@ -23,11 +23,6 @@ namespace Catel.Threading
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly Stack<Task<IDisposable>> _cachedKeyTasks;
-
-        // Note: don't cache the Task<IDisposable>, it will cause deadlocks. Only
-        // cache the key which can be disposed multiple times
-        //private readonly Task<IDisposable> _cacheKeyReleaseTask;
 #pragma warning disable IDISP006 // Implement IDisposable
         private readonly Key _cachedKey;
 #pragma warning restore IDISP006 // Implement IDisposable
@@ -64,7 +59,6 @@ namespace Catel.Threading
         public AsyncLock(IAsyncWaitQueue<IDisposable> queue)
         {
             _queue = queue;
-            _cachedKeyTasks = new Stack<Task<IDisposable>>();
             _cachedKey = new Key(this);
             _mutex = new object();
         }
@@ -142,7 +136,6 @@ namespace Catel.Threading
                     _allowTakeoverByTask = false;
 
                     ret = Task.FromResult<IDisposable>(_cachedKey);
-                    _cachedKeyTasks.Push(ret);
                 }
                 else
                 {
@@ -188,7 +181,6 @@ namespace Catel.Threading
                     _allowTakeoverByTask = false;
 
                     var task = Task.FromResult<IDisposable>(_cachedKey);
-                    _cachedKeyTasks.Push(task);
                     return task.Result;
                 }
 
@@ -214,35 +206,20 @@ namespace Catel.Threading
 
             lock (_mutex)
             {
-                // Step 1: clear current task locks
-                if (_cachedKeyTasks.Count > 0)
+                _takenByCurrentTask.Value = false;
+
+                if (!_queue.IsEmpty)
                 {
-                    LogDebug($"[SYNC] Releasing cached key lock");
+                    LogDebug($"[SYNC] Queue is not yet empty, dequeueing next");
 
-                    var finish = _cachedKeyTasks.Pop();
-
-                    // Important: dispose the task result, not the task itself
-                    finish?.Result.Dispose();
+                    queuedLocker = _queue.Dequeue(_cachedKey);
                 }
-
-                // Step 2: check if there are pending locks left
-                if (_cachedKeyTasks.Count == 0)
+                else
                 {
-                    _takenByCurrentTask.Value = false;
+                    LogDebug($"[SYNC] Lock has no pending requests left, now fully free");
 
-                    if (!_queue.IsEmpty)
-                    {
-                        LogDebug($"[SYNC] Queue is not yet empty, dequeueing next");
-
-                        queuedLocker = _queue.Dequeue(_cachedKey);
-                    }
-                    else
-                    {
-                        LogDebug($"[SYNC] Lock has no pending requests left, now fully free");
-
-                        // No lock and no queue, fully free
-                        _taken = false;
-                    }
+                    // No lock and no queue, fully free
+                    _taken = false;
                 }
             }
 
