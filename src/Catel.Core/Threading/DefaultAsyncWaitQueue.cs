@@ -18,7 +18,7 @@
     {
         private readonly Dequeue<TaskCompletionSource<T>> _queue = new Dequeue<TaskCompletionSource<T>>();
 
-        private int Count
+        public int Count
         {
             get
             {

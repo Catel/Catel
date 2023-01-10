@@ -4062,9 +4062,11 @@ namespace Catel.Threading
     public sealed class DefaultAsyncWaitQueue<T> : Catel.Threading.IAsyncWaitQueue<T>
     {
         public DefaultAsyncWaitQueue() { }
+        public int Count { get; }
     }
     public interface IAsyncWaitQueue<T>
     {
+        int Count { get; }
         bool IsEmpty { get; }
         System.IDisposable CancelAll();
         System.IDisposable Dequeue(T result = default);

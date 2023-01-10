@@ -18,6 +18,11 @@
         bool IsEmpty { get; }
 
         /// <summary>
+        /// Gets the number of items left in the queue.
+        /// </summary>
+        int Count { get; }
+
+        /// <summary>
         /// Creates a new entry and queues it to this wait queue. The returned task must support both synchronous and asynchronous waits.
         /// </summary>
         /// <returns>The queued task.</returns>

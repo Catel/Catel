@@ -146,6 +146,8 @@ namespace Catel.Threading
                     {
                         _allowTakeoverByTask = true;
                     }, cancellationToken);
+
+                    LogDebug($"[ASYNC] New queue length: {_queue.Count}");
                 }
             }
 
@@ -190,6 +192,8 @@ namespace Catel.Threading
                 {
                     _allowTakeoverByTask = true;
                 }, cancellationToken);
+
+                LogDebug($"[SYNC] New queue length: {_queue.Count}");
             }
 
             return enqueuedTask.WaitAndUnwrapException();
@@ -210,9 +214,11 @@ namespace Catel.Threading
 
                 if (!_queue.IsEmpty)
                 {
-                    LogDebug($"[SYNC] Queue is not yet empty, dequeueing next");
+                    LogDebug($"[SYNC] Queue is not yet empty ({_queue.Count}), dequeueing next");
 
                     queuedLocker = _queue.Dequeue(_cachedKey);
+
+                    LogDebug($"[ASYNC] New queue length: {_queue.Count}");
                 }
                 else
                 {
@@ -268,7 +274,7 @@ namespace Catel.Threading
             /// </summary>
             public void Dispose()
             {
-                _asyncLock.LogDebug($"[{_asyncLock._id}] Releasing key");
+                _asyncLock.LogDebug("Releasing key");
 
                 _asyncLock.ReleaseLock();
             }
