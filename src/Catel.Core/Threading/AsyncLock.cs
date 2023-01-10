@@ -218,7 +218,12 @@ namespace Catel.Threading
 
                     queuedLocker = _queue.Dequeue(_cachedKey);
 
-                    LogDebug($"[ASYNC] New queue length: {_queue.Count}");
+                    LogDebug($"[SYNC] New queue length: {_queue.Count}");
+
+                    // Important: dispose inside lock to prevent hard to reproduce deadlocks
+                    LogDebug($"[SYNC] Disposing queued locker");
+
+                    queuedLocker.Dispose();
                 }
                 else
                 {
@@ -227,14 +232,6 @@ namespace Catel.Threading
                     // No lock and no queue, fully free
                     _taken = false;
                 }
-            }
-
-            // Outside scope to allow new locks to be taken
-            if (queuedLocker is not null)
-            {
-                LogDebug($"[SYNC] Disposing queued locker");
-
-                queuedLocker.Dispose();
             }
         }
 
