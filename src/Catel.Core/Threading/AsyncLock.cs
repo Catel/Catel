@@ -214,7 +214,7 @@ namespace Catel.Threading
 
                 if (!_queue.IsEmpty)
                 {
-                    LogDebug($"[SYNC] Queue is not yet empty ({_queue.Count}), dequeueing next");
+                    LogDebug($"[SYNC] Queue is not yet empty ({_queue.Count}), dequeuing next");
 
                     queuedLocker = _queue.Dequeue(_cachedKey);
 
