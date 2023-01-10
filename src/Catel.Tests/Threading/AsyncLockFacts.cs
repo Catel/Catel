@@ -237,7 +237,7 @@
             Assert.IsFalse(testClass._asyncLock.IsTaken);
         }
 
-        [Test]
+        [Test, Repeat(25)]
         public async Task Does_Not_Deadlock_Async()
         {
             Debug.Flush();
