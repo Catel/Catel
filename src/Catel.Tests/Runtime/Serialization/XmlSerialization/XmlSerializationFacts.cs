@@ -145,6 +145,85 @@
                 Assert.IsNotNull(inheritedFromModelBaseCopy.Name);
                 Assert.IsNotNull(notInheritedFromModelBaseCopy.Name);
             }
+
+            [Test, Timeout(5000)]
+            public async Task HierarchyOfModelBaseObjectsTestAsync()
+            {
+                var itemD = new DataItemD
+                {
+                    Name = "Item D"
+                };
+
+                var itemR = new DataItemR
+                {
+                    Name = "Data item R",
+                    Parts = new List<DataItemRPart>
+                    {
+                        new()
+                        {
+                            Item = itemD,
+                            Name = "Parts"
+                        }
+                    },
+                };
+
+                var itemV = new DataItemV
+                {
+                    First = itemR,
+                    Second = itemD
+                };
+
+                var data = new ContentData
+                {
+                    DataItems = new List<IDataItem>
+                    {
+                        itemV,
+                        itemR,
+                        itemD
+                    },
+
+                    Roots = new Dictionary<string, IDataItem>
+                    {
+                        { "Key", itemV }
+                    }
+                };
+
+                var xmlSerializer = SerializationFactory.GetXmlSerializer();
+                var dataCopy = SerializationTestHelper.SerializeAndDeserialize(data, SerializationFactory.GetXmlSerializer());
+
+                //var tempFile = Path.Combine(Path.GetTempPath(), "Test.xml");
+                //try
+                //{
+                //    using (var fileStream = File.Create(tempFile))
+                //    {
+                //        xmlSerializer.Serialize(data, fileStream);
+                //    }
+
+                //    using (var newFileStream = File.OpenRead(tempFile))
+                //    {
+                //        try
+                //        {
+                //            var data2 = xmlSerializer.Deserialize<ContentData>(newFileStream);
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Console.WriteLine(e);
+                //            throw;
+                //        }
+                //    }
+                //}
+                //catch (Exception e)
+                //{
+                //    Assert.Fail(e.Message);
+                //}
+                //finally
+                //{
+                //    if (File.Exists(tempFile))
+                //    {
+                //        File.Delete(tempFile);
+                //    }
+                //}
+            }
         }
 
         [TestFixture]
