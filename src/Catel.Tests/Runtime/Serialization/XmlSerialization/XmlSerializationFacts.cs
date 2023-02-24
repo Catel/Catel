@@ -5,14 +5,15 @@
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows.Markup;
     using System.Xml.Serialization;
-    using Catel.Collections;
     using Catel.Data;
     using Catel.IoC;
-    using Catel.Logging;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
     using Data;
+    using Namespace_1;
     using NUnit.Framework;
     using TestModels;
 
@@ -97,6 +98,53 @@
             }
 
             public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", string.Empty);
+        }
+
+        [TestFixture]
+        public class FailedTestFacts
+        {
+            [Test]
+            public async Task DictionaryWithItemsListSerializationTestAsync()
+            {
+                var serializableData = new SerializableData
+                {
+                    Items = new List<DataItem>
+                    {
+                        new()
+                    },
+
+                    Roots = new Dictionary<string, DataItem>
+                    {
+                        {
+                            "Key", new DataItem()
+                        }
+                    }
+                };
+
+                Assert.DoesNotThrow(() => SerializationTestHelper.SerializeAndDeserialize(serializableData, SerializationFactory.GetXmlSerializer()));
+            }
+
+            [Test]
+            public async Task SerializeInheritedFromModelBaseAsync()
+            {
+                var inheritedFromModelBase = new InheritedFromModelBase
+                {
+                    Name = "Inherited"
+                };
+
+                var inheritedFromModelBaseCopy = SerializationTestHelper.SerializeAndDeserialize(inheritedFromModelBase, SerializationFactory.GetXmlSerializer());
+
+
+                var notInheritedFromModelBase = new NotInheritedFromModelBase
+                {
+                    Name = "NotInherited"
+                };
+
+                var notInheritedFromModelBaseCopy = SerializationTestHelper.SerializeAndDeserialize(notInheritedFromModelBase, SerializationFactory.GetXmlSerializer());
+
+                Assert.IsNotNull(inheritedFromModelBaseCopy.Name);
+                Assert.IsNotNull(notInheritedFromModelBaseCopy.Name);
+            }
         }
 
         [TestFixture]
