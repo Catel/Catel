@@ -4104,15 +4104,3 @@ namespace Catel.Threading
         public static TResult WaitAndUnwrapException<TResult>(this System.Threading.Tasks.Task<TResult> task, System.Threading.CancellationToken cancellationToken) { }
     }
 }
-namespace System.ComponentModel
-{
-    public class BeginEditEventArgs : System.ComponentModel.EditEventArgs { }
-    public class CancelEditCompletedEventArgs : System.EventArgs { }
-    public class CancelEditEventArgs : System.ComponentModel.EditEventArgs { }
-    public class EditEventArgs : System.EventArgs { }
-    public class EndEditEventArgs : System.ComponentModel.EditEventArgs { }
-    public interface IAdvancedEditableObject : System.ComponentModel.IEditableObject { }
-    public interface IDataWarningInfo { }
-    public interface INotifyDataWarningInfo { }
-    public static class PropertyChangedEventArgsExtensions { }
-}
