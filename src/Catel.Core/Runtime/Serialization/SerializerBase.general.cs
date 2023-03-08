@@ -1004,7 +1004,7 @@
         /// <returns><c>true</c> if the specified member value is a root object; otherwise, <c>false</c>.</returns>
         protected virtual bool IsRootObject(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue, Func<MemberValue, bool> predicate)
         {
-            if (context.Depth > 0)
+            if (context.Depth > 1)
             {
                 return false;
             }

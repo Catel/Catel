@@ -46,9 +46,11 @@
             [MethodImpl(MethodImplOptions.NoInlining)]
             public async Task Xml_Collection_Async()
             {
-                var originalObject = new List<Country>();
-                originalObject.Add(new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425ae"), IsoCode = "AF", Description = "Afghanistan" });
-                originalObject.Add(new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425af"), IsoCode = "AG", Description = "Agypt" });
+                var originalObject = new List<Country>
+                {
+                    new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425ae"), IsoCode = "AF", Description = "Afghanistan" },
+                    new Country { Id = Guid.Parse("19721f5a-b406-4079-89b3-1011005425af"), IsoCode = "AG", Description = "Agypt" }
+                };
 
                 await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }
@@ -70,10 +72,12 @@
             [MethodImpl(MethodImplOptions.NoInlining)]
             public async Task Xml_Dictionary_Async()
             {
-                var originalObject = new Dictionary<string, int>();
-                originalObject.Add("skip", 1);
-                originalObject.Add("take", 2);
-                originalObject.Add("some other string", 3);
+                var originalObject = new Dictionary<string, int>
+                {
+                    { "skip", 1 },
+                    { "take", 2 },
+                    { "some other string", 3 }
+                };
 
                 await TestXmlSerializationWithExpectedFormatAsync(originalObject);
             }

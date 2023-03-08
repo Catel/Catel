@@ -353,21 +353,29 @@
 
             if (ShouldSerializeAsDictionary(memberValue))
             {
-                // TODO: For now only support top-level dictionaries
-                if (context.Depth == 0)
+                var collection = ConvertDictionaryToCollection(memberValue.Value);
+                if (collection is not null)
                 {
-                    var collection = ConvertDictionaryToCollection(memberValue.Value);
-                    if (collection is not null)
+                    // Wrap in element if this is not the root
+                    var isRoot = memberValue.Value == context.Model;
+                    if (!isRoot)
                     {
-                        // Note: since we are not getting into a WriteXml call, get known types for the current context here
-                        var knownTypesHashSet = context.Context.KnownTypes;
-                        var knownTypes = _dataContractSerializerFactory.GetKnownTypes(modelType, collection.GetType(), knownTypesHashSet.ToList());
-                        knownTypesHashSet.AddRange(knownTypes);
-
-                        Serialize(collection, context.Context, context.Configuration);
+                        context.Context.XmlWriter!.WriteStartElement(memberValue.NameForSerialization);
                     }
-                    return;
+
+                    // Note: since we are not getting into a WriteXml call, get known types for the current context here
+                    var knownTypesHashSet = context.Context.KnownTypes;
+                    var knownTypes = _dataContractSerializerFactory.GetKnownTypes(modelType, collection.GetType(), knownTypesHashSet.ToList());
+                    knownTypesHashSet.AddRange(knownTypes);
+
+                    Serialize(collection, context.Context, context.Configuration);
+
+                    if (!isRoot)
+                    {
+                        context.Context.XmlWriter!.WriteEndElement();
+                    }
                 }
+                return;
             }
 
             var propertyDataManager = PropertyDataManager.Default;
@@ -439,10 +447,9 @@
                         memberName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberToDeserialize.Name);
                     }
 
-                    if (ShouldSerializeAsDictionary(memberToDeserialize.GetBestMemberType()))
+                    if (elementMembers.ContainsKey(memberName))
                     {
-                        // Fixed name for items inside dictionaries
-                        memberName = "Items";
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Deserialized list of members already contains a member named '{memberName}', make sure to use unique member names");
                     }
 
                     elementMembers.Add(memberName, memberToDeserialize);
@@ -493,12 +500,24 @@
                     {
                         StartMemberDeserialization(context, elementMemberValue);
 
+                        var serializeAsDictionary = !context.Context.IsRootObject && ShouldSerializeAsDictionary(elementMemberValue.GetBestMemberType());
+                        if (serializeAsDictionary)
+                        {
+                            xmlReader.ReadStartElement();
+                            xmlReader.MoveToContent();
+                        }
+
                         var serializationObject = DeserializeMember(context, elementMemberValue);
 
                         var finalMemberValue = EndMemberDeserialization(context, elementMemberValue, serializationObject, serializerModifiers);
                         if (finalMemberValue is not null)
                         {
                             deserializedMemberValues.Add(finalMemberValue);
+                        }
+
+                        if (serializeAsDictionary)
+                        {
+                            xmlReader.ReadEndElement();
                         }
                     }
                     else
@@ -643,11 +662,12 @@
         /// <summary>
         /// Gets the name of the xml element.
         /// </summary>
+        /// <param name="context">The serialization context.</param>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="model">The model.</param>
         /// <param name="memberName">Name of the member.</param>
         /// <returns>System.String.</returns>
-        protected string GetXmlElementName(Type modelType, object model, string? memberName)
+        protected string GetXmlElementName(ISerializationContext<XmlSerializationContextInfo> context, Type modelType, object model, string? memberName)
         {
             string xmlElementName = string.Empty;
 
@@ -846,7 +866,7 @@
                 }
             }
 
-            // Serialization dictionaries as collections
+            // Serialize dictionaries as collections
             if (!isDeserialized && ShouldSerializeAsDictionary(propertyTypeToDeserialize))
             {
                 // Force deserialization as List<>
@@ -933,6 +953,15 @@
 
                         if (childValue is not null)
                         {
+                            if (childValue is SerializableKeyValuePair serializableKeyValuePair)
+                            {
+                                // Make sure we are not deserializing a dictionary
+                                if (!propertyTypeToDeserialize.IsGenericTypeEx() || propertyTypeToDeserialize.GetGenericArgumentsEx()[0] != typeof(SerializableKeyValuePair))
+                                {
+                                    childValue = serializableKeyValuePair.Value;
+                                }
+                            }
+
                             collection.Add(childValue);
 
                             if (!string.IsNullOrWhiteSpace(collectionItemGraphIdAttribute))
@@ -1147,7 +1176,7 @@
                                     actualSerializerElementType = itemType;
                                 }
 
-                                var subItemElementName = GetXmlElementName(itemType, item, null);
+                                var subItemElementName = GetXmlElementName(context, itemType, item, null);
                                 referenceInfo = referenceManager.GetInfo(item, true);
 
                                 if (!WriteXmlElementAsGraphReference(xmlWriter, referenceInfo, itemType, subItemElementName, namespacePrefix))
@@ -1234,7 +1263,7 @@
             {
                 rootName = _rootNameCache.GetFromCacheOrFetch(context.ModelType, () =>
                 {
-                    return GetXmlElementName(context.ModelType, model, null);
+                    return GetXmlElementName(context, context.ModelType, model, null);
                 });
             }
 

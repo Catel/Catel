@@ -3,12 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Runtime.Serialization;
     using System.Xml;
-    using System.Xml.Linq;
     using Catel.Collections;
-    using Catel.Data;
-    using Catel.IoC;
 
     /// <summary>
     /// Class containing all information about the binary serialization context.

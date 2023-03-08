@@ -19,7 +19,7 @@
         /// <returns><see cref="DataContractSerializer" /> for the given type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
-        List<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, List<Type>? additionalKnownTypes = null);
+        IReadOnlyCollection<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, IReadOnlyCollection<Type>? additionalKnownTypes = null);
 
         /// <summary>
         /// Gets the Data Contract serializer for a specific type. This method caches serializers so the
@@ -34,7 +34,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
-        DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string? rootNamespace = null, List<Type>? additionalKnownTypes = null);
+        DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string? rootNamespace = null, IReadOnlyCollection<Type>? additionalKnownTypes = null);
 
         /// <summary>
         /// Gets or sets the <see cref="DataContractResolver"/> passed in constructor to <see cref="DataContractSerializer"/>.

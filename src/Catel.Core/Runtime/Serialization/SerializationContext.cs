@@ -16,7 +16,6 @@
 #pragma warning disable IDISP006 // Implement IDisposable
         private ScopeManager<SerializationContextScope<TSerializationContextInfo>>? _scopeManager;
 #pragma warning restore IDISP006 // Implement IDisposable
-        private int? _depth;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
@@ -26,9 +25,6 @@
         /// <param name="context">The context.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <param name="configuration">The configuration.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         public SerializationContext(object model, Type modelType, TSerializationContextInfo context,
             SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
@@ -37,7 +33,6 @@
             ModelTypeName = modelType.GetSafeFullName(false);
             Context = context;
             ContextMode = contextMode;
-            TypeStack = new Stack<Type>();
             Configuration = configuration;
 
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
@@ -93,22 +88,7 @@
         {
             get
             {
-                if (!_depth.HasValue)
-                {
-                    // Note: changed to STackCount, that's more reliable than ReferenceManager since instances
-                    // can be re-used and this won't increase the depth
-                    //_depth = ReferenceManager.Count;
-                    var depth = TypeStack.Count;
-                    if (depth > 0)
-                    {
-                        // The type itself is pushed to the typestack, so the depth is - 1
-                        depth--;
-                    }
-
-                    _depth = depth;
-                }
-
-                return _depth.Value;
+                return TypeStack.Count;
             }
         }
 
