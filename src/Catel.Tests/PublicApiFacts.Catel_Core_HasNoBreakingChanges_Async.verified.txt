@@ -3671,6 +3671,7 @@ namespace Catel.Runtime.Serialization.Xml
         public System.Runtime.Serialization.DataContractResolver? DataContractResolver { get; set; }
         protected virtual bool AddTypeToKnownTypesIfSerializable(System.Type typeToAdd, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected virtual bool AllowNonPublicReflection(System.Type type) { }
+        protected virtual string CreateCacheKey(System.Type serializingType, System.Type typeToSerialize, string xmlName, System.Collections.Generic.IReadOnlyCollection<System.Type>? additionalKnownTypes) { }
         public virtual System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string? rootNamespace = null, System.Collections.Generic.IReadOnlyCollection<System.Type>? additionalKnownTypes = null) { }
         public virtual System.Collections.Generic.IReadOnlyCollection<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.IReadOnlyCollection<System.Type>? additionalKnownTypes = null) { }
         protected virtual void GetKnownTypes(System.Type type, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo, bool resolveAbstractClassesAndInterfaces = true) { }
