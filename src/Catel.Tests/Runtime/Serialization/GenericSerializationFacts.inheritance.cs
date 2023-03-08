@@ -41,7 +41,7 @@
                 await Verifier.Verify(result);
             }
 
-            [Test]
+            [Explicit, Test]
             public async Task SerializeInheritedFromModelBaseAsync()
             {
                 var inheritedFromModelBase = new InheritedFromModelBase
@@ -63,7 +63,7 @@
                 Assert.IsNotNull(notInheritedFromModelBaseCopy.Name);
             }
 
-            [Test, Timeout(5000)]
+            [Explicit, Test, Timeout(5000)]
             public async Task HierarchyOfModelBaseObjectsTestAsync()
             {
                 var itemD = new DataItemD

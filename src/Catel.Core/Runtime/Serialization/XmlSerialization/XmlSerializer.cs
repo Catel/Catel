@@ -500,7 +500,8 @@
                     {
                         StartMemberDeserialization(context, elementMemberValue);
 
-                        var serializeAsDictionary = !context.Context.IsRootObject && ShouldSerializeAsDictionary(elementMemberValue.GetBestMemberType());
+                        // If this is the root (ModelType implements IDictionary), it's not being wrapped
+                        var serializeAsDictionary = !context.ModelType.ImplementsInterfaceEx(typeof(IDictionary)) && ShouldSerializeAsDictionary(elementMemberValue.GetBestMemberType());
                         if (serializeAsDictionary)
                         {
                             xmlReader.ReadStartElement();
