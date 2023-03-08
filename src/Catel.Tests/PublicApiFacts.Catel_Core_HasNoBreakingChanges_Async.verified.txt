@@ -3671,21 +3671,21 @@ namespace Catel.Runtime.Serialization.Xml
         public System.Runtime.Serialization.DataContractResolver? DataContractResolver { get; set; }
         protected virtual bool AddTypeToKnownTypesIfSerializable(System.Type typeToAdd, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected virtual bool AllowNonPublicReflection(System.Type type) { }
-        public virtual System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string? rootNamespace = null, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null) { }
-        public virtual System.Collections.Generic.List<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null) { }
+        public virtual System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string? rootNamespace = null, System.Collections.Generic.IReadOnlyCollection<System.Type>? additionalKnownTypes = null) { }
+        public virtual System.Collections.Generic.IReadOnlyCollection<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.IReadOnlyCollection<System.Type>? additionalKnownTypes = null) { }
         protected virtual void GetKnownTypes(System.Type type, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo, bool resolveAbstractClassesAndInterfaces = true) { }
-        protected virtual System.Type[] GetKnownTypesViaAttributes(System.Type type) { }
+        protected virtual System.Collections.Generic.IReadOnlyCollection<System.Type> GetKnownTypesViaAttributes(System.Type type) { }
         protected virtual bool IsTypeSerializable(System.Type type, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected virtual bool ShouldTypeBeIgnored(System.Type type, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected class XmlSerializerTypeInfo
         {
             public XmlSerializerTypeInfo(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.IEnumerable<System.Type>? additionalKnownTypes = null) { }
-            public System.Collections.Generic.IEnumerable<System.Type> KnownTypes { get; }
+            public System.Collections.Generic.IReadOnlyCollection<System.Type> KnownTypes { get; }
             public System.Type SerializingType { get; }
-            public System.Collections.Generic.IEnumerable<System.Type> SpecialCollectionTypes { get; }
-            public System.Collections.Generic.IEnumerable<System.Type> SpecialGenericCollectionTypes { get; }
+            public System.Collections.Generic.IReadOnlyCollection<System.Type> SpecialCollectionTypes { get; }
+            public System.Collections.Generic.IReadOnlyCollection<System.Type> SpecialGenericCollectionTypes { get; }
             public System.Type TypeToSerialize { get; }
-            public System.Collections.Generic.IEnumerable<System.Type> TypesAlreadyHandled { get; }
+            public System.Collections.Generic.IReadOnlyCollection<System.Type> TypesAlreadyHandled { get; }
             public void AddCollectionAsHandled(System.Type type) { }
             public bool AddKnownType(System.Type type) { }
             public void AddTypeAsHandled(System.Type type) { }
@@ -3704,8 +3704,8 @@ namespace Catel.Runtime.Serialization.Xml
     public interface IDataContractSerializerFactory
     {
         System.Runtime.Serialization.DataContractResolver? DataContractResolver { get; set; }
-        System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string? rootNamespace = null, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null);
-        System.Collections.Generic.List<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.List<System.Type>? additionalKnownTypes = null);
+        System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string? rootNamespace = null, System.Collections.Generic.IReadOnlyCollection<System.Type>? additionalKnownTypes = null);
+        System.Collections.Generic.IReadOnlyCollection<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.IReadOnlyCollection<System.Type>? additionalKnownTypes = null);
     }
     public interface IXmlNamespaceManager
     {
@@ -3765,7 +3765,7 @@ namespace Catel.Runtime.Serialization.Xml
         protected virtual string GetNamespacePrefix() { }
         protected virtual string GetNamespaceUrl() { }
         protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration? configuration) { }
-        protected string GetXmlElementName(System.Type modelType, object model, string? memberName) { }
+        protected string GetXmlElementName(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Type modelType, object model, string? memberName) { }
         protected virtual object? ReadXmlObject(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Xml.XmlReader xmlReader, System.Runtime.Serialization.DataContractSerializer serializer, string namespacePrefix, string xmlName, System.Type modelType) { }
         protected override void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
