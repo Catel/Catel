@@ -51,9 +51,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
         public virtual IReadOnlyCollection<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, IReadOnlyCollection<Type>? additionalKnownTypes = null)
         {
-            var serializingTypeName = serializingType.GetSafeFullName(false);
-            var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = $"{serializingTypeName}|{typeToSerializeName}|{additionalKnownTypes?.Count ?? 0}";
+            var key = CreateCacheKey(serializingType, typeToSerialize, string.Empty, additionalKnownTypes);
 
             return _knownTypesCache.GetFromCacheOrFetch(key, () =>
             {
@@ -103,9 +101,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
-            var serializingTypeName = serializingType.GetSafeFullName(false);
-            var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = $"{serializingTypeName}|{typeToSerializeName}|{additionalKnownTypes?.Count ?? 0}|{xmlName}";
+            var key = CreateCacheKey(serializingType, typeToSerialize, xmlName, additionalKnownTypes);
 
             return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
             {
@@ -113,6 +109,22 @@ namespace Catel.Runtime.Serialization.Xml
                 var xmlSerializer = new DataContractSerializer(typeToSerialize, xmlName, rootNamespace ?? string.Empty, knownTypes);
                 return xmlSerializer;
             });
+        }
+
+        protected virtual string CreateCacheKey(Type serializingType, Type typeToSerialize, string xmlName, IReadOnlyCollection<Type>? additionalKnownTypes)
+        {
+            var serializingTypeName = serializingType.GetSafeFullName(false);
+            var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
+
+            var additionalTypes = string.Empty;
+
+            if (additionalKnownTypes is not null)
+            {
+                additionalTypes = string.Join(";", additionalKnownTypes.Select(x => x.Name));
+            }
+
+            var key = $"{serializingTypeName}|{typeToSerializeName}|{additionalTypes}|{xmlName}";
+            return key;
         }
 
         /// <summary>
