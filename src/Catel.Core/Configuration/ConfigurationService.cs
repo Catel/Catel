@@ -79,8 +79,6 @@
         public ConfigurationService(IObjectConverterService objectConverterService, ISerializer serializer,
             IAppDataService appDataService, IDispatcherService dispatcherService)
         {
-            ArgumentNullException.ThrowIfNull(dispatcherService);
-
             _objectConverterService = objectConverterService;
             _serializer = serializer;
             _appDataService = appDataService;
