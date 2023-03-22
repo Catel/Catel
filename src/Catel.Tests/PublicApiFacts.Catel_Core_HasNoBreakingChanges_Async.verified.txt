@@ -978,8 +978,8 @@ namespace Catel.Configuration
     }
     public class ConfigurationService : Catel.Configuration.IConfigurationService
     {
-        public ConfigurationService(Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer, Catel.Services.IAppDataService appDataService) { }
-        public ConfigurationService(Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer, Catel.Services.IAppDataService appDataService) { }
+        public ConfigurationService(Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer, Catel.Services.IAppDataService appDataService, Catel.Services.IDispatcherService dispatcherService) { }
+        public ConfigurationService(Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer, Catel.Services.IAppDataService appDataService, Catel.Services.IDispatcherService dispatcherService) { }
         public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs>? ConfigurationChanged;
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
@@ -4040,6 +4040,8 @@ namespace Catel.Threading
         public int Id { get; }
         public bool IsTaken { get; }
         public bool IsTakenByCurrentTask { get; }
+        public string? Name { get; set; }
+        public object? Tag { get; set; }
         public System.IDisposable Lock() { }
         public System.IDisposable Lock(System.Threading.CancellationToken cancellationToken) { }
         public Catel.Threading.AwaitableDisposable<System.IDisposable> LockAsync() { }

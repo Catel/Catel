@@ -25,6 +25,8 @@
         /// <param name="model">The model.</param>
         public override void OnSerializing(ISerializationContext context, object model)
         {
+            // The only reason we should have to clear is to make sure we can keep
+            // serializing new configuration value types
             _serializationManager.Clear(model.GetType());
 
             base.OnSerializing(context, model);

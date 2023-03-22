@@ -27,7 +27,8 @@
             private class SerializationConfigurationService : ConfigurationService
             {
                 public SerializationConfigurationService()
-                    : base(new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService())
+                    : base(new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), 
+                        new AppDataService(), new DispatcherService(new DispatcherProviderService()))
                 {
                 }
 

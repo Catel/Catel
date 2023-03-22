@@ -19,7 +19,9 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+#pragma warning disable IDE1006 // Naming Styles
         private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
+#pragma warning restore IDE1006 // Naming Styles
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
             var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
