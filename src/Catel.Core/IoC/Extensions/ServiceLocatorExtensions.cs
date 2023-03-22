@@ -415,16 +415,13 @@
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public static object ResolveRequiredType(this IServiceLocator serviceLocator, Type serviceType, object? tag = null)
         {
-            lock (serviceLocator)
+            var instance = serviceLocator.ResolveType(serviceType, tag);
+            if (instance is null)
             {
-                var instance = serviceLocator.ResolveType(serviceType, tag);
-                if (instance is null)
-                {
-                    throw CreateExceptionForRequiredType(serviceType);
-                }
-
-                return instance;
+                throw CreateExceptionForRequiredType(serviceType);
             }
+
+            return instance;
         }
 
         /// <summary>
