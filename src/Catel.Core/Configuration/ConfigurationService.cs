@@ -23,15 +23,29 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// If the timer duration is smaller than this threshold, the
+        /// timer will not be used.
+        /// </summary>
+        private const int IgnoreTimerThresholdInMilliseconds = 10;
+
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
-        private readonly IAppDataService _appDataService;
+        private readonly IAppDataService _appDataService; 
+        private readonly IDispatcherService _dispatcherService;
 
         private DynamicConfiguration? _localConfiguration;
         private DynamicConfiguration? _roamingConfiguration;
 
-        private readonly AsyncLock _localConfigurationLock = new();
-        private readonly AsyncLock _roamingConfigurationLock = new();
+        private readonly AsyncLock _localConfigurationLock = new()
+        {
+            Name = "ConfigurationService.Local"
+        };
+
+        private readonly AsyncLock _roamingConfigurationLock = new()
+        {
+            Name = "ConfigurationService.Roaming"
+        };
 
         private readonly Timer _localSaveConfigurationTimer = new();
         private readonly Timer _roamingSaveConfigurationTimer = new();
@@ -48,8 +62,10 @@
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
-        public ConfigurationService(IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
-            : this(objectConverterService, (ISerializer)serializer, appDataService)
+        /// <param name="dispatcherService">Dispatcher service.</param>
+        public ConfigurationService(IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService,
+            IDispatcherService dispatcherService)
+            : this(objectConverterService, (ISerializer)serializer, appDataService, dispatcherService)
         {
         }
 
@@ -59,12 +75,16 @@
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
+        /// <param name="dispatcherService">The application data service.</param>
         public ConfigurationService(IObjectConverterService objectConverterService, ISerializer serializer,
-            IAppDataService appDataService)
+            IAppDataService appDataService, IDispatcherService dispatcherService)
         {
+            ArgumentNullException.ThrowIfNull(dispatcherService);
+
             _objectConverterService = objectConverterService;
             _serializer = serializer;
             _appDataService = appDataService;
+            _dispatcherService = dispatcherService;
 
             _localSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _localSaveConfigurationTimer.Elapsed += OnLocalSaveConfigurationTimerElapsed;
@@ -76,6 +96,19 @@
             _localConfigurationLock.EnableExtremeLogging = true;
             _roamingConfigurationLock.EnableExtremeLogging = true;
 #endif
+
+            // To prevent any deadlocks (when saving from timer tick), make sure to
+            // dispatch on timer ticks.
+            // 
+            // 1. Create a type in the type factory, that tries to read a value inside INeedCustomInitialization
+            // 2. At the *same* time, because other values were stored before, the timer in this class ticks
+            //    to save for the very first time, causing the modifiers to be constructed in a timer thread
+            //
+            // Since the TypeFactory is still creating the type, it cannot construct the newly required type thus
+            // causing a deadlock.
+            //
+            // For this reason, we have decided to dispatcher the timer tick events back to the 
+            // "main" thread
         }
 
         /// <summary>

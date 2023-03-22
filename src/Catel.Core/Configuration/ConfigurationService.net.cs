@@ -6,6 +6,7 @@
     using System.Timers;
     using Catel.Data;
     using Catel.Logging;
+    using Services;
 
     public partial class ConfigurationService
     {
@@ -44,14 +45,16 @@
         {
             _localSaveConfigurationTimer.Stop();
 
-            await SaveLocalConfigurationAsync();
+            // Important: dispatch to prevent deadlocks, see ctor explanation
+            _dispatcherService.BeginInvoke(async ()=> await SaveLocalConfigurationAsync());
         }
 
         private async void OnRoamingSaveConfigurationTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _roamingSaveConfigurationTimer.Stop();
 
-            await SaveRoamingConfigurationAsync();
+            // Important: dispatch to prevent deadlocks, see ctor explanation
+            _dispatcherService.BeginInvoke(async () => await SaveRoamingConfigurationAsync());
         }
 
         protected virtual void ScheduleSaveConfiguration(ConfigurationContainer container)
@@ -72,7 +75,7 @@
         {
             _localSaveConfigurationTimer.Stop();
 
-            if (_localSaveConfigurationTimer.Interval > 0)
+            if (_localSaveConfigurationTimer.Interval > IgnoreTimerThresholdInMilliseconds)
             {
                 _localSaveConfigurationTimer.Start();
             }
@@ -86,7 +89,7 @@
         {
             _roamingSaveConfigurationTimer.Stop();
 
-            if (_roamingSaveConfigurationTimer.Interval > 0)
+            if (_roamingSaveConfigurationTimer.Interval > IgnoreTimerThresholdInMilliseconds)
             {
                 _roamingSaveConfigurationTimer.Start();
             }

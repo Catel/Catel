@@ -7,6 +7,7 @@ namespace Catel.Threading
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Catel.Logging;
@@ -103,6 +104,16 @@ namespace Catel.Threading
                 }
             }
         }
+
+        /// <summary>
+        /// Optional extra identifier to identify this async lock.
+        /// </summary>
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tag of this async lock.
+        /// </summary>
+        public object? Tag { get; set; }
 
         /// <summary>
         /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
@@ -242,7 +253,17 @@ namespace Catel.Threading
         {
             if (EnableExtremeLogging)
             {
-                Log.Debug($"[{_id}] {message}");
+                var logBuilder = new StringBuilder();
+
+                var name = Name;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    logBuilder.Append($"[{name}] ");
+                }
+
+                logBuilder.Append($"[{_id}] {message}");
+
+                Log.Debug(logBuilder.ToString());
             }
         }
 #endif

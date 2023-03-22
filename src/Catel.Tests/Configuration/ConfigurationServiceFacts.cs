@@ -19,7 +19,7 @@
             private readonly string _name;
 
             public TestConfigurationService(string name, IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
-                : base(objectConverterService, serializer, appDataService)
+                : base(objectConverterService, serializer, appDataService, new DispatcherService(new DispatcherProviderService()))
             {
                 _name = name;
             }

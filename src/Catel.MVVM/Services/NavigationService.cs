@@ -26,9 +26,10 @@
         /// <summary>
         /// The navigation root service.
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         protected readonly INavigationRootService NavigationRootService;
         protected readonly IUrlLocator UrlLocator;
-
+#pragma warning restore IDE1006 // Naming Styles
         public NavigationService(INavigationRootService navigationRootService, IUrlLocator urlLocator)
         {
             ArgumentNullException.ThrowIfNull(navigationRootService);

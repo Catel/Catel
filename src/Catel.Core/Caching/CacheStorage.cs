@@ -42,7 +42,10 @@
         /// <summary>
         /// The lock used when the key is <c>null</c>.
         /// </summary>
-        private readonly AsyncLock _nullKeyLock = new AsyncLock();
+        private readonly AsyncLock _nullKeyLock = new AsyncLock
+        {
+            Name = "NullKeyLock"
+        };
 
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
@@ -440,7 +443,7 @@
             }
         }
 
-        private void ExecuteInLock(TKey key, Action action)
+        private void ExecuteInLock(TKey? key, Action action)
         {
             ExecuteInLock(key, () =>
             {
@@ -449,7 +452,7 @@
             });
         }
 
-        private T ExecuteInLock<T>(TKey key, Func<T> action)
+        private T ExecuteInLock<T>(TKey? key, Func<T> action)
         {
             // Note: check comments below, this lock is required like this
             var asyncLock = GetLockByKey(key);
@@ -477,7 +480,7 @@
             }
         }
 
-        private Task ExecuteInLockAsync(TKey key, Func<Task> action)
+        private Task ExecuteInLockAsync(TKey? key, Func<Task> action)
         {
             return ExecuteInLockAsync(key, async () =>
             {
@@ -486,7 +489,7 @@
             });
         }
 
-        private async Task<T> ExecuteInLockAsync<T>(TKey key, Func<Task<T>> action)
+        private async Task<T> ExecuteInLockAsync<T>(TKey? key, Func<Task<T>> action)
         {
             var asyncLock = GetLockByKey(key);
             using (await asyncLock.LockAsync())
@@ -500,7 +503,7 @@
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The lock object.</returns>
-        private AsyncLock GetLockByKey(TKey key)
+        private AsyncLock GetLockByKey(TKey? key)
         {
             if (key is null)
             {
@@ -514,6 +517,11 @@
                 if (!_locksByKey.TryGetValue(key, out var asyncLock))
                 {
                     _locksByKey[key] = asyncLock = new AsyncLock();
+
+#if DEBUG
+                    // Only in debug, don't leak potential cache keys
+                    asyncLock.Name = key.ToString();
+#endif
                 }
 
                 return asyncLock;
