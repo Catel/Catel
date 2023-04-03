@@ -2,7 +2,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.MVVM")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Serialization.Json")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v7.0", FrameworkDisplayName=".NET 7.0")]
 namespace Catel
 {
     public static class Argument

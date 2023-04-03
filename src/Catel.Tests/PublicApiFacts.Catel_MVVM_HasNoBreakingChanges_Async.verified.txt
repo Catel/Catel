@@ -1,6 +1,6 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v7.0", FrameworkDisplayName=".NET 7.0")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Providers")]

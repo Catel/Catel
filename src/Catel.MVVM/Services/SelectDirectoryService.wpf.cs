@@ -16,7 +16,7 @@
 
             using (var browserDialog = new FolderBrowserDialog())
             {
-                browserDialog.Description = context.Title;
+                browserDialog.Description = context.Title ?? string.Empty;
                 browserDialog.ShowNewFolderButton = context.ShowNewFolderButton;
 
                 var initialDirectory = context.InitialDirectory;
