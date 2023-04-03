@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net6.0-windows;net7.0-windows</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>

@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows</TargetFrameworks>
     <AssemblyName>Catel.Tests</AssemblyName>
     <RootNamespace>Catel.Tests</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>

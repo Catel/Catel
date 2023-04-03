@@ -63,7 +63,7 @@ Added/fixed
 
 Platform support changes
 ========================
-(-) #1285 Remove support for all frameworks except .NET 6.0
+(-) #1285 Remove support for all frameworks except .NET 6.0, .NET 7.0
 (+) #2008 Implement nullable support (and remove all argument null checks) 
 
 ===========================================================

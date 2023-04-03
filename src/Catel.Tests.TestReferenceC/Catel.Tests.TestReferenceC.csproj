@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows</TargetFrameworks>
     <AssemblyName>C</AssemblyName>
     <RootNamespace>C</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
