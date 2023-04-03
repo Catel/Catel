@@ -25,7 +25,7 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2022/xx/xx
+2023/xx/xx
 
 Added/fixed
 ===========
@@ -45,6 +45,7 @@ Added/fixed
 (*) #1494 Improve non-generic ModelBase.RegisterProperty methods
 (*) #1507 Move Catel.MVVM collections to Catel.Core collections
 (*) #1536 Create T4 template to generate logging extensions with optimized memory usage
+(x) #2070 StringToObjectHelper.ToRightType returns wrong values for type byte
 (-) #1035 Remove services that are used less-frequently (AccelerometerService, CameraService, 
     LocationService, SchedulerService, VibrateService, ViewExportService)
 (-) #1101 Remove Catel.Reflection.TypeInfo
