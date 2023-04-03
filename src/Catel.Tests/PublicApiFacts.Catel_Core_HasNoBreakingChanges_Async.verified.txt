@@ -408,6 +408,7 @@ namespace Catel
         public static long ToLong(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static object? ToRightType(System.Type targetType, string value) { }
         public static object? ToRightType(System.Type targetType, string value, System.Globalization.CultureInfo? cultureInfo) { }
+        public static TTarget? ToRightType<TTarget>(string value) { }
         public static short ToShort(string value) { }
         public static short ToShort(string value, System.Globalization.CultureInfo? cultureInfo) { }
         public static string? ToString(string value) { }

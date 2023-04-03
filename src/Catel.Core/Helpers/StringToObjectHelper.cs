@@ -73,8 +73,8 @@
         /// <returns>The byte array value of the string.</returns>
         public static byte ToByte(string value)
         {
-            var bytes = ToByteArray(value);
-            return bytes.Length > 0 ? bytes[0] : default;
+            var intValue = ToInt(value);
+            return (byte)intValue;
         }
 
         /// <summary>
@@ -460,6 +460,16 @@
         public static string? ToString(string value)
         {
             return value;
+        }
+
+        /// <summary>
+        /// Converts a string to the right target type, such as <see cref="string"/>, <see cref="bool"/> and <see cref="DateTime"/>.
+        /// </summary>
+        /// <param name="value">The value to convert to the specified target type.</param>
+        /// <returns>The converted value. If the <paramref name="value"/> is <c>null</c>, this method will return <c>null</c>.</returns>
+        public static TTarget? ToRightType<TTarget>(string value)
+        {
+            return (TTarget?)ToRightType(typeof(TTarget), value, DefaultCulture);
         }
 
         /// <summary>
