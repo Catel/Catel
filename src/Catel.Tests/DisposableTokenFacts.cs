@@ -19,7 +19,18 @@
         }
 
         [Test]
-        public void InitializesWhenConstructed()
+        public void Accepts_Null_Instance()
+        {
+            using (var token = new DisposableToken(null, 
+                x => { },
+                x => { }))
+            {
+
+            }
+        }
+
+        [Test]
+        public void Initializes_When_Constructed()
         {
             var container = new DisposableTokenTestContainer();
 
@@ -35,7 +46,7 @@
         }
 
         [Test]
-        public void DisposesWhenDisposed()
+        public void Disposes_When_Disposed()
         {
             var container = new DisposableTokenTestContainer();
 

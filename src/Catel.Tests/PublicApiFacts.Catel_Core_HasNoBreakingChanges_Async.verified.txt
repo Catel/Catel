@@ -116,9 +116,9 @@ namespace Catel
         protected virtual void DisposeUnmanaged() { }
         protected override void Finalize() { }
     }
-    public class DisposableToken : Catel.DisposableToken<object>
+    public class DisposableToken : Catel.DisposableToken<object?>
     {
-        public DisposableToken(object instance, System.Action<Catel.IDisposableToken<object>> initialize, System.Action<Catel.IDisposableToken<object>> dispose, object? tag = null) { }
+        public DisposableToken(object? instance, System.Action<Catel.IDisposableToken<object?>> initialize, System.Action<Catel.IDisposableToken<object?>> dispose, object? tag = null) { }
     }
     public class DisposableToken<T> : Catel.Disposable, Catel.IDisposableToken<T>, System.IDisposable
     {

@@ -5,7 +5,7 @@
     /// <summary>
     /// A reusable disposable token that accepts initialization and uninitialization code.
     /// </summary>
-    public class DisposableToken : DisposableToken<object>
+    public class DisposableToken : DisposableToken<object?>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DisposableToken" /> class.
@@ -14,7 +14,7 @@
         /// <param name="initialize">The initialize action.</param>
         /// <param name="dispose">The dispose action.</param>
         /// <param name="tag">The tag.</param>
-        public DisposableToken(object instance, Action<IDisposableToken<object>> initialize, Action<IDisposableToken<object>> dispose, object? tag = null)
+        public DisposableToken(object? instance, Action<IDisposableToken<object?>> initialize, Action<IDisposableToken<object?>> dispose, object? tag = null)
             : base(instance, initialize, dispose, tag)
         {
         }
@@ -25,8 +25,8 @@
     /// </summary>
     public class DisposableToken<T> : Disposable, IDisposableToken<T>
     {
-        private T _instance;
-        private Action<IDisposableToken<T>> _dispose;
+        private readonly T _instance;
+        private readonly Action<IDisposableToken<T>> _dispose;
         private object? _tag;
 
         /// <summary>
