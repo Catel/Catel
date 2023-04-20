@@ -46,6 +46,7 @@ Added/fixed
 (*) #1507 Move Catel.MVVM collections to Catel.Core collections
 (*) #1536 Create T4 template to generate logging extensions with optimized memory usage
 (x) #2070 StringToObjectHelper.ToRightType returns wrong values for type byte
+(x) #2078 Duplicate subscription to close callback in UIVisualizerService
 (-) #1035 Remove services that are used less-frequently (AccelerometerService, CameraService, 
     LocationService, SchedulerService, VibrateService, ViewExportService)
 (-) #1101 Remove Catel.Reflection.TypeInfo
