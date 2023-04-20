@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Threading;
+    using Catel.Windows.Threading;
     using Logging;
     using MVVM;
     using Reflection;
@@ -46,6 +47,11 @@
 
             // In case the window is not initialized, return active window as main window
             return GetActiveWindow();
+        }
+
+        protected virtual bool ShouldForceDispatcher(FrameworkElement window)
+        {
+            return false;
         }
 
         protected virtual void SetOwnerWindow(FrameworkElement window, System.Windows.Window? ownerWindow)
@@ -100,7 +106,7 @@
                     }
 
                     // Important: don't set owner window here. Whenever this owner gets closed between this moment and the actual
-                    // showing, this window will be diposed automatically too. For more information, see https://github.com/Catel/Catel/issues/1794
+                    // showing, this window will be disposed automatically too. For more information, see https://github.com/Catel/Catel/issues/1794
                     //
                     // Keeping this code so it's easier to understand why things are done this way
                     //
@@ -112,6 +118,8 @@
                     // Explicitly clear since creating a data window automatically sets the owner window
                     SetOwnerWindow(window, null);
 
+                    // Note: handling the close subscription will happen when showing the window, not when creating,
+                    // see #2078 for more details
                     var completedCallback = context.CompletedCallback;
 
                     if (completedCallback is not null)
@@ -229,8 +237,9 @@
             }
             else
             {
-                // ORCOMP-337: Always invoke with priority Input.
-                window.Dispatcher.BeginInvoke(async () =>
+                Log.Debug($"Showing window '{window.GetType().Name}'");
+
+                var handler = async () =>
                 {
                     if (context.SetParentWindow)
                     {
@@ -256,7 +265,20 @@
                         Log.Error(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
                         tcs.TrySetException(ex);
                     }
-                }, DispatcherPriority.Input);
+                };
+
+                // ORCOMP-337: Always invoke with priority Input, and respect the dispatcher from the window. Note
+                // that this has changed from forced dispatcher behavior to only when required to prevent deadlocks
+                // during unit tests.
+                var dispatcher = window.Dispatcher;
+                if (ShouldForceDispatcher(window) || !dispatcher.CheckAccess())
+                {
+                    dispatcher.BeginInvoke(handler, DispatcherPriority.Input);
+                }
+                else
+                {
+                    handler();
+                }
             }
 
             return tcs.Task;
