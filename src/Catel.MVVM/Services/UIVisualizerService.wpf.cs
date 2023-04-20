@@ -34,14 +34,16 @@
         /// <returns>The main window.</returns>
         protected virtual FrameworkElement? GetMainWindow()
         {
-            var mainWindow = Application.Current.MainWindow;
-
-            if (PropertyHelper.TryGetPropertyValue(mainWindow, "NeverMeasured", out bool neverMeasured))
+            var mainWindow = Application.Current?.MainWindow;
+            if (mainWindow is not null)
             {
-                if (!neverMeasured)
+                if (PropertyHelper.TryGetPropertyValue(mainWindow, "NeverMeasured", out bool neverMeasured))
                 {
-                    // Window should be valid
-                    return mainWindow;
+                    if (!neverMeasured)
+                    {
+                        // Window should be valid
+                        return mainWindow;
+                    }
                 }
             }
 
@@ -120,12 +122,6 @@
 
                     // Note: handling the close subscription will happen when showing the window, not when creating,
                     // see #2078 for more details
-                    var completedCallback = context.CompletedCallback;
-
-                    if (completedCallback is not null)
-                    {
-                        HandleCloseSubscription(window, context, null);
-                    }
 
                     tcs.TrySetResult(window);
                 }

@@ -1982,6 +1982,7 @@ namespace Catel.Services
         public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = true) { }
         protected virtual void RegisterViewForViewModelIfRequired(System.Type viewModelType) { }
         protected virtual void SetOwnerWindow(System.Windows.FrameworkElement window, System.Windows.Window? ownerWindow) { }
+        protected virtual bool ShouldForceDispatcher(System.Windows.FrameworkElement window) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowContextAsync(Catel.Services.UIVisualizerContext context) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowWindowAsync(System.Windows.FrameworkElement window, Catel.Services.UIVisualizerContext context) { }
         public virtual bool Unregister(string name) { }

@@ -13,7 +13,7 @@
         {
             base.OnLoaded(e);
 
-            Dispatcher.BeginInvoke(() => this.Close());
+            Close();
         }
     }
 }

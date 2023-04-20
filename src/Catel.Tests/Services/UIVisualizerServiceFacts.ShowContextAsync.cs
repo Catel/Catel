@@ -15,8 +15,10 @@
         [TestFixture, Apartment(ApartmentState.STA)]
         public class The_ShowContextAsync_Method
         {
-            [TestCase, MaxTime(30 * 1000)]
-            public async Task Does_Not_Subscribe_More_Than_Once_To_Close_Handler_Async()
+            [MaxTime(30 * 1000)]
+            [TestCase(true)]
+            [TestCase(false)]
+            public async Task Does_Not_Subscribe_More_Than_Once_To_Close_Handler_Async(bool isModal)
             {
                 var viewLocatorMock = new Mock<IViewLocator>();
                 viewLocatorMock.Setup(x => x.ResolveView(It.IsAny<Type>()))
@@ -40,6 +42,7 @@
 
                 var uiVisualizerContext = new UIVisualizerContext
                 {
+                    IsModal = isModal,
                     Data = new AutoClosingViewModel(),
                     CompletedCallback = (sender, e) =>
                     {
