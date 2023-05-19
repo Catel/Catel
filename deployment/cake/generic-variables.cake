@@ -392,7 +392,7 @@ public class SonarQubeContext : BuildContextBase
     public bool SupportBranches { get; set; }
     public string Url { get; set; }
     public string Organization { get; set; }
-    public string Username { get; set; }
+    public string Token { get; set; }
     public string Password { get; set; }
     public string Project { get; set; }
 
@@ -496,13 +496,21 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
         Password = buildContext.BuildServer.GetVariable("RepositoryPassword", showValue: false)
     };
 
+    // Note: Username ('.Login') has been replaced by '.Token', but we support
+    // Username for backwards compatibility
+    var token = buildContext.BuildServer.GetVariable("SonarToken", showValue: false);
+    if (string.IsNullOrWhiteSpace(token))
+    {
+        token = buildContext.BuildServer.GetVariable("SonarUsername", showValue: false);
+    }
+
     data.SonarQube = new SonarQubeContext(data)
     {
         IsDisabled = buildContext.BuildServer.GetVariableAsBool("SonarDisabled", false, showValue: true),
         SupportBranches = buildContext.BuildServer.GetVariableAsBool("SonarSupportBranches", true, showValue: true),
         Url = buildContext.BuildServer.GetVariable("SonarUrl", showValue: true),
         Organization = buildContext.BuildServer.GetVariable("SonarOrganization", showValue: true),
-        Username = buildContext.BuildServer.GetVariable("SonarUsername", showValue: false),
+        Token = token,
         Password = buildContext.BuildServer.GetVariable("SonarPassword", showValue: false),
         Project = buildContext.BuildServer.GetVariable("SonarProject", data.Solution.Name, showValue: true)
     };
