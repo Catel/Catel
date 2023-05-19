@@ -392,9 +392,9 @@ Task("Build")
             sonarSettings.Organization = buildContext.General.SonarQube.Organization;
         }
 
-        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Token))
+        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Username))
         {
-            sonarSettings.Token = buildContext.General.SonarQube.Token;
+            sonarSettings.Login = buildContext.General.SonarQube.Username;
         }
 
         if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
@@ -456,9 +456,9 @@ Task("Build")
                     UseCoreClr = true
                 };
 
-                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Token))
+                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Username))
                 {
-                    sonarEndSettings.Token = buildContext.General.SonarQube.Token;
+                    sonarEndSettings.Login = buildContext.General.SonarQube.Username;
                 }
 
                 if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
