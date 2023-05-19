@@ -25,7 +25,7 @@
 #l "templates-tasks.cake"
 
 #addin "nuget:?package=Cake.FileHelpers&version=6.1.3"
-#addin "nuget:?package=Cake.Sonar&version=1.1.31"
+#addin "nuget:?package=Cake.Sonar&version=1.1.32"
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 #addin "nuget:?package=Newtonsoft.Json&version=13.0.3"
 
@@ -392,9 +392,9 @@ Task("Build")
             sonarSettings.Organization = buildContext.General.SonarQube.Organization;
         }
 
-        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Username))
+        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Token))
         {
-            sonarSettings.Login = buildContext.General.SonarQube.Username;
+            sonarSettings.Token = buildContext.General.SonarQube.Token;
         }
 
         if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
@@ -456,9 +456,9 @@ Task("Build")
                     UseCoreClr = true
                 };
 
-                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Username))
+                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Token))
                 {
-                    sonarEndSettings.Login = buildContext.General.SonarQube.Username;
+                    sonarEndSettings.Token = buildContext.General.SonarQube.Token;
                 }
 
                 if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
