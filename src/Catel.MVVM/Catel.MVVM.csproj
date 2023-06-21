@@ -33,6 +33,14 @@
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.*" />
   </ItemGroup>
+    
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
+    <!-- No net6.0 specific packages yet -->
+  </ItemGroup>  
+    
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
+    <!-- No net7.0 specific packages yet -->
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />

@@ -34,6 +34,14 @@
     <PackageReference Include="Verify.NUnit" Version="20.3.2" />
   </ItemGroup>
 
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
+    <!-- No net6.0 specific packages yet -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
+    <!-- No net7.0 specific packages yet -->
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
     <ProjectReference Include="..\Catel.MVVM\Catel.MVVM.csproj" />
