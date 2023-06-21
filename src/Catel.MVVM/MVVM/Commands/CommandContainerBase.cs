@@ -105,7 +105,7 @@
         /// <summary>
         /// Invalidates the command.
         /// </summary>
-        protected void InvalidateCommand()
+        public virtual void InvalidateCommand()
         {
             _compositeCommand.RaiseCanExecuteChanged();
         }
@@ -115,7 +115,7 @@
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns><c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanExecute(TCanExecuteParameter? parameter)
+        public virtual bool CanExecute(TCanExecuteParameter? parameter)
         {
             return true;
         }
@@ -139,7 +139,7 @@
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>Task.</returns>
-        protected virtual async Task ExecuteAsync(TExecuteParameter? parameter)
+        public virtual async Task ExecuteAsync(TExecuteParameter? parameter)
         {
             Execute(parameter);
         }
@@ -148,7 +148,7 @@
         /// Executes the command.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
-        protected virtual void Execute(TExecuteParameter? parameter)
+        public virtual void Execute(TExecuteParameter? parameter)
         {
         }
     }

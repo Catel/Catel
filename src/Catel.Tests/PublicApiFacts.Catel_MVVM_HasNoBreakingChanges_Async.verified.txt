@@ -174,10 +174,10 @@ namespace Catel.MVVM
     {
         protected CommandContainerBase(string commandName, Catel.MVVM.ICommandManager commandManager) { }
         public string CommandName { get; }
-        protected virtual bool CanExecute(TCanExecuteParameter? parameter) { }
-        protected virtual void Execute(TExecuteParameter? parameter) { }
-        protected virtual System.Threading.Tasks.Task ExecuteAsync(TExecuteParameter? parameter) { }
-        protected void InvalidateCommand() { }
+        public virtual bool CanExecute(TCanExecuteParameter? parameter) { }
+        public virtual void Execute(TExecuteParameter? parameter) { }
+        public virtual System.Threading.Tasks.Task ExecuteAsync(TExecuteParameter? parameter) { }
+        public virtual void InvalidateCommand() { }
     }
     public class CommandCreatedEventArgs : System.EventArgs
     {

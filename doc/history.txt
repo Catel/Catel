@@ -45,6 +45,7 @@ Added/fixed
 (*) #1494 Improve non-generic ModelBase.RegisterProperty methods
 (*) #1507 Move Catel.MVVM collections to Catel.Core collections
 (*) #1536 Create T4 template to generate logging extensions with optimized memory usage
+(*) #2101 Change Execute and CanExecute methods for CommandContainerBase to public
 (x) #2070 StringToObjectHelper.ToRightType returns wrong values for type byte
 (x) #2078 Duplicate subscription to close callback in UIVisualizerService
 (-) #1035 Remove services that are used less-frequently (AccelerometerService, CameraService, 
