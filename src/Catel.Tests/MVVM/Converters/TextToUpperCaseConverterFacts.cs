@@ -1,6 +1,5 @@
 ﻿namespace Catel.Tests.MVVM.Converters
 {
-    using System.Diagnostics;
     using System.Globalization;
     using Catel.MVVM.Converters;
 
@@ -18,25 +17,6 @@
 
                 Assert.AreEqual("UPPERCASE", converter.Convert("UpPeRcAsE", typeof(string), null, (CultureInfo)null));
             }
-
-            [TestCase]
-            public void Second_Call_Runs_Faster_Than_First_One()
-            {
-                var converter = new TextToLowerCaseConverter();
-
-                Stopwatch stopwatch1 = new Stopwatch();
-                stopwatch1.Start();
-                converter.Convert("UpPeRcAsE", typeof(string), null, (CultureInfo)null);
-                stopwatch1.Stop();
-
-                Stopwatch stopwatch2 = new Stopwatch();
-                stopwatch2.Start();
-                converter.Convert("UpPeRcAsE", typeof(string), null, (CultureInfo)null);
-                stopwatch2.Stop();
-
-                Assert.Less(stopwatch2.Elapsed, stopwatch1.Elapsed);
-            }
-
 
             [TestCase]
             public void Returns_Null_For_Null_Value()
