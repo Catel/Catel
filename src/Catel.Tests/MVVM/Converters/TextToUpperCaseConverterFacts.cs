@@ -8,13 +8,11 @@
 
     public class TextToUpperCaseConverterFacts
     {
-        #region Nested type: TheConvertMethod
         [TestFixture]
         public class TheConvertMethod
         {
-            #region Methods
             [TestCase]
-            public void ReturnsUpperCaseString()
+            public void Returns_UpperCase_String()
             {
                 var converter = new TextToUpperCaseConverter();
 
@@ -22,7 +20,7 @@
             }
 
             [TestCase]
-            public void SecondCallRunsFasterThanFirstOne()
+            public void Second_Call_Runs_Faster_Than_First_One()
             {
                 var converter = new TextToLowerCaseConverter();
 
@@ -41,14 +39,12 @@
 
 
             [TestCase]
-            public void ReturnsNullForNullValue()
+            public void Returns_Null_For_Null_Value()
             {
                 var converter = new TextToUpperCaseConverter();
 
                 Assert.AreEqual(null, converter.Convert(null, typeof(string), null, (CultureInfo)null));
             }
-            #endregion
         }
-        #endregion
     }
 }
