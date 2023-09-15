@@ -106,7 +106,7 @@
                 returnValue = Link.Convert(returnValue, OverrideType ?? targetType, parameter, cultureToUse);
             }
 
-            if (!IsConvertable<TConvert>(value))
+            if (!IsConvertable<TConvert>(returnValue))
             {
                 Log.Warning("Cannot convert value of type '{0}', expected type '{1}', ignoring converter results",
                     ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvert));
@@ -136,7 +136,7 @@
 
             var returnValue = value;
 
-            if (!IsConvertable<TConvertBack>(value))
+            if (!IsConvertable<TConvertBack>(returnValue))
             {
                 Log.Warning("Cannot convert back value of type '{0}', expected type '{1}', ignoring converter results",
                     ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvertBack));
