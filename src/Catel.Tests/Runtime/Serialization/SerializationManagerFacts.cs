@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq;
-    using Catel.Data;
     using Catel.Runtime.Serialization;
 
     using NUnit.Framework;

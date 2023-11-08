@@ -13,7 +13,6 @@ namespace Catel.IoC
     using Catel.Collections;
     using Catel.Linq;
     using Logging;
-    using MethodTimer;
     using Reflection;
     using Threading;
 

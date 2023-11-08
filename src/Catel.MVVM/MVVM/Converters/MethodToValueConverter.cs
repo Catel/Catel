@@ -1,7 +1,6 @@
 ﻿namespace Catel.MVVM.Converters
 {
     using System;
-    using Collections;
     using Logging;
     using Reflection;
 

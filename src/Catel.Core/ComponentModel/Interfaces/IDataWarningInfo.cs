@@ -1,7 +1,5 @@
 ﻿namespace System.ComponentModel
 {
-    using System.ComponentModel;
-
     /// <summary>
     /// Interface that is based on the <see cref="IDataErrorInfo"/> interface, but supports warnings instead of errors.
     /// </summary>

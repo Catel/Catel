@@ -3,7 +3,6 @@
     using Catel.Data;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.Views;
 
     /// <summary>
     /// Test view model.

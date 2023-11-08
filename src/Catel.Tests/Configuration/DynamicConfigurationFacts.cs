@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.Configuration
 {
     using System.IO;
-    using System.Runtime.Serialization;
     using System.Text;
     using Catel.Configuration;
     using Catel.Data;

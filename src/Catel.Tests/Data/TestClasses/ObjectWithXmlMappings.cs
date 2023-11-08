@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
-    using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using Catel.Data;
 

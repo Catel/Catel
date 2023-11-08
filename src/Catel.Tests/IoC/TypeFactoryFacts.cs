@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Threading;
     using Catel.IoC;
-    using Catel.Messaging;
     using Catel.MVVM;
     using Catel.Services;
     using Data;

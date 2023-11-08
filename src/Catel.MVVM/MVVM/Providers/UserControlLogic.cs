@@ -1,7 +1,6 @@
 ﻿namespace Catel.MVVM.Providers
 {
     using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
     using IoC;
     using Views;
@@ -11,7 +10,6 @@
     using Reflection;
     using System.Windows;
     using Windows.Controls;
-    using Catel.Data;
 
     /// <summary>
     /// MVVM Provider behavior implementation for a user control.

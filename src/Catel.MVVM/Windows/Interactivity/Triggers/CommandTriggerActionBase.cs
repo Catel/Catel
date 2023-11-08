@@ -1,6 +1,5 @@
 ﻿namespace Catel.Windows.Interactivity
 {
-    using System;
     using System.Windows;
     using System.Windows.Input;
     using Catel.Windows.Input;

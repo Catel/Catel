@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using MVVM;
 
     /// <summary>
     /// This interface defines a UI controller which can be used to display dialogs

@@ -1,7 +1,6 @@
 ﻿namespace Catel.Windows.Input
 {
     using System.Windows.Input;
-    using Catel;
 
     /// <summary>
     /// Extension methods for the <see cref="Catel.Windows.Input.InputGesture"/>.

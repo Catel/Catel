@@ -1,6 +1,5 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels
 {
-    using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
 

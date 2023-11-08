@@ -9,7 +9,6 @@
     using Collections;
     using Logging;
     using MethodTimer;
-    using Threading;
 
     /// <summary>
     /// Cache containing the types of an appdomain.

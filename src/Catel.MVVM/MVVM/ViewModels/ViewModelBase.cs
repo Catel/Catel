@@ -7,7 +7,6 @@
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
-    using System.Windows.Media.Media3D;
     using Auditing;
     using Collections;
     using Data;

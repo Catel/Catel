@@ -2,7 +2,6 @@
 {
     using System;
     using System.Reflection;
-    using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
 

@@ -2,12 +2,9 @@
 {
     using System.Windows;
     using System.Windows.Controls;
-    using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
-    using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;
     using System;
-    using System.ComponentModel;
     using Logging;
     using Reflection;
 

@@ -6,7 +6,6 @@
     using System.Timers;
     using Catel.Data;
     using Catel.Logging;
-    using Services;
 
     public partial class ConfigurationService
     {

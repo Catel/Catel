@@ -3,7 +3,6 @@
     using System;
     using Catel.MVVM;
     using SpecialTest;
-    using Views;
     using Tests.ViewModels;
 
     using NUnit.Framework;

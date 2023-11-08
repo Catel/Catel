@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using Catel.Data;
 using Catel.IoC;
 using Catel.Logging;

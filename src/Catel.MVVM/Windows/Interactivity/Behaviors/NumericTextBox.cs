@@ -1,9 +1,7 @@
 ﻿namespace Catel.Windows.Interactivity
 {
     using System.Windows.Controls;
-    using System.Windows.Data;
     using System.Windows.Input;
-    using UIEventArgs = System.EventArgs;
     using UIKeyEventArgs = System.Windows.Input.KeyEventArgs;
     using System;
     using System.Collections.Generic;

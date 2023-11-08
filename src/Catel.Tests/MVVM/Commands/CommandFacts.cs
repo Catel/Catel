@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.MVVM.Commands
 {
     using System;
-    using System.Diagnostics;
     using Catel.Data;
     using Catel.MVVM;
 

@@ -2,7 +2,6 @@
 {
     using System.Windows;
     using System.Windows.Controls;
-    using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
 
     /// <summary>

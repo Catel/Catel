@@ -20,7 +20,6 @@ namespace Catel.Runtime.Serialization.Json
 
 #if SUPPORT_BSON
     using Newtonsoft.Json.Bson;
-    using System.Reflection;
 #endif
 
     /// <summary>

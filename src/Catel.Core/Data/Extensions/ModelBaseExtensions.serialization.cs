@@ -1,7 +1,6 @@
 ﻿namespace Catel.Data
 {
     using System.IO;
-    using System.Xml.Serialization;
     using Catel.Runtime.Serialization;
 
     public static partial class ModelBaseExtensions

@@ -4,7 +4,6 @@
     using System.Windows.Input;
     using Microsoft.Xaml.Behaviors;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using UIEventArgs = System.EventArgs;
 
     /// <summary>
     /// Behavior that converts a key press on a specific UI element to a command.

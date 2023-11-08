@@ -1,6 +1,5 @@
 ﻿namespace Catel.Windows.Interactivity
 {
-    using System;
     using System.Windows;
 
     /// <summary>

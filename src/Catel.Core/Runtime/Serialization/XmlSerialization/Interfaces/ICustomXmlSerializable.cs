@@ -1,7 +1,5 @@
 ﻿namespace Catel.Runtime.Serialization.Xml
 {
-    using System.Xml.Linq;
-
     /// <summary>
     /// Allows a type to implement their own (de)serialization mechanism.
     /// </summary>

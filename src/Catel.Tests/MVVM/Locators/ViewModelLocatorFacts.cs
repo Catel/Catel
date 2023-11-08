@@ -7,10 +7,8 @@
     using SpecialTest;
     using Tests.ViewModels;
     using Tests.Views;
-    using ViewModels;
 
     using NUnit.Framework;
-    using Views;
 
     public class ViewModelLocatorFacts
     {

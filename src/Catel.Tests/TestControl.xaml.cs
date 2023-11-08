@@ -1,7 +1,5 @@
 ﻿namespace Catel.Tests
 {
-    using System.Windows.Controls;
-
     /// <summary>
     /// Interaction logic for TestControl.xaml
     /// </summary>

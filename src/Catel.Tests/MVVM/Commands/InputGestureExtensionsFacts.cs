@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests
 {
     using System.Windows.Input;
-    using Windows.Input;
     using NUnit.Framework;
     using Catel.Windows.Input;
     using InputGesture = Catel.Windows.Input.InputGesture;

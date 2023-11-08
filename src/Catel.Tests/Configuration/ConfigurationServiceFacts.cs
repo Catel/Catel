@@ -10,7 +10,6 @@
     using Catel.IO;
     using System.IO;
     using System.Threading.Tasks;
-    using System.ComponentModel;
 
     public partial class ConfigurationServiceFacts
     {

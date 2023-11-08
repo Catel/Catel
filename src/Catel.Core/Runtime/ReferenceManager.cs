@@ -14,12 +14,12 @@
         private static readonly IEqualityComparer<object> DefaultReferenceEqualityComparer = new ReferenceEqualityComparer<object>();
 
         /// <summary>
-        /// The dictionary containing the actualy information by object reference.
+        /// The dictionary containing the actual information by object reference.
         /// </summary>
         private readonly Dictionary<object, ReferenceInfo> _referenceInfoByInstance = new Dictionary<object, ReferenceInfo>(DefaultReferenceEqualityComparer);
 
         /// <summary>
-        /// The dictionary containing the actualy information by id.
+        /// The dictionary containing the actual information by id.
         /// </summary>
         private readonly Dictionary<int, ReferenceInfo> _referenceInfoById = new Dictionary<int, ReferenceInfo>();
 

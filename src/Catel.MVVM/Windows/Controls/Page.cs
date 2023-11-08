@@ -5,7 +5,6 @@
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
-    using Catel.Reflection;
     using System.Windows;
     using UIEventArgs = System.EventArgs;
 

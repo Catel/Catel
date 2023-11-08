@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Logging;
 
     /// <summary>
     /// In memory log listener that keeps track of the latest log messages.

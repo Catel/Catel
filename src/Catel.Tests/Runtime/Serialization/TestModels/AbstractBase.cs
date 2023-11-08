@@ -1,10 +1,5 @@
 ﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Data;
 
     public abstract class AbstractBase : ModelBase

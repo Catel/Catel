@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq.Expressions;
-    using System.Runtime.Serialization;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 

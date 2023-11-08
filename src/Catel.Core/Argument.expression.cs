@@ -4,7 +4,6 @@
     using System.Diagnostics;
     using System.Linq.Expressions;
     using System.Text.RegularExpressions;
-    using Catel.Logging;
     using Data;
 
     /// <summary>

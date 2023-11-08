@@ -2,10 +2,7 @@
 {
     using System.Windows.Input;
     using Catel.Windows.Input;
-    using System;
     using System.Windows;
-    using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
 
     /// <summary>
     /// Behavior base class that handles a safe unsubscribe and clean up because the default

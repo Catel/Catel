@@ -1,7 +1,6 @@
 ﻿namespace Catel
 {
     using System;
-    using Collections;
 
     /// <summary>
     /// Exception in case the functionality is not supported in the current platform.

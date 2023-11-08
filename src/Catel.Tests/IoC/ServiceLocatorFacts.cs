@@ -2,17 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using Catel.Caching;
-    using Catel.Configuration;
     using Catel.IoC;
     using Catel.MVVM;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Xml;
     using Catel.Services;
     using Catel.Tests.Data;
-    using Moq;
     using NUnit.Framework;
 
     public partial class ServiceLocatorFacts

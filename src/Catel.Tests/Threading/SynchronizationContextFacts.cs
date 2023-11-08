@@ -1,7 +1,6 @@
 namespace Catel.Tests.Threading
 {
     using System;
-    using System.Threading;
     using NUnit.Framework;
 
     using SynchronizationContext = Catel.Threading.SynchronizationContext;

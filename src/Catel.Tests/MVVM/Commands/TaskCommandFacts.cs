@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
 
     using Catel.MVVM;
-    using Catel.Threading;
 
     using NUnit.Framework;
 

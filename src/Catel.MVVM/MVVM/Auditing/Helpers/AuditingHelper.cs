@@ -6,8 +6,6 @@
     using System.Threading.Tasks;
     using Catel.Data;
     using Catel.IoC;
-    using Reflection;
-    using Threading;
 
     /// <summary>
     /// Helper for auditing which handles the complete subscription of an <see cref="IViewModel"/> instance

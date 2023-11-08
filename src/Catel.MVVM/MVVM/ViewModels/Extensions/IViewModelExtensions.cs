@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Catel.Data;
     using Logging;
     using Threading;
 

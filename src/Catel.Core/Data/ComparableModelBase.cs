@@ -1,11 +1,9 @@
 ﻿namespace Catel.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Xml.Serialization;
     using IoC;
     using System.ComponentModel;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Comparable model base.

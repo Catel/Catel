@@ -2,9 +2,7 @@
 {
     using System.Globalization;
     using System.Windows;
-    using IoC;
     using MVVM.Views;
-    using System;
     using UIEventArgs = System.EventArgs;
     using Microsoft.Xaml.Behaviors;
 

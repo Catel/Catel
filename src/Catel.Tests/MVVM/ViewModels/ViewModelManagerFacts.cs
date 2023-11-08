@@ -3,7 +3,6 @@
     using System;
     using System.Linq;
     using Catel.MVVM;
-    using Tests.ViewModels;
     using TestClasses;
 
     using NUnit.Framework;

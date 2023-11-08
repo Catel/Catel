@@ -1,7 +1,5 @@
 ﻿namespace Catel.Runtime.Serialization
 {
-    using Catel.Data;
-
     /// <summary>
     /// Allows modifications for a specific model for every supported serializer.
     /// </summary>

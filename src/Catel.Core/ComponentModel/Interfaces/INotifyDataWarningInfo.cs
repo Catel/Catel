@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections;
-    using System.ComponentModel;
 
     /// <summary>
     /// Interface that is based on the <see cref="INotifyDataErrorInfo"/> interface, but supports warnings instead of errors.

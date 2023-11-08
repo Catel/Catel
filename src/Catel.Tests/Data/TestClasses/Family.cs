@@ -1,8 +1,5 @@
 ﻿namespace Catel.Tests.Data.TestClasses
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Collections.ObjectModel;
     using Catel.Data;
 

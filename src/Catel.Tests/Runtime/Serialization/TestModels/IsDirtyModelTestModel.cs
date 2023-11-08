@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
     [Serializable]

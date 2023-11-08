@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Threading;
-    using Catel.Windows.Threading;
     using Logging;
     using MVVM;
     using Reflection;

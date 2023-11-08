@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Logging;
-    using Threading;
 
     /// <summary>
     /// Extensions for asynchronous event handlers.

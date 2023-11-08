@@ -4,7 +4,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Logging;
-    using Catel.Threading;
     using System.Windows.Threading;
 
     /// <summary>

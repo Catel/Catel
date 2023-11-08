@@ -1,7 +1,6 @@
 ﻿namespace Catel.Services
 {
     using System;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Extension methods for the <see cref="IDispatcherService"/>.

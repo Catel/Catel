@@ -1,7 +1,6 @@
 ﻿namespace System.ComponentModel
 {
     using System;
-    using Catel;
 
     /// <summary>
     /// Event args class containing information about events that occur in the <see cref="IAdvancedEditableObject"/>

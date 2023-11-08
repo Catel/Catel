@@ -1,7 +1,6 @@
 ﻿namespace Catel.Windows.Input
 {
     using System.Collections.Generic;
-    using System;
     using System.Windows.Input;
     using ModifierKeys = System.Windows.Input.ModifierKeys;
 

@@ -1,13 +1,9 @@
 ﻿namespace Catel.Tests.Reflection
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Catel.Reflection;
     using Catel.Tests.Reflection.Models;
-    using Catel.Threading;
     using NUnit.Framework;
 
     public class FastMemberInvokerFacts

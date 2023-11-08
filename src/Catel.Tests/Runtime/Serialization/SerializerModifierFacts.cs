@@ -1,11 +1,6 @@
 ﻿namespace Catel.Tests.Runtime.Serialization
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using Catel.Data;
     using Catel.Runtime.Serialization;
-    using Catel.Tests.Data;
     using Catel.Tests.Runtime.Serialization.TestModels;
     using NUnit.Framework;
 

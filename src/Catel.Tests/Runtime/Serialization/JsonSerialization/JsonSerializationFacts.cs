@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using Catel.IoC;

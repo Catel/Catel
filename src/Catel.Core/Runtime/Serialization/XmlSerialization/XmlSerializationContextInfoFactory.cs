@@ -1,7 +1,6 @@
 ﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
-    using System.Xml.Linq;
 
     /// <summary>
     /// Xml serialization context factory.

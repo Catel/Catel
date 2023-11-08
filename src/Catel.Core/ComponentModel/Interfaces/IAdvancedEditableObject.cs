@@ -1,7 +1,6 @@
 ﻿namespace System.ComponentModel
 {
     using System;
-    using System.ComponentModel;
 
     /// <summary>
     /// Interface extending the <see cref="IEditableObject"/> interface with events which allows preventing the

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Catel.Threading;
     using NUnit.Framework;
 
     [TestFixture]

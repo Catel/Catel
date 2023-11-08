@@ -6,7 +6,6 @@
     using System.Threading;
     using Catel.Data;
     using Logging;
-    using Reflection;
     using Threading;
 
     /// <summary>

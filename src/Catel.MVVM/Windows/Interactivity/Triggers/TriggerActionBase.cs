@@ -1,6 +1,5 @@
 ﻿namespace Catel.Windows.Interactivity
 {
-    using System;
     using System.Windows;
     using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;

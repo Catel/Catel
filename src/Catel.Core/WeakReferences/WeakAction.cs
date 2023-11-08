@@ -1,7 +1,6 @@
 ﻿namespace Catel
 {
     using System;
-    using Catel.Data;
     using Logging;
     using Reflection;
 

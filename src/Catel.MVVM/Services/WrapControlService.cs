@@ -10,7 +10,6 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Documents;
-    using Catel.Windows.Interactivity;
 
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.

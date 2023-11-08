@@ -1,10 +1,5 @@
 ﻿namespace Catel.Tests.Runtime.Serialization
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Runtime.Serialization;
     using Catel.Tests.Runtime.Serialization.TestModels;
     using NUnit.Framework;
@@ -30,7 +25,7 @@
                 MyString = "This is a serialization test."
             };
 
-            // Round-trip the instance: Serialize and de-serialize with a BinaryFormatter
+            // Round-trip the instance: Serialize and de-serialize
             var actual = SerializationTestHelper.SerializeAndDeserialize(input, SerializationFactory.GetXmlSerializer());
 
             // Double-check that the internal values are preserved

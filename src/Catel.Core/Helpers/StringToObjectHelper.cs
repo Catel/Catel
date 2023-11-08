@@ -4,7 +4,6 @@
     using System.Globalization;
     using System.Text;
     using Catel.Data;
-    using Collections;
     using Logging;
     using Reflection;
 

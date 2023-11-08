@@ -1,10 +1,8 @@
 ﻿namespace Catel.Windows.Interactivity
 {
-    using System;
     using System.Windows;
     using System.Windows.Controls;
     using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
 
     /// <summary>
     /// Selects all the text when the <see cref="TextBox"/> or <see cref="PasswordBox"/> is focused.

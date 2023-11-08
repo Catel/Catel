@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using Catel.Reflection;
 
     /// <summary>
     /// Class that is aware of changes of child objects by using the <see cref="ChangeNotificationWrapper"/>.

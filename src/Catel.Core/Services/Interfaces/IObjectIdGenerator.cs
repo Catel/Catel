@@ -1,7 +1,5 @@
 ﻿namespace Catel.Services
 {
-    using System;
-
     /// <summary>
     /// The object id generator service.
     /// </summary>

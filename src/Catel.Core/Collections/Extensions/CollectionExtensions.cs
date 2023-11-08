@@ -6,7 +6,6 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Logging;
-    using Microsoft.VisualBasic;
 
     /// <summary>
     /// Extensions for the <see cref="ICollection"/> and <see cref="Collection{T}"/> classes.

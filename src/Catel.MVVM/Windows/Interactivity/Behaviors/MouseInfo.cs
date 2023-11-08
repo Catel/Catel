@@ -2,7 +2,6 @@
 {
     using System;
     using System.Windows;
-    using UIEventArgs = System.EventArgs;
 
     /// <summary>
     /// Trigger that enables a property to bind the several mouse events for the associated object.

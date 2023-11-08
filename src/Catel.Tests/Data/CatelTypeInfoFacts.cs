@@ -1,7 +1,5 @@
 ﻿namespace Catel.Tests.Data
 {
-    using System;
-    using System.Linq;
     using Catel.Data;
 
     using NUnit.Framework;

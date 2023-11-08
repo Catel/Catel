@@ -1,6 +1,5 @@
 ﻿namespace Catel.Tests.Data
 {
-    using System.Collections.Generic;
     using Catel.Collections;
     using Catel.Data;
     using NUnit.Framework;

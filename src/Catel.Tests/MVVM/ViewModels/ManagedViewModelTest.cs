@@ -6,7 +6,6 @@
     using TestClasses;
 
     using NUnit.Framework;
-    using System.Threading.Tasks;
 
     [TestFixture]
     public class ManagedViewModelTest

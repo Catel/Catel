@@ -1,8 +1,6 @@
 ﻿namespace Catel.Runtime.Serialization
 {
     using System;
-    using System.Reflection;
-    using Catel.Services;
 
     /// <summary>
     /// Class containing information about a (de)serialized value.
