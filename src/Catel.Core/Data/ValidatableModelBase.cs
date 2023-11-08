@@ -76,9 +76,13 @@
 
         private readonly Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext> _dataAnnotationsValidationContext = new Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext>();
 
+        [field: NonSerialized]
         private event EventHandler<DataErrorsChangedEventArgs>? _errorsChanged;
+        [field: NonSerialized]
         private event EventHandler<DataErrorsChangedEventArgs>? _warningsChanged;
+        [field: NonSerialized]
         private event EventHandler<ValidationEventArgs>? _validating;
+        [field: NonSerialized]
         private event EventHandler<ValidationEventArgs>? _validated;
 
         /// <summary>

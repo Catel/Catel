@@ -120,6 +120,7 @@
         /// </summary>
         private BackupData? _backup;
 
+        [field: NonSerialized]
         private event EventHandler<BeginEditEventArgs>? _beginEditingEvent;
 
         /// <summary>
@@ -132,10 +133,13 @@
         /// be no need for the <see cref="EditEventArgs.EditableObject"/> as
         /// the sender of the event should be the same information.
         /// </remarks>
+        [field: NonSerialized]
         private event EventHandler<EventArgs>? _cancelEditingCompletedEvent;
 
+        [field: NonSerialized]
         private event EventHandler<CancelEditEventArgs>? _cancelEditingEvent;
 
+        [field: NonSerialized]
         private event EventHandler<EndEditEventArgs>? _endEditingEvent;
 
         event EventHandler<BeginEditEventArgs>? IAdvancedEditableObject.BeginEditing

@@ -13,6 +13,7 @@
         /// <summary>
         /// Occurs when a property of this object has changed.
         /// </summary>
+        [field: NonSerialized]
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
