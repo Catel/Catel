@@ -2,7 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Windows.Data;
+    using Catel.Data;
+    using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
 
@@ -10,7 +13,7 @@
     public class ChildAwareModelBaseFacts
     {
         [TestCase]
-        public void AllowsRegistrationOfObservableCollection()
+        public void Allows_Registration_Of_ObservableCollection()
         {
             var model = new ModelWithObservableCollection();
             model.Collection = new ObservableCollection<int>(new List<int>() { 1, 2, 3 });
@@ -21,14 +24,14 @@
         }
 
         [TestCase]
-        public void AllowsRegistrationOfCollectionViewSource()
+        public void Allows_Registration_Of_CollectionViewSource()
         {
             var model = new ModelWithCollectionViewSource();
             model.Collection = new CollectionView(new List<int>() { 1, 2, 3 });
         }
 
         [TestCase]
-        public void RegistersChangeNotificationsOfDefaultValues()
+        public void Registers_Change_Notifications_Of_Default_Values()
         {
             var model = new ModelWithObservableCollection();
 
@@ -38,7 +41,7 @@
         }
 
         [Test]
-        public void ValidatesParentOnCollectionChanged()
+        public void Validates_Parent_On_CollectionChanged()
         {
             var c = new ValidatableChild();
             var p = new ValidatableParent();
@@ -62,7 +65,7 @@
         }
 
         [Test]
-        public void ValidatesParentOnCollectionItemPropertyChanged()
+        public void Validates_Parent_On_CollectionItemPropertyChanged()
         {
             var c = new ValidatableChild();
             var p = new ValidatableParent();
@@ -85,7 +88,7 @@
         }
 
         [Test]
-        public void ValidatesParentOnPropertyChanged()
+        public void Validates_Parent_On_PropertyChanged()
         {
             var c = new ValidatableChild();
             var p = new ValidatableParent();
@@ -105,8 +108,6 @@
             Assert.IsFalse(p.HasErrors);
             Assert.IsFalse(c.HasErrors);
         }
-
-
 
         //[TestCase]
         //public void IsDirtyWithChildrenWhenSavingChild()
@@ -146,13 +147,12 @@
         //    Assert.IsFalse(computerSettings.IsDirty);
         //}
 
-
         [Test]
-        public void ChildChangesPropagateToGrandParent()
+        public void Child_Changes_Propagate_To_GrandParent()
         {
-            TestClasses.Child c = new TestClasses.Child();
-            TestClasses.Parent p = new TestClasses.Parent();
-            GrandParent g = new GrandParent();
+            var c = new TestClasses.Child();
+            var p = new TestClasses.Parent();
+            var g = new GrandParent();
             g.Parents.Add(p);
             p.Children.Add(c);
 
@@ -169,6 +169,30 @@
             Assert.IsTrue(c.IsDirty);
             Assert.IsTrue(p.IsDirty);
             Assert.IsTrue(g.IsDirty);
+        }
+
+        [Test]
+        public void Serializing_Delegates_Exception_Test()
+        {
+            var model = new TestModel();
+
+            Assert.DoesNotThrow(() => (model as IEditableObject).BeginEdit());
+        }
+
+        private class TestModel : ChildAwareModelBase
+        {
+            public TestModel()
+            {
+                ChildProp = new ObservableObject();
+            }
+
+            public ObservableObject? ChildProp
+            {
+                get { return GetValue<ObservableObject?>(ChildPropProperty); }
+                set { SetValue(ChildPropProperty, value); }
+            }
+
+            public static readonly IPropertyData ChildPropProperty = RegisterProperty<ObservableObject?>(nameof(ChildProp), (ObservableObject?)null);
         }
     }
 }
