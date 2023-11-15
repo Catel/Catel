@@ -62,6 +62,7 @@ Added/fixed
 (-) #1655 Remove ExceptionTester
 (-) #1661 Remove ActionTask, TaskBase, ProgressNotifyableViewModel
 (-) #1662 Remove NavigationViewModelBase
+(-) #2148 Remove TypeExtensions.IsSerializableEx
 
 Platform support changes
 ========================

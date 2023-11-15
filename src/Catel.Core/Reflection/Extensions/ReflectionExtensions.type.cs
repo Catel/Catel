@@ -254,19 +254,6 @@
         }
 
         /// <summary>
-        /// The is serializable ex.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>The is serializable ex.</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static bool IsSerializableEx(this Type type)
-        {
-            ArgumentNullException.ThrowIfNull(type);
-
-            return type.IsSerializable;
-        }
-
-        /// <summary>
         /// The is public ex.
         /// </summary>
         /// <param name="type">The type.</param>

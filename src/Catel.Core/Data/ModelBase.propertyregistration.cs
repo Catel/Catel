@@ -188,10 +188,8 @@
                 };
             }
 
+            // 
             var isSerializable = true;
-
-            isSerializable = typeof(TValue).IsInterfaceEx() || typeof(TValue).IsSerializableEx();
-
             var property = new PropertyData<TValue>(name, typedDefaultValueCallback, propertyChangedEventHandler, isSerializable,
                 includeInSerialization, includeInBackup, isModelBaseProperty, false);
             return property;
@@ -220,9 +218,8 @@
                 createDefaultValue = () => default!;
             }
 
+            // GH-2148: no longer supporting Type.IsSerializable, so assuming everything is serializable
             var isSerializable = true;
-
-            isSerializable = typeof(TValue).IsInterfaceEx() || typeof(TValue).IsSerializableEx();
 
             var property = new PropertyData<TValue>(name, createDefaultValue, propertyChangedEventHandler, isSerializable,
                 includeInSerialization, includeInBackup, isModelBaseProperty, false);

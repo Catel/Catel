@@ -381,8 +381,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-            // IsSerializable
-            return type.IsSerializableEx();
+            return false;
         }
 
         /// <summary>

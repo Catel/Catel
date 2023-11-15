@@ -3093,7 +3093,6 @@ namespace Catel.Reflection
         public static bool IsNestedPublicEx(this System.Type type) { }
         public static bool IsPrimitiveEx(this System.Type type) { }
         public static bool IsPublicEx(this System.Type type) { }
-        public static bool IsSerializableEx(this System.Type type) { }
         public static bool IsValueTypeEx(this System.Type type) { }
         public static System.Type MakeGenericTypeEx(this System.Type type, System.Type typeArgument) { }
         public static System.Type MakeGenericTypeEx(this System.Type type, params System.Type[] typeArguments) { }
