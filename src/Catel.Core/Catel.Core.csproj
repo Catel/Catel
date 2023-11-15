@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <AssemblyName>Catel.Core</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -31,6 +31,10 @@
     
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.*" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.*" />
   </ItemGroup>
 
   <ItemGroup>

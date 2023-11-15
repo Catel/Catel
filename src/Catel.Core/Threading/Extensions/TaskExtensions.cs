@@ -27,7 +27,11 @@
                 if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
 #pragma warning restore HAA0101 // Array allocation for params parameter
                 {
+#if NET8_0_OR_GREATER
+                    await cts.CancelAsync();
+#else
                     cts.Cancel();
+#endif
                     return;
                 }
 

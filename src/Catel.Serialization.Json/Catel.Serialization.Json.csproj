@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <AssemblyName>Catel.Serialization.Json</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -32,6 +32,10 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
     <!-- No net7.0 specific packages yet -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
+    <!-- No net8.0 specific packages yet -->
   </ItemGroup>
 
   <ItemGroup>
