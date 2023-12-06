@@ -574,7 +574,7 @@ namespace Catel.IoC
                 throw;
             }
 
-            // Some loging like .GetSignature are expensive
+            // Some logging like .GetSignature are expensive
             var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
             if (logDebug)
             {
