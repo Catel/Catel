@@ -143,7 +143,7 @@
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer, config);
 
-                    Assert.IsNotNull(clonedGraph, description);
+                    Assert.That(clonedGraph, Is.Not.Null, description);
                     Assert.That(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel), Is.True, description);
                 }, false);
             }
@@ -179,7 +179,7 @@
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer, config);
 
-                    Assert.IsNotNull(clonedGraph, description);
+                    Assert.That(clonedGraph, Is.Not.Null, description);
                     Assert.That(ReferenceEquals(clonedGraph.Children[0].Children[0], clonedGraph.Children[1].Children[0]), Is.True, description);
                 }, false);
             }
@@ -193,8 +193,8 @@
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer, config);
 
-                    Assert.IsNotNull(clonedGraph.Collection1, description);
-                    Assert.IsNotNull(clonedGraph.Collection2, description);
+                    Assert.That(clonedGraph.Collection1, Is.Not.Null, description);
+                    Assert.That(clonedGraph.Collection2, Is.Not.Null, description);
 
                     Assert.That(clonedGraph.Collection1.Count, Is.EqualTo(5), description);
                     Assert.That(clonedGraph.Collection2.Count, Is.EqualTo(5), description);

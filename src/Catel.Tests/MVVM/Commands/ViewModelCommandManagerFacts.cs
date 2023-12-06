@@ -24,7 +24,7 @@
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
 
-                Assert.IsNotNull(viewModelCommandManager);
+                Assert.That(viewModelCommandManager, Is.Not.Null);
             }
         }
 

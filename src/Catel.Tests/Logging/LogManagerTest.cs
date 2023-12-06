@@ -76,7 +76,7 @@
             var log = LogManager.GetLogger(typeof(LogManager));
             log.Info("hello there");
 
-            Assert.IsNotNull(eventArgs);
+            Assert.That(eventArgs, Is.Not.Null);
             Assert.That(eventArgs.Log, Is.EqualTo(log));
             Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
             Assert.That(eventArgs.Message, Is.EqualTo("hello there"));

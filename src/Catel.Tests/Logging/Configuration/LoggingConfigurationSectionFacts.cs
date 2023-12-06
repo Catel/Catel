@@ -16,7 +16,7 @@
             var openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var configurationSection = openExeConfiguration.GetSection<LoggingConfigurationSection>("logging", "catel");
 
-            Assert.IsNotNull(configurationSection.LogListenerConfigurationCollection);
+            Assert.That(configurationSection.LogListenerConfigurationCollection, Is.Not.Null);
             Assert.That(configurationSection.LogListenerConfigurationCollection.Count, Is.Not.EqualTo(0));
         }
 

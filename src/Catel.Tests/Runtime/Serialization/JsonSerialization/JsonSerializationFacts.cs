@@ -37,8 +37,8 @@
                     {
                         var streamAsText = streamReader.ReadToEnd();
 
-                        Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"));
-                        Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"));
+                        Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"), Is.True);
+                        Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"), Is.True);
                     }
                 }
             }
@@ -106,7 +106,7 @@
 
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.IsNotNull(clonedModel.NestedModel);
+                Assert.That(clonedModel.NestedModel, Is.Not.Null);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
                 Assert.That(model.NestedModel.IsCustomSerialized, Is.True);

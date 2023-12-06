@@ -112,14 +112,14 @@
             // ReSharper disable once CoVariantArrayConversion
             Assert.That(Task.WaitAll(tasks, 5000), Is.True);
 
-            Assert.IsNotNull(tasks[0].Result);
-            Assert.IsNotNull(tasks[1].Result);
+            Assert.That(tasks[0].Result, Is.Not.Null);
+            Assert.That(tasks[1].Result, Is.Not.Null);
 
             var typeB = TypeCache.GetType("A.AB, A");
             var typeC = TypeCache.GetType("A.AC, A");
 
-            Assert.IsNotNull(typeB);
-            Assert.IsNotNull(typeC);
+            Assert.That(typeB, Is.Not.Null);
+            Assert.That(typeC, Is.Not.Null);
         }
 
         private static Task<Type> LoadACAsync()

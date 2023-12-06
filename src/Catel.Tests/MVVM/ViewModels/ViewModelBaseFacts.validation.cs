@@ -121,7 +121,7 @@
             var summary = viewModel.GetValidationSummary(true);
 
             Assert.That(viewModel.HasErrors, Is.True);
-            Assert.IsNotNull(summary);
+            Assert.That(summary, Is.Not.Null);
             Assert.That(summary.FieldErrors.Count, Is.EqualTo(2));
         }
 
@@ -134,7 +134,7 @@
             var summary = viewModel.GetValidationSummary(true, null);
 
             Assert.That(viewModel.HasErrors, Is.True);
-            Assert.IsNotNull(summary);
+            Assert.That(summary, Is.Not.Null);
             Assert.That(summary.FieldErrors.Count, Is.EqualTo(0));
         }
 
@@ -147,7 +147,7 @@
             var summary = viewModel.GetValidationSummary(true, "NonExistingTag");
 
             Assert.That(viewModel.HasErrors, Is.True);
-            Assert.IsNotNull(summary);
+            Assert.That(summary, Is.Not.Null);
             Assert.That(summary.FieldErrors.Count, Is.EqualTo(0));
         }
 
@@ -160,7 +160,7 @@
             var summary = viewModel.GetValidationSummary(true, "PersonValidation");
 
             Assert.That(viewModel.HasErrors, Is.True);
-            Assert.IsNotNull(summary);
+            Assert.That(summary, Is.Not.Null);
             Assert.That(summary.FieldErrors.Count, Is.EqualTo(2));
         }
     }

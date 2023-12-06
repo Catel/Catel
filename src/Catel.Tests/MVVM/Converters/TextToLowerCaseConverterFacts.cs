@@ -37,7 +37,7 @@
                 converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo)null);
                 stopwatch2.Stop();
 
-                Assert.Less(stopwatch2.Elapsed, stopwatch1.Elapsed);
+                Assert.That(stopwatch2.Elapsed, Is.LessThan(stopwatch1.Elapsed));
             }
 
             [TestCase]

@@ -387,7 +387,7 @@
         [TestCase]
         public void PropertiesAreRegisteredWithPropertyChangeNotification()
         {
-            Assert.IsNotNull(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.PropertyChangedEventHandler);
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.PropertyChangedEventHandler, Is.Not.Null);
 
             var random = new Random();
             int maxPropertyChanges = random.Next(0, 15);

@@ -836,8 +836,8 @@
 
                 Assert.That(eventArgsList.Count, Is.EqualTo(2));
 
-                Assert.Contains(5, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Add).NewItems);
-                Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Remove).OldItems);
+                Assert.That(eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Add).NewItems, Does.Contain(5));
+                Assert.That(eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Remove).OldItems, Does.Contain(4));
             }
         }
     }

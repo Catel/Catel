@@ -49,7 +49,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -102,7 +102,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -128,7 +128,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -181,7 +181,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -207,7 +207,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -260,7 +260,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -286,7 +286,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -339,7 +339,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -365,7 +365,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
@@ -418,7 +418,7 @@
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
+                    Assert.That(e, Is.Not.Null);
                     Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
                     Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };

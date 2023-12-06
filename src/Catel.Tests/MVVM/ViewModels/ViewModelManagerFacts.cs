@@ -222,7 +222,7 @@
 
                     var foundViewModels = viewModelManager.GetChildViewModels(parentViewModel as IViewModel);
 
-                    Assert.IsNotNull(foundViewModels);
+                    Assert.That(foundViewModels, Is.Not.Null);
                     Assert.That(foundViewModels.Contains(childViewModel), Is.True);
                 }
             }
@@ -294,7 +294,7 @@
             {
                 using (var vmManager = new ViewModelManager())
                 {
-                    Assert.IsNotNull(vmManager.ActiveViewModels);
+                    Assert.That(vmManager.ActiveViewModels, Is.Not.Null);
                 }
             }
 

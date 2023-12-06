@@ -65,7 +65,7 @@
                 referenceManager.GetInfo(obj2);
                 referenceManager.GetInfo(obj3);
 
-                Assert.IsNotNull(referenceManager.GetInfoById(3));
+                Assert.That(referenceManager.GetInfoById(3), Is.Not.Null);
             }
         }
 

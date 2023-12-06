@@ -435,7 +435,7 @@
                 var typeFactory = TypeFactory.Default;
                 var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>(42);
 
-                Assert.IsNotNull(instance);
+                Assert.That(instance, Is.Not.Null);
                 Assert.That(instance.IntValue, Is.EqualTo(42));
             }
 
@@ -445,7 +445,7 @@
                 var typeFactory = TypeFactory.Default;
                 var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>("string", 42, 42L);
 
-                Assert.IsNotNull(instance);
+                Assert.That(instance, Is.Not.Null);
                 Assert.That(instance.StringValue, Is.EqualTo("string"));
                 Assert.That(instance.IntValue, Is.EqualTo(42));
                 Assert.That(instance.LongValue, Is.EqualTo(42L));
@@ -539,7 +539,7 @@
                     {
                         var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<AdvancedDependencyInjectionTestClass>("tag", "string", 42, 42L);
 
-                        Assert.IsNotNull(instance);
+                        Assert.That(instance, Is.Not.Null);
                         Assert.That(instance.StringValue, Is.EqualTo("string"));
                         Assert.That(instance.IntValue, Is.EqualTo(42));
                         Assert.That(instance.LongValue, Is.EqualTo(42L));

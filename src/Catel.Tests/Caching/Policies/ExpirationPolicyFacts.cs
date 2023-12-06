@@ -25,7 +25,7 @@
             [TestCase]
             public void NotReturnsNullIfExpirationDateTimeIsInThePass()
             {
-                Assert.IsNotNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)));
+                Assert.That(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)), Is.Not.Null);
             }
 
 
@@ -35,7 +35,7 @@
             [TestCase]
             public void NotReturnsNullIfExpirationDateTimeIsInThePassIfForceIsEqualsTrue()
             {
-                Assert.IsNotNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)));
+                Assert.That(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)), Is.Not.Null);
             }
         }
         #endregion
@@ -56,7 +56,7 @@
             [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
             {
-                Assert.IsNotNull(ExpirationPolicy.Duration(new TimeSpan(0)));
+                Assert.That(ExpirationPolicy.Duration(new TimeSpan(0)), Is.Not.Null);
             }
 
             /// <summary>
@@ -65,7 +65,7 @@
             [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZeroIfForceIsEqualsTrue()
             {
-                Assert.IsNotNull(ExpirationPolicy.Duration(new TimeSpan(0)));
+                Assert.That(ExpirationPolicy.Duration(new TimeSpan(0)), Is.Not.Null);
             }
 
             #endregion
@@ -88,7 +88,7 @@
             [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
             {
-                Assert.IsNotNull(ExpirationPolicy.Sliding(new TimeSpan(0)));
+                Assert.That(ExpirationPolicy.Sliding(new TimeSpan(0)), Is.Not.Null);
             }
 
             /// <summary>
@@ -97,7 +97,7 @@
             [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZeroIfForceIsEqualsTrue()
             {
-                Assert.IsNotNull(ExpirationPolicy.Sliding(new TimeSpan(0)));
+                Assert.That(ExpirationPolicy.Sliding(new TimeSpan(0)), Is.Not.Null);
             }
 
             #endregion
@@ -117,7 +117,7 @@
             [TestCase]
             public void NotReturnsNullIfFunctionReturnsTrue()
             {
-                Assert.IsNotNull(ExpirationPolicy.Custom(() => true));
+                Assert.That(ExpirationPolicy.Custom(() => true), Is.Not.Null);
             }
 
             [TestCase]
@@ -129,7 +129,7 @@
             [TestCase]
             public void NotReturnsNullIfFunctionReturnsFalse()
             {
-                Assert.IsNotNull(ExpirationPolicy.Custom(() => false));
+                Assert.That(ExpirationPolicy.Custom(() => false), Is.Not.Null);
             }
 
             #endregion

@@ -56,7 +56,7 @@
 
             vm.Validate();
 
-            Assert.True(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.True);
         }
 
         [Test]
@@ -76,7 +76,7 @@
 
             vm.Validate();
 
-            Assert.True(vm.HasWarnings);
+            Assert.That(vm.HasWarnings, Is.True);
         }
     }
 }

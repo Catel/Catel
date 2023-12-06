@@ -55,18 +55,18 @@
                 var xmlDocument = person.ToXml(serializer);
 
                 var personElement = xmlDocument.Element("MappedPerson");
-                Assert.IsNotNull(personElement);
+                Assert.That(personElement, Is.Not.Null);
 
                 var firstNameElement = personElement.Element("NameFirst");
-                Assert.IsNotNull(firstNameElement);
+                Assert.That(firstNameElement, Is.Not.Null);
                 Assert.That(firstNameElement.Value, Is.EqualTo("Geert"));
 
                 var middleNameElement = personElement.Element("NameMiddle");
-                Assert.IsNotNull(middleNameElement);
+                Assert.That(middleNameElement, Is.Not.Null);
                 Assert.That(middleNameElement.Value, Is.EqualTo("van"));
 
                 var lastNameElement = personElement.Element("NameLast");
-                Assert.IsNotNull(lastNameElement);
+                Assert.That(lastNameElement, Is.Not.Null);
                 Assert.That(lastNameElement.Value, Is.EqualTo("Horrik"));
 
                 using (var memoryStream = new MemoryStream())
@@ -96,10 +96,10 @@
                 var xmlDocument = person.ToXml(serializer);
 
                 var personElement = xmlDocument.Element("MappedPerson");
-                Assert.IsNotNull(personElement);
+                Assert.That(personElement, Is.Not.Null);
 
                 var ageAttribute = personElement.Attribute("FutureAge");
-                Assert.IsNotNull(ageAttribute);
+                Assert.That(ageAttribute, Is.Not.Null);
                 Assert.That(ageAttribute.Value, Is.EqualTo("42"));
 
                 using (var memoryStream = new MemoryStream())
@@ -182,7 +182,7 @@
                 var xmlDocument = person.ToXml(serializer);
 
                 var personElement = xmlDocument.Element("MappedPerson");
-                Assert.IsNotNull(personElement);
+                Assert.That(personElement, Is.Not.Null);
 
                 Assert.That(personElement.Element("FullName"), Is.Null);
             }
@@ -206,7 +206,7 @@
                 root.Items.Add(child);
 
                 var newRoot = SerializationTestHelper.SerializeAndDeserialize(root, serializer);
-                Assert.IsNotNull(newRoot);
+                Assert.That(newRoot, Is.Not.Null);
                 Assert.That(newRoot.Name, Is.EqualTo("myRoot"));
                 Assert.That(newRoot.Items.Count, Is.EqualTo(1));
                 Assert.That(newRoot.Items[0].Name, Is.EqualTo("myChild"));
@@ -296,7 +296,7 @@
 
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.IsNotNull(clonedModel.NestedModel);
+                Assert.That(clonedModel.NestedModel, Is.Not.Null);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
                 Assert.That(model.NestedModel.IsCustomSerialized, Is.True);

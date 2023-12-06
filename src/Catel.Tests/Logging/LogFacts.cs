@@ -56,7 +56,7 @@
                 log.Indent();
                 log.Info("Indented message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo("  Indented message"));
@@ -93,7 +93,7 @@
                 log.Unindent();
                 log.Info("Unindented message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo("Unindented message"));
@@ -259,7 +259,7 @@
 
                 log.Debug("log message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message"));
@@ -285,7 +285,7 @@
 
                 log.Debug("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
@@ -312,7 +312,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Debug(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -335,7 +335,7 @@
 
                 log.Debug(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
                 Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
@@ -373,7 +373,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Debug(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -411,7 +411,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Debug(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -450,7 +450,7 @@
 
                 log.Info("log message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message"));
@@ -476,7 +476,7 @@
 
                 log.Info("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
@@ -503,7 +503,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Info(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -527,7 +527,7 @@
 
                 log.Info(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
@@ -565,7 +565,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Info(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -603,7 +603,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Info(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -642,7 +642,7 @@
 
                 log.Warning("log message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message"));
@@ -668,7 +668,7 @@
 
                 log.Warning("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
@@ -695,7 +695,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Warning(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -718,7 +718,7 @@
 
                 log.Warning(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
                 Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
@@ -756,7 +756,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Warning(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -794,7 +794,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Warning(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -833,7 +833,7 @@
 
                 log.Error("log message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message"));
@@ -859,7 +859,7 @@
 
                 log.Error("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
@@ -886,7 +886,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Error(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -909,7 +909,7 @@
 
                 log.Error(exception);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
                 Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
@@ -947,7 +947,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Error(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -985,7 +985,7 @@
                 var exception = new ArgumentNullException("log test");
                 log.Error(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
                 Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
@@ -1036,14 +1036,14 @@
 
                 log.InfoWithData("log message", null);
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message"));
 
                 var logData = eventArgs.LogData;
 
-                Assert.IsNotNull(logData);
+                Assert.That(logData, Is.Not.Null);
             }
 
             [Test]
@@ -1062,14 +1062,14 @@
                     { "ThreadId", threadId }
                 });
 
-                Assert.IsNotNull(eventArgs);
+                Assert.That(eventArgs, Is.Not.Null);
                 Assert.That(eventArgs.Log, Is.EqualTo(log));
                 Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
                 Assert.That(eventArgs.Message, Is.EqualTo("log message"));
 
                 var logData = eventArgs.LogData;
 
-                Assert.IsNotNull(logData);
+                Assert.That(logData, Is.Not.Null);
                 Assert.That(ObjectHelper.AreEqual(logData["ThreadId"], threadId), Is.True);
             }
         }

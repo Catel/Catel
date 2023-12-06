@@ -119,7 +119,7 @@
 
                 commandManager.CreateCommand("MyCommand");
 
-                Assert.IsNotNull(commandManager.GetCommand("MyCommand"));
+                Assert.That(commandManager.GetCommand("MyCommand"), Is.Not.Null);
             }
         }
 

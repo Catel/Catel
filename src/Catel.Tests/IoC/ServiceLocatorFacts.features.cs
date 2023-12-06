@@ -92,8 +92,8 @@
 
                 var resolved = serviceLocator.ResolveType<TTestComponent>();
 
-                Assert.IsNotNull(resolved);
-                Assert.IsNotNull(resolved.Services);
+                Assert.That(resolved, Is.Not.Null);
+                Assert.That(resolved.Services, Is.Not.Null);
                 Assert.That(resolved.Services.Count(), Is.EqualTo(2));
 
                 Assert.That(resolved.Services.Any(service => service is IndependentService), Is.True);
@@ -115,8 +115,8 @@
 
                     var model = serviceLocator.ResolveType<Consumer>();
 
-                    Assert.IsNotNull(model);
-                    Assert.IsNotNull(model.Item);
+                    Assert.That(model, Is.Not.Null);
+                    Assert.That(model.Item, Is.Not.Null);
                 }
             }
         }

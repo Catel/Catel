@@ -28,14 +28,14 @@
 
             var viewModel = new TestViewModelWithMultipleModelMappings(firstPerson);
 
-            Assert.IsNotNull(viewModel.Person);
-            Assert.IsNotNull(viewModel.ContactInfo);
+            Assert.That(viewModel.Person, Is.Not.Null);
+            Assert.That(viewModel.ContactInfo, Is.Not.Null);
             Assert.That(viewModel.Email, Is.EqualTo("john@doe.com"));
 
             viewModel.Person = secondPerson;
 
-            Assert.IsNotNull(viewModel.Person);
-            Assert.IsNotNull(viewModel.ContactInfo);
+            Assert.That(viewModel.Person, Is.Not.Null);
+            Assert.That(viewModel.ContactInfo, Is.Not.Null);
             Assert.That(viewModel.Email, Is.EqualTo("Another email"));
         }
 
@@ -51,7 +51,7 @@
 
             var viewModel = new TestViewModelWithImplicitModelMappings(person);
 
-            Assert.IsNotNull(viewModel.Person);
+            Assert.That(viewModel.Person, Is.Not.Null);
             Assert.That(viewModel.FirstName, Is.EqualTo("John"));
         }
 

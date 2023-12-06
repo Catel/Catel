@@ -509,7 +509,7 @@
                 ServiceLocator.Default.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
                 var testValidatorModel = (IValidatable)new TestValidatorModel();
 
-                Assert.IsNotNull(testValidatorModel.Validator);
+                Assert.That(testValidatorModel.Validator, Is.Not.Null);
 
                 testValidatorModel.Validate(true);
 

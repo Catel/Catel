@@ -42,7 +42,7 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsNotNull(clonedObject);
+                    Assert.That(clonedObject, Is.Not.Null);
                     Assert.That(clonedObject.Lookup.Count, Is.EqualTo(1));
                 });
             }

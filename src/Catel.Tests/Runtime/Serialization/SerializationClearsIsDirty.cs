@@ -11,7 +11,7 @@
         public void MyCatelModel_ConstructorTest()
         {
             var cm = new IsDirtyModelTestModel();
-            Assert.IsNotNull(cm, "The IsDirtyModelTestModel constructor returned a null instance.");
+            Assert.That(cm, Is.Not.Null, "The IsDirtyModelTestModel constructor returned a null instance.");
             Assert.That(cm, Is.InstanceOf(typeof(IsDirtyModelTestModel)), "The IsDirtyModelTestModel constructor did not return the correct type.");
         }
 

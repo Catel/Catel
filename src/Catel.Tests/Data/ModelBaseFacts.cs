@@ -274,8 +274,8 @@
             {
                 var catelTypeInfo = new CatelTypeInfo(typeof(JohnDoe));
 
-                Assert.IsNotNull(catelTypeInfo.GetPropertyData("FirstName"));
-                Assert.IsNotNull(catelTypeInfo.GetPropertyData("LastName"));
+                Assert.That(catelTypeInfo.GetPropertyData("FirstName"), Is.Not.Null);
+                Assert.That(catelTypeInfo.GetPropertyData("LastName"), Is.Not.Null);
             }
         }
     }

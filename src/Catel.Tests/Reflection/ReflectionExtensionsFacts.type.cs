@@ -164,7 +164,7 @@
 
                 var propertyInfo = typeof(TestViewModel).GetPropertyEx(nameof(TestViewModel.Variable1));
 
-                Assert.IsNotNull(propertyInfo);
+                Assert.That(propertyInfo, Is.Not.Null);
                 Assert.That(propertyInfo.PropertyType, Is.EqualTo(typeof(IPerson)));
             }
 
@@ -181,7 +181,7 @@
             {
                 var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: true);
 
-                Assert.IsNotNull(propertyInfo);
+                Assert.That(propertyInfo, Is.Not.Null);
             }
         }
 
@@ -202,7 +202,7 @@
             {
                 var fieldInfo = typeof(System.Windows.Window).GetFieldEx("_showingAsDialog");
 
-                Assert.IsNotNull(fieldInfo);
+                Assert.That(fieldInfo, Is.Not.Null);
             }
         }
 

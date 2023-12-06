@@ -106,7 +106,7 @@
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(viewType);
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(viewModelType));
             }
 
@@ -119,7 +119,7 @@
 
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(Pages.PersonPage));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
             }
 
@@ -129,7 +129,7 @@
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
@@ -137,7 +137,7 @@
 
                 resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
             }
 
@@ -147,7 +147,7 @@
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(MyNameViewer));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(MyNameViewerViewModel)));
             }
         }
@@ -161,7 +161,7 @@
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
@@ -169,7 +169,7 @@
 
                 resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
 
                 // Clear the cache, now it should break

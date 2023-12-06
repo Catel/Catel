@@ -32,7 +32,7 @@ namespace Catel.Tests.Reflection
 
                 if (isNotNull)
                 {
-                    Assert.IsNotNull(attribute);
+                    Assert.That(attribute, Is.Not.Null);
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace Catel.Tests.Reflection
 
                 if (isNotNull)
                 {
-                    Assert.IsNotNull(attribute);
+                    Assert.That(attribute, Is.Not.Null);
                 }
                 else
                 {

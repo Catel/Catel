@@ -87,7 +87,7 @@
                 {
                     var service3 = serviceLocator.ResolveType<IService3>();
 
-                    Assert.IsNotNull(service3);
+                    Assert.That(service3, Is.Not.Null);
                 }
             }
 
@@ -98,7 +98,7 @@
                 {
                     var selfService = serviceLocator.ResolveType<IAppDataService>();
 
-                    Assert.IsNotNull(selfService);
+                    Assert.That(selfService, Is.Not.Null);
                     Assert.That(selfService, Is.InstanceOf<CustomAppDataService>());
                 }
             }
@@ -110,7 +110,7 @@
                 {
                     var parentService = serviceLocator.ResolveType<ISerializationManager>();
 
-                    Assert.IsNotNull(parentService);
+                    Assert.That(parentService, Is.Not.Null);
                 }
             }
         }
@@ -568,7 +568,7 @@
                     serviceLocator.TypeRegistered += (sender, args) => { eventArgs = args; };
                     serviceLocator.RegisterInstance<ITestInterface>(new TestClass2());
 
-                    Assert.IsNotNull(eventArgs);
+                    Assert.That(eventArgs, Is.Not.Null);
                     Assert.That(eventArgs.ServiceType, Is.EqualTo(typeof(ITestInterface)));
                     Assert.That(eventArgs.ServiceImplementationType, Is.EqualTo(typeof(TestClass2)));
                     Assert.That(eventArgs.RegistrationType, Is.EqualTo(RegistrationType.Singleton));
@@ -710,7 +710,7 @@
                     serviceLocator.TypeRegistered += (sender, args) => { eventArgs = args; };
                     serviceLocator.RegisterType<ITestInterface, TestClass2>(registrationType: RegistrationType.Transient);
 
-                    Assert.IsNotNull(eventArgs);
+                    Assert.That(eventArgs, Is.Not.Null);
                     Assert.That(eventArgs.ServiceType, Is.EqualTo(typeof(ITestInterface)));
                     Assert.That(eventArgs.ServiceImplementationType, Is.EqualTo(typeof(TestClass2)));
                     Assert.That(eventArgs.RegistrationType, Is.EqualTo(RegistrationType.Transient));
@@ -949,7 +949,7 @@
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
                     var dependencyInjectionTestClass = serviceLocator.ResolveType<DependencyInjectionTestClass>();
-                    Assert.IsNotNull(dependencyInjectionTestClass);
+                    Assert.That(dependencyInjectionTestClass, Is.Not.Null);
                     Assert.That(serviceLocator.IsTypeRegistered(typeof(DependencyInjectionTestClass)), Is.False);
                 }
             }
@@ -1157,7 +1157,7 @@
 
                     serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
-                    Assert.IsNotNull(serviceLocator.ResolveType<ITestInterface>());
+                    Assert.That(serviceLocator.ResolveType<ITestInterface>(), Is.Not.Null);
                 }
             }
         }
@@ -1309,7 +1309,7 @@
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    Assert.IsNotNull(() => serviceLocator.ResolveType<IDummy>());
+                    Assert.That(() => serviceLocator.ResolveType<IDummy>(), Is.Not.Null);
                 }
             }
 
@@ -1320,8 +1320,8 @@
                 {
                     serviceLocator.RegisterType(typeof(IDummy), typeof(Dummy), "SomeTag");
 
-                    Assert.IsNotNull(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"));
-                    Assert.IsNotNull(() => serviceLocator.ResolveType<IDummy>());
+                    Assert.That(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"), Is.Not.Null);
+                    Assert.That(() => serviceLocator.ResolveType<IDummy>(), Is.Not.Null);
                 }
             }
         }

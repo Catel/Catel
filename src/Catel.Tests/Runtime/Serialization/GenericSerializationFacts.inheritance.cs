@@ -59,11 +59,11 @@
 
                 var notInheritedFromModelBaseCopy = SerializationTestHelper.SerializeAndDeserialize(notInheritedFromModelBase, SerializationFactory.GetXmlSerializer());
 
-                Assert.IsNotNull(inheritedFromModelBaseCopy.Name);
-                Assert.IsNotNull(notInheritedFromModelBaseCopy.Name);
+                Assert.That(inheritedFromModelBaseCopy.Name, Is.Not.Null);
+                Assert.That(notInheritedFromModelBaseCopy.Name, Is.Not.Null);
             }
 
-            [Explicit, Test, Timeout(5000)]
+            [Explicit, Test, CancelAfter(5000)]
             public async Task HierarchyOfModelBaseObjectsTestAsync()
             {
                 var itemD = new DataItemD

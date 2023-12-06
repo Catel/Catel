@@ -148,7 +148,7 @@
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
                 var propertyData = propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), "stringProperty");
-                Assert.IsNotNull(propertyData);
+                Assert.That(propertyData, Is.Not.Null);
                 Assert.That(propertyData.Name, Is.EqualTo("stringProperty"));
             }
             #endregion

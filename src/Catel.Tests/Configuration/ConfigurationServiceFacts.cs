@@ -82,7 +82,7 @@
 
                     var config = await configurationService.PublicLoadConfigurationAsync(fileName);
 
-                    Assert.IsNotNull(config);
+                    Assert.That(config, Is.Not.Null);
                 }
                 finally
                 {

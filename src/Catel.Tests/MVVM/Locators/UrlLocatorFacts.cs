@@ -68,7 +68,7 @@
                 var urlLocator = new UrlLocator();
                 var resolvedType = urlLocator.ResolveUrl(viewModelType, false);
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(expectedValue));
             }
 
@@ -78,7 +78,7 @@
                 var urlLocator = new UrlLocator();
                 var resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the naming conventions (so it *must* come from the cache)
@@ -86,7 +86,7 @@
 
                 resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo("/Views/Person.xaml"));
             }
         }
@@ -100,7 +100,7 @@
                 var urlLocator = new UrlLocator();
                 var resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedUrl);
+                Assert.That(resolvedUrl, Is.Not.Null);
                 Assert.That(resolvedUrl, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the naming conventions (so it *must* come from the cache)
@@ -108,7 +108,7 @@
 
                 resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedUrl);
+                Assert.That(resolvedUrl, Is.Not.Null);
                 Assert.That(resolvedUrl, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the cache, now it should break

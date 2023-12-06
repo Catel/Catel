@@ -806,7 +806,7 @@
                     Assert.That(parameters[2], Is.EqualTo(false));
 
                     var sort = ((List<SortDescriptor>)parameters[3])[0];
-                    Assert.IsNotNull(sort);
+                    Assert.That(sort, Is.Not.Null);
                     Assert.That(sort.Field, Is.EqualTo("IsoCode"));
                     Assert.That(sort.Direction, Is.EqualTo("asc"));
                 });

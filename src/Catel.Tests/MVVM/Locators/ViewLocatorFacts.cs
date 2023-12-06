@@ -112,7 +112,7 @@
 
                 var resolvedType = viewLocator.ResolveView(viewModelType);
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(viewType));
             }
 
@@ -122,7 +122,7 @@
                 var viewLocator = new ViewLocator();
                 var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
@@ -130,7 +130,7 @@
 
                 resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
             }
         }
@@ -144,7 +144,7 @@
                 var viewLocator = new ViewLocator();
                 var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
@@ -152,7 +152,7 @@
 
                 resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
-                Assert.IsNotNull(resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
                 Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
 
                 // Clear the cache, now it should break
