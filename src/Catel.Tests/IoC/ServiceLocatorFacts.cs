@@ -1309,7 +1309,7 @@
             {
                 using (var serviceLocator = IoCFactory.CreateServiceLocator())
                 {
-                    Assert.That(() => serviceLocator.ResolveType<IDummy>(), Is.Not.Null);
+                    Assert.That(serviceLocator.ResolveType<IDummy>(), Is.Null);
                 }
             }
 
@@ -1321,7 +1321,7 @@
                     serviceLocator.RegisterType(typeof(IDummy), typeof(Dummy), "SomeTag");
 
                     Assert.That(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"), Is.Not.Null);
-                    Assert.That(() => serviceLocator.ResolveType<IDummy>(), Is.Not.Null);
+                    Assert.That(serviceLocator.ResolveType<IDummy>(), Is.Null);
                 }
             }
         }
