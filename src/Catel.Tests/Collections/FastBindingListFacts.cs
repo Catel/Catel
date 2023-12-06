@@ -21,7 +21,7 @@
             {
                 var fastCollection = new FastBindingList<int>();
 
-                Assert.IsFalse(fastCollection.IsDirty);
+                Assert.That(fastCollection.IsDirty, Is.False);
             }
 
             [TestCase]
@@ -31,10 +31,10 @@
 
                 using (fastCollection.SuspendChangeNotifications())
                 {
-                    Assert.IsTrue(fastCollection.IsDirty);
+                    Assert.That(fastCollection.IsDirty, Is.True);
                 }
 
-                Assert.IsFalse(fastCollection.IsDirty);
+                Assert.That(fastCollection.IsDirty, Is.False);
             }
         }
 
@@ -50,10 +50,10 @@
                 {
                     fastCollection.Add(1);
 
-                    Assert.IsTrue(fastCollection.NotificationsSuspended);
+                    Assert.That(fastCollection.NotificationsSuspended, Is.True);
                 }
 
-                Assert.IsFalse(fastCollection.NotificationsSuspended);
+                Assert.That(fastCollection.NotificationsSuspended, Is.False);
             }
 
             [TestCase]
@@ -69,7 +69,7 @@
                 secondToken.Dispose();
 #pragma warning restore IDISP017 // Prefer using.
 
-                Assert.IsFalse(fastCollection.NotificationsSuspended);
+                Assert.That(fastCollection.NotificationsSuspended, Is.False);
             }
         }
 
@@ -99,11 +99,11 @@
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 fastCollection.AddItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }));
 
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
             }
         }
 
@@ -133,11 +133,11 @@
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 fastCollection.InsertItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }), 0);
 
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
             }
         }
 
@@ -167,11 +167,11 @@
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 });
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 fastCollection.RemoveItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }));
 
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
             }
         }
 
@@ -204,7 +204,7 @@
                     fastCollection.Remove(1);
                 }
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
         }
 
@@ -225,7 +225,7 @@
                                where x == 42
                                select x).FirstOrDefault();
 
-                Assert.AreEqual(42, allInts);
+                Assert.That(allInts, Is.EqualTo(42));
             }
         }
 
@@ -247,7 +247,7 @@
 
                 fastCollection.Reset();
 
-                Assert.AreEqual(true, collectionChanged);
+                Assert.That(collectionChanged, Is.EqualTo(true));
             }
 
             [TestCase]
@@ -272,17 +272,17 @@
                     fastCollection.Add(2);
 
                     fastCollection.Reset();
-                    Assert.AreEqual(0, counter);
+                    Assert.That(counter, Is.EqualTo(0));
 
                     fastCollection.Add(3);
                     fastCollection.Add(4);
                     fastCollection.Add(5);
                 }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
-                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(eventArgs.ListChangedType, Is.EqualTo(ListChangedType.Reset));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyRangedListChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
             }
         }
 
@@ -312,9 +312,9 @@
                 var idx1 = ((IBindingList)fastCollection).Find(desc, "Test2");
                 var idx2 = ((IBindingList)fastCollection).Find(desc, "Test3");
 
-                Assert.AreEqual(0, idx0);
-                Assert.AreEqual(1, idx1);
-                Assert.AreEqual(2, idx2);
+                Assert.That(idx0, Is.EqualTo(0));
+                Assert.That(idx1, Is.EqualTo(1));
+                Assert.That(idx2, Is.EqualTo(2));
             }
 
             [TestCase]
@@ -333,7 +333,7 @@
 
                 var idxnf = ((IBindingList)fastCollection).Find(desc, "Test4");
 
-                Assert.AreEqual(-1, idxnf);
+                Assert.That(idxnf, Is.EqualTo(-1));
             }
         }
 
@@ -380,7 +380,7 @@
 
                 ((IBindingList)fastCollection).ApplySort(desc, ListSortDirection.Ascending);
 
-                CollectionAssert.AreEqual(new List<TestModel> { tm0, tm1, tm2 }, fastCollection);
+                Assert.That(fastCollection, Is.EqualTo(new List<TestModel> { tm0, tm1, tm2 }).AsCollection);
             }
 
             [TestCase]
@@ -402,7 +402,7 @@
 
                 ((IBindingList)fastCollection).ApplySort(desc, ListSortDirection.Ascending);
 
-                CollectionAssert.AreEqual(new List<TestModel> { tmn, tm0, tm1, tm2 }, fastCollection);
+                Assert.That(fastCollection, Is.EqualTo(new List<TestModel> { tmn, tm0, tm1, tm2 }).AsCollection);
             }
 
             [TestCase]
@@ -424,7 +424,7 @@
 
                 ((IBindingList)fastCollection).ApplySort(desc, ListSortDirection.Ascending);
 
-                CollectionAssert.AreEqual(new List<TestModel> { tmn, tm0, tm1, tm2 }, fastCollection);
+                Assert.That(fastCollection, Is.EqualTo(new List<TestModel> { tmn, tm0, tm1, tm2 }).AsCollection);
             }
 
             [TestCase]
@@ -444,7 +444,7 @@
 
                 ((IBindingList)fastCollection).ApplySort(desc, ListSortDirection.Descending);
 
-                CollectionAssert.AreEqual(new List<TestModel> { tm2, tm1, tm0 }, fastCollection);
+                Assert.That(fastCollection, Is.EqualTo(new List<TestModel> { tm2, tm1, tm0 }).AsCollection);
             }
 
             [TestCase]
@@ -466,7 +466,7 @@
 
                 ((IBindingList)fastCollection).ApplySort(desc, ListSortDirection.Descending);
 
-                CollectionAssert.AreEqual(new List<TestModel> { tm2, tm1, tm0, tmn }, fastCollection);
+                Assert.That(fastCollection, Is.EqualTo(new List<TestModel> { tm2, tm1, tm0, tmn }).AsCollection);
             }
 
             [TestCase]
@@ -488,7 +488,7 @@
 
                 ((IBindingList)fastCollection).ApplySort(desc, ListSortDirection.Descending);
 
-                CollectionAssert.AreEqual(new List<TestModel> { tm2, tm1, tm0, tmn }, fastCollection);
+                Assert.That(fastCollection, Is.EqualTo(new List<TestModel> { tm2, tm1, tm0, tmn }).AsCollection);
             }
 
             [TestCase]
@@ -515,8 +515,8 @@
 
                 ((IBindingList)fastCollection).ApplySort(desc, ListSortDirection.Ascending);
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(eventArgs.ListChangedType, Is.EqualTo(ListChangedType.Reset));
             }
         }
 
@@ -548,10 +548,10 @@
                     fastCollection.Add(5);
                 }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
-                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(eventArgs.ListChangedType, Is.EqualTo(ListChangedType.Reset));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyRangedListChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
             }
 
             [TestCase]
@@ -581,15 +581,15 @@
                         fastCollection.Add(5);
                     }
 
-                    Assert.AreEqual(0, counter);
-                    Assert.IsNull(eventArgs);
+                    Assert.That(counter, Is.EqualTo(0));
+                    Assert.That(eventArgs, Is.Null);
                 }
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
                 // ReSharper disable PossibleNullReferenceException
-                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
-                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(eventArgs.ListChangedType, Is.EqualTo(ListChangedType.Reset));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyRangedListChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
                 // ReSharper restore PossibleNullReferenceException
             }
 
@@ -617,19 +617,19 @@
                         fastCollection.Add(2);
                     }
 
-                    Assert.AreEqual(0, counter);
-                    Assert.IsNull(eventArgs);
+                    Assert.That(counter, Is.EqualTo(0));
+                    Assert.That(eventArgs, Is.Null);
 
                     fastCollection.Add(3);
                     fastCollection.Add(4);
                     fastCollection.Add(5);
                 }
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
                 // ReSharper disable PossibleNullReferenceException
-                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
-                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(eventArgs.ListChangedType, Is.EqualTo(ListChangedType.Reset));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyRangedListChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
                 // ReSharper restore PossibleNullReferenceException
             }
 
@@ -656,10 +656,10 @@
                     fastCollection.Remove(5);
                 }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
-                Assert.AreEqual(NotifyRangedListChangedAction.Remove, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(eventArgs.ListChangedType, Is.EqualTo(ListChangedType.Reset));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyRangedListChangedAction.Remove));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.OldItems).AsCollection);
             }
 
             private SuspensionContext<T> GetSuspensionContext<T>(FastBindingList<T> collection)
@@ -682,7 +682,7 @@
                 }
 
                 var context = GetSuspensionContext(fastCollection);
-                Assert.IsNull(context);
+                Assert.That(context, Is.Null);
             }
 
             [TestCase]
@@ -695,7 +695,7 @@
                 }
 
                 var context = GetSuspensionContext(fastCollection);
-                Assert.IsNull(context);
+                Assert.That(context, Is.Null);
             }
 
             [TestCase]
@@ -780,9 +780,9 @@
                     fastCollection.RemoveItems(new[] { 2, 3 });
                 }
 
-                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(new[] { 1, 4 }, eventArgs.NewItems.OfType<int>().ToArray());
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyRangedListChangedAction.Add));
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.NewItems.OfType<int>().ToArray(), Is.EqualTo(new[] { 1, 4 }));
             }
 
             [Test]
@@ -808,9 +808,9 @@
                     fastCollection.AddItems(new[] { 2 });
                 }
 
-                Assert.AreEqual(NotifyRangedListChangedAction.Remove, eventArgs.Action);
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(new[] { 4, 3 }, eventArgs.OldItems.OfType<int>().ToArray());
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyRangedListChangedAction.Remove));
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.OldItems.OfType<int>().ToArray(), Is.EqualTo(new[] { 4, 3 }));
             }
 
             [Test]
@@ -834,7 +834,7 @@
                     fastCollection.AddItems(new[] { 5 });
                 }
 
-                Assert.AreEqual(2, eventArgsList.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(2));
 
                 Assert.Contains(5, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Add).NewItems);
                 Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Remove).OldItems);

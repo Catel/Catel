@@ -18,20 +18,20 @@
             [TestCase]
             public void ReturnsFalseForNonExistingScope()
             {
-                Assert.IsFalse(ScopeManager<string>.ScopeExists());
+                Assert.That(ScopeManager<string>.ScopeExists(), Is.False);
             }
 
             [TestCase]
             public void ReturnsTrueForExistingScope()
             {
-                Assert.IsFalse(ScopeManager<string>.ScopeExists());
+                Assert.That(ScopeManager<string>.ScopeExists(), Is.False);
 
                 using (var scopeManager = ScopeManager<string>.GetScopeManager(createScopeFunction: () => string.Empty))
                 {
-                    Assert.IsTrue(ScopeManager<string>.ScopeExists());
+                    Assert.That(ScopeManager<string>.ScopeExists(), Is.True);
                 }
 
-                Assert.IsFalse(ScopeManager<string>.ScopeExists());
+                Assert.That(ScopeManager<string>.ScopeExists(), Is.False);
             }
         }
 
@@ -45,10 +45,10 @@
 
                 using (scopeManager = ScopeManager<object>.GetScopeManager("object"))
                 {
-                    Assert.AreEqual(1, scopeManager.RefCount);
+                    Assert.That(scopeManager.RefCount, Is.EqualTo(1));
                 }
 
-                Assert.AreEqual(0, scopeManager.RefCount);
+                Assert.That(scopeManager.RefCount, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -58,24 +58,24 @@
 
                 using (scopeManager = ScopeManager<object>.GetScopeManager("object"))
                 {
-                    Assert.AreEqual(1, scopeManager.RefCount);
+                    Assert.That(scopeManager.RefCount, Is.EqualTo(1));
 
                     using (ScopeManager<object>.GetScopeManager("object"))
                     {
-                        Assert.AreEqual(2, scopeManager.RefCount);
+                        Assert.That(scopeManager.RefCount, Is.EqualTo(2));
 
                         using (ScopeManager<object>.GetScopeManager("object"))
                         {
-                            Assert.AreEqual(3, scopeManager.RefCount);
+                            Assert.That(scopeManager.RefCount, Is.EqualTo(3));
                         }
 
-                        Assert.AreEqual(2, scopeManager.RefCount);
+                        Assert.That(scopeManager.RefCount, Is.EqualTo(2));
                     }
 
-                    Assert.AreEqual(1, scopeManager.RefCount);
+                    Assert.That(scopeManager.RefCount, Is.EqualTo(1));
                 }
 
-                Assert.AreEqual(0, scopeManager.RefCount);
+                Assert.That(scopeManager.RefCount, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -88,8 +88,8 @@
                 {
                     using (var scope2Manager = ScopeManager<string>.GetScopeManager(createScopeFunction: () => obj2))
                     {
-                        Assert.AreEqual(obj1, scope2Manager.ScopeObject);
-                        Assert.AreEqual(2, scope2Manager.RefCount);
+                        Assert.That(scope2Manager.ScopeObject, Is.EqualTo(obj1));
+                        Assert.That(scope2Manager.RefCount, Is.EqualTo(2));
                     }
                 }
             }

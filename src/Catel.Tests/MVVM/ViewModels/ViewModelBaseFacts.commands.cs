@@ -24,15 +24,15 @@
                 };
 
                 // By default, command can be executed
-                Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.True);
 
                 viewModel.FirstName = "first name";
 
-                Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.False);
 
                 canExecuteChangedEvent.WaitOne(1000, false);
 
-                Assert.IsFalse(canExecuteChangedTriggered);
+                Assert.That(canExecuteChangedTriggered, Is.False);
             }
         }
 
@@ -53,15 +53,15 @@
                 };
 
                 // By default, command can be executed
-                Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.True);
 
                 viewModel.FirstName = "first name";
 
-                Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.False);
 
                 canExecuteChangedEvent.WaitOne(1000, false);
 
-                Assert.IsTrue(canExecuteChangedTriggered);
+                Assert.That(canExecuteChangedTriggered, Is.True);
             }
         }
     }

@@ -55,7 +55,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("ViewModels.TestViewModel", result);
+                Assert.That(result, Is.EqualTo("ViewModels.TestViewModel"));
             }
 
             [TestCase]
@@ -66,7 +66,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -77,7 +77,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("ViewModels.ExampleVWViewModel", result);
+                Assert.That(result, Is.EqualTo("ViewModels.ExampleVWViewModel"));
             }
 
             [TestCase]
@@ -88,7 +88,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -99,7 +99,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -110,7 +110,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -121,7 +121,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -132,7 +132,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -143,7 +143,7 @@
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleControlViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleControlViewModel"));
             }
         }
 
@@ -194,7 +194,7 @@
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("/Views/TestView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/TestView.xaml"));
             }
 
             [TestCase]
@@ -205,7 +205,7 @@
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("/Views/ExampleView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/ExampleView.xaml"));
             }
 
             [TestCase]
@@ -216,7 +216,7 @@
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("/Views/ExampleVMView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/ExampleVMView.xaml"));
             }
 
             [TestCase]
@@ -227,7 +227,7 @@
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.Views.Examples.ExampleView", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.Views.Examples.ExampleView"));
             }
         }
 
@@ -262,7 +262,7 @@
 
                 string result = NamingConvention.ResolveNamingConvention(constantValues, convention);
 
-                Assert.AreEqual("/Views/VmValueView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/VmValueView.xaml"));
             }
 
             [TestCase]
@@ -275,7 +275,7 @@
 
                 string result = NamingConvention.ResolveNamingConvention(constantValues, convention);
 
-                Assert.AreEqual("/Views/TestValue/VmValueView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/TestValue/VmValueView.xaml"));
             }
         }
 
@@ -321,7 +321,7 @@
 
                 var result = NamingConvention.ResolveNamingConvention(constantValues, convention, value);
 
-                Assert.AreEqual("Catel.Views.MyView", result);
+                Assert.That(result, Is.EqualTo("Catel.Views.MyView"));
             }
 
             [TestCase]
@@ -333,7 +333,7 @@
 
                 var result = NamingConvention.ResolveNamingConvention(constantValues, convention, value);
 
-                Assert.AreEqual("Catel.Examples.Views.MyView", result);
+                Assert.That(result, Is.EqualTo("Catel.Examples.Views.MyView"));
             }
 
             [TestCase]
@@ -345,7 +345,7 @@
 
                 var result = NamingConvention.ResolveNamingConvention(constantValues, convention, value);
 
-                Assert.AreEqual("Catel.Examples.ViewModels.Wizards.MyWizardViewModel", result);
+                Assert.That(result, Is.EqualTo("Catel.Examples.ViewModels.Wizards.MyWizardViewModel"));
             }
         }
 
@@ -369,25 +369,25 @@
             [TestCase]
             public void ReturnsInputWhenNoPathSeparatorIsAutomaticallyDetected()
             {
-                Assert.AreEqual("pathwithoutseparator", NamingConvention.GetParentPath("pathwithoutseparator"));
+                Assert.That(NamingConvention.GetParentPath("pathwithoutseparator"), Is.EqualTo("pathwithoutseparator"));
             }
 
             [TestCase]
             public void ReturnsInputWhenPathSeparatorIsAutomaticallyDetected()
             {
-                Assert.AreEqual("Catel.Examples", NamingConvention.GetParentPath("Catel.Examples.Views"));
+                Assert.That(NamingConvention.GetParentPath("Catel.Examples.Views"), Is.EqualTo("Catel.Examples"));
             }
 
             [TestCase]
             public void ReturnsRightParentPathForDotSeparator()
             {
-                Assert.AreEqual("Catel.Examples", NamingConvention.GetParentPath("Catel.Examples.Views", "."));
+                Assert.That(NamingConvention.GetParentPath("Catel.Examples.Views", "."), Is.EqualTo("Catel.Examples"));
             }
 
             [TestCase]
             public void ReturnsRightParentPathForSlashSeparator()
             {
-                Assert.AreEqual("Catel\\Examples", NamingConvention.GetParentPath("Catel\\Examples\\Views.xaml", "\\"));
+                Assert.That(NamingConvention.GetParentPath("Catel\\Examples\\Views.xaml", "\\"), Is.EqualTo("Catel\\Examples"));
             }
         }
 
@@ -409,31 +409,31 @@
             [TestCase]
             public void ReturnsDefaultWhenNoKnownSeparatorIsUsed()
             {
-                Assert.AreEqual(".", NamingConvention.GetParentSeparator("noknownseparators"));
+                Assert.That(NamingConvention.GetParentSeparator("noknownseparators"), Is.EqualTo("."));
             }
 
             [TestCase]
             public void ReturnsBackSlashWhenUsed()
             {
-                Assert.AreEqual("\\", NamingConvention.GetParentSeparator("Catel\\Views\\MyView.xaml"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel\\Views\\MyView.xaml"), Is.EqualTo("\\"));
             }
 
             [TestCase]
             public void ReturnsSlashWhenUsed()
             {
-                Assert.AreEqual("/", NamingConvention.GetParentSeparator("Catel/Views/MyView.xaml"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel/Views/MyView.xaml"), Is.EqualTo("/"));
             }
 
             [TestCase]
             public void ReturnsPipeWhenUsed()
             {
-                Assert.AreEqual("|", NamingConvention.GetParentSeparator("Catel|Views|MyView.xaml"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel|Views|MyView.xaml"), Is.EqualTo("|"));
             }
 
             [TestCase]
             public void ReturnsDotWhenUsed()
             {
-                Assert.AreEqual(".", NamingConvention.GetParentSeparator("Catel.Views.MyView"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel.Views.MyView"), Is.EqualTo("."));
             }
         }
     }

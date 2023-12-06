@@ -21,16 +21,16 @@
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test");
                 messageMediator.SendMessage("test 2");
 
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(2));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -39,16 +39,16 @@
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test", "tag");
                 messageMediator.SendMessage("test 2", "tag");
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(2));
             }
         }
 
@@ -67,24 +67,24 @@
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test");
                 messageMediator.SendMessage("test 2");
 
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(2));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.UnsubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test 3");
                 messageMediator.SendMessage("test 4");
 
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(2));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -93,24 +93,24 @@
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test", "tag");
                 messageMediator.SendMessage("test 2", "tag");
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(2));
 
                 recipient.UnsubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test 3", "tag");
                 messageMediator.SendMessage("test 4", "tag");
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(2));
             }
         }
     }

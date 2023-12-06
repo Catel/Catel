@@ -34,7 +34,7 @@
             {
                 var languageService = new LanguageService();
 
-                Assert.AreEqual(null, languageService.GetString("NonExistingResourceName"));
+                Assert.That(languageService.GetString("NonExistingResourceName"), Is.EqualTo(null));
             }
 
             //[TestCase]

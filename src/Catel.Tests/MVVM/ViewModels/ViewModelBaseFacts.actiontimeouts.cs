@@ -13,7 +13,7 @@
         {
             var vm = new TestViewModelWithActionTimeout();
 
-            Assert.AreEqual(IViewModelExtensions.ViewModelActionAwaitTimeoutInMilliseconds, vm.ViewModelActionAwaitTimeoutInMilliseconds);
+            Assert.That(vm.ViewModelActionAwaitTimeoutInMilliseconds, Is.EqualTo(IViewModelExtensions.ViewModelActionAwaitTimeoutInMilliseconds));
         }
 
         [Test]

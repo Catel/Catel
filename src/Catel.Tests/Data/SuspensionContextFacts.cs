@@ -18,9 +18,9 @@
 
             var items = suspensionContext.Properties.ToList();
 
-            Assert.AreEqual(string.Empty, items[0]);
-            Assert.AreEqual("A", items[1]);
-            Assert.AreEqual("B", items[2]);
+            Assert.That(items[0], Is.EqualTo(string.Empty));
+            Assert.That(items[1], Is.EqualTo("A"));
+            Assert.That(items[2], Is.EqualTo("B"));
         }
 
         [TestCase]
@@ -35,9 +35,9 @@
 
             var items = suspensionContext.Properties.ToList();
 
-            Assert.AreEqual(2, items.Count);
-            Assert.AreEqual(string.Empty, items[0]);
-            Assert.AreEqual("A", items[1]);
+            Assert.That(items.Count, Is.EqualTo(2));
+            Assert.That(items[0], Is.EqualTo(string.Empty));
+            Assert.That(items[1], Is.EqualTo("A"));
         }
     }
 }

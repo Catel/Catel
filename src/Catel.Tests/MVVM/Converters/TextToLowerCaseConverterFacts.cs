@@ -19,7 +19,7 @@
                 var converter = new TextToLowerCaseConverter();
                 var actualValue = converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo)null);
 
-                Assert.AreEqual("lowercase", actualValue);
+                Assert.That(actualValue, Is.EqualTo("lowercase"));
             }
 
             [TestCase]
@@ -45,7 +45,7 @@
             {
                 var converter = new TextToLowerCaseConverter();
 
-                Assert.AreEqual(null, converter.Convert(null, typeof(string), null, (CultureInfo)null));
+                Assert.That(converter.Convert(null, typeof(string), null, (CultureInfo)null), Is.EqualTo(null));
             }
             #endregion
         }

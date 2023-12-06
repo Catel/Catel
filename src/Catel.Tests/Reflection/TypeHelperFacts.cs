@@ -29,7 +29,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForNullOrEmptyType(string type)
+            public void ThrowsArgumentExceptionForNullOrEmptyType(string? type)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.ConvertTypeToVersionIndependentType(type));
             }
@@ -42,7 +42,7 @@
 
                 var realOutput = TypeHelper.ConvertTypeToVersionIndependentType(input);
 
-                Assert.AreEqual(output, realOutput);
+                Assert.That(realOutput, Is.EqualTo(output));
             }
 
             [TestCase]
@@ -53,7 +53,7 @@
 
                 var realOutput = TypeHelper.ConvertTypeToVersionIndependentType(input);
 
-                Assert.AreEqual(output, realOutput);
+                Assert.That(realOutput, Is.EqualTo(output));
             }
 
             [TestCase]
@@ -64,7 +64,7 @@
 
                 var realOutput = TypeHelper.ConvertTypeToVersionIndependentType(input);
 
-                Assert.AreEqual(output, realOutput);
+                Assert.That(realOutput, Is.EqualTo(output));
             }
 
             [TestCase]
@@ -76,7 +76,7 @@
 
                 var realOutput = TypeHelper.ConvertTypeToVersionIndependentType(input);
 
-                Assert.AreEqual(output, realOutput);
+                Assert.That(realOutput, Is.EqualTo(output));
             }
             #endregion
         }
@@ -90,7 +90,7 @@
             [TestCase]
             public void ReturnsEmptyStringForEmptyArray()
             {
-                Assert.AreEqual(string.Empty, TypeHelper.FormatInnerTypes((IEnumerable<string>)Array.Empty<string>()));
+                Assert.That(TypeHelper.FormatInnerTypes((IEnumerable<string>)Array.Empty<string>()), Is.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -100,7 +100,7 @@
 
                 string actualValue = TypeHelper.FormatInnerTypes((IEnumerable<string>)new[] { "string", "string", "int" });
 
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
             }
             #endregion
         }
@@ -113,7 +113,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForNullOrEmptyAssemblyName(string assemblyName)
+            public void ThrowsArgumentExceptionForNullOrEmptyAssemblyName(string? assemblyName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.FormatType(assemblyName, "Type"));
             }
@@ -121,7 +121,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForNullOrEmptyTypeName(string typeName)
+            public void ThrowsArgumentExceptionForNullOrEmptyTypeName(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.FormatType("Catel.Core", typeName));
             }
@@ -133,7 +133,7 @@
 
                 string actualValue = TypeHelper.FormatType("Catel.Tests", "Catel.Tests.Helpers.TypeHelperFacts");
 
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
             }
         }
         #endregion
@@ -144,7 +144,7 @@
         {
             [TestCase(null)]
             [TestCase("")]
-            public void ThrowsArgumentExceptionForNullFullTypeName(string assemblyName)
+            public void ThrowsArgumentExceptionForNullFullTypeName(string? assemblyName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.GetAssemblyName(assemblyName));
             }
@@ -154,9 +154,9 @@
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]]", null)]
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]], mscorlib", "mscorlib")]
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-            public void ReturnsAssemblyName(string typeName, string expectedAssembly)
+            public void ReturnsAssemblyName(string typeName, string? expectedAssembly)
             {
-                Assert.AreEqual(expectedAssembly, TypeHelper.GetAssemblyName(typeName));
+                Assert.That(TypeHelper.GetAssemblyName(typeName), Is.EqualTo(expectedAssembly));
             }
         }
         #endregion
@@ -169,7 +169,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForNullOrEmptyAssemblyName(string assemblyName)
+            public void ThrowsArgumentExceptionForNullOrEmptyAssemblyName(string? assemblyName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.GetAssemblyNameWithoutOverhead(assemblyName));
             }
@@ -180,7 +180,7 @@
                 var input = "Catel.Core";
                 var expected = "Catel.Core";
 
-                Assert.AreEqual(expected, TypeHelper.GetAssemblyNameWithoutOverhead(input));
+                Assert.That(TypeHelper.GetAssemblyNameWithoutOverhead(input), Is.EqualTo(expected));
             }
 
             [TestCase]
@@ -189,7 +189,7 @@
                 var input = "Catel.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6";
                 var expected = "Catel.Core";
 
-                Assert.AreEqual(expected, TypeHelper.GetAssemblyNameWithoutOverhead(input));
+                Assert.That(TypeHelper.GetAssemblyNameWithoutOverhead(input), Is.EqualTo(expected));
             }
             #endregion
         }
@@ -203,7 +203,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForNullOrEmptyType(string typeName)
+            public void ThrowsArgumentExceptionForNullOrEmptyType(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.GetInnerTypes(typeName));
             }
@@ -214,7 +214,7 @@
                 var input = "Catel.Data.ObservableObject, Catel.Core";
                 var output = TypeHelper.GetInnerTypes(input);
 
-                Assert.AreEqual(0, output.Length);
+                Assert.That(output.Length, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -223,9 +223,9 @@
                 var input = "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx], [System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx";
                 var output = TypeHelper.GetInnerTypes(input);
 
-                Assert.AreEqual(2, output.Length);
-                Assert.AreEqual("System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx", output[0]);
-                Assert.AreEqual("System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx", output[1]);
+                Assert.That(output.Length, Is.EqualTo(2));
+                Assert.That(output[0], Is.EqualTo("System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx"));
+                Assert.That(output[1], Is.EqualTo("System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx"));
             }
 
             [TestCase]
@@ -234,9 +234,9 @@
                 var input = "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx], [System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx";
                 var output = TypeHelper.GetInnerTypes(input);
 
-                Assert.AreEqual(2, output.Length);
-                Assert.AreEqual("System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx", output[0]);
-                Assert.AreEqual("System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx", output[1]);
+                Assert.That(output.Length, Is.EqualTo(2));
+                Assert.That(output[0], Is.EqualTo("System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx"));
+                Assert.That(output[1], Is.EqualTo("System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx"));
             }
             #endregion
         }
@@ -249,7 +249,7 @@
             #region Methods
             [TestCase(null)]
             [TestCase("")]
-            public void ThrowsArgumentExceptionForNullFullTypeName(string typeName)
+            public void ThrowsArgumentExceptionForNullFullTypeName(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.GetTypeName(typeName));
             }
@@ -260,7 +260,7 @@
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Collections.Generic.List`1[[Catel.Data.PropertyValue]]")]
             public void ReturnsTypeName(string input, string expectedOutput)
             {
-                Assert.AreEqual(expectedOutput, TypeHelper.GetTypeName(input));
+                Assert.That(TypeHelper.GetTypeName(input), Is.EqualTo(expectedOutput));
             }
             #endregion
         }
@@ -273,7 +273,7 @@
             #region Methods
             [TestCase(null)]
             [TestCase("")]
-            public void ThrowsArgumentExceptionForNullFullTypeName(string typeName)
+            public void ThrowsArgumentExceptionForNullFullTypeName(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.GetTypeNameWithAssembly(typeName));
             }
@@ -281,13 +281,13 @@
             [TestCase]
             public void ReturnsFullTypeNameForTypeWithAssemblyWithoutOverhead()
             {
-                Assert.AreEqual("Catel.Tests.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Tests.TypeHelper, Catel.Core"));
+                Assert.That(TypeHelper.GetTypeNameWithAssembly("Catel.Tests.TypeHelper, Catel.Core"), Is.EqualTo("Catel.Tests.TypeHelper, Catel.Core"));
             }
 
             [TestCase]
             public void ReturnsFullTypeNameForTypeWithAssembly()
             {
-                Assert.AreEqual("Catel.Tests.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Tests.TypeHelper, Catel.Core, Version=1.0.0.0, PublicKeyToken=1234578, Culture=neutral"));
+                Assert.That(TypeHelper.GetTypeNameWithAssembly("Catel.Tests.TypeHelper, Catel.Core, Version=1.0.0.0, PublicKeyToken=1234578, Culture=neutral"), Is.EqualTo("Catel.Tests.TypeHelper, Catel.Core"));
             }
             #endregion
         }
@@ -300,7 +300,7 @@
             #region Methods
             [TestCase(null)]
             [TestCase("")]
-            public void ThrowsArgumentExceptionForNullFullTypeName(string typeName)
+            public void ThrowsArgumentExceptionForNullFullTypeName(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.GetTypeNameWithoutNamespace(typeName));
             }
@@ -308,13 +308,13 @@
             [TestCase]
             public void ReturnsTypeNameForTypeWithoutAssembly()
             {
-                Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Tests.TypeHelper"));
+                Assert.That(TypeHelper.GetTypeNameWithoutNamespace("Catel.Tests.TypeHelper"), Is.EqualTo("TypeHelper"));
             }
 
             [TestCase]
             public void ReturnsTypeNameForTypeWithAssembly()
             {
-                Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Tests.TypeHelper, Catel.Core"));
+                Assert.That(TypeHelper.GetTypeNameWithoutNamespace("Catel.Tests.TypeHelper, Catel.Core"), Is.EqualTo("TypeHelper"));
             }
             #endregion
         }
@@ -327,7 +327,7 @@
             #region Methods
             [TestCase(null)]
             [TestCase("")]
-            public void ThrowsArgumentExceptionForNullFullTypeName(string typeName)
+            public void ThrowsArgumentExceptionForNullFullTypeName(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeHelper.GetTypeNamespace(typeName));
             }
@@ -335,13 +335,13 @@
             [TestCase]
             public void ReturnsTypeNamespaceForTypeWithoutAssembly()
             {
-                Assert.AreEqual("Catel.Tests", TypeHelper.GetTypeNamespace("Catel.Tests.TypeHelper"));
+                Assert.That(TypeHelper.GetTypeNamespace("Catel.Tests.TypeHelper"), Is.EqualTo("Catel.Tests"));
             }
 
             [TestCase]
             public void ReturnsTypeNamespaceForTypeWithAssembly()
             {
-                Assert.AreEqual("Catel.Tests", TypeHelper.GetTypeNamespace("Catel.Tests.TypeHelper, Catel.Core"));
+                Assert.That(TypeHelper.GetTypeNamespace("Catel.Tests.TypeHelper, Catel.Core"), Is.EqualTo("Catel.Tests"));
             }
             #endregion
         }
@@ -355,7 +355,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForInvalidAssemblyName(string typeName)
+            public void ThrowsArgumentExceptionForInvalidAssemblyName(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeCache.GetTypeWithAssembly(typeName, "Catel.Core"));
             }
@@ -363,7 +363,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForInvalidTypeName(string assemblyName)
+            public void ThrowsArgumentExceptionForInvalidTypeName(string? assemblyName)
             {
                 Assert.Throws<ArgumentException>(() => TypeCache.GetTypeWithAssembly("Catel.Reflection.TypeHelper", assemblyName));
             }
@@ -371,25 +371,25 @@
             [TestCase]
             public void ReturnsNullForUnavailableType()
             {
-                Assert.IsNull(TypeCache.GetTypeWithAssembly("Catel.UnknownType", "Catel.Core"));
+                Assert.That(TypeCache.GetTypeWithAssembly("Catel.UnknownType", "Catel.Core"), Is.Null);
             }
 
             [TestCase]
             public void ReturnsTypeForAvailableType()
             {
-                Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithAssembly("Catel.Reflection.TypeHelper", "Catel.Core"));
+                Assert.That(TypeCache.GetTypeWithAssembly("Catel.Reflection.TypeHelper", "Catel.Core"), Is.EqualTo(typeof(TypeHelper)));
             }
 
             [TestCase]
             public void ReturnsNullWithoutIgnoringCase()
             {
-                Assert.AreEqual(null, TypeCache.GetTypeWithAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", "cAtEl.CoRe", false));
+                Assert.That(TypeCache.GetTypeWithAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", "cAtEl.CoRe", false), Is.EqualTo(null));
             }
 
             [TestCase]
             public void ReturnsTypeWithIgnoringCase()
             {
-                Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", "cAtEl.CoRe", true));
+                Assert.That(TypeCache.GetTypeWithAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", "cAtEl.CoRe", true), Is.EqualTo(typeof(TypeHelper)));
             }
             #endregion
         }
@@ -403,7 +403,7 @@
             [TestCase(null)]
             [TestCase("")]
             [TestCase(" ")]
-            public void ThrowsArgumentExceptionForInvalidTypeName(string typeName)
+            public void ThrowsArgumentExceptionForInvalidTypeName(string? typeName)
             {
                 Assert.Throws<ArgumentException>(() => TypeCache.GetTypeWithoutAssembly(typeName));
             }
@@ -411,25 +411,25 @@
             [TestCase]
             public void ReturnsNullForUnavailableType()
             {
-                Assert.IsNull(TypeCache.GetTypeWithoutAssembly("Catel.UnknownType"));
+                Assert.That(TypeCache.GetTypeWithoutAssembly("Catel.UnknownType"), Is.Null);
             }
 
             [TestCase]
             public void ReturnsTypeForAvailableType()
             {
-                Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithoutAssembly("Catel.Reflection.TypeHelper"));
+                Assert.That(TypeCache.GetTypeWithoutAssembly("Catel.Reflection.TypeHelper"), Is.EqualTo(typeof(TypeHelper)));
             }
 
             [TestCase]
             public void ReturnsNullWithoutIgnoringCase()
             {
-                Assert.AreEqual(null, TypeCache.GetTypeWithoutAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", false));
+                Assert.That(TypeCache.GetTypeWithoutAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", false), Is.EqualTo(null));
             }
 
             [TestCase]
             public void ReturnsTypeWithIgnoringCase()
             {
-                Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithoutAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", true));
+                Assert.That(TypeCache.GetTypeWithoutAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", true), Is.EqualTo(typeof(TypeHelper)));
             }
             #endregion
         }
@@ -443,7 +443,7 @@
             [TestCase]
             public void ReturnsNullForNullInstance()
             {
-                Assert.AreEqual(null, TypeHelper.GetTypedInstance<List<int>>(null));
+                Assert.That(TypeHelper.GetTypedInstance<List<int>>(null), Is.EqualTo(null));
             }
 
             [TestCase]
@@ -457,7 +457,7 @@
             public void ReturnsTypedInstanceWhenInstanceIsOfType()
             {
                 var list = new List<int>();
-                Assert.AreEqual(list, TypeHelper.GetTypedInstance<List<int>>(list));
+                Assert.That(TypeHelper.GetTypedInstance<List<int>>(list), Is.EqualTo(list));
             }
             #endregion
         }
@@ -474,7 +474,7 @@
                 var allTypes = TypeCache.GetTypes();
                 var notifyTypes = TypeCache.GetTypes(t => t.ImplementsInterfaceEx<INotifyPropertyChanged>());
 
-                Assert.AreNotEqual(allTypes.Length, notifyTypes.Length);
+                Assert.That(notifyTypes.Length, Is.Not.EqualTo(allTypes.Length));
             }
             #endregion
         }
@@ -503,7 +503,7 @@
                 var genericType = typeof(SavableModelBase<>);
                 var toCheck = new List<string>();
 
-                Assert.IsFalse(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()));
+                Assert.That(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()), Is.False);
             }
 
             [TestCase]
@@ -512,7 +512,7 @@
                 var genericType = typeof(List<>);
                 var toCheck = new List<string>();
 
-                Assert.IsTrue(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()));
+                Assert.That(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()), Is.True);
             }
             #endregion
         }

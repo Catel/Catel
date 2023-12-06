@@ -13,7 +13,7 @@
             public void SetsValuesCorrectly()
             {
                 var exception = new InvalidPropertyException("PropertyName");
-                Assert.AreEqual("PropertyName", exception.PropertyName);
+                Assert.That(exception.PropertyName, Is.EqualTo("PropertyName"));
             }
         }
     }

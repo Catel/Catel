@@ -17,8 +17,8 @@
             }
             catch (ModelNotRegisteredException ex)
             {
-                Assert.AreEqual("model", ex.ModelName);
-                Assert.AreEqual("property", ex.PropertyDeclaringViewModelToModelAttribute);
+                Assert.That(ex.ModelName, Is.EqualTo("model"));
+                Assert.That(ex.PropertyDeclaringViewModelToModelAttribute, Is.EqualTo("property"));
             }
         }
         #endregion

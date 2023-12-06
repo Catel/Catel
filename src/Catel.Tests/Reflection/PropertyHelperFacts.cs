@@ -61,14 +61,14 @@
             public void IsPropertyAvailable_NotExistingProperty()
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                Assert.AreEqual(false, PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, "NotExistingProperty"));
+                Assert.That(PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, "NotExistingProperty"), Is.EqualTo(false));
             }
 
             [TestCase]
             public void IsPropertyAvailable_ExistingProperty()
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                Assert.AreEqual(true, PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, "PublicProperty"));
+                Assert.That(PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, "PublicProperty"), Is.EqualTo(true));
             }
 
             [TestCase("publicProperty", false, false)]
@@ -77,7 +77,7 @@
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
 
-                Assert.AreEqual(expectedResult, PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, property, ignoreCase));
+                Assert.That(PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, property, ignoreCase), Is.EqualTo(expectedResult));
             }
         }
 
@@ -107,8 +107,8 @@
 
                 var result = PropertyHelper.TryGetPropertyValue(obj, "Non-existing property", out value);
 
-                Assert.IsFalse(result);
-                Assert.AreEqual(null, value);
+                Assert.That(result, Is.False);
+                Assert.That(value, Is.EqualTo(null));
             }
 
             [TestCase]
@@ -119,8 +119,8 @@
 
                 var result = PropertyHelper.TryGetPropertyValue(obj, "PublicProperty", out value);
 
-                Assert.IsTrue(result);
-                Assert.AreEqual(1, value);
+                Assert.That(result, Is.True);
+                Assert.That(value, Is.EqualTo(1));
             }
 
             [TestCase("publicProperty", false, false)]
@@ -132,11 +132,11 @@
 
                 var result = PropertyHelper.TryGetPropertyValue(obj, property, ignoreCase, out value);
 
-                Assert.AreEqual(expectedResult, result);
+                Assert.That(result, Is.EqualTo(expectedResult));
 
                 if (expectedResult)
                 {
-                    Assert.AreEqual(1, value);
+                    Assert.That(value, Is.EqualTo(1));
                 }
             }
         }
@@ -168,7 +168,7 @@
             public void GetPropertyValue_PrivateWriteProperty()
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                Assert.AreEqual(4, PropertyHelper.GetPropertyValue<int>(myPropertyHelperClass, "PrivateWriteProperty"));
+                Assert.That(PropertyHelper.GetPropertyValue<int>(myPropertyHelperClass, "PrivateWriteProperty"), Is.EqualTo(4));
             }
 
             [TestCase]
@@ -176,7 +176,7 @@
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
                 myPropertyHelperClass.PublicProperty = 42;
-                Assert.AreEqual(42, PropertyHelper.GetPropertyValue<int>(myPropertyHelperClass, "PublicProperty"));
+                Assert.That(PropertyHelper.GetPropertyValue<int>(myPropertyHelperClass, "PublicProperty"), Is.EqualTo(42));
             }
 
             [TestCase]
@@ -184,7 +184,7 @@
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
                 myPropertyHelperClass.StringValue = "FourtyTwo";
-                Assert.AreEqual("FourtyTwo", PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, "StringValue"));
+                Assert.That(PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, "StringValue"), Is.EqualTo("FourtyTwo"));
             }
 
             [TestCase("stringValue", false, "exception")]
@@ -201,7 +201,7 @@
                 else
                 {
                     var result = PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, property, ignoreCase);
-                    Assert.AreEqual(expectedResult, result);
+                    Assert.That(result, Is.EqualTo(expectedResult));
                 }
             }
         }
@@ -229,7 +229,7 @@
 
                 var result = PropertyHelper.TrySetPropertyValue(obj, "Non-existing property", null);
 
-                Assert.IsFalse(result);
+                Assert.That(result, Is.False);
             }
 
             [TestCase]
@@ -239,8 +239,8 @@
 
                 var result = PropertyHelper.TrySetPropertyValue(obj, "PublicProperty", 5);
 
-                Assert.IsTrue(result);
-                Assert.AreEqual(5, obj.PublicProperty);
+                Assert.That(result, Is.True);
+                Assert.That(obj.PublicProperty, Is.EqualTo(5));
             }
 
             [TestCase("publicProperty", false, false)]
@@ -251,10 +251,10 @@
 
                 var result = PropertyHelper.TrySetPropertyValue(obj, property, 5, ignoreCase);
 
-                Assert.AreEqual(result, expectedResult);
+                Assert.That(expectedResult, Is.EqualTo(result));
                 if (expectedResult)
                 {
-                    Assert.AreEqual(5, obj.PublicProperty);
+                    Assert.That(obj.PublicProperty, Is.EqualTo(5));
                 }
             }
         }
@@ -280,7 +280,7 @@
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
                 PropertyHelper.SetPropertyValue(myPropertyHelperClass, "PrivateReadProperty", 42);
-                Assert.AreEqual(42, myPropertyHelperClass.GetPrivateReadPropertyValue());
+                Assert.That(myPropertyHelperClass.GetPrivateReadPropertyValue(), Is.EqualTo(42));
             }
 
             [TestCase]
@@ -295,7 +295,7 @@
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
                 PropertyHelper.SetPropertyValue(myPropertyHelperClass, "PublicProperty", 42);
-                Assert.AreEqual(42, myPropertyHelperClass.PublicProperty);
+                Assert.That(myPropertyHelperClass.PublicProperty, Is.EqualTo(42));
             }
 
             [TestCase]
@@ -303,7 +303,7 @@
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
                 PropertyHelper.SetPropertyValue(myPropertyHelperClass, "StringValue", "FourtyTwo");
-                Assert.AreEqual("FourtyTwo", myPropertyHelperClass.StringValue);
+                Assert.That(myPropertyHelperClass.StringValue, Is.EqualTo("FourtyTwo"));
             }
 
             [TestCase("stringValue", false, false)]
@@ -319,7 +319,7 @@
                 else
                 {
                     PropertyHelper.SetPropertyValue(myPropertyHelperClass, property, "FourtyTwo", ignoreCase);
-                    Assert.AreEqual("FourtyTwo", myPropertyHelperClass.StringValue);
+                    Assert.That(myPropertyHelperClass.StringValue, Is.EqualTo("FourtyTwo"));
                 }
             }
         }

@@ -108,31 +108,31 @@
                 foreach (var plugin in pluginContainer.Plugins)
                 {
                     plugin.Name = "dummy";
-                    Assert.IsTrue(plugin.IsDirty);
+                    Assert.That(plugin.IsDirty, Is.True);
 
                     foreach (var preset in plugin.Presets)
                     {
                         preset.Foo = "test";
-                        Assert.IsTrue(preset.IsDirty);
+                        Assert.That(preset.IsDirty, Is.True);
                     }
                 }
 
                 pluginChangeNotifications = 0;
                 presetChangeNotifications = 0;
 
-                Assert.IsTrue(pluginContainer.IsDirty);
+                Assert.That(pluginContainer.IsDirty, Is.True);
 
                 pluginContainer.ClearIsDirtyOnAllChildren();
 
-                Assert.AreEqual(100, pluginChangeNotifications);
-                Assert.AreEqual(50000, presetChangeNotifications);
+                Assert.That(pluginChangeNotifications, Is.EqualTo(100));
+                Assert.That(presetChangeNotifications, Is.EqualTo(50000));
 
                 // Test https://github.com/Catel/Catel/issues/1262
-                Assert.IsFalse(pluginContainer.IsDirty);
+                Assert.That(pluginContainer.IsDirty, Is.False);
 
                 foreach (var plugin in pluginContainer.Plugins)
                 {
-                    Assert.IsFalse(plugin.IsDirty);
+                    Assert.That(plugin.IsDirty, Is.False);
                 }
             }
 
@@ -180,31 +180,31 @@
                 foreach (var plugin in pluginContainer.Plugins)
                 {
                     plugin.Name = "dummy";
-                    Assert.IsTrue(plugin.IsDirty);
+                    Assert.That(plugin.IsDirty, Is.True);
 
                     foreach (var preset in plugin.Presets)
                     {
                         preset.Foo = "test";
-                        Assert.IsTrue(preset.IsDirty);
+                        Assert.That(preset.IsDirty, Is.True);
                     }
                 }
 
                 pluginChangeNotifications = 0;
                 presetChangeNotifications = 0;
 
-                Assert.IsTrue(pluginContainer.IsDirty);
+                Assert.That(pluginContainer.IsDirty, Is.True);
 
                 pluginContainer.ClearIsDirtyOnAllChildren(true);
 
-                Assert.AreEqual(0, pluginChangeNotifications);
-                Assert.AreEqual(0, presetChangeNotifications);
+                Assert.That(pluginChangeNotifications, Is.EqualTo(0));
+                Assert.That(presetChangeNotifications, Is.EqualTo(0));
 
                 // Test https://github.com/Catel/Catel/issues/1262
-                Assert.IsFalse(pluginContainer.IsDirty);
+                Assert.That(pluginContainer.IsDirty, Is.False);
 
                 foreach (var plugin in pluginContainer.Plugins)
                 {
-                    Assert.IsFalse(plugin.IsDirty);
+                    Assert.That(plugin.IsDirty, Is.False);
                 }
             }
         }

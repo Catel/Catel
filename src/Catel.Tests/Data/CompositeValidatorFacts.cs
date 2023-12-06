@@ -114,7 +114,7 @@
 
                 compositeValidator.Add(validator);
 
-                Assert.IsTrue(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.True);
             }
 
             [TestCase]
@@ -127,15 +127,15 @@
 
                 compositeValidator.Add(validator);
 
-                Assert.IsTrue(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.True);
 
                 compositeValidator.Add(validator);
 
-                Assert.IsTrue(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.True);
 
                 compositeValidator.Remove(validator);
 
-                Assert.IsFalse(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.False);
             }
         }
 
@@ -160,11 +160,11 @@
 
                 compositeValidator.Add(validator);
 
-                Assert.IsTrue(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.True);
 
                 compositeValidator.Remove(validator);
 
-                Assert.IsFalse(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.False);
             }
 
             [TestCase]
@@ -175,11 +175,11 @@
                 var validatorMock = new Mock<IValidator>();
                 var validator = validatorMock.Object;
 
-                Assert.IsFalse(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.False);
 
                 compositeValidator.Remove(validator);
 
-                Assert.IsFalse(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.False);
             }
         }
 
@@ -204,7 +204,7 @@
 
                 compositeValidator.Add(validator);
 
-                Assert.IsTrue(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.True);
             }
 
             [TestCase]
@@ -215,7 +215,7 @@
                 var validatorMock = new Mock<IValidator>();
                 var validator = validatorMock.Object;
 
-                Assert.IsFalse(compositeValidator.Contains(validator));
+                Assert.That(compositeValidator.Contains(validator), Is.False);
             }
         }
 

@@ -605,15 +605,15 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer, config);
 
-                    Assert.AreEqual(countrylist.Count, deserializedObject.Count, description);
+                    Assert.That(deserializedObject.Count, Is.EqualTo(countrylist.Count), description);
 
                     for (int i = 0; i < deserializedObject.Count; i++)
                     {
                         var expectedItem = countrylist[i];
                         var actualItem = deserializedObject[i];
 
-                        Assert.AreEqual(expectedItem.IsoCode, actualItem.IsoCode, description);
-                        Assert.AreEqual(expectedItem.Description, actualItem.Description, description);
+                        Assert.That(actualItem.IsoCode, Is.EqualTo(expectedItem.IsoCode), description);
+                        Assert.That(actualItem.Description, Is.EqualTo(expectedItem.Description), description);
                     }
                 });
             }
@@ -638,15 +638,15 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer, config);
 
-                    Assert.AreEqual(bc.Count, deserializedObject.Count, description);
+                    Assert.That(deserializedObject.Count, Is.EqualTo(bc.Count), description);
 
-                    Assert.AreEqual(3, deserializedObject.Count, description);
-                    Assert.AreEqual("B1", deserializedObject[0].Name, description);
-                    Assert.AreEqual("F1", deserializedObject[0].Floors[0].Name, description);
-                    Assert.AreEqual("F2", deserializedObject[0].Floors[1].Name, description);
-                    Assert.AreEqual("F3", deserializedObject[0].Floors[2].Name, description);
-                    Assert.AreEqual("B2", deserializedObject[1].Name, description);
-                    Assert.AreEqual("B3", deserializedObject[2].Name, description);
+                    Assert.That(deserializedObject.Count, Is.EqualTo(3), description);
+                    Assert.That(deserializedObject[0].Name, Is.EqualTo("B1"), description);
+                    Assert.That(deserializedObject[0].Floors[0].Name, Is.EqualTo("F1"), description);
+                    Assert.That(deserializedObject[0].Floors[1].Name, Is.EqualTo("F2"), description);
+                    Assert.That(deserializedObject[0].Floors[2].Name, Is.EqualTo("F3"), description);
+                    Assert.That(deserializedObject[1].Name, Is.EqualTo("B2"), description);
+                    Assert.That(deserializedObject[2].Name, Is.EqualTo("B3"), description);
                 });
             }
 
@@ -671,15 +671,15 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer, config);
 
-                    Assert.AreEqual(bc.Count, deserializedObject.Count, description);
+                    Assert.That(deserializedObject.Count, Is.EqualTo(bc.Count), description);
 
-                    Assert.AreEqual(3, deserializedObject.Count, description);
-                    Assert.AreEqual("B1", deserializedObject[0].Name, description);
-                    Assert.AreEqual("F1", deserializedObject[0].Floors[0].Name, description);
-                    Assert.AreEqual("F2", deserializedObject[0].Floors[1].Name, description);
-                    Assert.AreEqual("F3", deserializedObject[0].Floors[2].Name, description);
-                    Assert.AreEqual("B2", deserializedObject[1].Name, description);
-                    Assert.AreEqual("B3", deserializedObject[2].Name, description);
+                    Assert.That(deserializedObject.Count, Is.EqualTo(3), description);
+                    Assert.That(deserializedObject[0].Name, Is.EqualTo("B1"), description);
+                    Assert.That(deserializedObject[0].Floors[0].Name, Is.EqualTo("F1"), description);
+                    Assert.That(deserializedObject[0].Floors[1].Name, Is.EqualTo("F2"), description);
+                    Assert.That(deserializedObject[0].Floors[2].Name, Is.EqualTo("F3"), description);
+                    Assert.That(deserializedObject[1].Name, Is.EqualTo("B2"), description);
+                    Assert.That(deserializedObject[2].Name, Is.EqualTo("B3"), description);
                 });
             }
 
@@ -696,16 +696,16 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer, config);
 
-                    Assert.AreEqual(countrylist.GetType(), deserializedObject.GetType(), description);
-                    Assert.AreEqual(countrylist.Length, deserializedObject.Length, description);
+                    Assert.That(deserializedObject.GetType(), Is.EqualTo(countrylist.GetType()), description);
+                    Assert.That(deserializedObject.Length, Is.EqualTo(countrylist.Length), description);
 
                     for (var i = 0; i < deserializedObject.Length; i++)
                     {
                         var expectedItem = countrylist[i];
                         var actualItem = deserializedObject[i];
 
-                        Assert.AreEqual(expectedItem.IsoCode, actualItem.IsoCode, description);
-                        Assert.AreEqual(expectedItem.Description, actualItem.Description, description);
+                        Assert.That(actualItem.IsoCode, Is.EqualTo(expectedItem.IsoCode), description);
+                        Assert.That(actualItem.Description, Is.EqualTo(expectedItem.Description), description);
                     }
                 });
             }
@@ -722,14 +722,14 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer, config);
 
-                    Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
+                    Assert.That(deserializedObject.Count, Is.EqualTo(dictionary.Count), description);
 
-                    Assert.IsTrue(deserializedObject.ContainsKey("skip"));
-                    Assert.AreEqual(1, deserializedObject["skip"]);
-                    Assert.IsTrue(deserializedObject.ContainsKey("take"));
-                    Assert.AreEqual(2, deserializedObject["take"]);
-                    Assert.IsTrue(deserializedObject.ContainsKey("some other string"));
-                    Assert.AreEqual(3, deserializedObject["some other string"]);
+                    Assert.That(deserializedObject.ContainsKey("skip"), Is.True);
+                    Assert.That(deserializedObject["skip"], Is.EqualTo(1));
+                    Assert.That(deserializedObject.ContainsKey("take"), Is.True);
+                    Assert.That(deserializedObject["take"], Is.EqualTo(2));
+                    Assert.That(deserializedObject.ContainsKey("some other string"), Is.True);
+                    Assert.That(deserializedObject["some other string"], Is.EqualTo(3));
                 });
             }
 
@@ -743,7 +743,7 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(value, serializer, config);
 
-                    Assert.AreEqual(value, deserializedObject);
+                    Assert.That(deserializedObject, Is.EqualTo(value));
                 });
             }
 
@@ -762,15 +762,15 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dataSourceResult, serializer, config);
 
-                    Assert.AreEqual(243, deserializedObject.Total, description);
+                    Assert.That(deserializedObject.Total, Is.EqualTo(243), description);
 
                     int counter = 0;
                     foreach (var country in dataSourceResult.Data)
                     {
                         var existingCountry = countrylist[counter++];
 
-                        Assert.AreEqual(existingCountry.IsoCode, ((Country)country).IsoCode, description);
-                        Assert.AreEqual(existingCountry.Description, ((Country)country).Description, description);
+                        Assert.That(((Country)country).IsoCode, Is.EqualTo(existingCountry.IsoCode), description);
+                        Assert.That(((Country)country).Description, Is.EqualTo(existingCountry.Description), description);
                     }
                 });
             }
@@ -782,10 +782,10 @@
 
                 CustomizedJsonParsing(json, parameters =>
                 {
-                    Assert.AreEqual(0, parameters[0]);
-                    Assert.AreEqual(10, parameters[1]);
-                    Assert.AreEqual(false, parameters[2]);
-                    Assert.IsNull(parameters[3]);
+                    Assert.That(parameters[0], Is.EqualTo(0));
+                    Assert.That(parameters[1], Is.EqualTo(10));
+                    Assert.That(parameters[2], Is.EqualTo(false));
+                    Assert.That(parameters[3], Is.Null);
                 });
             }
 
@@ -796,19 +796,19 @@
 
                 CustomizedJsonParsing(json, parameters =>
                 {
-                    Assert.AreEqual(typeof(int), parameters[0].GetType());
-                    Assert.AreEqual(0, parameters[0]);
+                    Assert.That(parameters[0].GetType(), Is.EqualTo(typeof(int)));
+                    Assert.That(parameters[0], Is.EqualTo(0));
 
-                    Assert.AreEqual(typeof(int), parameters[1].GetType());
-                    Assert.AreEqual(10, parameters[1]);
+                    Assert.That(parameters[1].GetType(), Is.EqualTo(typeof(int)));
+                    Assert.That(parameters[1], Is.EqualTo(10));
 
-                    Assert.AreEqual(typeof(bool), parameters[2].GetType());
-                    Assert.AreEqual(false, parameters[2]);
+                    Assert.That(parameters[2].GetType(), Is.EqualTo(typeof(bool)));
+                    Assert.That(parameters[2], Is.EqualTo(false));
 
                     var sort = ((List<SortDescriptor>)parameters[3])[0];
                     Assert.IsNotNull(sort);
-                    Assert.AreEqual("IsoCode", sort.Field);
-                    Assert.AreEqual("asc", sort.Direction);
+                    Assert.That(sort.Field, Is.EqualTo("IsoCode"));
+                    Assert.That(sort.Direction, Is.EqualTo("asc"));
                 });
             }
 

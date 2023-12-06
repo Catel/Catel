@@ -14,15 +14,15 @@
             {
                 var modelC = new TestModels.ModelC();
 
-                Assert.AreEqual(string.Empty, modelC.ModelAProperty);
-                Assert.AreEqual(string.Empty, modelC.ModelBProperty);
-                Assert.AreEqual(string.Empty, modelC.ModelCProperty);
+                Assert.That(modelC.ModelAProperty, Is.EqualTo(string.Empty));
+                Assert.That(modelC.ModelBProperty, Is.EqualTo(string.Empty));
+                Assert.That(modelC.ModelCProperty, Is.EqualTo(string.Empty));
 
                 var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetXmlSerializer());
 
-                Assert.AreEqual("ModifiedA", clonedModelC.ModelAProperty);
-                Assert.AreEqual("ModifiedB", clonedModelC.ModelBProperty);
-                Assert.AreEqual("ModifiedC", clonedModelC.ModelCProperty);
+                Assert.That(clonedModelC.ModelAProperty, Is.EqualTo("ModifiedA"));
+                Assert.That(clonedModelC.ModelBProperty, Is.EqualTo("ModifiedB"));
+                Assert.That(clonedModelC.ModelCProperty, Is.EqualTo("ModifiedC"));
             }
 
             [TestCase]
@@ -33,7 +33,7 @@
 
                 var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetXmlSerializer());
 
-                Assert.AreEqual(string.Empty, clonedModelC.IgnoredMember);
+                Assert.That(clonedModelC.IgnoredMember, Is.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -48,10 +48,10 @@
 
                 var clone = SerializationTestHelper.SerializeAndDeserialize(changingType, SerializationFactory.GetXmlSerializer());
 
-                Assert.AreEqual(10, clone.CustomizedCollection.Count);
+                Assert.That(clone.CustomizedCollection.Count, Is.EqualTo(10));
                 for (int i = 0; i < 10; i++)
                 {
-                    Assert.AreEqual(i, clone.CustomizedCollection[i]);
+                    Assert.That(clone.CustomizedCollection[i], Is.EqualTo(i));
                 }
             }
         }

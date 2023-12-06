@@ -20,7 +20,7 @@
 
             model.Collection.Add(4);
 
-            Assert.IsTrue(model.HasCollectionChanged);
+            Assert.That(model.HasCollectionChanged, Is.True);
         }
 
         [TestCase]
@@ -37,7 +37,7 @@
 
             model.Collection.Add(4);
 
-            Assert.IsTrue(model.HasCollectionChanged);
+            Assert.That(model.HasCollectionChanged, Is.True);
         }
 
         [Test]
@@ -48,20 +48,20 @@
 
             p.Collection = new ObservableCollection<ValidatableChild>();
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
 
             c.Name = string.Empty;
             p.Collection.Add(c);
 
-            Assert.IsTrue(p.HasErrors);
-            Assert.IsTrue(c.HasErrors);
+            Assert.That(p.HasErrors, Is.True);
+            Assert.That(c.HasErrors, Is.True);
 
             c.Name = "Funny";
             p.Collection.Clear();
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
         }
 
         [Test]
@@ -73,18 +73,18 @@
             p.Collection = new ObservableCollection<ValidatableChild>();
             p.Collection.Add(c);
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
 
             c.Name = string.Empty;
 
-            Assert.IsTrue(p.HasErrors);
-            Assert.IsTrue(c.HasErrors);
+            Assert.That(p.HasErrors, Is.True);
+            Assert.That(c.HasErrors, Is.True);
 
             c.Name = "Bunny";
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
         }
 
         [Test]
@@ -95,18 +95,18 @@
 
             p.Child = c;
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
 
             c.Name = string.Empty;
 
-            Assert.IsTrue(p.HasErrors);
-            Assert.IsTrue(c.HasErrors);
+            Assert.That(p.HasErrors, Is.True);
+            Assert.That(c.HasErrors, Is.True);
 
             c.Name = "Funny";
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
         }
 
         //[TestCase]
@@ -160,15 +160,15 @@
             p.ResetDirtyFlag();
             g.ResetDirtyFlag();
 
-            Assert.IsFalse(c.IsDirty);
-            Assert.IsFalse(p.IsDirty);
-            Assert.IsFalse(g.IsDirty);
+            Assert.That(c.IsDirty, Is.False);
+            Assert.That(p.IsDirty, Is.False);
+            Assert.That(g.IsDirty, Is.False);
 
             c.Name = "Pietje";
 
-            Assert.IsTrue(c.IsDirty);
-            Assert.IsTrue(p.IsDirty);
-            Assert.IsTrue(g.IsDirty);
+            Assert.That(c.IsDirty, Is.True);
+            Assert.That(p.IsDirty, Is.True);
+            Assert.That(g.IsDirty, Is.True);
         }
 
         [Test]

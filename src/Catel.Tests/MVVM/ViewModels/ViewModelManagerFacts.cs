@@ -46,7 +46,7 @@
 
                     var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                    Assert.AreEqual(vm, foundVm);
+                    Assert.That(foundVm, Is.EqualTo(vm));
                 }
             }
         }
@@ -87,13 +87,13 @@
 
                     var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                    Assert.AreEqual(vm, foundVm);
+                    Assert.That(foundVm, Is.EqualTo(vm));
 
                     vmManager.UnregisterModel(vm, model);
 
                     foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
 
-                    Assert.IsNull(foundVm);
+                    Assert.That(foundVm, Is.Null);
                 }
             }
         }
@@ -122,13 +122,13 @@
 
                     var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                    Assert.AreEqual(vm, foundVm);
+                    Assert.That(foundVm, Is.EqualTo(vm));
 
                     vmManager.UnregisterAllModels(vm);
 
                     foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
 
-                    Assert.IsNull(foundVm);
+                    Assert.That(foundVm, Is.Null);
                 }
             }
         }
@@ -144,7 +144,7 @@
                 {
                     var foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
 
-                    Assert.IsNull(foundVm);
+                    Assert.That(foundVm, Is.Null);
                 }
             }
 
@@ -160,7 +160,7 @@
 
                     var foundVm = vmManager.GetViewModelsOfModel(model).First();
 
-                    Assert.AreEqual(vm, foundVm);
+                    Assert.That(foundVm, Is.EqualTo(vm));
                 }
             }
         }
@@ -175,7 +175,7 @@
                 {
                     var foundvm = vmManager.GetViewModel(42);
 
-                    Assert.IsNull(foundvm);
+                    Assert.That(foundvm, Is.Null);
                 }
             }
 
@@ -188,7 +188,7 @@
                     vmManager.RegisterViewModelInstance(vm);
                     var foundvm = vmManager.GetViewModel(vm.UniqueIdentifier);
 
-                    Assert.AreEqual(vm, foundvm);
+                    Assert.That(foundvm, Is.EqualTo(vm));
                 }
             }
         }
@@ -203,7 +203,7 @@
                 {
                     var foundViewModels = viewModelManager.GetChildViewModels(42);
 
-                    Assert.AreEqual(0, foundViewModels.Count());
+                    Assert.That(foundViewModels.Count(), Is.EqualTo(0));
                 }
             }
 
@@ -223,7 +223,7 @@
                     var foundViewModels = viewModelManager.GetChildViewModels(parentViewModel as IViewModel);
 
                     Assert.IsNotNull(foundViewModels);
-                    Assert.IsTrue(foundViewModels.Contains(childViewModel));
+                    Assert.That(foundViewModels.Contains(childViewModel), Is.True);
                 }
             }
         }
@@ -238,7 +238,7 @@
                 {
                     var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
 
-                    Assert.IsNull(foundvm);
+                    Assert.That(foundvm, Is.Null);
                 }
             }
 
@@ -251,7 +251,7 @@
                     vmManager.RegisterViewModelInstance(vm);
                     var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
 
-                    Assert.AreEqual(vm, foundvm);
+                    Assert.That(foundvm, Is.EqualTo(vm));
                 }
             }
 
@@ -272,7 +272,7 @@
                     vmManager.RegisterViewModelInstance(secondvm);
                     var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
 
-                    Assert.AreEqual(firstvm, foundvm);
+                    Assert.That(foundvm, Is.EqualTo(firstvm));
                 }
             }
 
@@ -311,8 +311,8 @@
 
                     var vmList = vmManager.ActiveViewModels.ToList();
 
-                    Assert.IsTrue(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, firstvm.UniqueIdentifier)));
-                    Assert.IsTrue(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, secondvm.UniqueIdentifier)));
+                    Assert.That(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, firstvm.UniqueIdentifier)), Is.True);
+                    Assert.That(vmList.Any(vm => TagHelper.AreTagsEqual(vm.UniqueIdentifier, secondvm.UniqueIdentifier)), Is.True);
                 }
             }
         }

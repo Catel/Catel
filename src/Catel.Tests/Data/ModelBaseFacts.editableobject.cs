@@ -169,14 +169,14 @@
                 var isEnabled1 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
                 var isEnabled2 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
 
-                Assert.IsTrue(ReferenceEquals(isEnabled1, isEnabled2));
+                Assert.That(ReferenceEquals(isEnabled1, isEnabled2), Is.True);
 
                 model.SetValue(nameof(PersonTestModel.IsEnabled), true);
 
                 isEnabled1 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
                 isEnabled2 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
 
-                Assert.IsTrue(ReferenceEquals(isEnabled1, isEnabled2));
+                Assert.That(ReferenceEquals(isEnabled1, isEnabled2), Is.True);
             }
         }
 
@@ -199,13 +199,13 @@
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.BeginEditingCalled);
-                Assert.IsFalse(editableObject.OnBeginEditCalled);
+                Assert.That(editableObject.BeginEditingCalled, Is.False);
+                Assert.That(editableObject.OnBeginEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
 
-                Assert.IsTrue(editableObject.BeginEditingCalled);
-                Assert.IsTrue(editableObject.OnBeginEditCalled);
+                Assert.That(editableObject.BeginEditingCalled, Is.True);
+                Assert.That(editableObject.OnBeginEditCalled, Is.True);
             }
         }
 
@@ -218,7 +218,7 @@
                 CancelEdit(() => ModelBaseTestHelper.CreateIniEntryObject(),
                     x => x.Value = "MyOldValue",
                     x => x.Value = "MyNewValue",
-                    x => Assert.AreEqual("MyOldValue", x.Value));
+                    x => Assert.That(x.Value, Is.EqualTo("MyOldValue")));
             }
 
             [TestCase]
@@ -235,7 +235,7 @@
 
                 objEntryAsIEditableObject.CancelEdit();
 
-                Assert.AreEqual(Gender.Female, obj.Gender);
+                Assert.That(obj.Gender, Is.EqualTo(Gender.Female));
             }
 
             [TestCase]
@@ -254,12 +254,12 @@
 
                 editableObject.FirstName = "John";
 
-                Assert.AreEqual("John", editableObject.FirstName);
+                Assert.That(editableObject.FirstName, Is.EqualTo("John"));
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.AreEqual(true, editableObject.CancelEditingCalled);
-                Assert.AreEqual("Geert", editableObject.FirstName);
+                Assert.That(editableObject.CancelEditingCalled, Is.EqualTo(true));
+                Assert.That(editableObject.FirstName, Is.EqualTo("Geert"));
             }
 
             [TestCase]
@@ -268,15 +268,15 @@
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.CancelEditingCompletedCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCompletedCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.CancelEditingCompletedCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCompletedCalled, Is.False);
             }
 
             [TestCase]
@@ -285,16 +285,16 @@
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.IsTrue(editableObject.CancelEditingCalled);
-                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.True);
+                Assert.That(editableObject.CancelEditingCompletedCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCompletedCalled, Is.True);
             }
 
             [TestCase]
@@ -305,16 +305,16 @@
 
                 editableObject.DoCancelCancel = true;
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.IsTrue(editableObject.CancelEditingCalled);
-                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.True);
+                Assert.That(editableObject.CancelEditingCompletedCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCompletedCalled, Is.True);
             }
 
             [TestCase]
@@ -331,7 +331,7 @@
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.AreEqual(2, editableObject.IgnoredPropertyInBackup);
+                Assert.That(editableObject.IgnoredPropertyInBackup, Is.EqualTo(2));
             }
 
             public void CancelEdit<TModel>(Func<TModel> createModel, Action<TModel> beforeBeginEdit, Action<TModel> afterBeginEdit, Action<TModel> assert)
@@ -380,7 +380,7 @@
 
                 iniEntryAsIEditableObject.EndEdit();
 
-                Assert.AreEqual("MyNewValue", iniEntry.Value);
+                Assert.That(iniEntry.Value, Is.EqualTo("MyNewValue"));
             }
 
             [TestCase]
@@ -397,7 +397,7 @@
 
                 ((IEditableObject)obj).EndEdit();
 
-                Assert.AreEqual(Gender.Male, obj.Gender);
+                Assert.That(obj.Gender, Is.EqualTo(Gender.Male));
             }
 
             [TestCase]
@@ -412,13 +412,13 @@
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.EndEditingCalled);
-                Assert.IsFalse(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.False);
+                Assert.That(editableObject.OnEndEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.EndEdit();
 
-                Assert.IsFalse(editableObject.EndEditingCalled);
-                Assert.IsFalse(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.False);
+                Assert.That(editableObject.OnEndEditCalled, Is.False);
             }
 
             [TestCase]
@@ -427,14 +427,14 @@
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.EndEditingCalled);
-                Assert.IsFalse(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.False);
+                Assert.That(editableObject.OnEndEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
                 editableObjectAsIEditableObject.EndEdit();
 
-                Assert.IsTrue(editableObject.EndEditingCalled);
-                Assert.IsTrue(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.True);
+                Assert.That(editableObject.OnEndEditCalled, Is.True);
             }
         }
 
@@ -466,7 +466,7 @@
                 // IsDirty change 3 + 4 (Name change back to null, and restoreof IsDirty)
                 ((IEditableObject)model).CancelEdit();
 
-                Assert.AreEqual(4, isDirtyChangedCalls);
+                Assert.That(isDirtyChangedCalls, Is.EqualTo(4));
             }
         }
     }

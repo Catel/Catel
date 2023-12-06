@@ -17,7 +17,7 @@
                 var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyDisplayName");
                 displayAttribute.LanguageService = languageService;
 
-                Assert.AreEqual("It works", displayAttribute.DisplayName);
+                Assert.That(displayAttribute.DisplayName, Is.EqualTo("It works"));
             }
 
             [TestCase]
@@ -29,7 +29,7 @@
                 var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyNonExistingDisplayName");
                 displayAttribute.LanguageService = languageService;
 
-                Assert.AreEqual("MyNonExistingDisplayName", displayAttribute.DisplayName);
+                Assert.That(displayAttribute.DisplayName, Is.EqualTo("MyNonExistingDisplayName"));
             }
         }
     }

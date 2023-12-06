@@ -63,7 +63,7 @@
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty, false);
 
-                Assert.AreEqual("TestProperty", propertyName);
+                Assert.That(propertyName, Is.EqualTo("TestProperty"));
             }
 
             [TestCase]
@@ -71,7 +71,7 @@
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty.SubClass.Id, false);
 
-                Assert.AreEqual("Id", propertyName);
+                Assert.That(propertyName, Is.EqualTo("Id"));
             }
 
             [TestCase]
@@ -79,7 +79,7 @@
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty, true);
 
-                Assert.AreEqual("TestProperty", propertyName);
+                Assert.That(propertyName, Is.EqualTo("TestProperty"));
             }
 
             [TestCase]
@@ -87,7 +87,7 @@
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty.SubClass.Id, true);
 
-                Assert.AreEqual("TestProperty.SubClass.Id", propertyName);
+                Assert.That(propertyName, Is.EqualTo("TestProperty.SubClass.Id"));
             }
         }
     }

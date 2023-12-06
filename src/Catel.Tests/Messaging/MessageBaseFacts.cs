@@ -23,7 +23,7 @@
             {
                 var message = new TestMessage("my content");
 
-                Assert.AreEqual("my content", message.Data);
+                Assert.That(message.Data, Is.EqualTo("my content"));
             }
         }
 
@@ -51,9 +51,9 @@
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage);
 
-                Assert.IsTrue(ranInitializer);
-                Assert.IsTrue(_messageSent);
-                Assert.AreEqual("test", _messageData);
+                Assert.That(ranInitializer, Is.True);
+                Assert.That(_messageSent, Is.True);
+                Assert.That(_messageData, Is.EqualTo("test"));
             }
 
             [TestCase]
@@ -69,8 +69,8 @@
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage);
 
-                Assert.IsTrue(_messageSent);
-                Assert.AreEqual("test", _messageData);
+                Assert.That(_messageSent, Is.True);
+                Assert.That(_messageData, Is.EqualTo("test"));
             }
 
             [TestCase]
@@ -86,8 +86,8 @@
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage, "mytag");
 
-                Assert.IsTrue(_messageSent);
-                Assert.AreEqual("test", _messageData);
+                Assert.That(_messageSent, Is.True);
+                Assert.That(_messageData, Is.EqualTo("test"));
             }
 
             public void OnTestMessage(TestMessage message)
@@ -113,7 +113,7 @@
 
                 TestMessage.Unregister(this, OnTestMessage);
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
             }
 
             [TestCase]
@@ -127,7 +127,7 @@
 
                 TestMessage.Unregister(this, OnTestMessage, "mytag");
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
             }
 
             public void OnTestMessage(TestMessage message)
@@ -152,13 +152,13 @@
 
                 TestMessage.Unregister(this, OnTestMessage);
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
 
                 _messageSent = false;
 
                 TestMessage.SendWith("test");
 
-                Assert.IsFalse(_messageSent);
+                Assert.That(_messageSent, Is.False);
             }
 
             [TestCase]
@@ -172,13 +172,13 @@
 
                 TestMessage.Unregister(this, OnTestMessage, "mytag");
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
 
                 _messageSent = false;
 
                 TestMessage.SendWith("test", "mytag");
 
-                Assert.IsFalse(_messageSent);
+                Assert.That(_messageSent, Is.False);
             }
 
             public void OnTestMessage(TestMessage message)
@@ -195,7 +195,7 @@
             {
                 var message = TestMessage.With("test");
 
-                Assert.AreEqual("test", message.Data);
+                Assert.That(message.Data, Is.EqualTo("test"));
             }
         }
     }

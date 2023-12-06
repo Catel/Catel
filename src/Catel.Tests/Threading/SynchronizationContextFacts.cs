@@ -16,9 +16,9 @@ namespace Catel.Tests.Threading
             public void SetsIsLockAquiredToTrue()
             {
                 var context = new SynchronizationContext();
-                Assert.IsFalse(context.IsLockAcquired);
+                Assert.That(context.IsLockAcquired, Is.False);
                 context.Acquire();
-                Assert.IsTrue(context.IsLockAcquired);
+                Assert.That(context.IsLockAcquired, Is.True);
             }
 
             #endregion
@@ -33,45 +33,45 @@ namespace Catel.Tests.Threading
             public void AdquiresTheLockDuringTheExecutionAndReleaseItAtTheEnd()
             {
                 var context = new SynchronizationContext();
-                Assert.IsFalse(context.IsLockAcquired);
-                context.Execute(() => Assert.IsTrue(context.IsLockAcquired));
-                Assert.IsFalse(context.IsLockAcquired);
+                Assert.That(context.IsLockAcquired, Is.False);
+                context.Execute(() => Assert.That(context.IsLockAcquired, Is.True));
+                Assert.That(context.IsLockAcquired, Is.False);
             }
 
             [TestCase]
             public void AdquiresTheLockDuringTheExecutionAndReleaseItAtTheEndAndReturnAValue()
             {
                 var context = new SynchronizationContext();
-                Assert.IsFalse(context.IsLockAcquired);
+                Assert.That(context.IsLockAcquired, Is.False);
                 int expected = new Random().Next(50, 100);
                 int result = context.Execute(() =>
                     {
-                        Assert.IsTrue(context.IsLockAcquired);
+                        Assert.That(context.IsLockAcquired, Is.True);
                         return expected;
                     });
-                Assert.IsFalse(context.IsLockAcquired);
-                Assert.AreEqual(expected, result);
+                Assert.That(context.IsLockAcquired, Is.False);
+                Assert.That(result, Is.EqualTo(expected));
             }
 
             [TestCase]
             public void NestedExecuteCallAreAllowed()
             {
                 var context = new SynchronizationContext();
-                Assert.IsFalse(context.IsLockAcquired);
+                Assert.That(context.IsLockAcquired, Is.False);
                 int expected = new Random().Next(50, 100);
                 int result = context.Execute(() =>
                     {
                         int nestedResult = context.Execute(() =>
                             {
-                                Assert.IsTrue(context.IsLockAcquired);
+                                Assert.That(context.IsLockAcquired, Is.True);
                                 return expected;
                             });
-                        Assert.IsTrue(context.IsLockAcquired);
+                        Assert.That(context.IsLockAcquired, Is.True);
                         return nestedResult;
                     });
 
-                Assert.IsFalse(context.IsLockAcquired);
-                Assert.AreEqual(expected, result);
+                Assert.That(context.IsLockAcquired, Is.False);
+                Assert.That(result, Is.EqualTo(expected));
             }
 
             #endregion
@@ -86,9 +86,9 @@ namespace Catel.Tests.Threading
             public void KeepsIsLockAquiredInFalse()
             {
                 var context = new SynchronizationContext();
-                Assert.IsFalse(context.IsLockAcquired);
+                Assert.That(context.IsLockAcquired, Is.False);
                 context.Release();
-                Assert.IsFalse(context.IsLockAcquired);
+                Assert.That(context.IsLockAcquired, Is.False);
             }
 
             #endregion

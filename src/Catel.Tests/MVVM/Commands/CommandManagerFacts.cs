@@ -43,7 +43,7 @@
 
                 commandManager.CreateCommand("MyCommand");
 
-                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
             }
         }
 
@@ -73,7 +73,7 @@
 
                 commandManager.CreateCommand("MyCommand");
 
-                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
             }
 
             [TestCase]
@@ -81,7 +81,7 @@
             {
                 var commandManager = new CommandManager();
 
-                Assert.IsFalse(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.False);
             }
         }
 
@@ -109,7 +109,7 @@
             {
                 var commandManager = new CommandManager();
 
-                Assert.IsNull(commandManager.GetCommand("MyCommand"));
+                Assert.That(commandManager.GetCommand("MyCommand"), Is.Null);
             }
 
             [TestCase]
@@ -153,7 +153,7 @@
 
                 commandManager.ExecuteCommand("MyCommand");
 
-                Assert.IsTrue(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.True);
             }
 
             [TestCase]
@@ -165,13 +165,13 @@
                 commandManager.CreateCommand("MyCommand");
                 commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
 
-                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
 
                 commandManager.UnregisterCommand("MyCommand", vm.TestCommand1);
 
                 commandManager.ExecuteCommand("MyCommand");
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
             }
         }
 
@@ -252,7 +252,7 @@
 
                 commandManager.ExecuteCommand("TestAction");
 
-                Assert.IsTrue(invoked);
+                Assert.That(invoked, Is.True);
             }
 
             [TestCase]
@@ -270,7 +270,7 @@
 
                 commandManager.ExecuteCommand("TestAction");
 
-                Assert.IsFalse(invoked);
+                Assert.That(invoked, Is.False);
             }
 
             [TestCase]
@@ -285,7 +285,7 @@
 
                 commandManager.ExecuteCommand("TestAction");
 
-                Assert.IsFalse(_registeredActionsCanBeUnregistered_TestValue);
+                Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
             }
 
             private bool _registeredActionsCanBeUnregistered_TestValue = false;

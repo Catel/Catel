@@ -22,7 +22,7 @@
 
                         var output = memoryStream.GetUtf8String();
 
-                        Assert.AreEqual(input, output);
+                        Assert.That(output, Is.EqualTo(input));
                     }
                 }
             }

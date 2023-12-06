@@ -24,7 +24,7 @@
 
                 var success = observableDictionary.Contains(items[0]);
 
-                Assert.IsTrue(success);
+                Assert.That(success, Is.True);
             }
 
             [Test]
@@ -41,7 +41,7 @@
 
                 var success = observableDictionary.Contains(new KeyValuePair<int, KeyValuePair<int, int>>(1, items[0]));
 
-                Assert.IsTrue(success);
+                Assert.That(success, Is.True);
             }
 
             [Test]
@@ -59,7 +59,7 @@
                 var hasItem = observableDictionary.Contains(items[0]);
                 var comparerWorks = observableDictionary.ContainsKey("foo");
 
-                Assert.IsTrue(hasItem && comparerWorks);
+                Assert.That(hasItem && comparerWorks, Is.True);
             }
         }
     }

@@ -21,7 +21,7 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject, clonedObject, description);
+                    Assert.That(clonedObject, Is.EqualTo(originalObject), description);
                 });
             }
 
@@ -34,7 +34,7 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject, clonedObject, description);
+                    Assert.That(clonedObject, Is.EqualTo(originalObject), description);
                 });
             }
 
@@ -47,7 +47,7 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject, clonedObject, description);
+                    Assert.That(clonedObject, Is.EqualTo(originalObject), description);
                 });
             }
 
@@ -60,7 +60,7 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject, clonedObject, description);
+                    Assert.That(clonedObject, Is.EqualTo(originalObject), description);
                 }, false);
             }
 
@@ -75,7 +75,7 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject, clonedObject, description);
+                    Assert.That(clonedObject, Is.EqualTo(originalObject), description);
                 });
             }
 
@@ -89,7 +89,7 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject, clonedObject, description);
+                    Assert.That(clonedObject, Is.EqualTo(originalObject), description);
                 });
             }
 
@@ -103,7 +103,7 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, serializer, config);
 
-                    Assert.IsTrue(complexHierarchy == deserializedObject, description);
+                    Assert.That(complexHierarchy, Is.EqualTo(deserializedObject), description);
                 });
             }
 
@@ -162,7 +162,7 @@
                     var field = obj.GetType().GetFieldEx(fieldName);
                     var fieldValue = (int)field.GetValue(obj);
 
-                    Assert.AreEqual(1, fieldValue, $"{obj.GetType().Name}.{fieldName} should have been 1 for serialization mode {serializationMode}");
+                    Assert.That(fieldValue, Is.EqualTo(1), $"{obj.GetType().Name}.{fieldName} should have been 1 for serialization mode {serializationMode}");
                 }
 
                 var methodInfo = obj.GetType().GetMethodEx("ClearSerializationCounters");
@@ -210,8 +210,8 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
-                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                    Assert.That(clonedObject.FirstName, Is.EqualTo(originalObject.FirstName), description);
+                    Assert.That(clonedObject.LastName, Is.EqualTo(originalObject.LastName), description);
                 });
             }
 
@@ -226,11 +226,11 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsTrue(originalObject.GetViaInterface, description);
-                    Assert.IsTrue(clonedObject.SetViaInterface, description);
+                    Assert.That(originalObject.GetViaInterface, Is.True, description);
+                    Assert.That(clonedObject.SetViaInterface, Is.True, description);
 
-                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
-                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                    Assert.That(clonedObject.FirstName, Is.EqualTo(originalObject.FirstName), description);
+                    Assert.That(clonedObject.LastName, Is.EqualTo(originalObject.LastName), description);
                 });
             }
 
@@ -245,11 +245,11 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsTrue(originalObject.GetViaInterface, description);
-                    Assert.IsTrue(clonedObject.SetViaInterface, description);
+                    Assert.That(originalObject.GetViaInterface, Is.True, description);
+                    Assert.That(clonedObject.SetViaInterface, Is.True, description);
 
-                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
-                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                    Assert.That(clonedObject.FirstName, Is.EqualTo(originalObject.FirstName), description);
+                    Assert.That(clonedObject.LastName, Is.EqualTo(originalObject.LastName), description);
                 });
             }
 
@@ -262,17 +262,17 @@
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, serializer, config);
 
-                    Assert.AreEqual(complexHierarchy.LastName, deserializedObject.LastName, description);
-                    Assert.AreEqual(complexHierarchy.Persons.Count, deserializedObject.Persons.Count, description);
+                    Assert.That(deserializedObject.LastName, Is.EqualTo(complexHierarchy.LastName), description);
+                    Assert.That(deserializedObject.Persons.Count, Is.EqualTo(complexHierarchy.Persons.Count), description);
 
                     for (int i = 0; i < deserializedObject.Persons.Count; i++)
                     {
                         var expectedPerson = complexHierarchy.Persons[i];
                         var actualPerson = deserializedObject.Persons[i];
 
-                        Assert.AreEqual(expectedPerson.Gender, actualPerson.Gender, description);
-                        Assert.AreEqual(expectedPerson.FirstName, actualPerson.FirstName, description);
-                        Assert.AreEqual(expectedPerson.LastName, actualPerson.LastName, description);
+                        Assert.That(actualPerson.Gender, Is.EqualTo(expectedPerson.Gender), description);
+                        Assert.That(actualPerson.FirstName, Is.EqualTo(expectedPerson.FirstName), description);
+                        Assert.That(actualPerson.LastName, Is.EqualTo(expectedPerson.LastName), description);
                     }
                 });
             }
@@ -291,10 +291,10 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsTrue(clonedObject.Vector.UsedParse);
-                    Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
-                    Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
-                    Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
+                    Assert.That(clonedObject.Vector.UsedParse, Is.True);
+                    Assert.That(clonedObject.Vector.X, Is.EqualTo(originalObject.Vector.X), description);
+                    Assert.That(clonedObject.Vector.Y, Is.EqualTo(originalObject.Vector.Y), description);
+                    Assert.That(clonedObject.Vector.Z, Is.EqualTo(originalObject.Vector.Z), description);
                 });
             }
 
@@ -308,10 +308,10 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsFalse(clonedObject.Vector.UsedParse);
-                    Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
-                    Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
-                    Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
+                    Assert.That(clonedObject.Vector.UsedParse, Is.False);
+                    Assert.That(clonedObject.Vector.X, Is.EqualTo(originalObject.Vector.X), description);
+                    Assert.That(clonedObject.Vector.Y, Is.EqualTo(originalObject.Vector.Y), description);
+                    Assert.That(clonedObject.Vector.Z, Is.EqualTo(originalObject.Vector.Z), description);
                 });
             }
 
@@ -328,10 +328,10 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsTrue(clonedObject.Vector.UsedParse);
-                    Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
-                    Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
-                    Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
+                    Assert.That(clonedObject.Vector.UsedParse, Is.True);
+                    Assert.That(clonedObject.Vector.X, Is.EqualTo(originalObject.Vector.X), description);
+                    Assert.That(clonedObject.Vector.Y, Is.EqualTo(originalObject.Vector.Y), description);
+                    Assert.That(clonedObject.Vector.Z, Is.EqualTo(originalObject.Vector.Z), description);
                 }, serializationManager: serializationManager);
             }
 
@@ -348,10 +348,10 @@
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsFalse(clonedObject.Vector.UsedParse);
-                    Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
-                    Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
-                    Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
+                    Assert.That(clonedObject.Vector.UsedParse, Is.False);
+                    Assert.That(clonedObject.Vector.X, Is.EqualTo(originalObject.Vector.X), description);
+                    Assert.That(clonedObject.Vector.Y, Is.EqualTo(originalObject.Vector.Y), description);
+                    Assert.That(clonedObject.Vector.Z, Is.EqualTo(originalObject.Vector.Z), description);
                 }, serializationManager: serializationManager);
             }
         }

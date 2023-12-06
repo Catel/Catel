@@ -17,8 +17,8 @@
 
             var viewModel = new TestViewModel();
 
-            Assert.AreEqual(true, auditor.OnViewModelCreatingCalled);
-            Assert.AreEqual(typeof(TestViewModel), auditor.OnViewModelCreatingType);
+            Assert.That(auditor.OnViewModelCreatingCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelCreatingType, Is.EqualTo(typeof(TestViewModel)));
         }
 
         [TestCase]
@@ -31,8 +31,8 @@
 
             var viewModel = new TestViewModel();
 
-            Assert.AreEqual(true, auditor.OnViewModelCreatedCalled);
-            Assert.AreEqual(typeof(TestViewModel), auditor.OnViewModelCreatedType);
+            Assert.That(auditor.OnViewModelCreatedCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelCreatedType, Is.EqualTo(typeof(TestViewModel)));
         }
 
         [TestCase]
@@ -46,8 +46,8 @@
             var viewModel = new TestViewModel();
             await viewModel.InitializeViewModelAsync();
 
-            Assert.AreEqual(true, auditor.OnViewModelInitializedCalled);
-            Assert.AreEqual(typeof(TestViewModel), auditor.OnViewModelInitializedType);
+            Assert.That(auditor.OnViewModelInitializedCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelInitializedType, Is.EqualTo(typeof(TestViewModel)));
         }
 
         [TestCase]
@@ -61,10 +61,10 @@
             var viewModel = new TestViewModel();
             viewModel.TestProperty = "test";
 
-            Assert.AreEqual(true, auditor.OnPropertyChangedCalled);
-            Assert.AreEqual(viewModel, auditor.OnPropertyChangedViewModel);
-            Assert.AreEqual("TestProperty", auditor.OnPropertyChangedPropertyName);
-            Assert.AreEqual("test", auditor.OnPropertyChangedNewValue);
+            Assert.That(auditor.OnPropertyChangedCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnPropertyChangedViewModel, Is.EqualTo(viewModel));
+            Assert.That(auditor.OnPropertyChangedPropertyName, Is.EqualTo("TestProperty"));
+            Assert.That(auditor.OnPropertyChangedNewValue, Is.EqualTo("test"));
         }
 
         [TestCase]
@@ -79,10 +79,10 @@
             var viewModel = new TestViewModel();
             viewModel.TestProperty = "test";
 
-            Assert.AreEqual(false, auditor.OnPropertyChangedCalled);
-            Assert.AreEqual(null, auditor.OnPropertyChangedViewModel);
-            Assert.AreEqual(null, auditor.OnPropertyChangedPropertyName);
-            Assert.AreEqual(null, auditor.OnPropertyChangedNewValue);
+            Assert.That(auditor.OnPropertyChangedCalled, Is.EqualTo(false));
+            Assert.That(auditor.OnPropertyChangedViewModel, Is.EqualTo(null));
+            Assert.That(auditor.OnPropertyChangedPropertyName, Is.EqualTo(null));
+            Assert.That(auditor.OnPropertyChangedNewValue, Is.EqualTo(null));
         }
 
         [TestCase]
@@ -96,11 +96,11 @@
             var viewModel = new TestViewModel();
             viewModel.TestCommand.Execute("test");
 
-            Assert.AreEqual(true, auditor.OnCommandExecutedCalled);
-            Assert.AreEqual(viewModel, auditor.OnCommandExecutedViewModel);
-            Assert.AreEqual("TestCommand", auditor.OnCommandExecutedCommandName);
-            Assert.AreEqual(viewModel.TestCommand, auditor.OnCommandExecutedCommand);
-            Assert.AreEqual("test", auditor.OnCommandExecutedCommandParameter);
+            Assert.That(auditor.OnCommandExecutedCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnCommandExecutedViewModel, Is.EqualTo(viewModel));
+            Assert.That(auditor.OnCommandExecutedCommandName, Is.EqualTo("TestCommand"));
+            Assert.That(auditor.OnCommandExecutedCommand, Is.EqualTo(viewModel.TestCommand));
+            Assert.That(auditor.OnCommandExecutedCommandParameter, Is.EqualTo("test"));
         }
 
         [TestCase]
@@ -114,8 +114,8 @@
             var viewModel = new TestViewModel();
             await viewModel.SaveViewModelAsync();
 
-            Assert.AreEqual(true, auditor.OnViewModelSavingCalled);
-            Assert.AreEqual(viewModel, auditor.OnViewModelSavingViewModel);
+            Assert.That(auditor.OnViewModelSavingCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelSavingViewModel, Is.EqualTo(viewModel));
         }
 
         [TestCase]
@@ -129,8 +129,8 @@
             var viewModel = new TestViewModel();
             await viewModel.SaveViewModelAsync();
 
-            Assert.AreEqual(true, auditor.OnViewModelSavedCalled);
-            Assert.AreEqual(viewModel, auditor.OnViewModelSavedViewModel);
+            Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelSavedViewModel, Is.EqualTo(viewModel));
         }
 
         [TestCase]
@@ -144,8 +144,8 @@
             var viewModel = new TestViewModel();
             await viewModel.CancelViewModelAsync();
 
-            Assert.AreEqual(true, auditor.OnViewModelCancelingCalled);
-            Assert.AreEqual(viewModel, auditor.OnViewModelCancelingViewModel);
+            Assert.That(auditor.OnViewModelCancelingCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelCancelingViewModel, Is.EqualTo(viewModel));
         }
 
         [TestCase]
@@ -159,8 +159,8 @@
             var viewModel = new TestViewModel();
             await viewModel.CancelViewModelAsync();
 
-            Assert.AreEqual(true, auditor.OnViewModelCanceledCalled);
-            Assert.AreEqual(viewModel, auditor.OnViewModelCanceledViewModel);
+            Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelCanceledViewModel, Is.EqualTo(viewModel));
         }
 
         [TestCase]
@@ -174,8 +174,8 @@
             var viewModel = new TestViewModel();
             await viewModel.CloseViewModelAsync(null);
 
-            Assert.AreEqual(true, auditor.OnViewModelClosingCalled);
-            Assert.AreEqual(viewModel, auditor.OnViewModelClosingViewModel);
+            Assert.That(auditor.OnViewModelClosingCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelClosingViewModel, Is.EqualTo(viewModel));
         }
 
         [TestCase]
@@ -189,8 +189,8 @@
             var viewModel = new TestViewModel();
             await viewModel.CloseViewModelAsync(null);
 
-            Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
-            Assert.AreEqual(viewModel, auditor.OnViewModelClosedViewModel);
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelClosedViewModel, Is.EqualTo(viewModel));
         }
     }
 }

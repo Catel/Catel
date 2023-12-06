@@ -22,7 +22,7 @@
             var inputGesture = new InputGesture(key, modifierKeys);
             var existingCommands = commandManager.FindCommandsByGesture(inputGesture);
 
-            Assert.AreEqual(expectedToBeAvailable, existingCommands.Any());
+            Assert.That(existingCommands.Any(), Is.EqualTo(expectedToBeAvailable));
         }
     }
 }

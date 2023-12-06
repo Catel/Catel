@@ -98,7 +98,7 @@
                 var configServiceC = await GetConfigurationServiceAsync("GH1840");
                 var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);
 
-                Assert.AreEqual("A", value);
+                Assert.That(value, Is.EqualTo("A"));
             }
 
             [Test]
@@ -120,7 +120,7 @@
                     await Task.Delay(200);
                 }
 
-                Assert.AreEqual(1, configurationService.RoamingSaveCount);
+                Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(1));
             }
 
             [Test]
@@ -142,11 +142,11 @@
                     await Task.Delay(100);
                 }
 
-                Assert.AreEqual(0, configurationService.RoamingChangeCount);
-                Assert.AreEqual(0, configurationService.RoamingSaveCount);
+                Assert.That(configurationService.RoamingChangeCount, Is.EqualTo(0));
+                Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(0));
 
-                Assert.AreEqual(5 * 50, configurationService.LocalChangeCount);
-                Assert.AreEqual(5, configurationService.LocalSaveCount);
+                Assert.That(configurationService.LocalChangeCount, Is.EqualTo(5 * 50));
+                Assert.That(configurationService.LocalSaveCount, Is.EqualTo(5));
             }
 
             [Test]
@@ -168,11 +168,11 @@
                     await Task.Delay(100);
                 }
 
-                Assert.AreEqual(0, configurationService.LocalChangeCount);
-                Assert.AreEqual(0, configurationService.LocalSaveCount);
+                Assert.That(configurationService.LocalChangeCount, Is.EqualTo(0));
+                Assert.That(configurationService.LocalSaveCount, Is.EqualTo(0));
 
-                Assert.AreEqual(5 * 50, configurationService.RoamingChangeCount);
-                Assert.AreEqual(5, configurationService.RoamingSaveCount);
+                Assert.That(configurationService.RoamingChangeCount, Is.EqualTo(5 * 50));
+                Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(5));
             }
         }
     }

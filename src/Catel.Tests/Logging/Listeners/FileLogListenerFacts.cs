@@ -24,7 +24,7 @@
 
                 returnedPath = returnedPath.Replace(appDataPath, "{AppData}");
 
-                Assert.AreEqual(expectedPath, returnedPath);
+                Assert.That(returnedPath, Is.EqualTo(expectedPath));
             }
         }
     }

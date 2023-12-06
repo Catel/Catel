@@ -21,8 +21,8 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new PersonTestModel();
 
-                Assert.IsTrue(adapter.TrySetMemberValue(model, nameof(PersonTestModel.FirstName), "John"));
-                Assert.AreEqual("John", model.FirstName);
+                Assert.That(adapter.TrySetMemberValue(model, nameof(PersonTestModel.FirstName), "John"), Is.True);
+                Assert.That(model.FirstName, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -31,8 +31,8 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), "John"));
-                Assert.AreEqual("John", model.StringProperty);
+                Assert.That(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), "John"), Is.True);
+                Assert.That(model.StringProperty, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -41,8 +41,8 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), "John"));
-                Assert.AreEqual("John", model.StringField);
+                Assert.That(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), "John"), Is.True);
+                Assert.That(model.StringField, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -51,7 +51,7 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsFalse(adapter.TrySetMemberValue(model, "NotExistingMember", "John"));
+                Assert.That(adapter.TrySetMemberValue(model, "NotExistingMember", "John"), Is.False);
             }
         }
 
@@ -69,8 +69,8 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.TryGetMemberValue(model, nameof(PersonTestModel.FirstName), out value));
-                Assert.AreEqual("John", model.FirstName);
+                Assert.That(adapter.TryGetMemberValue(model, nameof(PersonTestModel.FirstName), out value), Is.True);
+                Assert.That(model.FirstName, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -84,8 +84,8 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), out value));
-                Assert.AreEqual("John", value);
+                Assert.That(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), out value), Is.True);
+                Assert.That(value, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -99,8 +99,8 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), out value));
-                Assert.AreEqual("John", value);
+                Assert.That(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), out value), Is.True);
+                Assert.That(value, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -110,7 +110,7 @@
                 var model = new TestClassWithRegularMembers();
                 string value = string.Empty;
 
-                Assert.IsFalse(adapter.TryGetMemberValue(model, "NotExistingMember", out value));
+                Assert.That(adapter.TryGetMemberValue(model, "NotExistingMember", out value), Is.False);
             }
         }
     }

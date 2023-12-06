@@ -20,8 +20,8 @@
                 }
                 catch (WrongViewModelTypeException ex)
                 {
-                    Assert.AreEqual(typeof(int), ex.ActualType);
-                    Assert.AreEqual(typeof(string), ex.ExpectedType);
+                    Assert.That(ex.ActualType, Is.EqualTo(typeof(int)));
+                    Assert.That(ex.ExpectedType, Is.EqualTo(typeof(string)));
                 }
             }
             #endregion

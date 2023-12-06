@@ -34,12 +34,12 @@
             {
                 var viewLocator = new ViewLocator();
 
-                Assert.IsNull(viewLocator.ResolveView(typeof(FollowingNoNamingConventionView)));
+                Assert.That(viewLocator.ResolveView(typeof(FollowingNoNamingConventionView)), Is.Null);
 
                 viewLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel));
 
                 var resolvedView = viewLocator.ResolveView(typeof(FollowingNoNamingConventionView));
-                Assert.AreEqual(typeof(NoNamingConventionViewModel), resolvedView);
+                Assert.That(resolvedView, Is.EqualTo(typeof(NoNamingConventionViewModel)));
             }
 
             [TestCase]
@@ -50,7 +50,7 @@
                 viewLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel2));
 
                 var resolvedView = viewLocator.ResolveView(typeof(FollowingNoNamingConventionView));
-                Assert.AreEqual(typeof(NoNamingConventionViewModel2), resolvedView);
+                Assert.That(resolvedView, Is.EqualTo(typeof(NoNamingConventionViewModel2)));
             }
         }
 
@@ -82,7 +82,7 @@
                 viewLocator.Register(typeof(MyNameViewerViewModel), typeof(MyNameViewer2));
 
                 var isCompatible = viewLocator.IsCompatible(typeof(MyNameViewerViewModel), viewType);
-                Assert.AreEqual(expectedValue, isCompatible);
+                Assert.That(isCompatible, Is.EqualTo(expectedValue));
             }
         }
 
@@ -100,7 +100,7 @@
             [TestCase(typeof(PersonViewModel), typeof(PersonView), "[UP].Views.[VM]View")]
             [TestCase(typeof(SameNamespacePersonViewModel), typeof(SameNamespacePersonView), null)]
             [TestCase(typeof(SameNamespacePersonViewModel), typeof(SameNamespacePersonView), "[CURRENT].[VM]View")]
-            public void ReturnsViewForViewModel(Type viewModelType, Type viewType, string convention)
+            public void ReturnsViewForViewModel(Type viewModelType, Type viewType, string? convention)
             {
                 var viewLocator = new ViewLocator();
 
@@ -113,7 +113,7 @@
                 var resolvedType = viewLocator.ResolveView(viewModelType);
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(viewType, resolvedType);
+                Assert.That(resolvedType, Is.EqualTo(viewType));
             }
 
             [TestCase]
@@ -123,7 +123,7 @@
                 var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonView), resolvedType);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 viewLocator.NamingConventions.Clear();
@@ -131,7 +131,7 @@
                 resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonView), resolvedType);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
             }
         }
 
@@ -145,7 +145,7 @@
                 var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonView), resolvedType);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 viewLocator.NamingConventions.Clear();
@@ -153,14 +153,14 @@
                 resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonView), resolvedType);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonView)));
 
                 // Clear the cache, now it should break
                 viewLocator.ClearCache();
 
                 resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
-                Assert.IsNull(resolvedType);
+                Assert.That(resolvedType, Is.Null);
             }
         }
     }

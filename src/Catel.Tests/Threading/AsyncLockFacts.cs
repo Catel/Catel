@@ -96,7 +96,7 @@
                 {
                     using (await _asyncLock.LockAsync())
                     {
-                        Assert.IsFalse(_isTaken);
+                        Assert.That(_isTaken, Is.False);
 
                         _isTaken = true;
 
@@ -132,7 +132,7 @@
 
             Task.WaitAll(tasksList.ToArray(), 500);
 
-            Assert.IsTrue(testClass.ExecutedSuccessfully);
+            Assert.That(testClass.ExecutedSuccessfully, Is.True);
         }
 
         [Test]
@@ -149,7 +149,7 @@
 
             Task.WaitAll(tasksList.ToArray(), 500);
 
-            Assert.IsTrue(testClass.ExecutedSuccessfully);
+            Assert.That(testClass.ExecutedSuccessfully, Is.True);
         }
 
         [Test]
@@ -164,7 +164,7 @@
 
             Task.WaitAll(tasksList.ToArray(), 500);
 
-            Assert.IsTrue(testClass.ExecutedSuccessfully);
+            Assert.That(testClass.ExecutedSuccessfully, Is.True);
         }
 
         [Test]
@@ -181,8 +181,8 @@
 
             Task.WaitAll(tasksList.ToArray(), 500);
 
-            Assert.IsTrue(testClass.ExecutedSuccessfully);
-            Assert.AreEqual(1, testClass.ExecutionCount);
+            Assert.That(testClass.ExecutedSuccessfully, Is.True);
+            Assert.That(testClass.ExecutionCount, Is.EqualTo(1));
         }
 
         [Test]
@@ -199,8 +199,8 @@
 
             Task.WaitAll(tasksList.ToArray(), 60 * 1000);
 
-            Assert.IsTrue(testClass.ExecutedSuccessfully);
-            Assert.AreEqual(50, testClass.ExecutionCount);
+            Assert.That(testClass.ExecutedSuccessfully, Is.True);
+            Assert.That(testClass.ExecutionCount, Is.EqualTo(50));
         }
 
         [Test]
@@ -217,8 +217,8 @@
 
             Task.WaitAll(tasksList.ToArray(), 10 * 5000);
 
-            Assert.IsTrue(testClass.ExecutedSuccessfully);
-            Assert.AreEqual(3, testClass.ExecutionCount);
+            Assert.That(testClass.ExecutedSuccessfully, Is.True);
+            Assert.That(testClass.ExecutionCount, Is.EqualTo(3));
         }
 
         [Test]
@@ -233,8 +233,8 @@
 
             Task.WaitAll(tasksList.ToArray(), 500);
 
-            Assert.IsTrue(testClass.ExecutedSuccessfully);
-            Assert.IsFalse(testClass._asyncLock.IsTaken);
+            Assert.That(testClass.ExecutedSuccessfully, Is.True);
+            Assert.That(testClass._asyncLock.IsTaken, Is.False);
         }
 
         [Test, Repeat(25)]
@@ -261,7 +261,7 @@
 
             Task.WaitAll(tasks.ToArray(), timeout);
 
-            Assert.IsTrue(tasks.All(x => x.IsCompletedSuccessfully));
+            Assert.That(tasks.All(x => x.IsCompletedSuccessfully), Is.True);
         }
     }
 }

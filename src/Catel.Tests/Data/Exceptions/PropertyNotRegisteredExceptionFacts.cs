@@ -13,8 +13,8 @@
             public void SetsValuesCorrectly()
             {
                 var exception = new PropertyNotRegisteredException("PropertyName", typeof(string));
-                Assert.AreEqual("PropertyName", exception.PropertyName);
-                Assert.AreEqual(typeof(string), exception.ObjectType);
+                Assert.That(exception.PropertyName, Is.EqualTo("PropertyName"));
+                Assert.That(exception.ObjectType, Is.EqualTo(typeof(string)));
             }
         }
     }

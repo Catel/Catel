@@ -17,7 +17,7 @@
         {
             var inputGesture = new InputGesture(key, modifierKeys);
 
-            Assert.AreEqual(expectedValue, inputGesture.IsEmpty());
+            Assert.That(inputGesture.IsEmpty(), Is.EqualTo(expectedValue));
         }
     }
 }

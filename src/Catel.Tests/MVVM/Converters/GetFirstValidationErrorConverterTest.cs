@@ -11,7 +11,7 @@
         public void Convert_Null()
         {
             var converter = new GetFirstValidationErrorConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(null, typeof(string), null, null));
+            Assert.That(converter.Convert(null, typeof(string), null, null), Is.EqualTo(string.Empty));
         }
 
         //[TestCase]
@@ -34,7 +34,7 @@
         public void ConvertBack()
         {
             var converter = new GetFirstValidationErrorConverter();
-            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof(object), null, null));
+            Assert.That(converter.ConvertBack(null, typeof(object), null, null), Is.EqualTo(ConverterHelper.UnsetValue));
         }
     }
 }

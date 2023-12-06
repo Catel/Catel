@@ -15,7 +15,7 @@
         public void Constructor()
         {
             var viewModel = new ManagedViewModel(typeof(TestViewModel));
-            Assert.AreEqual(typeof(TestViewModel), viewModel.ViewModelType);
+            Assert.That(viewModel.ViewModelType, Is.EqualTo(typeof(TestViewModel)));
         }
 
         [TestCase]
@@ -43,8 +43,8 @@
             }
             catch (WrongViewModelTypeException ex)
             {
-                Assert.AreEqual(ex.ActualType, typeof(TestViewModelWithDeferredValidation));
-                Assert.AreEqual(ex.ExpectedType, typeof(TestViewModel));
+                Assert.That(typeof(TestViewModelWithDeferredValidation), Is.EqualTo(ex.ActualType));
+                Assert.That(typeof(TestViewModel), Is.EqualTo(ex.ExpectedType));
             }
         }
 

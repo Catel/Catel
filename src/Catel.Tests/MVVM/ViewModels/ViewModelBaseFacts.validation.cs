@@ -16,13 +16,13 @@
 
             vm.Validate();
 
-            Assert.IsTrue(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.True);
 
             using (vm.SuspendValidations())
             {
                 var hasSaved = await vm.SaveViewModelAsync();
 
-                Assert.IsTrue(hasSaved);
+                Assert.That(hasSaved, Is.True);
             }
         }
 
@@ -31,20 +31,20 @@
         {
             var testViewModel = new TestViewModel();
 
-            Assert.IsFalse(testViewModel.HasErrors);
+            Assert.That(testViewModel.HasErrors, Is.False);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(testViewModel.HasErrors);
+            Assert.That(testViewModel.HasErrors, Is.False);
 
             testViewModel.SpecialValidationModel.FieldErrorWhenEmpty = string.Empty;
 
-            Assert.IsTrue(testViewModel.HasErrors);
-            Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)testViewModel)["FieldErrorWhenEmpty"]);
+            Assert.That(testViewModel.HasErrors, Is.True);
+            Assert.That(((IDataErrorInfo)testViewModel)["FieldErrorWhenEmpty"], Is.Not.EqualTo(string.Empty));
 
             testViewModel.SpecialValidationModel.FieldErrorWhenEmpty = "no error";
 
-            Assert.IsFalse(testViewModel.HasErrors);
+            Assert.That(testViewModel.HasErrors, Is.False);
         }
 
         [TestCase]
@@ -52,20 +52,20 @@
         {
             var testViewModel = new TestViewModel();
 
-            Assert.IsFalse(testViewModel.HasErrors);
+            Assert.That(testViewModel.HasErrors, Is.False);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(testViewModel.HasErrors);
+            Assert.That(testViewModel.HasErrors, Is.False);
 
             testViewModel.SpecialValidationModel.BusinessRuleErrorWhenEmpty = string.Empty;
 
-            Assert.IsTrue(testViewModel.HasErrors);
-            Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)testViewModel).Error);
+            Assert.That(testViewModel.HasErrors, Is.True);
+            Assert.That(((IDataErrorInfo)testViewModel).Error, Is.Not.EqualTo(string.Empty));
 
             testViewModel.SpecialValidationModel.BusinessRuleErrorWhenEmpty = "no error";
 
-            Assert.IsFalse(testViewModel.HasErrors);
+            Assert.That(testViewModel.HasErrors, Is.False);
         }
 
         [TestCase]
@@ -74,20 +74,20 @@
             var testViewModel = new TestViewModel();
             var validation = testViewModel;
 
-            Assert.IsFalse(validation.HasWarnings);
+            Assert.That(validation.HasWarnings, Is.False);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(validation.HasWarnings);
+            Assert.That(validation.HasWarnings, Is.False);
 
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = string.Empty;
 
-            Assert.IsTrue(validation.HasWarnings);
-            Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel)["FieldWarningWhenEmpty"]);
+            Assert.That(validation.HasWarnings, Is.True);
+            Assert.That(((IDataWarningInfo)testViewModel)["FieldWarningWhenEmpty"], Is.Not.EqualTo(string.Empty));
 
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = "no warning";
 
-            Assert.IsFalse(validation.HasWarnings);
+            Assert.That(validation.HasWarnings, Is.False);
         }
 
         [TestCase]
@@ -96,20 +96,20 @@
             var testViewModel = new TestViewModel();
             var validation = testViewModel;
 
-            Assert.IsFalse(validation.HasWarnings);
+            Assert.That(validation.HasWarnings, Is.False);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(validation.HasWarnings);
+            Assert.That(validation.HasWarnings, Is.False);
 
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = string.Empty;
 
-            Assert.IsTrue(validation.HasWarnings);
-            Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel).Warning);
+            Assert.That(validation.HasWarnings, Is.True);
+            Assert.That(((IDataWarningInfo)testViewModel).Warning, Is.Not.EqualTo(string.Empty));
 
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = "no warning";
 
-            Assert.IsFalse(validation.HasWarnings);
+            Assert.That(validation.HasWarnings, Is.False);
         }
 
         [TestCase]
@@ -120,9 +120,9 @@
 
             var summary = viewModel.GetValidationSummary(true);
 
-            Assert.IsTrue(viewModel.HasErrors);
+            Assert.That(viewModel.HasErrors, Is.True);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(2, summary.FieldErrors.Count);
+            Assert.That(summary.FieldErrors.Count, Is.EqualTo(2));
         }
 
         [TestCase]
@@ -133,9 +133,9 @@
 
             var summary = viewModel.GetValidationSummary(true, null);
 
-            Assert.IsTrue(viewModel.HasErrors);
+            Assert.That(viewModel.HasErrors, Is.True);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(0, summary.FieldErrors.Count);
+            Assert.That(summary.FieldErrors.Count, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -146,9 +146,9 @@
 
             var summary = viewModel.GetValidationSummary(true, "NonExistingTag");
 
-            Assert.IsTrue(viewModel.HasErrors);
+            Assert.That(viewModel.HasErrors, Is.True);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(0, summary.FieldErrors.Count);
+            Assert.That(summary.FieldErrors.Count, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -159,9 +159,9 @@
 
             var summary = viewModel.GetValidationSummary(true, "PersonValidation");
 
-            Assert.IsTrue(viewModel.HasErrors);
+            Assert.That(viewModel.HasErrors, Is.True);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(2, summary.FieldErrors.Count);
+            Assert.That(summary.FieldErrors.Count, Is.EqualTo(2));
         }
     }
 }

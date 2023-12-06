@@ -20,8 +20,8 @@
             {
                 var typeRequestInfo = new TypeRequestInfo(typeof(int), "mytag");
 
-                Assert.AreEqual(typeof(int), typeRequestInfo.Type);
-                Assert.AreEqual("mytag", typeRequestInfo.Tag);
+                Assert.That(typeRequestInfo.Type, Is.EqualTo(typeof(int)));
+                Assert.That(typeRequestInfo.Tag, Is.EqualTo("mytag"));
             }
         }
 
@@ -34,14 +34,14 @@
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag");
                 var obj2 = new TypeRequestInfo(typeof(int), "mytag");
 
-                Assert.IsTrue(obj1 == obj2);
-                Assert.IsTrue(obj2 == obj1);
+                Assert.That(obj1, Is.EqualTo(obj2));
+                Assert.That(obj2, Is.EqualTo(obj1));
 
-                Assert.IsFalse(obj1 != obj2);
-                Assert.IsFalse(obj2 != obj1);
+                Assert.That(obj1, Is.EqualTo(obj2));
+                Assert.That(obj2, Is.EqualTo(obj1));
 
-                Assert.IsTrue(obj1.Equals(obj2));
-                Assert.IsTrue(obj2.Equals(obj1));
+                Assert.That(obj1, Is.EqualTo(obj2));
+                Assert.That(obj2, Is.EqualTo(obj1));
             }
 
             [TestCase]
@@ -50,14 +50,14 @@
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag");
                 var obj2 = new TypeRequestInfo(typeof(double), "mytag");
 
-                Assert.IsFalse(obj1 == obj2);
-                Assert.IsFalse(obj2 == obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsTrue(obj1 != obj2);
-                Assert.IsTrue(obj2 != obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsFalse(obj1.Equals(obj2));
-                Assert.IsFalse(obj2.Equals(obj1));
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
             }
 
             [TestCase]
@@ -66,14 +66,14 @@
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag1");
                 var obj2 = new TypeRequestInfo(typeof(int), "mytag2");
 
-                Assert.IsFalse(obj1 == obj2);
-                Assert.IsFalse(obj2 == obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsTrue(obj1 != obj2);
-                Assert.IsTrue(obj2 != obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsFalse(obj1.Equals(obj2));
-                Assert.IsFalse(obj2.Equals(obj1));
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
             }
         }
     }

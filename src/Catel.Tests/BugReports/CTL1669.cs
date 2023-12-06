@@ -19,7 +19,7 @@
 
                 var vm = new DogViewModel(dogModel);
 
-                Assert.AreEqual(vm.Name, dogModel.Name);
+                Assert.That(dogModel.Name, Is.EqualTo(vm.Name));
             });
         }
     }

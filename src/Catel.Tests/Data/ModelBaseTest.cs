@@ -65,13 +65,13 @@
             iniEntry.SetReadOnly(true);
             iniEntry.Value = testValue;
             actualValue = iniEntry.Value;
-            Assert.AreEqual(originalValue, actualValue);
+            Assert.That(actualValue, Is.EqualTo(originalValue));
 
             // Test whether the object can be set to edit mode again
             iniEntry.SetReadOnly(false);
             iniEntry.Value = testValue;
             actualValue = iniEntry.Value;
-            Assert.AreEqual(testValue, actualValue);
+            Assert.That(actualValue, Is.EqualTo(testValue));
         }
         #endregion
 
@@ -81,7 +81,7 @@
         {
             var obj = new ObjectWithDefaultValues();
 
-            Assert.AreEqual(0, obj.ValueType_NoDefaultValue);
+            Assert.That(obj.ValueType_NoDefaultValue, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -89,7 +89,7 @@
         {
             var obj = new ObjectWithDefaultValues();
 
-            Assert.AreEqual(5, obj.ValueType_DefaultValueViaValue);
+            Assert.That(obj.ValueType_DefaultValueViaValue, Is.EqualTo(5));
         }
 
         [TestCase]
@@ -97,7 +97,7 @@
         {
             var obj = new ObjectWithDefaultValues();
 
-            Assert.AreEqual(10, obj.ValueType_DefaultValueViaCallback);
+            Assert.That(obj.ValueType_DefaultValueViaCallback, Is.EqualTo(10));
         }
 
         [TestCase]
@@ -105,7 +105,7 @@
         {
             var obj = new ObjectWithDefaultValues();
 
-            Assert.AreEqual(null, obj.ReferenceType_NoDefaultValue);
+            Assert.That(obj.ReferenceType_NoDefaultValue, Is.EqualTo(null));
         }
 
         [TestCase]
@@ -113,8 +113,8 @@
         {
             var obj = new ObjectWithDefaultValues();
 
-            Assert.AreNotEqual(null, obj.ReferenceType_DefaultValueViaValue);
-            Assert.IsInstanceOf(typeof(Collection<int>), obj.ReferenceType_DefaultValueViaValue);
+            Assert.That(obj.ReferenceType_DefaultValueViaValue, Is.Not.EqualTo(null));
+            Assert.That(obj.ReferenceType_DefaultValueViaValue, Is.InstanceOf(typeof(Collection<int>)));
         }
 
         [TestCase]
@@ -123,7 +123,7 @@
             var obj1 = new ObjectWithDefaultValues();
             var obj2 = new ObjectWithDefaultValues();
 
-            Assert.IsTrue(ReferenceEquals(obj1.ReferenceType_DefaultValueViaValue, obj2.ReferenceType_DefaultValueViaValue));
+            Assert.That(ReferenceEquals(obj1.ReferenceType_DefaultValueViaValue, obj2.ReferenceType_DefaultValueViaValue), Is.True);
         }
 
         [TestCase]
@@ -131,8 +131,8 @@
         {
             var obj = new ObjectWithDefaultValues();
 
-            Assert.AreNotEqual(null, obj.ReferenceType_DefaultValueViaCallback);
-            Assert.IsInstanceOf(typeof(Collection<int>), obj.ReferenceType_DefaultValueViaCallback);
+            Assert.That(obj.ReferenceType_DefaultValueViaCallback, Is.Not.EqualTo(null));
+            Assert.That(obj.ReferenceType_DefaultValueViaCallback, Is.InstanceOf(typeof(Collection<int>)));
         }
 
         [TestCase]
@@ -141,7 +141,7 @@
             var obj1 = new ObjectWithDefaultValues();
             var obj2 = new ObjectWithDefaultValues();
 
-            Assert.IsFalse(ReferenceEquals(obj1.ReferenceType_DefaultValueViaCallback, obj2.ReferenceType_DefaultValueViaCallback));
+            Assert.That(ReferenceEquals(obj1.ReferenceType_DefaultValueViaCallback, obj2.ReferenceType_DefaultValueViaCallback), Is.False);
         }
         #endregion
 
@@ -249,7 +249,7 @@
 
             obj.RaisePropertyChangedForAllRegisteredProperties();
 
-            Assert.AreEqual(expectedProperties.Count, actualProperties.Count);
+            Assert.That(actualProperties.Count, Is.EqualTo(expectedProperties.Count));
             foreach (string property in expectedProperties)
             {
                 if (!actualProperties.Contains(property))
@@ -268,7 +268,7 @@
             {
                 var model = new ObjectWithCustomType();
 
-                Assert.IsFalse(model.IsDirty);
+                Assert.That(model.IsDirty, Is.False);
             }
 
             [TestCase]
@@ -277,7 +277,7 @@
                 var model = new ObjectWithCustomType();
                 model.FirstName = "myNewFirstName";
 
-                Assert.IsTrue(model.IsDirty);
+                Assert.That(model.IsDirty, Is.True);
             }
         }
 
@@ -304,7 +304,7 @@
             var entry = new IniEntry();
             entry.Key = "key value";
             var value = entry.GetValue<string>(IniEntry.KeyProperty.Name);
-            Assert.AreEqual("key value", value);
+            Assert.That(value, Is.EqualTo("key value"));
         }
         #endregion
 
@@ -324,7 +324,7 @@
             obj.InitializePropertyAfterConstruction(dynamicProperty);
 
             obj.SetValue(dynamicProperty.Name, 5);
-            Assert.AreEqual(5, obj.GetValue<int>(dynamicProperty.Name));
+            Assert.That(obj.GetValue<int>(dynamicProperty.Name), Is.EqualTo(5));
         }
 
         [TestCase]
@@ -337,14 +337,14 @@
             obj.InitializePropertyAfterConstruction(dynamicProperty);
 
             obj.SetValue(dynamicProperty.Name, 5);
-            Assert.AreEqual(5, obj.GetValue<int>(dynamicProperty.Name));
+            Assert.That(obj.GetValue<int>(dynamicProperty.Name), Is.EqualTo(5));
 
             obj = new DynamicObject();
             dynamicProperty = DynamicObject.RegisterProperty<int>("DynamicProperty");
             obj.InitializePropertyAfterConstruction(dynamicProperty);
 
             obj.SetValue(dynamicProperty.Name, 5);
-            Assert.AreEqual(5, obj.GetValue<int>(dynamicProperty.Name));
+            Assert.That(obj.GetValue<int>(dynamicProperty.Name), Is.EqualTo(5));
         }
         #endregion
 
@@ -353,35 +353,35 @@
         public void PropertiesAreActuallyRegistered()
         {
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
-            Assert.IsTrue(instance.IsPropertyRegistered("StringProperty"));
-            Assert.IsTrue(instance.IsPropertyRegistered("StringPropertyWithSpecifiedDefaultValue"));
-            Assert.IsTrue(instance.IsPropertyRegistered("IntPropertyWithPropertyChangeNotication"));
-            Assert.IsTrue(instance.IsPropertyRegistered("IntPropertyExcludedFromSerializationAndBackup"));
+            Assert.That(instance.IsPropertyRegistered("StringProperty"), Is.True);
+            Assert.That(instance.IsPropertyRegistered("StringPropertyWithSpecifiedDefaultValue"), Is.True);
+            Assert.That(instance.IsPropertyRegistered("IntPropertyWithPropertyChangeNotication"), Is.True);
+            Assert.That(instance.IsPropertyRegistered("IntPropertyExcludedFromSerializationAndBackup"), Is.True);
         }
 
         [TestCase]
         public void PropertiesAreActuallyRegisteredWithDefaultValues()
         {
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
-            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.GetDefaultValue<string>(), instance.StringPropertyWithSpecifiedDefaultValue);
-            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.GetDefaultValue<string>(), instance.StringProperty);
-            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.GetDefaultValue<int>(), instance.IntPropertyWithPropertyChangeNotication);
-            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.GetDefaultValue<int>(), instance.IntPropertyExcludedFromSerializationAndBackup);
+            Assert.That(instance.StringPropertyWithSpecifiedDefaultValue, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.GetDefaultValue<string>()));
+            Assert.That(instance.StringProperty, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.GetDefaultValue<string>()));
+            Assert.That(instance.IntPropertyWithPropertyChangeNotication, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.GetDefaultValue<int>()));
+            Assert.That(instance.IntPropertyExcludedFromSerializationAndBackup, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.GetDefaultValue<int>()));
         }
 
         [TestCase]
         public void PropertiesAreActuallyRegisteredWithTheSpecifiedConfigurationForSerializationAndBackup()
         {
-            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInSerialization);
-            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInSerialization);
-            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInSerialization);
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInSerialization, Is.EqualTo(true));
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInSerialization, Is.EqualTo(true));
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInSerialization, Is.EqualTo(true));
 
-            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInBackup);
-            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInBackup);
-            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInBackup);
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInBackup, Is.EqualTo(true));
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInBackup, Is.EqualTo(true));
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInBackup, Is.EqualTo(true));
 
-            Assert.AreEqual(false, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInSerialization);
-            Assert.AreEqual(false, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInBackup);
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInSerialization, Is.EqualTo(false));
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInBackup, Is.EqualTo(false));
         }
 
         [TestCase]
@@ -397,7 +397,7 @@
                 instance.IntPropertyWithPropertyChangeNotication = random.Next(1000);
             }
 
-            Assert.IsTrue(0 <= instance.IntPropertyWithPropertyChangeNoticationsCount && instance.IntPropertyWithPropertyChangeNoticationsCount <= maxPropertyChanges);
+            Assert.That(0 <= instance.IntPropertyWithPropertyChangeNoticationsCount && instance.IntPropertyWithPropertyChangeNoticationsCount <= maxPropertyChanges, Is.True);
         }
 
         public class TestModelWithGenericPropertyRegistrations : ModelBase
@@ -440,10 +440,10 @@
         {
             var model = new TestModelWithGenericPropertyRegistrations();
 
-            Assert.IsTrue(model.IsPropertyRegistered("ValueType"));
-            Assert.IsTrue(model.IsPropertyRegistered("ValueTypeWithDefaultValue"));
-            Assert.IsTrue(model.IsPropertyRegistered("ReferenceType"));
-            Assert.IsTrue(model.IsPropertyRegistered("ReferenceTypeWithDefaultValue"));
+            Assert.That(model.IsPropertyRegistered("ValueType"), Is.True);
+            Assert.That(model.IsPropertyRegistered("ValueTypeWithDefaultValue"), Is.True);
+            Assert.That(model.IsPropertyRegistered("ReferenceType"), Is.True);
+            Assert.That(model.IsPropertyRegistered("ReferenceTypeWithDefaultValue"), Is.True);
         }
         #endregion
     }

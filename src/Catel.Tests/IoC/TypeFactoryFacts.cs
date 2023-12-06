@@ -203,7 +203,7 @@
 
                 TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b);
 
-                Assert.IsTrue(b.SignalB);
+                Assert.That(b.SignalB, Is.True);
             }
 
             [Test]
@@ -214,8 +214,8 @@
 
                 TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b1, b2);
 
-                Assert.IsTrue(b1.SignalB);
-                Assert.IsTrue(b2.SignalB);
+                Assert.That(b1.SignalB, Is.True);
+                Assert.That(b2.SignalB, Is.True);
             }
 
             [Test]
@@ -226,8 +226,8 @@
 
                 TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b, a);
 
-                Assert.IsTrue(b.SignalB);
-                Assert.IsTrue(a.SignalA);
+                Assert.That(b.SignalB, Is.True);
+                Assert.That(a.SignalA, Is.True);
             }
 
             [Test]
@@ -238,8 +238,8 @@
 
                 TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), c, a);
 
-                Assert.IsTrue(c.SignalC);
-                Assert.IsTrue(a.SignalA);
+                Assert.That(c.SignalC, Is.True);
+                Assert.That(a.SignalA, Is.True);
             }
         }
 
@@ -249,7 +249,7 @@
             [TestCase]
             public void ResolvesTypeWithStaticAndNonStaticConstructorButUsesNonStatic()
             {
-                Assert.IsInstanceOf(typeof(StaticCtorClass), TypeFactory.Default.CreateInstance<StaticCtorClass>());
+                Assert.That(TypeFactory.Default.CreateInstance<StaticCtorClass>(), Is.InstanceOf(typeof(StaticCtorClass)));
             }
 
             [TestCase]
@@ -261,7 +261,7 @@
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                    Assert.IsTrue(instance.UsedDefaultConstructor);
+                    Assert.That(instance.UsedDefaultConstructor, Is.True);
                 }
             }
 
@@ -277,10 +277,10 @@
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                    Assert.IsFalse(instance.UsedDefaultConstructor);
-                    Assert.AreEqual(iniEntry, instance.IniEntry);
-                    Assert.AreEqual(0, instance.IntValue);
-                    Assert.AreEqual(null, instance.StringValue);
+                    Assert.That(instance.UsedDefaultConstructor, Is.False);
+                    Assert.That(instance.IniEntry, Is.EqualTo(iniEntry));
+                    Assert.That(instance.IntValue, Is.EqualTo(0));
+                    Assert.That(instance.StringValue, Is.EqualTo(null));
                 }
             }
 
@@ -297,10 +297,10 @@
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                    Assert.IsFalse(instance.UsedDefaultConstructor);
-                    Assert.AreEqual(iniEntry, instance.IniEntry);
-                    Assert.AreEqual(42, instance.IntValue);
-                    Assert.AreEqual(null, instance.StringValue);
+                    Assert.That(instance.UsedDefaultConstructor, Is.False);
+                    Assert.That(instance.IniEntry, Is.EqualTo(iniEntry));
+                    Assert.That(instance.IntValue, Is.EqualTo(42));
+                    Assert.That(instance.StringValue, Is.EqualTo(null));
                 }
             }
 
@@ -318,10 +318,10 @@
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
 
-                    Assert.IsFalse(instance.UsedDefaultConstructor);
-                    Assert.AreEqual(iniEntry, instance.IniEntry);
-                    Assert.AreEqual(42, instance.IntValue);
-                    Assert.AreEqual("hi there", instance.StringValue);
+                    Assert.That(instance.UsedDefaultConstructor, Is.False);
+                    Assert.That(instance.IniEntry, Is.EqualTo(iniEntry));
+                    Assert.That(instance.IntValue, Is.EqualTo(42));
+                    Assert.That(instance.StringValue, Is.EqualTo("hi there"));
                 }
             }
 
@@ -333,7 +333,7 @@
                     var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
 
                     var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
-                    Assert.IsTrue(instance.HasCalledCustomInitialization);
+                    Assert.That(instance.HasCalledCustomInitialization, Is.True);
                 }
             }
 
@@ -349,7 +349,7 @@
                     var dependencyResolverManager = DependencyResolverManager.Default;
                     var actualDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(instance);
 
-                    Assert.AreEqual(dependencyResolver, actualDependencyResolver);
+                    Assert.That(actualDependencyResolver, Is.EqualTo(dependencyResolver));
                 }
             }
 
@@ -381,9 +381,9 @@
 
                     var ex = Assert.Throws<CircularDependencyException>(() => typeFactory.CreateInstance<X>());
 
-                    Assert.AreEqual(3, ex.TypePath.AllTypes.Count());
-                    Assert.AreEqual(typeof(X), ex.TypePath.FirstType.Type);
-                    Assert.AreEqual(typeof(X), ex.DuplicateRequestInfo.Type);
+                    Assert.That(ex.TypePath.AllTypes.Count(), Is.EqualTo(3));
+                    Assert.That(ex.TypePath.FirstType.Type, Is.EqualTo(typeof(X)));
+                    Assert.That(ex.DuplicateRequestInfo.Type, Is.EqualTo(typeof(X)));
                 }
             }
         }
@@ -436,7 +436,7 @@
                 var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>(42);
 
                 Assert.IsNotNull(instance);
-                Assert.AreEqual(42, instance.IntValue);
+                Assert.That(instance.IntValue, Is.EqualTo(42));
             }
 
             [TestCase]
@@ -446,9 +446,9 @@
                 var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>("string", 42, 42L);
 
                 Assert.IsNotNull(instance);
-                Assert.AreEqual("string", instance.StringValue);
-                Assert.AreEqual(42, instance.IntValue);
-                Assert.AreEqual(42L, instance.LongValue);
+                Assert.That(instance.StringValue, Is.EqualTo("string"));
+                Assert.That(instance.IntValue, Is.EqualTo(42));
+                Assert.That(instance.LongValue, Is.EqualTo(42L));
             }
 
             [TestCase]
@@ -459,8 +459,8 @@
                 var person = new Person { FirstName = "John", LastName = "Doe" };
                 var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<ClassWithDynamicConstructor>(person);
 
-                Assert.IsFalse(instance.IsDynamicConstructorCalled);
-                Assert.IsTrue(instance.IsTypedConstructorCalled);
+                Assert.That(instance.IsDynamicConstructorCalled, Is.False);
+                Assert.That(instance.IsTypedConstructorCalled, Is.True);
             }
 
             [TestCase, Explicit]
@@ -540,11 +540,11 @@
                         var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<AdvancedDependencyInjectionTestClass>("tag", "string", 42, 42L);
 
                         Assert.IsNotNull(instance);
-                        Assert.AreEqual("string", instance.StringValue);
-                        Assert.AreEqual(42, instance.IntValue);
-                        Assert.AreEqual(42L, instance.LongValue);
+                        Assert.That(instance.StringValue, Is.EqualTo("string"));
+                        Assert.That(instance.IntValue, Is.EqualTo(42));
+                        Assert.That(instance.LongValue, Is.EqualTo(42L));
 
-                        Assert.IsTrue(ReferenceEquals(tagDependency, instance.Dependency));
+                        Assert.That(ReferenceEquals(tagDependency, instance.Dependency), Is.True);
                     }
                 }
             }

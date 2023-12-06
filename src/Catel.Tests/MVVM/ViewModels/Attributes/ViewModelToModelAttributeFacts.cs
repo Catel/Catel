@@ -14,8 +14,8 @@
             {
                 var viewModelToModelAttribute = new ViewModelToModelAttribute("model");
 
-                Assert.AreEqual("model", viewModelToModelAttribute.Model);
-                Assert.AreEqual(string.Empty, viewModelToModelAttribute.Property);
+                Assert.That(viewModelToModelAttribute.Model, Is.EqualTo("model"));
+                Assert.That(viewModelToModelAttribute.Property, Is.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -23,8 +23,8 @@
             {
                 var viewModelToModelAttribute = new ViewModelToModelAttribute("model", "property");
 
-                Assert.AreEqual("model", viewModelToModelAttribute.Model);
-                Assert.AreEqual("property", viewModelToModelAttribute.Property);
+                Assert.That(viewModelToModelAttribute.Model, Is.EqualTo("model"));
+                Assert.That(viewModelToModelAttribute.Property, Is.EqualTo("property"));
             }
         }
     }

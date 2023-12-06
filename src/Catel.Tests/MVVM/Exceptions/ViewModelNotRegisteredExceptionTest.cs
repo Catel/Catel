@@ -17,7 +17,7 @@
             }
             catch (ViewModelNotRegisteredException ex)
             {
-                Assert.AreEqual(typeof(ViewModelBase), ex.ViewModelType);
+                Assert.That(ex.ViewModelType, Is.EqualTo(typeof(ViewModelBase)));
             }
         }
         #endregion

@@ -32,7 +32,7 @@
             [TestCase]
             public void ReturnsFalseForNonRegisteredPropertyName()
             {
-                Assert.IsFalse(_propertyBag.IsAvailable("MyProperty"));
+                Assert.That(_propertyBag.IsAvailable("MyProperty"), Is.False);
             }
 
             [TestCase]
@@ -40,7 +40,7 @@
             {
                 _propertyBag.SetValue("MyProperty", 1);
 
-                Assert.IsTrue(_propertyBag.IsAvailable("MyProperty"));
+                Assert.That(_propertyBag.IsAvailable("MyProperty"), Is.True);
             }
         }
 
@@ -65,12 +65,12 @@
 
                 var allProperties = _propertyBag.GetAllNames().ToList();
 
-                Assert.AreEqual(2, allProperties.Count);
+                Assert.That(allProperties.Count, Is.EqualTo(2));
 
-                Assert.AreEqual("FirstProperty", allProperties[0]);
+                Assert.That(allProperties[0], Is.EqualTo("FirstProperty"));
                 //Assert.AreEqual(1, allProperties[0].Value);
 
-                Assert.AreEqual("SecondProperty", allProperties[1]);
+                Assert.That(allProperties[1], Is.EqualTo("SecondProperty"));
                 //Assert.AreEqual("test", allProperties[1].Value);
             }
         }
@@ -98,8 +98,8 @@
             [TestCase]
             public void ReturnsDefaultValueForNonRegisteredProperty()
             {
-                Assert.AreEqual(null, _propertyBag.GetValue<string>("StringProperty"));
-                Assert.AreEqual(0, _propertyBag.GetValue<int>("IntProperty"));
+                Assert.That(_propertyBag.GetValue<string>("StringProperty"), Is.EqualTo(null));
+                Assert.That(_propertyBag.GetValue<int>("IntProperty"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -108,8 +108,8 @@
                 _propertyBag.SetValue("StringProperty", "test");
                 _propertyBag.SetValue("IntProperty", 1);
 
-                Assert.AreEqual("test", _propertyBag.GetValue<string>("StringProperty"));
-                Assert.AreEqual(1, _propertyBag.GetValue<int>("IntProperty"));
+                Assert.That(_propertyBag.GetValue<string>("StringProperty"), Is.EqualTo("test"));
+                Assert.That(_propertyBag.GetValue<int>("IntProperty"), Is.EqualTo(1));
             }
         }
 
@@ -137,10 +137,10 @@
             public void SetsPropertyCorrectly()
             {
                 _propertyBag.SetValue("StringProperty", "A");
-                Assert.AreEqual("A", _propertyBag.GetValue<string>("StringProperty"));
+                Assert.That(_propertyBag.GetValue<string>("StringProperty"), Is.EqualTo("A"));
 
                 _propertyBag.SetValue("StringProperty", "B");
-                Assert.AreEqual("B", _propertyBag.GetValue<string>("StringProperty"));
+                Assert.That(_propertyBag.GetValue<string>("StringProperty"), Is.EqualTo("B"));
             }
 
             [TestCase]
@@ -158,11 +158,11 @@
 
                 _propertyBag.SetValue("ChangeNotificationTest", "ABC");
 
-                Assert.AreEqual(1, eventCount);
+                Assert.That(eventCount, Is.EqualTo(1));
 
                 _propertyBag.SetValue("ChangeNotificationTest", "DEF");
 
-                Assert.AreEqual(2, eventCount);
+                Assert.That(eventCount, Is.EqualTo(2));
             }
 
             [TestCase]
@@ -180,11 +180,11 @@
 
                 _propertyBag.SetValue("ChangeNotificationTest2", "ABC");
 
-                Assert.AreEqual(1, eventCount);
+                Assert.That(eventCount, Is.EqualTo(1));
 
                 _propertyBag.SetValue("ChangeNotificationTest2", "ABC");
 
-                Assert.AreEqual(1, eventCount);
+                Assert.That(eventCount, Is.EqualTo(1));
             }
         }
     }

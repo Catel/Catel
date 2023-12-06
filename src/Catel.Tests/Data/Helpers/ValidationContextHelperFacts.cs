@@ -22,9 +22,9 @@
             {
                 var change = new ValidationContextChange(FieldValidationResult.CreateError("Property", "Error"), ValidationContextChangeType.Added);
 
-                Assert.AreEqual("Property", ((FieldValidationResult)change.ValidationResult).PropertyName);
-                Assert.AreEqual("Error", change.ValidationResult.Message);
-                Assert.AreEqual(ValidationContextChangeType.Added, change.ChangeType);
+                Assert.That(((FieldValidationResult)change.ValidationResult).PropertyName, Is.EqualTo("Property"));
+                Assert.That(change.ValidationResult.Message, Is.EqualTo("Error"));
+                Assert.That(change.ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
             }
 
             [TestCase]
@@ -32,9 +32,9 @@
             {
                 var change = new ValidationContextChange(FieldValidationResult.CreateError("Property", "Error"), ValidationContextChangeType.Removed);
 
-                Assert.AreEqual("Property", ((FieldValidationResult)change.ValidationResult).PropertyName);
-                Assert.AreEqual("Error", change.ValidationResult.Message);
-                Assert.AreEqual(ValidationContextChangeType.Removed, change.ChangeType);
+                Assert.That(((FieldValidationResult)change.ValidationResult).PropertyName, Is.EqualTo("Property"));
+                Assert.That(change.ValidationResult.Message, Is.EqualTo("Error"));
+                Assert.That(change.ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
             }
         }
     }
@@ -79,7 +79,7 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(0, changes.Count);
+                Assert.That(changes.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -104,11 +104,11 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldWarning", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(((IFieldValidationResult)changes[0].ValidationResult).PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("FieldWarning"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
             }
 
             [TestCase]
@@ -133,11 +133,11 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldWarning", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(((IFieldValidationResult)changes[0].ValidationResult).PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("FieldWarning"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
             }
 
             [TestCase]
@@ -162,11 +162,11 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldError", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Error, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(((IFieldValidationResult)changes[0].ValidationResult).PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("FieldError"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
             }
 
             [TestCase]
@@ -191,11 +191,11 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[0].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldError", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Error, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(((IFieldValidationResult)changes[0].ValidationResult).PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("FieldError"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
             }
 
             [TestCase]
@@ -220,10 +220,10 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("BusinessRuleWarning", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
             }
 
             [TestCase]
@@ -248,10 +248,10 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("BusinessRuleWarning", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
             }
 
             [TestCase]
@@ -276,10 +276,10 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("BusinessRuleError", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Error, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
             }
 
             [TestCase]
@@ -304,10 +304,10 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(1, changes.Count);
-                Assert.AreEqual("BusinessRuleError", changes[0].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Error, changes[0].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
+                Assert.That(changes.Count, Is.EqualTo(1));
+                Assert.That(changes[0].ValidationResult.Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(changes[0].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(changes[0].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
             }
 
             [TestCase]
@@ -332,54 +332,54 @@
 
                 var changes = ValidationContextHelper.GetChanges(context1, context2);
 
-                Assert.AreEqual(7, changes.Count);
+                Assert.That(changes.Count, Is.EqualTo(7));
                 int counter;
 
                 // Field warning text has changed, thus removed
                 counter = 0;
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldWarning", changes[counter].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[counter].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[counter].ChangeType);
+                Assert.That(((IFieldValidationResult)changes[counter].ValidationResult).PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(changes[counter].ValidationResult.Message, Is.EqualTo("FieldWarning"));
+                Assert.That(changes[counter].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[counter].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
 
                 // Field error has been removed
                 counter++;
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldError", changes[counter].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Error, changes[counter].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[counter].ChangeType);
+                Assert.That(((IFieldValidationResult)changes[counter].ValidationResult).PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(changes[counter].ValidationResult.Message, Is.EqualTo("FieldError"));
+                Assert.That(changes[counter].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(changes[counter].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
 
                 // Field warning text has changed, thus added
                 counter++;
-                Assert.AreEqual("MyProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldWarningTextHasChanged", changes[counter].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[counter].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Added, changes[counter].ChangeType);
+                Assert.That(((IFieldValidationResult)changes[counter].ValidationResult).PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(changes[counter].ValidationResult.Message, Is.EqualTo("FieldWarningTextHasChanged"));
+                Assert.That(changes[counter].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[counter].ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
 
                 // Field error added
                 counter++;
-                Assert.AreEqual("NewProperty", ((IFieldValidationResult)changes[counter].ValidationResult).PropertyName);
-                Assert.AreEqual("FieldErrorForNewProperty", changes[counter].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Error, changes[counter].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Added, changes[counter].ChangeType);
+                Assert.That(((IFieldValidationResult)changes[counter].ValidationResult).PropertyName, Is.EqualTo("NewProperty"));
+                Assert.That(changes[counter].ValidationResult.Message, Is.EqualTo("FieldErrorForNewProperty"));
+                Assert.That(changes[counter].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(changes[counter].ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
 
                 // Business rule text has changed, thus removed
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", changes[counter].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[counter].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[counter].ChangeType);
+                Assert.That(changes[counter].ValidationResult.Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(changes[counter].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[counter].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
 
                 // Business rule error has been removed
                 counter++;
-                Assert.AreEqual("BusinessRuleError", changes[counter].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Error, changes[counter].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Removed, changes[counter].ChangeType);
+                Assert.That(changes[counter].ValidationResult.Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(changes[counter].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(changes[counter].ChangeType, Is.EqualTo(ValidationContextChangeType.Removed));
 
                 // Business rule text has changed, thus added
                 counter++;
-                Assert.AreEqual("BusinessRuleWarningTextHasChanged", changes[counter].ValidationResult.Message);
-                Assert.AreEqual(ValidationResultType.Warning, changes[counter].ValidationResult.ValidationResultType);
-                Assert.AreEqual(ValidationContextChangeType.Added, changes[counter].ChangeType);
+                Assert.That(changes[counter].ValidationResult.Message, Is.EqualTo("BusinessRuleWarningTextHasChanged"));
+                Assert.That(changes[counter].ValidationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(changes[counter].ChangeType, Is.EqualTo(ValidationContextChangeType.Added));
             }
         }
     }

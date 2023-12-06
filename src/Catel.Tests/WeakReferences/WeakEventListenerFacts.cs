@@ -147,10 +147,10 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.IsFalse(weakEventListener.IsSourceAlive);
-                Assert.IsTrue(weakEventListener.IsStaticEvent);
-                Assert.IsTrue(weakEventListener.IsTargetAlive);
-                Assert.IsFalse(weakEventListener.IsStaticEventHandler);
+                Assert.That(weakEventListener.IsSourceAlive, Is.False);
+                Assert.That(weakEventListener.IsStaticEvent, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.True);
+                Assert.That(weakEventListener.IsStaticEventHandler, Is.False);
             }
 
             [TestCase]
@@ -164,10 +164,10 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsStaticEvent);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
-                Assert.IsTrue(weakEventListener.IsStaticEventHandler);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsStaticEvent, Is.False);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
+                Assert.That(weakEventListener.IsStaticEventHandler, Is.True);
             }
 
             [TestCase]
@@ -192,19 +192,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -222,19 +222,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -252,19 +252,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -286,19 +286,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -316,19 +316,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -346,19 +346,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -380,19 +380,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -410,19 +410,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.Add(DateTime.Now);
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -440,7 +440,7 @@
 
                 source.AddNewItem(4);
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
             }
 
             [TestCase, Explicit]
@@ -455,19 +455,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -489,19 +489,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -519,7 +519,7 @@
 
                 source.Add(1);
 
-                Assert.AreEqual(2, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(2));
             }
 
             [TestCase, Explicit]
@@ -534,19 +534,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -573,8 +573,8 @@
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -591,15 +591,15 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.StaticEventCounter);
+                Assert.That(listener.StaticEventCounter, Is.EqualTo(0));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsFalse(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.False);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
             }
 
             [TestCase, Explicit]
@@ -613,19 +613,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, EventListener.StaticEventHandlerCounter);
+                Assert.That(EventListener.StaticEventHandlerCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, EventListener.StaticEventHandlerCounter);
+                Assert.That(EventListener.StaticEventHandlerCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous source is removed
                 source = new EventSource();
                 GC.Collect();
                 var type = source.GetType();
 
-                Assert.IsFalse(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.False);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
             }
 
             [TestCase]
@@ -637,11 +637,11 @@
 
                 WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", (sender, e) => count++);
 
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
             }
 
             [TestCase, Explicit]
@@ -656,19 +656,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PublicActionCounter);
+                Assert.That(listener.PublicActionCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicActionCounter);
+                Assert.That(listener.PublicActionCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -692,11 +692,11 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 GC.Collect();
@@ -720,19 +720,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -767,19 +767,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PublicClassEventCount);
+                Assert.That(listener.PublicClassEventCount, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicClassEventCount);
+                Assert.That(listener.PublicClassEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -797,19 +797,19 @@
                     throw new Exception("Weak event listener should not be null");
                 }
 
-                Assert.AreEqual(0, listener.PrivateClassEventCount);
+                Assert.That(listener.PrivateClassEventCount, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PrivateClassEventCount);
+                Assert.That(listener.PrivateClassEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();

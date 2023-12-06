@@ -62,7 +62,7 @@
 
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -73,7 +73,7 @@
 
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -90,8 +90,8 @@
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Check if the directory exists
-            Assert.AreEqual(directory, result);
-            Assert.IsTrue(Directory.Exists(result));
+            Assert.That(result, Is.EqualTo(directory));
+            Assert.That(Directory.Exists(result), Is.True);
         }
 
         [TestCase]
@@ -102,7 +102,7 @@
 
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -113,7 +113,7 @@
 
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -130,8 +130,8 @@
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Check if the directory exists
-            Assert.AreEqual(directory, result);
-            Assert.IsTrue(Directory.Exists(result));
+            Assert.That(result, Is.EqualTo(directory));
+            Assert.That(Directory.Exists(result), Is.True);
         }
 
         #region GetDirectoryName
@@ -140,7 +140,7 @@
         {
             string result = Path.GetDirectoryName(@"C:\ParentDirectory\ChildDirectory");
 
-            Assert.AreEqual(@"C:\ParentDirectory", result);
+            Assert.That(result, Is.EqualTo(@"C:\ParentDirectory"));
         }
 
         [TestCase]
@@ -148,7 +148,7 @@
         {
             string result = Path.GetDirectoryName(@"C:\");
 
-            Assert.AreEqual(string.Empty, result);
+            Assert.That(result, Is.EqualTo(string.Empty));
         }
         #endregion
 
@@ -164,7 +164,7 @@
             string output = Path.GetFileName(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -178,7 +178,7 @@
             string output = Path.GetFileName(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -201,7 +201,7 @@
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -215,7 +215,7 @@
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -229,7 +229,7 @@
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -243,7 +243,7 @@
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -257,7 +257,7 @@
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
         #endregion
 
@@ -273,7 +273,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"Windows\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -287,7 +287,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -301,7 +301,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -315,7 +315,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -329,7 +329,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\MyTest\MyFile.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\MyTest\MyFile.exe".ToLower()));
         }
 
         [TestCase]
@@ -346,7 +346,7 @@
             string relative = Path.GetRelativePath(file);
 
             // Validate
-            Assert.AreEqual(@"..\MyTest\MyFile.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\MyTest\MyFile.exe".ToLower()));
 
             // Restore current working directory
             Environment.CurrentDirectory = currentWorkingDirectory;
@@ -363,7 +363,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\..\Level1_\Level2_".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\..\Level1_\Level2_".ToLower()));
         }
 
         [TestCase]
@@ -377,7 +377,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\..".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\..".ToLower()));
         }
 
         [TestCase]
@@ -391,7 +391,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\Windows\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -405,7 +405,7 @@
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -427,7 +427,7 @@
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -441,7 +441,7 @@
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -455,7 +455,7 @@
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -469,7 +469,7 @@
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -483,7 +483,7 @@
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -519,7 +519,7 @@
             string result = Path.AppendTrailingSlash(path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\", result);
+            Assert.That(result, Is.EqualTo(@"C:\Windows\"));
         }
 
         [TestCase]
@@ -532,7 +532,7 @@
             string result = Path.AppendTrailingSlash(path, '/');
 
             // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/", result);
+            Assert.That(result, Is.EqualTo(@"http://www.catenalogic.com/"));
         }
 
         [TestCase]
@@ -545,7 +545,7 @@
             string result = Path.AppendTrailingSlash(path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\", result);
+            Assert.That(result, Is.EqualTo(@"C:\Windows\"));
         }
 
         [TestCase]
@@ -558,7 +558,7 @@
             string result = Path.AppendTrailingSlash(path, '/');
 
             // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/", result);
+            Assert.That(result, Is.EqualTo(@"http://www.catenalogic.com/"));
         }
         #endregion
 
@@ -575,7 +575,7 @@
         {
             string result = Path.RemoveStartSlashes(@"\withStartSlash");
 
-            Assert.AreEqual(@"withStartSlash", result);
+            Assert.That(result, Is.EqualTo(@"withStartSlash"));
         }
 
         [TestCase]
@@ -583,7 +583,7 @@
         {
             string result = Path.RemoveStartSlashes(@"withoutStartSlash");
 
-            Assert.AreEqual(@"withoutStartSlash", result);
+            Assert.That(result, Is.EqualTo(@"withoutStartSlash"));
         }
         #endregion
 
@@ -600,7 +600,7 @@
         {
             string result = Path.RemoveTrailingSlashes(@"withEndingSlash\");
 
-            Assert.AreEqual(@"withEndingSlash", result);
+            Assert.That(result, Is.EqualTo(@"withEndingSlash"));
         }
 
         [TestCase]
@@ -608,7 +608,7 @@
         {
             string result = Path.RemoveTrailingSlashes(@"withoutEndingSlash");
 
-            Assert.AreEqual(@"withoutEndingSlash", result);
+            Assert.That(result, Is.EqualTo(@"withoutEndingSlash"));
         }
         #endregion
     }

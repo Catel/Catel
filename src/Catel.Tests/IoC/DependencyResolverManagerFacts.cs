@@ -54,7 +54,7 @@
 
                     var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(myObject);
 
-                    Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                    Assert.That(ReferenceEquals(dependencyResolver, resolvedDependencyResolver), Is.True);
                 }
             }
 
@@ -71,7 +71,7 @@
 
                     var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(myObject);
 
-                    Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                    Assert.That(ReferenceEquals(dependencyResolver, resolvedDependencyResolver), Is.True);
                 }
             }
 
@@ -83,7 +83,7 @@
 
                 var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(myObject);
 
-                Assert.IsTrue(ReferenceEquals(dependencyResolverManager.DefaultDependencyResolver, resolvedDependencyResolver));
+                Assert.That(ReferenceEquals(dependencyResolverManager.DefaultDependencyResolver, resolvedDependencyResolver), Is.True);
             }
         }
 
@@ -134,7 +134,7 @@
 
                     var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
 
-                    Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
+                    Assert.That(ReferenceEquals(dependencyResolver, resolvedDependencyResolver), Is.True);
                 }
             }
 
@@ -145,7 +145,7 @@
 
                 var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
 
-                Assert.IsTrue(ReferenceEquals(dependencyResolverManager.DefaultDependencyResolver, resolvedDependencyResolver));
+                Assert.That(ReferenceEquals(dependencyResolverManager.DefaultDependencyResolver, resolvedDependencyResolver), Is.True);
             }
 
             [TestFixture]
@@ -173,7 +173,7 @@
 
                     var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
 
-                    Assert.IsNull(resolvedDependencyResolver.Resolve(typeof(IDummy)));
+                    Assert.That(resolvedDependencyResolver.Resolve(typeof(IDummy)), Is.Null);
                 }
             }
         }

@@ -24,7 +24,7 @@
         public void Convert(object enumValue, string parameter, Visibility expectedVisibility)
         {
             var converter = new EnumToCollapsingVisibilityConverter();
-            Assert.AreEqual(expectedVisibility, converter.Convert(enumValue, typeof(Visibility), parameter, (CultureInfo)null));
+            Assert.That(converter.Convert(enumValue, typeof(Visibility), parameter, (CultureInfo)null), Is.EqualTo(expectedVisibility));
         }
     }
 }

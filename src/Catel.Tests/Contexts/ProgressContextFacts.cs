@@ -24,7 +24,7 @@
 
                 var percentage = progressContext.Percentage;
 
-                Assert.AreEqual(expectedPercentage, percentage);
+                Assert.That(percentage, Is.EqualTo(expectedPercentage));
             }
         }
 
@@ -48,7 +48,7 @@
 
                 var currentRefreshNumber = progressContext.CurrentRefreshNumber;
 
-                Assert.AreEqual(expectedRefreshNumber, currentRefreshNumber);
+                Assert.That(currentRefreshNumber, Is.EqualTo(expectedRefreshNumber));
             }
         }
 
@@ -72,7 +72,7 @@
 
                 var isRefreshRequired = progressContext.IsRefreshRequired;
 
-                Assert.AreEqual(expectedIsRefreshRequired, isRefreshRequired);
+                Assert.That(isRefreshRequired, Is.EqualTo(expectedIsRefreshRequired));
             }
         }
     }

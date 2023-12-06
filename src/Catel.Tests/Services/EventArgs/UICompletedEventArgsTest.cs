@@ -16,8 +16,8 @@
                 Data = 15
             }, null));
 
-            Assert.AreEqual(15, completedEventArgs.Context.Data);
-            Assert.AreEqual(true, completedEventArgs.Result.DialogResult);
+            Assert.That(completedEventArgs.Context.Data, Is.EqualTo(15));
+            Assert.That(completedEventArgs.Result.DialogResult, Is.EqualTo(true));
         }
         #endregion
     }

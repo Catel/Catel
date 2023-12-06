@@ -19,7 +19,7 @@
         {
             var testService = new ViewModelService();
 
-            Assert.AreEqual("ViewModelService", testService.Name);
+            Assert.That(testService.Name, Is.EqualTo("ViewModelService"));
         }
         #endregion
     }

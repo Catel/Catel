@@ -13,13 +13,13 @@
             [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET8)]
             public void ReturnsTrueForSupportedPlatform(KnownPlatforms platformToCheck, SupportedPlatforms currentPlatform)
             {
-                Assert.IsTrue(Platforms.IsPlatformSupported(platformToCheck, currentPlatform));
+                Assert.That(Platforms.IsPlatformSupported(platformToCheck, currentPlatform), Is.True);
             }
 
             //[TestCase(KnownPlatforms.N, SupportedPlatforms.NET47)]
             public void ReturnsFalseForUnsupportedPlatform(KnownPlatforms platformToCheck, SupportedPlatforms currentPlatform)
             {
-                Assert.IsFalse(Platforms.IsPlatformSupported(platformToCheck, currentPlatform));
+                Assert.That(Platforms.IsPlatformSupported(platformToCheck, currentPlatform), Is.False);
             }
         }
         #endregion

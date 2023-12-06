@@ -15,7 +15,7 @@
             {
                 var converter = new TextToUpperCaseConverter();
 
-                Assert.AreEqual("UPPERCASE", converter.Convert("UpPeRcAsE", typeof(string), null, (CultureInfo)null));
+                Assert.That(converter.Convert("UpPeRcAsE", typeof(string), null, (CultureInfo)null), Is.EqualTo("UPPERCASE"));
             }
 
             [TestCase]
@@ -23,7 +23,7 @@
             {
                 var converter = new TextToUpperCaseConverter();
 
-                Assert.AreEqual(null, converter.Convert(null, typeof(string), null, (CultureInfo)null));
+                Assert.That(converter.Convert(null, typeof(string), null, (CultureInfo)null), Is.EqualTo(null));
             }
         }
     }

@@ -16,7 +16,7 @@
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
             var loadedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
 
-            Assert.AreEqual(originalObject, loadedObject);
+            Assert.That(loadedObject, Is.EqualTo(originalObject));
         }
 
         [TestCase]
@@ -34,7 +34,7 @@
                 memoryStream.Position = 0L;
                 var loadedObject = serializer.Deserialize(typeof(IniFile), memoryStream);
 
-                Assert.AreEqual(originalObject, loadedObject);
+                Assert.That(loadedObject, Is.EqualTo(originalObject));
             }
         }
         #endregion

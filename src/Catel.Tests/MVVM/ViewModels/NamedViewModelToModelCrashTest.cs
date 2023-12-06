@@ -171,12 +171,12 @@
         public void OnSetModelToNullShouldSetDefaultValueForMappedProperties()
         {
             var vm = new MainWindowViewModel();
-            Assert.AreEqual(444, vm.Identifier);
+            Assert.That(vm.Identifier, Is.EqualTo(444));
 
             vm.Reset.Execute();
 
-            Assert.AreEqual(123, vm.Identifier);
-            Assert.AreEqual("asd", vm.Comment);
+            Assert.That(vm.Identifier, Is.EqualTo(123));
+            Assert.That(vm.Comment, Is.EqualTo("asd"));
         }
 
         #endregion

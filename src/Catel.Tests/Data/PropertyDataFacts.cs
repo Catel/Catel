@@ -12,8 +12,8 @@
             {
                 var propertiesObject = new ObjectWithoutDefaultValues();
 
-                Assert.AreNotEqual(null, propertiesObject.ReferenceType);
-                Assert.AreEqual(null, propertiesObject.ReferenceTypeWithoutDefaultValue);
+                Assert.That(propertiesObject.ReferenceType, Is.Not.EqualTo(null));
+                Assert.That(propertiesObject.ReferenceTypeWithoutDefaultValue, Is.EqualTo(null));
             }
 
             [TestCase]
@@ -21,8 +21,8 @@
             {
                 var propertiesObject = new ObjectWithoutDefaultValues();
 
-                Assert.AreEqual(1, propertiesObject.ValueType);
-                Assert.AreEqual(0, propertiesObject.ValueTypeWithoutDefaultValue);
+                Assert.That(propertiesObject.ValueType, Is.EqualTo(1));
+                Assert.That(propertiesObject.ValueTypeWithoutDefaultValue, Is.EqualTo(0));
             }
         }
 
@@ -34,7 +34,7 @@
             {
                 var property = ObjectWithoutDefaultValues.ReferenceTypeProperty;
 
-                Assert.AreEqual(property.GetDefaultValue(), property.GetDefaultValue<object>());
+                Assert.That(property.GetDefaultValue<object>(), Is.EqualTo(property.GetDefaultValue()));
             }
 
             [TestCase]
@@ -42,7 +42,7 @@
             {
                 var property = ObjectWithoutDefaultValues.ValueTypeProperty;
 
-                Assert.AreEqual(property.GetDefaultValue(), property.GetDefaultValue<int>());
+                Assert.That(property.GetDefaultValue<int>(), Is.EqualTo(property.GetDefaultValue()));
             }
         }
     }

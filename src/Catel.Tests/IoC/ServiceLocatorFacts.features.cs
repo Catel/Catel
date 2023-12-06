@@ -94,10 +94,10 @@
 
                 Assert.IsNotNull(resolved);
                 Assert.IsNotNull(resolved.Services);
-                Assert.AreEqual(2, resolved.Services.Count());
+                Assert.That(resolved.Services.Count(), Is.EqualTo(2));
 
-                Assert.IsTrue(resolved.Services.Any(service => service is IndependentService));
-                Assert.IsTrue(resolved.Services.Any(service => service is IndependentService2));
+                Assert.That(resolved.Services.Any(service => service is IndependentService), Is.True);
+                Assert.That(resolved.Services.Any(service => service is IndependentService2), Is.True);
             }
         }
 

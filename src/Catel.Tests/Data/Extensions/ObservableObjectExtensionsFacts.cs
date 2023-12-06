@@ -37,7 +37,7 @@
 
                 model.RaiseAllPropertiesChanged();
 
-                Assert.IsTrue(propertyChanged);
+                Assert.That(propertyChanged, Is.True);
             }
         }
     }

@@ -40,9 +40,9 @@
             {
                 var validationResult = new FieldValidationResult("myProperty", ValidationResultType.Error, string.Empty);
 
-                Assert.AreEqual("myProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual(string.Empty, validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("myProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -50,9 +50,9 @@
             {
                 var validationResult = new FieldValidationResult("myProperty", ValidationResultType.Error, "my message");
 
-                Assert.AreEqual("myProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("myProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message"));
             }
 
             [TestCase]
@@ -60,9 +60,9 @@
             {
                 var validationResult = new FieldValidationResult("myProperty", ValidationResultType.Error, "my message with {0}", "format");
 
-                Assert.AreEqual("myProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("myProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
         }
 
@@ -76,9 +76,9 @@
             {
                 var validationResult = FieldValidationResult.CreateWarning("myProperty", "my message");
 
-                Assert.AreEqual("myProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Warning, validationResult.ValidationResultType);
-                Assert.AreEqual("my message", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("myProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(validationResult.Message, Is.EqualTo("my message"));
             }
 
             [TestCase]
@@ -86,9 +86,9 @@
             {
                 var validationResult = FieldValidationResult.CreateWarning("myProperty", "my message with {0}", "format");
 
-                Assert.AreEqual("myProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Warning, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("myProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
 
             [TestCase]
@@ -96,9 +96,9 @@
             {
                 var validationResult = FieldValidationResult.CreateWarning(() => MyProperty, "my message with {0}", "format");
 
-                Assert.AreEqual("MyProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Warning, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
         }
 
@@ -112,9 +112,9 @@
             {
                 var validationResult = FieldValidationResult.CreateError("myProperty", "my message");
 
-                Assert.AreEqual("myProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("myProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message"));
             }
 
             [TestCase]
@@ -122,9 +122,9 @@
             {
                 var validationResult = FieldValidationResult.CreateError("myProperty", "my message with {0}", "format");
 
-                Assert.AreEqual("myProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("myProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
 
             [TestCase]
@@ -132,9 +132,9 @@
             {
                 var validationResult = FieldValidationResult.CreateError(() => MyProperty, "my message with {0}", "format");
 
-                Assert.AreEqual("MyProperty", validationResult.PropertyName);
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
         }
     }
@@ -155,8 +155,8 @@
             {
                 var validationResult = new BusinessRuleValidationResult(ValidationResultType.Error, string.Empty);
 
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual(string.Empty, validationResult.Message);
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -164,8 +164,8 @@
             {
                 var validationResult = new BusinessRuleValidationResult(ValidationResultType.Error, "my message");
 
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message", validationResult.Message);
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message"));
             }
 
             [TestCase]
@@ -173,8 +173,8 @@
             {
                 var validationResult = new BusinessRuleValidationResult(ValidationResultType.Error, "my message with {0}", "format");
 
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
         }
 
@@ -186,8 +186,8 @@
             {
                 var validationResult = BusinessRuleValidationResult.CreateWarning("my message");
 
-                Assert.AreEqual(ValidationResultType.Warning, validationResult.ValidationResultType);
-                Assert.AreEqual("my message", validationResult.Message);
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(validationResult.Message, Is.EqualTo("my message"));
             }
 
             [TestCase]
@@ -195,8 +195,8 @@
             {
                 var validationResult = BusinessRuleValidationResult.CreateWarning("my message with {0}", "format");
 
-                Assert.AreEqual(ValidationResultType.Warning, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
         }
 
@@ -208,8 +208,8 @@
             {
                 var validationResult = BusinessRuleValidationResult.CreateError("my message");
 
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message", validationResult.Message);
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message"));
             }
 
             [TestCase]
@@ -217,8 +217,8 @@
             {
                 var validationResult = BusinessRuleValidationResult.CreateError("my message with {0}", "format");
 
-                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
-                Assert.AreEqual("my message with format", validationResult.Message);
+                Assert.That(validationResult.ValidationResultType, Is.EqualTo(ValidationResultType.Error));
+                Assert.That(validationResult.Message, Is.EqualTo("my message with format"));
             }
         }
     }

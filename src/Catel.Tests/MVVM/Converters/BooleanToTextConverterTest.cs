@@ -38,7 +38,7 @@
         public void ConvertBack()
         {
             var converter = new BooleanToTextConverter();
-            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.ConvertBack(null, typeof(bool), null, (CultureInfo)null), Is.EqualTo(ConverterHelper.UnsetValue));
         }
 
         //[Test]

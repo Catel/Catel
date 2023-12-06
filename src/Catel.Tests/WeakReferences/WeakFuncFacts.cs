@@ -58,7 +58,7 @@
             target = null;
             GC.Collect();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -68,14 +68,14 @@
             var weakFunc = new WeakFunc<bool>(target, target.PublicFuncToExecute);
 
             bool result;
-            Assert.IsTrue(weakFunc.Execute(out result));
+            Assert.That(weakFunc.Execute(out result), Is.True);
 
-            Assert.AreEqual(1, target.PublicFuncExecutedCount);
+            Assert.That(target.PublicFuncExecutedCount, Is.EqualTo(1));
 
             target = null;
             GC.Collect();
 
-            Assert.IsFalse(weakFunc.IsTargetAlive);
+            Assert.That(weakFunc.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -91,14 +91,14 @@
             var weakFunc = new WeakFunc<int, bool>(target, target.PublicFuncWithParameterToExecute);
 
             bool result;
-            Assert.IsTrue(weakFunc.Execute(1, out result));
+            Assert.That(weakFunc.Execute(1, out result), Is.True);
 
-            Assert.AreEqual(1, target.PublicFuncWithParameterExecutedCount);
+            Assert.That(target.PublicFuncWithParameterExecutedCount, Is.EqualTo(1));
 
             target = null;
             GC.Collect();
 
-            Assert.IsFalse(weakFunc.IsTargetAlive);
+            Assert.That(weakFunc.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -115,7 +115,7 @@
                             return true;
                         }));
 
-            Assert.AreEqual(0, count);
+            Assert.That(count, Is.EqualTo(0));
         }
         #endregion
     }

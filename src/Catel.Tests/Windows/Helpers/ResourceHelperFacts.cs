@@ -27,7 +27,7 @@
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml");
 
-                Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
+                Assert.That(packUri, Is.EqualTo("pack://application:,,,/App.xaml"));
             }
 
             [TestCase]
@@ -35,7 +35,7 @@
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", null);
 
-                Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
+                Assert.That(packUri, Is.EqualTo("pack://application:,,,/App.xaml"));
             }
 
             [TestCase]
@@ -43,7 +43,7 @@
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", null);
 
-                Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
+                Assert.That(packUri, Is.EqualTo("pack://application:,,,/App.xaml"));
             }
 
             [TestCase]
@@ -51,7 +51,7 @@
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", "Catel.MVVM");
 
-                Assert.AreEqual("pack://application:,,,/Catel.MVVM;component/App.xaml", packUri);
+                Assert.That(packUri, Is.EqualTo("pack://application:,,,/Catel.MVVM;component/App.xaml"));
             }
 
             [TestCase]
@@ -59,7 +59,7 @@
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", "Catel.MVVM");
 
-                Assert.AreEqual("pack://application:,,,/Catel.MVVM;component/App.xaml", packUri);
+                Assert.That(packUri, Is.EqualTo("pack://application:,,,/Catel.MVVM;component/App.xaml"));
             }
         }
 
@@ -93,13 +93,13 @@
             [TestCase]
             public void ReturnsFalseForNonExistingResourceAsUriString()
             {
-                Assert.IsFalse(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("NonExistingTestControl.xaml", "Catel.Tests")));
+                Assert.That(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("NonExistingTestControl.xaml", "Catel.Tests")), Is.False);
             }
 
             [TestCase]
             public void ReturnsTrueForExistingResourceAsUriString()
             {
-                Assert.IsTrue(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests")));
+                Assert.That(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests")), Is.True);
             }
 
             [TestCase]
@@ -107,7 +107,7 @@
             {
                 ResourceHelper.EnsurePackUriIsAllowed();
 
-                Assert.IsFalse(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("NonExistingTestControl.xaml", "Catel.Tests"), UriKind.RelativeOrAbsolute)));
+                Assert.That(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("NonExistingTestControl.xaml", "Catel.Tests"), UriKind.RelativeOrAbsolute)), Is.False);
             }
 
             [TestCase]
@@ -115,7 +115,7 @@
             {
                 ResourceHelper.EnsurePackUriIsAllowed();
 
-                Assert.IsTrue(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests"), UriKind.RelativeOrAbsolute)));
+                Assert.That(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests"), UriKind.RelativeOrAbsolute)), Is.True);
             }
         }
     }

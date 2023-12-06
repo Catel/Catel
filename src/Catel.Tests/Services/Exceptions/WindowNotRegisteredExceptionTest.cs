@@ -17,7 +17,7 @@
             }
             catch (WindowNotRegisteredException ex)
             {
-                Assert.AreEqual("windowName", ex.Name);
+                Assert.That(ex.Name, Is.EqualTo("windowName"));
             }
         }
         #endregion

@@ -20,7 +20,7 @@
                 var inputUri = new Uri("/Views/MainPage.xaml", UriKind.RelativeOrAbsolute);
                 var uri = UriExtensions.GetSafeUriString(inputUri);
 
-                Assert.AreEqual("/Views/MainPage.xaml", uri);
+                Assert.That(uri, Is.EqualTo("/Views/MainPage.xaml"));
             }
 
             // Test case for https://catelproject.atlassian.net/browse/CTL-240
@@ -30,7 +30,7 @@
                 var inputUri = new Uri("//Views/MainPage.xaml", UriKind.RelativeOrAbsolute);
                 var uri = UriExtensions.GetSafeUriString(inputUri);
 
-                Assert.AreEqual("/Views/MainPage.xaml", uri);
+                Assert.That(uri, Is.EqualTo("/Views/MainPage.xaml"));
             }
         }
     }

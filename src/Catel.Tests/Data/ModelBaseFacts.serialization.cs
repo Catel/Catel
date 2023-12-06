@@ -408,7 +408,7 @@
 
                 var json = JsonConvert.SerializeObject(model);
 
-                Assert.AreEqual("{\"name\":\"Geert\",\"modules\":[{\"name\":\"Name 1\"},{\"name\":\"Name 2\"},{\"name\":\"Name 3\"}]}", json);
+                Assert.That(json, Is.EqualTo("{\"name\":\"Geert\",\"modules\":[{\"name\":\"Name 1\"},{\"name\":\"Name 2\"},{\"name\":\"Name 3\"}]}"));
             }
 
             [TestCase]
@@ -418,7 +418,7 @@
 
                 var model = JsonConvert.DeserializeObject<JsonExampleModel>(json);
 
-                Assert.AreEqual("Geert", model.Name);
+                Assert.That(model.Name, Is.EqualTo("Geert"));
             }
         }
     }

@@ -14,7 +14,7 @@
             {
                 var modelAttribute = new ModelAttribute();
 
-                Assert.AreEqual(true, modelAttribute.SupportIEditableObject);
+                Assert.That(modelAttribute.SupportIEditableObject, Is.EqualTo(true));
             }
 
             [TestCase]
@@ -22,7 +22,7 @@
             {
                 var modelAttribute = new ModelAttribute();
 
-                Assert.AreEqual(true, modelAttribute.SupportValidation);
+                Assert.That(modelAttribute.SupportValidation, Is.EqualTo(true));
             }
         }
     }

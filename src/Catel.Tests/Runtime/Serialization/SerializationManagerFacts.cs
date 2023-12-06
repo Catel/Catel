@@ -27,10 +27,10 @@
 
                 var modifiers = serializationManager.GetSerializerModifiers(typeof(TestModels.ModelC));
 
-                Assert.AreEqual(3, modifiers.Length);
-                Assert.AreEqual(typeof(TestModels.ModelASerializerModifier), modifiers[0].GetType());
-                Assert.AreEqual(typeof(TestModels.ModelBSerializerModifier), modifiers[1].GetType());
-                Assert.AreEqual(typeof(TestModels.ModelCSerializerModifier), modifiers[2].GetType());
+                Assert.That(modifiers.Length, Is.EqualTo(3));
+                Assert.That(modifiers[0].GetType(), Is.EqualTo(typeof(TestModels.ModelASerializerModifier)));
+                Assert.That(modifiers[1].GetType(), Is.EqualTo(typeof(TestModels.ModelBSerializerModifier)));
+                Assert.That(modifiers[2].GetType(), Is.EqualTo(typeof(TestModels.ModelCSerializerModifier)));
             }
         }
 
@@ -52,8 +52,8 @@
 
                 var fieldsToSerialize = serializationManager.GetFieldsToSerialize(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(1, fieldsToSerialize.Length);
-                Assert.AreEqual("_includedField", fieldsToSerialize[0].Key);
+                Assert.That(fieldsToSerialize.Length, Is.EqualTo(1));
+                Assert.That(fieldsToSerialize[0].Key, Is.EqualTo("_includedField"));
             }
         }
 
@@ -75,8 +75,8 @@
 
                 var propertiesToSerialize = serializationManager.GetRegularPropertiesToSerialize(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(1, propertiesToSerialize.Length);
-                Assert.AreEqual("IncludedRegularProperty", propertiesToSerialize[0].Key);
+                Assert.That(propertiesToSerialize.Length, Is.EqualTo(1));
+                Assert.That(propertiesToSerialize[0].Key, Is.EqualTo("IncludedRegularProperty"));
             }
         }
 
@@ -98,9 +98,9 @@
 
                 var propertiesToSerialize = serializationManager.GetCatelPropertiesToSerialize(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(2, propertiesToSerialize.Length);
-                Assert.AreEqual("DateTimeProperty", propertiesToSerialize[0].Key);
-                Assert.AreEqual("IncludedCatelProperty", propertiesToSerialize[1].Key);
+                Assert.That(propertiesToSerialize.Length, Is.EqualTo(2));
+                Assert.That(propertiesToSerialize[0].Key, Is.EqualTo("DateTimeProperty"));
+                Assert.That(propertiesToSerialize[1].Key, Is.EqualTo("IncludedCatelProperty"));
             }
         }
 
@@ -122,12 +122,12 @@
 
                 var properties = serializationManager.GetCatelPropertyNames(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(4, properties.Length);
+                Assert.That(properties.Length, Is.EqualTo(4));
 
-                Assert.AreEqual("DateTimeProperty", properties[0]);
-                Assert.AreEqual("IncludedCatelProperty", properties[1]);
-                Assert.AreEqual("ExcludedCatelProperty", properties[2]);
-                Assert.AreEqual("ExcludedProtectedCatelProperty", properties[3]);
+                Assert.That(properties[0], Is.EqualTo("DateTimeProperty"));
+                Assert.That(properties[1], Is.EqualTo("IncludedCatelProperty"));
+                Assert.That(properties[2], Is.EqualTo("ExcludedCatelProperty"));
+                Assert.That(properties[3], Is.EqualTo("ExcludedProtectedCatelProperty"));
             }
         }
 
@@ -149,19 +149,19 @@
 
                 var properties = serializationManager.GetCatelProperties(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(4, properties.Length);
+                Assert.That(properties.Length, Is.EqualTo(4));
 
-                Assert.AreEqual("DateTimeProperty", properties[0].Key);
-                Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[0].Value.MemberGroup);
+                Assert.That(properties[0].Key, Is.EqualTo("DateTimeProperty"));
+                Assert.That(properties[0].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.CatelProperty));
 
-                Assert.AreEqual("IncludedCatelProperty", properties[1].Key);
-                Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[1].Value.MemberGroup);
+                Assert.That(properties[1].Key, Is.EqualTo("IncludedCatelProperty"));
+                Assert.That(properties[1].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.CatelProperty));
 
-                Assert.AreEqual("ExcludedCatelProperty", properties[2].Key);
-                Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[2].Value.MemberGroup);
+                Assert.That(properties[2].Key, Is.EqualTo("ExcludedCatelProperty"));
+                Assert.That(properties[2].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.CatelProperty));
 
-                Assert.AreEqual("ExcludedProtectedCatelProperty", properties[3].Key);
-                Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[3].Value.MemberGroup);
+                Assert.That(properties[3].Key, Is.EqualTo("ExcludedProtectedCatelProperty"));
+                Assert.That(properties[3].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.CatelProperty));
             }
         }
 
@@ -183,9 +183,9 @@
 
                 var properties = serializationManager.GetRegularPropertyNames(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(2, properties.Length);
-                Assert.AreEqual("ExcludedRegularProperty", properties[0]);
-                Assert.AreEqual("IncludedRegularProperty", properties[1]);
+                Assert.That(properties.Length, Is.EqualTo(2));
+                Assert.That(properties[0], Is.EqualTo("ExcludedRegularProperty"));
+                Assert.That(properties[1], Is.EqualTo("IncludedRegularProperty"));
             }
         }
 
@@ -207,11 +207,11 @@
 
                 var properties = serializationManager.GetRegularProperties(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(2, properties.Length);
-                Assert.AreEqual("ExcludedRegularProperty", properties[0].Key);
-                Assert.AreEqual(SerializationMemberGroup.RegularProperty, properties[0].Value.MemberGroup);
-                Assert.AreEqual("IncludedRegularProperty", properties[1].Key);
-                Assert.AreEqual(SerializationMemberGroup.RegularProperty, properties[1].Value.MemberGroup);
+                Assert.That(properties.Length, Is.EqualTo(2));
+                Assert.That(properties[0].Key, Is.EqualTo("ExcludedRegularProperty"));
+                Assert.That(properties[0].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.RegularProperty));
+                Assert.That(properties[1].Key, Is.EqualTo("IncludedRegularProperty"));
+                Assert.That(properties[1].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.RegularProperty));
             }
         }
 
@@ -234,9 +234,9 @@
 
                 var fields = serializationManager.GetFieldNames(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(2, fields.Length);
-                Assert.AreEqual("_excludedField", fields[0]);
-                Assert.AreEqual("_includedField", fields[1]);
+                Assert.That(fields.Length, Is.EqualTo(2));
+                Assert.That(fields[0], Is.EqualTo("_excludedField"));
+                Assert.That(fields[1], Is.EqualTo("_includedField"));
             }
         }
 
@@ -258,11 +258,11 @@
 
                 var fields = serializationManager.GetFields(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(2, fields.Length);
-                Assert.AreEqual("_excludedField", fields[0].Key);
-                Assert.AreEqual(SerializationMemberGroup.Field, fields[0].Value.MemberGroup);
-                Assert.AreEqual("_includedField", fields[1].Key);
-                Assert.AreEqual(SerializationMemberGroup.Field, fields[1].Value.MemberGroup);
+                Assert.That(fields.Length, Is.EqualTo(2));
+                Assert.That(fields[0].Key, Is.EqualTo("_excludedField"));
+                Assert.That(fields[0].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.Field));
+                Assert.That(fields[1].Key, Is.EqualTo("_includedField"));
+                Assert.That(fields[1].Value.MemberGroup, Is.EqualTo(SerializationMemberGroup.Field));
             }
         }
 
@@ -285,14 +285,14 @@
 
                 var modifiers = serializationManager.GetSerializerModifiers<DynamicSerializerModifierModel>();
 
-                Assert.AreEqual(0, modifiers.Length);
+                Assert.That(modifiers.Length, Is.EqualTo(0));
 
                 serializationManager.AddSerializerModifier<DynamicSerializerModifierModel, DynamicSerializerModifier>();
 
                 modifiers = serializationManager.GetSerializerModifiers(typeof(DynamicSerializerModifierModel));
 
-                Assert.AreEqual(1, modifiers.Length);
-                Assert.AreEqual(typeof(DynamicSerializerModifier), modifiers[0].GetType());
+                Assert.That(modifiers.Length, Is.EqualTo(1));
+                Assert.That(modifiers[0].GetType(), Is.EqualTo(typeof(DynamicSerializerModifier)));
             }
         }
 
@@ -317,14 +317,14 @@
 
                 var modifiers = serializationManager.GetSerializerModifiers(typeof(DynamicSerializerModifierModel));
 
-                Assert.AreEqual(1, modifiers.Length);
-                Assert.AreEqual(typeof(DynamicSerializerModifier), modifiers[0].GetType());
+                Assert.That(modifiers.Length, Is.EqualTo(1));
+                Assert.That(modifiers[0].GetType(), Is.EqualTo(typeof(DynamicSerializerModifier)));
 
                 serializationManager.RemoveSerializerModifier<DynamicSerializerModifierModel, DynamicSerializerModifier>();
 
                 modifiers = serializationManager.GetSerializerModifiers(typeof(DynamicSerializerModifierModel));
 
-                Assert.AreEqual(0, modifiers.Length);
+                Assert.That(modifiers.Length, Is.EqualTo(0));
             }
         }
     }

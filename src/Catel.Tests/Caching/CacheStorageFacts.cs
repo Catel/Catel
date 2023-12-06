@@ -108,23 +108,23 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
 
                 Assert.Throws<ArgumentNullException>(() =>
                 {
                     var value = cache[null];
-                    Assert.IsNull(value);
+                    Assert.That(value, Is.Null);
                 });
             }
 
             [TestCase]
             public void ReturnsRightValueForExistingKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.AreEqual(2, cache["2"]);
+                Assert.That(cache["2"], Is.EqualTo(2));
             }
         }
 
@@ -134,23 +134,23 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
 
                 Assert.Throws<ArgumentNullException>(() =>
                 {
                     var value = cache.Get(null);
-                    Assert.IsNull(value);
+                    Assert.That(value, Is.Null);
                 });
             }
 
             [TestCase]
             public void ReturnsRightValueForExistingKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.AreEqual(2, cache.Get("2"));
+                Assert.That(cache.Get("2"), Is.EqualTo(2));
             }
         }
 
@@ -160,7 +160,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
 
                 Assert.Throws<ArgumentNullException>(() => cache.Contains(null));
             }
@@ -172,7 +172,7 @@
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.IsFalse(cache.Contains("3"));
+                Assert.That(cache.Contains("3"), Is.False);
             }
 
             [TestCase]
@@ -182,7 +182,7 @@
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.IsTrue(cache.Contains("2"));
+                Assert.That(cache.Contains("2"), Is.True);
             }
         }
 
@@ -212,9 +212,9 @@
 
                 var value = cache.GetFromCacheOrFetch("1", () => 1);
 
-                Assert.IsTrue(cache.Contains("1"));
-                Assert.AreEqual(1, cache["1"]);
-                Assert.AreEqual(1, value);
+                Assert.That(cache.Contains("1"), Is.True);
+                Assert.That(cache["1"], Is.EqualTo(1));
+                Assert.That(value, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -225,9 +225,9 @@
                 cache.Add("1", 1);
                 var value = cache.GetFromCacheOrFetch("1", () => 2);
 
-                Assert.IsTrue(cache.Contains("1"));
-                Assert.AreEqual(1, cache["1"]);
-                Assert.AreEqual(1, value);
+                Assert.That(cache.Contains("1"), Is.True);
+                Assert.That(cache["1"], Is.EqualTo(1));
+                Assert.That(value, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -238,9 +238,9 @@
                 cache.Add("1", 1);
                 var value = cache.GetFromCacheOrFetch("1", () => 2, true);
 
-                Assert.IsTrue(cache.Contains("1"));
-                Assert.AreEqual(2, cache["1"]);
-                Assert.AreEqual(2, value);
+                Assert.That(cache.Contains("1"), Is.True);
+                Assert.That(cache["1"], Is.EqualTo(2));
+                Assert.That(value, Is.EqualTo(2));
             }
         }
 
@@ -269,7 +269,7 @@
                 var cache = new CacheStorage<string, int>();
                 cache.Add("1", 1);
 
-                Assert.AreEqual(1, cache["1"]);
+                Assert.That(cache["1"], Is.EqualTo(1));
             }
 
             [TestCase]
@@ -279,7 +279,7 @@
                 cache.Add("1", 1);
                 cache.Add("1", 2, true);
 
-                Assert.AreEqual(2, cache["1"]);
+                Assert.That(cache["1"], Is.EqualTo(2));
             }
 
             [TestCase]
@@ -289,7 +289,7 @@
                 cache.Add("1", 1);
                 cache.Add("1", 2, false);
 
-                Assert.AreEqual(1, cache["1"]);
+                Assert.That(cache["1"], Is.EqualTo(1));
             }
         }
 
@@ -310,11 +310,11 @@
                 var cache = new CacheStorage<string, int>();
                 cache.Add("1", 1);
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 cache.Remove("1");
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -332,7 +332,7 @@
                 cache.Add("1", 1);
                 cache.Expiring += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -343,7 +343,7 @@
                 cache.Add("1", 1);
                 cache.Expired += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
         }
 
@@ -358,7 +358,7 @@
                 cache.Add("1", 1);
                 cache.Expiring += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -369,7 +369,7 @@
                 cache.Add("1", 1);
                 cache.Expired += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
         }
 
@@ -384,11 +384,11 @@
 
                 cache.Add("1", 1, expiration: new TimeSpan(0, 0, 0, 0, 250));
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -399,11 +399,11 @@
 
                 cache.Add("1", 1, expiration: new TimeSpan(0, 0, 0, 0, 250));
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -414,11 +414,11 @@
 
                 cache.Add("1", 1);
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -434,7 +434,7 @@
                     int innerI = i;
                     var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.AreEqual(i, value);
+                    Assert.That(value, Is.EqualTo(i));
                 }
             }
 
@@ -461,9 +461,9 @@
 
                 ThreadHelper.Sleep(750);
 
-                Assert.AreEqual(key, evKey);
-                Assert.AreEqual(expirationPolicy, evExpirationPolicy);
-                Assert.AreEqual(value, evValue);
+                Assert.That(evKey, Is.EqualTo(key));
+                Assert.That(evExpirationPolicy, Is.EqualTo(expirationPolicy));
+                Assert.That(evValue, Is.EqualTo(value));
             }
 
             [TestCase]
@@ -483,7 +483,7 @@
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsTrue(cache.Contains(key));
+                Assert.That(cache.Contains(key), Is.True);
             }
 
             [TestCase]
@@ -510,9 +510,9 @@
 
                 ThreadHelper.Sleep(750);
 
-                Assert.AreEqual(dispose, evDispose);
-                Assert.AreEqual(key, evKey);
-                Assert.AreEqual(value, evValue);
+                Assert.That(evDispose, Is.EqualTo(dispose));
+                Assert.That(evKey, Is.EqualTo(key));
+                Assert.That(evValue, Is.EqualTo(value));
             }
         }
 
@@ -545,11 +545,11 @@
 
                     cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
                     ThreadHelper.Sleep(750);
 
-                    Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
                 }
             }
 
@@ -564,11 +564,11 @@
 
                     cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
                     cache.Remove("disposable");
 
-                    Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
                 }
             }
 
@@ -583,11 +583,11 @@
 
                     cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
                     cache.Clear();
 
-                    Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
                 }
             }
 
@@ -608,7 +608,7 @@
 
                     ThreadHelper.Sleep(750);
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
                 }
             }
 
@@ -622,11 +622,11 @@
 
                     cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
                     ThreadHelper.Sleep(750);
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
                 }
             }
 
@@ -640,11 +640,11 @@
 
                     cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
                     cache.Remove("disposable");
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
                 }
             }
 
@@ -658,11 +658,11 @@
 
                     cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
                     cache.Clear();
 
-                    Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
                 }
             }
 
@@ -682,7 +682,7 @@
 
                     ThreadHelper.Sleep(750);
 
-                    Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
                 }
             }
         }

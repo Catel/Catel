@@ -19,7 +19,7 @@
 
                     var resolved = serviceLocator.ResolveType<IInterfaceA>();
 
-                    Assert.IsTrue(ReferenceEquals(resolved, instance));
+                    Assert.That(ReferenceEquals(resolved, instance), Is.True);
                 }
             }
 
@@ -36,9 +36,9 @@
 
                     var resolved = serviceLocator.ResolveType<IInterfaceA>();
 
-                    Assert.IsTrue(typeInstantiatedCalled);
-                    Assert.AreEqual(1, numCalls);
-                    Assert.IsInstanceOf(typeof(ClassA), resolved);
+                    Assert.That(typeInstantiatedCalled, Is.True);
+                    Assert.That(numCalls, Is.EqualTo(1));
+                    Assert.That(resolved, Is.InstanceOf(typeof(ClassA)));
                 }
 
                 IInterfaceA createServiceFunc(ITypeFactory tf, ServiceLocatorRegistration reg)
@@ -62,9 +62,9 @@
                     var resolved = serviceLocator.ResolveType<IInterfaceA>();
                     var resolved1 = serviceLocator.ResolveType<IInterfaceA>();
 
-                    Assert.IsTrue(typeInstantiatedCalled);
-                    Assert.AreEqual(2, numCalls);
-                    Assert.IsInstanceOf(typeof(ClassA), resolved);
+                    Assert.That(typeInstantiatedCalled, Is.True);
+                    Assert.That(numCalls, Is.EqualTo(2));
+                    Assert.That(resolved, Is.InstanceOf(typeof(ClassA)));
                 }
 
                 IInterfaceA createServiceFunc(ITypeFactory tf, ServiceLocatorRegistration reg)
@@ -86,8 +86,8 @@
 
                     var resolved = serviceLocator.ResolveType<IInterfaceA>();
 
-                    Assert.IsTrue(typeInstantiatedCalled);
-                    Assert.IsInstanceOf(typeof(ClassA), resolved);
+                    Assert.That(typeInstantiatedCalled, Is.True);
+                    Assert.That(resolved, Is.InstanceOf(typeof(ClassA)));
                 }
             }
 

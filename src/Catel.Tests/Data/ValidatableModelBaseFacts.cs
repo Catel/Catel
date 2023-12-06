@@ -25,12 +25,12 @@
 
                 validationObject.Validate();
 
-                Assert.IsTrue(validationObject.IsValidated);
+                Assert.That(validationObject.IsValidated, Is.True);
 
                 var modelEditor = (IModelEditor)validationObject;
                 modelEditor.SetValue(propertyName, propertyValue);
 
-                Assert.IsTrue(validationObject.IsValidated);
+                Assert.That(validationObject.IsValidated, Is.True);
             }
 
             #region Validation
@@ -41,23 +41,23 @@
                 var validation = (IValidatableModel)validationObject;
 
                 // Check if the object now has warnings
-                Assert.AreEqual(false, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                 // Now set a field warning and check it
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesFieldWarning;
-                Assert.AreEqual(true, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                 // Now set a business warning and check it
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesBusinessWarning;
-                Assert.AreEqual(true, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                 // Clear warning
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatHasNoWarningsOrErrors;
-                Assert.AreEqual(false, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
             }
 
             [TestCase]
@@ -66,15 +66,15 @@
                 var validationObject = new ObjectWithValidation();
                 var validation = (IValidatableModel)validationObject;
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 validationObject.ValueWithAnnotations = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.True);
 
                 validationObject.ValueWithAnnotations = "value";
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
             }
 
             //[TestCase]
@@ -100,7 +100,7 @@
             {
                 var validationObject = new ObjectWithValidation();
 
-                Assert.IsFalse(validationObject.HasErrors);
+                Assert.That(validationObject.HasErrors, Is.False);
             }
             #endregion
 
@@ -113,13 +113,13 @@
 
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsFalse(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]));
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]), Is.False);
 
                 obj.ErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]));
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]), Is.True);
             }
             #endregion
 
@@ -134,35 +134,35 @@
 
                 ((INotifyDataErrorInfo)obj).ErrorsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual("ErrorWhenEmpty", e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo("ErrorWhenEmpty"));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataErrorInfo)obj).GetErrors("ErrorWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.ErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataErrorInfo)obj).GetErrors("ErrorWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -175,35 +175,35 @@
 
                 ((INotifyDataErrorInfo)obj).ErrorsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -216,35 +216,35 @@
 
                 ((INotifyDataErrorInfo)obj).ErrorsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
             #endregion
 
@@ -257,13 +257,13 @@
 
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsFalse(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]));
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]), Is.False);
 
                 obj.WarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]));
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]), Is.True);
             }
             #endregion
 
@@ -278,35 +278,35 @@
 
                 ((INotifyDataWarningInfo)obj).WarningsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual("WarningWhenEmpty", e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo("WarningWhenEmpty"));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataWarningInfo)obj).GetWarnings("WarningWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.WarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataWarningInfo)obj).GetWarnings("WarningWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -319,35 +319,35 @@
 
                 ((INotifyDataWarningInfo)obj).WarningsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -360,35 +360,35 @@
 
                 ((INotifyDataWarningInfo)obj).WarningsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
             #endregion
 
@@ -403,19 +403,19 @@
 
                 classWithValidator.Validate(true);
 
-                Assert.AreEqual(1, validator.ValidateCount);
+                Assert.That(validator.ValidateCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.BeforeValidationCount);
+                Assert.That(validator.BeforeValidationCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.BeforeValidateFieldsCount);
-                Assert.AreEqual(1, validator.ValidateFieldsCount);
-                Assert.AreEqual(1, validator.AfterValidateFieldsCount);
+                Assert.That(validator.BeforeValidateFieldsCount, Is.EqualTo(1));
+                Assert.That(validator.ValidateFieldsCount, Is.EqualTo(1));
+                Assert.That(validator.AfterValidateFieldsCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.BeforeValidateBusinessRulesCount);
-                Assert.AreEqual(1, validator.ValidateBusinessRulesCount);
-                Assert.AreEqual(1, validator.AfterValidateBusinessRulesCount);
+                Assert.That(validator.BeforeValidateBusinessRulesCount, Is.EqualTo(1));
+                Assert.That(validator.ValidateBusinessRulesCount, Is.EqualTo(1));
+                Assert.That(validator.AfterValidateBusinessRulesCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.AfterValidationCount);
+                Assert.That(validator.AfterValidationCount, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -431,8 +431,8 @@
                 var dataWarningInfo = (IDataWarningInfo)classWithValidator;
                 var dataErrorInfo = (IDataErrorInfo)classWithValidator;
 
-                Assert.AreEqual("Warning", dataWarningInfo[ClassWithValidator.WarningPropertyProperty.Name]);
-                Assert.AreEqual("Error", dataErrorInfo[ClassWithValidator.ErrorPropertyProperty.Name]);
+                Assert.That(dataWarningInfo[ClassWithValidator.WarningPropertyProperty.Name], Is.EqualTo("Warning"));
+                Assert.That(dataErrorInfo[ClassWithValidator.ErrorPropertyProperty.Name], Is.EqualTo("Error"));
             }
 
             [TestCase]
@@ -447,7 +447,7 @@
 
                 var dataErrorInfo = (IDataErrorInfo)classWithValidator;
 
-                Assert.AreEqual("Error", dataErrorInfo.Error);
+                Assert.That(dataErrorInfo.Error, Is.EqualTo("Error"));
             }
             #endregion
         }
@@ -513,7 +513,7 @@
 
                 testValidatorModel.Validate(true);
 
-                Assert.IsTrue(testValidatorModel.HasErrors);
+                Assert.That(testValidatorModel.HasErrors, Is.True);
             }
         }
 
@@ -529,12 +529,12 @@
 
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(((IDataErrorInfo)obj)["ErrorWhenEmpty"], Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
+                Assert.That(((IDataErrorInfo)obj)["ErrorWhenEmpty"], Is.Not.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -546,12 +546,12 @@
 
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj).Error);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(((IDataErrorInfo)obj).Error, Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj).Error);
+                Assert.That(((IDataErrorInfo)obj).Error, Is.Not.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -563,12 +563,12 @@
 
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(((IDataWarningInfo)obj)["WarningWhenEmpty"], Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
+                Assert.That(((IDataWarningInfo)obj)["WarningWhenEmpty"], Is.Not.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -580,12 +580,12 @@
 
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(((IDataWarningInfo)obj).Warning, Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
+                Assert.That(((IDataWarningInfo)obj).Warning, Is.Not.EqualTo(string.Empty));
             }
         }
 
@@ -610,13 +610,13 @@
                 var model = new SuspendValidationModel();
                 var validation = model as IValidatable;
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 using (model.SuspendValidations())
                 {
                     model.FirstName = null;
 
-                    Assert.IsFalse(validation.HasErrors);
+                    Assert.That(validation.HasErrors, Is.False);
                 }
             }
 
@@ -626,16 +626,16 @@
                 var model = new SuspendValidationModel();
                 var validation = model;
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 using (model.SuspendValidations())
                 {
                     model.FirstName = null;
 
-                    Assert.IsFalse(validation.HasErrors);
+                    Assert.That(validation.HasErrors, Is.False);
                 }
 
-                Assert.IsTrue(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.True);
             }
         }
 
@@ -652,9 +652,9 @@
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.IsTrue(validationContext.HasErrors);
-                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
-                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+                Assert.That(validationContext.HasErrors, Is.True);
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("FirstName"));
+                Assert.That(((FieldValidationResult)errors[1]).PropertyName, Is.EqualTo("LastName"));
             }
 
             [TestCase]
@@ -668,15 +668,15 @@
 
                     var innerValidationContext = model.GetValidationContext();
 
-                    Assert.IsFalse(innerValidationContext.HasErrors);
+                    Assert.That(innerValidationContext.HasErrors, Is.False);
                 }
 
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.IsTrue(validationContext.HasErrors);
-                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
-                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+                Assert.That(validationContext.HasErrors, Is.True);
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("FirstName"));
+                Assert.That(((FieldValidationResult)errors[1]).PropertyName, Is.EqualTo("LastName"));
             }
 
             [TestCase]
@@ -692,20 +692,20 @@
 
                         var innerValidationContext1 = model.GetValidationContext();
 
-                        Assert.IsFalse(innerValidationContext1.HasErrors);
+                        Assert.That(innerValidationContext1.HasErrors, Is.False);
                     }
 
                     var innerValidationContext2 = model.GetValidationContext();
 
-                    Assert.IsFalse(innerValidationContext2.HasErrors);
+                    Assert.That(innerValidationContext2.HasErrors, Is.False);
                 }
 
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.IsTrue(validationContext.HasErrors);
-                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
-                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+                Assert.That(validationContext.HasErrors, Is.True);
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("FirstName"));
+                Assert.That(((FieldValidationResult)errors[1]).PropertyName, Is.EqualTo("LastName"));
             }
         }
 
@@ -728,13 +728,13 @@
                 var model = new ModelWithCalculatedPropertiesValidation();
                 model.Validate(true);
 
-                Assert.IsTrue(model.HasErrors);
+                Assert.That(model.HasErrors, Is.True);
 
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.AreEqual(1, errors.Count);
-                Assert.AreEqual("Weight", ((FieldValidationResult)errors[0]).PropertyName);
+                Assert.That(errors.Count, Is.EqualTo(1));
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("Weight"));
             }
         }
 
@@ -776,7 +776,7 @@
                 // validate model without data annotations
                 model.Validate(true, false);
 
-                Assert.AreEqual(0, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -788,7 +788,7 @@
 
                 model.Validate(true);
 
-                Assert.AreEqual(0, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -805,7 +805,7 @@
                 // store original value
                 ValidatableModelBase.DefaultValidateUsingDataAnnotationsValue = oldValue;
 
-                Assert.AreEqual(0, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -816,7 +816,7 @@
 
                 model.Validate(true);
 
-                Assert.AreEqual(1, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(1));
             }
         }
 
@@ -861,7 +861,7 @@
 
                     model.Counter = 1;
 
-                    Assert.AreEqual(false, model.HasNotValidatedProperties());
+                    Assert.That(model.HasNotValidatedProperties(), Is.EqualTo(false));
                 }
             }
 
@@ -875,7 +875,7 @@
                 {
                     model.Counter = 1;
 
-                    Assert.AreEqual(true, model.HasNotValidatedProperties());
+                    Assert.That(model.HasNotValidatedProperties(), Is.EqualTo(true));
                 }
             }
         }

@@ -16,8 +16,8 @@
             {
                 var validationContext = new ValidationContext(null, null);
 
-                Assert.AreEqual(0, validationContext.GetFieldValidationCount());
-                Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(0));
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(0));
             }
         }
 
@@ -29,7 +29,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.IsFalse(context.HasWarnings);
+                Assert.That(context.HasWarnings, Is.False);
             }
 
             [TestCase]
@@ -37,7 +37,7 @@
             {
                 var context = CreateValidationContextSimple(true, false, false, false);
 
-                Assert.IsTrue(context.HasWarnings);
+                Assert.That(context.HasWarnings, Is.True);
             }
 
             [TestCase]
@@ -45,7 +45,7 @@
             {
                 var context = CreateValidationContextSimple(false, false, true, false);
 
-                Assert.IsTrue(context.HasWarnings);
+                Assert.That(context.HasWarnings, Is.True);
             }
         }
 
@@ -57,7 +57,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.IsFalse(context.HasErrors);
+                Assert.That(context.HasErrors, Is.False);
             }
 
             [TestCase]
@@ -65,7 +65,7 @@
             {
                 var context = CreateValidationContextSimple(false, true, false, false);
 
-                Assert.IsTrue(context.HasErrors);
+                Assert.That(context.HasErrors, Is.True);
             }
 
             [TestCase]
@@ -73,7 +73,7 @@
             {
                 var context = CreateValidationContextSimple(false, false, false, true);
 
-                Assert.IsTrue(context.HasErrors);
+                Assert.That(context.HasErrors, Is.True);
             }
         }
 
@@ -85,7 +85,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetValidationCount());
+                Assert.That(context.GetValidationCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -93,7 +93,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(8, context.GetValidationCount());
+                Assert.That(context.GetValidationCount(), Is.EqualTo(8));
             }
 
             [TestCase]
@@ -101,7 +101,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetValidationCount("tag"));
+                Assert.That(context.GetValidationCount("tag"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -109,7 +109,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(4, context.GetValidationCount("tag"));
+                Assert.That(context.GetValidationCount("tag"), Is.EqualTo(4));
             }
         }
 
@@ -122,7 +122,7 @@
                 var context = new ValidationContext();
 
                 var validations = context.GetValidations();
-                Assert.AreEqual(0, validations.Count);
+                Assert.That(validations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -131,23 +131,23 @@
                 var context = CreateValidationContext();
 
                 var validations = context.GetValidations();
-                Assert.AreEqual(8, validations.Count);
-                Assert.AreEqual("WarningWithoutTag", validations[0].Message);
-                Assert.IsTrue(validations[0] is IFieldValidationResult);
-                Assert.AreEqual("WarningWithTag", validations[1].Message);
-                Assert.IsTrue(validations[1] is IFieldValidationResult);
-                Assert.AreEqual("ErrorWithoutTag", validations[2].Message);
-                Assert.IsTrue(validations[2] is IFieldValidationResult);
-                Assert.AreEqual("ErrorWithTag", validations[3].Message);
-                Assert.IsTrue(validations[3] is IFieldValidationResult);
-                Assert.AreEqual("WarningWithoutTag", validations[4].Message);
-                Assert.IsTrue(validations[4] is IBusinessRuleValidationResult);
-                Assert.AreEqual("WarningWithTag", validations[5].Message);
-                Assert.IsTrue(validations[5] is IBusinessRuleValidationResult);
-                Assert.AreEqual("ErrorWithoutTag", validations[6].Message);
-                Assert.IsTrue(validations[6] is IBusinessRuleValidationResult);
-                Assert.AreEqual("ErrorWithTag", validations[7].Message);
-                Assert.IsTrue(validations[7] is IBusinessRuleValidationResult);
+                Assert.That(validations.Count, Is.EqualTo(8));
+                Assert.That(validations[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(validations[0] is IFieldValidationResult, Is.True);
+                Assert.That(validations[1].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(validations[1] is IFieldValidationResult, Is.True);
+                Assert.That(validations[2].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(validations[2] is IFieldValidationResult, Is.True);
+                Assert.That(validations[3].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(validations[3] is IFieldValidationResult, Is.True);
+                Assert.That(validations[4].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(validations[4] is IBusinessRuleValidationResult, Is.True);
+                Assert.That(validations[5].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(validations[5] is IBusinessRuleValidationResult, Is.True);
+                Assert.That(validations[6].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(validations[6] is IBusinessRuleValidationResult, Is.True);
+                Assert.That(validations[7].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(validations[7] is IBusinessRuleValidationResult, Is.True);
             }
 
             [TestCase]
@@ -156,7 +156,7 @@
                 var context = new ValidationContext();
 
                 var validations = context.GetValidations("tag");
-                Assert.AreEqual(0, validations.Count);
+                Assert.That(validations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -165,15 +165,15 @@
                 var context = CreateValidationContext();
 
                 var validations = context.GetValidations("tag");
-                Assert.AreEqual(4, validations.Count);
-                Assert.AreEqual("WarningWithTag", validations[0].Message);
-                Assert.IsTrue(validations[0] is IFieldValidationResult);
-                Assert.AreEqual("ErrorWithTag", validations[1].Message);
-                Assert.IsTrue(validations[1] is IFieldValidationResult);
-                Assert.AreEqual("WarningWithTag", validations[2].Message);
-                Assert.IsTrue(validations[2] is IBusinessRuleValidationResult);
-                Assert.AreEqual("ErrorWithTag", validations[3].Message);
-                Assert.IsTrue(validations[3] is IBusinessRuleValidationResult);
+                Assert.That(validations.Count, Is.EqualTo(4));
+                Assert.That(validations[0].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(validations[0] is IFieldValidationResult, Is.True);
+                Assert.That(validations[1].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(validations[1] is IFieldValidationResult, Is.True);
+                Assert.That(validations[2].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(validations[2] is IBusinessRuleValidationResult, Is.True);
+                Assert.That(validations[3].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(validations[3] is IBusinessRuleValidationResult, Is.True);
             }
         }
 
@@ -185,7 +185,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetWarningCount());
+                Assert.That(context.GetWarningCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -193,7 +193,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(4, context.GetWarningCount());
+                Assert.That(context.GetWarningCount(), Is.EqualTo(4));
             }
 
             [TestCase]
@@ -201,8 +201,8 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetWarningCount("tag"));
-                Assert.AreEqual(2, context.GetWarningCount(null));
+                Assert.That(context.GetWarningCount("tag"), Is.EqualTo(2));
+                Assert.That(context.GetWarningCount(null), Is.EqualTo(2));
             }
         }
 
@@ -215,7 +215,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings();
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -224,19 +224,19 @@
                 var context = CreateValidationContext();
 
                 var warnings = context.GetWarnings();
-                Assert.AreEqual(4, warnings.Count);
+                Assert.That(warnings.Count, Is.EqualTo(4));
 
-                Assert.AreEqual("WarningWithoutTag", warnings[0].Message);
-                Assert.IsTrue(warnings[0] is IFieldValidationResult);
+                Assert.That(warnings[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(warnings[0] is IFieldValidationResult, Is.True);
 
-                Assert.AreEqual("WarningWithTag", warnings[1].Message);
-                Assert.IsTrue(warnings[1] is IFieldValidationResult);
+                Assert.That(warnings[1].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(warnings[1] is IFieldValidationResult, Is.True);
 
-                Assert.AreEqual("WarningWithoutTag", warnings[2].Message);
-                Assert.IsTrue(warnings[2] is IBusinessRuleValidationResult);
+                Assert.That(warnings[2].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(warnings[2] is IBusinessRuleValidationResult, Is.True);
 
-                Assert.AreEqual("WarningWithTag", warnings[3].Message);
-                Assert.IsTrue(warnings[3] is IBusinessRuleValidationResult);
+                Assert.That(warnings[3].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(warnings[3] is IBusinessRuleValidationResult, Is.True);
             }
 
             [TestCase]
@@ -245,13 +245,13 @@
                 var context = CreateValidationContext();
 
                 var warnings = context.GetWarnings("tag");
-                Assert.AreEqual(2, warnings.Count);
+                Assert.That(warnings.Count, Is.EqualTo(2));
 
-                Assert.AreEqual("WarningWithTag", warnings[0].Message);
-                Assert.IsTrue(warnings[0] is IFieldValidationResult);
+                Assert.That(warnings[0].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(warnings[0] is IFieldValidationResult, Is.True);
 
-                Assert.AreEqual("WarningWithTag", warnings[1].Message);
-                Assert.IsTrue(warnings[1] is IBusinessRuleValidationResult);
+                Assert.That(warnings[1].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(warnings[1] is IBusinessRuleValidationResult, Is.True);
             }
         }
 
@@ -263,7 +263,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetWarningCount());
+                Assert.That(context.GetWarningCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -271,7 +271,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(4, context.GetErrorCount());
+                Assert.That(context.GetErrorCount(), Is.EqualTo(4));
             }
 
             [TestCase]
@@ -279,8 +279,8 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetErrorCount("tag"));
-                Assert.AreEqual(2, context.GetErrorCount(null));
+                Assert.That(context.GetErrorCount("tag"), Is.EqualTo(2));
+                Assert.That(context.GetErrorCount(null), Is.EqualTo(2));
             }
         }
 
@@ -293,7 +293,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldErrors();
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -302,19 +302,19 @@
                 var context = CreateValidationContext();
 
                 var errors = context.GetErrors();
-                Assert.AreEqual(4, errors.Count);
+                Assert.That(errors.Count, Is.EqualTo(4));
 
-                Assert.AreEqual("ErrorWithoutTag", errors[0].Message);
-                Assert.IsTrue(errors[0] is IFieldValidationResult);
+                Assert.That(errors[0].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(errors[0] is IFieldValidationResult, Is.True);
 
-                Assert.AreEqual("ErrorWithTag", errors[1].Message);
-                Assert.IsTrue(errors[1] is IFieldValidationResult);
+                Assert.That(errors[1].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(errors[1] is IFieldValidationResult, Is.True);
 
-                Assert.AreEqual("ErrorWithoutTag", errors[2].Message);
-                Assert.IsTrue(errors[2] is IBusinessRuleValidationResult);
+                Assert.That(errors[2].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(errors[2] is IBusinessRuleValidationResult, Is.True);
 
-                Assert.AreEqual("ErrorWithTag", errors[3].Message);
-                Assert.IsTrue(errors[3] is IBusinessRuleValidationResult);
+                Assert.That(errors[3].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(errors[3] is IBusinessRuleValidationResult, Is.True);
             }
 
             [TestCase]
@@ -323,13 +323,13 @@
                 var context = CreateValidationContext();
 
                 var warnings = context.GetErrors("tag");
-                Assert.AreEqual(2, warnings.Count);
+                Assert.That(warnings.Count, Is.EqualTo(2));
 
-                Assert.AreEqual("ErrorWithTag", warnings[0].Message);
-                Assert.IsTrue(warnings[0] is IFieldValidationResult);
+                Assert.That(warnings[0].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(warnings[0] is IFieldValidationResult, Is.True);
 
-                Assert.AreEqual("ErrorWithTag", warnings[1].Message);
-                Assert.IsTrue(warnings[1] is IBusinessRuleValidationResult);
+                Assert.That(warnings[1].Message, Is.EqualTo("ErrorWithTag"));
+                Assert.That(warnings[1] is IBusinessRuleValidationResult, Is.True);
             }
         }
 
@@ -341,7 +341,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetFieldValidationCount());
+                Assert.That(context.GetFieldValidationCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -349,7 +349,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(4, context.GetFieldValidationCount());
+                Assert.That(context.GetFieldValidationCount(), Is.EqualTo(4));
             }
 
             [TestCase]
@@ -357,7 +357,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetFieldValidationCount("tag"));
+                Assert.That(context.GetFieldValidationCount("tag"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -365,7 +365,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetFieldValidationCount("tag"));
+                Assert.That(context.GetFieldValidationCount("tag"), Is.EqualTo(2));
             }
         }
 
@@ -378,7 +378,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldValidations();
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -387,11 +387,11 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldValidations();
-                Assert.AreEqual(4, fieldValidations.Count);
-                Assert.AreEqual("WarningWithoutTag", fieldValidations[0].Message);
-                Assert.AreEqual("WarningWithTag", fieldValidations[1].Message);
-                Assert.AreEqual("ErrorWithoutTag", fieldValidations[2].Message);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[3].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(4));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(fieldValidations[2].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(fieldValidations[3].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -400,7 +400,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldValidations((object)"tag");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -409,9 +409,9 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldValidations((object)"tag");
-                Assert.AreEqual(2, fieldValidations.Count);
-                Assert.AreEqual("WarningWithTag", fieldValidations[0].Message);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[1].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -420,7 +420,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldValidations("MyProperty");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -429,11 +429,11 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldValidations("MyProperty");
-                Assert.AreEqual(4, fieldValidations.Count);
-                Assert.AreEqual("WarningWithoutTag", fieldValidations[0].Message);
-                Assert.AreEqual("WarningWithTag", fieldValidations[1].Message);
-                Assert.AreEqual("ErrorWithoutTag", fieldValidations[2].Message);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[3].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(4));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(fieldValidations[2].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(fieldValidations[3].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -442,7 +442,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldValidations("MyProperty", "tag");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -451,9 +451,9 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldValidations("MyProperty", "tag");
-                Assert.AreEqual(2, fieldValidations.Count);
-                Assert.AreEqual("WarningWithTag", fieldValidations[0].Message);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[1].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("ErrorWithTag"));
             }
         }
 
@@ -465,7 +465,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetFieldWarningCount());
+                Assert.That(context.GetFieldWarningCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -473,7 +473,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetFieldWarningCount());
+                Assert.That(context.GetFieldWarningCount(), Is.EqualTo(2));
             }
 
             [TestCase]
@@ -481,7 +481,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetFieldWarningCount("tag"));
+                Assert.That(context.GetFieldWarningCount("tag"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -489,7 +489,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(1, context.GetFieldWarningCount("tag"));
+                Assert.That(context.GetFieldWarningCount("tag"), Is.EqualTo(1));
             }
         }
 
@@ -502,7 +502,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings();
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -511,9 +511,9 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings();
-                Assert.AreEqual(2, fieldValidations.Count);
-                Assert.AreEqual("WarningWithoutTag", fieldValidations[0].Message);
-                Assert.AreEqual("WarningWithTag", fieldValidations[1].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("WarningWithTag"));
             }
 
             [TestCase]
@@ -522,7 +522,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings((object)"tag");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -531,8 +531,8 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings((object)"tag");
-                Assert.AreEqual(1, fieldValidations.Count);
-                Assert.AreEqual("WarningWithTag", fieldValidations[0].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(1));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithTag"));
             }
 
             [TestCase]
@@ -541,7 +541,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings("MyProperty");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -550,9 +550,9 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings("MyProperty");
-                Assert.AreEqual(2, fieldValidations.Count);
-                Assert.AreEqual("WarningWithoutTag", fieldValidations[0].Message);
-                Assert.AreEqual("WarningWithTag", fieldValidations[1].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("WarningWithTag"));
             }
 
             [TestCase]
@@ -561,7 +561,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings("MyProperty", "tag");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -570,8 +570,8 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldWarnings("MyProperty", "tag");
-                Assert.AreEqual(1, fieldValidations.Count);
-                Assert.AreEqual("WarningWithTag", fieldValidations[0].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(1));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("WarningWithTag"));
             }
         }
 
@@ -583,7 +583,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetFieldErrorCount());
+                Assert.That(context.GetFieldErrorCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -591,7 +591,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetFieldErrorCount());
+                Assert.That(context.GetFieldErrorCount(), Is.EqualTo(2));
             }
 
             [TestCase]
@@ -599,7 +599,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetFieldErrorCount("tag"));
+                Assert.That(context.GetFieldErrorCount("tag"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -607,7 +607,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(1, context.GetFieldErrorCount("tag"));
+                Assert.That(context.GetFieldErrorCount("tag"), Is.EqualTo(1));
             }
         }
 
@@ -620,7 +620,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldErrors();
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -629,9 +629,9 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldErrors();
-                Assert.AreEqual(2, fieldValidations.Count);
-                Assert.AreEqual("ErrorWithoutTag", fieldValidations[0].Message);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[1].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -640,7 +640,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldErrors("tag");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -649,8 +649,8 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldErrors((object)"tag");
-                Assert.AreEqual(1, fieldValidations.Count);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[0].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(1));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -659,7 +659,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldErrors("MyProperty");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -668,9 +668,9 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldErrors("MyProperty");
-                Assert.AreEqual(2, fieldValidations.Count);
-                Assert.AreEqual("ErrorWithoutTag", fieldValidations[0].Message);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[1].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(fieldValidations[1].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -679,7 +679,7 @@
                 var context = new ValidationContext();
 
                 var fieldValidations = context.GetFieldErrors("MyProperty");
-                Assert.AreEqual(0, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -688,8 +688,8 @@
                 var context = CreateValidationContext();
 
                 var fieldValidations = context.GetFieldErrors("MyProperty", "tag");
-                Assert.AreEqual(1, fieldValidations.Count);
-                Assert.AreEqual("ErrorWithTag", fieldValidations[0].Message);
+                Assert.That(fieldValidations.Count, Is.EqualTo(1));
+                Assert.That(fieldValidations[0].Message, Is.EqualTo("ErrorWithTag"));
             }
         }
 
@@ -701,7 +701,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetBusinessRuleValidationCount());
+                Assert.That(context.GetBusinessRuleValidationCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -709,7 +709,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(4, context.GetBusinessRuleValidationCount());
+                Assert.That(context.GetBusinessRuleValidationCount(), Is.EqualTo(4));
             }
 
             [TestCase]
@@ -717,7 +717,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetBusinessRuleValidationCount("tag"));
+                Assert.That(context.GetBusinessRuleValidationCount("tag"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -725,7 +725,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetBusinessRuleValidationCount("tag"));
+                Assert.That(context.GetBusinessRuleValidationCount("tag"), Is.EqualTo(2));
             }
         }
 
@@ -738,7 +738,7 @@
                 var context = new ValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleValidations();
-                Assert.AreEqual(0, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -747,11 +747,11 @@
                 var context = CreateValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleValidations();
-                Assert.AreEqual(4, businessRuleValidations.Count);
-                Assert.AreEqual("WarningWithoutTag", businessRuleValidations[0].Message);
-                Assert.AreEqual("WarningWithTag", businessRuleValidations[1].Message);
-                Assert.AreEqual("ErrorWithoutTag", businessRuleValidations[2].Message);
-                Assert.AreEqual("ErrorWithTag", businessRuleValidations[3].Message);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(4));
+                Assert.That(businessRuleValidations[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(businessRuleValidations[1].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(businessRuleValidations[2].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(businessRuleValidations[3].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -760,7 +760,7 @@
                 var context = new ValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleValidations("tag");
-                Assert.AreEqual(0, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -769,9 +769,9 @@
                 var context = CreateValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleValidations("tag");
-                Assert.AreEqual(2, businessRuleValidations.Count);
-                Assert.AreEqual("WarningWithTag", businessRuleValidations[0].Message);
-                Assert.AreEqual("ErrorWithTag", businessRuleValidations[1].Message);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
+                Assert.That(businessRuleValidations[0].Message, Is.EqualTo("WarningWithTag"));
+                Assert.That(businessRuleValidations[1].Message, Is.EqualTo("ErrorWithTag"));
             }
         }
 
@@ -783,7 +783,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetBusinessRuleWarningCount());
+                Assert.That(context.GetBusinessRuleWarningCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -791,7 +791,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetBusinessRuleWarningCount());
+                Assert.That(context.GetBusinessRuleWarningCount(), Is.EqualTo(2));
             }
 
             [TestCase]
@@ -799,7 +799,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetBusinessRuleWarningCount("tag"));
+                Assert.That(context.GetBusinessRuleWarningCount("tag"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -807,7 +807,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(1, context.GetBusinessRuleWarningCount("tag"));
+                Assert.That(context.GetBusinessRuleWarningCount("tag"), Is.EqualTo(1));
             }
         }
 
@@ -820,7 +820,7 @@
                 var context = new ValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleWarnings();
-                Assert.AreEqual(0, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -829,9 +829,9 @@
                 var context = CreateValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleWarnings();
-                Assert.AreEqual(2, businessRuleValidations.Count);
-                Assert.AreEqual("WarningWithoutTag", businessRuleValidations[0].Message);
-                Assert.AreEqual("WarningWithTag", businessRuleValidations[1].Message);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
+                Assert.That(businessRuleValidations[0].Message, Is.EqualTo("WarningWithoutTag"));
+                Assert.That(businessRuleValidations[1].Message, Is.EqualTo("WarningWithTag"));
             }
 
             [TestCase]
@@ -840,7 +840,7 @@
                 var context = new ValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleWarnings("tag");
-                Assert.AreEqual(0, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -849,8 +849,8 @@
                 var context = CreateValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleWarnings("tag");
-                Assert.AreEqual(1, businessRuleValidations.Count);
-                Assert.AreEqual("WarningWithTag", businessRuleValidations[0].Message);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(1));
+                Assert.That(businessRuleValidations[0].Message, Is.EqualTo("WarningWithTag"));
             }
         }
 
@@ -862,7 +862,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetBusinessRuleErrorCount());
+                Assert.That(context.GetBusinessRuleErrorCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -870,7 +870,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(2, context.GetBusinessRuleErrorCount());
+                Assert.That(context.GetBusinessRuleErrorCount(), Is.EqualTo(2));
             }
 
             [TestCase]
@@ -878,7 +878,7 @@
             {
                 var context = new ValidationContext();
 
-                Assert.AreEqual(0, context.GetBusinessRuleErrorCount("tag"));
+                Assert.That(context.GetBusinessRuleErrorCount("tag"), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -886,7 +886,7 @@
             {
                 var context = CreateValidationContext();
 
-                Assert.AreEqual(1, context.GetBusinessRuleErrorCount("tag"));
+                Assert.That(context.GetBusinessRuleErrorCount("tag"), Is.EqualTo(1));
             }
         }
 
@@ -899,7 +899,7 @@
                 var context = new ValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleErrors();
-                Assert.AreEqual(0, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -908,9 +908,9 @@
                 var context = CreateValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleErrors();
-                Assert.AreEqual(2, businessRuleValidations.Count);
-                Assert.AreEqual("ErrorWithoutTag", businessRuleValidations[0].Message);
-                Assert.AreEqual("ErrorWithTag", businessRuleValidations[1].Message);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
+                Assert.That(businessRuleValidations[0].Message, Is.EqualTo("ErrorWithoutTag"));
+                Assert.That(businessRuleValidations[1].Message, Is.EqualTo("ErrorWithTag"));
             }
 
             [TestCase]
@@ -919,7 +919,7 @@
                 var context = new ValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleErrors("tag");
-                Assert.AreEqual(0, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -928,8 +928,8 @@
                 var context = CreateValidationContext();
 
                 var businessRuleValidations = context.GetBusinessRuleErrors("tag");
-                Assert.AreEqual(1, businessRuleValidations.Count);
-                Assert.AreEqual("ErrorWithTag", businessRuleValidations[0].Message);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(1));
+                Assert.That(businessRuleValidations[0].Message, Is.EqualTo("ErrorWithTag"));
             }
         }
 
@@ -950,11 +950,11 @@
                 var validationContext = new ValidationContext();
                 var fieldValidation = FieldValidationResult.CreateError("MyProperty", "MyError");
 
-                Assert.AreEqual(0, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(0));
 
                 validationContext.Add(fieldValidation);
 
-                Assert.AreEqual(1, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(1));
             }
 
             [TestCase]
@@ -965,11 +965,11 @@
 
                 validationContext.Add(fieldValidation);
 
-                Assert.AreEqual(1, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(1));
 
                 validationContext.Add(fieldValidation);
 
-                Assert.AreEqual(2, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(2));
             }
         }
 
@@ -992,11 +992,11 @@
 
                 validationContext.Add(fieldValidation);
 
-                Assert.AreEqual(1, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(1));
 
                 validationContext.Remove(fieldValidation);
 
-                Assert.AreEqual(0, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -1005,11 +1005,11 @@
                 var validationContext = new ValidationContext();
                 var fieldValidation = FieldValidationResult.CreateError("MyProperty", "MyError");
 
-                Assert.AreEqual(0, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(0));
 
                 validationContext.Remove(fieldValidation);
 
-                Assert.AreEqual(0, validationContext.GetFieldValidationCount());
+                Assert.That(validationContext.GetFieldValidationCount(), Is.EqualTo(0));
             }
         }
 
@@ -1030,11 +1030,11 @@
                 var validationContext = new ValidationContext();
                 var businessRuleValidation = BusinessRuleValidationResult.CreateError("MyProperty");
 
-                Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(0));
 
                 validationContext.Add(businessRuleValidation);
 
-                Assert.AreEqual(1, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(1));
             }
 
             [TestCase]
@@ -1045,11 +1045,11 @@
 
                 validationContext.Add(businessRuleValidation);
 
-                Assert.AreEqual(1, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(1));
 
                 validationContext.Add(businessRuleValidation);
 
-                Assert.AreEqual(2, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(2));
             }
         }
 
@@ -1072,11 +1072,11 @@
 
                 validationContext.Add(businessRuleValidation);
 
-                Assert.AreEqual(1, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(1));
 
                 validationContext.Remove(businessRuleValidation);
 
-                Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(0));
             }
 
             [TestCase]
@@ -1085,11 +1085,11 @@
                 var validationContext = new ValidationContext();
                 var businessRuleValidation = BusinessRuleValidationResult.CreateError("MyError");
 
-                Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(0));
 
                 validationContext.Remove(businessRuleValidation);
 
-                Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
+                Assert.That(validationContext.GetBusinessRuleValidationCount(), Is.EqualTo(0));
             }
         }
 
@@ -1129,30 +1129,30 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(2, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(2, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
             }
 
             [TestCase]
@@ -1181,30 +1181,30 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(2, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(2, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
             }
 
             [TestCase]
@@ -1233,25 +1233,25 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(1, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(1));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(2, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
             }
 
             [TestCase]
@@ -1280,30 +1280,30 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(2, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(2, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
             }
 
             [TestCase]
@@ -1332,25 +1332,25 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(1, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(1));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(2, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
             }
 
             [TestCase]
@@ -1379,30 +1379,30 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(2, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(2, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
             }
 
             [TestCase]
@@ -1431,26 +1431,26 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(2, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(1, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(1));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
             }
 
             [TestCase]
@@ -1479,30 +1479,30 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(2, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(2, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("BusinessRuleError", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleError"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
             }
 
             [TestCase]
@@ -1531,26 +1531,26 @@
                 int counter;
 
                 var fieldValidations = context1.GetFieldValidations();
-                Assert.AreEqual(2, fieldValidations.Count);
+                Assert.That(fieldValidations.Count, Is.EqualTo(2));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldWarning", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldWarning"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
 
                 counter++;
-                Assert.AreEqual("MyProperty", fieldValidations[counter].PropertyName);
-                Assert.AreEqual("FieldError", fieldValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Error, fieldValidations[counter].ValidationResultType);
+                Assert.That(fieldValidations[counter].PropertyName, Is.EqualTo("MyProperty"));
+                Assert.That(fieldValidations[counter].Message, Is.EqualTo("FieldError"));
+                Assert.That(fieldValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Error));
 
                 var businessRuleValidations = context1.GetBusinessRuleValidations();
-                Assert.AreEqual(1, businessRuleValidations.Count);
+                Assert.That(businessRuleValidations.Count, Is.EqualTo(1));
                 counter = -1;
 
                 counter++;
-                Assert.AreEqual("BusinessRuleWarning", businessRuleValidations[counter].Message);
-                Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
+                Assert.That(businessRuleValidations[counter].Message, Is.EqualTo("BusinessRuleWarning"));
+                Assert.That(businessRuleValidations[counter].ValidationResultType, Is.EqualTo(ValidationResultType.Warning));
             }
         }
 

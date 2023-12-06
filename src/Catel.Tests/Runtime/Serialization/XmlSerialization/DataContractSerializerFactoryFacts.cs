@@ -42,7 +42,7 @@
                     typeof(string)
                 }));
 
-                Assert.AreEqual(keys, keys.Distinct());
+                Assert.That(keys.Distinct(), Is.EqualTo(keys));
             }
         }
     }

@@ -25,7 +25,7 @@
             [TestCase]
             public void ReturnsTrueIfAnyPolicyCanBeReset()
             {
-                Assert.IsTrue(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true, () => ThreadHelper.Sleep(0))).Add(new CustomExpirationPolicy(() => true)).CanReset);
+                Assert.That(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true, () => ThreadHelper.Sleep(0))).Add(new CustomExpirationPolicy(() => true)).CanReset, Is.True);
             }
 
             /// <summary>
@@ -34,7 +34,7 @@
             [TestCase]
             public void ReturnsFalseIfAllPolicyCanNotBeReset()
             {
-                Assert.IsFalse(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).CanReset);
+                Assert.That(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).CanReset, Is.False);
             }
 
             [TestCase]
@@ -45,13 +45,13 @@
 
                 new Thread(() =>
                 {
-                    Assert.IsFalse(policy.CanReset);
+                    Assert.That(policy.CanReset, Is.False);
                     events[0].Set();
                 }).Start();
 
                 new Thread(() =>
                 {
-                    Assert.IsFalse(policy.CanReset);
+                    Assert.That(policy.CanReset, Is.False);
                     events[1].Set();
                 }).Start();
 
@@ -77,33 +77,33 @@
             [TestCase]
             public void ReturnsTrueIfAnyPolicyExpires()
             {
-                Assert.IsTrue(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => true)).IsExpired);
+                Assert.That(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => true)).IsExpired, Is.True);
             }
 
 
             [TestCase]
             public void ReturnsFalseIfAnyPolicyExpiresButWasConfiguredToExpireOnlyIfAllPolicyExpires()
             {
-                Assert.IsFalse(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => true)).IsExpired);
+                Assert.That(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => true)).IsExpired, Is.False);
             }
 
 
             [TestCase]
             public void ReturnsTrueIfAllPolicyExpiresButWasConfiguredToExpireOnlyIfAllPolicyExpires()
             {
-                Assert.IsTrue(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).IsExpired);
+                Assert.That(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).IsExpired, Is.True);
             }
 
             [TestCase]
             public void ReturnsFalseIfAllPolicyNonExpiresWasConfiguredToExpireOnlyIfAllPolicyExpires()
             {
-                Assert.IsFalse(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired);
+                Assert.That(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired, Is.False);
             }
 
             [TestCase]
             public void ReturnsFalseIfAllPolicyNonExpires()
             {
-                Assert.IsFalse(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired);
+                Assert.That(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired, Is.False);
             }
 
             #endregion
@@ -132,8 +132,8 @@
 
                 new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true, () => actionInvoked1 = true)).Add(new CustomExpirationPolicy(() => true, () => actionInvoked2 = true)).Reset();
 
-                Assert.IsTrue(actionInvoked1);
-                Assert.IsTrue(actionInvoked2);
+                Assert.That(actionInvoked1, Is.True);
+                Assert.That(actionInvoked2, Is.True);
             }
 
             [TestCase]

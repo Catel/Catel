@@ -34,14 +34,14 @@
         {
             var container = new DisposableTokenTestContainer();
 
-            Assert.IsFalse(container.IsSuspended);
-            Assert.IsFalse(container.IsDisposed);
+            Assert.That(container.IsSuspended, Is.False);
+            Assert.That(container.IsDisposed, Is.False);
 
             using (var token = container.Suspend())
             {
-                Assert.IsTrue(container.IsSuspended);
-                Assert.IsFalse(container.IsDisposed);
-                Assert.IsTrue(ReferenceEquals(container, ((DisposableToken<DisposableTokenTestContainer>)token).Instance));
+                Assert.That(container.IsSuspended, Is.True);
+                Assert.That(container.IsDisposed, Is.False);
+                Assert.That(ReferenceEquals(container, ((DisposableToken<DisposableTokenTestContainer>)token).Instance), Is.True);
             }
         }
 
@@ -50,14 +50,14 @@
         {
             var container = new DisposableTokenTestContainer();
 
-            Assert.IsFalse(container.IsSuspended);
-            Assert.IsFalse(container.IsDisposed);
+            Assert.That(container.IsSuspended, Is.False);
+            Assert.That(container.IsDisposed, Is.False);
 
             var token = container.Suspend();
 
-            Assert.IsTrue(container.IsSuspended);
-            Assert.IsFalse(container.IsDisposed);
-            Assert.IsTrue(ReferenceEquals(container, ((DisposableToken<DisposableTokenTestContainer>)token).Instance));
+            Assert.That(container.IsSuspended, Is.True);
+            Assert.That(container.IsDisposed, Is.False);
+            Assert.That(ReferenceEquals(container, ((DisposableToken<DisposableTokenTestContainer>)token).Instance), Is.True);
 
 #pragma warning disable IDISP017 // Prefer using.
 #pragma warning disable IDISP016 // Don't use disposed instance.
@@ -65,8 +65,8 @@
 #pragma warning restore IDISP016 // Don't use disposed instance.
 #pragma warning restore IDISP017 // Prefer using.
 
-            Assert.IsTrue(container.IsSuspended);
-            Assert.IsTrue(container.IsDisposed);
+            Assert.That(container.IsSuspended, Is.True);
+            Assert.That(container.IsDisposed, Is.True);
         }
     }
 }

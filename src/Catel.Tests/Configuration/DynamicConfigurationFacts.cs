@@ -80,9 +80,9 @@
             configuration.SetConfigurationValue("A", "1");
             configuration.SetConfigurationValue("B", "2");
 
-            Assert.IsTrue(configuration.IsConfigurationValueSet("A"));
-            Assert.IsTrue(configuration.IsConfigurationValueSet("B"));
-            Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
+            Assert.That(configuration.IsConfigurationValueSet("A"), Is.True);
+            Assert.That(configuration.IsConfigurationValueSet("B"), Is.True);
+            Assert.That(configuration.IsConfigurationValueSet("C"), Is.False);
         }
 
         [TestCase]
@@ -99,9 +99,9 @@
 
                     var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
-                    Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
+                    Assert.That(configuration.IsConfigurationValueSet("KeyX"), Is.True);
+                    Assert.That(configuration.IsConfigurationValueSet("KeyY"), Is.True);
+                    Assert.That(configuration.IsConfigurationValueSet("C"), Is.False);
                 }
             }
         }
@@ -120,11 +120,11 @@
 
                     var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
+                    Assert.That(configuration.IsConfigurationValueSet("KeyX"), Is.True);
+                    Assert.That(configuration.IsConfigurationValueSet("KeyY"), Is.True);
 
-                    Assert.AreEqual("Value X", configuration.GetConfigurationValue("KeyX"));
-                    Assert.AreEqual("Value Y", configuration.GetConfigurationValue("KeyY"));
+                    Assert.That(configuration.GetConfigurationValue("KeyX"), Is.EqualTo("Value X"));
+                    Assert.That(configuration.GetConfigurationValue("KeyY"), Is.EqualTo("Value Y"));
                 }
             }
         }
@@ -170,9 +170,9 @@
                 var newDynamicConfiguration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
                 var newComplexSetting = newDynamicConfiguration.GetConfigurationValue<ComplexSetting>("ComplexSetting", null);
 
-                Assert.AreEqual(newComplexSetting.FirstName, complexSetting.FirstName);
-                Assert.AreEqual(newComplexSetting.MiddleName, complexSetting.MiddleName);
-                Assert.AreEqual(newComplexSetting.LastName, complexSetting.LastName);
+                Assert.That(complexSetting.FirstName, Is.EqualTo(newComplexSetting.FirstName));
+                Assert.That(complexSetting.MiddleName, Is.EqualTo(newComplexSetting.MiddleName));
+                Assert.That(complexSetting.LastName, Is.EqualTo(newComplexSetting.LastName));
             }
         }
     }

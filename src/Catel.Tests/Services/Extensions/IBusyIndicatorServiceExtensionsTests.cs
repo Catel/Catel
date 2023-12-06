@@ -40,14 +40,14 @@
         public void PushInScope_CodeThrowsException_Hides()
         {
             // ARRANGE
-            Assert.AreEqual(0, Target.ShowCounter);
+            Assert.That(Target.ShowCounter, Is.EqualTo(0));
 
             // ACT
             try
             {
                 using (Target.PushInScope())
                 {
-                    Assert.AreEqual(1, Target.ShowCounter);
+                    Assert.That(Target.ShowCounter, Is.EqualTo(1));
                     throw new ArgumentException();
                 }
             }
@@ -56,21 +56,21 @@
             }
 
             // ASSERT
-            Assert.AreEqual(0, Target.ShowCounter);
+            Assert.That(Target.ShowCounter, Is.EqualTo(0));
         }
 
         [Test]
         public void PushInScope_WithStatus_CodeThrowsException_Hides()
         {
             // ARRANGE
-            Assert.AreEqual(0, Target.ShowCounter);
+            Assert.That(Target.ShowCounter, Is.EqualTo(0));
 
             // ACT
             try
             {
                 using (Target.PushInScope("Loading..."))
                 {
-                    Assert.AreEqual(1, Target.ShowCounter);
+                    Assert.That(Target.ShowCounter, Is.EqualTo(1));
                     throw new ArgumentException();
                 }
             }
@@ -79,7 +79,7 @@
             }
 
             // ASSERT
-            Assert.AreEqual(0, Target.ShowCounter);
+            Assert.That(Target.ShowCounter, Is.EqualTo(0));
         }
     }
 }

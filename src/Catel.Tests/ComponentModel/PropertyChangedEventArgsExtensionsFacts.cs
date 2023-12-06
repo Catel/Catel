@@ -22,7 +22,7 @@
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs(null);
 
-                Assert.IsTrue(propertyChangedEventArgs.AllPropertiesChanged());
+                Assert.That(propertyChangedEventArgs.AllPropertiesChanged(), Is.True);
             }
 
             [TestCase]
@@ -30,7 +30,7 @@
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs(string.Empty);
 
-                Assert.IsTrue(propertyChangedEventArgs.AllPropertiesChanged());
+                Assert.That(propertyChangedEventArgs.AllPropertiesChanged(), Is.True);
             }
 
             [TestCase]
@@ -38,7 +38,7 @@
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("MyProperty");
 
-                Assert.IsFalse(propertyChangedEventArgs.AllPropertiesChanged());
+                Assert.That(propertyChangedEventArgs.AllPropertiesChanged(), Is.False);
             }
         }
 
@@ -66,7 +66,7 @@
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestProperty");
 
-                Assert.IsTrue(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty));
+                Assert.That(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty), Is.True);
             }
 
             [TestCase]
@@ -74,7 +74,7 @@
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestPropertyNotExisting");
 
-                Assert.IsFalse(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty));
+                Assert.That(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty), Is.False);
             }
         }
     }

@@ -20,7 +20,7 @@
             {
                 var eventArgs = new MissingTypeEventArgs(typeof(ITestInterface));
 
-                Assert.AreEqual(typeof(ITestInterface), eventArgs.InterfaceType);
+                Assert.That(eventArgs.InterfaceType, Is.EqualTo(typeof(ITestInterface)));
             }
 
             [TestCase]
@@ -40,8 +40,8 @@
                     var classA = serviceLocator.ResolveType<IInterfaceA>();
                     var classATag = serviceLocator.ResolveType<IInterfaceA>(Tag);
 
-                    Assert.IsInstanceOf(typeof(ClassA), classA);
-                    Assert.IsInstanceOf(typeof(ClassATag), classATag);
+                    Assert.That(classA, Is.InstanceOf(typeof(ClassA)));
+                    Assert.That(classATag, Is.InstanceOf(typeof(ClassATag)));
                 }
             }
 
@@ -62,7 +62,7 @@
                     var classATag = serviceLocator.ResolveType<IInterfaceA>(Tag);
                     var classATag2 = serviceLocator.ResolveType<IInterfaceA>(Tag);
 
-                    Assert.AreNotSame(classATag, classATag2);
+                    Assert.That(classATag2, Is.Not.SameAs(classATag));
                 }
             }
 
@@ -83,8 +83,8 @@
                     var classA = serviceLocator.ResolveType<IInterfaceA>();
                     var classATag = serviceLocator.ResolveType<IInterfaceA>(Tag);
 
-                    Assert.IsInstanceOf(typeof(ClassA), classA);
-                    Assert.IsInstanceOf(typeof(ClassATag), classATag);
+                    Assert.That(classA, Is.InstanceOf(typeof(ClassA)));
+                    Assert.That(classATag, Is.InstanceOf(typeof(ClassATag)));
                 }
             }
 
@@ -105,7 +105,7 @@
                     var classATag = serviceLocator.ResolveType<IInterfaceA>(Tag);
                     var classATag2 = serviceLocator.ResolveType<IInterfaceA>(Tag);
 
-                    Assert.AreSame(classATag, classATag2);
+                    Assert.That(classATag2, Is.SameAs(classATag));
                 }
             }
 

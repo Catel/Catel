@@ -32,12 +32,12 @@
             {
                 var urlLocator = new UrlLocator();
 
-                Assert.IsNull(urlLocator.ResolveUrl(typeof(FollowingNoNamingConventionView)));
+                Assert.That(urlLocator.ResolveUrl(typeof(FollowingNoNamingConventionView)), Is.Null);
 
                 urlLocator.Register(typeof(NoNamingConventionViewModel), "/App.xaml");
 
                 var resolvedUri = urlLocator.ResolveUrl(typeof(NoNamingConventionViewModel));
-                Assert.AreEqual("/App.xaml", resolvedUri);
+                Assert.That(resolvedUri, Is.EqualTo("/App.xaml"));
             }
 
             [TestCase]
@@ -48,7 +48,7 @@
                 urlLocator.Register(typeof(NoNamingConventionViewModel2), "/App.xaml");
 
                 var resolvedUri = urlLocator.ResolveUrl(typeof(NoNamingConventionViewModel2), false);
-                Assert.AreEqual("/App.xaml", resolvedUri);
+                Assert.That(resolvedUri, Is.EqualTo("/App.xaml"));
             }
         }
 
@@ -69,7 +69,7 @@
                 var resolvedType = urlLocator.ResolveUrl(viewModelType, false);
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(expectedValue, resolvedType);
+                Assert.That(resolvedType, Is.EqualTo(expectedValue));
             }
 
             [TestCase]
@@ -79,7 +79,7 @@
                 var resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual("/Views/Person.xaml", resolvedType);
+                Assert.That(resolvedType, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 urlLocator.NamingConventions.Clear();
@@ -87,7 +87,7 @@
                 resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual("/Views/Person.xaml", resolvedType);
+                Assert.That(resolvedType, Is.EqualTo("/Views/Person.xaml"));
             }
         }
 
@@ -101,7 +101,7 @@
                 var resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
                 Assert.IsNotNull(resolvedUrl);
-                Assert.AreEqual("/Views/Person.xaml", resolvedUrl);
+                Assert.That(resolvedUrl, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 urlLocator.NamingConventions.Clear();
@@ -109,14 +109,14 @@
                 resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
                 Assert.IsNotNull(resolvedUrl);
-                Assert.AreEqual("/Views/Person.xaml", resolvedUrl);
+                Assert.That(resolvedUrl, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the cache, now it should break
                 urlLocator.ClearCache();
 
                 resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNull(resolvedUrl);
+                Assert.That(resolvedUrl, Is.Null);
             }
         }
     }

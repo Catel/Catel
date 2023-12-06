@@ -51,7 +51,7 @@
             propertyBag.SetValue("Int", 42);
             propertyBag.SetValue("Int", (object)52);
 
-            Assert.AreEqual(52, propertyBag.GetValue("Int", 0));
+            Assert.That(propertyBag.GetValue("Int", 0), Is.EqualTo(52));
         }
     }
 }

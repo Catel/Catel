@@ -120,7 +120,7 @@
 
                 configurationService.SetValue(container, "myKey", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "myKey"));
+                Assert.That(configurationService.GetValue<string>(container, "myKey"), Is.EqualTo("myValue"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -129,7 +129,7 @@
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
-                Assert.AreEqual("nonExistingValue", configurationService.GetValue(container, "nonExistingKey", "nonExistingValue"));
+                Assert.That(configurationService.GetValue(container, "nonExistingKey", "nonExistingValue"), Is.EqualTo("nonExistingValue"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -140,7 +140,7 @@
 
                 configurationService.SetValue(container, "key with special chars", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue(container, "key with special chars", "nonExistingValue"));
+                Assert.That(configurationService.GetValue(container, "key with special chars", "nonExistingValue"), Is.EqualTo("myValue"));
             }
         }
 
@@ -173,7 +173,7 @@
 
                 configurationService.SetValue(container, "myKey", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "myKey"));
+                Assert.That(configurationService.GetValue<string>(container, "myKey"), Is.EqualTo("myValue"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -184,7 +184,7 @@
 
                 configurationService.SetValue(container, "key with special chars", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "key with special chars"));
+                Assert.That(configurationService.GetValue<string>(container, "key with special chars"), Is.EqualTo("myValue"));
             }
         }
 
@@ -214,10 +214,10 @@
 
                 configurationService.SetValue(container, "key", guid.ToString());
 
-                Assert.IsTrue(invoked);
-                Assert.AreEqual(container, receivedContainer);
-                Assert.AreEqual("key", receivedKey);
-                Assert.AreEqual(guid.ToString(), (string)receivedValue);
+                Assert.That(invoked, Is.True);
+                Assert.That(receivedContainer, Is.EqualTo(container));
+                Assert.That(receivedKey, Is.EqualTo("key"));
+                Assert.That((string)receivedValue, Is.EqualTo(guid.ToString()));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -236,7 +236,7 @@
 
                 configurationService.SetValue(container, "key", "value");
 
-                Assert.IsFalse(invoked);
+                Assert.That(invoked, Is.False);
             }
         }
     }

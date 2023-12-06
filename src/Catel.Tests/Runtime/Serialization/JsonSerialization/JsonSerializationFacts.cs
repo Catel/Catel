@@ -61,8 +61,8 @@
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
 
-                Assert.AreEqual(model.EnumWithAttribute, clonedModel.EnumWithAttribute);
-                Assert.AreEqual(model.EnumWithoutAttribute, clonedModel.EnumWithoutAttribute);
+                Assert.That(clonedModel.EnumWithAttribute, Is.EqualTo(model.EnumWithAttribute));
+                Assert.That(clonedModel.EnumWithoutAttribute, Is.EqualTo(model.EnumWithoutAttribute));
             }
         }
 
@@ -83,10 +83,10 @@
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.IsTrue(model.IsCustomSerialized);
-                Assert.IsTrue(clonedModel.IsCustomDeserialized);
+                Assert.That(model.IsCustomSerialized, Is.True);
+                Assert.That(clonedModel.IsCustomDeserialized, Is.True);
 
-                Assert.AreEqual(model.FirstName, clonedModel.FirstName);
+                Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
             }
 
             [TestCase]
@@ -109,11 +109,11 @@
                 Assert.IsNotNull(clonedModel.NestedModel);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.IsTrue(model.NestedModel.IsCustomSerialized);
-                Assert.IsTrue(clonedModel.NestedModel.IsCustomDeserialized);
+                Assert.That(model.NestedModel.IsCustomSerialized, Is.True);
+                Assert.That(clonedModel.NestedModel.IsCustomDeserialized, Is.True);
 
-                Assert.AreEqual(model.Name, clonedModel.Name);
-                Assert.AreEqual(model.NestedModel.FirstName, clonedModel.NestedModel.FirstName);
+                Assert.That(clonedModel.Name, Is.EqualTo(model.Name));
+                Assert.That(clonedModel.NestedModel.FirstName, Is.EqualTo(model.NestedModel.FirstName));
             }
 
             [TestCase]
@@ -137,7 +137,7 @@
 
                 var json = testModel.ToJson(configuration);
 
-                Assert.IsFalse(json.Contains("Excluded"));
+                Assert.That(json.Contains("Excluded"), Is.False);
             }
 
             [TestCase]
@@ -161,7 +161,7 @@
 
                 var json = testModel.ToJson(configuration);
 
-                Assert.IsFalse(json.Contains("Excluded"));
+                Assert.That(json.Contains("Excluded"), Is.False);
             }
 
             [TestCase]
@@ -183,10 +183,10 @@
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, configuration);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.IsTrue(model.IsCustomSerialized);
-                Assert.IsTrue(clonedModel.IsCustomDeserialized);
+                Assert.That(model.IsCustomSerialized, Is.True);
+                Assert.That(clonedModel.IsCustomDeserialized, Is.True);
 
-                Assert.AreEqual(model.FirstName, clonedModel.FirstName);
+                Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
             }
 
             //[TestCase]
@@ -227,7 +227,7 @@
 
                 var json = testModel.ToJson(configuration);
 
-                Assert.IsTrue(json.Contains(currentDateTime.ToString(culture)));
+                Assert.That(json.Contains(currentDateTime.ToString(culture)), Is.True);
             }
         }
     }

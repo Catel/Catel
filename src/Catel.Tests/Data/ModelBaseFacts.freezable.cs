@@ -12,20 +12,20 @@
             var freezable = (IFreezable)model;
 
             model.FirstName = "John";
-            Assert.AreEqual("John", model.FirstName);
-            Assert.IsFalse(freezable.IsFrozen);
+            Assert.That(model.FirstName, Is.EqualTo("John"));
+            Assert.That(freezable.IsFrozen, Is.False);
 
             freezable.Freeze();
 
             model.FirstName = "Jane";
-            Assert.AreEqual("John", model.FirstName);
-            Assert.IsTrue(freezable.IsFrozen);
+            Assert.That(model.FirstName, Is.EqualTo("John"));
+            Assert.That(freezable.IsFrozen, Is.True);
 
             freezable.Unfreeze();
 
             model.FirstName = "Jane";
-            Assert.AreEqual("Jane", model.FirstName);
-            Assert.IsFalse(freezable.IsFrozen);
+            Assert.That(model.FirstName, Is.EqualTo("Jane"));
+            Assert.That(freezable.IsFrozen, Is.False);
         }
     }
 }

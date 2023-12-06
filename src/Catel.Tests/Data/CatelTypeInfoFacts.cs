@@ -32,8 +32,8 @@
             var catelTypeInfo = new CatelTypeInfo(typeof(CatelTypeInfoTestModel));
 
             var properties = catelTypeInfo.GetCatelProperties();
-            Assert.AreNotEqual(0, properties.Count);
-            Assert.IsTrue(properties.Keys.Contains("CatelProperty"));
+            Assert.That(properties.Count, Is.Not.EqualTo(0));
+            Assert.That(properties.Keys.Contains("CatelProperty"), Is.True);
         }
 
         [TestCase]
@@ -42,8 +42,8 @@
             var catelTypeInfo = new CatelTypeInfo(typeof(CatelTypeInfoTestModel));
 
             var properties = catelTypeInfo.GetNonCatelProperties();
-            Assert.AreNotEqual(0, properties.Count);
-            Assert.IsTrue(properties.Keys.Contains("NormalProperty"));
+            Assert.That(properties.Count, Is.Not.EqualTo(0));
+            Assert.That(properties.Keys.Contains("NormalProperty"), Is.True);
         }
     }
 }

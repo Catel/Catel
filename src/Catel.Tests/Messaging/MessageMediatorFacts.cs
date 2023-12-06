@@ -96,7 +96,7 @@
 
                 mediator.CleanUp();
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
             }
 
             [TestCase, Explicit]
@@ -112,7 +112,7 @@
 
                 mediator.CleanUp();
 
-                Assert.AreEqual(0, mediator.GetRegisteredHandlers<string>().Count);
+                Assert.That(mediator.GetRegisteredHandlers<string>().Count, Is.EqualTo(0));
             }
             #endregion
         }
@@ -137,7 +137,7 @@
             {
                 var mediator = new MessageMediator();
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof(string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.False);
             }
 
             [TestCase]
@@ -148,7 +148,7 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof(string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.True);
             }
 
             [TestCase]
@@ -159,7 +159,7 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof(string), "myTag"));
+                Assert.That(mediator.IsMessageRegistered(typeof(string), "myTag"), Is.False);
             }
 
             [TestCase]
@@ -170,7 +170,7 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof(string), "myTag"));
+                Assert.That(mediator.IsMessageRegistered(typeof(string), "myTag"), Is.True);
             }
 
             [TestCase]
@@ -181,7 +181,7 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof(string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.False);
             }
 
             [TestCase]
@@ -193,7 +193,7 @@
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
                 mediator.Register<string>(recipient, recipient.AnotherOnMessage);
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof(string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.True);
             }
             #endregion
         }
@@ -210,11 +210,11 @@
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
             }
 
             [TestCase]
@@ -223,12 +223,12 @@
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.False);
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "anotherTag"));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "anotherTag"), Is.False);
             }
 
             [TestCase]
@@ -237,8 +237,8 @@
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsTrue(mediator.Register<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.Register<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.False);
             }
             #endregion
         }
@@ -255,7 +255,7 @@
                 var mediator = new MessageMediator();
                 var sender = new MessageSender();
 
-                Assert.IsFalse(sender.SendMessage(mediator, "test"));
+                Assert.That(sender.SendMessage(mediator, "test"), Is.False);
             }
 
             [TestCase]
@@ -267,7 +267,7 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsFalse(sender.SendMessage(mediator, "test", "myTag"));
+                Assert.That(sender.SendMessage(mediator, "test", "myTag"), Is.False);
             }
 
             [TestCase]
@@ -279,8 +279,8 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(sender.SendMessage(mediator, "test"));
-                Assert.AreEqual(1, recipient.MessagesReceived);
+                Assert.That(sender.SendMessage(mediator, "test"), Is.True);
+                Assert.That(recipient.MessagesReceived, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -294,8 +294,8 @@
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
                 mediator.Register<string>(recipient, recipient.OnMessage, "anotherTag");
 
-                Assert.IsTrue(sender.SendMessage(mediator, "test", "myTag"));
-                Assert.AreEqual(1, recipient.MessagesReceived);
+                Assert.That(sender.SendMessage(mediator, "test", "myTag"), Is.True);
+                Assert.That(recipient.MessagesReceived, Is.EqualTo(1));
             }
 
             [TestCase, Explicit]
@@ -311,8 +311,8 @@
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.IsFalse(sender.SendMessage(mediator, "test"));
-                Assert.AreEqual(0, mediator.GetRegisteredHandlers<string>().Count, "SendMessage should auto cleanup");
+                Assert.That(sender.SendMessage(mediator, "test"), Is.False);
+                Assert.That(mediator.GetRegisteredHandlers<string>().Count, Is.EqualTo(0), "SendMessage should auto cleanup");
             }
             #endregion
         }
@@ -331,9 +331,9 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsTrue(mediator.Unregister<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.Unregister<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
             }
 
             [TestCase]
@@ -344,9 +344,9 @@
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
-                Assert.IsTrue(mediator.Unregister<string>(recipient, recipient.OnMessage, "myTag"));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
+                Assert.That(mediator.Unregister<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.False);
             }
 
             [TestCase]
@@ -355,8 +355,8 @@
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.Unregister<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
+                Assert.That(mediator.Unregister<string>(recipient, recipient.OnMessage), Is.False);
             }
 
             [TestCase]
@@ -369,15 +369,15 @@
                 mediator.Register<string>(recipient, recipient.AnotherOnMessage);
                 mediator.Register<string>(recipient, recipient.YetAnotherOnMessage);
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage));
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage), Is.True);
 
                 mediator.UnregisterRecipient(recipient);
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage), Is.False);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage), Is.False);
             }
             #endregion
         }
@@ -394,7 +394,7 @@
                 var recipient = new MessageRecipient();
                 var messageMediator = new MessageMediator();
                 messageMediator.Register<string>(recipient, recipient.OnMessage);
-                Assert.IsTrue(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
             }
 
             [Test]
@@ -409,7 +409,7 @@
                 GC.Collect();
 
                 recipient = new MessageRecipient();
-                Assert.IsFalse(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
             }
         }
     }

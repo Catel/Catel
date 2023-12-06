@@ -21,9 +21,9 @@
             {
                 var iniEntry = new IniEntry();
 
-                Assert.AreEqual("Group", ExpressionHelper.GetPropertyName(() => iniEntry.Group));
-                Assert.AreEqual("Key", ExpressionHelper.GetPropertyName(() => iniEntry.Key));
-                Assert.AreEqual("Value", ExpressionHelper.GetPropertyName(() => iniEntry.Value));
+                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Group), Is.EqualTo("Group"));
+                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Key), Is.EqualTo("Key"));
+                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Value), Is.EqualTo("Value"));
             }
         }
 
@@ -62,7 +62,7 @@
             {
                 var owner = ExpressionHelper.GetOwner(() => MyProperty);
 
-                Assert.IsTrue(ReferenceEquals(this, owner));
+                Assert.That(ReferenceEquals(this, owner), Is.True);
             }
 
             [TestCase]
@@ -71,7 +71,7 @@
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.StringProperty);
 
-                Assert.IsTrue(ReferenceEquals(testModel, owner));
+                Assert.That(ReferenceEquals(testModel, owner), Is.True);
             }
 
             [TestCase]
@@ -80,7 +80,7 @@
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.IntProperty);
 
-                Assert.IsTrue(ReferenceEquals(testModel, owner));
+                Assert.That(ReferenceEquals(testModel, owner), Is.True);
             }
 
             [TestCase]
@@ -89,7 +89,7 @@
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.InnerModel.InnerProperty);
 
-                Assert.IsTrue(ReferenceEquals(testModel.InnerModel, owner));
+                Assert.That(ReferenceEquals(testModel.InnerModel, owner), Is.True);
             }
         }
     }

@@ -17,9 +17,9 @@
             }
             catch (PropertyNotFoundInModelException ex)
             {
-                Assert.AreEqual("viewModelProperty", ex.ViewModelPropertyName);
-                Assert.AreEqual("modelName", ex.ModelName);
-                Assert.AreEqual("modelPropertyName", ex.ModelPropertyName);
+                Assert.That(ex.ViewModelPropertyName, Is.EqualTo("viewModelProperty"));
+                Assert.That(ex.ModelName, Is.EqualTo("modelName"));
+                Assert.That(ex.ModelPropertyName, Is.EqualTo("modelPropertyName"));
             }
         }
         #endregion

@@ -26,7 +26,7 @@
             {
                 var exception = ExceptionFactory.CreateException<TestExceptionWithInnerExceptionSupport>(null);
 
-                Assert.IsNull(exception);
+                Assert.That(exception, Is.Null);
             }
 
             [TestCase]
@@ -34,8 +34,8 @@
             {
                 var exception = ExceptionFactory.CreateException<TestExceptionWithInnerExceptionSupport>("msg", null);
 
-                Assert.AreEqual("msg", exception.Message);
-                Assert.IsNull(exception.InnerException);
+                Assert.That(exception.Message, Is.EqualTo("msg"));
+                Assert.That(exception.InnerException, Is.Null);
             }
 
             [TestCase]
@@ -44,8 +44,8 @@
                 var innerException = new Exception();
                 var exception = ExceptionFactory.CreateException<TestExceptionWithInnerExceptionSupport>("msg", innerException);
 
-                Assert.AreEqual("msg", exception.Message);
-                Assert.AreEqual(innerException, exception.InnerException);
+                Assert.That(exception.Message, Is.EqualTo("msg"));
+                Assert.That(exception.InnerException, Is.EqualTo(innerException));
             }
         }
     }

@@ -16,7 +16,7 @@
 
                 stringBuilder.AppendLine("test with {0} {1}", "formatting", 1);
 
-                Assert.AreEqual("test with formatting 1\r\n", stringBuilder.ToString());
+                Assert.That(stringBuilder.ToString(), Is.EqualTo("test with formatting 1\r\n"));
             }
         }
     }

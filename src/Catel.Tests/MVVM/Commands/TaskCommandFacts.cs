@@ -21,12 +21,12 @@
         {
             var taskCommand = new TaskCommand(TestExecuteAsync);
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
 
             taskCommand.Execute();
 
-            Assert.IsTrue(taskCommand.IsExecuting);
+            Assert.That(taskCommand.IsExecuting, Is.True);
 
             ThreadHelper.Sleep(1000);
 
@@ -34,8 +34,8 @@
 
             ThreadHelper.Sleep(1000);
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
         }
 
         [TestCase]
@@ -46,14 +46,14 @@
                 SwallowExceptions = true
             };
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
 
             try
             {
                 taskCommand.Execute();
 
-                Assert.IsTrue(taskCommand.IsExecuting);
+                Assert.That(taskCommand.IsExecuting, Is.True);
 
                 await taskCommand.Task;
             }
@@ -62,7 +62,7 @@
                 Assert.Fail($"No exception expected, should be swallowed, but got '{ex}'");
             }
 
-            Assert.IsFalse(taskCommand.IsExecuting);
+            Assert.That(taskCommand.IsExecuting, Is.False);
         }
 
         [TestCase, Explicit]
@@ -73,8 +73,8 @@
                 SwallowExceptions = false
             };
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
 
             try
             {
@@ -88,7 +88,7 @@
             {
             }
 
-            Assert.IsFalse(taskCommand.IsExecuting, "Command should not be executing");
+            Assert.That(taskCommand.IsExecuting, Is.False, "Command should not be executing");
         }
 
         //[TestCase]

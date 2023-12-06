@@ -18,7 +18,7 @@
 
             var result = converterB.Convert(new A(), typeof(C), null, null);
 
-            Assert.IsInstanceOf<C>(result);
+            Assert.That(result, Is.InstanceOf<C>());
         }
 
         [TestCase]
@@ -30,7 +30,7 @@
 
             var result = converterA.Convert(new A(), typeof(C), null, null);
 
-            Assert.AreEqual(result, ConverterHelper.UnsetValue);
+            Assert.That(ConverterHelper.UnsetValue, Is.EqualTo(result));
         }
         
         [TestCase]
@@ -40,7 +40,7 @@
 
             var result = converterB.Convert(new A(), typeof(C), null, null);
 
-            Assert.AreEqual(result, ConverterHelper.UnsetValue);
+            Assert.That(ConverterHelper.UnsetValue, Is.EqualTo(result));
         }
         #endregion
 

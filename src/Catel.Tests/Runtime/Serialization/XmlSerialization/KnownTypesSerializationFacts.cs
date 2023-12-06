@@ -171,7 +171,7 @@
 
                 var c2 = serializer.Deserialize<ContainerInterfaces>(memoryStream);
 
-                Assert.AreEqual(c, c2);
+                Assert.That(c2, Is.EqualTo(c));
             }
         }
 
@@ -197,7 +197,7 @@
 
                 var c2 = serializer.Deserialize<ContainerAbstractClasses>(memoryStream);
 
-                Assert.AreEqual(c, c2);
+                Assert.That(c2, Is.EqualTo(c));
             }
         }
 
@@ -218,8 +218,8 @@
                 var serializer = new DataContractSerializerFactory().
                     GetDataContractSerializer(typeof(ContainerAbstractClasses), collectionType, "TestXmlName", null, null);
 
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginA.Params)), Is.True);
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginB.Params)), Is.True);
             }
         }
 
@@ -250,8 +250,8 @@
                 var serializer = new DataContractSerializerFactory().
                     GetDataContractSerializer(typeof(object), collection.GetType(), "TestXmlName");
 
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginA.Params)), Is.True);
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginB.Params)), Is.True);
             }
         }
     }

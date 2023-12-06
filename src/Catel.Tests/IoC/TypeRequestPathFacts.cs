@@ -88,7 +88,7 @@
             public void RootOfThePathCanBeCreatedWithName()
             {
                 var path = TypeRequestPath.Root(TestPathName);
-                Assert.AreEqual(TestPathName, path.Name);
+                Assert.That(path.Name, Is.EqualTo(TestPathName));
             }
         }
 
@@ -118,11 +118,11 @@
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
+                    Assert.That(path.AllTypes.ElementAt(i), Is.EqualTo(typeArray[i]));
                 }
 
-                Assert.AreEqual(typeArray[0], path.FirstType);
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
 
             [TestCase]
@@ -134,11 +134,11 @@
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
+                    Assert.That(path.AllTypes.ElementAt(i), Is.EqualTo(typeArray[i]));
                 }
 
-                Assert.AreEqual(typeArray[0], path.FirstType);
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
 
             [TestCase]
@@ -150,11 +150,11 @@
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
+                    Assert.That(path.AllTypes.ElementAt(i), Is.EqualTo(typeArray[i]));
                 }
 
-                Assert.AreEqual(typeArray[0], path.FirstType);
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
 
             [TestCase]
@@ -172,7 +172,7 @@
             public void ReturnsNullForEmpty()
             {
                 var path = TypeRequestPath.Root(string.Empty);
-                Assert.IsNull(path.FirstType);
+                Assert.That(path.FirstType, Is.Null);
             }
 
             [TestCase]
@@ -181,7 +181,7 @@
                 var typeArray = CreateArrayWithOnlyValueTypes();
                 var path = MapRequestInfoArrayIntoPath(typeArray);
 
-                Assert.AreEqual(typeArray[0], path.FirstType);
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
             }
         }
 
@@ -192,7 +192,7 @@
             public void ReturnsNullForEmpty()
             {
                 var path = TypeRequestPath.Root(string.Empty);
-                Assert.IsNull(path.LastType);
+                Assert.That(path.LastType, Is.Null);
             }
 
             [TestCase]
@@ -201,7 +201,7 @@
                 var typeArray = CreateArrayWithOnlyValueTypes();
                 var path = MapRequestInfoArrayIntoPath(typeArray);
 
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
         }
 
@@ -215,9 +215,8 @@
                 var path = MapRequestInfoArrayIntoPath(typeArray);
 
                 const string expected = "X => Y => Z";
-                Assert.AreEqual(path.ToString(), expected);
+                Assert.That(path.ToString(), Is.EqualTo(expected));
             }
-
         }
     }
 }

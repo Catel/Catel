@@ -32,8 +32,8 @@
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default, ServiceLocator.Default);
                 var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(5, null);
 
-                Assert.IsFalse(viewModel.EmptyConstructorCalled);
-                Assert.AreEqual(5, viewModel.Integer);
+                Assert.That(viewModel.EmptyConstructorCalled, Is.False);
+                Assert.That(viewModel.Integer, Is.EqualTo(5));
             }
 
             [TestCase]
@@ -42,7 +42,7 @@
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default, ServiceLocator.Default);
                 var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(null, null);
 
-                Assert.IsTrue(viewModel.EmptyConstructorCalled);
+                Assert.That(viewModel.EmptyConstructorCalled, Is.True);
             }
 
             [TestCase]
@@ -51,7 +51,7 @@
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default, ServiceLocator.Default);
                 var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModelWithOnlyDefaultConstructor>(5, null);
 
-                Assert.IsTrue(viewModel.EmptyConstructorCalled);
+                Assert.That(viewModel.EmptyConstructorCalled, Is.True);
             }
 
             [TestCase]
@@ -77,7 +77,7 @@
                     var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
                     var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(null, "tag");
 
-                    Assert.IsTrue(ReferenceEquals(tagDependency, viewModel.Dependency));
+                    Assert.That(ReferenceEquals(tagDependency, viewModel.Dependency), Is.True);
                 }
             }
 
@@ -104,7 +104,7 @@
                     var viewModelFactory = new ViewModelFactory(typeFactory, serviceLocator);
                     var viewModel = viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>(5, "tag");
 
-                    Assert.IsTrue(ReferenceEquals(tagDependency, viewModel.Dependency));
+                    Assert.That(ReferenceEquals(tagDependency, viewModel.Dependency), Is.True);
                 }
             }
         }

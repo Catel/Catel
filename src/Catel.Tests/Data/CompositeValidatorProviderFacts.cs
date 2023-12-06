@@ -44,7 +44,7 @@
                 compositeValidatorProvider.Add(validatorProviderMock2.Object);
 
                 compositeValidatorProvider.Remove(validatorProviderMock1.Object);
-                Assert.IsFalse(compositeValidatorProvider.Contains(validatorProviderMock1.Object));
+                Assert.That(compositeValidatorProvider.Contains(validatorProviderMock1.Object), Is.False);
             }
         }
 
@@ -74,7 +74,7 @@
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
 
-                Assert.IsInstanceOf(typeof(CompositeValidator), validator);
+                Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
                 ((CompositeValidator)validator).Contains(validatorMock1.Object);
                 ((CompositeValidator)validator).Contains(validatorMock2.Object);
             }
@@ -96,7 +96,7 @@
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
 
-                Assert.AreEqual(validator, validatorMock1.Object);
+                Assert.That(validatorMock1.Object, Is.EqualTo(validator));
             }
         }
 
@@ -126,7 +126,7 @@
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
 
-                Assert.IsInstanceOf(typeof(CompositeValidator), validator);
+                Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
                 ((CompositeValidator)validator).Contains(validatorMock1.Object);
                 ((CompositeValidator)validator).Contains(validatorMock2.Object);
             }
@@ -148,7 +148,7 @@
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
 
-                Assert.AreEqual(validator, validatorMock1.Object);
+                Assert.That(validatorMock1.Object, Is.EqualTo(validator));
             }
         }
     }

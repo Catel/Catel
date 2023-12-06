@@ -24,7 +24,7 @@
                 var timespanValue = StringToObjectHelper.ToTimeSpan("1.23:12:21");
                 var expectedTimespan = new TimeSpan(1, 23, 12, 21);
 
-                Assert.AreEqual(expectedTimespan, timespanValue);
+                Assert.That(timespanValue, Is.EqualTo(expectedTimespan));
             }
         }
 
@@ -56,7 +56,7 @@
             {
                 var enumValue = StringToObjectHelper.ToRightType(typeof(TestEnum), "Value3");
 
-                Assert.AreEqual(TestEnum.Value3, enumValue);
+                Assert.That(enumValue, Is.EqualTo(TestEnum.Value3));
             }
 
             [TestCase("0", ExpectedResult = (byte)0)]
@@ -78,7 +78,7 @@
             {
                 var enumValue = StringToObjectHelper.ToEnum("bla", TestEnum.Value3);
 
-                Assert.AreEqual(TestEnum.Value3, enumValue);
+                Assert.That(enumValue, Is.EqualTo(TestEnum.Value3));
             }
 
             [TestCase]
@@ -86,7 +86,7 @@
             {
                 var enumValue = StringToObjectHelper.ToEnum("Value2", TestEnum.Value3);
 
-                Assert.AreEqual(TestEnum.Value2, enumValue);
+                Assert.That(enumValue, Is.EqualTo(TestEnum.Value2));
             }
         }
     }

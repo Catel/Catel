@@ -17,7 +17,7 @@
             var configurationSection = openExeConfiguration.GetSection<LoggingConfigurationSection>("logging", "catel");
 
             Assert.IsNotNull(configurationSection.LogListenerConfigurationCollection);
-            Assert.AreNotEqual(0, configurationSection.LogListenerConfigurationCollection.Count);
+            Assert.That(configurationSection.LogListenerConfigurationCollection.Count, Is.Not.EqualTo(0));
         }
 
         [TestCase]
@@ -28,15 +28,15 @@
 
             var logListeners = configurationSection.GetLogListeners();
 
-            Assert.AreEqual(logListeners.Count(), 1);
+            Assert.That(logListeners.Count(), Is.EqualTo(1));
 
             var fileLogListener = (FileLogListener)logListeners.First();
 
-            Assert.IsTrue(fileLogListener.IgnoreCatelLogging);
-            Assert.IsFalse(fileLogListener.IsDebugEnabled);
-            Assert.IsTrue(fileLogListener.IsInfoEnabled);
-            Assert.IsTrue(fileLogListener.IsWarningEnabled);
-            Assert.IsTrue(fileLogListener.IsErrorEnabled);
+            Assert.That(fileLogListener.IgnoreCatelLogging, Is.True);
+            Assert.That(fileLogListener.IsDebugEnabled, Is.False);
+            Assert.That(fileLogListener.IsInfoEnabled, Is.True);
+            Assert.That(fileLogListener.IsWarningEnabled, Is.True);
+            Assert.That(fileLogListener.IsErrorEnabled, Is.True);
 
             var assembly = typeof(FileLogListener).Assembly;
             var appDataDirectory = Catel.IO.Path.GetApplicationDataDirectory(assembly.Company(), assembly.Product());

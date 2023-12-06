@@ -29,7 +29,7 @@
 
                     var finalInputGesture = xmlSerializer.Deserialize(typeof(InputGesture), memoryStream, null);
 
-                    Assert.AreEqual(inputGesture, finalInputGesture);
+                    Assert.That(finalInputGesture, Is.EqualTo(inputGesture));
                 }
             }
         }
@@ -42,7 +42,7 @@
             {
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.None);
 
-                Assert.AreEqual("A", inputGesture.ToString());
+                Assert.That(inputGesture.ToString(), Is.EqualTo("A"));
             }
 
             [TestCase]
@@ -50,7 +50,7 @@
             {
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.Control);
 
-                Assert.AreEqual("Control + A", inputGesture.ToString());
+                Assert.That(inputGesture.ToString(), Is.EqualTo("Control + A"));
             }
 
             [TestCase]
@@ -58,7 +58,7 @@
             {
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
 
-                Assert.AreEqual("Control + Shift + A", inputGesture.ToString());
+                Assert.That(inputGesture.ToString(), Is.EqualTo("Control + Shift + A"));
             }
 
             [TestCase]
@@ -70,7 +70,7 @@
 
                 inputGesture.Key = Key.B;
 
-                Assert.AreEqual("Control + Shift + B", inputGesture.ToString());
+                Assert.That(inputGesture.ToString(), Is.EqualTo("Control + Shift + B"));
             }
 
             [TestCase]
@@ -81,7 +81,7 @@
                 inputGesture.ToString();
 
                 inputGesture.Modifiers |= ModifierKeys.Alt;
-                Assert.AreEqual("Alt + Control + Shift + A", inputGesture.ToString());
+                Assert.That(inputGesture.ToString(), Is.EqualTo("Alt + Control + Shift + A"));
             }
 
             [TestCase]

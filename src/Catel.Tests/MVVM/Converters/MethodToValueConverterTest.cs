@@ -15,8 +15,8 @@
         {
             var converter = new MethodToValueConverter();
 
-            Assert.AreEqual("1234", converter.Convert(1234, typeof(string), "ToString", (CultureInfo)null));
-            Assert.AreEqual("ABCD", converter.Convert(" ABCD ", typeof(string), "Trim", (CultureInfo)null));
+            Assert.That(converter.Convert(1234, typeof(string), "ToString", (CultureInfo)null), Is.EqualTo("1234"));
+            Assert.That(converter.Convert(" ABCD ", typeof(string), "Trim", (CultureInfo)null), Is.EqualTo("ABCD"));
         }
 
         [TestCase]
@@ -24,7 +24,7 @@
         {
             var converter = new MethodToValueConverter();
 
-            Assert.IsNull(converter.Convert(null, typeof(string), "ToString", (CultureInfo)null));
+            Assert.That(converter.Convert(null, typeof(string), "ToString", (CultureInfo)null), Is.Null);
         }
 
         [TestCase]
@@ -32,7 +32,7 @@
         {
             var converter = new MethodToValueConverter();
 
-            Assert.AreEqual("Pineapple", converter.Convert("Pineapple", typeof(string), "InvalidMethodName", (CultureInfo)null));
+            Assert.That(converter.Convert("Pineapple", typeof(string), "InvalidMethodName", (CultureInfo)null), Is.EqualTo("Pineapple"));
         }
 
         [TestCase]

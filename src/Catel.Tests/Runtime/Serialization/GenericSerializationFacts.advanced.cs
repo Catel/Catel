@@ -76,16 +76,16 @@
                 {
                     var clonedModel = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer, config);
 
-                    Assert.AreEqual(null, clonedModel._excludedField, description);
-                    Assert.AreEqual("included", clonedModel._includedField, description);
+                    Assert.That(clonedModel._excludedField, Is.EqualTo(null), description);
+                    Assert.That(clonedModel._includedField, Is.EqualTo("included"), description);
 
-                    Assert.AreEqual(null, clonedModel.ExcludedRegularProperty, description);
-                    Assert.AreEqual("included", clonedModel.IncludedRegularProperty, description);
+                    Assert.That(clonedModel.ExcludedRegularProperty, Is.EqualTo(null), description);
+                    Assert.That(clonedModel.IncludedRegularProperty, Is.EqualTo("included"), description);
 
-                    Assert.AreEqual(string.Empty, clonedModel.ExcludedCatelProperty, description);
-                    Assert.AreEqual("included", clonedModel.IncludedCatelProperty, description);
+                    Assert.That(clonedModel.ExcludedCatelProperty, Is.EqualTo(string.Empty), description);
+                    Assert.That(clonedModel.IncludedCatelProperty, Is.EqualTo("included"), description);
 
-                    Assert.AreEqual(string.Empty, ((IModelEditor)clonedModel).GetValue<object>(TestModel.ExcludedProtectedCatelPropertyProperty.Name), description);
+                    Assert.That(((IModelEditor)clonedModel).GetValue<object>(TestModel.ExcludedProtectedCatelPropertyProperty.Name), Is.EqualTo(string.Empty), description);
                 });
             }
 
@@ -99,7 +99,7 @@
                 {
                     var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, config);
 
-                    Assert.AreEqual(Colors.Red, clonedModel.Color, description);
+                    Assert.That(clonedModel.Color, Is.EqualTo(Colors.Red), description);
                 });
             }
 
@@ -113,7 +113,7 @@
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(collection, serializer, config);
 
-                    Assert.AreEqual(collection, clonedGraph, description);
+                    Assert.That(clonedGraph, Is.EqualTo(collection), description);
                 }, false);
             }
 
@@ -131,7 +131,7 @@
 
                 editableObject.CancelEdit();
 
-                Assert.IsNull(testModel.IncludedCatelProperty);
+                Assert.That(testModel.IncludedCatelProperty, Is.Null);
             }
 
             [TestCase]
@@ -144,7 +144,7 @@
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer, config);
 
                     Assert.IsNotNull(clonedGraph, description);
-                    Assert.IsTrue(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel), description);
+                    Assert.That(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel), Is.True, description);
                 }, false);
             }
 
@@ -180,7 +180,7 @@
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer, config);
 
                     Assert.IsNotNull(clonedGraph, description);
-                    Assert.IsTrue(ReferenceEquals(clonedGraph.Children[0].Children[0], clonedGraph.Children[1].Children[0]), description);
+                    Assert.That(ReferenceEquals(clonedGraph.Children[0].Children[0], clonedGraph.Children[1].Children[0]), Is.True, description);
                 }, false);
             }
 
@@ -196,10 +196,10 @@
                     Assert.IsNotNull(clonedGraph.Collection1, description);
                     Assert.IsNotNull(clonedGraph.Collection2, description);
 
-                    Assert.AreEqual(5, clonedGraph.Collection1.Count, description);
-                    Assert.AreEqual(5, clonedGraph.Collection2.Count, description);
+                    Assert.That(clonedGraph.Collection1.Count, Is.EqualTo(5), description);
+                    Assert.That(clonedGraph.Collection2.Count, Is.EqualTo(5), description);
 
-                    Assert.IsTrue(ReferenceEquals(clonedGraph.Collection1, clonedGraph.Collection2), description);
+                    Assert.That(ReferenceEquals(clonedGraph.Collection1, clonedGraph.Collection2), Is.True, description);
                 }, false);
             }
         }

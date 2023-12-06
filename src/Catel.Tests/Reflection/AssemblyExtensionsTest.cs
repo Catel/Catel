@@ -25,7 +25,7 @@
 
             var result = Assembly.Title();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -35,7 +35,7 @@
 
             var result = Assembly.Version();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -45,7 +45,7 @@
 
             var result = Assembly.Version(1);
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -55,7 +55,7 @@
 
             var result = Assembly.Version(8);
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         //[TestCase]
@@ -75,7 +75,7 @@
 
             var result = Assembly.Description();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -85,7 +85,7 @@
 
             var result = Assembly.Product();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -95,7 +95,7 @@
 
             var result = Assembly.Copyright();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -105,7 +105,7 @@
 
             var result = Assembly.Company();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]

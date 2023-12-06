@@ -35,7 +35,7 @@
                 var lastUpdated = DateTime.Now.Ticks + 1;
 
                 // Only full .NET supports reliable stopwatch, all other frameworks always assume outdated
-                Assert.IsFalse(vm.IsValidationSummaryOutdated(lastUpdated, true));
+                Assert.That(vm.IsValidationSummaryOutdated(lastUpdated, true), Is.False);
             }
 
             [TestCase]
@@ -50,7 +50,7 @@
 
                 vm.FirstName = null;
 
-                Assert.IsTrue(vm.IsValidationSummaryOutdated(lastUpdated, true));
+                Assert.That(vm.IsValidationSummaryOutdated(lastUpdated, true), Is.True);
             }
         }
     }

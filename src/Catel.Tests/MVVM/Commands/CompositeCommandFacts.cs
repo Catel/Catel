@@ -17,7 +17,7 @@
                 var compositeCommand = new CompositeCommand();
                 compositeCommand.AtLeastOneMustBeExecutable = atLeastOneMustBeExecutable;
 
-                Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
+                Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
             }
 
             [TestCase(false, true)]
@@ -31,7 +31,7 @@
 
                 compositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand = checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand;
 
-                Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
+                Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
             }
         }
 
@@ -56,7 +56,7 @@
 
                 compositeCommand.Execute();
 
-                Assert.IsTrue(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.True);
             }
         }
 
@@ -84,8 +84,8 @@
 
                 compositeCommand.Execute();
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
-                Assert.IsTrue(vm.IsTestCommand2Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
+                Assert.That(vm.IsTestCommand2Executed, Is.True);
             }
         }
 
@@ -111,7 +111,7 @@
                 compositeCommand.RegisterAction(action);
                 compositeCommand.Execute();
 
-                Assert.IsTrue(executed);
+                Assert.That(executed, Is.True);
             }
         }
 
@@ -139,7 +139,7 @@
 
                 compositeCommand.Execute();
 
-                Assert.IsFalse(executed);
+                Assert.That(executed, Is.False);
             }
         }
 
@@ -158,7 +158,7 @@
 
                 compositeCommand.Execute(null);
 
-                Assert.IsTrue(invoked);
+                Assert.That(invoked, Is.True);
             }
 
             [TestCase]
@@ -174,7 +174,7 @@
 
                 compositeCommand.Execute(null);
 
-                Assert.IsFalse(invoked);
+                Assert.That(invoked, Is.False);
             }
 
             [TestCase]
@@ -187,7 +187,7 @@
 
                 compositeCommand.Execute(null);
 
-                Assert.IsFalse(_registeredActionsCanBeUnregistered_TestValue);
+                Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
             }
 
             private bool _registeredActionsCanBeUnregistered_TestValue = false;
@@ -209,13 +209,13 @@
 
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
 
                 await vm.CloseViewModelAsync(false);
 
                 compositeCommand.Execute();
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
             }
         }
     }

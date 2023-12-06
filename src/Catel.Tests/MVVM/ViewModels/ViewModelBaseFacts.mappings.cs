@@ -30,13 +30,13 @@
 
             Assert.IsNotNull(viewModel.Person);
             Assert.IsNotNull(viewModel.ContactInfo);
-            Assert.AreEqual("john@doe.com", viewModel.Email);
+            Assert.That(viewModel.Email, Is.EqualTo("john@doe.com"));
 
             viewModel.Person = secondPerson;
 
             Assert.IsNotNull(viewModel.Person);
             Assert.IsNotNull(viewModel.ContactInfo);
-            Assert.AreEqual("Another email", viewModel.Email);
+            Assert.That(viewModel.Email, Is.EqualTo("Another email"));
         }
 
         [TestCase]
@@ -52,7 +52,7 @@
             var viewModel = new TestViewModelWithImplicitModelMappings(person);
 
             Assert.IsNotNull(viewModel.Person);
-            Assert.AreEqual("John", viewModel.FirstName);
+            Assert.That(viewModel.FirstName, Is.EqualTo("John"));
         }
 
         [TestCase]
@@ -79,31 +79,31 @@
             var person = new Person();
             var viewModel = new TestViewModel(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(string.Empty, viewModel.FirstName);
-            Assert.AreEqual(string.Empty, person.LastName);
-            Assert.AreEqual(string.Empty, viewModel.LastName);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(person.LastName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.LastName, Is.EqualTo(string.Empty));
 
-            Assert.AreEqual(0, person.Age);
-            Assert.AreEqual(0, viewModel.Age);
+            Assert.That(person.Age, Is.EqualTo(0));
+            Assert.That(viewModel.Age, Is.EqualTo(0));
 
             // Model to view model mapping
             person.FirstName = FirstName;
-            Assert.AreEqual(FirstName, person.FirstName);
-            Assert.AreEqual(FirstName, viewModel.FirstName);
+            Assert.That(person.FirstName, Is.EqualTo(FirstName));
+            Assert.That(viewModel.FirstName, Is.EqualTo(FirstName));
 
             // View model to model mapping
             viewModel.LastName = LastName;
-            Assert.AreEqual(LastName, person.LastName);
-            Assert.AreEqual(LastName, viewModel.LastName);
+            Assert.That(person.LastName, Is.EqualTo(LastName));
+            Assert.That(viewModel.LastName, Is.EqualTo(LastName));
 
             person.Age = Age1;
-            Assert.AreEqual(Age1, person.Age);
-            Assert.AreEqual(Age1, viewModel.Age);
+            Assert.That(person.Age, Is.EqualTo(Age1));
+            Assert.That(viewModel.Age, Is.EqualTo(Age1));
 
             viewModel.Age = Age2;
-            Assert.AreEqual(Age2, person.Age);
-            Assert.AreEqual(Age2, viewModel.Age);
+            Assert.That(person.Age, Is.EqualTo(Age2));
+            Assert.That(viewModel.Age, Is.EqualTo(Age2));
         }
 
         [TestCase]
@@ -117,36 +117,36 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappingConverters(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(string.Empty, viewModel.FirstName);
-            Assert.AreEqual(string.Empty, person.LastName);
-            Assert.AreEqual(string.Empty, viewModel.LastName);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(person.LastName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.LastName, Is.EqualTo(string.Empty));
 
-            Assert.AreEqual(string.Empty, viewModel.FullName);
+            Assert.That(viewModel.FullName, Is.EqualTo(string.Empty));
 
-            Assert.AreEqual(0, person.Age);
-            Assert.AreEqual("0", viewModel.Age);
+            Assert.That(person.Age, Is.EqualTo(0));
+            Assert.That(viewModel.Age, Is.EqualTo("0"));
 
             // Model to view model mapping
             person.FirstName = FirstName;
-            Assert.AreEqual(FirstName, person.FirstName);
-            Assert.AreEqual(FirstName, viewModel.FirstName);
-            Assert.AreEqual(FirstName, viewModel.FullName);
+            Assert.That(person.FirstName, Is.EqualTo(FirstName));
+            Assert.That(viewModel.FirstName, Is.EqualTo(FirstName));
+            Assert.That(viewModel.FullName, Is.EqualTo(FirstName));
 
             // View model to model mapping
             viewModel.LastName = LastName;
-            Assert.AreEqual(LastName, person.LastName);
-            Assert.AreEqual(LastName, viewModel.LastName);
-            Assert.AreEqual(FirstName + " " + LastName, viewModel.FullName);
-            Assert.AreEqual(FirstName + ";" + LastName, viewModel.FullNameWithCustomSeparator);
+            Assert.That(person.LastName, Is.EqualTo(LastName));
+            Assert.That(viewModel.LastName, Is.EqualTo(LastName));
+            Assert.That(viewModel.FullName, Is.EqualTo(FirstName + " " + LastName));
+            Assert.That(viewModel.FullNameWithCustomSeparator, Is.EqualTo(FirstName + ";" + LastName));
 
             person.Age = Age1;
-            Assert.AreEqual(Age1, person.Age);
-            Assert.AreEqual(Age1.ToString(), viewModel.Age);
+            Assert.That(person.Age, Is.EqualTo(Age1));
+            Assert.That(viewModel.Age, Is.EqualTo(Age1.ToString()));
 
             viewModel.Age = Age2.ToString();
-            Assert.AreEqual(Age2, person.Age);
-            Assert.AreEqual(Age2.ToString(), viewModel.Age);
+            Assert.That(person.Age, Is.EqualTo(Age2));
+            Assert.That(viewModel.Age, Is.EqualTo(Age2.ToString()));
         }
 
         [TestCase]
@@ -160,13 +160,13 @@
 
             person.FirstName = "first name";
 
-            Assert.AreEqual(string.Empty, personAsError[Person.FirstNameProperty.Name]);
-            Assert.AreEqual(string.Empty, viewModelAsError[TestViewModel.FirstNameProperty.Name]);
+            Assert.That(personAsError[Person.FirstNameProperty.Name], Is.EqualTo(string.Empty));
+            Assert.That(viewModelAsError[TestViewModel.FirstNameProperty.Name], Is.EqualTo(string.Empty));
 
             person.FirstName = string.Empty;
 
-            Assert.AreNotEqual(string.Empty, personAsError[Person.FirstNameProperty.Name]);
-            Assert.AreNotEqual(string.Empty, viewModelAsError[TestViewModel.FirstNameProperty.Name]);
+            Assert.That(personAsError[Person.FirstNameProperty.Name], Is.Not.EqualTo(string.Empty));
+            Assert.That(viewModelAsError[TestViewModel.FirstNameProperty.Name], Is.Not.EqualTo(string.Empty));
         }
 
         [TestCase]
@@ -183,17 +183,17 @@
 
             var validation = (IValidatableModel)viewModel;
 
-            Assert.IsFalse(validation.HasErrors);
-            Assert.IsTrue(validation.HasWarnings);
-            Assert.AreNotEqual(string.Empty, personAsWarning[Person.MiddleNameProperty.Name]);
-            Assert.AreNotEqual(string.Empty, viewModelAsWarning[TestViewModel.MiddleNameProperty.Name]);
+            Assert.That(validation.HasErrors, Is.False);
+            Assert.That(validation.HasWarnings, Is.True);
+            Assert.That(personAsWarning[Person.MiddleNameProperty.Name], Is.Not.EqualTo(string.Empty));
+            Assert.That(viewModelAsWarning[TestViewModel.MiddleNameProperty.Name], Is.Not.EqualTo(string.Empty));
 
             person.MiddleName = "middle name";
 
-            Assert.IsFalse(validation.HasErrors);
-            Assert.IsFalse(validation.HasWarnings);
-            Assert.AreEqual(string.Empty, personAsWarning[Person.MiddleNameProperty.Name]);
-            Assert.AreEqual(string.Empty, viewModelAsWarning[TestViewModel.MiddleNameProperty.Name]);
+            Assert.That(validation.HasErrors, Is.False);
+            Assert.That(validation.HasWarnings, Is.False);
+            Assert.That(personAsWarning[Person.MiddleNameProperty.Name], Is.EqualTo(string.Empty));
+            Assert.That(viewModelAsWarning[TestViewModel.MiddleNameProperty.Name], Is.EqualTo(string.Empty));
         }
 
         [TestCase]
@@ -208,13 +208,13 @@
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            Assert.AreEqual(string.Empty, personAsError.Error);
-            Assert.AreEqual(string.Empty, viewModelAsError.Error);
+            Assert.That(personAsError.Error, Is.EqualTo(string.Empty));
+            Assert.That(viewModelAsError.Error, Is.EqualTo(string.Empty));
 
             person.FirstName = string.Empty;
 
-            Assert.AreNotEqual(string.Empty, personAsError.Error);
-            Assert.AreNotEqual(string.Empty, viewModelAsError.Error);
+            Assert.That(personAsError.Error, Is.Not.EqualTo(string.Empty));
+            Assert.That(viewModelAsError.Error, Is.Not.EqualTo(string.Empty));
         }
 
         [TestCase]
@@ -229,13 +229,13 @@
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            Assert.AreNotEqual(string.Empty, personAsWarning.Warning);
-            Assert.AreNotEqual(string.Empty, viewModelAsWarning.Warning);
+            Assert.That(personAsWarning.Warning, Is.Not.EqualTo(string.Empty));
+            Assert.That(viewModelAsWarning.Warning, Is.Not.EqualTo(string.Empty));
 
             person.MiddleName = "middle name";
 
-            Assert.AreEqual(string.Empty, personAsWarning.Warning);
-            Assert.AreEqual(string.Empty, viewModelAsWarning.Warning);
+            Assert.That(personAsWarning.Warning, Is.EqualTo(string.Empty));
+            Assert.That(viewModelAsWarning.Warning, Is.EqualTo(string.Empty));
         }
 
         [TestCase]
@@ -246,7 +246,7 @@
 
             ((IValidatableModel)person).Validate(true);
 
-            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
+            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
         }
 
         [TestCase]
@@ -255,13 +255,13 @@
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, false);
 
-            Assert.AreEqual(0, person.GetValidationContext().GetValidationCount());
-            Assert.AreEqual(0, viewModel.GetValidationContext().GetValidationCount());
+            Assert.That(person.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
+            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
 
             viewModel.FirstName = null;
 
-            Assert.AreNotEqual(0, person.GetValidationContext().GetValidationCount());
-            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
+            Assert.That(person.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
+            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
         }
 
         [TestCase]
@@ -270,13 +270,13 @@
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, false);
 
-            Assert.AreEqual(0, person.GetValidationContext().GetValidationCount());
-            Assert.AreEqual(0, viewModel.GetValidationContext().GetValidationCount());
+            Assert.That(person.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
+            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
 
             person.FirstName = null;
 
-            Assert.AreNotEqual(0, person.GetValidationContext().GetValidationCount());
-            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
+            Assert.That(person.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
+            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
         }
 
         [TestCase]
@@ -285,14 +285,14 @@
             var person = new Person();
             var viewModel = new TestViewModel(person, true);
 
-            Assert.AreNotEqual("test1", person.FirstName);
+            Assert.That(person.FirstName, Is.Not.EqualTo("test1"));
             viewModel.FirstName = "test1";
-            Assert.AreEqual("test1", person.FirstName);
+            Assert.That(person.FirstName, Is.EqualTo("test1"));
 
             await viewModel.CloseViewModelAsync(true);
             viewModel.FirstName = "test2";
 
-            Assert.AreEqual("test1", person.FirstName);
+            Assert.That(person.FirstName, Is.EqualTo("test1"));
         }
 
         [TestCase]
@@ -301,14 +301,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
 
             person.FirstName = "geert";
 
             // Both must have changed
-            Assert.AreEqual("geert", person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
+            Assert.That(person.FirstName, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -317,14 +317,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
 
             viewModel.FirstNameAsTwoWay = "geert";
 
             // Both must have changed
-            Assert.AreEqual("geert", viewModel.FirstNameAsTwoWay);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
+            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -333,14 +333,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWay);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
 
             person.FirstName = "geert";
 
             // Both must have changed
-            Assert.AreEqual("geert", person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWay);
+            Assert.That(person.FirstName, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -349,14 +349,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWay);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
 
             viewModel.FirstNameAsOneWay = "geert";
 
             // Only view model must have changed
-            Assert.AreEqual("geert", viewModel.FirstNameAsOneWay);
-            Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsOneWay);
+            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsOneWay, Is.Not.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -365,14 +365,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
 
             person.FirstName = "geert";
 
             // Only model must have changed
-            Assert.AreEqual("geert", person.FirstName);
-            Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
+            Assert.That(person.FirstName, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.Not.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -381,14 +381,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
 
             viewModel.FirstNameAsOneWayToSource = "geert";
 
             // Both must have changed
-            Assert.AreEqual("geert", viewModel.FirstNameAsOneWayToSource);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
+            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -397,14 +397,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
 
             person.FirstName = "geert";
 
             // When initiated from model => VM should change
-            Assert.AreEqual("geert", person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.That(person.FirstName, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -413,14 +413,14 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
 
             viewModel.FirstNameAsExplicit = "geert";
 
             // When initiated from VM => nothing should change
-            Assert.AreEqual("geert", viewModel.FirstNameAsExplicit);
-            Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsExplicit, Is.Not.EqualTo(person.FirstName));
         }
 
         [TestCase]
@@ -429,15 +429,15 @@
             var person = new Person();
             var viewModel = new TestViewModelWithMappings(person);
 
-            Assert.AreEqual(string.Empty, person.FirstName);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
 
             viewModel.FirstNameAsExplicit = "geert";
             viewModel.UpdateExplicitMappings();
 
             // Both must have changed
-            Assert.AreEqual("geert", viewModel.FirstNameAsExplicit);
-            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo("geert"));
+            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
         }
     }
 }

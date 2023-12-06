@@ -47,7 +47,7 @@
                 var model = new TestModel();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                Assert.IsTrue(wrapper.SupportsNotifyPropertyChanged);
+                Assert.That(wrapper.SupportsNotifyPropertyChanged, Is.True);
             }
 
             [TestCase]
@@ -56,7 +56,7 @@
                 var model = new object();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                Assert.IsFalse(wrapper.SupportsNotifyPropertyChanged);
+                Assert.That(wrapper.SupportsNotifyPropertyChanged, Is.False);
             }
         }
 
@@ -69,7 +69,7 @@
                 var collection = new ObservableCollection<int>();
                 var wrapper = new ChangeNotificationWrapper(collection);
 
-                Assert.IsTrue(wrapper.SupportsNotifyCollectionChanged);
+                Assert.That(wrapper.SupportsNotifyCollectionChanged, Is.True);
             }
 
             [TestCase]
@@ -78,7 +78,7 @@
                 var collection = new List<int>();
                 var wrapper = new ChangeNotificationWrapper(collection);
 
-                Assert.IsFalse(wrapper.SupportsNotifyCollectionChanged);
+                Assert.That(wrapper.SupportsNotifyCollectionChanged, Is.False);
             }
         }
 
@@ -88,19 +88,19 @@
             [TestCase]
             public void ReturnsFalseForNullObject()
             {
-                Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(null));
+                Assert.That(ChangeNotificationWrapper.IsUsefulForObject(null), Is.False);
             }
 
             [TestCase]
             public void ReturnsFalseForObjectNotImplementingINotifyPropertyChanged()
             {
-                Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(15));
+                Assert.That(ChangeNotificationWrapper.IsUsefulForObject(15), Is.False);
             }
 
             [TestCase]
             public void ReturnsTrueForObjectImplementingINotifyPropertyChanged()
             {
-                Assert.IsTrue(ChangeNotificationWrapper.IsUsefulForObject(new TestModel()));
+                Assert.That(ChangeNotificationWrapper.IsUsefulForObject(new TestModel()), Is.True);
             }
         }
 
@@ -121,7 +121,7 @@
 
                 testModel.FirstName = "Geert";
 
-                Assert.IsFalse(eventRaised);
+                Assert.That(eventRaised, Is.False);
             }
 
             [TestCase]
@@ -137,7 +137,7 @@
 
                 collection.Add(new TestModel());
 
-                Assert.IsFalse(eventRaised);
+                Assert.That(eventRaised, Is.False);
             }
 
             [TestCase]
@@ -155,7 +155,7 @@
 
                 testModel.FirstName = "Geert";
 
-                Assert.IsFalse(eventRaised);
+                Assert.That(eventRaised, Is.False);
             }
         }
 
@@ -174,7 +174,7 @@
 
                 model.FirstName = "Geert";
 
-                Assert.IsTrue(propertyChanged);
+                Assert.That(propertyChanged, Is.True);
             }
         }
 
@@ -205,11 +205,11 @@
 
                 var model = new TestModel();
                 collection.Add(model);
-                Assert.IsTrue(itemsAdded, "Item should have been added");
-                Assert.IsFalse(itemsRemoved, "Item should not (yet) have been removed");
+                Assert.That(itemsAdded, Is.True, "Item should have been added");
+                Assert.That(itemsRemoved, Is.False, "Item should not (yet) have been removed");
 
-                Assert.IsTrue(collection.Remove(model), "Item should have been removed from collection");
-                Assert.IsTrue(itemsRemoved, "Item should have been removed");
+                Assert.That(collection.Remove(model), Is.True, "Item should have been removed from collection");
+                Assert.That(itemsRemoved, Is.True, "Item should have been removed");
             }
 
             [TestCase]
@@ -252,9 +252,9 @@
                     collection.ReplaceRange(new[] { new TestModel() });
                 }
 
-                Assert.IsTrue(itemsAdded, "Items should be added");
-                Assert.IsTrue(itemsRemoved, "Items should be removed");
-                Assert.IsFalse(itemsReset, "Items should not be reset");
+                Assert.That(itemsAdded, Is.True, "Items should be added");
+                Assert.That(itemsRemoved, Is.True, "Items should be removed");
+                Assert.That(itemsReset, Is.False, "Items should not be reset");
             }
 
             [TestCase]
@@ -272,7 +272,7 @@
 
                 model.FirstName = "Geert";
 
-                Assert.IsTrue(collectionItemPropertyChanged);
+                Assert.That(collectionItemPropertyChanged, Is.True);
             }
 
             [TestCase]
@@ -299,7 +299,7 @@
 
                 model.FirstName = "Geert";
 
-                Assert.IsFalse(collectionItemPropertyChanged);
+                Assert.That(collectionItemPropertyChanged, Is.False);
             }
 
             [TestCase]
@@ -331,7 +331,7 @@
 
                 newModel.FirstName = "Geert";
 
-                Assert.IsTrue(collectionItemPropertyChanged, "Collection item property should have changed");
+                Assert.That(collectionItemPropertyChanged, Is.True, "Collection item property should have changed");
             }
 
             [TestCase]
@@ -364,7 +364,7 @@
 
                 model.FirstName = "Geert";
 
-                Assert.IsFalse(collectionItemPropertyChanged);
+                Assert.That(collectionItemPropertyChanged, Is.False);
             }
         }
 
@@ -377,13 +377,13 @@
                 var model = new TestModel();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                Assert.IsTrue(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.True);
 
                 model = null;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.IsFalse(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.False);
             }
 
             [TestCase]
@@ -393,13 +393,13 @@
                 var collectionModel = new ObservableCollection<TestModel>(new[] { model });
                 var wrapper = new ChangeNotificationWrapper(collectionModel);
 
-                Assert.IsTrue(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.True);
 
                 collectionModel = null;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.IsFalse(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.False);
             }
         }
     }

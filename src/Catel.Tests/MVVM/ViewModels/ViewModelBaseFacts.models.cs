@@ -19,8 +19,8 @@
 
             var models = viewModel.GetAllModelsForTest();
 
-            Assert.AreEqual(1, models.Length);
-            Assert.AreEqual(person, models[0]);
+            Assert.That(models.Length, Is.EqualTo(1));
+            Assert.That(models[0], Is.EqualTo(person));
         }
 
         [TestCase]
@@ -37,9 +37,9 @@
 
             var models = viewModel.GetAllModelsForTest();
 
-            Assert.AreEqual(2, models.Length);
-            Assert.AreEqual(person, models[0]);
-            Assert.AreEqual(specialValidationModel, models[1]);
+            Assert.That(models.Length, Is.EqualTo(2));
+            Assert.That(models[0], Is.EqualTo(person));
+            Assert.That(models[1], Is.EqualTo(specialValidationModel));
         }
 
         [TestCase]
@@ -51,14 +51,14 @@
 
             var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(model.IsInEditSession);
+            Assert.That(model.IsInEditSession, Is.True);
 
             viewModel.FirstName = "new";
 
             await viewModel.SaveAndCloseViewModelAsync();
 
-            Assert.IsFalse(model.IsInEditSession);
-            Assert.AreEqual("new", person.FirstName);
+            Assert.That(model.IsInEditSession, Is.False);
+            Assert.That(person.FirstName, Is.EqualTo("new"));
         }
 
         [TestCase]
@@ -70,14 +70,14 @@
 
             var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(model.IsInEditSession);
+            Assert.That(model.IsInEditSession, Is.True);
 
             viewModel.FirstName = "new first name";
 
             await viewModel.CancelAndCloseViewModelAsync();
 
-            Assert.IsFalse(model.IsInEditSession);
-            Assert.AreEqual("first name", person.FirstName);
+            Assert.That(model.IsInEditSession, Is.False);
+            Assert.That(person.FirstName, Is.EqualTo("first name"));
         }
 
         [TestCase]
@@ -89,7 +89,7 @@
 
             var viewModel = new TestViewModel(person);
 
-            Assert.IsTrue(viewModel.IsModelRegisteredForTest("Person"));
+            Assert.That(viewModel.IsModelRegisteredForTest("Person"), Is.True);
         }
 
         [TestCase]
@@ -101,7 +101,7 @@
 
             var viewModel = new TestViewModel(person);
 
-            Assert.IsFalse(viewModel.IsModelRegisteredForTest("SecondPerson"));
+            Assert.That(viewModel.IsModelRegisteredForTest("SecondPerson"), Is.False);
         }
 
     }

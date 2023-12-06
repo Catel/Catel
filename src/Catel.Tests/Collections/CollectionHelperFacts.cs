@@ -16,7 +16,7 @@
                 var collectionA = new Collection<int> { 1 };
                 var collectionB = new Collection<int> { 1, 2 };
 
-                Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
+                Assert.That(CollectionHelper.IsEqualTo(collectionA, collectionB), Is.False);
             }
 
             [TestCase]
@@ -25,7 +25,7 @@
                 var collectionA = new Collection<int> { 1, 2, 4 };
                 var collectionB = new Collection<int> { 1, 2, 3 };
 
-                Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
+                Assert.That(CollectionHelper.IsEqualTo(collectionA, collectionB), Is.False);
             }
 
             [TestCase]
@@ -34,7 +34,7 @@
                 var collectionA = new Collection<int> { 1 };
                 var collectionB = new Collection<int> { 1 };
 
-                Assert.IsTrue(CollectionHelper.IsEqualTo(collectionA, collectionB));
+                Assert.That(CollectionHelper.IsEqualTo(collectionA, collectionB), Is.True);
             }
 
             [TestCase]
@@ -45,7 +45,7 @@
                 var collection1 = new Collection<object>(new object[] { obj });
                 var collection2 = new Collection<object>(new object[] { obj });
 
-                Assert.IsTrue(CollectionHelper.IsEqualTo(collection1, collection2));
+                Assert.That(CollectionHelper.IsEqualTo(collection1, collection2), Is.True);
             }
 
             [TestCase]
@@ -53,7 +53,7 @@
             {
                 var collection = new Collection<int> { 1 };
 
-                Assert.IsTrue(CollectionHelper.IsEqualTo(collection, collection));
+                Assert.That(CollectionHelper.IsEqualTo(collection, collection), Is.True);
             }
 
             [TestCase]
@@ -62,7 +62,7 @@
                 Collection<int> collectionA = null;
                 var collectionB = new Collection<int> { 1 };
 
-                Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
+                Assert.That(CollectionHelper.IsEqualTo(collectionA, collectionB), Is.False);
             }
 
             [TestCase]
@@ -71,7 +71,7 @@
                 var collectionA = new Collection<int> { 1 };
                 Collection<int> collectionB = null;
 
-                Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
+                Assert.That(CollectionHelper.IsEqualTo(collectionA, collectionB), Is.False);
             }
         }
     }

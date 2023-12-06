@@ -20,11 +20,11 @@
                 var property = ModelBase.RegisterProperty<string>("RuntimePropertyBeingUnregistered");
                 model.InitializePropertyAfterConstruction(property);
 
-                Assert.IsTrue(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
+                Assert.That(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"), Is.True);
 
                 ModelBase.UnregisterProperty(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered");
 
-                Assert.IsFalse(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
+                Assert.That(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"), Is.False);
             }
         }
 
@@ -37,12 +37,12 @@
                 var model = new PersonTestModel();
                 var weakReference = new WeakReference(model);
 
-                Assert.IsTrue(weakReference.IsAlive);
+                Assert.That(weakReference.IsAlive, Is.True);
 
                 model = null;
                 GC.Collect();
 
-                Assert.IsFalse(weakReference.IsAlive);
+                Assert.That(weakReference.IsAlive, Is.False);
             }
         }
 
@@ -125,10 +125,10 @@
                 var validation = model as IValidatableModel;
 
                 validation.Validate(true);
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), nameof(LatePropertyRegistrationModel.CanSave));
-                Assert.IsTrue(propertyData.IsCalculatedProperty);
+                Assert.That(propertyData.IsCalculatedProperty, Is.True);
             }
 
             [TestCase]
@@ -137,10 +137,10 @@
                 var model = new ComputedPropertiesModel();
 
                 var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(ComputedPropertiesModel), nameof(ComputedPropertiesModel.ComputedProperty));
-                Assert.IsTrue(propertyData.IsCalculatedProperty);
+                Assert.That(propertyData.IsCalculatedProperty, Is.True);
 
                 var propertyValue = ((IModelEditor)model).GetValue<bool>(nameof(ComputedPropertiesModel.ComputedProperty));
-                Assert.IsTrue(propertyValue);
+                Assert.That(propertyValue, Is.True);
             }
         }
 
@@ -194,9 +194,9 @@
                 AddToCollection(collection, a);
                 AddToCollection(collection, b);
 
-                Assert.AreEqual(2, collection.Count);
-                Assert.IsTrue(collection.Contains(a));
-                Assert.IsTrue(collection.Contains(b));
+                Assert.That(collection.Count, Is.EqualTo(2));
+                Assert.That(collection.Contains(a), Is.True);
+                Assert.That(collection.Contains(b), Is.True);
             }
 
             [TestCase]
@@ -209,9 +209,9 @@
                 AddToCollection_CompareByReference(collection, a);
                 AddToCollection_CompareByReference(collection, b);
 
-                Assert.AreEqual(2, collection.Count);
-                Assert.IsTrue(collection.Contains(a));
-                Assert.IsTrue(collection.Contains(b));
+                Assert.That(collection.Count, Is.EqualTo(2));
+                Assert.That(collection.Contains(a), Is.True);
+                Assert.That(collection.Contains(b), Is.True);
             }
 
             private static void AddToCollection(ObservableCollection<ITestModel> collection, ITestModel m)

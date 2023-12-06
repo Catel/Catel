@@ -52,7 +52,7 @@
 
                 Assert.Throws<InvalidOperationException>(() => propertyValue = serializationObject.MemberValue);
 
-                Assert.IsNull(propertyValue);
+                Assert.That(propertyValue, Is.Null);
             }
 
             [TestCase]
@@ -61,7 +61,7 @@
                 var serializationObject = SerializationObject.SucceededToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, "property", 42);
                 object propertyValue = serializationObject.MemberValue;
 
-                Assert.AreEqual(42, propertyValue);
+                Assert.That(propertyValue, Is.EqualTo(42));
             }
         }
     }

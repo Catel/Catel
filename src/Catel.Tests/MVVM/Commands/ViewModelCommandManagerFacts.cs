@@ -52,7 +52,7 @@
                 viewModelCommandManager.AddHandler(async (vm, property, command, commandParameter) => called = true);
                 viewModel.GenerateData.Execute();
 
-                Assert.IsTrue(called);
+                Assert.That(called, Is.True);
             }
         }
     }

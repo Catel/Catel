@@ -15,11 +15,11 @@
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
             AuditingManager.Clear();
 
-            Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -36,7 +36,7 @@
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
         }
 
         [TestCase]
@@ -48,7 +48,7 @@
             AuditingManager.RegisterAuditor(auditor);
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
         }
 
         [TestCase]
@@ -65,11 +65,11 @@
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
             AuditingManager.UnregisterAuditor(auditor);
 
-            Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -80,7 +80,7 @@
             var auditor = new TestAuditor();
             AuditingManager.UnregisterAuditor(auditor);
 
-            Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -93,11 +93,11 @@
 
             AuditingManager.RegisterAuditor(auditor1);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
             AuditingManager.UnregisterAuditor(auditor2);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount, "Count should still be 1");
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1), "Count should still be 1");
         }
     }
 }

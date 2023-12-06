@@ -19,7 +19,7 @@
                 var usedTypeFactory = obj.GetTypeFactory();
 #pragma warning restore IDISP001 // Dispose created.
 
-                Assert.IsTrue(ReferenceEquals(defaultTypeFactory, usedTypeFactory));
+                Assert.That(ReferenceEquals(defaultTypeFactory, usedTypeFactory), Is.True);
             }
 
             [TestCase]
@@ -38,7 +38,7 @@
                     var usedTypeFactory = obj.GetTypeFactory();
 #pragma warning restore IDISP001 // Dispose created.
 
-                    Assert.IsTrue(ReferenceEquals(typeFactory, usedTypeFactory));
+                    Assert.That(ReferenceEquals(typeFactory, usedTypeFactory), Is.True);
                 }
             }
         }
@@ -53,7 +53,7 @@
                 var defaultDependencyResolver = ServiceLocator.Default.ResolveRequiredType<IDependencyResolver>();
                 var dependencyResolver = obj.GetDependencyResolver();
 
-                Assert.IsTrue(ReferenceEquals(defaultDependencyResolver, dependencyResolver));
+                Assert.That(ReferenceEquals(defaultDependencyResolver, dependencyResolver), Is.True);
             }
 
             [TestCase]
@@ -71,7 +71,7 @@
 
                     var usedDependencyResolver = obj.GetDependencyResolver();
 
-                    Assert.IsTrue(ReferenceEquals(dependencyResolver, usedDependencyResolver));
+                    Assert.That(ReferenceEquals(dependencyResolver, usedDependencyResolver), Is.True);
                 }
             }
         }

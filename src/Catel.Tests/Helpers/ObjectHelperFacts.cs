@@ -14,8 +14,8 @@
                 object obj1 = 5;
                 object obj2 = 5;
 
-                Assert.IsTrue(ObjectHelper.AreEqual(obj1, obj2));
-                Assert.IsTrue(ObjectHelper.AreEqual(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqual(obj1, obj2), Is.True);
+                Assert.That(ObjectHelper.AreEqual(obj2, obj1), Is.True);
             }
 
             [TestCase]
@@ -24,8 +24,8 @@
                 object obj1 = 5;
                 object obj2 = 6;
 
-                Assert.IsFalse(ObjectHelper.AreEqual(obj1, obj2));
-                Assert.IsFalse(ObjectHelper.AreEqual(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqual(obj1, obj2), Is.False);
+                Assert.That(ObjectHelper.AreEqual(obj2, obj1), Is.False);
             }
 
             [TestCase]
@@ -34,8 +34,8 @@
                 object obj1 = null;
                 object obj2 = null;
 
-                Assert.IsTrue(ObjectHelper.AreEqual(obj1, obj2));
-                Assert.IsTrue(ObjectHelper.AreEqual(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqual(obj1, obj2), Is.True);
+                Assert.That(ObjectHelper.AreEqual(obj2, obj1), Is.True);
             }
 
             [TestCase]
@@ -44,8 +44,8 @@
                 object obj1 = DBNull.Value;
                 object obj2 = DBNull.Value;
 
-                Assert.IsTrue(ObjectHelper.AreEqual(obj1, obj2));
-                Assert.IsTrue(ObjectHelper.AreEqual(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqual(obj1, obj2), Is.True);
+                Assert.That(ObjectHelper.AreEqual(obj2, obj1), Is.True);
             }
 
             [TestCase]
@@ -54,8 +54,8 @@
                 object obj1 = 5;
                 object obj2 = null;
 
-                Assert.IsFalse(ObjectHelper.AreEqual(obj1, obj2));
-                Assert.IsFalse(ObjectHelper.AreEqual(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqual(obj1, obj2), Is.False);
+                Assert.That(ObjectHelper.AreEqual(obj2, obj1), Is.False);
             }
         }
 
@@ -68,8 +68,8 @@
                 object obj1 = 5;
                 object obj2 = 5;
 
-                Assert.IsTrue(ObjectHelper.AreEqualReferences(obj1, obj2));
-                Assert.IsTrue(ObjectHelper.AreEqualReferences(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqualReferences(obj1, obj2), Is.True);
+                Assert.That(ObjectHelper.AreEqualReferences(obj2, obj1), Is.True);
             }
 
             [TestCase]
@@ -78,8 +78,8 @@
                 object obj1 = 5;
                 object obj2 = 6;
 
-                Assert.IsFalse(ObjectHelper.AreEqualReferences(obj1, obj2));
-                Assert.IsFalse(ObjectHelper.AreEqualReferences(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqualReferences(obj1, obj2), Is.False);
+                Assert.That(ObjectHelper.AreEqualReferences(obj2, obj1), Is.False);
             }
 
             [TestCase]
@@ -88,8 +88,8 @@
                 object obj1 = null;
                 object obj2 = null;
 
-                Assert.IsTrue(ObjectHelper.AreEqualReferences(obj1, obj2));
-                Assert.IsTrue(ObjectHelper.AreEqualReferences(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqualReferences(obj1, obj2), Is.True);
+                Assert.That(ObjectHelper.AreEqualReferences(obj2, obj1), Is.True);
             }
 
             [TestCase]
@@ -98,8 +98,8 @@
                 object obj1 = 5;
                 object obj2 = null;
 
-                Assert.IsFalse(ObjectHelper.AreEqualReferences(obj1, obj2));
-                Assert.IsFalse(ObjectHelper.AreEqualReferences(obj2, obj1));
+                Assert.That(ObjectHelper.AreEqualReferences(obj1, obj2), Is.False);
+                Assert.That(ObjectHelper.AreEqualReferences(obj2, obj1), Is.False);
             }
 
             [TestCase]
@@ -108,9 +108,9 @@
                 object obj1 = new { Id = "test" };
                 object obj2 = new { Id = "test" };
 
-                Assert.IsTrue(obj1.Equals(obj2));
-                Assert.IsFalse(ObjectHelper.AreEqualReferences(obj1, obj2));
-                Assert.IsFalse(ObjectHelper.AreEqualReferences(obj2, obj1));
+                Assert.That(obj1, Is.EqualTo(obj2));
+                Assert.That(ObjectHelper.AreEqualReferences(obj1, obj2), Is.False);
+                Assert.That(ObjectHelper.AreEqualReferences(obj2, obj1), Is.False);
             }
         }
     }

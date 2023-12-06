@@ -20,7 +20,7 @@
 
                 list.Add(key, "value");
 
-                Assert.AreEqual(expected, list.ContainsKey(retrievalKey));
+                Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
             }
 
             [TestCase("key", "key", true)]
@@ -33,7 +33,7 @@
 
                 list.Add(key, "value");
 
-                Assert.AreEqual(expected, list.ContainsKey(retrievalKey));
+                Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
             }
         }
 
@@ -54,7 +54,7 @@
                 var keyValuePairs = listDictionary.ToList();
                 for (var i = 0; i < itemsCount; i++)
                 {
-                    Assert.AreEqual(i.ToString(), keyValuePairs[i].Key);
+                    Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
                 }
             }
 
@@ -85,7 +85,7 @@
                 var keyValuePairs = dict.ToList();
                 for (var i = 0; i < itemsToAddCount; i++)
                 {
-                    Assert.AreEqual(i.ToString(), keyValuePairs[i].Key);
+                    Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
                 }
             }
 
@@ -112,7 +112,7 @@
                     listDictionary.Remove(i.ToString());
                 }
 
-                Assert.AreEqual(0, listDictionary.Count);
+                Assert.That(listDictionary.Count, Is.EqualTo(0));
             }
         }
     }

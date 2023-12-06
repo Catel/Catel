@@ -30,7 +30,7 @@
                 delta1 = TimeSpan.FromMilliseconds(delta1.TotalMilliseconds * -1);
             }
 
-            Assert.IsTrue(delta1.TotalMilliseconds < 15);
+            Assert.That(delta1.TotalMilliseconds < 15, Is.True);
 
             await Task.Delay(5000);
 
@@ -43,7 +43,7 @@
                 delta2 = TimeSpan.FromMilliseconds(delta2.TotalMilliseconds * -1);
             }
 
-            Assert.IsTrue(delta2.TotalMilliseconds < 15);
+            Assert.That(delta2.TotalMilliseconds < 15, Is.True);
         }
     }
 }

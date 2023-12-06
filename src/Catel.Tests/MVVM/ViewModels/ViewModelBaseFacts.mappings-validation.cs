@@ -15,7 +15,7 @@
             vm.FirstNameAsTwoWay = "John";
             vm.LastName = "Doe";
 
-            Assert.IsFalse(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.False);
         }
 
         [Test]
@@ -26,17 +26,17 @@
             var model = new Person();
             model.Validate();
 
-            Assert.IsTrue(model.HasErrors);
+            Assert.That(model.HasErrors, Is.True);
 
             var vm = new TestViewModelWithMappings(model);
             vm.DeferValidationUntilFirstSaveCallWrapper = false;
 
-            Assert.IsTrue(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.True);
 
             vm.FirstNameAsTwoWay = "John";
             vm.LastName = "Doe";
 
-            Assert.IsFalse(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.False);
         }
 
         [Test]
@@ -46,7 +46,7 @@
 
             vm.Validate();
 
-            Assert.IsFalse(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.False);
         }
 
         [Test]
@@ -66,7 +66,7 @@
 
             vm.Validate();
 
-            Assert.IsFalse(vm.HasWarnings);
+            Assert.That(vm.HasWarnings, Is.False);
         }
 
         [Test]

@@ -54,7 +54,7 @@
 
             GCHelper.CollectAndFreeMemory();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -63,15 +63,15 @@
             var target = CreateActionTarget();
             var weakAction = new WeakAction(target, target.PublicActionToExecute);
 
-            Assert.IsTrue(weakAction.Execute());
+            Assert.That(weakAction.Execute(), Is.True);
 
-            Assert.AreEqual(1, target.PublicActionExecutedCount);
+            Assert.That(target.PublicActionExecutedCount, Is.EqualTo(1));
 
             target = null;
 
             GCHelper.CollectAndFreeMemory();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -92,15 +92,15 @@
             var target = CreateActionTarget();
             var weakAction = new WeakAction<int>(target, target.PublicActionWithParameterToExecute);
 
-            Assert.IsTrue(weakAction.Execute(1));
+            Assert.That(weakAction.Execute(1), Is.True);
 
-            Assert.AreEqual(1, target.PublicActionWithParameterExecutedCount);
+            Assert.That(target.PublicActionWithParameterExecutedCount, Is.EqualTo(1));
 
             target = null;
 
             GCHelper.CollectAndFreeMemory();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -110,7 +110,7 @@
 
             Assert.Throws<NotSupportedException>(() => new WeakAction<int>(null, i => count = i));
 
-            Assert.AreEqual(0, count);
+            Assert.That(count, Is.EqualTo(0));
         }
 
         // Require separate method to allow GC.Collect to do its magic

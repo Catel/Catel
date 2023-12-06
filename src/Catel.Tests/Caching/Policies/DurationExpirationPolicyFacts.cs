@@ -27,7 +27,7 @@
             [TestCase]
             public void ReturnsFalse()
             {
-                Assert.IsFalse(new DurationExpirationPolicy(new TimeSpan(0)).CanReset);
+                Assert.That(new DurationExpirationPolicy(new TimeSpan(0)).CanReset, Is.False);
             }
 
             #endregion
@@ -53,7 +53,7 @@
             [TestCase]
             public void ReturnsTrueIfTheExpirationDateTimeIsThePass()
             {
-                Assert.IsTrue(new DurationExpirationPolicy(TimeSpan.FromDays(-1)).IsExpired);
+                Assert.That(new DurationExpirationPolicy(TimeSpan.FromDays(-1)).IsExpired, Is.True);
             }
 
             /// <summary>
@@ -62,7 +62,7 @@
             [TestCase]
             public void ReturnsFalseIfTheExpirationDateTimeIsTheFuture()
             {
-                Assert.IsFalse(new DurationExpirationPolicy(TimeSpan.FromDays(1)).IsExpired);
+                Assert.That(new DurationExpirationPolicy(TimeSpan.FromDays(1)).IsExpired, Is.False);
             }
 
             #endregion

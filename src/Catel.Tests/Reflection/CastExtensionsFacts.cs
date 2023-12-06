@@ -29,7 +29,7 @@ namespace Catel.Tests.Reflection
                 yield return new Tester<bool> { ExpectedValue = true };
             }
 
-            [TestCaseSource("TestCases")]
+            [TestCaseSource(nameof(TestCases))]
             public void TestReverse(ITester tester)
             {
                 tester.ExecuteTest();
@@ -52,7 +52,7 @@ namespace Catel.Tests.Reflection
                 {
                     var actualValue = true.CastTo<T>();
 
-                    Assert.AreEqual(actualValue, ExpectedValue);
+                    Assert.That(ExpectedValue, Is.EqualTo(actualValue));
                 }
             }
         }

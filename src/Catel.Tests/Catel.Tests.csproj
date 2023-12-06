@@ -1,4 +1,4 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <AssemblyName>Catel.Tests</AssemblyName>
@@ -40,6 +40,10 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
     <!-- No net7.0 specific packages yet -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
+    <!-- No net8.0 specific packages yet -->
   </ItemGroup>
 
   <ItemGroup>

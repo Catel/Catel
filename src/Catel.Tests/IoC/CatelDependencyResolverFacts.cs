@@ -38,7 +38,7 @@
                 {
                     var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                    Assert.IsFalse(dependencyResolver.CanResolve(typeof(ITestInterface)));
+                    Assert.That(dependencyResolver.CanResolve(typeof(ITestInterface)), Is.False);
                 }
             }
 
@@ -50,7 +50,7 @@
                     serviceLocator.RegisterType<IMessageService, MessageService>();
                     var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                    Assert.IsTrue(dependencyResolver.CanResolve(typeof(IMessageService)));
+                    Assert.That(dependencyResolver.CanResolve(typeof(IMessageService)), Is.True);
                 }
             }
         }
@@ -76,7 +76,7 @@
                 {
                     var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                    Assert.IsTrue(dependencyResolver.CanResolveMultiple(new Type[] { }));
+                    Assert.That(dependencyResolver.CanResolveMultiple(new Type[] { }), Is.True);
                 }
             }
 
@@ -90,7 +90,7 @@
 
                     var typesToResolve = new[] { typeof(ITestInterface), typeof(INavigationService), typeof(ITypeFactory) };
 
-                    Assert.IsFalse(dependencyResolver.CanResolveMultiple(typesToResolve));
+                    Assert.That(dependencyResolver.CanResolveMultiple(typesToResolve), Is.False);
                 }
             }
 
@@ -104,7 +104,7 @@
                     var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
-                    Assert.IsTrue(dependencyResolver.CanResolveMultiple(typesToResolve));
+                    Assert.That(dependencyResolver.CanResolveMultiple(typesToResolve), Is.True);
                 }
             }
         }
@@ -130,7 +130,7 @@
                 {
                     var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                    Assert.IsNull(dependencyResolver.Resolve(typeof(ITestInterface)));
+                    Assert.That(dependencyResolver.Resolve(typeof(ITestInterface)), Is.Null);
                 }
             }
 
@@ -169,7 +169,7 @@
                     var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
                     var resolvedObjects = dependencyResolver.ResolveMultiple(new Type[] { });
-                    Assert.AreEqual(0, resolvedObjects.Length);
+                    Assert.That(resolvedObjects.Length, Is.EqualTo(0));
                 }
             }
 
@@ -185,7 +185,7 @@
                     var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
 
                     Assert.IsNotNull(resolvedTypes[0] as IMessageService);
-                    Assert.IsNull(resolvedTypes[1]);
+                    Assert.That(resolvedTypes[1], Is.Null);
                     Assert.IsNotNull(resolvedTypes[2] as ITypeFactory);
                 }
             }

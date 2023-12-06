@@ -32,7 +32,7 @@
             {
                 var type = typeof(A);
 
-                Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
+                Assert.That(type.ImplementsInterfaceEx<ISomeInterface>(), Is.True);
             }
 
             [TestCase]
@@ -40,7 +40,7 @@
             {
                 var type = typeof(B);
 
-                Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
+                Assert.That(type.ImplementsInterfaceEx<ISomeInterface>(), Is.True);
             }
         }
 
@@ -69,7 +69,7 @@
             [TestCase]
             public void ReturnsFalseForNullInstance()
             {
-                Assert.IsFalse(ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null));
+                Assert.That(ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null), Is.False);
             }
 
             [TestCase]
@@ -78,7 +78,7 @@
                 var type = typeof(InvalidOperationException);
                 var instance = new InvalidOperationException();
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -87,7 +87,7 @@
                 var type = typeof(Exception);
                 var instance = new InvalidOperationException();
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -96,7 +96,7 @@
                 var type = typeof(Exception);
                 var instance = new EventArgs();
 
-                Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.False);
             }
 
             [TestCase]
@@ -105,7 +105,7 @@
                 var type = typeof(int);
                 var instance = 32;
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -114,7 +114,7 @@
                 var type = typeof(Int64);
                 var instance = 32;
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -123,7 +123,7 @@
                 var type = typeof(bool);
                 var instance = 32;
 
-                Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.False);
             }
         }
 
@@ -165,7 +165,7 @@
                 var propertyInfo = typeof(TestViewModel).GetPropertyEx(nameof(TestViewModel.Variable1));
 
                 Assert.IsNotNull(propertyInfo);
-                Assert.AreEqual(typeof(IPerson), propertyInfo.PropertyType);
+                Assert.That(propertyInfo.PropertyType, Is.EqualTo(typeof(IPerson)));
             }
 
             [TestCase]
@@ -173,7 +173,7 @@
             {
                 var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: false);
 
-                Assert.IsNull(propertyInfo);
+                Assert.That(propertyInfo, Is.Null);
             }
 
             [TestCase]
@@ -194,7 +194,7 @@
                 var fieldInfo = typeof(DataWindow).GetFieldEx("_showingAsDialog");
 
                 // Note: see https://github.com/Catel/Catel/issues/1617, this should return null
-                Assert.IsNull(fieldInfo);
+                Assert.That(fieldInfo, Is.Null);
             }
 
             [TestCase]
@@ -240,7 +240,7 @@
             {
                 var fields = typeof(DerivedClass).GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
 
-                Assert.IsTrue(fields.Any(x => x.Name == "field1"));
+                Assert.That(fields.Any(x => x.Name == "field1"), Is.True);
             }
 
             [Test]
@@ -248,7 +248,7 @@
             {
                 var fields = typeof(DerivedClass).GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
 
-                Assert.IsTrue(fields.Any(x => x.Name == "field2"));
+                Assert.That(fields.Any(x => x.Name == "field2"), Is.True);
             }
 
             [Test]
@@ -256,7 +256,7 @@
             {
                 var properties = typeof(DerivedClass).GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
 
-                Assert.IsTrue(properties.Any(x => x.Name == "Property1"));
+                Assert.That(properties.Any(x => x.Name == "Property1"), Is.True);
             }
 
             [Test]
@@ -264,7 +264,7 @@
             {
                 var properties = typeof(DerivedClass).GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
 
-                Assert.IsTrue(properties.Any(x => x.Name == "Property2"));
+                Assert.That(properties.Any(x => x.Name == "Property2"), Is.True);
             }
 
             [Test]
@@ -272,7 +272,7 @@
             {
                 var methods = typeof(DerivedClass).GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
 
-                Assert.IsTrue(methods.Any(x => x.Name == "Method1"));
+                Assert.That(methods.Any(x => x.Name == "Method1"), Is.True);
             }
 
             [Test]
@@ -280,7 +280,7 @@
             {
                 var methods = typeof(DerivedClass).GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
 
-                Assert.IsTrue(methods.Any(x => x.Name == "Method2"));
+                Assert.That(methods.Any(x => x.Name == "Method2"), Is.True);
             }
         }
     }

@@ -16,7 +16,7 @@
             {
                 var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 5));
 
-                Assert.IsTrue(valueInfo.CanExpire);
+                Assert.That(valueInfo.CanExpire, Is.True);
             }
         }
 
@@ -28,7 +28,7 @@
             {
                 var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0));
 
-                Assert.IsFalse(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.False);
             }
 
             [TestCase]
@@ -36,7 +36,7 @@
             {
                 var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 2));
 
-                Assert.IsFalse(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.False);
             }
 
             [TestCase]
@@ -49,7 +49,7 @@
 #pragma warning disable 168
                     var value = valueInfo.Value;
 #pragma warning restore 168
-                    Assert.IsFalse(valueInfo.IsExpired);
+                    Assert.That(valueInfo.IsExpired, Is.False);
                 }
                 while (FastDateTime.Now.Subtract(startTime).TotalSeconds < 3);
             }
@@ -61,7 +61,7 @@
 
                 ThreadHelper.Sleep(500);
 
-                Assert.IsTrue(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.True);
             }
 
             [TestCase]
@@ -71,7 +71,7 @@
 
                 ThreadHelper.Sleep(500);
 
-                Assert.IsTrue(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.True);
             }
         }
 
