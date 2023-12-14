@@ -1,18 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConfigurationService.netfxcore.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || NETSTANDARD
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
     using System.Timers;
     using Catel.Data;
-    using Catel.Runtime.Serialization;
+    using Catel.Logging;
 
     public partial class ConfigurationService
     {
@@ -23,7 +16,7 @@ namespace Catel.Configuration
         /// <returns>The settings container.</returns>
         protected virtual DynamicConfiguration GetSettingsContainer(ConfigurationContainer container)
         {
-            DynamicConfiguration settings = null;
+            DynamicConfiguration? settings = null;
 
             switch (container)
             {
@@ -36,61 +29,31 @@ namespace Catel.Configuration
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException("container");
+                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>("container");
             }
 
             if (settings is null)
             {
-                switch (container)
-                {
-                    case ConfigurationContainer.Local:
-                        var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-                        SetLocalConfigFilePath(defaultLocalConfigFilePath);
-                        break;
-
-                    case ConfigurationContainer.Roaming:
-                        var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-                        SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
-                        break;
-                }
-
-                // Let's try again
-                settings = GetSettingsContainer(container);
-
-                if (settings is not null)
-                {
-                    // As soon as we initialized the config, make sure we do a 1-time write so we have the serializer and all required objects
-                    // to prevent any deadlocks when resolving required services when doing a delayed save of the settings
-                    _xmlSerializer ??= SerializationFactory.GetXmlSerializer();
-
-                    switch (container)
-                    {
-                        case ConfigurationContainer.Local:
-                            SaveLocalConfiguration();
-                            break;
-
-                        case ConfigurationContainer.Roaming:
-                            SaveRoamingConfiguration();
-                            break;
-                    }
-                }
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Configuration is not yet initialized for '{container}' container, make sure to call LoadAsync first");
             }
 
             return settings;
         }
 
-        private void OnLocalSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnLocalSaveConfigurationTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _localSaveConfigurationTimer.Stop();
 
-            SaveLocalConfiguration();
+            // Important: dispatch to prevent deadlocks, see ctor explanation
+            _dispatcherService.BeginInvoke(async ()=> await SaveLocalConfigurationAsync());
         }
 
-        private void OnRoamingSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnRoamingSaveConfigurationTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _roamingSaveConfigurationTimer.Stop();
 
-            SaveRoamingConfiguration();
+            // Important: dispatch to prevent deadlocks, see ctor explanation
+            _dispatcherService.BeginInvoke(async () => await SaveRoamingConfigurationAsync());
         }
 
         protected virtual void ScheduleSaveConfiguration(ConfigurationContainer container)
@@ -107,68 +70,104 @@ namespace Catel.Configuration
             }
         }
 
-        protected void ScheduleLocalConfigurationSave()
+        protected async void ScheduleLocalConfigurationSave()
         {
             _localSaveConfigurationTimer.Stop();
 
-            if (_localSaveConfigurationTimer.Interval > 0)
+            if (_localSaveConfigurationTimer.Interval > IgnoreTimerThresholdInMilliseconds)
             {
                 _localSaveConfigurationTimer.Start();
             }
             else
             {
-                SaveLocalConfiguration();
+                await SaveLocalConfigurationAsync();
             }
         }
 
-        protected void ScheduleRoamingConfigurationSave()
+        protected async void ScheduleRoamingConfigurationSave()
         {
             _roamingSaveConfigurationTimer.Stop();
 
-            if (_roamingSaveConfigurationTimer.Interval > 0)
+            if (_roamingSaveConfigurationTimer.Interval > IgnoreTimerThresholdInMilliseconds)
             {
                 _roamingSaveConfigurationTimer.Start();
             }
             else
             {
-                SaveRoamingConfiguration();
+                await SaveRoamingConfigurationAsync();
             }
         }
 
-        private void SaveLocalConfiguration()
+        private async Task SaveLocalConfigurationAsync()
         {
+            _localSaveConfigurationTimer.Stop();
+
             var container = ConfigurationContainer.Local;
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
                 var settings = GetSettingsContainer(container);
-                var fileName = _localConfigFilePath;
+                if (settings is null)
+                {
+                    return;
+                }
 
-                SaveConfiguration(container, settings, fileName);
+                var fileName = _localConfigFilePath;
+                if (fileName is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("Cannot save local configuration without a file name");
+                }
+
+                try
+                {
+                    await SaveConfigurationAsync(container, settings, fileName);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to save local configuration");
+                }
             }
         }
 
-        private void SaveRoamingConfiguration()
+        private async Task SaveRoamingConfigurationAsync()
         {
+            _roamingSaveConfigurationTimer.Stop();
+
             var container = ConfigurationContainer.Roaming;
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (await lockObject.LockAsync())
             {
                 var settings = GetSettingsContainer(container);
-                var fileName = _roamingConfigFilePath;
+                if (settings is null)
+                {
+                    return;
+                }
 
-                SaveConfiguration(container, settings, fileName);
+                var fileName = _roamingConfigFilePath;
+                if (fileName is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>("Cannot save roaming configuration without a file name");
+                }
+
+                try
+                {
+                    await SaveConfigurationAsync(container, settings, fileName);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to save roaming configuration");
+                }
             }
         }
 
-        protected virtual void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+        protected virtual async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
         {
             using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                configuration.Save(fileStream, _xmlSerializer);
+                configuration.Save(fileStream, _serializer);
             }
         }
     }
 }
-
-#endif

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseTestHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.Generic;
     using System.IO;
@@ -40,11 +34,11 @@ namespace Catel.Tests.Data
         public static IniEntry CreateIniEntryObject(string group, string key, string value)
         {
             return new IniEntry
-                       {
-                           Group = group,
-                           Key = key,
-                           Value = value
-                       };
+            {
+                Group = group,
+                Key = key,
+                Value = value
+            };
         }
 
         /// <summary>
@@ -69,9 +63,9 @@ namespace Catel.Tests.Data
         {
             // Ini file
             IniFile iniFile = new IniFile
-                                  {
-                                      FileName = fileName
-                                  };
+            {
+                FileName = fileName
+            };
 
             // Add entries
             foreach (IniEntry iniEntry in iniEntries)

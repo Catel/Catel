@@ -1,0 +1,17 @@
+<Project>
+  <!-- 
+    This file applies to all projects automatically, this file contains all the project specific data
+  -->
+
+  <PropertyGroup>
+    <Authors>Catel</Authors>
+    <PackageProjectUrl>https://github.com/Catel/Catel</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Catel/Catel</RepositoryUrl>
+  </PropertyGroup>
+     
+  <PropertyGroup>
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+  </PropertyGroup>
+  
+</Project>

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReaderWriterLockSlimExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
     using System.Threading;
@@ -21,9 +15,8 @@ namespace Catel.Threading
         /// <param name="criticalOperation">Performed operation.</param>
         public static void PerformRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
         {
-            Argument.IsNotNull("criticalOperation", criticalOperation);
-
             lockSlim.EnterReadLock();
+
             try
             {
                 criticalOperation();
@@ -43,9 +36,8 @@ namespace Catel.Threading
         /// <returns>Performed operation result.</returns>
         public static T PerformRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
         {
-            Argument.IsNotNull("criticalOperation", criticalOperation);
-
             lockSlim.EnterReadLock();
+
             try
             {
                 return criticalOperation();
@@ -63,9 +55,8 @@ namespace Catel.Threading
         /// <param name="criticalOperation">Performed operation.</param>
         public static void PerformWrite(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
         {
-            Argument.IsNotNull("criticalOperation", criticalOperation);
-
             lockSlim.EnterWriteLock();
+
             try
             {
                 criticalOperation();
@@ -83,9 +74,8 @@ namespace Catel.Threading
         /// <param name="criticalOperation">Performed operation.</param>
         public static void PerformUpgradableRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
         {
-            Argument.IsNotNull("criticalOperation", criticalOperation);
-
             lockSlim.EnterUpgradeableReadLock();
+
             try
             {
                 criticalOperation();
@@ -105,9 +95,8 @@ namespace Catel.Threading
         /// <returns>Performed operation result.</returns>
         public static T PerformUpgradableRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
         {
-            Argument.IsNotNull("criticalOperation", criticalOperation);
-
             lockSlim.EnterUpgradeableReadLock();
+
             try
             {
                 return criticalOperation();

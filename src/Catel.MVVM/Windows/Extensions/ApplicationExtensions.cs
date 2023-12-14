@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ApplicationExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -24,14 +16,14 @@ namespace Catel.Windows
         /// <returns>
         /// The active window of the application or null in case of none window is opened.
         /// </returns>
-        public static System.Windows.Window GetActiveWindow(this System.Windows.Application application)
+        public static System.Windows.Window? GetActiveWindow(this System.Windows.Application application)
         {
-            System.Windows.Window activeWindow = null;
+            System.Windows.Window? activeWindow = null;
 
             // CTL-687: Only allow windows that have an actual size (been shown at least once)
             Func<System.Windows.Window, bool> predicate = x => x.IsValidAsOwnerWindow();
 
-            if (application != null && application.Windows.Count > 0)
+            if (application is not null && application.Windows.Count > 0)
             {
                 var windowList = new List<System.Windows.Window>(application.Windows.Cast<System.Windows.Window>());
 
@@ -51,5 +43,3 @@ namespace Catel.Windows
         }
     }
 }
-
-#endif

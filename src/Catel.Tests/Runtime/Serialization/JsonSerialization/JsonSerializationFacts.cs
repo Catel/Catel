@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using Catel.IoC;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
     using NUnit.Framework;
     using TestModels;
@@ -42,11 +33,13 @@ namespace Catel.Tests.Runtime.Serialization
 
                     memoryStream.Position = 0L;
 
-                    var streamReader = new StreamReader(memoryStream);
-                    var streamAsText = streamReader.ReadToEnd();
+                    using (var streamReader = new StreamReader(memoryStream))
+                    {
+                        var streamAsText = streamReader.ReadToEnd();
 
-                    Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"));
-                    Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"));
+                        Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"), Is.True);
+                        Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"), Is.True);
+                    }
                 }
             }
 
@@ -68,8 +61,8 @@ namespace Catel.Tests.Runtime.Serialization
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
 
-                Assert.AreEqual(model.EnumWithAttribute, clonedModel.EnumWithAttribute);
-                Assert.AreEqual(model.EnumWithoutAttribute, clonedModel.EnumWithoutAttribute);
+                Assert.That(clonedModel.EnumWithAttribute, Is.EqualTo(model.EnumWithAttribute));
+                Assert.That(clonedModel.EnumWithoutAttribute, Is.EqualTo(model.EnumWithoutAttribute));
             }
         }
 
@@ -90,10 +83,10 @@ namespace Catel.Tests.Runtime.Serialization
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.IsTrue(model.IsCustomSerialized);
-                Assert.IsTrue(clonedModel.IsCustomDeserialized);
+                Assert.That(model.IsCustomSerialized, Is.True);
+                Assert.That(clonedModel.IsCustomDeserialized, Is.True);
 
-                Assert.AreEqual(model.FirstName, clonedModel.FirstName);
+                Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
             }
 
             [TestCase]
@@ -113,14 +106,14 @@ namespace Catel.Tests.Runtime.Serialization
 
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.IsNotNull(clonedModel.NestedModel);
+                Assert.That(clonedModel.NestedModel, Is.Not.Null);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.IsTrue(model.NestedModel.IsCustomSerialized);
-                Assert.IsTrue(clonedModel.NestedModel.IsCustomDeserialized);
+                Assert.That(model.NestedModel.IsCustomSerialized, Is.True);
+                Assert.That(clonedModel.NestedModel.IsCustomDeserialized, Is.True);
 
-                Assert.AreEqual(model.Name, clonedModel.Name);
-                Assert.AreEqual(model.NestedModel.FirstName, clonedModel.NestedModel.FirstName);
+                Assert.That(clonedModel.Name, Is.EqualTo(model.Name));
+                Assert.That(clonedModel.NestedModel.FirstName, Is.EqualTo(model.NestedModel.FirstName));
             }
 
             [TestCase]
@@ -144,7 +137,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 var json = testModel.ToJson(configuration);
 
-                Assert.IsFalse(json.Contains("Excluded"));
+                Assert.That(json.Contains("Excluded"), Is.False);
             }
 
             [TestCase]
@@ -168,7 +161,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 var json = testModel.ToJson(configuration);
 
-                Assert.IsFalse(json.Contains("Excluded"));
+                Assert.That(json.Contains("Excluded"), Is.False);
             }
 
             [TestCase]
@@ -190,10 +183,10 @@ namespace Catel.Tests.Runtime.Serialization
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, configuration);
 
                 // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.IsTrue(model.IsCustomSerialized);
-                Assert.IsTrue(clonedModel.IsCustomDeserialized);
+                Assert.That(model.IsCustomSerialized, Is.True);
+                Assert.That(clonedModel.IsCustomDeserialized, Is.True);
 
-                Assert.AreEqual(model.FirstName, clonedModel.FirstName);
+                Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
             }
 
             //[TestCase]
@@ -234,7 +227,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 var json = testModel.ToJson(configuration);
 
-                Assert.IsTrue(json.Contains(currentDateTime.ToString(culture)));
+                Assert.That(json.Contains(currentDateTime.ToString(culture)), Is.True);
             }
         }
     }

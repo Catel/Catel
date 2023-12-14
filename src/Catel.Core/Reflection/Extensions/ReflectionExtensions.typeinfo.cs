@@ -1,14 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensions.typeinfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if UAP || NET || NETSTANDARD
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
-    using System.Collections.Generic;
     using System;
     using System.Linq;
     using System.Reflection;
@@ -22,7 +13,6 @@ namespace Catel.Reflection
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        #region Methods
         /// <summary>
         /// Determines whether the hierarchy should be flattened based on the specified binding flags.
         /// </summary>
@@ -42,8 +32,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static MemberInfo[] GetMembers(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = typeInfo.DeclaredMembers.ToList();
 
@@ -51,7 +39,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetMembers(baseType.GetTypeInfo(), bindingFlags)
                                     select member);
@@ -73,7 +61,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static MemberInfo[] GetMember(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetMembers(typeInfo, bindingFlags)
@@ -90,8 +77,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static FieldInfo[] GetFields(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = flattenHierarchy ? typeInfo.AsType().GetRuntimeFields().ToList() : typeInfo.DeclaredFields.ToList();
 
@@ -101,7 +86,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetFields(baseType.GetTypeInfo(), bindingFlags)
                                     where member.IsStatic
@@ -123,9 +108,8 @@ namespace Catel.Reflection
         /// <returns>The <see cref="FieldInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static FieldInfo GetField(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static FieldInfo? GetField(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
             
             return (from x in GetFields(typeInfo, bindingFlags)
@@ -142,13 +126,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static ConstructorInfo[] GetConstructors(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
-#if UAP_DEFAULT
-            var source = typeInfo.DeclaredConstructors.ToArray();
-#else
             var source = typeInfo.GetConstructors(bindingFlags);
-#endif
 
             var includeStatics = Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static);
             if (!includeStatics)
@@ -170,10 +148,8 @@ namespace Catel.Reflection
         /// <param name="bindingFlags">The binding flags.</param>
         /// <returns>An array of <see cref="ConstructorInfo"/>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
-        public static ConstructorInfo GetConstructor(this TypeInfo typeInfo, Type[] types, BindingFlags bindingFlags)
+        public static ConstructorInfo? GetConstructor(this TypeInfo typeInfo, Type[] types, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             return (from x in GetConstructors(typeInfo, bindingFlags)
                     where CollectionHelper.IsEqualTo(types, from parameterInfo in x.GetParameters()
                                                             select parameterInfo.ParameterType)
@@ -189,8 +165,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo" /> is <c>null</c>.</exception>
         public static PropertyInfo[] GetProperties(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = (flattenHierarchy ? typeInfo.AsType().GetRuntimeProperties() : typeInfo.DeclaredProperties).ToList();
 
@@ -200,7 +174,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetProperties(baseType.GetTypeInfo(), bindingFlags)
                                     where member.IsStatic()
@@ -222,9 +196,8 @@ namespace Catel.Reflection
         /// <returns>The <see cref="PropertyInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static PropertyInfo GetProperty(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static PropertyInfo? GetProperty(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetProperties(typeInfo, bindingFlags)
@@ -241,8 +214,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static EventInfo[] GetEvents(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var eventsSource = flattenHierarchy ? typeInfo.AsType().GetRuntimeEvents() : typeInfo.DeclaredEvents;
 
@@ -259,9 +230,8 @@ namespace Catel.Reflection
         /// <returns>The <see cref="EventInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static EventInfo GetEvent(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static EventInfo? GetEvent(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetEvents(typeInfo, bindingFlags)
@@ -278,8 +248,6 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         public static MethodInfo[] GetMethods(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
-
             var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
             var source = flattenHierarchy ? typeInfo.AsType().GetRuntimeMethods().ToList() : typeInfo.DeclaredMethods.ToList();
 
@@ -289,7 +257,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetMethods(baseType.GetTypeInfo(), bindingFlags)
                                     where member.IsStatic
@@ -317,9 +285,8 @@ namespace Catel.Reflection
         /// <returns>The <see cref="MethodInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethod(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        public static MethodInfo? GetMethod(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetMethods(typeInfo, bindingFlags)
@@ -337,9 +304,8 @@ namespace Catel.Reflection
         /// <returns>The <see cref="MethodInfo"/> or <c>null</c> if the member is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static MethodInfo GetMethod(this TypeInfo typeInfo, string name, Type[] types, BindingFlags bindingFlags)
+        public static MethodInfo? GetMethod(this TypeInfo typeInfo, string name, Type[] types, BindingFlags bindingFlags)
         {
-            Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
 
             return (from x in GetMethods(typeInfo, bindingFlags)
@@ -347,8 +313,5 @@ namespace Catel.Reflection
                                                                               select parameterInfo.ParameterType)
                     select x).FirstOrDefault();
         }
-        #endregion
     }
 }
-
-#endif

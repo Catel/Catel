@@ -89,7 +89,7 @@ foreach (TypeCode typeCode in typeCodes)
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out <#= typeCode #> item)
         {
             var getter = Get<#= typeCode #>PropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;

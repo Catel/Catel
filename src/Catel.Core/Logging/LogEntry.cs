@@ -1,21 +1,25 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogEntry.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Log entry class.
     /// </summary>
     public class LogEntry
     {
-        private LogData _logData;
+        private LogData? _logData;
 
-        #region Constructors
+        private static readonly Dictionary<LogEvent, string> LogEventCache = new Dictionary<LogEvent, string>();
+
+        static LogEntry()
+        {
+            foreach (var value in Enum<LogEvent>.GetValues())
+            {
+                LogEventCache[value] = Enum<LogEvent>.ToString(value);
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry" /> class.
         /// </summary>
@@ -34,7 +38,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        public LogEntry(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        public LogEntry(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             Time = time;
             Log = log;
@@ -44,9 +48,7 @@ namespace Catel.Logging
 
             _logData = logData;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the time.
         /// </summary>
@@ -59,7 +61,7 @@ namespace Catel.Logging
         /// <value>
         /// The extra data.
         /// </value>
-        public object ExtraData { get; private set; }
+        public object? ExtraData { get; private set; }
 
         /// <summary>
         /// Gets the log.
@@ -93,12 +95,13 @@ namespace Catel.Logging
         {
             get
             {
-                if (_logData is null)
+                var data = _logData;
+                if (data is null)
                 {
-                    _logData = new LogData();
+                    data = _logData = new LogData();
                 }
 
-                return _logData;
+                return data;
             }
         }
 
@@ -108,8 +111,7 @@ namespace Catel.Logging
         /// <returns>String value.</returns>
         public override string ToString()
         {
-            return $"[{Time}] [{LogEvent}] {Message}";
+            return $"[{Time}] [{LogEventCache[LogEvent]}] {Message}";
         }
-        #endregion
     }
 }

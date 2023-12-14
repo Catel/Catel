@@ -1,13 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MethodToValueConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
-    using Collections;
     using Logging;
     using Reflection;
 
@@ -22,9 +15,7 @@ namespace Catel.MVVM.Converters
     /// <para />
     /// Original license: CC BY-SA 2.5, compatible with the MIT license.
     /// </remarks>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
-#endif
     public class MethodToValueConverter : ValueConverterBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -36,7 +27,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var methodName = parameter as string;
             if (value is null || methodName is null)
@@ -45,13 +36,13 @@ namespace Catel.MVVM.Converters
             }
 
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
-            var methodInfo = value.GetType().GetMethodEx(methodName, ArrayShim.Empty<Type>(), bindingFlags);
+            var methodInfo = value.GetType().GetMethodEx(methodName, Array.Empty<Type>(), bindingFlags);
             if (methodInfo is null)
             {
                 return value;
             }
 
-            return methodInfo.Invoke(value, ArrayShim.Empty<object>());
+            return methodInfo.Invoke(value, Array.Empty<object>());
         }
 
         /// <summary>
@@ -65,7 +56,7 @@ namespace Catel.MVVM.Converters
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected override object ConvertBack(object value, Type targetType, object parameter)
+        protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
             throw Log.ErrorAndCreateException<NotSupportedException>("MethodToValueConverter can only be used for one way conversion");
         }

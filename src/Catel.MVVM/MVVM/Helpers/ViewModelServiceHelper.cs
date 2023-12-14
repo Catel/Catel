@@ -1,19 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelServiceHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using Catel.MVVM.Views;
     using Catel.Services;
-
-#if !XAMARIN && !XAMARIN_FORMS
-    using Catel.Windows;
-#endif
-
     using IoC;
     using Logging;
     using Messaging;
@@ -26,7 +15,7 @@ namespace Catel.MVVM
         /// <summary>
         /// The log.
         /// </summary>
-        private static ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Registers the default view model services.
@@ -35,7 +24,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
         public static void RegisterDefaultViewModelServices(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             try
             {
@@ -46,15 +35,17 @@ namespace Catel.MVVM
                     serviceLocator.RegisterInstance(MessageMediator.Default);
                 }
 
-                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
+                // Always overwrite the dispatcher service since we know Catel.Core registers a shim
+                var registrationInfo = serviceLocator.GetRegistrationInfo(typeof(IDispatcherService));
+                if (registrationInfo is null || registrationInfo.ImplementingType == typeof(ShimDispatcherService))
                 {
-                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
+                    serviceLocator.RegisterType<IDispatcherService, DispatcherService>();
                 }
 
+                // Only register if not yet registered
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, FastViewPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherProviderService, DispatcherProviderService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
@@ -63,48 +54,18 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationRootService, NavigationRootService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewContextService, ViewContextService>();
-
-#if !XAMARIN && !XAMARIN_FORMS
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISelectDirectoryService, SelectDirectoryService>();
-#endif
-
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
-
-#if !NET && !NETCORE && !NETCORE
-                serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
-#endif
-
-#if !XAMARIN && !XAMARIN_FORMS
-                // TODO: Add support in xamarin
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
-#endif
-
-#if NET || NETCORE || UWP
+                serviceLocator.RegisterTypeIfNotYetRegistered<IBusyIndicatorService, BusyIndicatorService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
-#endif
-
-#if NET || NETCORE
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
-#endif
-
-#if XAMARIN_FORMS
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
-#endif
 
                 Log.Debug("Registered default service implementations for IoC container");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to configure IoC container");
-
-                throw new Exception(Catel.ResourceHelper.GetString("FailedToConfigureIoCContainer"), ex);
+                throw Log.ErrorAndCreateException<Exception>(s => new Exception(s, ex), LanguageHelper.GetRequiredString("FailedToConfigureIoCContainer"));
             }            
         }
     }

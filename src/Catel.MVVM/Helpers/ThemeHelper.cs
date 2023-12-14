@@ -1,26 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ThemeHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using Caching;
     using Catel.Logging;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
-
-#if XAMARIN_FORMS
-    using Xamarin.Forms;
-#endif
 
     /// <summary>
     /// Theme helper to ensure themes are loaded upon usage.
@@ -72,13 +55,13 @@ namespace Catel
         /// <param name="predicate">The predicate.</param>
         public static void EnsureThemeIsLoaded(Uri resourceUri, Func<bool> predicate)
         {
-            Argument.IsNotNull("resourceUri", resourceUri);
-            Argument.IsNotNull("predicate", predicate);
+            ArgumentNullException.ThrowIfNull(resourceUri);
+            ArgumentNullException.ThrowIfNull(predicate);
 
             try
             {
                 var application = Application.Current;
-                if (application != null)
+                if (application is not null)
                 {
                     var resources = application.Resources;
 
@@ -102,7 +85,7 @@ namespace Catel
         private static bool ContainsDictionary(ResourceDictionary resourceDictionary, Uri resourceUri)
         {
             var source = resourceDictionary.Source;
-            if (source != null && source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
+            if (source is not null && source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
             {
                 return true;
             }
@@ -119,5 +102,3 @@ namespace Catel
         }
     }
 }
-
-#endif

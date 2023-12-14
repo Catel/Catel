@@ -1,48 +1,31 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakEventListenerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
-   
+
     using Catel.MVVM;
     using MVVM.Auditing;
 
-#if NET || NETCORE
     using System.Windows.Data;
-#endif
-
     using NUnit.Framework;
 
     public class WeakEventListenerFacts
     {
-        #region Test classes
-
-        #region Nested type: CustomObservableCollection
         public class CustomObservableCollection : ObservableCollection<DateTime>
         {
         }
-        #endregion
 
-        #region Nested type: EventListener
         public class EventListener
         {
-            #region Constructors
             public EventListener()
             {
                 // Always reset the static handler count
                 StaticEventHandlerCounter = 0;
             }
-            #endregion
 
-            #region Properties
             public int StaticEventCounter { get; private set; }
 
             public static int StaticEventHandlerCounter { get; private set; }
@@ -57,15 +40,13 @@ namespace Catel.Tests
             public int PrivateClassEventCount { get; private set; }
             public int PropertyChangedEventCount { get; private set; }
             public int CollectionChangedEventCount { get; private set; }
-            #endregion
 
-            #region Methods
-            public void OnStaticEvent(object sender, ViewModelClosedEventArgs e)
+            public void OnStaticEvent(object? sender, ViewModelClosedEventArgs e)
             {
                 StaticEventCounter++;
             }
 
-            public static void OnEventStaticHandler(object sender, EventArgs e)
+            public static void OnEventStaticHandler(object? sender, EventArgs e)
             {
                 StaticEventHandlerCounter++;
             }
@@ -75,61 +56,53 @@ namespace Catel.Tests
                 PublicActionCounter++;
             }
 
-            public void OnPublicEvent(object sender, ViewModelClosedEventArgs e)
+            public void OnPublicEvent(object? sender, ViewModelClosedEventArgs e)
             {
                 PublicEventCounter++;
             }
 
-            public void OnPrivateEvent(object sender, EventArgs e)
+            public void OnPrivateEvent(object? sender, EventArgs e)
             {
                 PrivateEventCounter++;
             }
 
-            public IWeakEventListener SubscribeToPublicClassEvent(EventSource source)
+            public IWeakEventListener? SubscribeToPublicClassEvent(EventSource source)
             {
                 return WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(this, source, "PublicEvent", OnPublicClassEvent);
             }
 
-            public void OnPublicClassEvent(object sender, EventArgs e)
+            public void OnPublicClassEvent(object? sender, EventArgs e)
             {
                 PublicClassEventCount++;
             }
 
-            public IWeakEventListener SubscribeToPrivateClassEvent(EventSource source)
+            public IWeakEventListener? SubscribeToPrivateClassEvent(EventSource source)
             {
                 return WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(this, source, "PublicEvent", OnPrivateClassEvent);
             }
 
-            private void OnPrivateClassEvent(object sender, EventArgs e)
+            private void OnPrivateClassEvent(object? sender, EventArgs e)
             {
                 PrivateClassEventCount++;
             }
 
-            public void OnPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
+            public void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
             {
                 PropertyChangedEventCount++;
             }
 
-            public void OnCollectionChangedEvent(object sender, NotifyCollectionChangedEventArgs e)
+            public void OnCollectionChangedEvent(object? sender, NotifyCollectionChangedEventArgs e)
             {
                 CollectionChangedEventCount++;
             }
-            #endregion
         }
-        #endregion
 
-        #region Nested type: EventSource
         public class EventSource : INotifyPropertyChanged, INotifyCollectionChanged
         {
-            #region INotifyCollectionChanged Members
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
-            #endregion
+            public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
-            #region INotifyPropertyChanged Members
-            public event PropertyChangedEventHandler PropertyChanged;
-            #endregion
+            public event PropertyChangedEventHandler? PropertyChanged;
 
-            #region Methods
             public static void RaiseStaticEvent()
             {
                 StaticEvent?.Invoke(null, new ViewModelClosedEventArgs(new TestViewModel(), true));
@@ -154,15 +127,11 @@ namespace Catel.Tests
             {
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
-            #endregion
 
-            public static event EventHandler<ViewModelClosedEventArgs> StaticEvent;
-            public event EventHandler<ViewModelClosedEventArgs> PublicEvent;
-            private event EventHandler<EventArgs> PrivateEvent;
+            public static event EventHandler<ViewModelClosedEventArgs>? StaticEvent;
+            public event EventHandler<ViewModelClosedEventArgs>? PublicEvent;
+            private event EventHandler<EventArgs>? PrivateEvent;
         }
-        #endregion
-
-        #endregion
 
         [TestFixture]
         public class TheConstructor
@@ -173,11 +142,15 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, null, "StaticEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.IsFalse(weakEventListener.IsSourceAlive);
-                Assert.IsTrue(weakEventListener.IsStaticEvent);
-                Assert.IsTrue(weakEventListener.IsTargetAlive);
-                Assert.IsFalse(weakEventListener.IsStaticEventHandler);
+                Assert.That(weakEventListener.IsSourceAlive, Is.False);
+                Assert.That(weakEventListener.IsStaticEvent, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.True);
+                Assert.That(weakEventListener.IsStaticEventHandler, Is.False);
             }
 
             [TestCase]
@@ -186,40 +159,27 @@ namespace Catel.Tests
                 var source = new EventSource();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(null, source, "PublicEvent", EventListener.OnEventStaticHandler);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsStaticEvent);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
-                Assert.IsTrue(weakEventListener.IsStaticEventHandler);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsStaticEvent, Is.False);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
+                Assert.That(weakEventListener.IsStaticEventHandler, Is.True);
             }
 
             [TestCase]
             public void ThrowsInvalidOperationExceptionWhenEverythingIsStatic()
             {
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => WeakEventListener<EventListener, EventSource, EventArgs>.SubscribeToWeakGenericEvent(null, null, "StaticEvent", EventListener.OnEventStaticHandler));
+                Assert.Throws<InvalidOperationException>(() => WeakEventListener<EventListener, EventSource, EventArgs>.SubscribeToWeakGenericEvent(null, null, "StaticEvent", EventListener.OnEventStaticHandler));
             }
         }
 
         [TestFixture]
         public class TheStaticOverloadsWithoutAnyTypeSpecificationMethods
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullListener()
-            {
-                var source = new EventSource();
-                var listener = new EventListener();
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => WeakEventListener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, source, "event", listener.OnPublicEvent));
-            }
-
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullSource()
-            {
-                var listener = new EventListener();
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => listener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, "event", listener.OnPublicEvent));
-            }
-
             [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticDetectionOfAllTypes()
             {
@@ -227,20 +187,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -253,20 +217,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakPropertyChangedEvent(source, listener.OnPropertyChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -279,20 +247,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakCollectionChangedEvent(source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -309,20 +281,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource>.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(listener, source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -335,20 +311,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -361,20 +341,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -391,20 +375,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -417,41 +405,43 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToWeakCollectionChangedEvent(source, listener.OnCollectionChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.Add(DateTime.Now);
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
             }
 
-#if NET || NETCORE
             [TestCase]
             public void SupportsExplicitlyImplementedEvents()
             {
                 var listener = new EventListener();
 
                 // ObservableCollection implements ICollectionChanged explicitly
-                var source = new ListCollectionView(new List<int>(new [] { 1, 2, 3 }));
+                var source = new ListCollectionView(new List<int>(new[] { 1, 2, 3 }));
 
                 WeakEventListener.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent);
 
                 source.AddNewItem(4);
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
             }
-#endif
 
             [TestCase, Explicit]
             public void DoesNotLeakWithCollectionChangedEvent()
@@ -460,20 +450,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent, eventName: "CollectionChanged");
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(0));
 
                 source.RaiseCollectionChangedEvent();
 
-                Assert.AreEqual(1, listener.CollectionChangedEventCount);
+                Assert.That(listener.CollectionChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -490,20 +484,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -521,7 +519,7 @@ namespace Catel.Tests
 
                 source.Add(1);
 
-                Assert.AreEqual(2, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(2));
             }
 
             [TestCase, Explicit]
@@ -531,20 +529,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent, eventName: "PropertyChanged");
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(0));
 
                 source.RaisePropertyChangedEvent();
 
-                Assert.AreEqual(1, listener.PropertyChangedEventCount);
+                Assert.That(listener.PropertyChangedEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -561,14 +563,18 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -580,16 +586,20 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, null, "StaticEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.StaticEventCounter);
+                Assert.That(listener.StaticEventCounter, Is.EqualTo(0));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsFalse(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.False);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
             }
 
             [TestCase, Explicit]
@@ -598,20 +608,24 @@ namespace Catel.Tests
                 var source = new EventSource();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(null, source, "PublicEvent", EventListener.OnEventStaticHandler);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, EventListener.StaticEventHandlerCounter);
+                Assert.That(EventListener.StaticEventHandlerCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, EventListener.StaticEventHandlerCounter);
+                Assert.That(EventListener.StaticEventHandlerCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous source is removed
                 source = new EventSource();
                 GC.Collect();
                 var type = source.GetType();
 
-                Assert.IsFalse(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.False);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
             }
 
             [TestCase]
@@ -623,11 +637,11 @@ namespace Catel.Tests
 
                 WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", (sender, e) => count++);
 
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
             }
 
             [TestCase, Explicit]
@@ -637,20 +651,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener.SubscribeToWeakEvent(listener, source, "PublicEvent", listener.OnPublicAction);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PublicActionCounter);
+                Assert.That(listener.PublicActionCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicActionCounter);
+                Assert.That(listener.PublicActionCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -669,12 +687,16 @@ namespace Catel.Tests
                 };
 
                 var weakEventListener = WeakEventListener.SubscribeToWeakEvent(this, source, "PublicEvent", action);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 GC.Collect();
@@ -693,20 +715,24 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", listener.OnPublicEvent);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicEventCounter);
+                Assert.That(listener.PublicEventCounter, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
@@ -736,26 +762,29 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToPublicClassEvent(source);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PublicClassEventCount);
+                Assert.That(listener.PublicClassEventCount, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PublicClassEventCount);
+                Assert.That(listener.PublicClassEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
             }
 
-#if NET || NETCORE
             [TestCase, Explicit]
             public void DoesNotLeakWithPrivateEventHandlerSubscribedFromClassItself()
             {
@@ -763,25 +792,28 @@ namespace Catel.Tests
                 var listener = new EventListener();
 
                 var weakEventListener = listener.SubscribeToPrivateClassEvent(source);
+                if (weakEventListener is null)
+                {
+                    throw new Exception("Weak event listener should not be null");
+                }
 
-                Assert.AreEqual(0, listener.PrivateClassEventCount);
+                Assert.That(listener.PrivateClassEventCount, Is.EqualTo(0));
 
                 source.RaisePublicEvent();
 
-                Assert.AreEqual(1, listener.PrivateClassEventCount);
+                Assert.That(listener.PrivateClassEventCount, Is.EqualTo(1));
 
                 // Some dummy code to make sure the previous listener is removed
                 listener = new EventListener();
                 GC.Collect();
                 var type = listener.GetType();
 
-                Assert.IsTrue(weakEventListener.IsSourceAlive);
-                Assert.IsFalse(weakEventListener.IsTargetAlive);
+                Assert.That(weakEventListener.IsSourceAlive, Is.True);
+                Assert.That(weakEventListener.IsTargetAlive, Is.False);
 
                 // Some dummy code to make sure the source stays in memory
                 source.GetType();
             }
-#endif
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Data;
 
     public abstract class AbstractBase : ModelBase
@@ -19,7 +14,7 @@
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), "Test name");
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", "Test name");
 
     }
 
@@ -31,7 +26,7 @@
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), "Test name");
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", "Test name");
 
     }
 }

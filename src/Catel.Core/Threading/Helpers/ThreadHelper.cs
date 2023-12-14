@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ThreadHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System.Threading;
 
@@ -19,11 +13,7 @@ namespace Catel
         /// <returns>System.String.</returns>
         public static int GetCurrentThreadId()
         {
-#if NETFX_CORE
-            return System.Environment.CurrentManagedThreadId;
-#else
             return Thread.CurrentThread.ManagedThreadId;
-#endif
         }
 
         /// <summary>
@@ -34,11 +24,7 @@ namespace Catel
         /// <param name="millisecondsTimeout">The milliseconds timeout.</param>
         public static void Sleep(int millisecondsTimeout)
         {
-#if NETFX_CORE
-            new ManualResetEvent(false).WaitOne(millisecondsTimeout);
-#else
             Thread.Sleep(millisecondsTimeout);
-#endif
         }
 
         /// <summary>
@@ -47,16 +33,7 @@ namespace Catel
         /// <param name="iterations">The number of iterations.</param>
         public static void SpinWait(int iterations)
         {
-#if NETFX_CORE
-            var spinWait = new SpinWait();
-
-            while (spinWait.Count < iterations)
-            {
-                spinWait.SpinOnce();
-            }
-#else
-            Thread.SpinWait(20);
-#endif
+            Thread.SpinWait(iterations);
         }
     }
 }

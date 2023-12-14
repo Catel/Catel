@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ShortDateFormattingConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
@@ -12,9 +6,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// ShortDateFormattingConverter
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(DateTime), typeof(string))]
-#endif
     public class ShortDateFormattingConverter : FormattingConverter
     {
         /// <summary>
@@ -36,12 +28,13 @@ namespace Catel.MVVM.Converters
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected override object ConvertBack(object value, Type targetType, object parameter)
+        protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
-            DateTime dateTimeValue;
-            bool parsed = DateTime.TryParse(value as string, CurrentCulture, DateTimeStyles.None, out dateTimeValue);
+            var parsed = DateTime.TryParse(value as string, CurrentCulture, DateTimeStyles.None, out var dateTimeValue);
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return parsed ? dateTimeValue : ConverterHelper.UnsetValue;
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
     }
 }

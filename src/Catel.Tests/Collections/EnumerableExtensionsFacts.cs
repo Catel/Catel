@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumerableExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2019 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Collections
+﻿namespace Catel.Tests.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -30,7 +24,7 @@ namespace Catel.Tests.Collections
 
                 var success = observableDictionary.Contains(items[0]);
 
-                Assert.IsTrue(success);
+                Assert.That(success, Is.True);
             }
 
             [Test]
@@ -47,7 +41,7 @@ namespace Catel.Tests.Collections
 
                 var success = observableDictionary.Contains(new KeyValuePair<int, KeyValuePair<int, int>>(1, items[0]));
 
-                Assert.IsTrue(success);
+                Assert.That(success, Is.True);
             }
 
             [Test]
@@ -65,7 +59,7 @@ namespace Catel.Tests.Collections
                 var hasItem = observableDictionary.Contains(items[0]);
                 var comparerWorks = observableDictionary.ContainsKey("foo");
 
-                Assert.IsTrue(hasItem && comparerWorks);
+                Assert.That(hasItem && comparerWorks, Is.True);
             }
         }
     }

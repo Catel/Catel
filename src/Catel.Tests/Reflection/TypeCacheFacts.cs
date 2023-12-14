@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeCacheFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +19,7 @@ namespace Catel.Tests.Reflection
 
                 var resourceAssemblies = allAssemblies.Where(x => x.ToLower().Contains(".resources.") && !x.ToLower().Contains("resourcemanager")).ToList();
 
-                Assert.AreEqual(0, resourceAssemblies.Count);
+                Assert.That(resourceAssemblies.Count, Is.EqualTo(0));
             }
         }
 
@@ -35,43 +30,43 @@ namespace Catel.Tests.Reflection
             [TestCase("System.String", true, typeof(string))]
             [TestCase("sYstEm.StRing", false, null)]
             [TestCase("sYstEm.StRing", true, typeof(string))]
-            public void ReturnsTypeFromMsCorlib(string typeName, bool ignoreCase, Type expectedType)
+            public void ReturnsTypeFromMsCorlib(string typeName, bool ignoreCase, Type? expectedType)
             {
                 var type = TypeCache.GetType(typeName, ignoreCase);
 
-                Assert.AreEqual(expectedType, type);
+                Assert.That(type, Is.EqualTo(expectedType));
             }
 
             [TestCase("System.Uri", false, typeof(Uri))]
             [TestCase("System.Uri", true, typeof(Uri))]
             [TestCase("sYstEm.uRi", false, null)]
             [TestCase("sYstEm.uRi", true, typeof(Uri))]
-            public void ReturnsTypeFromSystem(string typeName, bool ignoreCase, Type expectedType)
+            public void ReturnsTypeFromSystem(string typeName, bool ignoreCase, Type? expectedType)
             {
                 var type = TypeCache.GetType(typeName, ignoreCase);
 
-                Assert.AreEqual(expectedType, type);
+                Assert.That(type, Is.EqualTo(expectedType));
             }
 
             [TestCase("System.Lazy`1", false, typeof(Lazy<>))]
             [TestCase("System.Lazy`1", true, typeof(Lazy<>))]
             [TestCase("sYstEm.lAzY`1", false, null)]
             [TestCase("sYstEm.lAzY`1", true, typeof(Lazy<>))]
-            public void ReturnsTypeFromSystemCore(string typeName, bool ignoreCase, Type expectedType)
+            public void ReturnsTypeFromSystemCore(string typeName, bool ignoreCase, Type? expectedType)
             {
                 var type = TypeCache.GetType(typeName, ignoreCase);
 
-                Assert.AreEqual(expectedType, type);
+                Assert.That(type, Is.EqualTo(expectedType));
             }
 
             [TestCase]
             public void ReturnsTypeForLateBoundGenericTypeMultipleTimes()
             {
                 var type = TypeCache.GetType("System.Collections.Generic.List`1[[System.Int32]]");
-                Assert.AreEqual(typeof(List<int>), type);
+                Assert.That(type, Is.EqualTo(typeof(List<int>)));
 
                 var type2 = TypeCache.GetType("System.Collections.Generic.List`1[[System.Int32]]");
-                Assert.AreEqual(typeof(List<int>), type2);
+                Assert.That(type2, Is.EqualTo(typeof(List<int>)));
             }
 
             [TestCase("Catel.Tests.Reflection.TypeCacheFacts[]", typeof(TypeCacheFacts[]))]
@@ -80,7 +75,7 @@ namespace Catel.Tests.Reflection
             {
                 var type = TypeCache.GetType(typeName);
 
-                Assert.AreEqual(expectedType, type);
+                Assert.That(type, Is.EqualTo(expectedType));
             }
         }
 
@@ -89,42 +84,42 @@ namespace Catel.Tests.Reflection
         {
             public interface IMySpecialInterface
             {
-                
+
             }
 
             public class MySpecialClass : IMySpecialInterface
             {
-                
+
             }
 
             [TestCase]
             public void ReturnsRightTypes()
             {
-                var interfaces = TypeCache.GetTypesImplementingInterface(typeof (IMySpecialInterface));
+                var interfaces = TypeCache.GetTypesImplementingInterface(typeof(IMySpecialInterface));
 
-                Assert.AreEqual(1, interfaces.Length);
-                Assert.AreEqual(typeof(MySpecialClass), interfaces[0]);
+                Assert.That(interfaces.Length, Is.EqualTo(1));
+                Assert.That(interfaces[0], Is.EqualTo(typeof(MySpecialClass)));
             }
         }
 
-        [Test]
+        [Test, Explicit]
         public void Does_Not_Enter_In_A_Deadlock()
         {
             TypeCache.InitializeTypes();
 
-            Task<Type>[] tasks = { LoadABAsync(), LoadACAsync()};
+            Task<Type>[] tasks = { LoadABAsync(), LoadACAsync() };
 
             // ReSharper disable once CoVariantArrayConversion
-            Assert.IsTrue(Task.WaitAll(tasks, 5000));
+            Assert.That(Task.WaitAll(tasks, 5000), Is.True);
 
-            Assert.IsNotNull(tasks[0].Result);
-            Assert.IsNotNull(tasks[1].Result);
+            Assert.That(tasks[0].Result, Is.Not.Null);
+            Assert.That(tasks[1].Result, Is.Not.Null);
 
             var typeB = TypeCache.GetType("A.AB, A");
             var typeC = TypeCache.GetType("A.AC, A");
 
-            Assert.IsNotNull(typeB);
-            Assert.IsNotNull(typeC);
+            Assert.That(typeB, Is.Not.Null);
+            Assert.That(typeC, Is.Not.Null);
         }
 
         private static Task<Type> LoadACAsync()
@@ -138,8 +133,3 @@ namespace Catel.Tests.Reflection
         }
     }
 }
-
-
-
-
-

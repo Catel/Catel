@@ -6,21 +6,20 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Reflection;
 
     public static partial class ExpressionBuilder
     {
-        public static Expression<Action<object, TField>> CreateFieldSetter<TField>(Type modelType, string fieldName)
+        public static Expression<Action<object, TField>>? CreateFieldSetter<TField>(Type modelType, string fieldName)
         {
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
             var field = modelType.GetFieldEx(fieldName);
             return field is null ? null : CreateFieldSetter<object, TField>(field);
         }
 
-        public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(string fieldName)
+        public static Expression<Action<T, TField>>? CreateFieldSetter<T, TField>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -28,14 +27,12 @@
             return field is null ? null : CreateFieldSetter<T, TField>(field);
         }
 
-        public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(FieldInfo fieldInfo)
+        public static Expression<Action<T, TField>>? CreateFieldSetter<T, TField>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return CreateFieldSetterExpression<T, TField>(fieldInfo);
         }
 
-        public static Expression<Action<T, object>> CreateFieldSetter<T>(string fieldName)
+        public static Expression<Action<T, object>>? CreateFieldSetter<T>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -43,10 +40,8 @@
             return field is null ? null : CreateFieldSetter<T>(field);
         }
 
-        public static Expression<Action<T, object>> CreateFieldSetter<T>(FieldInfo fieldInfo)
+        public static Expression<Action<T, object>>? CreateFieldSetter<T>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return CreateFieldSetterExpression<T, object>(fieldInfo);
         }
 
@@ -88,7 +83,7 @@
             return new ReadOnlyDictionary<string, Expression<Action<T, TField>>>(fieldSetters);
         }
 
-        private static Expression<Action<T, TField>> CreateFieldSetterExpression<T, TField>(FieldInfo fieldInfo)
+        private static Expression<Action<T, TField>>? CreateFieldSetterExpression<T, TField>(FieldInfo fieldInfo)
         {
             var targetType = fieldInfo.DeclaringType;
             if (targetType is null)
@@ -105,7 +100,9 @@
             var fieldExpression = Expression.Field(targetExpression, fieldInfo);
             var body = Expression.Assign(fieldExpression, valueParameterExpression);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var lambda = Expression.Lambda<Action<T, TField>>(body, target, valueParameter);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return lambda;
         }
     }

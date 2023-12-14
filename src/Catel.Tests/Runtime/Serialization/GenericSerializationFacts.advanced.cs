@@ -1,41 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenericSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Diagnostics;
-    using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Text;
     using System.Windows.Media;
-    using Catel.Collections;
     using Catel.Data;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.Reflection;
-    using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
-    using Catel.Runtime.Serialization.Json;
-    using Catel.Runtime.Serialization.Xml;
-    using Data;
-    using Newtonsoft.Json;
     using NUnit.Framework;
     using TestModels;
-    using JsonSerializer = Catel.Runtime.Serialization.Json.JsonSerializer;
 
     public partial class GenericSerializationFacts
     {
@@ -50,20 +21,13 @@ namespace Catel.Tests.Runtime.Serialization
 
                 }
 
-#if NET || NETCORE
-                protected AbstractBase(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
-
                 public string Name
                 {
                     get { return GetValue<string>(NameProperty); }
                     set { SetValue(NameProperty, value); }
                 }
 
-                public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
             }
 
             [Serializable]
@@ -73,13 +37,6 @@ namespace Catel.Tests.Runtime.Serialization
                 {
 
                 }
-
-#if NET || NETCORE
-                protected DerivedClass(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
             }
 
             [Serializable]
@@ -90,20 +47,13 @@ namespace Catel.Tests.Runtime.Serialization
                     Items = new ObservableCollection<AbstractBase>();
                 }
 
-#if NET || NETCORE
-                protected ContainerClass(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
-
                 public ObservableCollection<AbstractBase> Items
                 {
                     get { return GetValue<ObservableCollection<AbstractBase>>(ItemsProperty); }
                     set { SetValue(ItemsProperty, value); }
                 }
 
-                public static readonly PropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<AbstractBase>), null);
+                public static readonly IPropertyData ItemsProperty = RegisterProperty("Items", () => new ObservableCollection<AbstractBase>());
             }
 
             [TestCase]
@@ -126,16 +76,16 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedModel = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer, config);
 
-                    Assert.AreEqual(null, clonedModel._excludedField, description);
-                    Assert.AreEqual("included", clonedModel._includedField, description);
+                    Assert.That(clonedModel._excludedField, Is.EqualTo(null), description);
+                    Assert.That(clonedModel._includedField, Is.EqualTo("included"), description);
 
-                    Assert.AreEqual(null, clonedModel.ExcludedRegularProperty, description);
-                    Assert.AreEqual("included", clonedModel.IncludedRegularProperty, description);
+                    Assert.That(clonedModel.ExcludedRegularProperty, Is.EqualTo(null), description);
+                    Assert.That(clonedModel.IncludedRegularProperty, Is.EqualTo("included"), description);
 
-                    Assert.AreEqual(null, clonedModel.ExcludedCatelProperty, description);
-                    Assert.AreEqual("included", clonedModel.IncludedCatelProperty, description);
+                    Assert.That(clonedModel.ExcludedCatelProperty, Is.EqualTo(string.Empty), description);
+                    Assert.That(clonedModel.IncludedCatelProperty, Is.EqualTo("included"), description);
 
-                    Assert.AreEqual(null, clonedModel.GetValue(TestModel.ExcludedProtectedCatelPropertyProperty.Name), description);
+                    Assert.That(((IModelEditor)clonedModel).GetValue<object>(TestModel.ExcludedProtectedCatelPropertyProperty.Name), Is.EqualTo(string.Empty), description);
                 });
             }
 
@@ -149,7 +99,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, config);
 
-                    Assert.AreEqual(Colors.Red, clonedModel.Color, description);
+                    Assert.That(clonedModel.Color, Is.EqualTo(Colors.Red), description);
                 });
             }
 
@@ -163,7 +113,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(collection, serializer, config);
 
-                    Assert.AreEqual(collection, clonedGraph, description);
+                    Assert.That(clonedGraph, Is.EqualTo(collection), description);
                 }, false);
             }
 
@@ -181,7 +131,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 editableObject.CancelEdit();
 
-                Assert.IsNull(testModel.IncludedCatelProperty);
+                Assert.That(testModel.IncludedCatelProperty, Is.Null);
             }
 
             [TestCase]
@@ -193,8 +143,8 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer, config);
 
-                    Assert.IsNotNull(clonedGraph, description);
-                    Assert.IsTrue(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel), description);
+                    Assert.That(clonedGraph, Is.Not.Null, description);
+                    Assert.That(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel), Is.True, description);
                 }, false);
             }
 
@@ -229,8 +179,8 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer, config);
 
-                    Assert.IsNotNull(clonedGraph, description);
-                    Assert.IsTrue(ReferenceEquals(clonedGraph.Children[0].Children[0], clonedGraph.Children[1].Children[0]), description);
+                    Assert.That(clonedGraph, Is.Not.Null, description);
+                    Assert.That(ReferenceEquals(clonedGraph.Children[0].Children[0], clonedGraph.Children[1].Children[0]), Is.True, description);
                 }, false);
             }
 
@@ -243,13 +193,13 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer, config);
 
-                    Assert.IsNotNull(clonedGraph.Collection1, description);
-                    Assert.IsNotNull(clonedGraph.Collection2, description);
+                    Assert.That(clonedGraph.Collection1, Is.Not.Null, description);
+                    Assert.That(clonedGraph.Collection2, Is.Not.Null, description);
 
-                    Assert.AreEqual(5, clonedGraph.Collection1.Count, description);
-                    Assert.AreEqual(5, clonedGraph.Collection2.Count, description);
+                    Assert.That(clonedGraph.Collection1.Count, Is.EqualTo(5), description);
+                    Assert.That(clonedGraph.Collection2.Count, Is.EqualTo(5), description);
 
-                    Assert.IsTrue(ReferenceEquals(clonedGraph.Collection1, clonedGraph.Collection2), description);
+                    Assert.That(ReferenceEquals(clonedGraph.Collection1, clonedGraph.Collection2), Is.True, description);
                 }, false);
             }
         }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
 
@@ -32,13 +26,13 @@ namespace Catel.Tests
         [TestFixture]
         public class TheGetValuesFromFlagsMethod
         {
-            [TestCase(Enum1.MySecondValue | Enum1.MyThirdValue, new[] {Enum1.MySecondValue, Enum1.MyThirdValue})]
+            [TestCase(Enum1.MySecondValue | Enum1.MyThirdValue, new[] { Enum1.MySecondValue, Enum1.MyThirdValue })]
             [TestCase(Enum1.MyThirdValue, new[] { Enum1.MyThirdValue })]
             public void ReturnsCorrectFlags(Enum1 flags, Enum1[] expectedValues)
             {
                 var actualValues = Enum<Enum1>.Flags.GetValues(flags);
 
-                Assert.AreEqual(expectedValues, actualValues);
+                Assert.That(actualValues, Is.EqualTo(expectedValues));
             }
         }
 
@@ -52,7 +46,7 @@ namespace Catel.Tests
                 var expectedFlags = Enum1.MyValue;
 
                 var clearedFlags = Enum<Enum1>.Flags.ClearFlag(flags, Enum1.MySecondValue);
-                Assert.AreEqual(expectedFlags, clearedFlags);
+                Assert.That(clearedFlags, Is.EqualTo(expectedFlags));
             }
 
             [TestCase]
@@ -62,7 +56,7 @@ namespace Catel.Tests
                 var expectedFlags = Enum1.MyValue;
 
                 var clearedFlags = Enum<Enum1>.Flags.ClearFlag(flags, Enum1.MySecondValue);
-                Assert.AreEqual(expectedFlags, clearedFlags);
+                Assert.That(clearedFlags, Is.EqualTo(expectedFlags));
             }
         }
 
@@ -72,25 +66,25 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullEnumValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(null));
+                Assert.Throws<ArgumentNullException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNonEnumValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(new object()));
+                Assert.Throws<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(new object()));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForWrongEnumValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MySecondValue));
+                Assert.Throws<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MySecondValue));
             }
 
             [TestCase]
             public void ReturnsConvertedEnumValue()
             {
-                Assert.AreEqual(Enum2.MyValue, Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MyValue));
+                Assert.That(Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MyValue), Is.EqualTo(Enum2.MyValue));
             }
         }
 
@@ -102,7 +96,7 @@ namespace Catel.Tests
             {
                 var name = Enum<Enum1>.GetName(2);
 
-                Assert.AreEqual("MySecondValue", name);
+                Assert.That(name, Is.EqualTo("MySecondValue"));
             }
         }
 
@@ -114,11 +108,11 @@ namespace Catel.Tests
             {
                 var names = Enum<Enum1>.GetNames();
 
-                Assert.AreEqual(4, names.Length);
-                Assert.AreEqual("None", names[0]);
-                Assert.AreEqual("MyValue", names[1]);
-                Assert.AreEqual("MySecondValue", names[2]);
-                Assert.AreEqual("MyThirdValue", names[3]);
+                Assert.That(names.Length, Is.EqualTo(4));
+                Assert.That(names[0], Is.EqualTo("None"));
+                Assert.That(names[1], Is.EqualTo("MyValue"));
+                Assert.That(names[2], Is.EqualTo("MySecondValue"));
+                Assert.That(names[3], Is.EqualTo("MyThirdValue"));
             }
         }
 
@@ -130,11 +124,11 @@ namespace Catel.Tests
             {
                 var values = Enum<Enum1>.GetValues();
 
-                Assert.AreEqual(4, values.Count);
-                Assert.AreEqual(Enum1.None, values[0]);
-                Assert.AreEqual(Enum1.MyValue, values[1]);
-                Assert.AreEqual(Enum1.MySecondValue, values[2]);
-                Assert.AreEqual(Enum1.MyThirdValue, values[3]);
+                Assert.That(values.Count, Is.EqualTo(4));
+                Assert.That(values[0], Is.EqualTo(Enum1.None));
+                Assert.That(values[1], Is.EqualTo(Enum1.MyValue));
+                Assert.That(values[2], Is.EqualTo(Enum1.MySecondValue));
+                Assert.That(values[3], Is.EqualTo(Enum1.MyThirdValue));
             }
         }
 
@@ -146,7 +140,7 @@ namespace Catel.Tests
             {
                 var flags = Enum1.MyValue;
 
-                Assert.IsFalse(Enum<Enum1>.Flags.IsFlagSet(flags, Enum1.MySecondValue));
+                Assert.That(Enum<Enum1>.Flags.IsFlagSet(flags, Enum1.MySecondValue), Is.False);
             }
 
             [TestCase]
@@ -154,7 +148,7 @@ namespace Catel.Tests
             {
                 var flags = Enum1.MyValue | Enum1.MySecondValue;
 
-                Assert.IsTrue(Enum<Enum1>.Flags.IsFlagSet(flags, Enum1.MySecondValue));
+                Assert.That(Enum<Enum1>.Flags.IsFlagSet(flags, Enum1.MySecondValue), Is.True);
             }
         }
 
@@ -168,7 +162,7 @@ namespace Catel.Tests
                 var expectedFlags = Enum1.MyValue | Enum1.MySecondValue;
 
                 var actualFlags = Enum<Enum1>.Flags.SetFlag(flags, Enum1.MySecondValue);
-                Assert.AreEqual(expectedFlags, actualFlags);
+                Assert.That(actualFlags, Is.EqualTo(expectedFlags));
             }
 
             [TestCase]
@@ -178,7 +172,7 @@ namespace Catel.Tests
                 var expectedFlags = Enum1.MyValue | Enum1.MySecondValue;
 
                 var actualFlags = Enum<Enum1>.Flags.SetFlag(flags, Enum1.MySecondValue);
-                Assert.AreEqual(expectedFlags, actualFlags);
+                Assert.That(actualFlags, Is.EqualTo(expectedFlags));
             }
         }
 
@@ -192,7 +186,7 @@ namespace Catel.Tests
                 var expectedFlags = Enum1.MyValue | Enum1.MySecondValue;
 
                 var actualFlags = Enum<Enum1>.Flags.SwapFlag(flags, Enum1.MySecondValue);
-                Assert.AreEqual(expectedFlags, actualFlags);
+                Assert.That(actualFlags, Is.EqualTo(expectedFlags));
             }
 
             [TestCase]
@@ -202,7 +196,7 @@ namespace Catel.Tests
                 var expectedFlags = Enum1.MyValue;
 
                 var actualFlags = Enum<Enum1>.Flags.SwapFlag(flags, Enum1.MySecondValue);
-                Assert.AreEqual(expectedFlags, actualFlags);
+                Assert.That(actualFlags, Is.EqualTo(expectedFlags));
             }
         }
 
@@ -214,11 +208,11 @@ namespace Catel.Tests
             {
                 var list = Enum<Enum1>.ToList();
 
-                Assert.AreEqual(4, list.Count);
-                Assert.AreEqual(Enum1.None, list[0]);
-                Assert.AreEqual(Enum1.MyValue, list[1]);
-                Assert.AreEqual(Enum1.MySecondValue, list[2]);
-                Assert.AreEqual(Enum1.MyThirdValue, list[3]);
+                Assert.That(list.Count, Is.EqualTo(4));
+                Assert.That(list[0], Is.EqualTo(Enum1.None));
+                Assert.That(list[1], Is.EqualTo(Enum1.MyValue));
+                Assert.That(list[2], Is.EqualTo(Enum1.MySecondValue));
+                Assert.That(list[3], Is.EqualTo(Enum1.MyThirdValue));
             }
         }
 
@@ -228,13 +222,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsExceptionForInvalidValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum1>.Parse("hi there"));
+                Assert.Throws<ArgumentException>(() => Enum<Enum1>.Parse("hi there"));
             }
 
             [TestCase]
             public void ReturnsTrueForValidValue()
             {
-                Assert.AreEqual(Enum1.MySecondValue, Enum<Enum1>.Parse("MySecondValue"));
+                Assert.That(Enum<Enum1>.Parse("MySecondValue"), Is.EqualTo(Enum1.MySecondValue));
             }
         }
 
@@ -258,8 +252,8 @@ namespace Catel.Tests
                     return;
                 }
 
-                Assert.IsTrue(parseResult);
-                Assert.AreEqual(expectedResult.Value, result);
+                Assert.That(parseResult, Is.True);
+                Assert.That(result, Is.EqualTo(expectedResult.Value));
             }
         }
     }

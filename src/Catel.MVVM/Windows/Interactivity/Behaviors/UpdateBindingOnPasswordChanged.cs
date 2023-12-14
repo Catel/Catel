@@ -1,23 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdateBindingOnPasswordChanged.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
     using System.Windows.Controls;
-    using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// This behavior automatically updates the binding of a <see cref="PasswordBox"/> when the
@@ -31,22 +16,17 @@ namespace Catel.Windows.Interactivity
         /// <value>
         /// The password.
         /// </value>
-        public string Password
+        public string? Password
         {
-            get { return (string) GetValue(PasswordProperty); }
+            get { return (string?) GetValue(PasswordProperty); }
             set { SetValue(PasswordProperty, value); }
         }
 
         /// <summary>
         /// The Password Property
         /// </summary>
-        public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof (string), typeof(UpdateBindingOnPasswordChanged),
-#if NET || NETCORE
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-#else
-            new PropertyMetadata(null,
-#endif
-                (sender, e) => ((UpdateBindingOnPasswordChanged)sender).OnPasswordChanged(e)));
+        public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register(nameof(Password), typeof (string), typeof(UpdateBindingOnPasswordChanged),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (sender, e) => ((UpdateBindingOnPasswordChanged)sender).OnPasswordChanged(e)));
 
         /// <summary>
         /// Called when the password has been changed.
@@ -54,7 +34,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnPasswordChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 if (AssociatedObject.Password != Password)
                 {
@@ -84,24 +64,14 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="UIEventArgs"/> instance containing the event data.</param>
-        private void OnPasswordChanged(object sender, RoutedEventArgs e)
+        private void OnPasswordChanged(object? sender, RoutedEventArgs e)
         {
             if (!IsEnabled)
             {
                 return;
             }
 
-#if NET || NETCORE || UWP
             Password = AssociatedObject.Password;
-#else
-            var binding = AssociatedObject.GetBindingExpression(PasswordBox.PasswordProperty);
-            if (binding != null)
-            {
-                binding.UpdateSource();
-            }
-#endif
         }
     }
 }
-
-#endif

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CatelLogFacts.cs" company="Catel development team">
-//   Copyright (c) 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Logging
+﻿namespace Catel.Tests.Logging
 {
     using Catel.Logging;
     using NUnit.Framework;
@@ -15,7 +9,7 @@ namespace Catel.Tests.Logging
         private CatelLog _logger;
         private CatelLog Logger
         {
-            get { return _logger ?? (_logger = (CatelLog) LogManager.GetCatelLogger(typeof(CatelLogFacts), AlwaysLog)); }
+            get { return _logger ?? (_logger = (CatelLog)LogManager.GetCatelLogger(typeof(CatelLogFacts), AlwaysLog)); }
             set { _logger = value; }
         }
 
@@ -55,21 +49,21 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
-        
+
         [Test]
         public void Debug_AlwaysLogIsFalse_IgnoreCatelLogsIsTrue_DoesNotWriteLog()
         {
@@ -84,7 +78,7 @@ namespace Catel.Tests.Logging
                     Assert.Fail();
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
@@ -108,19 +102,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsFalse(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.False);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -134,19 +128,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -163,7 +157,7 @@ namespace Catel.Tests.Logging
                     Assert.Fail();
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
@@ -187,19 +181,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsFalse(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.False);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -213,19 +207,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -242,7 +236,7 @@ namespace Catel.Tests.Logging
                     Assert.Fail();
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
@@ -266,19 +260,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsFalse(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.False);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -292,19 +286,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -321,7 +315,7 @@ namespace Catel.Tests.Logging
                     Assert.Fail();
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
@@ -345,19 +339,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsFalse(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.False);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -371,19 +365,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
 
         [Test]
@@ -400,7 +394,7 @@ namespace Catel.Tests.Logging
                     Assert.Fail();
                 };
 
-            Assert.IsTrue(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.True);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
@@ -424,19 +418,19 @@ namespace Catel.Tests.Logging
             FakeListener.LogMessage += (sender, e) =>
                 {
                     receivedLog = true;
-                    Assert.NotNull(e);
-                    Assert.AreEqual(expectedLogEvent, e.LogEvent);
-                    Assert.AreEqual(expectedMessage, e.Message);
+                    Assert.That(e, Is.Not.Null);
+                    Assert.That(e.LogEvent, Is.EqualTo(expectedLogEvent));
+                    Assert.That(e.Message, Is.EqualTo(expectedMessage));
                 };
 
-            Assert.IsFalse(FakeListener.IgnoreCatelLogging);
+            Assert.That(FakeListener.IgnoreCatelLogging, Is.False);
 
             // ACT
             Logger.Write(expectedLogEvent, expectedMessage);
 
 
             // ASSERT
-            Assert.IsTrue(receivedLog);
+            Assert.That(receivedLog, Is.True);
         }
     }
 }

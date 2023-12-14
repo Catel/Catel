@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Navigate.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System.Windows.Documents;
-    using Microsoft.Xaml.Behaviors;
     using IoC;
     using System.Windows.Navigation;
     using Catel.Services;
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// Navigate behavior to allow the execution of an url in non-pages for WPF.
@@ -21,7 +13,6 @@ namespace Catel.Windows.Interactivity
     {
         private static readonly IProcessService _processService;
 
-        #region Methods
         /// <summary>
         /// Initializes static members of the <see cref="Navigate"/> class.
         /// </summary>
@@ -29,7 +20,7 @@ namespace Catel.Windows.Interactivity
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            _processService = dependencyResolver.Resolve<IProcessService>();
+            _processService = dependencyResolver.ResolveRequired<IProcessService>();
         }
 
         /// <summary>
@@ -52,16 +43,13 @@ namespace Catel.Windows.Interactivity
             base.OnDetaching();
         }
 
-        private void AssociatedObjectRequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void AssociatedObjectRequestNavigate(object? sender, RequestNavigateEventArgs e)
         {
             var uri = AssociatedObject.NavigateUri;
-            if (uri != null)
+            if (uri is not null)
             {
                 _processService.StartProcess(uri.ToString());
             }
         }
-        #endregion
     }
 }
-
-#endif

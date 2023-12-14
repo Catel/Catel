@@ -27,7 +27,7 @@ namespace Catel.Reflection
             if (!_objectGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Object>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _objectGettersCache[key] = getter;
@@ -44,7 +44,7 @@ namespace Catel.Reflection
             if (!_objectGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Object>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _objectGettersCache[key] = getter;
@@ -61,7 +61,7 @@ namespace Catel.Reflection
             if (!_objectSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Object>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _objectSettersCache[key] = setter;
@@ -78,7 +78,7 @@ namespace Catel.Reflection
             if (!_objectSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Object>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _objectSettersCache[key] = setter;
@@ -98,7 +98,7 @@ namespace Catel.Reflection
             if (!_booleanGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Boolean>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _booleanGettersCache[key] = getter;
@@ -115,7 +115,7 @@ namespace Catel.Reflection
             if (!_booleanGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Boolean>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _booleanGettersCache[key] = getter;
@@ -132,7 +132,7 @@ namespace Catel.Reflection
             if (!_booleanSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Boolean>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _booleanSettersCache[key] = setter;
@@ -149,7 +149,7 @@ namespace Catel.Reflection
             if (!_booleanSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Boolean>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _booleanSettersCache[key] = setter;
@@ -169,7 +169,7 @@ namespace Catel.Reflection
             if (!_charGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Char>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _charGettersCache[key] = getter;
@@ -186,7 +186,7 @@ namespace Catel.Reflection
             if (!_charGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Char>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _charGettersCache[key] = getter;
@@ -203,7 +203,7 @@ namespace Catel.Reflection
             if (!_charSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Char>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _charSettersCache[key] = setter;
@@ -220,7 +220,7 @@ namespace Catel.Reflection
             if (!_charSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Char>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _charSettersCache[key] = setter;
@@ -240,7 +240,7 @@ namespace Catel.Reflection
             if (!_sbyteGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, SByte>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _sbyteGettersCache[key] = getter;
@@ -257,7 +257,7 @@ namespace Catel.Reflection
             if (!_sbyteGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, SByte>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _sbyteGettersCache[key] = getter;
@@ -274,7 +274,7 @@ namespace Catel.Reflection
             if (!_sbyteSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, SByte>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _sbyteSettersCache[key] = setter;
@@ -291,7 +291,7 @@ namespace Catel.Reflection
             if (!_sbyteSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, SByte>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _sbyteSettersCache[key] = setter;
@@ -311,7 +311,7 @@ namespace Catel.Reflection
             if (!_byteGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Byte>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _byteGettersCache[key] = getter;
@@ -328,7 +328,7 @@ namespace Catel.Reflection
             if (!_byteGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Byte>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _byteGettersCache[key] = getter;
@@ -345,7 +345,7 @@ namespace Catel.Reflection
             if (!_byteSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Byte>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _byteSettersCache[key] = setter;
@@ -362,7 +362,7 @@ namespace Catel.Reflection
             if (!_byteSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Byte>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _byteSettersCache[key] = setter;
@@ -382,7 +382,7 @@ namespace Catel.Reflection
             if (!_int16GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Int16>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _int16GettersCache[key] = getter;
@@ -399,7 +399,7 @@ namespace Catel.Reflection
             if (!_int16GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Int16>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _int16GettersCache[key] = getter;
@@ -416,7 +416,7 @@ namespace Catel.Reflection
             if (!_int16SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Int16>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _int16SettersCache[key] = setter;
@@ -433,7 +433,7 @@ namespace Catel.Reflection
             if (!_int16SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Int16>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _int16SettersCache[key] = setter;
@@ -453,7 +453,7 @@ namespace Catel.Reflection
             if (!_uint16GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, UInt16>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _uint16GettersCache[key] = getter;
@@ -470,7 +470,7 @@ namespace Catel.Reflection
             if (!_uint16GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, UInt16>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _uint16GettersCache[key] = getter;
@@ -487,7 +487,7 @@ namespace Catel.Reflection
             if (!_uint16SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, UInt16>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _uint16SettersCache[key] = setter;
@@ -504,7 +504,7 @@ namespace Catel.Reflection
             if (!_uint16SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, UInt16>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _uint16SettersCache[key] = setter;
@@ -524,7 +524,7 @@ namespace Catel.Reflection
             if (!_int32GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Int32>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _int32GettersCache[key] = getter;
@@ -541,7 +541,7 @@ namespace Catel.Reflection
             if (!_int32GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Int32>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _int32GettersCache[key] = getter;
@@ -558,7 +558,7 @@ namespace Catel.Reflection
             if (!_int32SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Int32>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _int32SettersCache[key] = setter;
@@ -575,7 +575,7 @@ namespace Catel.Reflection
             if (!_int32SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Int32>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _int32SettersCache[key] = setter;
@@ -595,7 +595,7 @@ namespace Catel.Reflection
             if (!_uint32GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, UInt32>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _uint32GettersCache[key] = getter;
@@ -612,7 +612,7 @@ namespace Catel.Reflection
             if (!_uint32GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, UInt32>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _uint32GettersCache[key] = getter;
@@ -629,7 +629,7 @@ namespace Catel.Reflection
             if (!_uint32SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, UInt32>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _uint32SettersCache[key] = setter;
@@ -646,7 +646,7 @@ namespace Catel.Reflection
             if (!_uint32SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, UInt32>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _uint32SettersCache[key] = setter;
@@ -666,7 +666,7 @@ namespace Catel.Reflection
             if (!_int64GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Int64>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _int64GettersCache[key] = getter;
@@ -683,7 +683,7 @@ namespace Catel.Reflection
             if (!_int64GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Int64>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _int64GettersCache[key] = getter;
@@ -700,7 +700,7 @@ namespace Catel.Reflection
             if (!_int64SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Int64>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _int64SettersCache[key] = setter;
@@ -717,7 +717,7 @@ namespace Catel.Reflection
             if (!_int64SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Int64>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _int64SettersCache[key] = setter;
@@ -737,7 +737,7 @@ namespace Catel.Reflection
             if (!_uint64GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, UInt64>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _uint64GettersCache[key] = getter;
@@ -754,7 +754,7 @@ namespace Catel.Reflection
             if (!_uint64GettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, UInt64>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _uint64GettersCache[key] = getter;
@@ -771,7 +771,7 @@ namespace Catel.Reflection
             if (!_uint64SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, UInt64>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _uint64SettersCache[key] = setter;
@@ -788,7 +788,7 @@ namespace Catel.Reflection
             if (!_uint64SettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, UInt64>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _uint64SettersCache[key] = setter;
@@ -808,7 +808,7 @@ namespace Catel.Reflection
             if (!_singleGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Single>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _singleGettersCache[key] = getter;
@@ -825,7 +825,7 @@ namespace Catel.Reflection
             if (!_singleGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Single>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _singleGettersCache[key] = getter;
@@ -842,7 +842,7 @@ namespace Catel.Reflection
             if (!_singleSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Single>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _singleSettersCache[key] = setter;
@@ -859,7 +859,7 @@ namespace Catel.Reflection
             if (!_singleSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Single>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _singleSettersCache[key] = setter;
@@ -879,7 +879,7 @@ namespace Catel.Reflection
             if (!_doubleGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Double>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _doubleGettersCache[key] = getter;
@@ -896,7 +896,7 @@ namespace Catel.Reflection
             if (!_doubleGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Double>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _doubleGettersCache[key] = getter;
@@ -913,7 +913,7 @@ namespace Catel.Reflection
             if (!_doubleSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Double>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _doubleSettersCache[key] = setter;
@@ -930,7 +930,7 @@ namespace Catel.Reflection
             if (!_doubleSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Double>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _doubleSettersCache[key] = setter;
@@ -950,7 +950,7 @@ namespace Catel.Reflection
             if (!_decimalGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Decimal>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _decimalGettersCache[key] = getter;
@@ -967,7 +967,7 @@ namespace Catel.Reflection
             if (!_decimalGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Decimal>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _decimalGettersCache[key] = getter;
@@ -984,7 +984,7 @@ namespace Catel.Reflection
             if (!_decimalSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Decimal>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _decimalSettersCache[key] = setter;
@@ -1001,7 +1001,7 @@ namespace Catel.Reflection
             if (!_decimalSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Decimal>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _decimalSettersCache[key] = setter;
@@ -1021,7 +1021,7 @@ namespace Catel.Reflection
             if (!_datetimeGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, DateTime>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _datetimeGettersCache[key] = getter;
@@ -1038,7 +1038,7 @@ namespace Catel.Reflection
             if (!_datetimeGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, DateTime>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _datetimeGettersCache[key] = getter;
@@ -1055,7 +1055,7 @@ namespace Catel.Reflection
             if (!_datetimeSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, DateTime>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _datetimeSettersCache[key] = setter;
@@ -1072,7 +1072,7 @@ namespace Catel.Reflection
             if (!_datetimeSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, DateTime>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _datetimeSettersCache[key] = setter;
@@ -1092,7 +1092,7 @@ namespace Catel.Reflection
             if (!_stringGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, String>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _stringGettersCache[key] = getter;
@@ -1109,7 +1109,7 @@ namespace Catel.Reflection
             if (!_stringGettersCache.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, String>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     _stringGettersCache[key] = getter;
@@ -1126,7 +1126,7 @@ namespace Catel.Reflection
             if (!_stringSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, String>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _stringSettersCache[key] = setter;
@@ -1143,7 +1143,7 @@ namespace Catel.Reflection
             if (!_stringSettersCache.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, String>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     _stringSettersCache[key] = setter;

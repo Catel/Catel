@@ -1,14 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FastObservableCollectionFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.Commands
+﻿namespace Catel.Tests.MVVM.Commands
 {
     using System;
-    using System.Diagnostics;
+    using Catel.Data;
     using Catel.MVVM;
 
     using NUnit.Framework;
@@ -22,14 +15,14 @@ namespace Catel.Tests.MVVM.Commands
             public void ExecuteThrowsException()
             {
                 var command = new Command(() => { throw new Exception(); }, () => true);
-                ExceptionTester.CallMethodAndExpectException<Exception>(() => command.Execute());
+                Assert.Throws<Exception>(() => command.Execute());
             }
 
             [Test]
             public void CanExecuteThrowsException()
             {
                 var command = new Command(() => { }, () => { throw new Exception(); });
-                ExceptionTester.CallMethodAndExpectException<Exception>(() => command.Execute());
+                Assert.Throws<Exception>(() => command.Execute());
             }
         }
 
@@ -46,7 +39,7 @@ namespace Catel.Tests.MVVM.Commands
                     int localVariable = 1;
                     TestCommand = new Command(TestFunction, () =>
                     {
-                        Console.WriteLine("CanExecute called " + localVariable++);
+                        Console.WriteLine("CanExecute called " + BoxingCache.GetBoxedValue(localVariable++));
                         return false;
                     });
                 }

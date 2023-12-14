@@ -1,10 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICacheStorage.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Caching
+﻿namespace Catel.Caching
 {
     using System;
     using System.Collections.Generic;
@@ -17,18 +11,18 @@ namespace Catel.Caching
     /// <typeparam name="TKey">The key type.</typeparam>
     /// <typeparam name="TValue">The value type.</typeparam>
     public interface ICacheStorage<TKey, TValue>
+        where TKey : notnull
     {
         /// <summary>
         /// Occurs when the item is expiring.
         /// </summary>
-        event EventHandler<ExpiringEventArgs<TKey, TValue>> Expiring;
+        event EventHandler<ExpiringEventArgs<TKey, TValue>>? Expiring;
 
         /// <summary>
         /// Occurs when the item has expired.
         /// </summary>
-        event EventHandler<ExpiredEventArgs<TKey, TValue>> Expired;
+        event EventHandler<ExpiredEventArgs<TKey, TValue>>? Expired;
 
-        #region Properties
         /// <summary>
         /// Gets or sets whether values should be disposed on removal.
         /// </summary>
@@ -41,7 +35,7 @@ namespace Catel.Caching
         /// <param name="key">The key.</param>
         /// <returns>The value associated with the specified key, or default value for the type of the value if the key do not exists.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        TValue this[TKey key] { get; }
+        TValue? this[TKey key] { get; }
 
         /// <summary>
         /// Gets the keys so it is possible to enumerate the cache.
@@ -56,16 +50,14 @@ namespace Catel.Caching
         /// </summary>
         /// <value>The expiration timer interval.</value>
         TimeSpan ExpirationTimerInterval { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the value associated with the specified key
         /// </summary>
         /// <param name="key">The key of the value to get.</param>
         /// <returns>The value associated with the specified key, or default value for the type of the value if the key do not exists.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        TValue Get(TKey key);
+        TValue? Get(TKey key);
 
         /// <summary>
         /// Determines whether the cache contains a value associated with the specified key.
@@ -86,7 +78,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan));
+        TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default);
 
         /// <summary>
         /// Adds a value to the cache associated with to a key.
@@ -97,9 +89,8 @@ namespace Catel.Caching
         /// <param name="override">Indicates if the key exists the value will be overridden</param>
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false);
+        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, ExpirationPolicy? expirationPolicy, bool @override = false);
 
         /// <summary>
         /// Adds a value to the cache associated with to a key.
@@ -109,8 +100,7 @@ namespace Catel.Caching
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <param name="expiration">The timespan in which the cache item should expire when added.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        void Add(TKey key, TValue @value, bool @override = false, TimeSpan expiration = default(TimeSpan));
+        void Add(TKey key, TValue @value, bool @override = false, TimeSpan expiration = default);
 
         /// <summary>
         /// Removes an item from the cache.
@@ -118,7 +108,7 @@ namespace Catel.Caching
         /// <param name="key">The key.</param>
         /// <param name="action">The action that need to be executed in synchronization with the item cache removal.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        void Remove(TKey key, Action action = null);
+        void Remove(TKey key, Action? action = null);
 
         /// <summary>
         /// Adds a value to the cache associated with to a key.
@@ -128,8 +118,7 @@ namespace Catel.Caching
         /// <param name="expirationPolicy">The expiration policy</param>
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        void Add(TKey key, TValue @value, ExpirationPolicy expirationPolicy, bool @override = false);
+        void Add(TKey key, TValue @value, ExpirationPolicy? expirationPolicy, bool @override = false);
 
         /// <summary>
         /// Clears all the items currently in the cache.
@@ -148,7 +137,7 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy expirationPolicy, bool @override = false);
+        Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy? expirationPolicy, bool @override = false);
 
         /// <summary>
         /// Adds a value to the cache associated with to a key asynchronously.
@@ -162,7 +151,6 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default(TimeSpan));
-        #endregion
+        Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default);
     }
 }

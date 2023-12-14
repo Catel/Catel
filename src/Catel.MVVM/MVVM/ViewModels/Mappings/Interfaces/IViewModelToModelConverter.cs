@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelToModelConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -14,13 +7,12 @@ namespace Catel.MVVM
     /// </summary>
     public interface IViewModelToModelConverter
     {
-        #region Methods
         /// <summary>
         /// Determines whether the property name should be converted.
         /// </summary>
         /// <param name="propertyName">The name of changed property</param>
         /// <returns><c>true</c> if the property name should be converted, <c>false</c> otherwise.</returns>
-        bool ShouldConvert(string propertyName);
+        bool ShouldConvert(string? propertyName);
 
         /// <summary>
         /// Determines whether this instance can convert the specified types.
@@ -37,7 +29,7 @@ namespace Catel.MVVM
         /// <param name="values">The values.</param>
         /// <param name="viewModel">Owner VM</param>
         /// <returns>System.Object.</returns>
-        object Convert(object[] values, IViewModel viewModel);
+        object? Convert(object?[] values, IViewModel viewModel);
 
         /// <summary>
         /// Determines whether this instance can convert back the specified in type.
@@ -54,7 +46,6 @@ namespace Catel.MVVM
         /// <param name="value">Property value</param>
         /// <param name="viewModel">Owner VM</param>
         /// <returns>System.Object[].</returns>
-        object[] ConvertBack(object value, IViewModel viewModel);
-        #endregion
+        object?[] ConvertBack(object? value, IViewModel viewModel);
     }
 }

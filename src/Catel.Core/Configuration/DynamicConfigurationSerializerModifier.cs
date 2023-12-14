@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DynamicConfigurationSerializerModifier.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using Runtime.Serialization;
 
@@ -21,8 +15,6 @@ namespace Catel.Configuration
         /// <param name="serializationManager">The serialization manager.</param>
         public DynamicConfigurationSerializerModifier(ISerializationManager serializationManager)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-
             _serializationManager = serializationManager;
         }
 
@@ -33,6 +25,8 @@ namespace Catel.Configuration
         /// <param name="model">The model.</param>
         public override void OnSerializing(ISerializationContext context, object model)
         {
+            // The only reason we should have to clear is to make sure we can keep
+            // serializing new configuration value types
             _serializationManager.Clear(model.GetType());
 
             base.OnSerializing(context, model);

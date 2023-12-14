@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
 
@@ -20,7 +13,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="serializationContext">The serialization context.</param>
         public SerializationEventArgs(ISerializationContext serializationContext)
         {
-            // Note: no check for null to improve performance
             SerializationContext = serializationContext;
         }
 

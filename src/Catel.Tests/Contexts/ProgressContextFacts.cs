@@ -1,16 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProgressContextFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Contexts
+﻿namespace Catel.Tests.Contexts
 {
     using NUnit.Framework;
 
     [TestFixture]
-    public class ProgressContextFacts 
+    public class ProgressContextFacts
     {
         [TestCase(10, 0, 10, 0d)]
         [TestCase(10, 1, 10, 10d)]
@@ -25,12 +18,14 @@ namespace Catel.Tests.Contexts
         [TestCase(2, 2, 75, 100)]
         public void CorrectlyCalculatesPercentage(int totalCount, int currentCount, int numberOfRefreshes, double expectedPercentage)
         {
-            var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
-            progressContext.CurrentCount = currentCount;
+            using (var progressContext = new ProgressContext(totalCount, numberOfRefreshes))
+            {
+                progressContext.CurrentCount = currentCount;
 
-            var percentage = progressContext.Percentage;
+                var percentage = progressContext.Percentage;
 
-            Assert.AreEqual(expectedPercentage, percentage);
+                Assert.That(percentage, Is.EqualTo(expectedPercentage));
+            }
         }
 
         [TestCase(10, 0, 10, 0)]
@@ -47,12 +42,14 @@ namespace Catel.Tests.Contexts
         [TestCase(2, 2, 75, 75)]
         public void CorrectlyCalculatesCurrentRefreshNumber(int totalCount, int currentCount, int numberOfRefreshes, int expectedRefreshNumber)
         {
-            var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
-            progressContext.CurrentCount = currentCount;
+            using (var progressContext = new ProgressContext(totalCount, numberOfRefreshes))
+            {
+                progressContext.CurrentCount = currentCount;
 
-            var currentRefreshNumber = progressContext.CurrentRefreshNumber;
+                var currentRefreshNumber = progressContext.CurrentRefreshNumber;
 
-            Assert.AreEqual(expectedRefreshNumber, currentRefreshNumber);
+                Assert.That(currentRefreshNumber, Is.EqualTo(expectedRefreshNumber));
+            }
         }
 
         [TestCase(10, 0, 10, true)]
@@ -69,12 +66,14 @@ namespace Catel.Tests.Contexts
         [TestCase(2, 2, 75, true)]
         public void CorrectlyCalculatesIsRefreshRequired(int totalCount, int currentCount, int numberOfRefreshes, bool expectedIsRefreshRequired)
         {
-            var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
-            progressContext.CurrentCount = currentCount;
+            using (var progressContext = new ProgressContext(totalCount, numberOfRefreshes))
+            {
+                progressContext.CurrentCount = currentCount;
 
-            var isRefreshRequired = progressContext.IsRefreshRequired;
+                var isRefreshRequired = progressContext.IsRefreshRequired;
 
-            Assert.AreEqual(expectedIsRefreshRequired, isRefreshRequired);
+                Assert.That(isRefreshRequired, Is.EqualTo(expectedIsRefreshRequired));
+            }
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NamingConvention.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
@@ -76,7 +70,6 @@ namespace Catel.Services
         /// </summary>
         public const string Current = "[CURRENT]";
 
-        #region Methods
         /// <summary>
         /// Resolves the convention by using the view model name.
         /// <para/>
@@ -103,12 +96,14 @@ namespace Catel.Services
             var viewModelWithoutViewModel = TypeHelper.GetTypeNameWithoutNamespace(fullViewModelName);
             viewModelWithoutViewModel = RemoveAllPostfixes(viewModelWithoutViewModel, new[] { "ViewModel" });
 
-            var constantsWithValues = new Dictionary<string, string>();
-            constantsWithValues.Add(Assembly, assembly);
-            constantsWithValues.Add(Current, TypeHelper.GetTypeNamespace(fullViewModelName));
-            constantsWithValues.Add(ViewModelName, viewModelWithoutViewModel);
+            var constantsWithValues = new Dictionary<string, string>
+            {
+                { Assembly, assembly },
+                { Current, TypeHelper.GetTypeNamespace(fullViewModelName) },
+                { ViewModelName, viewModelWithoutViewModel }
+            };
 
-            return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewModelName); 
+            return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewModelName);
         }
 
         /// <summary>
@@ -137,10 +132,12 @@ namespace Catel.Services
             var viewWithoutView = TypeHelper.GetTypeNameWithoutNamespace(fullViewName);
             viewWithoutView = RemoveAllPostfixes(viewWithoutView, new[] { "View", "Control", "UserControl", "Window", "Page", "Activity" });
 
-            var constantsWithValues = new Dictionary<string, string>();
-            constantsWithValues.Add(Assembly, assembly);
-            constantsWithValues.Add(Current, TypeHelper.GetTypeNamespace(fullViewName));
-            constantsWithValues.Add(ViewName, viewWithoutView);
+            var constantsWithValues = new Dictionary<string, string>
+            {
+                { Assembly, assembly },
+                { Current, TypeHelper.GetTypeNamespace(fullViewName) },
+                { ViewName, viewWithoutView }
+            };
 
             return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewName);
         }
@@ -158,7 +155,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">If <paramref name="conventionToUse"/> is <c>null</c> or whitespace.</exception>
         public static string ResolveNamingConvention(Dictionary<string, string> constantsWithValues, string conventionToUse)
         {
-            Argument.IsNotNull("constantsWithValues", constantsWithValues);
+            ArgumentNullException.ThrowIfNull(constantsWithValues);
             Argument.IsNotNullOrWhitespace("conventionToUse", conventionToUse);
 
             return constantsWithValues.Aggregate(conventionToUse, (current, constantWithValue) => current.Replace(constantWithValue.Key, constantWithValue.Value));
@@ -178,17 +175,18 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">If <paramref name="conventionToUse"/> is <c>null</c> or whitespace.</exception>
         public static string ResolveNamingConvention(Dictionary<string, string> constantsWithValues, string conventionToUse, string value)
         {
-            Argument.IsNotNull("constantsWithValues", constantsWithValues);
+            ArgumentNullException.ThrowIfNull(constantsWithValues);
             Argument.IsNotNullOrWhitespace("conventionToUse", conventionToUse);
             Argument.IsNotNullOrWhitespace("value", value);
 
             var fullnamespace = GetParentPath(value);
             var separator = GetParentSeparator(fullnamespace);
-            var namespaces = fullnamespace.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var namespaces = fullnamespace.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             var occurrences = Regex.Matches(conventionToUse, "UP", RegexOptions.IgnoreCase).Count;
 
             var prefix = string.Empty;
+
             for (var i = 0; i < namespaces.Count - occurrences; i++)
             {
                 if (i > 0)
@@ -287,7 +285,7 @@ namespace Catel.Services
 
             var knownSeparators = new[] { "\\", "/", "|", "." };
 
-            return knownSeparators.FirstOrDefault(path.Contains);
+            return knownSeparators.FirstOrDefault(path.Contains) ?? ".";
         }
 
         /// <summary>
@@ -300,7 +298,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">The <paramref name="postfixesToRemove"/> is <c>null</c> or an empty array.</exception>
         private static string RemoveAllPostfixes(string value, string[] postfixesToRemove)
         {
-            Argument.IsNotNull("value", value);
+            ArgumentNullException.ThrowIfNull(value);
             Argument.IsNotNullOrEmptyArray("postfixesToRemove", postfixesToRemove);
 
             foreach (var postfix in postfixesToRemove)
@@ -315,6 +313,5 @@ namespace Catel.Services
 
             return value;
         }
-        #endregion
     }
 }

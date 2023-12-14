@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationContextHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     /// <summary>
     /// Helper class for serialization.
@@ -13,22 +6,12 @@ namespace Catel.Runtime.Serialization
     public static class SerializationContextHelper
     {
         /// <summary>
-        /// Gets the name of the serialization reference manager scope.
-        /// </summary>
-        /// <returns>The name of the scope.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationScopeName", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
-        public static string GetSerializationReferenceManagerScopeName()
-        {
-            return GetSerializationScopeName();
-        }
-
-        /// <summary>
         /// Gets the name of the current serialization scope.
         /// </summary>
         /// <returns>The name of the scope.</returns>
         public static string GetSerializationScopeName()
         {
-            var scopeName = string.Format("Thread_{0}", ThreadHelper.GetCurrentThreadId());
+            var scopeName = $"Thread_{ThreadHelper.GetCurrentThreadId()}";
             return scopeName;
         }
     }

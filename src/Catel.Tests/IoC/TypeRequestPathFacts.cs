@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRequestPathFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using System.Linq;
@@ -28,13 +23,13 @@ namespace Catel.Tests.IoC
         {
             public Z(Y y) { }
         }
-        
+
         private static TypeRequestInfo[] CreateArrayWithOnlyReferenceTypes()
         {
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(X)),
-                new TypeRequestInfo(typeof(Y)), 
+                new TypeRequestInfo(typeof(Y)),
                 new TypeRequestInfo(typeof(Z))
             };
         }
@@ -44,7 +39,7 @@ namespace Catel.Tests.IoC
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(int)),
-                new TypeRequestInfo(typeof(double)), 
+                new TypeRequestInfo(typeof(double)),
                 new TypeRequestInfo(typeof(DateTime))
             };
         }
@@ -54,7 +49,7 @@ namespace Catel.Tests.IoC
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(X)),
-                new TypeRequestInfo(typeof(Y)), 
+                new TypeRequestInfo(typeof(Y)),
                 new TypeRequestInfo(typeof(Z))
             };
         }
@@ -64,7 +59,7 @@ namespace Catel.Tests.IoC
             return new TypeRequestInfo[]
             {
                 new TypeRequestInfo(typeof(X)),
-                new TypeRequestInfo(typeof(Y)), 
+                new TypeRequestInfo(typeof(Y)),
                 new TypeRequestInfo(typeof(Z)),
                 new TypeRequestInfo(typeof(X))
             };
@@ -86,14 +81,14 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void RootOfThePathCanBeCreatedWithoutTheName()
             {
-                Assert.DoesNotThrow(() => TypeRequestPath.Root());
+                Assert.DoesNotThrow(() => TypeRequestPath.Root(string.Empty));
             }
 
             [TestCase]
             public void RootOfThePathCanBeCreatedWithName()
             {
                 var path = TypeRequestPath.Root(TestPathName);
-                Assert.AreEqual(TestPathName, path.Name);
+                Assert.That(path.Name, Is.EqualTo(TestPathName));
             }
         }
 
@@ -104,14 +99,14 @@ namespace Catel.Tests.IoC
             public void ThrowsArgumentNullExceptionForNullParent()
             {
                 var item = new TypeRequestInfo(typeof(X));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeRequestPath.Branch(null, item));
+                Assert.Throws<ArgumentNullException>(() => TypeRequestPath.Branch(null, item));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
             {
-                var parent = TypeRequestPath.Root();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeRequestPath.Branch(parent, null));
+                var parent = TypeRequestPath.Root(string.Empty);
+                Assert.Throws<ArgumentNullException>(() => TypeRequestPath.Branch(parent, null));
             }
 
             [TestCase]
@@ -123,11 +118,11 @@ namespace Catel.Tests.IoC
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
+                    Assert.That(path.AllTypes.ElementAt(i), Is.EqualTo(typeArray[i]));
                 }
-                    
-                Assert.AreEqual(typeArray[0], path.FirstType);
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
 
             [TestCase]
@@ -139,11 +134,11 @@ namespace Catel.Tests.IoC
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
+                    Assert.That(path.AllTypes.ElementAt(i), Is.EqualTo(typeArray[i]));
                 }
 
-                Assert.AreEqual(typeArray[0], path.FirstType);
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
 
             [TestCase]
@@ -155,18 +150,18 @@ namespace Catel.Tests.IoC
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
+                    Assert.That(path.AllTypes.ElementAt(i), Is.EqualTo(typeArray[i]));
                 }
 
-                Assert.AreEqual(typeArray[0], path.FirstType);
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
 
             [TestCase]
             public void ThrowsCircularDependencyExceptionIfThereAreRepetitions()
             {
                 var typeArray = CreateInvalidPath();
-                ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => MapRequestInfoArrayIntoPath(typeArray));
+                Assert.Throws<CircularDependencyException>(() => MapRequestInfoArrayIntoPath(typeArray));
             }
         }
 
@@ -176,8 +171,8 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsNullForEmpty()
             {
-                var path = TypeRequestPath.Root();
-                Assert.IsNull(path.FirstType);
+                var path = TypeRequestPath.Root(string.Empty);
+                Assert.That(path.FirstType, Is.Null);
             }
 
             [TestCase]
@@ -186,7 +181,7 @@ namespace Catel.Tests.IoC
                 var typeArray = CreateArrayWithOnlyValueTypes();
                 var path = MapRequestInfoArrayIntoPath(typeArray);
 
-                Assert.AreEqual(typeArray[0], path.FirstType);
+                Assert.That(path.FirstType, Is.EqualTo(typeArray[0]));
             }
         }
 
@@ -196,8 +191,8 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ReturnsNullForEmpty()
             {
-                var path = TypeRequestPath.Root();
-                Assert.IsNull(path.LastType);
+                var path = TypeRequestPath.Root(string.Empty);
+                Assert.That(path.LastType, Is.Null);
             }
 
             [TestCase]
@@ -206,7 +201,7 @@ namespace Catel.Tests.IoC
                 var typeArray = CreateArrayWithOnlyValueTypes();
                 var path = MapRequestInfoArrayIntoPath(typeArray);
 
-                Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
+                Assert.That(path.LastType, Is.EqualTo(typeArray[typeArray.Length - 1]));
             }
         }
 
@@ -220,9 +215,8 @@ namespace Catel.Tests.IoC
                 var path = MapRequestInfoArrayIntoPath(typeArray);
 
                 const string expected = "X => Y => Z";
-                Assert.AreEqual(path.ToString(), expected);
+                Assert.That(path.ToString(), Is.EqualTo(expected));
             }
-
         }
     }
 }

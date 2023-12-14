@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumericBasedObjectIdGeneratorsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2018 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Services
+﻿namespace Catel.Tests.Services
 {
     using System;
 
@@ -24,7 +17,7 @@ namespace Catel.Tests.Services
                 IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel1>();
                 IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<PersonViewModel1>();
 
-                Assert.AreNotEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+                Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }
 
             [Test]
@@ -35,7 +28,7 @@ namespace Catel.Tests.Services
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
 
-                Assert.AreEqual(uniqueIdentifier, generator.GetUniqueIdentifier(true));
+                Assert.That(generator.GetUniqueIdentifier(true), Is.EqualTo(uniqueIdentifier));
             }
 
             [Test]
@@ -44,7 +37,7 @@ namespace Catel.Tests.Services
                 IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel3>();
                 IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<PersonViewModel4>();
 
-                Assert.AreEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+                Assert.That(generator2.GetUniqueIdentifier(), Is.EqualTo(generator1.GetUniqueIdentifier()));
             }
 
             public class PersonViewModel2
@@ -76,7 +69,7 @@ namespace Catel.Tests.Services
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
+                Assert.That(generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true), Is.EqualTo(uniqueIdentifierForInstance));
             }
 
             [Test]
@@ -88,14 +81,18 @@ namespace Catel.Tests.Services
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.AreNotEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel2()));
+                Assert.That(generator.GetUniqueIdentifierForInstance(new PersonViewModel2()), Is.Not.EqualTo(uniqueIdentifierForInstance));
             }
 
             [Test]
             public void Returns_A_Unique_Identifier_For_Different_Instances()
             {
                 var generator = new IntegerObjectIdGenerator<PersonViewModel3>();
-                Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
+
+                var a = generator.GetUniqueIdentifierForInstance(new PersonViewModel3());
+                var b = generator.GetUniqueIdentifierForInstance(new PersonViewModel3());
+
+                Assert.That(a, Is.Not.EqualTo(b));
             }
 
             public class PersonViewModel1
@@ -137,7 +134,7 @@ namespace Catel.Tests.Services
                 IObjectIdGenerator<long> generator1 = new LongObjectIdGenerator<PersonViewModel1>();
                 IObjectIdGenerator<long> generator2 = new LongObjectIdGenerator<PersonViewModel1>();
 
-                Assert.AreNotEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+                Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }
 
             [Test]
@@ -148,7 +145,7 @@ namespace Catel.Tests.Services
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
 
-                Assert.AreEqual(uniqueIdentifier, generator.GetUniqueIdentifier(true));
+                Assert.That(generator.GetUniqueIdentifier(true), Is.EqualTo(uniqueIdentifier));
             }
 
             [Test]
@@ -157,7 +154,7 @@ namespace Catel.Tests.Services
                 IObjectIdGenerator<long> generator1 = new LongObjectIdGenerator<PersonViewModel3>();
                 IObjectIdGenerator<long> generator2 = new LongObjectIdGenerator<PersonViewModel4>();
 
-                Assert.AreEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+                Assert.That(generator2.GetUniqueIdentifier(), Is.EqualTo(generator1.GetUniqueIdentifier()));
             }
         }
 
@@ -173,7 +170,7 @@ namespace Catel.Tests.Services
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
+                Assert.That(generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true), Is.EqualTo(uniqueIdentifierForInstance));
             }
 
             [Test]
@@ -185,14 +182,18 @@ namespace Catel.Tests.Services
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.AreNotEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel2()));
+                Assert.That(generator.GetUniqueIdentifierForInstance(new PersonViewModel2()), Is.Not.EqualTo(uniqueIdentifierForInstance));
             }
 
             [Test]
             public void Returns_A_Unique_Identifier_For_Different_Instances()
             {
                 var generator = new LongObjectIdGenerator<PersonViewModel3>();
-                Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
+
+                var a = generator.GetUniqueIdentifierForInstance(new PersonViewModel3());
+                var b = generator.GetUniqueIdentifierForInstance(new PersonViewModel3());
+
+                Assert.That(a, Is.Not.EqualTo(b));
             }
 
             public class PersonViewModel1
@@ -235,7 +236,7 @@ namespace Catel.Tests.Services
                 IObjectIdGenerator<ulong> generator1 = new ULongObjectIdGenerator<PersonViewModel1>();
                 IObjectIdGenerator<ulong> generator2 = new ULongObjectIdGenerator<PersonViewModel1>();
 
-                Assert.AreNotEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+                Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }
 
             [Test]
@@ -246,7 +247,7 @@ namespace Catel.Tests.Services
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
 
-                Assert.AreEqual(uniqueIdentifier, generator.GetUniqueIdentifier(true));
+                Assert.That(generator.GetUniqueIdentifier(true), Is.EqualTo(uniqueIdentifier));
             }
 
             [Test]
@@ -255,7 +256,7 @@ namespace Catel.Tests.Services
                 IObjectIdGenerator<ulong> generator1 = new ULongObjectIdGenerator<PersonViewModel3>();
                 IObjectIdGenerator<ulong> generator2 = new ULongObjectIdGenerator<PersonViewModel4>();
 
-                Assert.AreEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+                Assert.That(generator2.GetUniqueIdentifier(), Is.EqualTo(generator1.GetUniqueIdentifier()));
             }
         }
 
@@ -271,7 +272,7 @@ namespace Catel.Tests.Services
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
+                Assert.That(generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true), Is.EqualTo(uniqueIdentifierForInstance));
             }
 
             [Test]
@@ -282,14 +283,18 @@ namespace Catel.Tests.Services
 
                 GC.Collect();
 
-                Assert.AreNotEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel2()));
+                Assert.That(generator.GetUniqueIdentifierForInstance(new PersonViewModel2()), Is.Not.EqualTo(uniqueIdentifierForInstance));
             }
 
             [Test]
             public void Returns_A_Unique_Identifier_For_Different_Instances()
             {
                 var generator = new ULongObjectIdGenerator<PersonViewModel3>();
-                Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
+
+                var a = generator.GetUniqueIdentifierForInstance(new PersonViewModel3());
+                var b = generator.GetUniqueIdentifierForInstance(new PersonViewModel3());
+
+                Assert.That(a, Is.Not.EqualTo(b));
             }
 
             public class PersonViewModel1

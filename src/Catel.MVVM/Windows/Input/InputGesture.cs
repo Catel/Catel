@@ -1,35 +1,19 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputGesture.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Input
+﻿namespace Catel.Windows.Input
 {
     using Catel.Data;
-
-#if UWP
-    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
-    using Key = global::Windows.System.VirtualKey;
-    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
     using System.Windows.Input;
     using ModifierKeys = System.Windows.Input.ModifierKeys;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
 
     /// <summary>
     /// Input gesture class.
     /// </summary>
     public class InputGesture : ModelBase
     {
-
         /// <summary>
         /// <see cref="ToString"/> method result cache.
         /// </summary>
-        private string _string; 
+        private string? _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InputGesture"/> class.
@@ -70,7 +54,7 @@ namespace Catel.Windows.Input
         /// <summary>
         /// Register the Key property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData KeyProperty = RegisterProperty<InputGesture, Key>(o => o.Key, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
+        public static readonly IPropertyData KeyProperty = RegisterProperty<InputGesture, Key>(o => o.Key, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
 
         /// <summary>
         /// Gets the modifiers.
@@ -84,7 +68,7 @@ namespace Catel.Windows.Input
         /// <summary>
         /// Register the Modifiers property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ModifiersProperty = RegisterProperty<InputGesture, ModifierKeys>(o => o.Modifiers, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
+        public static readonly IPropertyData ModifiersProperty = RegisterProperty<InputGesture, ModifierKeys>(o => o.Modifiers, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
 
         /// <summary>
         /// Called whether <see cref="Modifiers"/> or <see cref="Key"/> properties changed.
@@ -99,7 +83,7 @@ namespace Catel.Windows.Input
         /// </summary>
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Keep this check to prevent == comparison troubles on the same object
             if (!(obj is InputGesture))
@@ -107,7 +91,7 @@ namespace Catel.Windows.Input
                 return false;
             }
 
-            return Equals((InputGesture) obj);
+            return Equals((InputGesture)obj);
         }
 
         /// <summary>
@@ -187,17 +171,15 @@ namespace Catel.Windows.Input
                     {
                         if (Enum<ModifierKeys>.Flags.IsFlagSet(Modifiers, modifier) && modifier != ModifierKeys.None)
                         {
-                            format += string.Format("{0} + ", modifier);
+                            format += $"{Enum<ModifierKeys>.ToString(modifier)} + ";
                         }
                     }
                 }
 
-                _string = format + Key;
+                _string = format + Enum<Key>.ToString(Key);
             }
 
             return _string;
         }
     }
 }
-
-#endif

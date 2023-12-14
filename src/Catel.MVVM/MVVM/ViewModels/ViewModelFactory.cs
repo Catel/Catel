@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Linq;
@@ -37,8 +31,8 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
         public ViewModelFactory(ITypeFactory typeFactory, IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             _typeFactory = typeFactory;
             _serviceLocator = serviceLocator;
@@ -62,7 +56,7 @@ namespace Catel.MVVM
                 foreach (var constructor in constructors)
                 {
                     var firstParameter = constructor.GetParameters().FirstOrDefault();
-                    if (firstParameter != null)
+                    if (firstParameter is not null)
                     {
                         if (!_serviceLocator.IsTypeRegistered(firstParameter.ParameterType))
                         {
@@ -90,7 +84,7 @@ namespace Catel.MVVM
         /// <returns>
         ///   <c>true</c> if the specified view model instance ben be reused by the view; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel viewModelAsDataContext)
+        public virtual bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel? viewModelAsDataContext)
         {
             if (viewModelAsDataContext is null)
             {
@@ -109,18 +103,18 @@ namespace Catel.MVVM
         /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
-        public virtual IViewModel CreateViewModel(Type viewModelType, object dataContext, object tag = null)
+        public virtual IViewModel? CreateViewModel(Type viewModelType, object? dataContext, object? tag = null)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
 
-            IViewModel viewModel = null;
+            IViewModel? viewModel = null;
 
             // Only try to construct the view model when the injection object is not null, otherwise every
             // view model can be constructed with a nullable object. If a user wants a view model to be constructed
             // without any datacontext or injection, he/she should use an empty default constructor which will only
             // be used when injection is not possible
-            if (dataContext != null)
+            if (dataContext is not null)
             {
                 var parameters = dataContext as object[];
                 if (parameters is null)
@@ -131,7 +125,7 @@ namespace Catel.MVVM
                 viewModel = _typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(viewModelType, tag,
                     parameters) as IViewModel;
 
-                if (viewModel != null)
+                if (viewModel is not null)
                 {
                     Log.Debug("Constructed view model '{0}' using injection of data context '{1}'", viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
                     return viewModel;
@@ -140,7 +134,7 @@ namespace Catel.MVVM
 
             // Try to construct view model using dependency injection
             viewModel = _typeFactory.CreateInstanceWithTag(viewModelType, tag) as IViewModel;
-            if (viewModel != null)
+            if (viewModel is not null)
             {
                 Log.Debug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
                 return viewModel;

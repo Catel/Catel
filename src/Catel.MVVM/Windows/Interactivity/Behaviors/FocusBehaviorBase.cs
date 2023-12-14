@@ -1,41 +1,17 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FocusBehaviorBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using Catel.Windows.Threading;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using TimerTickEventArgs = System.Object;
-#else
     using System.Windows;
     using System.Windows.Controls;
-    using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
-    using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;
-#endif
-
     using System;
-    using System.ComponentModel;
     using Logging;
     using Reflection;
 
     /// <summary>
     /// Base class for focus behaviors.
     /// </summary>
-#if NET || NETCORE
     public class FocusBehaviorBase : BehaviorBase<FrameworkElement>
-#else
-    public class FocusBehaviorBase : BehaviorBase<Control>
-#endif
     {
         /// <summary>
         /// The log.
@@ -49,14 +25,9 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public FocusBehaviorBase()
         {
-#if NET || NETCORE
             FocusDelay = 0;
-#else
-            FocusDelay = 500;
-#endif            
         }
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether this instance is focus already set.
         /// </summary>
@@ -81,8 +52,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for FocusDelay.  This enables animation, styling, binding, etc...
         /// </summary>
         public static readonly DependencyProperty FocusDelayProperty =
-            DependencyProperty.Register("FocusDelay", typeof(int), typeof(FocusBehaviorBase), new PropertyMetadata(0));
-        #endregion
+            DependencyProperty.Register(nameof(FocusDelay), typeof(int), typeof(FocusBehaviorBase), new PropertyMetadata(0));
 
         /// <summary>
         /// Starts the focus.
@@ -118,18 +88,14 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="DispatcherTimer.Tick" /> event occurs on the timer.
         /// </summary>
-        private void OnTimerTick(object sender, TimerTickEventArgs e)
+        private void OnTimerTick(object? sender, TimerTickEventArgs e)
         {
             IsFocusAlreadySet = true;
 
             _timer.Stop();
             _timer.Tick -= OnTimerTick;
 
-#if NET || NETCORE
             SetFocus();
-#else
-            AssociatedObject.Dispatcher.BeginInvoke(() => SetFocus());
-#endif
         }
 
         /// <summary>
@@ -142,16 +108,12 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
-#if UWP
-            if (AssociatedObject.Focus(FocusState.Programmatic))
-#else
             if (AssociatedObject.Focus())
-#endif
             {
                 Log.Debug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
 
                 var textBox = AssociatedObject as TextBox;
-                if (textBox != null)
+                if (textBox is not null)
                 {
                     textBox.SelectionStart = textBox.Text.Length;
                 }
@@ -165,5 +127,3 @@ namespace Catel.Windows.Interactivity
         }
     }
 }
-
-#endif

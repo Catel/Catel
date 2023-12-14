@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumericBasedObjectIdGenerator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2018 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using Catel.Reflection;
 
@@ -15,6 +9,7 @@ namespace Catel.Services
     /// <typeparam name="TUniqueIdentifier">The unique identifier type.</typeparam>
     public abstract class NumericBasedObjectIdGenerator<TObjectType, TUniqueIdentifier> : ObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType : class
+        where TUniqueIdentifier : notnull
     {
         static NumericBasedObjectIdGenerator()
         {
@@ -24,6 +19,6 @@ namespace Catel.Services
         /// <summary>
         /// Gets and sets the value.
         /// </summary>
-        protected static TUniqueIdentifier Value { get; set; } = default(TUniqueIdentifier);
+        protected static TUniqueIdentifier Value { get; set; } = default!;
     }
 }

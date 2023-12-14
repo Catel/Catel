@@ -1,21 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakViewInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using Logging;
-
-#if UWP
-    using LoadedEventArgs = System.Object;
-    using LayoutUpdatedEventArgs = System.Object;
-#else
     using LoadedEventArgs = System.EventArgs;
-    using LayoutUpdatedEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Class containing weak events for a <see cref="IView"/>. This way it is safe to subscribe
@@ -23,16 +10,12 @@ namespace Catel.MVVM.Views
     /// </summary>
     public class WeakViewInfo
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private WeakReference _view;
+        private readonly WeakReference _view;
 
         private bool _isViewLoadState;
-        #endregion
 
-
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakViewInfo"/> class.
         /// </summary>
@@ -41,8 +24,9 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public WeakViewInfo(IView view, bool isViewLoaded = false)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
+            _view = new WeakReference(view);
             Initialize(view, isViewLoaded);
         }
 
@@ -54,13 +38,12 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
         public WeakViewInfo(IViewLoadState viewLoadState, bool isViewLoaded = false)
         {
-            Argument.IsNotNull("viewLoadState", viewLoadState);
+            ArgumentNullException.ThrowIfNull(viewLoadState);
 
+            _view = new WeakReference(viewLoadState);
             Initialize(viewLoadState, isViewLoaded);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether the link to the <see cref="IView"/> is alive.
         /// </summary>
@@ -74,22 +57,26 @@ namespace Catel.MVVM.Views
         /// Gets the view.
         /// </summary>
         /// <value>The view.</value>
-        public IView View
+        public IView? View
         {
             get
             {
+                IView? view = null;
+
                 if (_isViewLoadState)
                 {
                     var viewLoadState = _view.Target as IViewLoadState;
-                    if (viewLoadState != null)
+                    if (viewLoadState is not null)
                     {
-                        return viewLoadState.View;
+                        view = viewLoadState.View;
                     }
-
-                    return null;
+                }
+                else
+                {
+                    view = _view.Target as IView;
                 }
 
-                return _view.Target as IView;
+                return view;
             }
         }
 
@@ -98,37 +85,30 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <value><c>true</c> if the <see cref="View"/> is loaded; otherwise, <c>false</c>.</value>
         public bool IsLoaded { get; private set; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        public event EventHandler<EventArgs> Loaded;
+        public event EventHandler<EventArgs>? Loaded;
 
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        public event EventHandler<EventArgs> Unloaded;
-        #endregion
+        public event EventHandler<EventArgs>? Unloaded;
 
-        #region Methods
         private void Initialize(object viewObject, bool isViewLoaded)
         {
-            _view = new WeakReference(viewObject);
-            _isViewLoadState = true;
-
             IsLoaded = isViewLoaded;
             _isViewLoadState = viewObject is IViewLoadState;
 
-            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Loaded", OnViewLoadStateLoaded, false) is null)
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, nameof(View.Loaded), OnViewLoadStateLoaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
                 ((IView) viewObject).Loaded += OnViewLoadStateLoaded;
             }
 
-            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Unloaded", OnViewLoadStateUnloaded, false) is null)
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, nameof(View.Unloaded), OnViewLoadStateUnloaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 
@@ -141,7 +121,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewLoaded(object sender, EventArgs e)
+        public void OnViewLoaded(object? sender, EventArgs e)
         {
             OnLoaded();
         }
@@ -151,7 +131,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewUnloaded(object sender, EventArgs e)
+        public void OnViewUnloaded(object? sender, EventArgs e)
         {
             OnUnloaded();
         }
@@ -161,7 +141,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewLoadStateLoaded(object sender, LoadedEventArgs e)
+        public void OnViewLoadStateLoaded(object? sender, LoadedEventArgs e)
         {
             OnLoaded();
         }
@@ -171,7 +151,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnViewLoadStateUnloaded(object sender, LoadedEventArgs e)
+        public void OnViewLoadStateUnloaded(object? sender, LoadedEventArgs e)
         {
             OnUnloaded();
         }
@@ -186,7 +166,7 @@ namespace Catel.MVVM.Views
             IsLoaded = true;
 
             var loaded = Loaded;
-            if (loaded != null)
+            if (loaded is not null)
             {
                 loaded(this, EventArgs.Empty);
             }
@@ -202,11 +182,10 @@ namespace Catel.MVVM.Views
             IsLoaded = false;
 
             var unloaded = Unloaded;
-            if (unloaded != null)
+            if (unloaded is not null)
             {
                 unloaded(this, EventArgs.Empty);
             }
         }
-        #endregion
     }
 }

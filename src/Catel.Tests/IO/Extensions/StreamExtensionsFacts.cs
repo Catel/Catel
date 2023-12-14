@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StreamExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.IO.Extensions
+﻿namespace Catel.Tests.IO
 {
     using Catel.IO;
     using System.IO;
@@ -29,7 +22,7 @@ namespace Catel.Tests.IO.Extensions
 
                         var output = memoryStream.GetUtf8String();
 
-                        Assert.AreEqual(input, output);
+                        Assert.That(output, Is.EqualTo(input));
                     }
                 }
             }

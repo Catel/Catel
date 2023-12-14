@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IUIVisualizerServiceExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
@@ -17,12 +9,11 @@ namespace Catel.Services
     using MVVM;
     using MVVM.Views;
     using Reflection;
-    using Threading;
 
     /// <summary>
     /// Extension methods for the <see cref="IUIVisualizerService" />.
     /// </summary>
-    public static class IUIVisualizerServiceExtensions
+    public static partial class IUIVisualizerServiceExtensions
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -46,9 +37,9 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         public static bool IsRegistered(this IUIVisualizerService uiVisualizerService, Type viewModelType)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
-            return uiVisualizerService.IsRegistered(viewModelType.FullName);
+            return uiVisualizerService.IsRegistered(viewModelType.GetSafeFullName());
         }
 
         /// <summary>
@@ -79,14 +70,10 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement <see cref="IViewModel" />.</exception>
         public static void Register(this IUIVisualizerService uiVisualizerService, Type viewModelType, Type windowType, bool throwExceptionIfExists = true)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
+            Argument.ImplementsInterface<IViewModel>(nameof(viewModelType), viewModelType);
 
-            if (viewModelType.GetInterfaceEx(typeof(IViewModel).FullName, false) is null)
-            {
-                throw new ArgumentException("The argument must implement IViewModel interface", "viewModelType");
-            }
-
-            uiVisualizerService.Register(viewModelType.FullName, windowType, throwExceptionIfExists);
+            uiVisualizerService.Register(viewModelType.GetSafeFullName(), windowType, throwExceptionIfExists);
         }
 
         /// <summary>
@@ -108,9 +95,9 @@ namespace Catel.Services
         /// <returns><c>true</c> if the view model is unregistered; otherwise <c>false</c>.</returns>
         public static bool Unregister(this IUIVisualizerService uiVisualizerService, Type viewModelType)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
-            return uiVisualizerService.Unregister(viewModelType.FullName);
+            return uiVisualizerService.Unregister(viewModelType.GetSafeFullName());
         }
 
         /// <summary>
@@ -122,13 +109,13 @@ namespace Catel.Services
         /// <param name="completedProc">The completed proc.</param>
         /// <returns><c>true</c> if shown successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static Task<bool?> ShowAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static Task<UIVisualizerResult> ShowAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? model = null, EventHandler<UICompletedEventArgs>? completedProc = null)
             where TViewModel : IViewModel
         {
-            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
 
             var viewModelFactory = GetViewModelFactory(uiVisualizerService);
-            var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model);
+            var vm = viewModelFactory.CreateRequiredViewModel<TViewModel>(model);
             return uiVisualizerService.ShowAsync(vm, completedProc);
         }
 
@@ -141,24 +128,23 @@ namespace Catel.Services
         /// <param name="completedProc">The completed proc.</param>
         /// <returns>The dialog result.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static Task<bool?> ShowDialogAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static Task<UIVisualizerResult> ShowDialogAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? model = null, EventHandler<UICompletedEventArgs>? completedProc = null)
             where TViewModel : IViewModel
         {
-            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
 
             var viewModelFactory = GetViewModelFactory(uiVisualizerService);
-            var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model);
+            var vm = viewModelFactory.CreateRequiredViewModel<TViewModel>(model);
             return uiVisualizerService.ShowDialogAsync(vm, completedProc);
         }
 
         private static IViewModelFactory GetViewModelFactory(IUIVisualizerService uiVisualizerService)
         {
             var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
+            var viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
             return viewModelFactory;
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
         /// </summary>
@@ -171,34 +157,48 @@ namespace Catel.Services
         ///   <c>true</c> if shown or activated successfully, <c>false</c> otherwise.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static Task<bool?> ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, object scope = null, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static async Task<bool?> ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? model = null, object? scope = null, EventHandler<UICompletedEventArgs>? completedProc = null)
             where TViewModel : IViewModel
         {
-            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
 
             var dependencyResolver = uiVisualizerService.GetDependencyResolver();
 
-            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
+#pragma warning disable IDISP001
+            var viewModelManager = dependencyResolver.ResolveRequired<IViewModelManager>();
+#pragma warning restore IDISP001
             var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
             if (viewModel is null)
             {
                 var viewModelFactory = GetViewModelFactory(uiVisualizerService);
-                var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model, scope);
-                return uiVisualizerService.ShowAsync(vm, completedProc);
+                var vm = viewModelFactory.CreateRequiredViewModel<TViewModel>(model, scope);
+                var result = await uiVisualizerService.ShowAsync(vm, completedProc);
+                return result.DialogResult;
             }
 
-            var viewLocator = dependencyResolver.Resolve<IViewLocator>();
+            var viewLocator = dependencyResolver.ResolveRequired<IViewLocator>();
             var viewType = viewLocator.ResolveView(viewModel.GetType());
-            var viewManager = dependencyResolver.Resolve<IViewManager>();
+            if (viewType is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Found active instance of '{viewModel.GetType().GetSafeFullName()}', but could not find a related view type");
+            }
+
+            var viewManager = dependencyResolver.ResolveRequired<IViewManager>();
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
+            if (viewType is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Found active instance of '{viewModel.GetType().GetSafeFullName()}', but could not find a related view");
+            }
+
             var window = view as System.Windows.Window;
             if (view is null || window is null)
             {
-                return uiVisualizerService.ShowAsync(viewModel, completedProc);
+                var result = await uiVisualizerService.ShowAsync(viewModel, completedProc);
+                return result.DialogResult;
             }
 
             var activated = ActivateWindow(window);
-            return TaskHelper<bool?>.FromResult(activated);
+            return activated;
         }
 
         /// <summary>
@@ -208,17 +208,18 @@ namespace Catel.Services
         /// <returns><c>true</c> if the window is activated with success; otherwise <c>false</c> or <c>null</c>.</returns>
         public static bool? ActivateWindow(Window window)
         {
+            ArgumentNullException.ThrowIfNull(window);
+
             var activateMethodInfo = window.GetType().GetMethodEx("Activate");
             if (activateMethodInfo is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Method 'Activate' not found on '{0}', cannot activate the window", window.GetType().Name);
+                throw Log.ErrorAndCreateException<NotSupportedException>($"Method 'Activate' not found on '{window.GetType().Name}', cannot activate the window");
             }
 
             bool? result = false;
             window.Dispatcher.InvokeIfRequired(() => result = (bool?)activateMethodInfo.Invoke(window, null));
             return result;
         }
-
 
         /// <summary>
         /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
@@ -230,84 +231,23 @@ namespace Catel.Services
         /// <returns>
         /// A task.
         /// </returns>
-        public static async Task ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
+        public static async Task ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? dataContext = null, object? scope = null)
             where TViewModel : IViewModel
         {
             var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
-            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
+            var viewModelManager = dependencyResolver.ResolveRequired<IViewModelManager>();
+            var viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
 
             var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
-            if (existingViewModel != null)
+            if (existingViewModel is not null)
             {
                 await uiVisualizerService.ShowOrActivateAsync<TViewModel>(dataContext, scope);
             }
             else
             {
-                var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), dataContext, scope);
+                var vm = viewModelFactory.CreateRequiredViewModel(typeof(TViewModel), dataContext, scope);
                 await uiVisualizerService.ShowAsync(vm);
             }
         }
-
-        ///// <summary>
-        ///// Shows the window in modal state and creates the view model automatically using the specified model.
-        ///// </summary>
-        ///// <typeparam name="TViewModel">The view model type.</typeparam>
-        ///// <param name="uiVisualizerService">The uiVisualizerService</param>
-        ///// <param name="dataContext">The data context.</param>
-        ///// <param name="scope">The scope.</param>
-        ///// <returns>
-        ///// A task.
-        ///// </returns>
-        //public static async Task ShowDialogWithScopeAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
-        //    where TViewModel : IViewModel
-        //{
-        //    var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-        //    var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
-        //    var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
-
-        //    var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
-        //    if (existingViewModel != null)
-        //    {
-        //        await uiVisualizerService.ShowDialogAsync<TViewModel>(dataContext);
-        //    }
-        //    else
-        //    {
-        //        var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), dataContext, scope);
-        //        await uiVisualizerService.ShowDialogAsync(vm);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Shows the window in non-modal state and creates the view model automatically using the specified model.
-        ///// </summary>
-        ///// <typeparam name="TViewModel">The view model type.</typeparam>
-        ///// <param name="uiVisualizerService">The uiVisualizerService</param>
-        ///// <param name="dataContext">The data context.</param>
-        ///// <param name="scope">The scope.</param>
-        ///// <returns>
-        ///// A task.
-        ///// </returns>
-        //public static async Task ShowWithScopeAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
-        //    where TViewModel : IViewModel
-        //{
-        //    var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-        //    var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
-        //    var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
-
-        //    var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
-        //    if (existingViewModel != null)
-        //    {
-        //        await uiVisualizerService.ShowAsync<TViewModel>(dataContext);
-        //    }
-        //    else
-        //    {
-        //        var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), dataContext, scope);
-        //        await uiVisualizerService.ShowAsync(vm);
-        //    }
-        //}
-#endif
     }
 }
-
-#endif

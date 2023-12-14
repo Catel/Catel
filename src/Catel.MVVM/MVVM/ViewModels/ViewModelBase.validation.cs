@@ -1,19 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using Data;
 
     public partial class ViewModelBase
     {
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModelAsync"/>.
         /// <para />
@@ -43,7 +35,7 @@ namespace Catel.MVVM
                 foreach (var childViewModel in ChildViewModels.ToList())
                 {
                     var childVm = childViewModel as ViewModelBase;
-                    if (childVm != null)
+                    if (childVm is not null)
                     {
                         childVm.DeferValidationUntilFirstSaveCall = DeferValidationUntilFirstSaveCall;
                     }
@@ -67,9 +59,7 @@ namespace Catel.MVVM
         /// </value>
         [ExcludeFromValidation]
         protected bool ValidateModelsOnInitialization { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Validates the current object for field and business rule errors.
         /// </summary>
@@ -100,20 +90,21 @@ namespace Catel.MVVM
 
             lock (_modelLock)
             {
-                foreach (KeyValuePair<string, object> model in _modelObjects)
+                foreach (var modelKeyValuePair in _modelObjects)
                 {
-                    if (model.Value is null)
+                    var model = modelKeyValuePair.Value;
+                    if (model is null)
                     {
                         continue;
                     }
 
-                    if (!_modelObjectsInfo[model.Key].SupportValidation)
+                    if (!_modelObjectsInfo[modelKeyValuePair.Key].SupportValidation)
                     {
                         continue;
                     }
 
-                    var validatable = model.Value as IValidatable;
-                    if (validatable != null)
+                    var validatable = model as IValidatable;
+                    if (validatable is not null)
                     {
                         validatable.Validate();
                     }
@@ -165,7 +156,7 @@ namespace Catel.MVVM
                     }
                 }
 
-                var model = GetValue(mapping.ModelProperty);
+                var model = GetValue<object>(mapping.ModelProperty);
                 string[] modelProperties = mapping.ValueProperties;
 
                 foreach (var modelProperty in modelProperties)
@@ -175,7 +166,7 @@ namespace Catel.MVVM
 
                     // IDataErrorInfo
                     var dataErrorInfo = model as IDataErrorInfo;
-                    if (dataErrorInfo != null)
+                    if (dataErrorInfo is not null)
                     {
                         var error = dataErrorInfo[modelProperty];
                         if (!string.IsNullOrWhiteSpace(error))
@@ -188,7 +179,7 @@ namespace Catel.MVVM
 
                     // IDataWarningInfo
                     var dataWarningInfo = model as IDataWarningInfo;
-                    if (dataWarningInfo != null)
+                    if (dataWarningInfo is not null)
                     {
                         var warning = dataWarningInfo[modelProperty];
                         if (!string.IsNullOrWhiteSpace(warning))
@@ -250,14 +241,14 @@ namespace Catel.MVVM
 
                     // IDataErrorInfo
                     var dataErrorInfo = modelObject.Value as IDataErrorInfo;
-                    if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo.Error))
+                    if (dataErrorInfo is not null && !string.IsNullOrEmpty(dataErrorInfo.Error))
                     {
                         validationContext.Add(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = modelObject.Value as IDataWarningInfo;
-                    if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo.Warning))
+                    if (dataWarningInfo is not null && !string.IsNullOrEmpty(dataWarningInfo.Warning))
                     {
                         validationContext.Add(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
                     }
@@ -278,7 +269,5 @@ namespace Catel.MVVM
                 }
             }
         }
-
-        #endregion
     }
 }

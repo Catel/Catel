@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UniqueIdentifierHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Collections.Generic;
@@ -42,8 +36,6 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public static int GetUniqueIdentifier(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             lock (_lockObject)
             {
                 if (!_uniqueIdentifiers.TryGetValue(type, out var id))

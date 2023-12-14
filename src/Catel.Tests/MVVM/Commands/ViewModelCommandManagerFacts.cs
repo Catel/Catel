@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelCommandManagerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
@@ -21,7 +15,7 @@ namespace Catel.Tests.MVVM
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
+                Assert.Throws<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
             }
 
             [TestCase]
@@ -30,7 +24,7 @@ namespace Catel.Tests.MVVM
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
 
-                Assert.IsNotNull(viewModelCommandManager);
+                Assert.That(viewModelCommandManager, Is.Not.Null);
             }
         }
 
@@ -43,11 +37,11 @@ namespace Catel.Tests.MVVM
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelCommandManager.AddHandler((Func<IViewModel, string, ICommand, object, Task>)null));
-            }            
+                Assert.Throws<ArgumentNullException>(() => viewModelCommandManager.AddHandler((Func<IViewModel, string, ICommand, object, Task>)null));
+            }
 
             [TestCase]
-            public async Task RegisteredHandlerGetsCalled()
+            public async Task RegisteredHandlerGetsCalledAsync()
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
@@ -58,7 +52,7 @@ namespace Catel.Tests.MVVM
                 viewModelCommandManager.AddHandler(async (vm, property, command, commandParameter) => called = true);
                 viewModel.GenerateData.Execute();
 
-                Assert.IsTrue(called);
+                Assert.That(called, Is.True);
             }
         }
     }

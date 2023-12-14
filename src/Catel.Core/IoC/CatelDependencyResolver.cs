@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CatelDependencyResolver.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
-    using Collections;
     using Logging;
     using Reflection;
 
@@ -29,7 +21,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
         public CatelDependencyResolver(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             _serviceLocator = serviceLocator;
         }
@@ -40,26 +32,11 @@ namespace Catel.IoC
         /// <param name="type">The type.</param>
         /// <param name="tag">The tag.</param>
         /// <returns><c>true</c> if the specified type with the specified tag can be resolved; otherwise, <c>false</c>.</returns>
-        public bool CanResolve(Type type, object tag = null)
+        public bool CanResolve(Type type, object? tag = null)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _serviceLocator.IsTypeRegistered(type, tag);
-        }
-
-        /// <summary>
-        /// Determines whether all types specified can be resolved. Though <see cref="ResolveAll"/> will return <c>null</c>
-        /// at the array index when a type cannot be resolved, this method will actually check whether all the specified types
-        /// are registered.
-        /// <para />
-        /// It is still possible to call <see cref="ResolveAll"/>, even when this method returns <c>false</c>.
-        /// </summary>
-        /// <param name="types">The types.</param>
-        /// <returns><c>true</c> if all types specified can be resolved; otherwise, <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "CanResolveMultiple", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
-        public bool CanResolveAll(Type[] types)
-        {
-            return CanResolveMultiple(types);
         }
 
         /// <summary>
@@ -73,14 +50,14 @@ namespace Catel.IoC
         /// <returns><c>true</c> if all types specified can be resolved; otherwise, <c>false</c>.</returns>
         public bool CanResolveMultiple(Type[] types)
         {
-            Argument.IsNotNull("types", types);
+            ArgumentNullException.ThrowIfNull(types);
 
             if (types.Length == 0)
             {
                 return true;
             }
 
-            return _serviceLocator.AreAllTypesRegistered(types);
+            return _serviceLocator.AreMultipleTypesRegistered(types);
         }
 
         /// <summary>
@@ -91,9 +68,9 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <returns>The resolved object.</returns>
-        public object Resolve(Type type, object tag = null)
+        public object? Resolve(Type type, object? tag = null)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             return _serviceLocator.ResolveType(type, tag);
         }
@@ -104,37 +81,29 @@ namespace Catel.IoC
         /// <param name="types">The types.</param>
         /// <param name="tag">The tag.</param>
         /// <returns>A list of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "ResolveMultiple", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
-        public object[] ResolveAll(Type[] types, object tag = null)
+        public object[] ResolveMultiple(Type[] types, object? tag = null)
         {
-            return ResolveMultiple(types, tag);
-        }
-
-        /// <summary>
-        /// Resolves the specified types with the specified tag.
-        /// </summary>
-        /// <param name="types">The types.</param>
-        /// <param name="tag">The tag.</param>
-        /// <returns>A list of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
-        public object[] ResolveMultiple(Type[] types, object tag = null)
-        {
-            Argument.IsNotNull("types", types);
+            ArgumentNullException.ThrowIfNull(types);
 
             if (types.Length == 0)
             {
-                return ArrayShim.Empty<object>();
+                return Array.Empty<object>();
             }
 
-            int typeCount = types.Length;
+            var typeCount = types.Length;
             var resolvedTypes = new object[typeCount];
 
             lock (_serviceLocator)
             {
-                for (int i = 0; i < typeCount; i++)
+                for (var i = 0; i < typeCount; i++)
                 {
                     try
                     {
-                        resolvedTypes[i] = Resolve(types[i], tag);
+                        var resolvedType = Resolve(types[i], tag);
+                        if (resolvedType is not null)
+                        {
+                            resolvedTypes[i] = resolvedType;
+                         }
                     }
                     catch (TypeNotRegisteredException ex)
                     {

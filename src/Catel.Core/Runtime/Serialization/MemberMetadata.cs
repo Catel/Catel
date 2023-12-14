@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MemberMetadata.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
 
@@ -14,7 +7,6 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public class MemberMetadata
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberMetadata" /> class.
         /// </summary>
@@ -30,7 +22,6 @@ namespace Catel.Runtime.Serialization
             MemberName = memberName;
             MemberNameForSerialization = memberName;
         }
-        #endregion
 
         /// <summary>
         /// Gets the type of the containing.
@@ -67,6 +58,6 @@ namespace Catel.Runtime.Serialization
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
     }
 }

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LoggingConfigurationSection.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System.Collections.Generic;
     using System.Configuration;
@@ -42,21 +34,16 @@ namespace Catel.Logging
     /// </example>
     public sealed class LoggingConfigurationSection : ConfigurationSection
     {
-        #region Constants
         /// <summary>
         /// The logging configuration collection property name.
         /// </summary>
         private const string LoggingConfigurationCollectionPropertyName = "listeners";
-        #endregion
 
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the logging configuration collection.
         /// </summary>
@@ -65,31 +52,26 @@ namespace Catel.Logging
         {
             get { return (LogListenerConfigurationCollection)base[LoggingConfigurationCollectionPropertyName]; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the log listeners.
         /// </summary>
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns>IEnumerable{ILogListener}.</returns>
-        public IEnumerable<ILogListener> GetLogListeners(Assembly assembly = null)
+        public IEnumerable<ILogListener> GetLogListeners(Assembly? assembly = null)
         {
             var logListeners = new List<ILogListener>();
 
-            Log.Debug("Instantiating {0} log listener(s) from configuration", LogListenerConfigurationCollection.Count);
+            Log.Debug("Instantiating {0} log listener(s) from configuration", LogListenerConfigurationCollection.Count.ToString());
 
             foreach (LogListenerConfiguration logListenerConfiguration in LogListenerConfigurationCollection)
             {
                 logListeners.Add(logListenerConfiguration.GetLogListener(assembly));
             }
 
-            Log.Debug("Instantiated {0} log listener(s) from configuration", logListeners.Count);
+            Log.Debug("Instantiated {0} log listener(s) from configuration", logListeners.Count.ToString());
 
             return logListeners;
         }
-        #endregion
     }
 }
-
-#endif

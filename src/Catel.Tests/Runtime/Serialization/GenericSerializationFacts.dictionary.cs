@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenericSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System.Collections.Generic;
     using System.Runtime.Serialization;
@@ -28,8 +21,8 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.AreEqual(originalObject.KeyValuePair, clonedObject.KeyValuePair, description);
-                    Assert.AreEqual(originalObject.KeyValuePairAsObject, clonedObject.KeyValuePairAsObject, description);
+                    Assert.That(clonedObject.KeyValuePair, Is.EqualTo(originalObject.KeyValuePair), description);
+                    Assert.That(clonedObject.KeyValuePairAsObject, Is.EqualTo(originalObject.KeyValuePairAsObject), description);
                 });
             }
 
@@ -43,14 +36,14 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var originalObject = new FailToSerialize();
                 originalObject.Lookup.Add(new PocoKeyClass { X = 1.0, Y = 2.0, Z = 3.0 }, "test me");
-                Assert.AreEqual(1, originalObject.Lookup.Count);
+                Assert.That(originalObject.Lookup.Count, Is.EqualTo(1));
 
                 TestSerializationOnXmlSerializer((serializer, config, description) =>
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
-                    Assert.IsNotNull(clonedObject);
-                    Assert.AreEqual(1, clonedObject.Lookup.Count);
+                    Assert.That(clonedObject, Is.Not.Null);
+                    Assert.That(clonedObject.Lookup.Count, Is.EqualTo(1));
                 });
             }
 

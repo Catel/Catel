@@ -1,29 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumbericTextBox.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-
-#if UWP
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using Key = global::Windows.System.VirtualKey;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using UIKeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
     using System.Windows.Controls;
-    using System.Windows.Data;
     using System.Windows.Input;
-    using UIEventArgs = System.EventArgs;
     using UIKeyEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
-
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -48,21 +27,9 @@ namespace Catel.Windows.Interactivity
         private static readonly HashSet<Key> AllowedKeys = new HashSet<Key>
         {
             Key.Back,
-
-#if UWP
-            Key.CapitalLock,
-#else
             Key.CapsLock,
-#endif
-            
-#if UWP
-            Key.LeftControl,
-            Key.RightControl,
-            Key.Control,
-#else
             Key.LeftCtrl,
             Key.RightCtrl,
-#endif
             Key.Down,
             Key.End,
             Key.Enter,
@@ -86,9 +53,7 @@ namespace Catel.Windows.Interactivity
         {
             base.Initialize();
 
-#if NET || NETCORE
             DataObject.AddPastingHandler(AssociatedObject, OnPaste);
-#endif
 
             AssociatedObject.KeyDown += OnAssociatedObjectKeyDown;
             AssociatedObject.TextChanged += OnAssociatedObjectTextChanged;
@@ -99,9 +64,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void Uninitialize()
         {
-#if NET || NETCORE
             DataObject.RemovePastingHandler(AssociatedObject, OnPaste);
-#endif
 
             AssociatedObject.KeyDown -= OnAssociatedObjectKeyDown;
             AssociatedObject.TextChanged -= OnAssociatedObjectTextChanged;
@@ -121,7 +84,6 @@ namespace Catel.Windows.Interactivity
             set
             {
 #pragma warning disable WPF0036
-#if NET || NETCORE
                 if (value)
                 {
                     AllowedKeys.Add(Key.OemMinus);
@@ -133,7 +95,6 @@ namespace Catel.Windows.Interactivity
                         AllowedKeys.Remove(Key.OemMinus);
                     }
                 }
-#endif
 #pragma warning restore WPF0036
 
                 SetValue(IsNegativeAllowedProperty, value);
@@ -144,7 +105,7 @@ namespace Catel.Windows.Interactivity
         /// Are negative numbers allowed
         /// </summary>
         public static readonly DependencyProperty IsNegativeAllowedProperty =
-            DependencyProperty.Register("IsNegativeAllowed", typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(IsNegativeAllowed), typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
         /// Gets or sets a value indicating whether decimal values are allowed.
@@ -162,7 +123,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for IsDecimalAllowed.  This enables animation, styling, binding, etc... 
         /// </summary>
         public static readonly DependencyProperty IsDecimalAllowedProperty =
-            DependencyProperty.Register("IsDecimalAllowed", typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(IsDecimalAllowed), typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
         /// Gets or sets a value indicating whether the binding should be updated whenever the text changes.
@@ -177,7 +138,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for UpdateBindingOnTextChanged.  This enables animation, styling, binding, etc...
         /// </summary>
-        public static readonly DependencyProperty UpdateBindingOnTextChangedProperty = DependencyProperty.Register("UpdateBindingOnTextChanged",
+        public static readonly DependencyProperty UpdateBindingOnTextChangedProperty = DependencyProperty.Register(nameof(UpdateBindingOnTextChanged),
             typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
@@ -185,10 +146,16 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>        
-        private void OnAssociatedObjectKeyDown(object sender, UIKeyEventArgs e)
+        private void OnAssociatedObjectKeyDown(object? sender, UIKeyEventArgs e)
         {
-            bool notAllowed = true;
-            string keyValue = GetKeyValue(e);
+            var textBox = sender as TextBox;
+            if (textBox is null)
+            {
+                return;
+            }
+
+            var notAllowed = true;
+            var keyValue = GetKeyValue(e);
 
             var numberDecimalSeparator = GetDecimalSeparator();
 
@@ -198,11 +165,11 @@ namespace Catel.Windows.Interactivity
             }
             else if (keyValue == MinusCharacter && IsNegativeAllowed)
             {
-                notAllowed = ((TextBox)sender).CaretIndex > 0;
+                notAllowed = textBox.CaretIndex > 0;
             }
             else if (AllowedKeys.Contains(e.Key) || IsDigit(e.Key))
             {
-                notAllowed = (e.Key == Key.OemMinus && ((TextBox)sender).CaretIndex > 0 && IsNegativeAllowed);
+                notAllowed = (e.Key == Key.OemMinus && textBox.CaretIndex > 0 && IsNegativeAllowed);
             }
 
             e.Handled = notAllowed;
@@ -213,7 +180,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The text change event args instance containing the event data.</param>
-        private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
+        private void OnAssociatedObjectTextChanged(object? sender, TextChangedEventArgs e)
         {
             if (!UpdateBindingOnTextChanged)
             {
@@ -279,13 +246,12 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Called when text is pasted into the TextBox.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="DataObjectPastingEventArgs"/> instance containing the event data.</param>
-        private void OnPaste(object sender, DataObjectPastingEventArgs e)
+        private void OnPaste(object? sender, DataObjectPastingEventArgs e)
         {
             if (e.DataObject.GetDataPresent(typeof(string)))
             {
@@ -303,8 +269,7 @@ namespace Catel.Windows.Interactivity
                     e.CancelCommand();
                 }
 
-                var tempDouble = 0d;
-                if (!double.TryParse(text, NumberStyles.Any, Culture, out tempDouble))
+                if (!double.TryParse(text, NumberStyles.Any, Culture, out var tempDouble))
                 {
                     Log.Warning("Pasted text '{0}' could not be parsed as double (wrong culture?), paste is not allowed", text);
 
@@ -316,7 +281,6 @@ namespace Catel.Windows.Interactivity
                 e.CancelCommand();
             }
         }
-#endif
 
         /// <summary>
         /// Gets the decimal separator.
@@ -334,9 +298,9 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns><c>true</c> if the input string only consists of digits; otherwise, <c>false</c>.</returns>
-        private bool IsDigitsOnly(string input)
+        private static bool IsDigitsOnly(string input)
         {
-            foreach (char c in input)
+            foreach (var c in input)
             {
                 if (c < '0' || c > '9')
                 {
@@ -354,11 +318,11 @@ namespace Catel.Windows.Interactivity
         /// <returns>
         ///   <c>true</c> if the specified key is digit; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsDigit(Key key)
+        private static bool IsDigit(Key key)
         {
             bool isDigit;
 
-            bool isShiftKey = KeyboardHelper.AreKeyboardModifiersPressed(ModifierKeys.Shift);
+            var isShiftKey = KeyboardHelper.AreKeyboardModifiersPressed(ModifierKeys.Shift);
 
             if (key >= Key.D0 && key <= Key.D9 && !isShiftKey)
             {
@@ -379,9 +343,8 @@ namespace Catel.Windows.Interactivity
         /// <returns></returns>
         private string GetKeyValue(UIKeyEventArgs e)
         {
-            string keyValue = string.Empty;
+            var keyValue = string.Empty;
 
-#if NET || NETCORE
             if (e.Key == Key.Decimal)
             {
                 keyValue = GetDecimalSeparator();
@@ -398,41 +361,8 @@ namespace Catel.Windows.Interactivity
             {
                 keyValue = PeriodCharacter;
             }
-#elif UWP
-            if (e.VirtualKey == Key.Subtract)
-            {
-                keyValue = MinusCharacter;
-            }
-            //else if (e.VirtualKey == Key.)
-            //{
-            //    keyValue = CommaCharacter;
-            //}
-            //else if (e.VirtualKey == Key.Pe)
-            //{
-            //    keyValue = PeriodCharacter;
-            //}
-#else
-            if (e.PlatformKeyCode == 190 || e.PlatformKeyCode == 110)
-            {
-                keyValue = PeriodCharacter;
-            }
-            else if (e.PlatformKeyCode == 188)
-            {
-                keyValue = CommaCharacter;
-            }
-            else if (e.PlatformKeyCode == 189)
-            {
-                keyValue = MinusCharacter;
-            }
-            else
-            {
-                keyValue = e.Key.ToString().Replace("D", string.Empty).Replace("NumPad", string.Empty);
-            }
-#endif
 
             return keyValue;
         }
     }
 }
-
-#endif

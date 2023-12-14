@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DisplayNameAttributeFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.ComponentModel
+﻿namespace Catel.Tests.ComponentModel
 {
     using NUnit.Framework;
     using Services.Fixtures;
@@ -24,7 +17,7 @@ namespace Catel.Tests.ComponentModel
                 var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyDisplayName");
                 displayAttribute.LanguageService = languageService;
 
-                Assert.AreEqual("It works", displayAttribute.DisplayName);
+                Assert.That(displayAttribute.DisplayName, Is.EqualTo("It works"));
             }
 
             [TestCase]
@@ -36,7 +29,7 @@ namespace Catel.Tests.ComponentModel
                 var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyNonExistingDisplayName");
                 displayAttribute.LanguageService = languageService;
 
-                Assert.AreEqual("MyNonExistingDisplayName", displayAttribute.DisplayName);
+                Assert.That(displayAttribute.DisplayName, Is.EqualTo("MyNonExistingDisplayName"));
             }
         }
     }

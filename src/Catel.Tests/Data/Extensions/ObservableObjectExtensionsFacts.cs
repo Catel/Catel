@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObservableObjectExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using Catel.Data;
@@ -16,7 +9,7 @@ namespace Catel.Tests.Data
     {
         public class TestModel : ObservableObject
         {
-            
+
         }
 
         [TestFixture]
@@ -25,7 +18,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullObject()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObservableObjectExtensions.RaiseAllPropertiesChanged(null));
+                Assert.Throws<ArgumentNullException>(() => ObservableObjectExtensions.RaiseAllPropertiesChanged(null));
             }
 
             [TestCase]
@@ -44,7 +37,7 @@ namespace Catel.Tests.Data
 
                 model.RaiseAllPropertiesChanged();
 
-                Assert.IsTrue(propertyChanged);
+                Assert.That(propertyChanged, Is.True);
             }
         }
     }

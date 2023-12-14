@@ -1,15 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanToTextConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using Logging;
 
-    #region Enums
     /// <summary>
     /// Available modes for the <see cref="BooleanToTextConverter"/>.
     /// </summary>
@@ -25,14 +18,11 @@ namespace Catel.MVVM.Converters
         /// </summary>
         X
     }
-    #endregion
 
     /// <summary>
     /// BooleanToTextConverter.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(string))]
-#endif
     public class BooleanToTextConverter : ValueConverterBase
     {
         #region Fields
@@ -50,7 +40,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             if ((value is null) || !(value is bool))
             {
@@ -84,19 +74,19 @@ namespace Catel.MVVM.Converters
         /// If the parameter is invalid, or the method fails to parse the parameter, <see cref="BooleanToTextConverterMode.YesNo"/>
         /// will be returned as a default value.
         /// </remarks>
-        private static BooleanToTextConverterMode ParseMode(string parameter)
+        private static BooleanToTextConverterMode ParseMode(string? parameter)
         {
             var mode = BooleanToTextConverterMode.YesNo;
 
             if (string.IsNullOrEmpty(parameter))
             {
-                Log.Error("Converter parameter cannot be null, default value '{0}' will be used", mode.ToString());
+                Log.Error($"Converter parameter cannot be null, default value '{Enum<BooleanToTextConverterMode>.ToString(mode)}' will be used");
                 return mode;
             }
 
             try
             {
-                mode = (BooleanToTextConverterMode) Enum.Parse(typeof (BooleanToTextConverterMode), parameter, false);
+                mode = (BooleanToTextConverterMode)Enum.Parse(typeof(BooleanToTextConverterMode), parameter, false);
             }
             catch (ArgumentException)
             {

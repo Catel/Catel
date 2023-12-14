@@ -1,22 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationTestHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-// Disable warning for obsolete binary serialization stuff
-#pragma warning disable CS0618
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Xml;
     using System.Xml.Linq;
     using Catel.Data;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using System.Diagnostics;
     using Catel.IoC;
     using Catel.Runtime.Serialization.Json;
@@ -32,17 +21,6 @@ namespace Catel.Tests.Runtime.Serialization
             }
 
             var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<XmlSerializer>(serializationManager);
-            return serializer;
-        }
-
-        public static IBinarySerializer GetBinarySerializer(ISerializationManager serializationManager = null)
-        {
-            if (serializationManager is null)
-            {
-                serializationManager = new SerializationManager();
-            }
-
-            var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<BinarySerializer>(serializationManager);
             return serializer;
         }
 
@@ -77,15 +55,14 @@ namespace Catel.Tests.Runtime.Serialization
 
                 if (Debugger.IsAttached)
                 {
-                    if (!(serializer is BinarySerializer))
-                    {
-                        var streamReader = new StreamReader(memoryStream);
-                        var streamAsText = streamReader.ReadToEnd();
+#pragma warning disable IDISP001 // Dispose created.
+                    var streamReader = new StreamReader(memoryStream);
+#pragma warning restore IDISP001 // Dispose created.
+                    var streamAsText = streamReader.ReadToEnd();
 
-                        Console.WriteLine(streamAsText);
+                    Console.WriteLine(streamAsText);
 
-                        memoryStream.Position = 0L;
-                    }
+                    memoryStream.Position = 0L;
                 }
 
                 // Note: we use model.GetType to always ensure the correct type (even if 'object' type is specified)
@@ -95,7 +72,7 @@ namespace Catel.Tests.Runtime.Serialization
 
         public static string ToXmlString(this object model)
         {
-            Argument.IsNotNull(() => model);
+            ArgumentNullException.ThrowIfNull(model);
 
             using (var memoryStream = new MemoryStream())
             {

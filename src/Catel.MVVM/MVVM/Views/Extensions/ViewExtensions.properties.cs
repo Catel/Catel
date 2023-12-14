@@ -1,26 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewExtensions.properties.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.ComponentModel;
     using System.Linq;
-    
-#if XAMARIN || XAMARIN_FORMS
-    // nothing
-    using Catel.Collections;
-#elif UWP
-    using Catel.Windows.Data;
-    using global::Windows.UI.Xaml;
-#else
     using Catel.Windows.Data;
     using System.Windows;
-#endif
 
     public static partial class ViewExtensions
     {
@@ -31,14 +15,23 @@ namespace Catel.MVVM.Views
         /// <returns>List of properties.</returns>
         public static string[] GetProperties(this IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
-#if !XAMARIN && !XAMARIN_FORMS
             var viewProperties = ((FrameworkElement)view).GetDependencyProperties();
             return viewProperties.Select(x => x.PropertyName).ToArray();
-#else
-            return ArrayShim.Empty<string>();
-#endif
+        }
+
+        /// <summary>
+        /// Gets the properties of the view.
+        /// </summary>
+        /// <param name="viewType">The view type.</param>
+        /// <returns>List of properties.</returns>
+        public static string[] GetProperties(Type viewType)
+        {
+            ArgumentNullException.ThrowIfNull(viewType);
+
+            var viewProperties = Catel.Windows.Data.DependencyPropertyHelper.GetDependencyProperties(viewType);
+            return viewProperties.Select(x => x.PropertyName).ToArray();
         }
 
         /// <summary>
@@ -49,24 +42,23 @@ namespace Catel.MVVM.Views
         /// <param name="handler">The handler.</param>
         public static void SubscribeToPropertyChanged(this IView view, string propertyName, EventHandler<PropertyChangedEventArgs> handler)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
-#if !XAMARIN && !XAMARIN_FORMS
             ((FrameworkElement)view).SubscribeToDependencyProperty(propertyName, (sender, e) =>
             {
-                if (!((FrameworkElement)sender).IsRealDependencyProperty(e.PropertyName))
+                if (sender is FrameworkElement senderFx)
                 {
-                    // Ignore, this is a wrapper
-                    return;
+                    if (!senderFx.IsRealDependencyProperty(e.PropertyName))
+                    {
+                        // Ignore, this is a wrapper
+                        return;
+                    }
                 }
 
                 handler(sender, new PropertyChangedEventArgs(e.PropertyName));
             });
-#else
-
-#endif
         }
     }
 }

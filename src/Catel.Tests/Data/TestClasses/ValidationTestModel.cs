@@ -2,22 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
     /// <summary>
     /// ValidationTest Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ValidationTestModel : ValidatableModelBase
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -29,20 +22,6 @@
             BusinessRuleWarningWhenEmpty = "noerror";
         }
 
-#if NET || NETCORE
-        /// <summary>
-        ///   Initializes a new object based on <see cref = "SerializationInfo" />.
-        /// </summary>
-        /// <param name = "info"><see cref = "SerializationInfo" /> that contains the information.</param>
-        /// <param name = "context"><see cref = "StreamingContext" />.</param>
-        protected ValidationTestModel(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
-        #endregion
-
-        #region Properties
         public new bool AutomaticallyValidateOnPropertyChanged
         {
             get { return base.AutomaticallyValidateOnPropertyChanged; }
@@ -61,7 +40,7 @@
         /// <summary>
         ///   Register the ErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ErrorWhenEmptyProperty = RegisterProperty("ErrorWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData ErrorWhenEmptyProperty = RegisterProperty("ErrorWhenEmpty", string.Empty);
 
         /// <summary>
         ///   Gets or sets field that returns a warning when empty.
@@ -75,7 +54,7 @@
         /// <summary>
         ///   Register the WarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData WarningWhenEmptyProperty = RegisterProperty("WarningWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData WarningWhenEmptyProperty = RegisterProperty("WarningWhenEmpty", string.Empty);
 
         /// <summary>
         ///   Gets or sets field that returns a business rule error when empty.
@@ -89,7 +68,7 @@
         /// <summary>
         ///   Register the BusinessRuleErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty("BusinessRuleErrorWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty("BusinessRuleErrorWhenEmpty", string.Empty);
 
         /// <summary>
         ///   Gets or sets field that returns a business rule warning when empty.
@@ -103,16 +82,14 @@
         /// <summary>
         ///   Register the BusinessRuleWarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", string.Empty);
 
         public new bool HideValidationResults
         {
             get { return base.HideValidationResults; }
             set { base.HideValidationResults = value; }
         }
-        #endregion
 
-        #region Methods
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
             if (string.IsNullOrEmpty(ErrorWhenEmpty))
@@ -138,6 +115,5 @@
                 validationResults.Add(BusinessRuleValidationResult.CreateWarning("BusinessRuleWarningWhenEmpty should not be empty"));
             }
         }
-        #endregion
     }
 }

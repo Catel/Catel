@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManagerExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System.Linq;
     using System.Windows.Input;
@@ -29,7 +22,7 @@ namespace Catel.Tests
             var inputGesture = new InputGesture(key, modifierKeys);
             var existingCommands = commandManager.FindCommandsByGesture(inputGesture);
 
-            Assert.AreEqual(expectedToBeAvailable, existingCommands.Any());
+            Assert.That(existingCommands.Any(), Is.EqualTo(expectedToBeAvailable));
         }
     }
 }

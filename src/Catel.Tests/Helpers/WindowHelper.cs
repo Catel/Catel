@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WindowHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System.Windows;
     using System.Windows.Controls;
@@ -16,7 +8,6 @@ namespace Catel.Tests
     /// </summary>
     internal static class WindowHelper
     {
-        #region Methods
         /// <summary>
         /// Shows a control in a window.
         /// </summary>
@@ -39,8 +30,5 @@ namespace Catel.Tests
             // Show window
             window.Show();
         }
-        #endregion
     }
 }
-
-#endif

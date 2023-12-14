@@ -23,12 +23,12 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The member value to update.</param>
         /// <returns><c>true</c> if the member was retrieved; otherwise <c>false</c>.</returns>
-        public virtual bool GetMemberValue<TValue>(object instance, string memberName, out TValue value)
+        public virtual bool TryGetMemberValue<TValue>(object instance, string memberName, out TValue? value)
         {
             try
             {
                 var modelEditor = instance as IModelEditor;
-                if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
+                if (modelEditor is not null && modelEditor.IsPropertyRegistered(memberName))
                 {
                     value = modelEditor.GetValueFastButUnsecure<TValue>(memberName);
                     return true;
@@ -36,26 +36,26 @@
 
                 if (instance is IPropertySerializable propertySerializable)
                 {
-                    object objectValue = null;
+                    object? objectValue = null;
                     if (propertySerializable.GetPropertyValue(memberName, ref objectValue))
                     {
-                        value = (TValue)objectValue;
+                        value = (TValue)objectValue!;
                         return true;
                     }
                 }
 
                 if (instance is IFieldSerializable fieldSerializable)
                 {
-                    object objectValue = null;
+                    object? objectValue = null;
                     if (fieldSerializable.GetFieldValue(memberName, ref objectValue))
                     {
-                        value = (TValue)objectValue;
+                        value = (TValue)objectValue!;
                         return true;
                     }
                 }
 
                 var modelType = instance.GetType();
-                IFastMemberInvoker fastMemberInvoker = null;
+                IFastMemberInvoker? fastMemberInvoker = null;
 
                 lock (_fastMemberInvokerCache)
                 {
@@ -83,7 +83,7 @@
                 Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
             }
 
-            value = default;
+            value = default!;
             return false;
         }
 
@@ -94,12 +94,12 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the member was set successfully; otherwise <c>false</c>.</returns>
-        public virtual bool SetMemberValue<TValue>(object instance, string memberName, TValue value)
+        public virtual bool TrySetMemberValue<TValue>(object instance, string memberName, TValue? value)
         {
             try
             {
                 var modelEditor = instance as IModelEditor;
-                if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
+                if (modelEditor is not null && modelEditor.IsPropertyRegistered(memberName))
                 {
                     // Don't use SetValueFastbutUnsecure, change notifications must be possible
                     modelEditor.SetValue(memberName, value);
@@ -123,7 +123,7 @@
                 }
 
                 var modelType = instance.GetType();
-                IFastMemberInvoker fastMemberInvoker = null;
+                IFastMemberInvoker? fastMemberInvoker = null;
 
                 lock (_fastMemberInvokerCache)
                 {
@@ -134,12 +134,12 @@
                     }
                 }
 
-                if (fastMemberInvoker.SetPropertyValue(instance, memberName, value))
+                if (fastMemberInvoker.TrySetPropertyValue(instance, memberName, value))
                 {
                     return true;
                 }
 
-                if (fastMemberInvoker.SetFieldValue(instance, memberName, value))
+                if (fastMemberInvoker.TrySetFieldValue(instance, memberName, value))
                 {
                     return true;
                 }
@@ -162,7 +162,13 @@
         protected virtual IFastMemberInvoker GetFastMemberInvoker(Type modelType)
         {
             var typeDefinition = typeof(FastMemberInvoker<>).MakeGenericTypeEx(modelType);
-            return (IFastMemberInvoker)Activator.CreateInstance(typeDefinition);
+            var fastMemberInvoker = Activator.CreateInstance(typeDefinition) as IFastMemberInvoker;
+            if (fastMemberInvoker is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Failed to get fast member invoker for type '{modelType.GetSafeFullName(false)}'");
+            }
+
+            return fastMemberInvoker;
         }
     }
 }

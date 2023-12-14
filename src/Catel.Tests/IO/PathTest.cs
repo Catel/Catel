@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PathTest.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.IO
+﻿namespace Catel.Tests.IO
 {
     using System;
     using System.IO;
@@ -22,19 +16,13 @@ namespace Catel.Tests.IO
     [TestFixture]
     public class PathTest
     {
-        #region Fields
-#if NET || NETCORE
         private string _testDirectory;
-#endif
-        #endregion
 
-        #region Initialization & cleanup
-#if NET || NETCORE
         [SetUp]
         public void Initialize()
         {
             // Determine test directory
-            _testDirectory = Path.Combine(System.IO.Path.GetTempPath(), "PathTest");
+            _testDirectory = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "PathTest");
 
             // Delete directory, than create it
             if (Directory.Exists(_testDirectory))
@@ -54,15 +42,11 @@ namespace Catel.Tests.IO
                 Directory.Delete(_testDirectory, true);
             }
         }
-#endif
-        #endregion
 
-        #region GetApplicationDataDirectory
-#if NET || NETCORE
         //[TestCase]
         //public void GetApplicationData_EntryAssembly()
         //{
-        //    string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        //    string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         //                                   Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
         //    string result = Path.GetApplicationDataDirectory();
@@ -73,30 +57,30 @@ namespace Catel.Tests.IO
         [TestCase]
         public void GetApplicationDataDirectory_AppOnly()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                            Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
         public void GetApplicationDataDirectory_CompanyAndApp()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                            Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
         public void GetApplicationDataDirectory_CompanyAndAppAndTestDirectoryCreation()
         {
             // Set up directory
-            string directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                             Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Make sure that the directory does not exist
@@ -106,37 +90,37 @@ namespace Catel.Tests.IO
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Check if the directory exists
-            Assert.AreEqual(directory, result);
-            Assert.IsTrue(Directory.Exists(result));
+            Assert.That(result, Is.EqualTo(directory));
+            Assert.That(Directory.Exists(result), Is.True);
         }
 
         [TestCase]
         public void GetApplicationDataDirectoryForAllUsers_AppOnly()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                                            Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
         public void GetApplicationDataDirectoryForAllUsers_CompanyAndApp()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                                            Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
         public void GetApplicationDataDirectoryForAllUsers_CompanyAndAppAndTestDirectoryCreation()
         {
             // Set up directory
-            string directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                                             Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Make sure that the directory does not exist
@@ -146,11 +130,9 @@ namespace Catel.Tests.IO
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Check if the directory exists
-            Assert.AreEqual(directory, result);
-            Assert.IsTrue(Directory.Exists(result));
+            Assert.That(result, Is.EqualTo(directory));
+            Assert.That(Directory.Exists(result), Is.True);
         }
-#endif
-        #endregion
 
         #region GetDirectoryName
         [TestCase]
@@ -158,7 +140,7 @@ namespace Catel.Tests.IO
         {
             string result = Path.GetDirectoryName(@"C:\ParentDirectory\ChildDirectory");
 
-            Assert.AreEqual(@"C:\ParentDirectory", result);
+            Assert.That(result, Is.EqualTo(@"C:\ParentDirectory"));
         }
 
         [TestCase]
@@ -166,7 +148,7 @@ namespace Catel.Tests.IO
         {
             string result = Path.GetDirectoryName(@"C:\");
 
-            Assert.AreEqual(string.Empty, result);
+            Assert.That(result, Is.EqualTo(string.Empty));
         }
         #endregion
 
@@ -182,7 +164,7 @@ namespace Catel.Tests.IO
             string output = Path.GetFileName(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -196,14 +178,14 @@ namespace Catel.Tests.IO
             string output = Path.GetFileName(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
         public void GetFileName_EmptyInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetFileName(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetFileName(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.GetFileName(null));
+            Assert.Throws<ArgumentException>(() => Path.GetFileName(string.Empty));
         }
         #endregion
 
@@ -219,7 +201,7 @@ namespace Catel.Tests.IO
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -233,7 +215,7 @@ namespace Catel.Tests.IO
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -247,7 +229,7 @@ namespace Catel.Tests.IO
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
@@ -255,27 +237,27 @@ namespace Catel.Tests.IO
         {
             // Declare variables
             string input = @"abse";
-            string expectedOutput = @"";
+            string expectedOutput = string.Empty;
 
             // Call method
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
 
         [TestCase]
         public void GetParentDirectory_EmptyInput()
         {
             // Declare variables
-            string input = @"";
-            string expectedOutput = @"";
+            string input = string.Empty;
+            string expectedOutput = string.Empty;
 
             // Call method
             string output = Path.GetParentDirectory(input);
 
             // Check result
-            Assert.AreEqual(expectedOutput, output);
+            Assert.That(output, Is.EqualTo(expectedOutput));
         }
         #endregion
 
@@ -291,7 +273,7 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"Windows\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -305,7 +287,7 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -319,7 +301,7 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -333,7 +315,7 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -347,10 +329,9 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\MyTest\MyFile.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\MyTest\MyFile.exe".ToLower()));
         }
 
-#if NET || NETCORE
         [TestCase]
         public void GetRelativePath_EmptyBasePath()
         {
@@ -365,12 +346,11 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file);
 
             // Validate
-            Assert.AreEqual(@"..\MyTest\MyFile.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\MyTest\MyFile.exe".ToLower()));
 
             // Restore current working directory
             Environment.CurrentDirectory = currentWorkingDirectory;
         }
-#endif
 
         [TestCase]
         public void GetRelativePath_DeepTree()
@@ -383,7 +363,7 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\..\Level1_\Level2_".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\..\Level1_\Level2_".ToLower()));
         }
 
         [TestCase]
@@ -397,7 +377,7 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\..".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\..".ToLower()));
         }
 
         [TestCase]
@@ -411,7 +391,7 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"..\Windows\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"..\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -425,18 +405,17 @@ namespace Catel.Tests.IO
             string relative = Path.GetRelativePath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), relative.ToLower());
+            Assert.That(relative.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
         public void GetRelativePath_InvalidInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetRelativePath(null, @"C:\test\"));
+            Assert.Throws<ArgumentException>(() => Path.GetRelativePath(null, @"C:\test\"));
         }
         #endregion
 
         #region GetFullPath
-#if NET || NETCORE
         [TestCase]
         public void GetFullPath_FromRootDirectory()
         {
@@ -448,7 +427,7 @@ namespace Catel.Tests.IO
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -462,7 +441,7 @@ namespace Catel.Tests.IO
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -476,7 +455,7 @@ namespace Catel.Tests.IO
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -490,7 +469,7 @@ namespace Catel.Tests.IO
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -504,7 +483,7 @@ namespace Catel.Tests.IO
             string full = Path.GetFullPath(file, path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
+            Assert.That(full.ToLower(), Is.EqualTo(@"C:\Windows\notepad.exe".ToLower()));
         }
 
         [TestCase]
@@ -512,23 +491,22 @@ namespace Catel.Tests.IO
         {
             // Declare variables
             string file = @"..\Windows\notepad.exe";
-            string path = @"";
+            string path = string.Empty;
 
             // Set current environment path
             string oldEnvironmentDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = @"C:\Program Files\";
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetFullPath(file, path));
+            Assert.Throws<ArgumentException>(() => Path.GetFullPath(file, path));
         }
-#endif
         #endregion
 
         #region AppendTrailing
         [TestCase]
         public void AppendTrailingSlash_EmptyValue()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.AppendTrailingSlash(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.AppendTrailingSlash(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.AppendTrailingSlash(null));
+            Assert.Throws<ArgumentException>(() => Path.AppendTrailingSlash(string.Empty));
         }
 
         [TestCase]
@@ -541,7 +519,7 @@ namespace Catel.Tests.IO
             string result = Path.AppendTrailingSlash(path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\", result);
+            Assert.That(result, Is.EqualTo(@"C:\Windows\"));
         }
 
         [TestCase]
@@ -554,7 +532,7 @@ namespace Catel.Tests.IO
             string result = Path.AppendTrailingSlash(path, '/');
 
             // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/", result);
+            Assert.That(result, Is.EqualTo(@"http://www.catenalogic.com/"));
         }
 
         [TestCase]
@@ -567,7 +545,7 @@ namespace Catel.Tests.IO
             string result = Path.AppendTrailingSlash(path);
 
             // Validate
-            Assert.AreEqual(@"C:\Windows\", result);
+            Assert.That(result, Is.EqualTo(@"C:\Windows\"));
         }
 
         [TestCase]
@@ -580,191 +558,7 @@ namespace Catel.Tests.IO
             string result = Path.AppendTrailingSlash(path, '/');
 
             // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/", result);
-        }
-        #endregion
-
-        #region Combine
-        [TestCase]
-        public void CombinePath_NoValues()
-        {
-            // Call method
-            string result = Path.Combine();
-
-            // Validate
-            Assert.AreEqual(@"", result);
-        }
-
-        [TestCase]
-        public void CombinePath_EmptyValues()
-        {
-            // Declare variables
-            string path1 = @"";
-            string path2 = @"";
-            string path3 = @"";
-
-            // Call method
-            string result = Path.Combine(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"", result);
-        }
-
-        [TestCase]
-        public void CombinePath_OneNullValue()
-        {
-            // Declare variables
-            string path1 = @"C:\";
-            string path2 = null;
-            string path3 = @"Program Files";
-
-            // Call method
-            string result = Path.Combine(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"C:\Program Files", result);
-        }
-
-        [TestCase]
-        public void CombinePath_1Value()
-        {
-            // Declare variables
-            string path1 = @"C:\Windows";
-
-            // Call method
-            string result = Path.Combine(path1);
-
-            // Validate
-            Assert.AreEqual(@"C:\Windows", result);
-        }
-
-        [TestCase]
-        public void CombinePath_2Values()
-        {
-            // Declare variables
-            string path1 = @"C:\";
-            string path2 = @"Windows";
-
-            // Call method
-            string result = Path.Combine(path1, path2);
-
-            // Validate
-            Assert.AreEqual(@"C:\Windows", result);
-        }
-
-        [TestCase]
-        public void CombinePath_3Values()
-        {
-            // Declare variables
-            string path1 = @"C:\";
-            string path2 = @"Windows";
-            string path3 = @"System";
-
-            // Call method
-            string result = Path.Combine(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"C:\Windows\System", result);
-        }
-        #endregion
-
-        #region CombineUrls
-        [TestCase]
-        public void CombineUrls_NoValues()
-        {
-            // Call method
-            string result = Path.CombineUrls();
-
-            // Validate
-            Assert.AreEqual(@"", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_1Value()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com";
-
-            // Call method
-            string result = Path.CombineUrls(path1);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_2Values()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com";
-            string path2 = @"products";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/products", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_3Values()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com";
-            string path2 = @"products";
-            string path3 = @"updater";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/products/updater", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_3ValuesAndGarbageSlashes()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com/";
-            string path2 = @"products\";
-            string path3 = @"/updater";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/products/updater", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_3ValuesAndRootedPath()
-        {
-            // Declare variables
-            string path1 = @"/products";
-            string path2 = @"updater\";
-            string path3 = @"/default.aspx";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"/products/updater/default.aspx", result);
-        }
-
-
-        [TestCase]
-        public void CombineUrls_3ValuesAnd1Empty()
-        {
-            // Declare variables
-            string path1 = @"/products";
-            string path2 = @"";
-            string path3 = @"/default.aspx";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"/products/default.aspx", result);
+            Assert.That(result, Is.EqualTo(@"http://www.catenalogic.com/"));
         }
         #endregion
 
@@ -772,8 +566,8 @@ namespace Catel.Tests.IO
         [TestCase]
         public void RemoveStartSlashes_EmptyInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveStartSlashes(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveStartSlashes(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.RemoveStartSlashes(null));
+            Assert.Throws<ArgumentException>(() => Path.RemoveStartSlashes(string.Empty));
         }
 
         [TestCase]
@@ -781,7 +575,7 @@ namespace Catel.Tests.IO
         {
             string result = Path.RemoveStartSlashes(@"\withStartSlash");
 
-            Assert.AreEqual(@"withStartSlash", result);
+            Assert.That(result, Is.EqualTo(@"withStartSlash"));
         }
 
         [TestCase]
@@ -789,7 +583,7 @@ namespace Catel.Tests.IO
         {
             string result = Path.RemoveStartSlashes(@"withoutStartSlash");
 
-            Assert.AreEqual(@"withoutStartSlash", result);
+            Assert.That(result, Is.EqualTo(@"withoutStartSlash"));
         }
         #endregion
 
@@ -797,8 +591,8 @@ namespace Catel.Tests.IO
         [TestCase]
         public void RemoveTrailingSlashes_EmptyInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveTrailingSlashes(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveTrailingSlashes(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.RemoveTrailingSlashes(null));
+            Assert.Throws<ArgumentException>(() => Path.RemoveTrailingSlashes(string.Empty));
         }
 
         [TestCase]
@@ -806,7 +600,7 @@ namespace Catel.Tests.IO
         {
             string result = Path.RemoveTrailingSlashes(@"withEndingSlash\");
 
-            Assert.AreEqual(@"withEndingSlash", result);
+            Assert.That(result, Is.EqualTo(@"withEndingSlash"));
         }
 
         [TestCase]
@@ -814,7 +608,7 @@ namespace Catel.Tests.IO
         {
             string result = Path.RemoveTrailingSlashes(@"withoutEndingSlash");
 
-            Assert.AreEqual(@"withoutEndingSlash", result);
+            Assert.That(result, Is.EqualTo(@"withoutEndingSlash"));
         }
         #endregion
     }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbsoluteExpirationPolicyFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Caching.Policies
+﻿namespace Catel.Tests.Caching.Policies
 {
     using System;
 
@@ -33,7 +27,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsFalse()
             {
-                Assert.IsFalse(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).CanReset);
+                Assert.That(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).CanReset, Is.False);
             }
 
             #endregion
@@ -56,7 +50,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsTrueIfTheExpirationDateTimeIsThePass()
             {
-                Assert.IsTrue(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(-1)).IsExpired);
+                Assert.That(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(-1)).IsExpired, Is.True);
             }
 
             /// <summary>
@@ -65,7 +59,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsFalseIfTheExpirationDateTimeIsTheFuture()
             {
-                Assert.IsFalse(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).IsExpired);
+                Assert.That(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).IsExpired, Is.False);
             }
 
             #endregion
@@ -88,7 +82,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ThrowsInvalidOperationException()
             {
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).Reset());
+                Assert.Throws<InvalidOperationException>(() => new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).Reset());
             }
 
             #endregion

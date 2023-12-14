@@ -1,11 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="INavigationRootService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     /// <summary>
     /// Service to retrieve the navigation root in the application.
@@ -16,6 +9,6 @@ namespace Catel.Services
         /// Gets the navigation root.
         /// </summary>
         /// <returns>System.Object.</returns>
-        object GetNavigationRoot();
+        object? GetNavigationRoot();
     }
 }

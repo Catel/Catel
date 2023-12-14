@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeValidatorProviderTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
 
@@ -25,7 +17,7 @@ namespace Catel.Tests.Data
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => compositeValidatorProvider.Add(null));
             }
         }
@@ -38,8 +30,7 @@ namespace Catel.Tests.Data
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(
-                    () => compositeValidatorProvider.Remove(null));
+                Assert.Throws<ArgumentNullException>(() => compositeValidatorProvider.Remove(null));
             }
 
             [TestCase]
@@ -48,12 +39,12 @@ namespace Catel.Tests.Data
                 var compositeValidatorProvider = new CompositeValidatorProvider();
                 var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
                 var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
-                
+
                 compositeValidatorProvider.Add(validatorProviderMock1.Object);
                 compositeValidatorProvider.Add(validatorProviderMock2.Object);
-                
+
                 compositeValidatorProvider.Remove(validatorProviderMock1.Object);
-                Assert.IsFalse(compositeValidatorProvider.Contains(validatorProviderMock1.Object));
+                Assert.That(compositeValidatorProvider.Contains(validatorProviderMock1.Object), Is.False);
             }
         }
 
@@ -62,7 +53,7 @@ namespace Catel.Tests.Data
         {
             public class FooViewModel : ViewModelBase
             {
-                 
+
             }
 
             [TestCase]
@@ -83,7 +74,7 @@ namespace Catel.Tests.Data
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
 
-                Assert.IsInstanceOf(typeof(CompositeValidator), validator);
+                Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
                 ((CompositeValidator)validator).Contains(validatorMock1.Object);
                 ((CompositeValidator)validator).Contains(validatorMock2.Object);
             }
@@ -105,7 +96,7 @@ namespace Catel.Tests.Data
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
 
-                Assert.AreEqual(validator, validatorMock1.Object);
+                Assert.That(validatorMock1.Object, Is.EqualTo(validator));
             }
         }
 
@@ -126,7 +117,7 @@ namespace Catel.Tests.Data
 
                 var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
                 validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
-                
+
                 var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
                 validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock2.Object);
 
@@ -135,7 +126,7 @@ namespace Catel.Tests.Data
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
 
-                Assert.IsInstanceOf(typeof(CompositeValidator), validator);
+                Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
                 ((CompositeValidator)validator).Contains(validatorMock1.Object);
                 ((CompositeValidator)validator).Contains(validatorMock2.Object);
             }
@@ -157,10 +148,8 @@ namespace Catel.Tests.Data
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
 
-                Assert.AreEqual(validator, validatorMock1.Object);
+                Assert.That(validatorMock1.Object, Is.EqualTo(validator));
             }
         }
     }
 }
-
-#endif

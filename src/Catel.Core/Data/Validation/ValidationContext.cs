@@ -1,33 +1,21 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using Text;
-
-#if NET || NETCORE || NETSTANDARD
     using System.Diagnostics;
-#endif
 
     /// <summary>
     /// Context containing all validation and provides several methods to gather this information.
     /// </summary>
     public class ValidationContext : IValidationContext
     {
-        #region Fields
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// The stop watch which will give accurate modification stamps.
         /// </summary>
         private static readonly Stopwatch _stopWatch = new Stopwatch();
-#endif
 
         /// <summary>
         /// List of field validations.
@@ -38,10 +26,7 @@ namespace Catel.Data
         /// List of business rule validations.
         /// </summary>
         private readonly List<IBusinessRuleValidationResult> _businessRuleValidations = new List<IBusinessRuleValidationResult>();
-        #endregion
 
-        #region Constructors
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes static members of the <see cref="ValidationContext"/> class.
         /// </summary>
@@ -49,7 +34,6 @@ namespace Catel.Data
         {
             _stopWatch.Start();
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationContext"/> class.
@@ -63,7 +47,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
         /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
-        public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults)
+        public ValidationContext(IEnumerable<IFieldValidationResult>? fieldValidationResults, IEnumerable<IBusinessRuleValidationResult>? businessRuleValidationResults)
             : this(fieldValidationResults, businessRuleValidationResults, FastDateTime.Now)
         { }
 
@@ -73,17 +57,17 @@ namespace Catel.Data
         /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
         /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
         /// <param name="lastModified">The last modified date/time.</param>
-        public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults, DateTime lastModified)
+        public ValidationContext(IEnumerable<IFieldValidationResult>? fieldValidationResults, IEnumerable<IBusinessRuleValidationResult>? businessRuleValidationResults, DateTime lastModified)
         {
             bool fieldValidationsIsNull = true;
-            if (fieldValidationResults != null)
+            if (fieldValidationResults is not null)
             {
                 fieldValidationsIsNull = false;
                 _fieldValidations.AddRange(fieldValidationResults);
             }
 
             bool businessRuleValidationsIsNull = true;
-            if (businessRuleValidationResults != null)
+            if (businessRuleValidationResults is not null)
             {
                 businessRuleValidationsIsNull = false;
                 _businessRuleValidations.AddRange(businessRuleValidationResults);
@@ -91,9 +75,7 @@ namespace Catel.Data
 
             UpdateLastModificationStamp(lastModified, fieldValidationsIsNull && businessRuleValidationsIsNull);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the last modified date/time.
         /// <para />
@@ -128,9 +110,7 @@ namespace Catel.Data
         {
             get { return (GetFieldErrorCount() != 0) || (GetBusinessRuleErrorCount() != 0); }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the total validation count of all fields and business rules.
         /// </summary>
@@ -147,7 +127,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of validations available.</returns>
-        public int GetValidationCount(object tag)
+        public int GetValidationCount(object? tag)
         {
             return GetValidations(tag).Count;
         }
@@ -184,7 +164,7 @@ namespace Catel.Data
         /// <returns>
         /// List of <see cref="IValidationResult"/> items.
         /// </returns>
-        public List<IValidationResult> GetValidations(object tag)
+        public List<IValidationResult> GetValidations(object? tag)
         {
             var list = new List<IValidationResult>();
 
@@ -219,7 +199,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of warnings available.</returns>
-        public int GetWarningCount(object tag)
+        public int GetWarningCount(object? tag)
         {
             return GetWarnings(tag).Count;
         }
@@ -243,7 +223,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IValidationResult" /> items.</returns>
-        public List<IValidationResult> GetWarnings(object tag)
+        public List<IValidationResult> GetWarnings(object? tag)
         {
             var validationResults = new List<IValidationResult>();
 
@@ -267,7 +247,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of errors available.</returns>
-        public int GetErrorCount(object tag)
+        public int GetErrorCount(object? tag)
         {
             return GetErrors(tag).Count;
         }
@@ -292,7 +272,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IValidationResult" /> items.</returns>
-        public List<IValidationResult> GetErrors(object tag)
+        public List<IValidationResult> GetErrors(object? tag)
         {
             var validationResults = new List<IValidationResult>();
 
@@ -317,7 +297,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of field validations available.</returns>
-        public int GetFieldValidationCount(object tag)
+        public int GetFieldValidationCount(object? tag)
         {
             return GetFieldValidations(tag).Count;
         }
@@ -342,7 +322,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
-        public List<IFieldValidationResult> GetFieldValidations(object tag)
+        public List<IFieldValidationResult> GetFieldValidations(object? tag)
         {
             lock (_fieldValidations)
             {
@@ -381,7 +361,7 @@ namespace Catel.Data
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public List<IFieldValidationResult> GetFieldValidations(string propertyName, object tag)
+        public List<IFieldValidationResult> GetFieldValidations(string propertyName, object? tag)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
@@ -410,7 +390,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of field warnings available.</returns>
-        public int GetFieldWarningCount(object tag)
+        public int GetFieldWarningCount(object? tag)
         {
             return GetFieldWarnings(tag).Count;
         }
@@ -436,7 +416,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
-        public List<IFieldValidationResult> GetFieldWarnings(object tag)
+        public List<IFieldValidationResult> GetFieldWarnings(object? tag)
         {
             lock (_fieldValidations)
             {
@@ -481,7 +461,7 @@ namespace Catel.Data
         /// List of <see cref="IFieldValidationResult"/> items.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public List<IFieldValidationResult> GetFieldWarnings(string propertyName, object tag)
+        public List<IFieldValidationResult> GetFieldWarnings(string propertyName, object? tag)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
@@ -511,7 +491,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>The number of field errors available.</returns>
-        public int GetFieldErrorCount(object tag)
+        public int GetFieldErrorCount(object? tag)
         {
             return GetFieldErrors(tag).Count;
         }
@@ -541,7 +521,7 @@ namespace Catel.Data
         /// <returns>
         /// List of <see cref="IFieldValidationResult"/> items.
         /// </returns>
-        public List<IFieldValidationResult> GetFieldErrors(object tag)
+        public List<IFieldValidationResult> GetFieldErrors(object? tag)
         {
             lock (_fieldValidations)
             {
@@ -586,7 +566,7 @@ namespace Catel.Data
         /// List of <see cref="IFieldValidationResult"/> items.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public List<IFieldValidationResult> GetFieldErrors(string propertyName, object tag)
+        public List<IFieldValidationResult> GetFieldErrors(string propertyName, object? tag)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
@@ -620,7 +600,7 @@ namespace Catel.Data
         /// <returns>
         /// The number of business rule validations available.
         /// </returns>
-        public int GetBusinessRuleValidationCount(object tag)
+        public int GetBusinessRuleValidationCount(object? tag)
         {
             return GetBusinessRuleValidations(tag).Count;
         }
@@ -649,7 +629,7 @@ namespace Catel.Data
         /// <returns>
         /// List of <see cref="IBusinessRuleValidationResult"/> items.
         /// </returns>
-        public List<IBusinessRuleValidationResult> GetBusinessRuleValidations(object tag)
+        public List<IBusinessRuleValidationResult> GetBusinessRuleValidations(object? tag)
         {
             lock (_businessRuleValidations)
             {
@@ -679,7 +659,7 @@ namespace Catel.Data
         /// <returns>
         /// The number of business rule warnings available.
         /// </returns>
-        public int GetBusinessRuleWarningCount(object tag)
+        public int GetBusinessRuleWarningCount(object? tag)
         {
             return GetBusinessRuleWarnings(tag).Count;
         }
@@ -709,7 +689,7 @@ namespace Catel.Data
         /// <returns>
         /// List of <see cref="IBusinessRuleValidationResult"/> items.
         /// </returns>
-        public List<IBusinessRuleValidationResult> GetBusinessRuleWarnings(object tag)
+        public List<IBusinessRuleValidationResult> GetBusinessRuleWarnings(object? tag)
         {
             lock (_businessRuleValidations)
             {
@@ -740,7 +720,7 @@ namespace Catel.Data
         /// <returns>
         /// The number of business rule errors available.
         /// </returns>
-        public int GetBusinessRuleErrorCount(object tag)
+        public int GetBusinessRuleErrorCount(object? tag)
         {
             return GetBusinessRuleErrors(tag).Count;
         }
@@ -770,7 +750,7 @@ namespace Catel.Data
         /// <returns>
         /// List of <see cref="IBusinessRuleValidationResult"/> items.
         /// </returns>
-        public List<IBusinessRuleValidationResult> GetBusinessRuleErrors(object tag)
+        public List<IBusinessRuleValidationResult> GetBusinessRuleErrors(object? tag)
         {
             lock (_businessRuleValidations)
             {
@@ -790,7 +770,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
         public void Add(IFieldValidationResult fieldValidationResult)
         {
-            Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
+            ArgumentNullException.ThrowIfNull(fieldValidationResult);
 
             lock (_fieldValidations)
             {
@@ -807,7 +787,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
         public void Remove(IFieldValidationResult fieldValidationResult)
         {
-            Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
+            ArgumentNullException.ThrowIfNull(fieldValidationResult);
 
             lock (_fieldValidations)
             {
@@ -818,35 +798,13 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Adds the field validation result.
-        /// </summary>
-        /// <param name="fieldValidationResult">The field validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Add(IFieldValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public void AddFieldValidationResult(IFieldValidationResult fieldValidationResult)
-        {
-            Add(fieldValidationResult);
-        }
-
-        /// <summary>
-        /// Removes the field validation result.
-        /// </summary>
-        /// <param name="fieldValidationResult">The field validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Remove(IFieldValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public void RemoveFieldValidationResult(IFieldValidationResult fieldValidationResult)
-        {
-            Remove(fieldValidationResult);
-        }
-
-        /// <summary>
         /// Adds the business rule validation result.
         /// </summary>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
         public void Add(IBusinessRuleValidationResult businessRuleValidationResult)
         {
-            Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
+            ArgumentNullException.ThrowIfNull(businessRuleValidationResult);
 
             lock (_businessRuleValidations)
             {
@@ -863,7 +821,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
         public void Remove(IBusinessRuleValidationResult businessRuleValidationResult)
         {
-            Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
+            ArgumentNullException.ThrowIfNull(businessRuleValidationResult);
 
             lock (_businessRuleValidations)
             {
@@ -871,28 +829,6 @@ namespace Catel.Data
 
                 UpdateLastModificationStamp(FastDateTime.Now);
             }
-        }
-
-        /// <summary>
-        /// Adds the business rule validation result.
-        /// </summary>
-        /// <param name="businessRuleValidationResult">The business rule validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Add(IBusinessRuleValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public void AddBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
-        {
-            Add(businessRuleValidationResult);
-        }
-
-        /// <summary>
-        /// Removes the business rule validation result.
-        /// </summary>
-        /// <param name="businessRuleValidationResult">The business rule validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Remove(IBusinessRuleValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public void RemoveBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
-        {
-            Remove(businessRuleValidationResult);
         }
 
         private void UpdateLastModificationStamp(DateTime dateTime, bool resetLastModifiedTicksToZero = false)
@@ -905,11 +841,7 @@ namespace Catel.Data
             }
             else
             {
-#if NET || NETCORE || NETSTANDARD
-                LastModifiedTicks = _stopWatch.ElapsedTicks;
-#else
-                LastModifiedTicks = dateTime.Ticks;
-#endif                
+                LastModifiedTicks = _stopWatch.ElapsedTicks;         
             }
         }
 
@@ -958,6 +890,5 @@ namespace Catel.Data
             var finalString = stringBuilder.ToString();
             return finalString;
         }
-        #endregion
     }
 }

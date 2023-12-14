@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataContextSubscriptionService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -35,7 +28,7 @@ namespace Catel.MVVM
         /// <returns>The data context subscription mode.</returns>
         public virtual DataContextSubscriptionMode GetDataContextSubscriptionMode(Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             return DefaultDataContextSubscriptionMode;
         }

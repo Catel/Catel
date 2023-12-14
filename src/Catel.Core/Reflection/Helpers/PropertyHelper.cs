@@ -1,17 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Globalization;
     using System.Reflection;
 
     using Catel.Caching;
-    using Collections;
+    using Catel.Data;
     using Logging;
 
     /// <summary>
@@ -19,16 +13,13 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class PropertyHelper
     {
-        #region Constants
         /// <summary>
         /// The <see cref="ILog">log</see> object.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly ICacheStorage<string, PropertyInfo> _availableProperties = new CacheStorage<string, PropertyInfo>();
-        #endregion
+        private static readonly ICacheStorage<string, PropertyInfo?> _availableProperties = new CacheStorage<string, PropertyInfo?>();
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified property is a public property on the specified object.
         /// </summary>
@@ -40,7 +31,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool IsPublicProperty(object obj, string property, bool ignoreCase = false)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
@@ -49,11 +40,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
-            var getMethod = propertyInfo.GetMethod;
-#else
             var getMethod = propertyInfo.GetGetMethod();
-#endif
             if (getMethod is null)
             {
                 return false;
@@ -73,10 +60,10 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool IsPropertyAvailable(object obj, string property, bool ignoreCase = false)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            return GetPropertyInfo(obj, property, ignoreCase) != null;
+            return GetPropertyInfo(obj, property, ignoreCase) is not null;
         }
 
         /// <summary>
@@ -91,7 +78,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue(object obj, string property, out object value)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue<object>(obj, property, out value);
@@ -110,7 +97,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue(object obj, string property, bool ignoreCase, out object value)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue<object>(obj, property, ignoreCase, out value);
@@ -129,7 +116,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue<TValue>(object obj, string property, out TValue value)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue(obj, property, false, out value);
@@ -149,7 +136,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TryGetPropertyValue<TValue>(object obj, string property, bool ignoreCase, out TValue value)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             return TryGetPropertyValue(obj, property, ignoreCase, false, out value);
@@ -168,6 +155,8 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static object GetPropertyValue(object obj, string property, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+
             return GetPropertyValue<object>(obj, property, ignoreCase);
         }
 
@@ -185,19 +174,19 @@ namespace Catel.Reflection
         /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
         public static TValue GetPropertyValue<TValue>(object obj, string property, bool ignoreCase = false)
         {
-            TValue returnValue;
+            ArgumentNullException.ThrowIfNull(obj);
 
-            TryGetPropertyValue(obj, property, ignoreCase, true, out returnValue);
+            TryGetPropertyValue(obj, property, ignoreCase, true, out TValue returnValue);
 
             return returnValue;
         }
 
         private static bool TryGetPropertyValue<TValue>(object obj, string property, bool ignoreCase, bool throwOnException, out TValue value)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            value = default(TValue);
+            value = default!;
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
             if (propertyInfo is null)
@@ -223,13 +212,9 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
-            value = (TValue)propertyInfo.GetValue(obj, null);
-            return true;
-#else
             try
             {
-                value = (TValue)propertyInfo.GetValue(obj, null);
+                value = (TValue)propertyInfo.GetValue(obj, null)!;
                 return true;
             }
             catch (MethodAccessException)
@@ -242,7 +227,6 @@ namespace Catel.Reflection
 
                 return false;
             }
-#endif
         }
 
         /// <summary>
@@ -256,8 +240,10 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the method succeeds; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase = false)
+        public static bool TrySetPropertyValue(object obj, string property, object? value, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+
             return TrySetPropertyValue(obj, property, value, ignoreCase, false);
         }
 
@@ -272,14 +258,16 @@ namespace Catel.Reflection
         /// <exception cref="CannotSetPropertyValueException">The the property value cannot be written.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static void SetPropertyValue(object obj, string property, object value, bool ignoreCase = false)
+        public static void SetPropertyValue(object obj, string property, object? value, bool ignoreCase = false)
         {
+            ArgumentNullException.ThrowIfNull(obj);
+
             TrySetPropertyValue(obj, property, value, ignoreCase, true);
         }
 
-        private static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase, bool throwOnError)
+        private static bool TrySetPropertyValue(object obj, string property, object? value, bool ignoreCase, bool throwOnError)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
@@ -305,15 +293,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
-            propertyInfo.SetValue(obj, value, null);
-#else
-
-#if NET || NETCORE
             var setMethod = propertyInfo.GetSetMethod(true);
-#else
-            var setMethod = propertyInfo.GetSetMethod();
-#endif
             if (setMethod is null)
             {
                 if (throwOnError)
@@ -326,12 +306,10 @@ namespace Catel.Reflection
             }
 
             setMethod.Invoke(obj, new[] { value });
-#endif
 
             return true;
         }
 
-#if !NETFX_CORE
         /// <summary>
         /// Gets hidden property value.
         /// </summary>
@@ -347,9 +325,8 @@ namespace Catel.Reflection
         /// <exception cref="System.ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         public static TValue GetHiddenPropertyValue<TValue>(object obj, string property, Type baseType)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
             Argument.IsNotNullOrWhitespace("property", property);
-            Argument.IsNotNull("baseType", baseType);
             Argument.IsOfType("obj", obj, baseType);
 
             var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -360,9 +337,8 @@ namespace Catel.Reflection
                     "Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
             }
 
-            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, ArrayShim.Empty<object>(), CultureInfo.InvariantCulture);
+            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, Array.Empty<object>(), CultureInfo.InvariantCulture)!;
         }
-#endif
 
         /// <summary>
         /// Gets the property info from the cache.
@@ -371,9 +347,12 @@ namespace Catel.Reflection
         /// <param name="property">The property.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case.</param>
         /// <returns>PropertyInfo.</returns>
-        public static PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase = false)
+        public static PropertyInfo? GetPropertyInfo(object obj, string property, bool ignoreCase = false)
         {
-            string cacheKey = $"{obj.GetType().FullName}_{property}_{ignoreCase}";
+            ArgumentNullException.ThrowIfNull(obj);
+            ArgumentNullException.ThrowIfNull(property);
+
+            var cacheKey = $"{obj.GetType().FullName}_{property}_{BoxingCache.GetBoxedValue(ignoreCase)}";
             return _availableProperties.GetFromCacheOrFetch(cacheKey, () =>
             {
                 var objectType = obj.GetType();
@@ -397,6 +376,5 @@ namespace Catel.Reflection
                 return null;
             });
         }
-        #endregion
     }
 }

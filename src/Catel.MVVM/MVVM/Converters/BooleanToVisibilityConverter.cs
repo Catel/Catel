@@ -1,32 +1,17 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanToVisibilityConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS || ANDROID
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Windows;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#endif
+    using Catel.Data;
 
     /// <summary>
     /// Convert from bool to <see cref="T:System.Windows.Visibility" /> and back.
     /// The bool value true will be converted to Visibility.Visible.
     /// The bool value false will be converted to Visibility.Collapsed.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(Visibility))]
-#endif
     public class BooleanToCollapsingVisibilityConverter : VisibilityConverterBase
     {
-#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="BooleanToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -44,7 +29,6 @@ namespace Catel.MVVM.Converters
             : base(notVisibleVisibility)
         {
         }
-#endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -55,7 +39,7 @@ namespace Catel.MVVM.Converters
         /// <returns>
         /// <c>true</c> if the specified value is visible; otherwise, <c>false</c>.
         /// </returns>
-        protected override bool IsVisible(object value, Type targetType, object parameter)
+        protected override bool IsVisible(object? value, Type targetType, object? parameter)
         {
             if (value is bool)
             {
@@ -78,7 +62,7 @@ namespace Catel.MVVM.Converters
         /// <returns>
         /// When value is Visibility.Visible then true else false.
         /// </returns>
-        protected override object ConvertBack(object value, Type targetType, object parameter)
+        protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
             if (value is Visibility)
             {
@@ -90,14 +74,13 @@ namespace Catel.MVVM.Converters
                     isVisible = !isVisible;
                 }
 
-                return isVisible;
+                return BoxingCache.GetBoxedValue(isVisible);
             }
 
-            return false;
+            return BoxingCache.GetBoxedValue(false);
         }
     }
 
-#if NET || NETCORE
     /// <summary>
     /// Convert from bool to <see cref="T:System.Windows.Visibility" /> and back.
     /// The bool value true will be converted to Visibility.Visible.
@@ -114,7 +97,4 @@ namespace Catel.MVVM.Converters
         {
         }
     }
-#endif
 }
-
-#endif

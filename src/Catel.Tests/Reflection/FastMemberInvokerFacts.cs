@@ -1,13 +1,9 @@
 ﻿namespace Catel.Tests.Reflection
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Catel.Reflection;
     using Catel.Tests.Reflection.Models;
-    using Catel.Threading;
     using NUnit.Framework;
 
     public class FastMemberInvokerFacts
@@ -64,7 +60,7 @@
 
                 for (int i = 0; i < 30; i++)
                 {
-                    tasks.Add(TaskHelper.Run(() => fastMemberInvoker.TryGetPropertyValue(instance, $"Int{i + 1:D2}", out int _)));
+                    tasks.Add(Task.Run(() => fastMemberInvoker.TryGetPropertyValue(instance, $"Int{i + 1:D2}", out int _)));
                 }
 
                 Task.WaitAll(tasks.ToArray());
@@ -91,11 +87,11 @@
                     Value = "C"
                 };
 
-                Assert.IsTrue(fastMemberInvoker.TryGetPropertyValue<RecordDetailItemValue>(recordDetailItem, nameof(recordDetailItem.ComparedValue1), out var item1));
-                Assert.IsTrue(ReferenceEquals(recordDetailItem.ComparedValue1, item1));
+                Assert.That(fastMemberInvoker.TryGetPropertyValue<RecordDetailItemValue>(recordDetailItem, nameof(recordDetailItem.ComparedValue1), out var item1), Is.True);
+                Assert.That(ReferenceEquals(recordDetailItem.ComparedValue1, item1), Is.True);
 
-                Assert.IsTrue(fastMemberInvoker.TryGetPropertyValue<RecordDetailItemValue>(recordDetailItem, nameof(recordDetailItem.ComparedValue2), out var item2));
-                Assert.IsTrue(ReferenceEquals(recordDetailItem.ComparedValue2, item2));
+                Assert.That(fastMemberInvoker.TryGetPropertyValue<RecordDetailItemValue>(recordDetailItem, nameof(recordDetailItem.ComparedValue2), out var item2), Is.True);
+                Assert.That(ReferenceEquals(recordDetailItem.ComparedValue2, item2), Is.True);
             }
 
             [TestCase]
@@ -110,8 +106,8 @@
                     BoolValue = true
                 };
 
-                Assert.IsTrue(fastMemberInvoker.TryGetPropertyValue<bool>(recordDetailItem, nameof(recordDetailItem.BoolValue), out var boolValue));
-                Assert.IsTrue(boolValue);
+                Assert.That(fastMemberInvoker.TryGetPropertyValue<bool>(recordDetailItem, nameof(recordDetailItem.BoolValue), out var boolValue), Is.True);
+                Assert.That(boolValue, Is.True);
             }
 
             [TestCase]
@@ -126,8 +122,8 @@
                     IntValue = 42
                 };
 
-                Assert.IsTrue(fastMemberInvoker.TryGetPropertyValue<int>(recordDetailItem, nameof(recordDetailItem.IntValue), out var intValue));
-                Assert.AreEqual(42, intValue);
+                Assert.That(fastMemberInvoker.TryGetPropertyValue<int>(recordDetailItem, nameof(recordDetailItem.IntValue), out var intValue), Is.True);
+                Assert.That(intValue, Is.EqualTo(42));
             }
         }
 
@@ -144,8 +140,8 @@
                     StringField = "John"
                 };
 
-                Assert.IsTrue(fastMemberInvoker.TryGetFieldValue<string>(testClass, nameof(TestClassWithRegularMembers.StringField), out var stringValue));
-                Assert.AreEqual("John", stringValue);
+                Assert.That(fastMemberInvoker.TryGetFieldValue<string>(testClass, nameof(TestClassWithRegularMembers.StringField), out var stringValue), Is.True);
+                Assert.That(stringValue, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -158,7 +154,7 @@
                     StringField = "John"
                 };
 
-                Assert.IsFalse(fastMemberInvoker.TryGetFieldValue<string>(testClass, "NonExistingField", out var stringValue));
+                Assert.That(fastMemberInvoker.TryGetFieldValue<string>(testClass, "NonExistingField", out var stringValue), Is.False);
             }
         }
 
@@ -175,8 +171,8 @@
                     StringProperty = "John"
                 };
 
-                Assert.IsTrue(fastMemberInvoker.TryGetPropertyValue<string>(testClass, nameof(TestClassWithRegularMembers.StringProperty), out var stringValue));
-                Assert.AreEqual("John", stringValue);
+                Assert.That(fastMemberInvoker.TryGetPropertyValue<string>(testClass, nameof(TestClassWithRegularMembers.StringProperty), out var stringValue), Is.True);
+                Assert.That(stringValue, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -189,12 +185,12 @@
                     StringProperty = "John"
                 };
 
-                Assert.IsFalse(fastMemberInvoker.TryGetPropertyValue<string>(testClass, "NonExistingProperty", out var stringValue));
+                Assert.That(fastMemberInvoker.TryGetPropertyValue<string>(testClass, "NonExistingProperty", out var stringValue), Is.False);
             }
         }
 
         [TestFixture]
-        public class TheSetFieldValueMethod
+        public class TheTrySetFieldValueMethod
         {
             [TestCase]
             public void UpdatesStringField()
@@ -203,8 +199,8 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(fastMemberInvoker.SetFieldValue<string>(testClass, nameof(TestClassWithRegularMembers.StringField), "John"));
-                Assert.AreEqual("John", testClass.StringField);
+                Assert.That(fastMemberInvoker.TrySetFieldValue<string>(testClass, nameof(TestClassWithRegularMembers.StringField), "John"), Is.True);
+                Assert.That(testClass.StringField, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -214,12 +210,12 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsFalse(fastMemberInvoker.SetFieldValue<string>(testClass, "NonExistingField", "John"));
+                Assert.That(fastMemberInvoker.TrySetFieldValue<string>(testClass, "NonExistingField", "John"), Is.False);
             }
         }
 
         [TestFixture]
-        public class TheSetPropertyValueMethod
+        public class TheTrySetPropertyValueMethod
         {
             [TestCase]
             public void UpdatesStringProperty()
@@ -228,8 +224,8 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(fastMemberInvoker.SetPropertyValue<string>(testClass, nameof(TestClassWithRegularMembers.StringProperty), "John"));
-                Assert.AreEqual("John", testClass.StringProperty);
+                Assert.That(fastMemberInvoker.TrySetPropertyValue<string>(testClass, nameof(TestClassWithRegularMembers.StringProperty), "John"), Is.True);
+                Assert.That(testClass.StringProperty, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -239,7 +235,7 @@
 
                 var testClass = new TestClassWithRegularMembers();
 
-                Assert.IsFalse(fastMemberInvoker.SetPropertyValue<string>(testClass, "NonExistingProperty", "John"));
+                Assert.That(fastMemberInvoker.TrySetPropertyValue<string>(testClass, "NonExistingProperty", "John"), Is.False);
             }
         }
     }

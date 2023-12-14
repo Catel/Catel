@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="KeyValuePairSerializerModifier.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -29,22 +22,24 @@ namespace Catel.Runtime.Serialization
             base.SerializeMember(context, memberValue);
 
             var value = memberValue.Value;
-            if (value != null)
+            if (value is not null)
             {
                 var valueType = value.GetType();
                 if (valueType.IsGenericTypeEx())
                 {
                     if (valueType.GetGenericTypeDefinitionEx() == typeof(KeyValuePair<,>))
                     {
-                        var keyProperty = valueType.GetPropertyEx("Key");
-                        var valueProperty = valueType.GetPropertyEx("Value");
+                        var keyProperty = valueType.GetPropertyEx("Key")!;
+                        var valueProperty = valueType.GetPropertyEx("Value")!;
 
                         var kvpKey = keyProperty.GetValue(value, null);
                         var kvpValue = valueProperty.GetValue(value, null);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
                         var finalValue = string.Format("{0}{1}{2}{1}{3}{1}{4}{1}{5}", Prefix, Splitter,
                             keyProperty.PropertyType, valueProperty.PropertyType,
                             ObjectToStringHelper.ToString(kvpKey), ObjectToStringHelper.ToString(kvpValue));
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
                         memberValue.Value = finalValue;
                     }
@@ -68,12 +63,23 @@ namespace Catel.Runtime.Serialization
 
                     var keyValuePairType = typeof(KeyValuePair<,>);
                     var keyType = TypeCache.GetTypeWithoutAssembly(splittedValues[1], allowInitialization: false);
+                    if (keyType is null)
+                    {
+                        throw new CatelException($"Cannot find key type '{splittedValues[1]}'");
+                    }
+
                     var valueType = TypeCache.GetTypeWithoutAssembly(splittedValues[2], allowInitialization: false);
+                    if (valueType is null)
+                    {
+                        throw new CatelException($"Cannot find value type '{splittedValues[2]}'");
+                    }
+
                     var keyValue = splittedValues[3];
                     var valueValue = splittedValues[4];
 
-                    // TODO: consider caching
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     var keyValuePairGenericType = keyValuePairType.MakeGenericType(keyType, valueType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
                     var key = StringToObjectHelper.ToRightType(keyType, keyValue);
                     var value = StringToObjectHelper.ToRightType(valueType, valueValue);

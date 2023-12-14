@@ -1,17 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtensionsControlsModule.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using MVVM;
     using MVVM.Views;
     using Services;
     using IoC;
     using Catel.MVVM.Auditing;
+    using System;
 
     /// <summary>
     /// MVVM module which allows the registration of default services in the service locator.
@@ -24,7 +18,7 @@ namespace Catel
         /// <param name="serviceLocator">The service locator.</param>
         public void Initialize(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IDataContextSubscriptionService, DataContextSubscriptionService>();
             serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
@@ -33,22 +27,19 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
-
-#if NET || NETCORE
             serviceLocator.RegisterTypeIfNotYetRegistered<IWrapControlService, WrapControlService>();
-#endif
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 
-#if !XAMARIN
-            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+#pragma warning disable IDISP001
+            var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
+#pragma warning restore IDISP001
 
-            var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
+            var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateRequiredInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
             AuditingManager.RegisterAuditor(invalidateCommandManagerOnViewModelInitializationAuditor);
 
-            var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
+            var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateRequiredInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
             AuditingManager.RegisterAuditor(subscribeKeyboardEventsOnViewModelCreationAuditor);
-#endif
 
             DesignTimeHelper.InitializeDesignTime();
         }

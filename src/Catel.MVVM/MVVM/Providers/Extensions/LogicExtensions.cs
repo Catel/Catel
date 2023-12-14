@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogicExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
 
@@ -22,7 +16,7 @@ namespace Catel.MVVM.Providers
         public static void SetValue<TLogic>(this LogicBase logic, Action<TLogic> action)
             where TLogic : LogicBase
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (logic is null)
             {
@@ -41,7 +35,7 @@ namespace Catel.MVVM.Providers
         public static TValue GetValue<TLogic, TValue>(this LogicBase logic, Func<TLogic, TValue> function)
             where TLogic : LogicBase
         {
-            return GetValue(logic, function, default(TValue));
+            return GetValue(logic, function, default)!;
         }
 
         /// <summary>
@@ -54,7 +48,7 @@ namespace Catel.MVVM.Providers
         public static TValue GetValue<TLogic, TValue>(this LogicBase logic, Func<TLogic, TValue> function, TValue defaultValue)
             where TLogic : LogicBase
         {
-            Argument.IsNotNull("function", function);
+            ArgumentNullException.ThrowIfNull(function);
 
             if (logic is null)
             {

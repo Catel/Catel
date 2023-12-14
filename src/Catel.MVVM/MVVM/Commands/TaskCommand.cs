@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TaskCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Threading;
@@ -12,7 +6,6 @@ namespace Catel.MVVM
 
     using Catel.Logging;
     using Services;
-    using Threading;
 
     /// <summary>
     /// Class to implement asynchronous task commands in the <see cref="ViewModelBase" />.
@@ -23,28 +16,29 @@ namespace Catel.MVVM
     public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : Command<TExecuteParameter, TCanExecuteParameter>, ICatelTaskCommand<TProgress>
         where TProgress : ITaskProgressReport
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly Action<TProgress> _reportProgress;
+        private readonly Action<TProgress>? _reportProgress;
 
-        private readonly Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> _executeAsync;
+        private readonly Progress<TProgress>? _progress;
 
-        private readonly Progress<TProgress> _progress;
+#pragma warning disable IDISP006 // Implement IDisposable.
+        private CancellationTokenSource? _cancellationTokenSource;
+#pragma warning restore IDISP006 // Implement IDisposable.
+        private readonly object _cancellationTokenSourceResultObject = new object();
 
-        private CancellationTokenSource _cancellationTokenSource;
-        private Task _task;
 
-        #endregion
+        private Func<TExecuteParameter?, CancellationToken, IProgress<TProgress>?, Task>? _executeAsync;
 
-        #region Constructors
+        private Task? _task;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<Task> execute, Func<bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<Task> execute, Func<bool>? canExecute = null, object? tag = null)
             : this(canExecuteWithoutParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute();
@@ -56,7 +50,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<CancellationToken, Task> execute, Func<bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<CancellationToken, Task> execute, Func<bool>? canExecute = null, object? tag = null)
             : this(canExecuteWithoutParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken);
@@ -69,7 +63,7 @@ namespace Catel.MVVM
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<CancellationToken, IProgress<TProgress>, Task> execute, Func<bool> canExecute = null, Action<TProgress> reportProgress = null, object tag = null)
+        public TaskCommand(Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
             : this(canExecuteWithoutParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken, progress);
@@ -81,7 +75,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<TExecuteParameter?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : this(canExecuteWithParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter);
@@ -93,7 +87,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter, CancellationToken, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : this(canExecuteWithParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter, cancellationToken);
@@ -107,8 +101,8 @@ namespace Catel.MVVM
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null,
-            Action<TProgress> reportProgress = null, object tag = null)
+        public TaskCommand(Func<TExecuteParameter?, CancellationToken, IProgress<TProgress>?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null,
+            Action<TProgress>? reportProgress = null, object? tag = null)
             : this(canExecuteWithParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
             _executeAsync = execute;
@@ -124,15 +118,15 @@ namespace Catel.MVVM
         /// parameter.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        private TaskCommand(Func<TCanExecuteParameter, bool> canExecuteWithParameter = null, Func<bool> canExecuteWithoutParameter = null,
-            Action<TProgress> reportProgress = null, object tag = null)
+        protected TaskCommand(Func<TCanExecuteParameter?, bool>? canExecuteWithParameter = null, Func<bool>? canExecuteWithoutParameter = null,
+            Action<TProgress>? reportProgress = null, object? tag = null)
             : base(null, null, canExecuteWithParameter, canExecuteWithoutParameter, tag)
         {
             _reportProgress = reportProgress;
 
             CancelCommand = new Command(() =>
             {
-                if (_cancellationTokenSource != null)
+                if (_cancellationTokenSource is not null)
                 {
                     _cancellationTokenSource.Cancel();
                 }
@@ -140,9 +134,7 @@ namespace Catel.MVVM
 
             _progress = new Progress<TProgress>(OnProgressChanged);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether to swallow exceptions that happen in the task command. This property can be used
         /// to use the behavior of Catel 4.x to swallow exceptions.
@@ -160,7 +152,7 @@ namespace Catel.MVVM
         /// <value><c>true</c> if this instance is executing; otherwise, <c>false</c>.</value>
         public bool IsExecuting
         {
-            get { return _cancellationTokenSource != null; }
+            get { return _cancellationTokenSource is not null; }
         }
 
         /// <summary>
@@ -169,7 +161,7 @@ namespace Catel.MVVM
         /// <value><c>true</c> if this instance is cancellation requested; otherwise, <c>false</c>.</value>
         public bool IsCancellationRequested
         {
-            get { return _cancellationTokenSource != null && _cancellationTokenSource.IsCancellationRequested; }
+            get { return _cancellationTokenSource is not null && _cancellationTokenSource.IsCancellationRequested; }
         }
 
         /// <summary>
@@ -186,34 +178,49 @@ namespace Catel.MVVM
         /// </value>
         public Task Task
         {
-            get { return _task ?? TaskHelper.Completed; }
+            get { return _task ?? Task.CompletedTask; }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the command is about to execute.
         /// </summary>
-        public event EventHandler<CommandCanceledEventArgs> Executing;
+        public event EventHandler<CommandCanceledEventArgs>? Executing;
 
         /// <summary>
         /// Occurs when the command is canceled.
         /// </summary>
-        public event EventHandler<CommandEventArgs> Canceled;
+        public event EventHandler<CommandEventArgs>? Canceled;
 
         /// <summary>
         /// Raised for each reported progress value.
         /// </summary>
-        public event EventHandler<CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
-        #endregion
+        public event EventHandler<CommandProgressChangedEventArgs<TProgress>>? ProgressChanged;
 
-        #region Methods
+        /// <summary>
+        /// Initializes the actions.
+        /// </summary>
+        protected void InitializeAsyncActions(Func<TExecuteParameter?, Task>? executeWithParameter, Func<Task>? executeWithoutParameter,
+            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter)
+        {
+            if (executeWithoutParameter is not null)
+            {
+                _executeAsync = async (parameter, cancellationToken, progress) => await executeWithoutParameter();
+            }
+
+            if (executeWithParameter is not null)
+            {
+                _executeAsync = async (parameter, cancellationToken, progress) => await executeWithParameter(parameter);
+            }
+
+            InitializeActions(null, null, canExecuteWithParameter, canExecuteWithoutParameter);
+        }
+
         /// <summary>
         /// Determines whether this instance can execute the specified parameter.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns><c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.</returns>
-        public override bool CanExecute(TCanExecuteParameter parameter)
+        public override bool CanExecute(TCanExecuteParameter? parameter)
         {
             return !IsExecuting && base.CanExecute(parameter);
         }
@@ -226,7 +233,7 @@ namespace Catel.MVVM
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="Command{TExecuteParameter, TCanExecuteParameter}.CanExecute()" /> will be used before
         /// actually executing the action.</param>
 #pragma warning disable AvoidAsyncVoid
-        protected override async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected override async void Execute(TExecuteParameter? parameter, bool ignoreCanExecuteCheck)
 #pragma warning restore AvoidAsyncVoid
         {
             var executeAsync = _executeAsync;
@@ -237,7 +244,7 @@ namespace Catel.MVVM
                 return;
             }
 
-            if (_cancellationTokenSource != null)
+            if (_cancellationTokenSource is not null)
             {
                 _cancellationTokenSource.Dispose();
             }
@@ -260,7 +267,7 @@ namespace Catel.MVVM
             var tcs = new TaskCompletionSource<object>();
             _task = tcs.Task;
 
-            Task executionTask = null;
+            Task? executionTask = null;
             var handledException = false;
 
             try
@@ -296,7 +303,7 @@ namespace Catel.MVVM
 
                 if (!handledException)
                 {
-                    tcs.TrySetResult(null);
+                    tcs.TrySetResult(_cancellationTokenSourceResultObject);
                 }
             }
 
@@ -318,7 +325,7 @@ namespace Catel.MVVM
         public void Cancel()
         {
             var cancelCommand = CancelCommand;
-            if (cancelCommand != null)
+            if (cancelCommand is not null)
             {
                 if (cancelCommand.CanExecute())
                 {
@@ -340,7 +347,7 @@ namespace Catel.MVVM
 
         private void OnProgressChanged(TProgress progress)
         {
-            if (_reportProgress != null)
+            if (_reportProgress is not null)
             {
                 _reportProgress(progress);
             }
@@ -351,16 +358,16 @@ namespace Catel.MVVM
 
         private void AutoDispatchIfRequired(Action action)
         {
-            if (AutomaticallyDispatchEvents)
+            var dispatcherService = DispatcherService;
+            if (dispatcherService is not null && AutomaticallyDispatchEvents)
             {
-                DispatcherService.BeginInvokeIfRequired(action);
+                dispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {
                 action();
             }
         }
-        #endregion
     }
 
     /// <summary>
@@ -371,14 +378,13 @@ namespace Catel.MVVM
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
     public class TaskCommand<TExecuteParameter, TCanExecuteParameter> : TaskCommand<TExecuteParameter, TCanExecuteParameter, ITaskProgressReport>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<TExecuteParameter?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag)
         {
         }
@@ -389,11 +395,10 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter, CancellationToken, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag)
         {
         }
-        #endregion
     }
 
     /// <summary>
@@ -403,14 +408,13 @@ namespace Catel.MVVM
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
     public class TaskCommand<TExecuteParameter> : TaskCommand<TExecuteParameter, TExecuteParameter>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter, Task> execute, Func<TExecuteParameter, bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<TExecuteParameter?, Task> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag)
         {
         }
@@ -421,11 +425,10 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter, CancellationToken, Task> execute, Func<TExecuteParameter, bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag)
         {
         }
-        #endregion
     }
 
     /// <summary>
@@ -434,14 +437,13 @@ namespace Catel.MVVM
     /// </summary>
     public class TaskCommand : TaskCommand<object, object, ITaskProgressReport>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand" /> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<Task> execute, Func<bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<Task> execute, Func<bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag)
         {
         }
@@ -452,11 +454,10 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<CancellationToken, Task> execute, Func<bool> canExecute = null, object tag = null)
+        public TaskCommand(Func<CancellationToken, Task> execute, Func<bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag)
         {
         }
-        #endregion
     }
 
     /// <summary>
@@ -469,7 +470,6 @@ namespace Catel.MVVM
     public class ProgressiveTaskCommand<TProgress, TExecuteParameter> : TaskCommand<TExecuteParameter, TExecuteParameter, TProgress>
         where TProgress : ITaskProgressReport
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressiveTaskCommand{TProgress, TExecuteParameter}" /> class.
         /// </summary>
@@ -477,11 +477,10 @@ namespace Catel.MVVM
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public ProgressiveTaskCommand(Func<CancellationToken, IProgress<TProgress>, Task> execute, Func<bool> canExecute = null, Action<TProgress> reportProgress = null, object tag = null)
+        public ProgressiveTaskCommand(Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
             : base(execute, canExecute, reportProgress, tag)
         {
         }
-        #endregion
     }
 
     /// <summary>
@@ -492,7 +491,6 @@ namespace Catel.MVVM
     public class ProgressiveTaskCommand<TProgress> : TaskCommand<object, object, TProgress>
         where TProgress : ITaskProgressReport
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
@@ -500,10 +498,9 @@ namespace Catel.MVVM
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public ProgressiveTaskCommand(Func<CancellationToken, IProgress<TProgress>, Task> execute, Func<bool> canExecute = null, Action<TProgress> reportProgress = null, object tag = null)
+        public ProgressiveTaskCommand(Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
             : base(execute, canExecute, reportProgress, tag)
         {
         }
-        #endregion
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanToOppositeBooleanConverterTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System.Globalization;
     using Catel.MVVM.Converters;
@@ -18,56 +12,56 @@ namespace Catel.Tests.MVVM.Converters
         public void Convert_Null()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(null, converter.Convert(null, typeof (bool), null, (CultureInfo)null));
+            Assert.That(converter.Convert(null, typeof(bool), null, (CultureInfo)null), Is.EqualTo(null));
         }
 
         [TestCase]
         public void Convert_NonBoolean()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(null, converter.Convert("test", typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.Convert("test", typeof(bool), null, (CultureInfo)null), Is.EqualTo(null));
         }
 
         [TestCase]
         public void Convert_True()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(false, converter.Convert(true, typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.Convert(true, typeof(bool), null, (CultureInfo)null), Is.EqualTo(false));
         }
 
         [TestCase]
         public void Convert_False()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(true, converter.Convert(false, typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.Convert(false, typeof(bool), null, (CultureInfo)null), Is.EqualTo(true));
         }
 
         [TestCase]
         public void ConvertBack_Null()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(null, converter.ConvertBack(null, typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.ConvertBack(null, typeof(bool), null, (CultureInfo)null), Is.EqualTo(null));
         }
 
         [TestCase]
         public void ConvertBack_NonBoolean()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(null, converter.ConvertBack("test", typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.ConvertBack("test", typeof(bool), null, (CultureInfo)null), Is.EqualTo(null));
         }
 
         [TestCase]
         public void ConvertBack_True()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(false, converter.ConvertBack(true, typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.ConvertBack(true, typeof(bool), null, (CultureInfo)null), Is.EqualTo(false));
         }
 
         [TestCase]
         public void ConvertBack_False()
         {
             var converter = new BooleanToOppositeBooleanConverter();
-            Assert.AreEqual(true, converter.ConvertBack(false, typeof(bool), null, (CultureInfo)null));
+            Assert.That(converter.ConvertBack(false, typeof(bool), null, (CultureInfo)null), Is.EqualTo(true));
         }
         #endregion
     }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyExtensionsTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using System.Reflection;
@@ -20,11 +14,10 @@ namespace Catel.Tests.Reflection
     {
         // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
         private static readonly string CurrentYear = DateTime.Today.Year.ToString();
-        private const string VersionPrefix = "5.12.9";
+        private const string VersionPrefix = "6.0.0";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
-        #region Methods
         [TestCase]
         public void TitleAutomatic()
         {
@@ -32,37 +25,37 @@ namespace Catel.Tests.Reflection
 
             var result = Assembly.Title();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
-        [TestCase, Explicit]
+        [TestCase]
         public void VersionAutomatic()
         {
             string expected = VersionPrefix + ".0";
 
             var result = Assembly.Version();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
-        [TestCase, Explicit]
+        [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
             string expected = VersionPrefix.Substring(0, VersionPrefix.IndexOf(".", 2));
 
             var result = Assembly.Version(1);
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
-        [TestCase, Explicit]
+        [TestCase]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
             string expected = VersionPrefix + ".0";
 
             var result = Assembly.Version(8);
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         //[TestCase]
@@ -82,7 +75,7 @@ namespace Catel.Tests.Reflection
 
             var result = Assembly.Description();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -92,7 +85,7 @@ namespace Catel.Tests.Reflection
 
             var result = Assembly.Product();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -102,7 +95,7 @@ namespace Catel.Tests.Reflection
 
             var result = Assembly.Copyright();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -112,17 +105,14 @@ namespace Catel.Tests.Reflection
 
             var result = Assembly.Company();
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
-#if NET || NETCORE
         [TestCase]
         public void TheGetBuildDateTimeMethod()
         {
             // Just check if the call works
             var dateTime = Assembly.GetBuildDateTime();
         }
-#endif
-        #endregion
     }
 }

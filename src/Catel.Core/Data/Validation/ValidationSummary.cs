@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationSummary.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -12,16 +6,11 @@ namespace Catel.Data
     using System.Text;
     using Text;
 
-#if NETFX_CORE
-    using Catel.Collections;
-#endif
-
     /// <summary>
     /// The validation summary that contains a momentum of the <see cref="IValidationContext"/>.
     /// </summary>
     public class ValidationSummary : IValidationSummary
     {
-        #region Fields
         /// <summary>
         /// The field warnings.
         /// </summary>
@@ -41,9 +30,7 @@ namespace Catel.Data
         /// The business rule errors.
         /// </summary>
         private readonly List<IBusinessRuleValidationResult> _businessRuleErrors;
-        #endregion
-
-        #region Constructors
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationSummary"/> class.
         /// </summary>
@@ -51,7 +38,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public ValidationSummary(IValidationContext validationContext)
         {
-            Argument.IsNotNull("validationContext", validationContext);
+            ArgumentNullException.ThrowIfNull(validationContext);
 
             _fieldWarnings = validationContext.GetFieldWarnings();
             _fieldErrors = validationContext.GetFieldErrors();
@@ -68,9 +55,9 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context to base the summary on.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
-        public ValidationSummary(IValidationContext validationContext, object tag)
+        public ValidationSummary(IValidationContext validationContext, object? tag)
         {
-            Argument.IsNotNull("validationContext", validationContext);
+            ArgumentNullException.ThrowIfNull(validationContext);
 
             _fieldWarnings = validationContext.GetFieldWarnings(tag);
             _fieldErrors = validationContext.GetFieldErrors(tag);
@@ -80,9 +67,7 @@ namespace Catel.Data
             LastModified = validationContext.LastModified;
             LastModifiedTicks = validationContext.LastModifiedTicks;
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         /// Gets the last modified date/time.
         /// <para />
@@ -215,9 +200,7 @@ namespace Catel.Data
                 return new ReadOnlyCollection<IBusinessRuleValidationResult>(_businessRuleErrors);
             }
         }
-        #endregion
-
-        #region Methods
+        
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
@@ -269,6 +252,5 @@ namespace Catel.Data
             var finalString = stringBuilder.ToString();
             return finalString;
         }
-        #endregion
     }
 }

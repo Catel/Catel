@@ -54,7 +54,7 @@
 
                 await Task.Delay(millisecondsToWait);
 
-                Assert.AreEqual(expectedFlushCount, listener.FlushCounter, "The timer should have awaited the calls");
+                Assert.That(listener.FlushCounter, Is.EqualTo(expectedFlushCount), "The timer should have awaited the calls");
             }
         }
     }

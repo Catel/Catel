@@ -1,21 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyPropertyInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System;
     using System.Diagnostics;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Information about a dependency property.
@@ -32,7 +19,7 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         public DependencyPropertyInfo(DependencyProperty dependencyProperty, string propertyName)
         {
-            Argument.IsNotNull("dependencyProperty", dependencyProperty);
+            ArgumentNullException.ThrowIfNull(dependencyProperty);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             DependencyProperty = dependencyProperty;
@@ -52,5 +39,3 @@ namespace Catel.Windows.Data
         public string PropertyName { get; private set; }
     }
 }
-
-#endif

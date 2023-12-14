@@ -1,12 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.mappings-validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
-    using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
 
@@ -22,7 +15,7 @@ namespace Catel.Tests.MVVM.ViewModels
             vm.FirstNameAsTwoWay = "John";
             vm.LastName = "Doe";
 
-            Assert.IsFalse(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.False);
         }
 
         [Test]
@@ -33,17 +26,17 @@ namespace Catel.Tests.MVVM.ViewModels
             var model = new Person();
             model.Validate();
 
-            Assert.IsTrue(model.HasErrors);
+            Assert.That(model.HasErrors, Is.True);
 
             var vm = new TestViewModelWithMappings(model);
             vm.DeferValidationUntilFirstSaveCallWrapper = false;
 
-            Assert.IsTrue(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.True);
 
             vm.FirstNameAsTwoWay = "John";
             vm.LastName = "Doe";
 
-            Assert.IsFalse(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.False);
         }
 
         [Test]
@@ -53,7 +46,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             vm.Validate();
 
-            Assert.IsFalse(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.False);
         }
 
         [Test]
@@ -63,7 +56,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             vm.Validate();
 
-            Assert.True(vm.HasErrors);
+            Assert.That(vm.HasErrors, Is.True);
         }
 
         [Test]
@@ -73,7 +66,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             vm.Validate();
 
-            Assert.IsFalse(vm.HasWarnings);
+            Assert.That(vm.HasWarnings, Is.False);
         }
 
         [Test]
@@ -83,7 +76,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             vm.Validate();
 
-            Assert.True(vm.HasWarnings);
+            Assert.That(vm.HasWarnings, Is.True);
         }
     }
 }

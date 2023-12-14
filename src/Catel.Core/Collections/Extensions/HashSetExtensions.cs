@@ -18,9 +18,6 @@
         /// <exception cref="ArgumentNullException">The <paramref name="items"/> is <c>null</c>.</exception>
         public static void AddRange<T>(this HashSet<T> hashSet, IEnumerable<T> items)
         {
-            Argument.IsNotNull(nameof(hashSet), hashSet);
-            Argument.IsNotNull(nameof(items), items);
-
             foreach (var item in items)
             {
                 hashSet.Add(item);

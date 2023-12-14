@@ -1,13 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyData.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
-    using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Reflection;
     using System.Xml.Serialization;
     using Catel.Reflection;
@@ -15,42 +9,42 @@ namespace Catel.Data
     /// <summary>
     /// Object that contains all the property data that is used by the <see cref="ModelBase"/> class.
     /// </summary>
-    public class PropertyData
+    public class PropertyData : PropertyData<object>
     {
-        #region Fields
-        /// <summary>
-        /// Type of the property.
-        /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
-        private Type _type;
+        internal PropertyData(string name, object defaultValue,
+            EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler, bool isSerializable,
+            bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
+            : base(name, defaultValue, propertyChangedEventHandler, isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty)
+        {
+        }
 
+        internal PropertyData(string name, Func<object> createDefaultValue,
+            EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler, bool isSerializable,
+            bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
+            : base(name, createDefaultValue, propertyChangedEventHandler, isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Object that contains all the property data that is used by the <see cref="ModelBase"/> class.
+    /// </summary>
+    /// <typeparam name="T">The type of the property.</typeparam>
+    public class PropertyData<T> : IPropertyData
+    {
         /// <summary>
         /// Callback to use to create the default value.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
-        private readonly Func<object> _createDefaultValue;
+        private readonly Func<T> _createDefaultValue;
 
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
-        private CachedPropertyInfo _cachedPropertyInfo;
+        private CachedPropertyInfo? _cachedPropertyInfo;
 
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _updatedCachedPropertyInfo;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyData" /> class.
         /// </summary>
         /// <param name="name">Name of the property.</param>
-        /// <param name="type">Type of the property.</param>
         /// <param name="defaultValue">Default value of the property.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
         /// <param name="isSerializable">if set to <c>true</c>, the property is serializable.</param>
@@ -59,17 +53,15 @@ namespace Catel.Data
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase" />.</param>
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        internal PropertyData(string name, Type type, object defaultValue, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, T defaultValue, EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
-            : this(name, type, () => defaultValue, propertyChangedEventHandler, isSerializable,
+            : this(name, () => defaultValue, propertyChangedEventHandler, isSerializable,
                    includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyData"/> class.
         /// </summary>
         /// <param name="name">Name of the property.</param>
-        /// <param name="type">Type of the property.</param>
         /// <param name="createDefaultValue">The delegate that creates the default value. If <c>null</c>, a delegate returning the default 
         /// value (<c>null</c> for reference types, <c>Activator.CreateInstance(type)</c> for reference types).</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
@@ -79,17 +71,14 @@ namespace Catel.Data
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="createDefaultValue"/> is <c>null</c>.</exception>
-        internal PropertyData(string name, Type type, Func<object> createDefaultValue, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, Func<T> createDefaultValue, EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("createDefaultValue", createDefaultValue);
 
             Name = name;
-            Type = type;
+            Type = typeof(T);
             PropertyChangedEventHandler = propertyChangedEventHandler;
             IsSerializable = isSerializable;
             IncludeInSerialization = includeInSerialization;
@@ -99,9 +88,7 @@ namespace Catel.Data
 
             _createDefaultValue = createDefaultValue;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the property.
         /// </summary>
@@ -111,17 +98,13 @@ namespace Catel.Data
         /// Gets the type of the property.
         /// </summary>
         [XmlIgnore]
-        public Type Type
-        {
-            get { return _type ?? typeof(object); }
-            private set { _type = value; }
-        }
+        public Type Type { get; private set; }
 
         /// <summary>
         /// Gets the default value of the property.
         /// </summary>
         [XmlIgnore]
-        private object DefaultValue
+        private T DefaultValue
         {
             get { return _createDefaultValue(); }
         }
@@ -131,7 +114,7 @@ namespace Catel.Data
         /// </summary>
         /// <value>The property changed event handler.</value>
         [XmlIgnore]
-        internal EventHandler<AdvancedPropertyChangedEventArgs> PropertyChangedEventHandler { get; private set; }
+        public EventHandler<PropertyChangedEventArgs>? PropertyChangedEventHandler { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this property is serializable.
@@ -174,27 +157,29 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if this is a calculated property; otherwise, <c>false</c>.</value>
         [XmlIgnore]
-        public bool IsCalculatedProperty { get; internal set; }
-        #endregion
-
-        #region Methods
+        public bool IsCalculatedProperty { get; set; }
+        
         /// <summary>
         /// Returns the default value of the property.
         /// </summary>
         /// <returns>Default value of the property.</returns>
-        public object GetDefaultValue()
+        public object? GetDefaultValue()
         {
             return DefaultValue;
         }
 
         /// <summary>
-        /// Returns the typed default value of the property.
+        /// Returns the default value of the property.
         /// </summary>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <returns>Default value of the property.</returns>
         public TValue GetDefaultValue<TValue>()
         {
-            return (DefaultValue is TValue) ? (TValue)DefaultValue : default;
+            if (DefaultValue is TValue typedValue)
+            {
+                return typedValue;
+            }
+
+            return default!;
         }
 
         /// <summary>
@@ -202,10 +187,8 @@ namespace Catel.Data
         /// </summary>
         /// <param name="containingType">Type of the containing.</param>
         /// <returns>CachedPropertyInfo.</returns>
-        public CachedPropertyInfo GetPropertyInfo(Type containingType)
+        public CachedPropertyInfo? GetPropertyInfo(Type containingType)
         {
-            Argument.IsNotNull("containingType", containingType);
-
             if (!_updatedCachedPropertyInfo)
             {
                 _updatedCachedPropertyInfo = true;
@@ -221,6 +204,5 @@ namespace Catel.Data
         {
             return $"[{Type.Name}] {Name}";
         }
-        #endregion
     }
 }

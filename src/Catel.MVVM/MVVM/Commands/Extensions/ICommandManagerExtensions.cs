@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManagerExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
-    using Catel;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
@@ -37,8 +28,8 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="inputGesture"/> is <c>null</c>.</exception>
         public static Dictionary<string, ICommand> FindCommandsByGesture(this ICommandManager commandManager, InputGesture inputGesture)
         {
-            Argument.IsNotNull("commandManager", commandManager);
-            Argument.IsNotNull("inputGesture", inputGesture);
+            ArgumentNullException.ThrowIfNull(commandManager);
+            ArgumentNullException.ThrowIfNull(inputGesture);
 
             var commands = new Dictionary<string, ICommand>();
 
@@ -47,7 +38,11 @@ namespace Catel
                 var commandInputGesture = commandManager.GetInputGesture(commandName);
                 if (inputGesture.Equals(commandInputGesture))
                 {
-                    commands[commandName] = commandManager.GetCommand(commandName);
+                    var command = commandManager.GetCommand(commandName);
+                    if (command is not null)
+                    {
+                        commands[commandName] = command;
+                    }
                 }
             }
 
@@ -65,11 +60,11 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="commandNameFieldName"/> is <c>null</c>.</exception>
         public static void CreateCommandWithGesture(this ICommandManager commandManager, Type containerType, string commandNameFieldName)
         {
-            Argument.IsNotNull("commandManager", commandManager);
-            Argument.IsNotNull("containerType", containerType);
+            ArgumentNullException.ThrowIfNull(commandManager);
+            ArgumentNullException.ThrowIfNull(containerType);
             Argument.IsNotNullOrWhitespace("commandNameFieldName", commandNameFieldName);
 
-            Log.Debug("Creating command '{0}'", commandNameFieldName);
+            Log.Debug($"Creating command '{commandNameFieldName}'");
 
             // Note: we must store bindingflags inside variable otherwise invalid IL will be generated
             var bindingFlags = BindingFlags.Public | BindingFlags.Static;
@@ -80,16 +75,21 @@ namespace Catel
                     commandNameFieldName, containerType.GetSafeFullName(false));
             }
 
-            var commandName = (string)commandNameField.GetValue(null);
+            var commandName = (string?)commandNameField.GetValue(null);
+            if (commandName is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Command name is not valid on on container type '{containerType.GetSafeFullName()}'");
+            }
+
             if (commandManager.IsCommandCreated(commandName))
             {
                 Log.Debug("Command '{0}' is already created, skipping...", commandName);
                 return;
             }
 
-            InputGesture commandInputGesture = null;
-            var inputGestureField = containerType.GetFieldEx(string.Format("{0}InputGesture", commandNameFieldName), bindingFlags);
-            if (inputGestureField != null)
+            InputGesture? commandInputGesture = null;
+            var inputGestureField = containerType.GetFieldEx($"{commandNameFieldName}InputGesture", bindingFlags);
+            if (inputGestureField is not null)
             {
                 commandInputGesture = inputGestureField.GetValue(null) as InputGesture;
             }
@@ -110,12 +110,17 @@ namespace Catel
 
             Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
 
+#pragma warning disable IDISP001 // Dispose created.
             var serviceLocator = commandManager.GetServiceLocator();
+#pragma warning restore IDISP001 // Dispose created.
+
             if (!serviceLocator.IsTypeRegistered(commandContainerType))
             {
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+#pragma warning disable IDISP001
+                var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
+#pragma warning restore IDISP001
                 var commandContainer = typeFactory.CreateInstance(commandContainerType);
-                if (commandContainer != null)
+                if (commandContainer is not null)
                 {
                     serviceLocator.RegisterInstance(commandContainerType, commandContainer);
                 }
@@ -127,5 +132,3 @@ namespace Catel
         }
     }
 }
-
-#endif

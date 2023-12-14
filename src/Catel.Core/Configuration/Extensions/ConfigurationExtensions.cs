@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConfigurationExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
 
@@ -25,8 +19,6 @@ namespace Catel.Configuration
         /// <exception cref="ArgumentNullException">The <paramref name="eventArgs"/> is <c>null</c>.</exception>
         public static bool IsConfigurationKey(this ConfigurationChangedEventArgs eventArgs, string expectedKey)
         {
-            Argument.IsNotNull("eventArgs", eventArgs);
-
             return IsConfigurationKey(eventArgs.Key, expectedKey);
         }
 

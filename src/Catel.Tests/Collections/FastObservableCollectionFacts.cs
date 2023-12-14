@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FastObservableCollectionFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Collections
+﻿namespace Catel.Tests.Collections
 {
     using System;
     using System.Collections;
@@ -87,7 +80,7 @@ namespace Catel.Tests.Collections
 
                 fastCollection.Add(1);
 
-                Assert.IsFalse(fastCollection.IsDirty);
+                Assert.That(fastCollection.IsDirty, Is.False);
             }
 
             [Test]
@@ -99,10 +92,10 @@ namespace Catel.Tests.Collections
                 {
                     fastCollection.Add(1);
 
-                    Assert.IsTrue(fastCollection.IsDirty);
+                    Assert.That(fastCollection.IsDirty, Is.True);
                 }
 
-                Assert.IsFalse(fastCollection.IsDirty);
+                Assert.That(fastCollection.IsDirty, Is.False);
             }
         }
 
@@ -118,10 +111,10 @@ namespace Catel.Tests.Collections
                 {
                     fastCollection.Add(1);
 
-                    Assert.IsTrue(fastCollection.NotificationsSuspended);
+                    Assert.That(fastCollection.NotificationsSuspended, Is.True);
                 }
 
-                Assert.IsFalse(fastCollection.NotificationsSuspended);
+                Assert.That(fastCollection.NotificationsSuspended, Is.False);
             }
 
             [Test]
@@ -129,13 +122,14 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
 
-                var firstToken = fastCollection.SuspendChangeNotifications();
-                var secondToken = fastCollection.SuspendChangeNotifications();
+                using (var firstToken = fastCollection.SuspendChangeNotifications())
+                {
+                    using (var secondToken = fastCollection.SuspendChangeNotifications())
+                    {
+                    }
+                }
 
-                firstToken.Dispose();
-                secondToken.Dispose();
-
-                Assert.IsFalse(fastCollection.NotificationsSuspended);
+                Assert.That(fastCollection.NotificationsSuspended, Is.False);
             }
         }
 
@@ -147,8 +141,8 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null, SuspensionMode.Adding));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null, SuspensionMode.Adding));
             }
 
             [Test]
@@ -156,7 +150,7 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing));
+                Assert.Throws<InvalidOperationException>(() => fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing));
             }
 
             [Test]
@@ -170,19 +164,19 @@ namespace Catel.Tests.Collections
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding);
 
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 fastCollection.AddItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }));
 
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 fastCollection.AddItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }), SuspensionMode.Adding);
 
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
 
             [Test]
@@ -197,8 +191,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
             }
 
             [Test]
@@ -214,8 +208,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.None);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -230,8 +224,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Mixed);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -246,8 +240,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
         }
 
@@ -259,8 +253,8 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0, SuspensionMode.Adding));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0, SuspensionMode.Adding));
             }
 
             [Test]
@@ -268,7 +262,7 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Removing));
+                Assert.Throws<InvalidOperationException>(() => fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Removing));
             }
 
             [Test]
@@ -282,19 +276,19 @@ namespace Catel.Tests.Collections
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Adding);
 
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 fastCollection.InsertItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }), 0);
 
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 fastCollection.InsertItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }), 0, SuspensionMode.Adding);
 
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
 
             [Test]
@@ -309,8 +303,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Adding);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
             }
 
             [Test]
@@ -325,8 +319,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.None);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -341,8 +335,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Mixed);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -357,8 +351,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
         }
 
@@ -370,8 +364,8 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null, SuspensionMode.Removing));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null, SuspensionMode.Removing));
             }
 
             [Test]
@@ -379,7 +373,7 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding));
+                Assert.Throws<InvalidOperationException>(() => fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding));
             }
 
             [Test]
@@ -393,19 +387,19 @@ namespace Catel.Tests.Collections
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 });
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing);
 
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 fastCollection.RemoveItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }));
 
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 fastCollection.RemoveItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }), SuspensionMode.Removing);
 
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
 
             [Test]
@@ -420,8 +414,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
             }
 
             [Test]
@@ -436,8 +430,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.None);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -452,8 +446,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Mixed);
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -468,8 +462,8 @@ namespace Catel.Tests.Collections
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 });
 
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
+                Assert.That(count, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
         }
 
@@ -490,8 +484,8 @@ namespace Catel.Tests.Collections
                     fastCollection.Move(1, 3);
                 }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(2, fastCollection[3]);
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(fastCollection[3], Is.EqualTo(2));
             }
 
             [Test]
@@ -509,7 +503,7 @@ namespace Catel.Tests.Collections
                     fastCollection.Insert(3, 2);
                 }
 
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
             }
 
             [Test]
@@ -525,7 +519,7 @@ namespace Catel.Tests.Collections
                 {
                 }
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
 
             [Test]
@@ -542,8 +536,8 @@ namespace Catel.Tests.Collections
                     fastCollection.Clear();
                 }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(0, fastCollection.Count);
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(fastCollection.Count, Is.EqualTo(0));
             }
         }
 
@@ -559,7 +553,7 @@ namespace Catel.Tests.Collections
 
                 var allInts = (from x in fastCollection where x == 42 select x).FirstOrDefault();
 
-                Assert.AreEqual(42, allInts);
+                Assert.That(allInts, Is.EqualTo(42));
             }
         }
 
@@ -576,7 +570,7 @@ namespace Catel.Tests.Collections
 
                 fastCollection.Reset();
 
-                Assert.AreEqual(true, collectionChanged);
+                Assert.That(collectionChanged, Is.EqualTo(false));
             }
 
             [Test]
@@ -593,21 +587,22 @@ namespace Catel.Tests.Collections
                         eventArgs = e;
                     };
 
-                var token = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-                fastCollection.Add(1);
-                fastCollection.Add(2);
+                using (var token = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    fastCollection.Add(1);
+                    fastCollection.Add(2);
 
-                fastCollection.Reset();
-                Assert.AreEqual(0, counter);
+                    fastCollection.Reset();
+                    Assert.That(counter, Is.EqualTo(0));
 
-                fastCollection.Add(3);
-                fastCollection.Add(4);
-                fastCollection.Add(5);
-                token.Dispose();
+                    fastCollection.Add(3);
+                    fastCollection.Add(4);
+                    fastCollection.Add(5);
+                }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
             }
         }
 
@@ -633,9 +628,9 @@ namespace Catel.Tests.Collections
                     fastCollection.Add(5);
                 }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
             }
 
             [Test]
@@ -648,25 +643,26 @@ namespace Catel.Tests.Collections
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
-                var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-                var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+                using (var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    using (var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                    {
+                        fastCollection.Add(1);
+                        fastCollection.Add(2);
+                        fastCollection.Add(3);
+                        fastCollection.Add(4);
+                        fastCollection.Add(5);
+                    }
 
-                fastCollection.Add(1);
-                fastCollection.Add(2);
-                fastCollection.Add(3);
-                fastCollection.Add(4);
-                fastCollection.Add(5);
+                    Assert.That(counter, Is.EqualTo(0));
+                    Assert.That(eventArgs, Is.Null);
+                }
 
-                secondToken.Dispose();
-                Assert.AreEqual(0, counter);
-                Assert.IsNull(eventArgs);
-
-                firstToken.Dispose();
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 // ReSharper disable PossibleNullReferenceException
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
 
                 // ReSharper restore PossibleNullReferenceException
             }
@@ -681,26 +677,27 @@ namespace Catel.Tests.Collections
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
-                var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-                var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+                using (var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    using (var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                    {
+                        fastCollection.Add(1);
+                        fastCollection.Add(2);
+                    }
 
-                fastCollection.Add(1);
-                fastCollection.Add(2);
+                    Assert.That(counter, Is.EqualTo(0));
+                    Assert.That(eventArgs, Is.Null);
 
-                secondToken.Dispose();
-                Assert.AreEqual(0, counter);
-                Assert.IsNull(eventArgs);
+                    fastCollection.Add(3);
+                    fastCollection.Add(4);
+                    fastCollection.Add(5);
+                }
 
-                fastCollection.Add(3);
-                fastCollection.Add(4);
-                fastCollection.Add(5);
-
-                firstToken.Dispose();
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 // ReSharper disable PossibleNullReferenceException
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.NewItems).AsCollection);
 
                 // ReSharper restore PossibleNullReferenceException
             }
@@ -728,7 +725,7 @@ namespace Catel.Tests.Collections
 
                 fastCollection.Clear();
 
-                Assert.AreEqual(9, counter);
+                Assert.That(counter, Is.EqualTo(9));
             }
 
             [Test]
@@ -754,9 +751,9 @@ namespace Catel.Tests.Collections
                     fastCollection.Remove(5);
                 }
 
-                Assert.AreEqual(1, counter);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 1, 2, 3, 4, 5 });
+                Assert.That(counter, Is.EqualTo(1));
+                Assert.That(eventArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(new[] { 1, 2, 3, 4, 5 }, Is.EqualTo(eventArgs.OldItems).AsCollection);
             }
 
             private SuspensionContext<T> GetSuspensionContext<T>(FastObservableCollection<T> collection)
@@ -777,8 +774,8 @@ namespace Catel.Tests.Collections
                     fastCollection.Add(1);
                 }
 
-                var context = this.GetSuspensionContext(fastCollection);
-                Assert.IsNull(context);
+                var context = GetSuspensionContext(fastCollection);
+                Assert.That(context, Is.Null);
             }
 
             [Test]
@@ -789,8 +786,8 @@ namespace Catel.Tests.Collections
                 {
                 }
 
-                var context = this.GetSuspensionContext(fastCollection);
-                Assert.IsNull(context);
+                var context = GetSuspensionContext(fastCollection);
+                Assert.That(context, Is.Null);
             }
 
             [Test]
@@ -878,8 +875,8 @@ namespace Catel.Tests.Collections
                     fastCollection.Remove(3);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(SuspensionMode.Mixed, eventArgsList[0].SuspensionMode);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].SuspensionMode, Is.EqualTo(SuspensionMode.Mixed));
             }
 
             [Test]
@@ -895,8 +892,8 @@ namespace Catel.Tests.Collections
                     fastCollection.Clear();
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(3, eventArgsList.First(args => args.SuspensionMode == SuspensionMode.Mixed).ChangedItems.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList.First(args => args.SuspensionMode == SuspensionMode.Mixed).ChangedItems.Count, Is.EqualTo(3));
             }
 
             [Test]
@@ -917,11 +914,11 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(3);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -937,11 +934,11 @@ namespace Catel.Tests.Collections
                     sourceCollection.Move(0, 3);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -958,11 +955,11 @@ namespace Catel.Tests.Collections
                     sourceCollection.Insert(3, 1);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -978,11 +975,11 @@ namespace Catel.Tests.Collections
                     sourceCollection[0] = 6;
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -998,8 +995,8 @@ namespace Catel.Tests.Collections
                     sourceCollection.Move(0, 3);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -1016,8 +1013,8 @@ namespace Catel.Tests.Collections
                     sourceCollection.Insert(3, 1);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -1034,8 +1031,8 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(2);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -1052,8 +1049,8 @@ namespace Catel.Tests.Collections
                     sourceCollection.Insert(1, 2);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
 
             [Test]
@@ -1071,8 +1068,8 @@ namespace Catel.Tests.Collections
                     sourceCollection.Move(1, 0);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
             }
         }
 
@@ -1092,9 +1089,9 @@ namespace Catel.Tests.Collections
                     fastCollection.Clear(); // { }
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(3, eventArgsList.First(args => args.SuspensionMode == SuspensionMode.MixedBash).ChangedItems.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList.First(args => args.SuspensionMode == SuspensionMode.MixedBash).ChangedItems.Count, Is.EqualTo(3));
             }
 
             [Test]
@@ -1115,16 +1112,16 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(3); // { 1, 2, 6, 7, 3 };
                 }
 
-                Assert.AreEqual(5, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[1].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[2].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[3].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[4].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(5));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[2].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(eventArgsList[3].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[4].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1140,13 +1137,13 @@ namespace Catel.Tests.Collections
                     sourceCollection[0] = 6; // { 6, 2, 3, 4, 5 };
                 }
 
-                Assert.AreEqual(2, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[1].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1162,13 +1159,13 @@ namespace Catel.Tests.Collections
                     sourceCollection.Move(0, 3); // { 2, 3, 4, 1, 5 }
                 }
 
-                Assert.AreEqual(2, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[1].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1185,13 +1182,13 @@ namespace Catel.Tests.Collections
                     sourceCollection.Insert(3, 1); // { 2, 3, 4, 1, 5 }
                 }
 
-                Assert.AreEqual(2, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[1].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1208,12 +1205,12 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(2); // { 1, 2 }
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1231,14 +1228,14 @@ namespace Catel.Tests.Collections
                     sourceCollection.Move(1, 0); // { 1, 2 }
                 }
 
-                Assert.AreEqual(3, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[1].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[2].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(3));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[2].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1255,12 +1252,12 @@ namespace Catel.Tests.Collections
                     sourceCollection.Insert(1, 2); // { 1, 2 }
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1276,11 +1273,11 @@ namespace Catel.Tests.Collections
                     fastCollection.Add(4);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(1, eventArgsList[0].ChangedItems.Count);
-                Assert.AreEqual(1, eventArgsList[0].NewItems.Count);
-                Assert.AreEqual(SuspensionMode.MixedBash, eventArgsList[0].SuspensionMode);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].ChangedItems.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].NewItems.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].SuspensionMode, Is.EqualTo(SuspensionMode.MixedBash));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
             }
 
             [Test]
@@ -1301,14 +1298,14 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(2);
                 }
 
-                Assert.AreEqual(3, eventArgsList.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(3));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
         }
-        
+
         [TestFixture]
         public class TheMixedConsolidateMode
         {
@@ -1325,9 +1322,9 @@ namespace Catel.Tests.Collections
                     fastCollection.Clear(); // { }
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(3, eventArgsList.First(args => args.SuspensionMode == SuspensionMode.MixedConsolidate).ChangedItems.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList.First(args => args.SuspensionMode == SuspensionMode.MixedConsolidate).ChangedItems.Count, Is.EqualTo(3));
             }
 
             [Test]
@@ -1348,16 +1345,16 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(3); // { 1, 2, 6, 7, 3 };
                 }
 
-                Assert.AreEqual(5, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[1].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[2].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[3].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[4].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(5));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[2].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+                Assert.That(eventArgsList[3].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[4].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1373,13 +1370,13 @@ namespace Catel.Tests.Collections
                     sourceCollection[0] = 6; // { 6, 2, 3, 4, 5 };
                 }
 
-                Assert.AreEqual(2, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[1].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1395,13 +1392,13 @@ namespace Catel.Tests.Collections
                     sourceCollection.Move(0, 3); // { 2, 3, 4, 1, 5 }
                 }
 
-                Assert.AreEqual(2, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[1].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1418,13 +1415,13 @@ namespace Catel.Tests.Collections
                     sourceCollection.Insert(3, 1); // { 2, 3, 4, 1, 5 }
                 }
 
-                Assert.AreEqual(2, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgsList[0].Action);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[1].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+                Assert.That(eventArgsList[1].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1441,12 +1438,12 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(2); // { 1, 2 }
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1463,12 +1460,12 @@ namespace Catel.Tests.Collections
                     sourceCollection.Insert(1, 2); // { 1, 2 }
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int> { };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1486,12 +1483,12 @@ namespace Catel.Tests.Collections
                     sourceCollection.Move(1, 0); // { 1, 2 }
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
 
                 var targetCollection = new List<int>();
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
 
             [Test]
@@ -1512,11 +1509,11 @@ namespace Catel.Tests.Collections
                     fastCollection.Add(2);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(2, eventArgsList[0].ChangedItems.Count);
-                Assert.AreEqual(2, eventArgsList[0].NewItems.Count);
-                Assert.AreEqual(SuspensionMode.MixedConsolidate, eventArgsList[0].SuspensionMode);
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
+                Assert.That(eventArgsList[0].ChangedItems.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].NewItems.Count, Is.EqualTo(2));
+                Assert.That(eventArgsList[0].SuspensionMode, Is.EqualTo(SuspensionMode.MixedConsolidate));
+                Assert.That(eventArgsList[0].Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
             }
 
             [Test]
@@ -1537,11 +1534,11 @@ namespace Catel.Tests.Collections
                     sourceCollection.Add(2);
                 }
 
-                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.That(eventArgsList.Count, Is.EqualTo(1));
 
                 var targetCollection = new List<int> { };
                 FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+                Assert.That(targetCollection, Is.EqualTo(sourceCollection).AsCollection);
             }
         }
 
@@ -1574,7 +1571,7 @@ namespace Catel.Tests.Collections
                     fastCollection.Clear();
                 }
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
         }
     }

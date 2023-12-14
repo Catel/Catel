@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileLogListenerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.Logging.Listeners
+﻿namespace Catel.Tests.Logging.Listeners
 {
     using System;
     using Catel.Logging;
@@ -32,10 +24,8 @@ namespace Catel.Tests.Logging.Listeners
 
                 returnedPath = returnedPath.Replace(appDataPath, "{AppData}");
 
-                Assert.AreEqual(expectedPath, returnedPath);
+                Assert.That(returnedPath, Is.EqualTo(expectedPath));
             }
         }
     }
 }
-
-#endif

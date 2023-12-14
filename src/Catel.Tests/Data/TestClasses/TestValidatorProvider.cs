@@ -7,7 +7,7 @@
     {
         protected override IValidator GetValidator(Type targetType)
         {
-            Argument.IsNotNull("targetType", targetType);
+            ArgumentNullException.ThrowIfNull(targetType);
 
             return new TestValidator();
         }

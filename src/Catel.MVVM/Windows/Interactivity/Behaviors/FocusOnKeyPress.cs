@@ -1,26 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FocusOnKeyPress.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-    using Key = global::Windows.System.VirtualKey;
-    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
-    using KeyDownEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
     using System.Windows;
     using System.Windows.Input;
     using Microsoft.Xaml.Behaviors;
     using KeyDownEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
-
     using Input;
     using Logging;
     using Reflection;
@@ -32,7 +15,7 @@ namespace Catel.Windows.Interactivity
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private FrameworkElement _layoutRoot;
+        private FrameworkElement? _layoutRoot;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FocusOnKeyPress"/> class.
@@ -42,7 +25,6 @@ namespace Catel.Windows.Interactivity
             
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the modifiers to check for.
         /// </summary>
@@ -56,7 +38,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Modifiers.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), 
+        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register(nameof(Modifiers), typeof(ModifierKeys), 
             typeof(FocusOnKeyPress), new PropertyMetadata(ModifierKeys.None));
 
         /// <summary>
@@ -72,11 +54,9 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Key.  This enables animation, styling, binding, etc...
         /// </summary>
-        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(Key), 
+        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(nameof(Key), typeof(Key), 
             typeof(FocusOnKeyPress), new PropertyMetadata(Key.None));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
@@ -102,7 +82,7 @@ namespace Catel.Windows.Interactivity
             Unsubscribe();
 
             _layoutRoot = AssociatedObject.FindLogicalRoot() as FrameworkElement;
-            if (_layoutRoot != null)
+            if (_layoutRoot is not null)
             {
                 Log.Debug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName(false));
 
@@ -112,7 +92,7 @@ namespace Catel.Windows.Interactivity
 
         private void Unsubscribe()
         {
-            if (_layoutRoot != null)
+            if (_layoutRoot is not null)
             {
                 _layoutRoot.KeyDown -= OnKeyDown;
                 _layoutRoot = null;
@@ -146,8 +126,6 @@ namespace Catel.Windows.Interactivity
                 }
             }
         }
-        #endregion
     }
 }
 
-#endif

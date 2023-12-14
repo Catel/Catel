@@ -1,13 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManagerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM
 {
     using System;
+    using System.Threading.Tasks;
     using Catel.MVVM;
     using NUnit.Framework;
 
@@ -21,7 +15,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.CreateCommand(null));
+                Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(null));
             }
 
             [TestCase]
@@ -29,7 +23,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.CreateCommand(" "));
+                Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(" "));
             }
 
             [TestCase]
@@ -39,7 +33,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.CreateCommand("MyCommand");
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.CreateCommand("MyCommand"));
+                Assert.Throws<InvalidOperationException>(() => commandManager.CreateCommand("MyCommand"));
             }
 
             [TestCase]
@@ -49,7 +43,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.CreateCommand("MyCommand");
 
-                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
             }
         }
 
@@ -61,7 +55,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.IsCommandCreated(null));
+                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
             }
 
             [TestCase]
@@ -69,7 +63,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.IsCommandCreated(" "));
+                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
             }
 
             [TestCase]
@@ -79,7 +73,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.CreateCommand("MyCommand");
 
-                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
             }
 
             [TestCase]
@@ -87,7 +81,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                Assert.IsFalse(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.False);
             }
         }
 
@@ -99,7 +93,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.GetCommand(null));
+                Assert.Throws<ArgumentException>(() => commandManager.GetCommand(null));
             }
 
             [TestCase]
@@ -107,7 +101,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.GetCommand(" "));
+                Assert.Throws<ArgumentException>(() => commandManager.GetCommand(" "));
             }
 
             [TestCase]
@@ -115,7 +109,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                Assert.IsNull(commandManager.GetCommand("MyCommand"));
+                Assert.That(commandManager.GetCommand("MyCommand"), Is.Null);
             }
 
             [TestCase]
@@ -125,7 +119,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.CreateCommand("MyCommand");
 
-                Assert.IsNotNull(commandManager.GetCommand("MyCommand"));
+                Assert.That(commandManager.GetCommand("MyCommand"), Is.Not.Null);
             }
         }
 
@@ -137,7 +131,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.ExecuteCommand(null));
+                Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(null));
             }
 
             [TestCase]
@@ -145,7 +139,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.ExecuteCommand(" "));
+                Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(" "));
             }
 
             [TestCase]
@@ -159,7 +153,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.ExecuteCommand("MyCommand");
 
-                Assert.IsTrue(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.True);
             }
 
             [TestCase]
@@ -171,13 +165,13 @@ namespace Catel.Tests.MVVM
                 commandManager.CreateCommand("MyCommand");
                 commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
 
-                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
 
                 commandManager.UnregisterCommand("MyCommand", vm.TestCommand1);
 
                 commandManager.ExecuteCommand("MyCommand");
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
             }
         }
 
@@ -190,7 +184,7 @@ namespace Catel.Tests.MVVM
                 var vm = new CompositeCommandViewModel();
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.RegisterCommand(null, vm.TestCommand1));
+                Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(null, vm.TestCommand1));
             }
 
             [TestCase]
@@ -199,7 +193,7 @@ namespace Catel.Tests.MVVM
                 var vm = new CompositeCommandViewModel();
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.RegisterCommand(" ", vm.TestCommand1));
+                Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(" ", vm.TestCommand1));
             }
 
             [TestCase]
@@ -208,7 +202,7 @@ namespace Catel.Tests.MVVM
                 var vm = new CompositeCommandViewModel();
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.RegisterCommand("MyCommand", null));
+                Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
             }
         }
 
@@ -220,7 +214,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.IsCommandCreated(null));
+                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
             }
 
             [TestCase]
@@ -228,7 +222,7 @@ namespace Catel.Tests.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.IsCommandCreated(" "));
+                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
             }
 
             [TestCase]
@@ -237,7 +231,7 @@ namespace Catel.Tests.MVVM
                 var vm = new CompositeCommandViewModel();
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.RegisterCommand("MyCommand", null));
+                Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
             }
         }
 
@@ -245,7 +239,7 @@ namespace Catel.Tests.MVVM
         public class TheRegisterAndUnregisterActionFunctionality
         {
             [TestCase]
-            public void RegisteredActionsCanBeInvoked()
+            public async Task RegisteredActionsCanBeInvokedAsync()
             {
                 var invoked = false;
                 Action action = () => invoked = true;
@@ -258,7 +252,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.ExecuteCommand("TestAction");
 
-                Assert.IsTrue(invoked);
+                Assert.That(invoked, Is.True);
             }
 
             [TestCase]
@@ -276,7 +270,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.ExecuteCommand("TestAction");
 
-                Assert.IsFalse(invoked);
+                Assert.That(invoked, Is.False);
             }
 
             [TestCase]
@@ -291,7 +285,7 @@ namespace Catel.Tests.MVVM
 
                 commandManager.ExecuteCommand("TestAction");
 
-                Assert.IsFalse(_registeredActionsCanBeUnregistered_TestValue);
+                Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
             }
 
             private bool _registeredActionsCanBeUnregistered_TestValue = false;

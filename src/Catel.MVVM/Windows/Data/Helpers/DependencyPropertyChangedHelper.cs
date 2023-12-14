@@ -1,24 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DependencyPropertyChangedHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System;
     using System.Collections.Generic;
-    using Logging;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#else
     using System.Windows;
     using System.Windows.Data;
-#endif
 
     /// <summary>
     /// Dependency property changed helper. This helper class allows to subscribe to any dependency property
@@ -55,12 +40,17 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         public static bool IsRealDependencyProperty(this FrameworkElement frameworkElement, string propertyName)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+
+            return IsRealDependencyProperty(frameworkElement.GetType(), propertyName);
+        }
+
+        public static bool IsRealDependencyProperty(Type frameworkElementType, string propertyName)
+        {
+            ArgumentNullException.ThrowIfNull(frameworkElementType);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
-            var type = frameworkElement.GetType();
-
-            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
+            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(frameworkElementType, propertyName);
 
             if (!_realDependencyPropertiesCache.TryGetValue(key, out var isRealDependencyProperty))
             {
@@ -70,7 +60,7 @@ namespace Catel.Windows.Data
                 {
                     isRealDependencyProperty = false;
                 }
-                else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(type)))
+                else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(frameworkElementType)))
                 {
                     isRealDependencyProperty = false;
                 }
@@ -90,8 +80,8 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void SubscribeToAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var dependencyProperties = frameworkElement.GetDependencyProperties();
             foreach (var dependencyProperty in dependencyProperties)
@@ -111,8 +101,8 @@ namespace Catel.Windows.Data
         public static void SubscribeToDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler,
             bool inherited)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var propertyName = inherited ? InheritedDataContextName : "DataContext";
 
@@ -128,8 +118,8 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void UnsubscribeFromAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var dependencyProperties = frameworkElement.GetDependencyProperties();
             foreach (var dependencyProperty in dependencyProperties)
@@ -148,8 +138,8 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void UnsubscribeFromDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler, bool inherited)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(handler);
 
             var propertyName = inherited ? InheritedDataContextName : "DataContext";
 
@@ -167,9 +157,9 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void SubscribeToDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             //Log.Debug("Subscribing to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
@@ -210,21 +200,21 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void UnsubscribeFromDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             //Log.Debug("Unsubscribing from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
             var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
             var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
             var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
-            if (internalHandler != null)
+            if (internalHandler is not null)
             {
                 internalHandler -= handler;
             }
 
-            if (internalHandler != null)
+            if (internalHandler is not null)
             {
                 frameworkElement.SetValue(handlerDependencyProperty, internalHandler);
             }
@@ -244,9 +234,13 @@ namespace Catel.Windows.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        private static void OnDependencyPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private static void OnDependencyPropertyChanged(object? sender, DependencyPropertyChangedEventArgs e)
         {
-            var frameworkElement = ((FrameworkElement)sender);
+            if (sender is not FrameworkElement frameworkElement)
+            {
+                return;
+            }
+
             var propertyName = _wrapperDependencyProperties[e.Property];
 
             if (!IsRealDependencyProperty(frameworkElement, propertyName))
@@ -260,7 +254,7 @@ namespace Catel.Windows.Data
             var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
 
             var handler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
-            if (handler != null)
+            if (handler is not null)
             {
                 if (string.Equals(propertyName, InheritedDataContextName))
                 {
@@ -291,7 +285,9 @@ namespace Catel.Windows.Data
                 // If called with object, this is the request for the dummy value containing the mapped dependency property
                 // on which we subscribe for changess. Otherwise this is the dependency property containing the actual
                 // handlers to call when the property changes.
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 var dependencyPropertyMetaData = typeof(T) == typeof(object) ? new PropertyMetadata(default(T), OnDependencyPropertyChanged) : null;
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), viewType, dependencyPropertyMetaData);
 
                 _dependencyProperties[key] = dependencyProperty;
@@ -313,5 +309,3 @@ namespace Catel.Windows.Data
         }
     }
 }
-
-#endif

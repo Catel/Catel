@@ -1,9 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SlidingExpirationPolicy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Caching.Policies
+﻿namespace Catel.Caching.Policies
 {
     using System;
 
@@ -12,8 +7,6 @@ namespace Catel.Caching.Policies
     /// </summary>
     public sealed class SlidingExpirationPolicy : DurationExpirationPolicy
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SlidingExpirationPolicy"/> class.
         /// </summary>
@@ -25,10 +18,6 @@ namespace Catel.Caching.Policies
         {
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// The reset.
         /// </summary>
@@ -36,7 +25,5 @@ namespace Catel.Caching.Policies
         {
             AbsoluteExpirationDateTime = FastDateTime.Now.Add(DurationTimeSpan);
         }
-
-        #endregion
     }
 }

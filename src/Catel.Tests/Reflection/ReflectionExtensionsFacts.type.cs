@@ -1,15 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensionsFacts.type.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.InteropServices;
     using Catel.IoC;
     using Catel.Reflection;
     using Catel.Windows;
@@ -22,17 +14,17 @@ namespace Catel.Tests.Reflection
         {
             public interface ISomeInterface
             {
-                
+
             }
 
             public class A : ISomeInterface
             {
-                
+
             }
 
             public class B : A
             {
-                
+
             }
 
             [TestCase]
@@ -40,15 +32,15 @@ namespace Catel.Tests.Reflection
             {
                 var type = typeof(A);
 
-                Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
+                Assert.That(type.ImplementsInterfaceEx<ISomeInterface>(), Is.True);
             }
 
             [TestCase]
             public void ReturnsTrueForTypeDerivetiveImplementingInterface()
             {
-                var type = typeof (B);
+                var type = typeof(B);
 
-                Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
+                Assert.That(type.ImplementsInterfaceEx<ISomeInterface>(), Is.True);
             }
         }
 
@@ -61,7 +53,7 @@ namespace Catel.Tests.Reflection
             [TestCase(typeof(TypeFactory), true, "Catel.IoC.typeFactory, Catel.Core")]
             public void ReturnsFullName(Type type, bool includeAssembly, string expected)
             {
-                
+
             }
         }
 
@@ -71,22 +63,22 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(null, new object()));
+                Assert.Throws<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(null, new object()));
             }
 
             [TestCase]
-            public void ThrowsArgumentNullExceptionForNullObjectToCheck()
+            public void ReturnsFalseForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null));
+                Assert.That(ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null), Is.False);
             }
 
             [TestCase]
             public void ReturnsTrueForEqualReferenceType()
             {
-                var type = typeof (InvalidOperationException);
+                var type = typeof(InvalidOperationException);
                 var instance = new InvalidOperationException();
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -95,7 +87,7 @@ namespace Catel.Tests.Reflection
                 var type = typeof(Exception);
                 var instance = new InvalidOperationException();
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));              
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -104,7 +96,7 @@ namespace Catel.Tests.Reflection
                 var type = typeof(Exception);
                 var instance = new EventArgs();
 
-                Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.False);
             }
 
             [TestCase]
@@ -113,7 +105,7 @@ namespace Catel.Tests.Reflection
                 var type = typeof(int);
                 var instance = 32;
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -122,7 +114,7 @@ namespace Catel.Tests.Reflection
                 var type = typeof(Int64);
                 var instance = 32;
 
-                Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.True);
             }
 
             [TestCase]
@@ -131,8 +123,8 @@ namespace Catel.Tests.Reflection
                 var type = typeof(bool);
                 var instance = 32;
 
-                Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
-            }            
+                Assert.That(type.IsInstanceOfTypeEx(instance), Is.False);
+            }
         }
 
         [TestFixture]
@@ -152,7 +144,7 @@ namespace Catel.Tests.Reflection
 
             public interface IPerson : INameProvider
             {
-                
+
             }
 
             public interface INameProvider
@@ -172,16 +164,16 @@ namespace Catel.Tests.Reflection
 
                 var propertyInfo = typeof(TestViewModel).GetPropertyEx(nameof(TestViewModel.Variable1));
 
-                Assert.IsNotNull(propertyInfo);
-                Assert.AreEqual(typeof(IPerson), propertyInfo.PropertyType);
+                Assert.That(propertyInfo, Is.Not.Null);
+                Assert.That(propertyInfo.PropertyType, Is.EqualTo(typeof(IPerson)));
             }
 
             [TestCase]
             public void ReturnsNoExplicitInterfacePropertiesWhenDisabled()
             {
-                var propertyInfo = typeof (Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: false);
+                var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: false);
 
-                Assert.IsNull(propertyInfo);
+                Assert.That(propertyInfo, Is.Null);
             }
 
             [TestCase]
@@ -189,7 +181,7 @@ namespace Catel.Tests.Reflection
             {
                 var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: true);
 
-                Assert.IsNotNull(propertyInfo);
+                Assert.That(propertyInfo, Is.Not.Null);
             }
         }
 
@@ -202,7 +194,7 @@ namespace Catel.Tests.Reflection
                 var fieldInfo = typeof(DataWindow).GetFieldEx("_showingAsDialog");
 
                 // Note: see https://github.com/Catel/Catel/issues/1617, this should return null
-                Assert.IsNull(fieldInfo);
+                Assert.That(fieldInfo, Is.Null);
             }
 
             [TestCase]
@@ -210,7 +202,7 @@ namespace Catel.Tests.Reflection
             {
                 var fieldInfo = typeof(System.Windows.Window).GetFieldEx("_showingAsDialog");
 
-                Assert.IsNotNull(fieldInfo);
+                Assert.That(fieldInfo, Is.Not.Null);
             }
         }
 
@@ -248,7 +240,7 @@ namespace Catel.Tests.Reflection
             {
                 var fields = typeof(DerivedClass).GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
 
-                Assert.IsTrue(fields.Any(x => x.Name == "field1"));
+                Assert.That(fields.Any(x => x.Name == "field1"), Is.True);
             }
 
             [Test]
@@ -256,7 +248,7 @@ namespace Catel.Tests.Reflection
             {
                 var fields = typeof(DerivedClass).GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
 
-                Assert.IsTrue(fields.Any(x => x.Name == "field2"));
+                Assert.That(fields.Any(x => x.Name == "field2"), Is.True);
             }
 
             [Test]
@@ -264,7 +256,7 @@ namespace Catel.Tests.Reflection
             {
                 var properties = typeof(DerivedClass).GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
 
-                Assert.IsTrue(properties.Any(x => x.Name == "Property1"));
+                Assert.That(properties.Any(x => x.Name == "Property1"), Is.True);
             }
 
             [Test]
@@ -272,7 +264,7 @@ namespace Catel.Tests.Reflection
             {
                 var properties = typeof(DerivedClass).GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
 
-                Assert.IsTrue(properties.Any(x => x.Name == "Property2"));
+                Assert.That(properties.Any(x => x.Name == "Property2"), Is.True);
             }
 
             [Test]
@@ -280,7 +272,7 @@ namespace Catel.Tests.Reflection
             {
                 var methods = typeof(DerivedClass).GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
 
-                Assert.IsTrue(methods.Any(x => x.Name == "Method1"));
+                Assert.That(methods.Any(x => x.Name == "Method1"), Is.True);
             }
 
             [Test]
@@ -288,7 +280,7 @@ namespace Catel.Tests.Reflection
             {
                 var methods = typeof(DerivedClass).GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
 
-                Assert.IsTrue(methods.Any(x => x.Name == "Method2"));
+                Assert.That(methods.Any(x => x.Name == "Method2"), Is.True);
             }
         }
     }

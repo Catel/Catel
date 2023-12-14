@@ -2,6 +2,14 @@
 {
     public class ProcessContext
     {
+        public ProcessContext()
+        {
+            FileName = string.Empty;
+            Arguments = string.Empty;
+            WorkingDirectory = string.Empty;
+            Verb = string.Empty;
+        }
+
         public string FileName { get; set; }
 
         public string Arguments { get; set; }

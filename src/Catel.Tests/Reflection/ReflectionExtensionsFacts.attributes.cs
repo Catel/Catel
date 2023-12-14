@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensionsFacts.attributes.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-// Required since we are testing obsolete attribute retrievals
+﻿// Required since we are testing obsolete attribute retrievals
 #pragma warning disable 612
 
 namespace Catel.Tests.Reflection
@@ -38,11 +32,11 @@ namespace Catel.Tests.Reflection
 
                 if (isNotNull)
                 {
-                    Assert.IsNotNull(attribute);
+                    Assert.That(attribute, Is.Not.Null);
                 }
                 else
                 {
-                    Assert.IsNull(attribute);
+                    Assert.That(attribute, Is.Null);
                 }
             }
 
@@ -55,11 +49,11 @@ namespace Catel.Tests.Reflection
 
                 if (isNotNull)
                 {
-                    Assert.IsNotNull(attribute);
+                    Assert.That(attribute, Is.Not.Null);
                 }
                 else
                 {
-                    Assert.IsNull(attribute);
+                    Assert.That(attribute, Is.Null);
                 }
             }
         }
@@ -71,7 +65,7 @@ namespace Catel.Tests.Reflection
             public void ThrowsArgumentNullExceptionForNullPropertyInfo()
             {
                 ObsoleteAttribute attribute;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ((MemberInfo)null).TryGetAttribute(out attribute));
+                Assert.Throws<ArgumentNullException>(() => ((MemberInfo)null).TryGetAttribute(out attribute));
             }
         }
     }

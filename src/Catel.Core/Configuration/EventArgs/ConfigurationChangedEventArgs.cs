@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConfigurationChangedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
 
@@ -20,7 +13,7 @@ namespace Catel.Configuration
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="newValue">The new value.</param>
-        public ConfigurationChangedEventArgs(ConfigurationContainer container, string key, object newValue)
+        public ConfigurationChangedEventArgs(ConfigurationContainer container, string key, object? newValue)
         {
             Container = container;
             Key = key;
@@ -43,6 +36,6 @@ namespace Catel.Configuration
         /// Gets the new value.
         /// </summary>
         /// <value>The new value.</value>
-        public object NewValue { get; private set; }
+        public object? NewValue { get; private set; }
     }
 }

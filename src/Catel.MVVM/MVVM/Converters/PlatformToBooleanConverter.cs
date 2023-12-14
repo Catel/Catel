@@ -1,13 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlatformsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Returns a boolean whether the currently executing platform is available.
@@ -21,7 +15,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <returns>System.Object.</returns>
-        protected override object Convert(object value, System.Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var parameterAsString = ObjectToStringHelper.ToString(parameter);
 
@@ -30,7 +24,7 @@ namespace Catel.MVVM.Converters
 
             foreach (var supportedPlatform in supportedPlatforms)
             {
-                KnownPlatforms platform = KnownPlatforms.Unknown;
+                var platform = KnownPlatforms.Unknown;
                 if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out platform))
                 {
                     if (Platforms.IsPlatformSupported(platform))
@@ -46,7 +40,7 @@ namespace Catel.MVVM.Converters
                 isSupported = !isSupported;
             }
 
-            return isSupported;
+            return BoxingCache.GetBoxedValue(isSupported);
         }
     }
 }

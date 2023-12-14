@@ -1,5 +1,5 @@
 #addin "nuget:?package=Cake.GitHub&version=0.1.0"
-#addin "nuget:?package=Octokit&version=0.50.0"
+#addin "nuget:?package=Octokit&version=9.0.0"
 
 //-------------------------------------------------------------
 
@@ -54,10 +54,15 @@ public class GitHubSourceControl : ISourceControl
 
     private void UpdateStatus(GitHubStatusState state, string context, string description)
     {
+        // Disabled for now
+        return;
+
         if (!IsAvailable)
         {
             return;
         }
+
+        BuildContext.CakeContext.Information("Updating GitHub status to '{0}' | '{1}'", state, description);
 
         var commitSha = BuildContext.General.Repository.CommitId;
 

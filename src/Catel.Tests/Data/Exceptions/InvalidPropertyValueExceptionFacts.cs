@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InvalidPropertyValueExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data.Exceptions
+﻿namespace Catel.Tests.Data.Exceptions
 {
     using Catel.Data;
 
@@ -19,9 +13,9 @@ namespace Catel.Tests.Data.Exceptions
             public void SetsValuesCorrectly()
             {
                 var exception = new InvalidPropertyValueException("PropertyName", typeof(int), typeof(string));
-                Assert.AreEqual("PropertyName", exception.PropertyName);
-                Assert.AreEqual(typeof(int), exception.ExpectedType);
-                Assert.AreEqual(typeof(string), exception.ActualType);
+                Assert.That(exception.PropertyName, Is.EqualTo("PropertyName"));
+                Assert.That(exception.ExpectedType, Is.EqualTo(typeof(int)));
+                Assert.That(exception.ActualType, Is.EqualTo(typeof(string)));
             }
         }
     }

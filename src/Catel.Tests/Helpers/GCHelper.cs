@@ -1,9 +1,7 @@
 ﻿namespace Catel.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.Runtime.InteropServices;
-    using System.Text;
 
     public static class GCHelper
     {

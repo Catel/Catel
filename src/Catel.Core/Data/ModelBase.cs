@@ -1,73 +1,33 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
     using System.Xml.Serialization;
     using Logging;
 
-#if NET || NETCORE || NETSTANDARD
-    using System.Runtime.Serialization;
-#endif
-
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
     /// </summary>
-#if NET || NETCORE || NETSTANDARD
     [Serializable]
-#endif
     public abstract partial class ModelBase : ObservableObject, IModel
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// The empty streaming context.
-        /// </summary>
-        [field: NonSerialized]
-        private static readonly StreamingContext EmptyStreamingContext = new StreamingContext();
-#endif
 
         /// <summary>
         /// The property values.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         internal IPropertyBag _propertyBag;
 
         /// <summary>
         /// Lock object.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         internal readonly object _lock = new object();
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
-        internal SuspensionContext _changeCallbacksSuspensionContext;
-
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
-        internal SuspensionContext _changeNotificationsSuspensionContext;
-        #endregion
-
-        #region Constructors
+        internal SuspensionContext? _changeCallbacksSuspensionContext;
+        internal SuspensionContext? _changeNotificationsSuspensionContext;
 
         /// <summary>
         /// Initializes static members of the <see cref="ModelBase"/> class.
@@ -77,53 +37,29 @@ namespace Catel.Data
             PropertyDataManager = PropertyDataManager.Default;
         }
 
-#if !NET && !NETCORE && !NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
         /// </summary>
         protected ModelBase()
         {
-            // Note: this initializes the model without serialization context
+            _propertyBag = CreatePropertyBag();
 
             Initialize();
         }
-#else
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase"/> class.
-        /// </summary>
-        /// <remarks>
-        /// Must have a public constructor in order to be serializable.
-        /// </remarks>
-        // ReSharper disable PublicConstructorInAbstractClass
-        protected ModelBase()
-            // ReSharper restore PublicConstructorInAbstractClass
-            : this(null, EmptyStreamingContext)
-        {
-            // Do not write anything in this constructor. Use the Initialize method or the
-            // OnInitializing or OnInitialized methods instead.
-        }
-#endif
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
         /// <value><c>true</c> if property change notifications should be disabled for all instances; otherwise, <c>false</c>.</value>
-        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
-        public static bool DisablePropertyChangeNotifications { get; set; }
+        internal static bool DisablePropertyChangeNotifications { get; set; }
 
         /// <summary>
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         internal static PropertyDataManager PropertyDataManager { get; private set; }
 
@@ -136,18 +72,14 @@ namespace Catel.Data
         /// <remarks>
         /// By default, this property is <c>false</c>.
         /// </remarks>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         protected bool AlwaysInvokeNotifyChanged { get; set; }
 
         /// <summary>
         /// Gets the name of the object. By default, this is the hash code of all the properties combined.
         /// </summary>
         /// <value>The name of the key.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         string IModel.KeyName
         {
@@ -162,16 +94,14 @@ namespace Catel.Data
         /// </value>
         bool IModel.IsInEditSession
         {
-            get { return _backup != null; }
+            get { return _backup is not null; }
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether this object is dirty (contains unsaved data).
         /// </summary>
         /// <value><c>true</c> if this instance is dirty; otherwise, <c>false</c>.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         public bool IsDirty
         {
@@ -183,14 +113,12 @@ namespace Catel.Data
         /// <summary>
         /// Register the IsDirty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IsDirtyProperty = RegisterProperty("IsDirty", typeof(bool), false, null, false, true, true);
+        public static readonly IPropertyData IsDirtyProperty = RegisterProperty<bool>(nameof(IsDirty), false, null, false, true, true);
 
         /// <summary>
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         public bool IsReadOnly
         {
@@ -202,11 +130,8 @@ namespace Catel.Data
         /// <summary>
         /// Register the IsReadOnly property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IsReadOnlyProperty = RegisterProperty("IsReadOnly", typeof(bool), false,
-            (sender, e) => ((ModelBase)sender).RaisePropertyChanged("IsEditable"), false, true, true);
-        #endregion
+        public static readonly IPropertyData IsReadOnlyProperty = RegisterProperty<bool>(nameof(IsReadOnly), false, null, false, true, true);
 
-        #region Methods
         /// <summary>
         /// Allows the initialization of custom properties. This is a virtual method that is called
         /// inside the constructor before the object is fully constructed.
@@ -228,8 +153,6 @@ namespace Catel.Data
         {
             AlwaysInvokeNotifyChanged = false;
 
-            _propertyBag = CreatePropertyBag();
-
             InitializeProperties();
 
             InitializeCustomProperties();
@@ -243,7 +166,7 @@ namespace Catel.Data
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public override string ToString()
+        public override string? ToString()
         {
             return base.ToString();
         }
@@ -275,7 +198,7 @@ namespace Catel.Data
                 lock (_lock)
                 {
                     var suspensionContext = _changeCallbacksSuspensionContext;
-                    if (suspensionContext != null)
+                    if (suspensionContext is not null)
                     {
                         suspensionContext.Decrement();
 
@@ -313,12 +236,12 @@ namespace Catel.Data
             },
             x =>
             {
-                SuspensionContext suspensionContext;
+                SuspensionContext? suspensionContext;
 
                 lock (_lock)
                 {
                     suspensionContext = _changeNotificationsSuspensionContext;
-                    if (suspensionContext != null)
+                    if (suspensionContext is not null)
                     {
                         suspensionContext.Decrement();
 
@@ -331,7 +254,7 @@ namespace Catel.Data
 
                 if (raiseOnResume)
                 {
-                    if (suspensionContext != null && suspensionContext.Counter == 0)
+                    if (suspensionContext is not null && suspensionContext.Counter == 0)
                     {
                         var properties = suspensionContext.Properties;
 
@@ -345,9 +268,7 @@ namespace Catel.Data
 
             return token;
         }
-        #endregion
 
-        #region INotifyPropertyChanged Members
         /// <summary>
         /// Invokes the property changed for all registered properties.
         /// </summary>
@@ -374,11 +295,11 @@ namespace Catel.Data
         /// <remarks>
         /// This method is overriden en does not call the base because lots of additional logic is added in this class. The
         /// <see cref="RaisePropertyChanged(object,System.ComponentModel.PropertyChangedEventArgs,bool,bool)"/> will explicitly call 
-        /// <see cref="ObservableObject.RaisePropertyChanged(object, AdvancedPropertyChangedEventArgs)"/>.
+        /// <see cref="ObservableObject.RaisePropertyChanged(object, PropertyChangedEventArgs)"/>.
         /// <para />
         /// If this method is overriden, it is very important to call the base.
         /// </remarks>
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(sender, e, true, false);
         }
@@ -391,14 +312,14 @@ namespace Catel.Data
         /// <param name="updateIsDirty">if set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
         /// <param name="isRefreshCallOnly">if set to <c>true</c>, the call is only to refresh updates (for example, for the IDataErrorInfo 
         /// implementation). If this value is <c>false</c>, the custom change handlers will not be called.</param>
-        protected void RaisePropertyChanged(object sender, PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly)
+        protected void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly)
         {
             if (string.IsNullOrEmpty(e.PropertyName))
             {
                 if (!DisablePropertyChangeNotifications)
                 {
                     // Call & exit, we can't handle "update them all" property change notifications
-                    base.RaisePropertyChanged(this, new AdvancedPropertyChangedEventArgs(sender, e.PropertyName));
+                    base.RaisePropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
                 }
 
                 return;
@@ -408,7 +329,7 @@ namespace Catel.Data
             if (IsModelBaseProperty(e.PropertyName))
             {
                 var senderAsModelBase = sender as ModelBase;
-                if ((senderAsModelBase != null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
+                if ((senderAsModelBase is not null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
                 {
                     // Maybe this is a child object informing us that it's not dirty any longer
                     if (!senderAsModelBase.GetValue<bool>(e.PropertyName) && !ReferenceEquals(this, sender))
@@ -427,7 +348,7 @@ namespace Catel.Data
                         if (!DisablePropertyChangeNotifications)
                         {
                             // Explicitly call base because we have overridden the behavior
-                            var eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
+                            var eventArgs = new PropertyChangedEventArgs(e.PropertyName);
                             base.RaisePropertyChanged(this, eventArgs);
                         }
                     }
@@ -438,27 +359,16 @@ namespace Catel.Data
 
             if (ReferenceEquals(this, sender))
             {
-                AdvancedPropertyChangedEventArgs eventArgs;
-                var advancedEventArgs = e as AdvancedPropertyChangedEventArgs;
-                if (advancedEventArgs != null)
-                {
-                    eventArgs = new AdvancedPropertyChangedEventArgs(this, advancedEventArgs);
-                }
-                else
-                {
-                    eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
-                }
-
                 if (!isRefreshCallOnly)
                 {
-                    SuspensionContext callbackSuspensionContext;
+                    SuspensionContext? callbackSuspensionContext;
 
                     lock (_lock)
                     {
                         callbackSuspensionContext = _changeCallbacksSuspensionContext;
                     }
 
-                    if (callbackSuspensionContext != null)
+                    if (callbackSuspensionContext is not null)
                     {
                         callbackSuspensionContext.Add(e.PropertyName);
                     }
@@ -467,9 +377,9 @@ namespace Catel.Data
                         var propertyData = GetPropertyData(e.PropertyName);
 
                         var handler = propertyData.PropertyChangedEventHandler;
-                        if (handler != null)
+                        if (handler is not null)
                         {
-                            handler(this, eventArgs);
+                            handler(this, e);
                         }
                     }
                 }
@@ -477,7 +387,7 @@ namespace Catel.Data
                 if (!DisablePropertyChangeNotifications)
                 {
                     // Explicitly call base because we have overridden the behavior
-                    base.RaisePropertyChanged(this, eventArgs);
+                    base.RaisePropertyChanged(this, e);
                 }
             }
 
@@ -512,6 +422,5 @@ namespace Catel.Data
                 IsDirty = true;
             }
         }
-        #endregion
     }
 }

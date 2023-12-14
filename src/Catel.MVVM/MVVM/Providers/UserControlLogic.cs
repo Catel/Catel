@@ -1,79 +1,38 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserControlLogic.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
-    using ApiCop;
-    using ApiCop.Rules;
     using IoC;
     using Views;
     using Services;
     using Logging;
     using MVVM;
     using Reflection;
-
-#if XAMARIN || XAMARIN_FORMS
-    // TODO
-#elif UWP
-    using global::Windows.UI;
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
     using Windows.Controls;
-#endif
 
     /// <summary>
     /// MVVM Provider behavior implementation for a user control.
     /// </summary>
     public class UserControlLogic : LogicBase
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The API cop.
-        /// </summary>
-        private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
-
-        private IViewModelContainer _parentViewModelContainer;
-        private IViewModel _parentViewModel;
-
-#if NET || NETCORE
-        private InfoBarMessageControl _infoBarMessageControl;
-#endif
-        #endregion
-
-        #region Constructors
+        private IViewModelContainer? _parentViewModelContainer;
+        private IViewModel? _parentViewModel;
+        private InfoBarMessageControl? _infoBarMessageControl;
+        
         /// <summary>
         /// Initializes static members of the <see cref="UserControlLogic" /> class.
         /// </summary>
         static UserControlLogic()
         {
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is not found in the visual tree. This will have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error,
-                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
-
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.CreateWarningAndErrorValidator", "The InfoBarMessageControl is not found in the visual tree. Only use this feature in combination with the InfoBarMessageControl or a customized class which uses the WarningAndErrorValidator. Consider setting the CreateWarningAndErrorValidatorForViewModel or DefaultCreateWarningAndErrorValidatorForViewModelValue to false.", ApiCopRuleLevel.Error,
-                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
-
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.SupportParentViewModelContainers", "No parent IViewModelContainer is found in the visual tree. Only use this feature when there are parent IViewModelContainer instances. Consider setting the SupportParentViewModelContainers to false.", ApiCopRuleLevel.Error,
-                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
-
             DefaultSupportParentViewModelContainersValue = true;
             DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
-
-#if NET || NETCORE
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
-#endif
         }
 
         /// <summary>
@@ -83,7 +42,7 @@ namespace Catel.MVVM.Providers
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
-        public UserControlLogic(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
+        public UserControlLogic(IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
             : base(targetView, viewModelType, viewModel)
         {
             if (CatelEnvironment.IsInDesignMode)
@@ -93,50 +52,11 @@ namespace Catel.MVVM.Providers
 
             SupportParentViewModelContainers = DefaultSupportParentViewModelContainersValue;
             UnloadBehavior = DefaultUnloadBehaviorValue;
-
-#if NET || NETCORE
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
             CreateWarningAndErrorValidatorForViewModel = DefaultCreateWarningAndErrorValidatorForViewModelValue;
-#endif
 
-#if XAMARIN
-            CreateViewModelWrapper();
-#elif !UWP
             // For non-UWP, we *cannot* use the ContentChanged event (it doesn't have the x:Name available)
             this.SubscribeToWeakGenericEvent<EventArgs>(targetView, nameof(FrameworkElement.Initialized), OnTargetViewInitialized, false);
-#else
-            // For UWP, we *can* use the ContentChanged event (it does have x:Name available)
-            // NOTE: There is NO unsubscription for this subscription.
-            // Hence target control content wrapper grid will be recreated each time content changes.
-            targetView.SubscribeToPropertyChanged(nameof(global::Windows.UI.Xaml.Controls.UserControl.Content), OnTargetViewContentChanged);
-#endif
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets a value indicating whether the user control should close any existing
-        /// view model when the control is unloaded from the visual tree.
-        /// <para />
-        /// Set this property to <c>false</c> if a view model should be kept alive and re-used
-        /// for unloading/loading instead of creating a new one.
-        /// <para />
-        /// By default, this value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
-        /// </value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public bool CloseViewModelOnUnloaded
-        {
-            get
-            {
-                return ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic;
-            }
-            set
-            {
-                ViewModelLifetimeManagement = value ? ViewModelLifetimeManagement.Automatic : ViewModelLifetimeManagement.PartlyManual;
-            }
         }
 
         /// <summary>
@@ -177,7 +97,6 @@ namespace Catel.MVVM.Providers
         /// <value>The unload behavior.</value>
         public static UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -223,7 +142,6 @@ namespace Catel.MVVM.Providers
         /// The default value is <c>true</c>.
         /// </summary>
         public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
-#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether the user control should automatically be disabled when there is no
@@ -242,7 +160,7 @@ namespace Catel.MVVM.Providers
         /// </value>
         protected bool HasParentViewModelContainer
         {
-            get { return _parentViewModelContainer != null; }
+            get { return _parentViewModelContainer is not null; }
         }
 
         /// <summary>
@@ -252,7 +170,7 @@ namespace Catel.MVVM.Providers
         /// <remarks>
         /// For internal usage only.
         /// </remarks>
-        internal IViewModelContainer ParentViewModelContainer
+        internal IViewModelContainer? ParentViewModelContainer
         {
             get { return _parentViewModelContainer; }
         }
@@ -265,11 +183,9 @@ namespace Catel.MVVM.Providers
         /// </value>
         protected bool IsSubscribedToParentViewModel
         {
-            get { return (_parentViewModel != null); }
+            get { return (_parentViewModel is not null); }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Sets the data context of the target control.
         /// <para />
@@ -286,24 +202,26 @@ namespace Catel.MVVM.Providers
         /// Creates the view model wrapper.
         /// </summary>
         /// <param name="force">If set the <c>true</c>, this will add the <see cref="WrapOptions.Force"/> flag.</param>
-        public IViewModelWrapper CreateViewModelWrapper(bool force = false)
+        public IViewModelWrapper? CreateViewModelWrapper(bool force = false)
         {
             var targetView = TargetView;
+            if (targetView is null)
+            {
+                return null;
+            }
 
             var dependencyResolver = this.GetDependencyResolver();
-            var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
+            var viewModelWrapperService = dependencyResolver.ResolveRequired<IViewModelWrapperService>();
 
             var wrapper = viewModelWrapperService.GetWrapper(targetView);
             if (wrapper is null)
             {
                 var wrapOptions = WrapOptions.None;
 
-#if NET || NETCORE
                 if (CreateWarningAndErrorValidatorForViewModel)
                 {
                     wrapOptions |= WrapOptions.CreateWarningAndErrorValidatorForViewModel;
                 }
-#endif
 
                 if (force)
                 {
@@ -320,38 +238,33 @@ namespace Catel.MVVM.Providers
         /// Gets the view model wrapper. If the view is not wrapped, this method will return <c>null</c>.
         /// </summary>
         /// <returns>The view model wrapper or <c>null</c>.</returns>
-        public object GetViewModelWrapper()
+        public object? GetViewModelWrapper()
         {
+            var targetView = TargetView;
+            if (targetView is null)
+            {
+                return null;
+            }
+
             var dependencyResolver = this.GetDependencyResolver();
-            var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
-            return viewModelWrapperService.GetWrapper(TargetView);
+            var viewModelWrapperService = dependencyResolver.ResolveRequired<IViewModelWrapperService>();
+
+            return viewModelWrapperService.GetWrapper(targetView);
         }
 
-#if !UWP
-        private void OnTargetViewInitialized(object sender, EventArgs e)
+        private void OnTargetViewInitialized(object? sender, EventArgs e)
         {
             // Note: we can't use Content changed property notification (x:Name is not yet set), but Loaded event is too late,
             // this event should be in-between: https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/object-lifetime-events
             CreateViewModelWrapper();
         }
-#else  
-        /// <summary>
-        /// Called when the content of the target control has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewContentChanged(object sender, PropertyChangedEventArgs e)
-        {
-            CreateViewModelWrapper();
-        }
-#endif
 
         /// <summary>
         /// Called when the <c>TargetView</c> has just been loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async Task OnTargetViewLoadedAsync(object sender, EventArgs e)
+        public override async Task OnTargetViewLoadedAsync(object? sender, EventArgs e)
         {
             await CompleteViewModelClosingAsync();
 
@@ -363,21 +276,11 @@ namespace Catel.MVVM.Providers
             // even if the Content property was changed while InitializeComponents() running there is no triggering of a binding update.
             CreateViewModelWrapper();
 
-#if NET || NETCORE
             if (!SkipSearchingForInfoBarMessageControl)
             {
                 Log.Debug("Searching for an instance of the InfoBarMessageControl");
 
-                _infoBarMessageControl = TargetView.FindParentByPredicate(o => o is InfoBarMessageControl) as InfoBarMessageControl;
-
-                ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.InfoBarMessageControl",
-                    rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetViewType.FullName));
-
-                if (CreateWarningAndErrorValidatorForViewModel)
-                {
-                    ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.CreateWarningAndErrorValidator",
-                        rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetViewType.FullName));
-                }
+                _infoBarMessageControl = TargetView?.FindParentByPredicate(o => o is InfoBarMessageControl) as InfoBarMessageControl;
 
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
 
@@ -390,7 +293,6 @@ namespace Catel.MVVM.Providers
             {
                 Log.Debug("Skipping the search for an instance of the InfoBarMessageControl");
             }
-#endif
 
             if (ViewModel is null)
             {
@@ -402,7 +304,7 @@ namespace Catel.MVVM.Providers
                 }
                 else
                 {
-                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                    Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
                 }
             }
             else
@@ -415,7 +317,11 @@ namespace Catel.MVVM.Providers
 
             if (DisableWhenNoViewModel)
             {
-                TargetView.IsEnabled = (ViewModel != null);
+                var targetView = TargetView;
+                if (targetView is not null)
+                {
+                    targetView.IsEnabled = (ViewModel is not null);
+                }
             }
         }
 
@@ -424,11 +330,11 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
+        public override async Task OnTargetViewUnloadedAsync(object? sender, EventArgs e)
         {
             await base.OnTargetViewUnloadedAsync(sender, e);
 
-            if (ViewModel != null)
+            if (ViewModel is not null)
             {
                 ClearWarningsAndErrorsForObject(ViewModel);
             }
@@ -442,7 +348,7 @@ namespace Catel.MVVM.Providers
             }
             else
             {
-                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
             }
         }
 
@@ -463,7 +369,11 @@ namespace Catel.MVVM.Providers
 
             if (DisableWhenNoViewModel)
             {
-                TargetView.IsEnabled = (ViewModel != null);
+                var targetView = TargetView;
+                if (targetView is not null)
+                {
+                    targetView.IsEnabled = (ViewModel is not null);
+                }
             }
         }
 
@@ -473,7 +383,7 @@ namespace Catel.MVVM.Providers
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        public override async void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
+        public override async void OnTargetViewDataContextChanged(object? sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (IsCurrentDataContext(e))
@@ -490,7 +400,7 @@ namespace Catel.MVVM.Providers
             CreateViewModelWrapper();
 
             // Fix for CTL-307: DataContextChanged is invoked before Unloaded because Parent is set to null
-            var targetControlParent = TargetView.GetParent();
+            var targetControlParent = TargetView?.GetParent();
             if (targetControlParent is null)
             {
                 return;
@@ -517,7 +427,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected override void OnViewLoadedManagerLoading(object sender, ViewLoadEventArgs e)
+        protected override void OnViewLoadedManagerLoading(object? sender, ViewLoadEventArgs e)
         {
             base.OnViewLoadedManagerLoading(sender, e);
 
@@ -532,7 +442,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected override void OnViewLoadedManagerUnloading(object sender, ViewLoadEventArgs e)
+        protected override void OnViewLoadedManagerUnloading(object? sender, ViewLoadEventArgs e)
         {
             base.OnViewLoadedManagerUnloading(sender, e);
 
@@ -557,24 +467,29 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            _parentViewModelContainer = TargetView.FindParentViewModelContainer();
-            if (_parentViewModelContainer != null)
+            var parentViewModelContainer = TargetView?.FindParentViewModelContainer();
+
+            // Always update the parent view model container
+            _parentViewModelContainer = parentViewModelContainer;
+
+            if (parentViewModelContainer is not null)
             {
-                Log.Debug("Found the parent view model container '{0}' for '{1}'", _parentViewModelContainer.GetType().Name, TargetView.GetType().Name);
+                Log.Debug("Found the parent view model container '{0}' for '{1}'", parentViewModelContainer.GetType().Name, TargetView?.GetType().Name);
             }
             else
             {
                 Log.Debug("Couldn't find parent view model container");
             }
 
-            ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.SupportParentViewModelContainers",
-                    rule => rule.IncreaseCount(_parentViewModelContainer != null, TargetViewType.FullName));
-
-            if (_parentViewModelContainer != null)
+            if (parentViewModelContainer is not null)
             {
-                _parentViewModelContainer.ViewModelChanged += OnParentViewModelContainerViewModelChanged;
+                parentViewModelContainer.ViewModelChanged += OnParentViewModelContainerViewModelChanged;
 
-                SubscribeToParentViewModel(_parentViewModelContainer.ViewModel);
+                var parentViewModel = parentViewModelContainer.ViewModel;
+                if (parentViewModel is not null)
+                {
+                    SubscribeToParentViewModel(parentViewModel);
+                }
             }
         }
 
@@ -583,7 +498,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         private void UnsubscribeFromParentViewModelContainer()
         {
-            if (_parentViewModelContainer != null)
+            if (_parentViewModelContainer is not null)
             {
                 // Fix for https://catelproject.atlassian.net/browse/CTL-182, we might be subscribed to a parent
                 // while that doesn't change, we might be unloaded and we always need to unsubscribe from the parent view model
@@ -601,15 +516,15 @@ namespace Catel.MVVM.Providers
         /// <param name="parentViewModel">The parent view model.</param>
         private void SubscribeToParentViewModel(IViewModel parentViewModel)
         {
-            if ((parentViewModel != null) && !ObjectHelper.AreEqualReferences(parentViewModel, ViewModel))
+            if (!ObjectHelper.AreEqualReferences(parentViewModel, ViewModel))
             {
                 _parentViewModel = parentViewModel;
 
                 RegisterViewModelAsChild();
 
-                _parentViewModel.SavingAsync += OnParentViewModelSavingAsync;
-                _parentViewModel.CancelingAsync += OnParentViewModelCancelingAsync;
-                _parentViewModel.ClosingAsync += OnParentViewModelClosingAsync;
+                parentViewModel.SavingAsync += OnParentViewModelSavingAsync;
+                parentViewModel.CancelingAsync += OnParentViewModelCancelingAsync;
+                parentViewModel.ClosingAsync += OnParentViewModelClosingAsync;
 
                 Log.Debug("Subscribed to parent view model '{0}'", parentViewModel.GetType());
             }
@@ -620,13 +535,14 @@ namespace Catel.MVVM.Providers
         /// </summary>
         private void UnsubscribeFromParentViewModel()
         {
-            if (_parentViewModel != null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is not null)
             {
                 UnregisterViewModelAsChild();
 
-                _parentViewModel.SavingAsync -= OnParentViewModelSavingAsync;
-                _parentViewModel.CancelingAsync -= OnParentViewModelCancelingAsync;
-                _parentViewModel.ClosingAsync -= OnParentViewModelClosingAsync;
+                parentViewModel.SavingAsync -= OnParentViewModelSavingAsync;
+                parentViewModel.CancelingAsync -= OnParentViewModelCancelingAsync;
+                parentViewModel.ClosingAsync -= OnParentViewModelClosingAsync;
 
                 _parentViewModel = null;
 
@@ -657,7 +573,7 @@ namespace Catel.MVVM.Providers
             }
 
             parentViewModel.RegisterChildViewModel(viewModel);
-            viewModel.SetParentViewModel(_parentViewModel);
+            viewModel.SetParentViewModel(parentViewModel);
         }
 
         /// <summary>
@@ -690,7 +606,7 @@ namespace Catel.MVVM.Providers
         /// Updates the data context to use view model.
         /// </summary>
         /// <param name="newDataContext">The new data context.</param>
-        private async Task UpdateDataContextToUseViewModelAsync(object newDataContext)
+        private async Task UpdateDataContextToUseViewModelAsync(object? newDataContext)
         {
             SubscribeToParentViewModelContainer();
 
@@ -701,13 +617,13 @@ namespace Catel.MVVM.Providers
             }
 
             var currentViewModel = ViewModel;
-            object modelToInject = null;
+            object? modelToInject = null;
             var constructNewViewModel = false;
 
-            if (newDataContext != null)
+            if (newDataContext is not null)
             {
                 var dataContextAsViewModel = newDataContext as IViewModel;
-                if (dataContextAsViewModel != null)
+                if (dataContextAsViewModel is not null)
                 {
                     // If the DataContext is a view model, only create a new view model if required
                     if (currentViewModel is null)
@@ -732,7 +648,7 @@ namespace Catel.MVVM.Providers
 
             if (constructNewViewModel)
             {
-                if (currentViewModel != null)
+                if (currentViewModel is not null)
                 {
                     var viewModelType = ViewModelType;
 
@@ -744,7 +660,7 @@ namespace Catel.MVVM.Providers
                     }
                 }
 
-                if (currentViewModel != null)
+                if (currentViewModel is not null)
                 {
                     var result = GetViewModelResultValueFromUnloadBehavior();
                     await CloseAndDisposeViewModelAsync(result);
@@ -788,7 +704,7 @@ namespace Catel.MVVM.Providers
         private async Task CloseAndDisposeViewModelAsync(bool? result)
         {
             var vm = ViewModel;
-            if (vm != null)
+            if (vm is not null)
             {
                 if (result.HasValue)
                 {
@@ -811,14 +727,14 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private void OnParentViewModelContainerViewModelChanged(object sender, EventArgs e)
+        private void OnParentViewModelContainerViewModelChanged(object? sender, EventArgs e)
         {
             UnsubscribeFromParentViewModel();
 
-            IViewModelContainer viewModelContainer;
+            IViewModelContainer? viewModelContainer;
 
             var senderAsLogic = sender as LogicBase;
-            if (senderAsLogic != null)
+            if (senderAsLogic is not null)
             {
                 viewModelContainer = senderAsLogic.TargetView;
             }
@@ -827,14 +743,17 @@ namespace Catel.MVVM.Providers
                 viewModelContainer = sender as IViewModelContainer;
             }
 
-            if (viewModelContainer != null)
+            if (viewModelContainer is not null)
             {
                 var parentVm = viewModelContainer.ViewModel;
-                SubscribeToParentViewModel(parentVm);
+                if (parentVm is not null)
+                {
+                    SubscribeToParentViewModel(parentVm);
+                }
             }
         }
 
-        private void OnParentViewModelContainerUnloading(object sender, EventArgs e)
+        private void OnParentViewModelContainerUnloading(object? sender, EventArgs e)
         {
             if (!IgnoreNullDataContext)
             {
@@ -844,7 +763,7 @@ namespace Catel.MVVM.Providers
             }
         }
 
-        private void OnParentViewModelContainerLoading(object sender, EventArgs e)
+        private void OnParentViewModelContainerLoading(object? sender, EventArgs e)
         {
             if (IgnoreNullDataContext)
             {
@@ -859,12 +778,19 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="CancelingEventArgs"/> instance containing the event data.</param>
-        private async Task OnParentViewModelCancelingAsync(object sender, CancelingEventArgs e)
+        private async Task OnParentViewModelCancelingAsync(object? sender, CancelingEventArgs e)
         {
-            // The parent view model is canceled, cancel our view model as well
-            if (ViewModel != null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is null)
             {
-                if (ReferenceEquals(sender, ViewModel))
+                return;
+            }
+
+            // The parent view model is canceled, cancel our view model as well
+            var viewModel = ViewModel;
+            if (viewModel is not null)
+            {
+                if (ReferenceEquals(sender, viewModel))
                 {
                     Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Canceling event", sender.GetType().FullName);
                     return;
@@ -872,15 +798,15 @@ namespace Catel.MVVM.Providers
 
                 if (e.Cancel)
                 {
-                    Log.Info("Parent view model '{0}' is canceling, but canceling is canceled by another view model, canceling of view model '{1}' will not continue", _parentViewModel.GetType(), ViewModel.GetType());
+                    Log.Info("Parent view model '{0}' is canceling, but canceling is canceled by another view model, canceling of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                     return;
                 }
 
-                Log.Info("Parent view model '{0}' is canceled, cancelling view model '{1}' as well", _parentViewModel.GetType(), ViewModel.GetType());
+                Log.Info("Parent view model '{0}' is canceled, cancelling view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
 
-                if (!ViewModel.IsClosed)
+                if (!viewModel.IsClosed)
                 {
-                    e.Cancel = !await ViewModel.CancelViewModelAsync();
+                    e.Cancel = !await viewModel.CancelViewModelAsync();
                 }
             }
         }
@@ -890,12 +816,19 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="SavingEventArgs"/> instance containing the event data.</param>
-        private async Task OnParentViewModelSavingAsync(object sender, SavingEventArgs e)
+        private async Task OnParentViewModelSavingAsync(object? sender, SavingEventArgs e)
         {
-            // The parent view model is saved, save our view model as well
-            if (ViewModel != null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is null)
             {
-                if (ReferenceEquals(sender, ViewModel))
+                return;
+            }
+
+            // The parent view model is saved, save our view model as well
+            var viewModel = ViewModel;
+            if (viewModel is not null)
+            {
+                if (ReferenceEquals(sender, viewModel))
                 {
                     Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Saving event", sender.GetType().FullName);
                     return;
@@ -903,15 +836,15 @@ namespace Catel.MVVM.Providers
 
                 if (e.Cancel)
                 {
-                    Log.Info("Parent view model '{0}' is saving, but saving is canceled by another view model, saving of view model '{1}' will not continue", _parentViewModel.GetType(), ViewModel.GetType());
+                    Log.Info("Parent view model '{0}' is saving, but saving is canceled by another view model, saving of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                     return;
                 }
 
-                Log.Info("Parent view model '{0}' is saving, saving view model '{1}' as well", _parentViewModel.GetType(), ViewModel.GetType());
+                Log.Info("Parent view model '{0}' is saving, saving view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
 
-                if (!ViewModel.IsClosed)
+                if (!viewModel.IsClosed)
                 {
-                    e.Cancel = !await ViewModel.SaveViewModelAsync();
+                    e.Cancel = !await viewModel.SaveViewModelAsync();
                 }
             }
         }
@@ -921,11 +854,18 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private async Task OnParentViewModelClosingAsync(object sender, EventArgs e)
+        private async Task OnParentViewModelClosingAsync(object? sender, EventArgs e)
         {
-            if (ViewModel != null)
+            var parentViewModel = _parentViewModel;
+            if (parentViewModel is null)
             {
-                if (ReferenceEquals(sender, ViewModel))
+                return;
+            }
+
+            var viewModel = ViewModel;
+            if (viewModel is not null)
+            {
+                if (ReferenceEquals(sender, viewModel))
                 {
                     Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
                     return;
@@ -941,7 +881,7 @@ namespace Catel.MVVM.Providers
                 }
                 else
                 {
-                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
+                    Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
                 }
             }
         }
@@ -961,15 +901,12 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-#if NET || NETCORE
-            if (_infoBarMessageControl != null)
+            if (_infoBarMessageControl is not null)
             {
                 _infoBarMessageControl.ClearObjectMessages(obj);
 
                 Log.Debug("Cleared all warnings and errors caused by '{0}' since this is caused by a DataContext issue in the .NET Framework", obj);
             }
-#endif
         }
-        #endregion
     }
 }

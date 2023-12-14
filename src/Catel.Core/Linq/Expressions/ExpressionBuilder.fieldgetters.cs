@@ -6,21 +6,20 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Reflection;
 
     public static partial class ExpressionBuilder
     {
-        public static Expression<Func<object, TField>> CreateFieldGetter<TField>(Type modelType, string fieldName)
+        public static Expression<Func<object, TField>>? CreateFieldGetter<TField>(Type modelType, string fieldName)
         {
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
             var field = modelType.GetFieldEx(fieldName);
             return field is null ? null : CreateFieldGetter<object, TField>(field);
         }
 
-        public static Expression<Func<T, TField>> CreateFieldGetter<T, TField>(string fieldName)
+        public static Expression<Func<T, TField>>? CreateFieldGetter<T, TField>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -28,14 +27,12 @@
             return field is null ? null : CreateFieldGetter<T, TField>(field);
         }
 
-        public static Expression<Func<T, TField>> CreateFieldGetter<T, TField>(FieldInfo fieldInfo)
+        public static Expression<Func<T, TField>>? CreateFieldGetter<T, TField>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return CreateFieldGetterExpression<T, TField>(fieldInfo);
         }
 
-        public static Expression<Func<T, object>> CreateFieldGetter<T>(string fieldName)
+        public static Expression<Func<T, object>>? CreateFieldGetter<T>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
@@ -43,10 +40,8 @@
             return field is null ? null : CreateFieldGetter<T>(field);
         }
 
-        public static Expression<Func<T, object>> CreateFieldGetter<T>(FieldInfo fieldInfo)
+        public static Expression<Func<T, object>>? CreateFieldGetter<T>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
-
             return fieldInfo is null ? null : CreateFieldGetterExpression<T, object>(fieldInfo);
         }
 
@@ -88,7 +83,7 @@
             return new ReadOnlyDictionary<string, Expression<Func<T, object>>>(fieldGetters);
         }
 
-        private static Expression<Func<T, TField>> CreateFieldGetterExpression<T, TField>(FieldInfo fieldInfo)
+        private static Expression<Func<T, TField>>? CreateFieldGetterExpression<T, TField>(FieldInfo fieldInfo)
         {
             var targetType = fieldInfo.DeclaringType;
             if (targetType is null)
@@ -102,7 +97,9 @@
             var body = Expression.Field(targetExpression, fieldInfo);
 
             var finalExpression = GetCastOrConvertExpression(body, typeof(TField));
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var lambda = Expression.Lambda<Func<T, TField>>(finalExpression, target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return lambda;
         }
     }

@@ -1,25 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
-    using IoC;
-
-#if ANDROID
-    using Android.App;
-#elif IOS
-
-#elif NETFX_CORE
-    using global::Windows.UI.Popups;
-#else
     using System.Windows;
-    using Windows;
-#endif
 
     /// <summary>
     /// Message service that implements the <see cref="IMessageService"/>.
@@ -33,25 +16,13 @@ namespace Catel.Services
         /// Initializes a new instance of the <see cref="MessageService"/> class.
         /// </summary>
         /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Backwards compatible constructor, use MessageService(IDispatcherService, ILanguageService) instead", TreatAsErrorFromVersion = "5.3", RemoveInVersion = "6.0")]
-        public MessageService(IDispatcherService dispatcherService)
-            : this(dispatcherService, dispatcherService?.GetDependencyResolver().Resolve<ILanguageService>())
-        {
-            // Note: backwards compatibility ctor
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MessageService"/> class.
-        /// </summary>
-        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="languageService">The language service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="languageService"/> is <c>null</c>.</exception>
         public MessageService(IDispatcherService dispatcherService, ILanguageService languageService)
         {
-            Argument.IsNotNull("dispatcherService", dispatcherService);
-            Argument.IsNotNull("languageService", languageService);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
+            ArgumentNullException.ThrowIfNull(languageService);
 
             _dispatcherService = dispatcherService;
             _languageService = languageService;
@@ -59,14 +30,7 @@ namespace Catel.Services
             Initialize();
         }
 
-        #region Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
         partial void Initialize();
-
-#if !XAMARIN && !XAMARIN_FORMS
 
         /// <summary>
         /// Translates the message box result.
@@ -95,23 +59,8 @@ namespace Catel.Services
             }
             catch (Exception)
             {
-                throw new NotSupportedInPlatformException("MessageBox class does not support MessageButton '{0}'", button);
+                throw new NotSupportedInPlatformException($"MessageBox class does not support MessageButton '{Enum<MessageButton>.ToString(button)}'");
             }
-        }
-#endif
-        #endregion
-
-        #region IMessageService Members
-        /// <summary>
-        /// Shows an error message to the user and allows a callback operation when the message is completed.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        public virtual Task<MessageResult> ShowErrorAsync(Exception exception)
-        {
-            Argument.IsNotNull("exception", exception);
-
-            return ShowErrorAsync(exception.Message, string.Empty);
         }
 
         /// <summary>
@@ -124,7 +73,7 @@ namespace Catel.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("ErrorTitle");
+                caption = Catel.ResourceHelper.GetString("ErrorTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;
@@ -143,7 +92,7 @@ namespace Catel.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("WarningTitle");
+                caption = Catel.ResourceHelper.GetString("WarningTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;
@@ -162,7 +111,7 @@ namespace Catel.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("InfoTitle");
+                caption = Catel.ResourceHelper.GetString("InfoTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;
@@ -184,6 +133,5 @@ namespace Catel.Services
         {
             return ShowMessageBoxAsync(message, caption, button, icon);
         }
-        #endregion
     }
 }

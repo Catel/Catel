@@ -1,22 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Windows;
-    using Collections;
     using Logging;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// View helper class for MVVM scenarios.
@@ -43,7 +30,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// Internally uses the <see cref="ConstructViewWithViewModel" /> method and casts the result.
         /// </remarks>
-        public static T ConstructViewWithViewModel<T>(Type viewType, object dataContext)
+        public static T? ConstructViewWithViewModel<T>(Type viewType, object? dataContext)
             where T : FrameworkElement
         {
             return ConstructViewWithViewModel(viewType, dataContext) as T;
@@ -60,19 +47,19 @@ namespace Catel.MVVM
         /// The constructed view or <c>null</c> if it was not possible to construct the view.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType" /> is <c>null</c>.</exception>
-        public static FrameworkElement ConstructViewWithViewModel(Type viewType, object dataContext)
+        public static FrameworkElement? ConstructViewWithViewModel(Type viewType, object? dataContext)
         {
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             Log.Debug("Constructing view for view type '{0}'", viewType.Name);
 
             FrameworkElement view;
 
             // First, try to constructor directly with the data context
-            if (dataContext != null)
+            if (dataContext is not null)
             {
                 var injectionConstructor = viewType.GetConstructorEx(new[] { dataContext.GetType() });
-                if (injectionConstructor != null)
+                if (injectionConstructor is not null)
                 {
                     view = (FrameworkElement)injectionConstructor.Invoke(new[] { dataContext });
 
@@ -85,7 +72,7 @@ namespace Catel.MVVM
             Log.Debug("No constructor with data (of type '{0}') injection found, trying default constructor", ObjectToStringHelper.ToTypeString(dataContext));
 
             // Try default constructor
-            var defaultConstructor = viewType.GetConstructorEx(ArrayShim.Empty<Type>());
+            var defaultConstructor = viewType.GetConstructorEx(Array.Empty<Type>());
             if (defaultConstructor is null)
             {
                 Log.Error("View '{0}' does not have an injection or default constructor thus cannot be constructed", viewType.Name);
@@ -109,5 +96,3 @@ namespace Catel.MVVM
         }
     }
 }
-
-#endif

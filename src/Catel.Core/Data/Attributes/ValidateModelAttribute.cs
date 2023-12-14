@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidateModelAttribute.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
 
@@ -23,8 +17,6 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validatorType"/> is <c>null</c>.</exception>
         public ValidateModelAttribute(Type validatorType)
         {
-            Argument.IsNotNull("validatorType", validatorType);
-
             ValidatorType = validatorType;
         }
 

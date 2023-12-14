@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Messaging
+﻿namespace Catel.Messaging
 {
     using System;
     using IoC;
@@ -42,7 +36,7 @@ namespace Catel.Messaging
                 serviceLocator.RegisterInstance(MessageMediator.Default);
             }
 
-            _mediator = serviceLocator.ResolveType<IMessageMediator>();
+            _mediator = serviceLocator.ResolveRequiredType<IMessageMediator>();
         }
 
         /// <summary>
@@ -56,6 +50,7 @@ namespace Catel.Messaging
         /// </summary>
         protected MessageBase()
         {
+            Data = default!;
         }
 
         /// <summary>
@@ -77,7 +72,7 @@ namespace Catel.Messaging
         /// </summary>
         /// <param name="data">The payload data.</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
-        public static void SendWith(TData data, object tag = null)
+        public static void SendWith(TData data, object? tag = null)
         {
             SendWith(data, null, tag);
         }
@@ -88,7 +83,7 @@ namespace Catel.Messaging
         /// <param name="data">The payload data.</param>
         /// <param name="initializer">The optional Catel mediator tag to be used.</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
-        public static void SendWith(TData data, Action<TMessage> initializer, object tag = null)
+        public static void SendWith(TData data, Action<TMessage>? initializer, object? tag = null)
         {
             var message = With(data);
 
@@ -106,10 +101,8 @@ namespace Catel.Messaging
         /// <param name="message">The message to be sent.</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        protected static void Send(TMessage message, object tag = null)
+        protected static void Send(TMessage message, object? tag = null)
         {
-            Argument.IsNotNull("message", message);
-
             _mediator.SendMessage(message, tag);
         }
 
@@ -126,10 +119,8 @@ namespace Catel.Messaging
         /// <param name="handler">A delegate handling the incoming message. For example: msg =&gt; Handler(msg.Data).</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void Register(object recipient, Action<TMessage> handler, object tag = null)
+        public static void Register(object recipient, Action<TMessage> handler, object? tag = null)
         {
-            Argument.IsNotNull("handler", handler);
-
             _mediator.Register(recipient, handler, tag);
         }
 
@@ -146,10 +137,8 @@ namespace Catel.Messaging
         /// <param name="handler">A delegate handling the incoming message. For example: msg =&gt; Handler(msg.Data).</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void Unregister(object recipient, Action<TMessage> handler, object tag = null)
+        public static void Unregister(object recipient, Action<TMessage> handler, object? tag = null)
         {
-            Argument.IsNotNull("handler", handler);
-
             _mediator.Unregister(recipient, handler, tag);
         }
 

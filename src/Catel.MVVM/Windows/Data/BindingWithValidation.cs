@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindingWithValidation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
     using System.Windows.Data;
 
@@ -25,7 +17,7 @@ namespace Catel.Windows.Data
         /// Initializes a new instance of the <see cref="BindingWithValidation" /> class with an initial path.
         /// </summary>
         /// <param name="path">The initial <see cref="P:System.Windows.Data.Binding.Path" /> for the binding.</param>
-        public BindingWithValidation(string path)
+        public BindingWithValidation(string? path)
             : base(path)
         {
             NotifyOnValidationError = true;
@@ -33,5 +25,3 @@ namespace Catel.Windows.Data
         }
     }
 }
-
-#endif

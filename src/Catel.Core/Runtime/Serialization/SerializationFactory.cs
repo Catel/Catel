@@ -1,15 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
-#if NET || NETCORE
-    using Catel.Runtime.Serialization.Binary;
-#endif
-
     using Catel.Runtime.Serialization.Xml;
     using IoC;
 
@@ -19,18 +9,6 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public static class SerializationFactory
     {
-#if NET || NETCORE
-        /// <summary>
-        /// Gets the binary serializer.
-        /// </summary>
-        /// <returns>The registered <see cref="IBinarySerializer"/>.</returns>
-        public static IBinarySerializer GetBinarySerializer()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            return dependencyResolver.Resolve<IBinarySerializer>();
-        }
-#endif
-
         /// <summary>
         /// Gets the XML serializer.
         /// </summary>
@@ -38,7 +16,7 @@ namespace Catel.Runtime.Serialization
         public static IXmlSerializer GetXmlSerializer()
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            return dependencyResolver.Resolve<IXmlSerializer>();
+            return dependencyResolver.ResolveRequired<IXmlSerializer>();
         }
     }
 }

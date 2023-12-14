@@ -12,4 +12,59 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArgumentMustBeOfTypeWindow" xml:space="preserve">
+    <value>Argument must be of type Window</value>
+  </data>
+  <data name="ArgumentMustImplementIViewModelInterface" xml:space="preserve">
+    <value>The argument must implement IViewModel interface</value>
+  </data>
+  <data name="ControlTemplateMustContainPart" xml:space="preserve">
+    <value>Control template must contain part '{0}'</value>
+  </data>
+  <data name="DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded" xml:space="preserve">
+    <value>DataWindowButtons can only be added when the window is not yet loaded</value>
+  </data>
+  <data name="FailedToConfigureIoCContainer" xml:space="preserve">
+    <value>Failed to configure IoC container</value>
+  </data>
+  <data name="InvalidViewModel" xml:space="preserve">
+    <value>Invalid or no view model</value>
+  </data>
+  <data name="ModelNotRegistered" xml:space="preserve">
+    <value>There is no model '{0}' registered with the model attribute, so the ViewModelToModel attribute on property '{1}' is invalid.
+
+Make sure that the property is a Catel property, not a regular property.
+
+If you are sure that you have a model with this name, make sure it's public instead of private or protected for UWP because non-public reflection is not allowed in UWP.</value>
+  </data>
+  <data name="NoExpectedResultsInQueueForUnitTest" xml:space="preserve">
+    <value>No expected results in the queue, set up expected result first</value>
+  </data>
+  <data name="PageNotRegistered" xml:space="preserve">
+    <value>There is no page registered as '{0}'</value>
+  </data>
+  <data name="PropertyNotFoundInModel" xml:space="preserve">
+    <value>Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'&lt;/value&gt;
+    &lt;comment&gt;{0} = view model property name
+{1} = model property name
+{2} = model name</value>
+  </data>
+  <data name="ViewModelAlreadyRegistered" xml:space="preserve">
+    <value>View model already registered</value>
+  </data>
+  <data name="ViewModelContainerMustBeOfTypeDependencyObject" xml:space="preserve">
+    <value>The viewModelContainer must be of type DependencyObject</value>
+  </data>
+  <data name="ViewModelNotRegistered" xml:space="preserve">
+    <value>The view model of type '{0}' is not registered thus cannot be used in this context</value>
+  </data>
+  <data name="VisibilityIsNotAllowedForConverter" xml:space="preserve">
+    <value>Visibility.Visible is not possible as not-visible option</value>
+  </data>
+  <data name="WindowNotRegistered" xml:space="preserve">
+    <value>There is no window registered as '{0}'</value>
+  </data>
+  <data name="WrongViewModelType" xml:space="preserve">
+    <value>The view model is of the wrong type. Expected '{0}', but type is '{1}'</value>
+  </data>
 </root>

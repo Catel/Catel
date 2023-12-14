@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ByteArrayExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System.Text;
 
@@ -32,9 +25,6 @@ namespace Catel
         /// <returns>System.String.</returns>
         public static string GetString(this byte[] data, Encoding encoding)
         {
-            Argument.IsNotNull("data", data);
-            Argument.IsNotNull("encoding", encoding);
-
             return encoding.GetString(data, 0, data.Length);
         }
     }

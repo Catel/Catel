@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.changenotifications.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.Generic;
     using NUnit.Framework;
@@ -34,10 +27,10 @@ namespace Catel.Tests.Data
                 model.FirstName = "A";
                 model.LastName = "B";
 
-                Assert.AreEqual(2, changedProperties.Count);
+                Assert.That(changedProperties.Count, Is.EqualTo(2));
 
-                Assert.AreEqual("FirstName", changedProperties[0]);
-                Assert.AreEqual("LastName", changedProperties[1]);
+                Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
+                Assert.That(changedProperties[1], Is.EqualTo("LastName"));
             }
 
             [TestCase]
@@ -60,13 +53,13 @@ namespace Catel.Tests.Data
                     model.FirstName = "A";
                     model.LastName = "B";
 
-                    Assert.AreEqual(0, changedProperties.Count);
+                    Assert.That(changedProperties.Count, Is.EqualTo(0));
                 }
 
-                Assert.AreEqual(2, changedProperties.Count);
+                Assert.That(changedProperties.Count, Is.EqualTo(2));
 
-                Assert.AreEqual("FirstName", changedProperties[0]);
-                Assert.AreEqual("LastName", changedProperties[1]);
+                Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
+                Assert.That(changedProperties[1], Is.EqualTo("LastName"));
             }
 
             [TestCase]
@@ -91,17 +84,17 @@ namespace Catel.Tests.Data
                         model.FirstName = "A";
                         model.LastName = "B";
 
-                        Assert.AreEqual(0, changedProperties.Count);
+                        Assert.That(changedProperties.Count, Is.EqualTo(0));
                     }
 
                     // We still haven't released all scopes
-                    Assert.AreEqual(0, changedProperties.Count);
+                    Assert.That(changedProperties.Count, Is.EqualTo(0));
                 }
 
-                Assert.AreEqual(2, changedProperties.Count);
+                Assert.That(changedProperties.Count, Is.EqualTo(2));
 
-                Assert.AreEqual("FirstName", changedProperties[0]);
-                Assert.AreEqual("LastName", changedProperties[1]);
+                Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
+                Assert.That(changedProperties[1], Is.EqualTo("LastName"));
             }
         }
 
@@ -116,8 +109,8 @@ namespace Catel.Tests.Data
                 model.FirstName = "A";
                 model.LastName = "B";
 
-                Assert.IsTrue(model.IsFirstNameCallbackInvoked);
-                Assert.IsTrue(model.IsLastNameCallbackInvoked);
+                Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
+                Assert.That(model.IsLastNameCallbackInvoked, Is.True);
             }
 
             [TestCase]
@@ -130,15 +123,15 @@ namespace Catel.Tests.Data
                     model.FirstName = "A";
                     model.LastName = "B";
 
-                    Assert.IsFalse(model.IsFirstNameCallbackInvoked);
-                    Assert.IsFalse(model.IsLastNameCallbackInvoked);
+                    Assert.That(model.IsFirstNameCallbackInvoked, Is.False);
+                    Assert.That(model.IsLastNameCallbackInvoked, Is.False);
                 }
 
                 model.FirstName = "A1";
                 model.LastName = "B1";
 
-                Assert.IsTrue(model.IsFirstNameCallbackInvoked);
-                Assert.IsTrue(model.IsLastNameCallbackInvoked);
+                Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
+                Assert.That(model.IsLastNameCallbackInvoked, Is.True);
             }
 
             [TestCase]
@@ -153,22 +146,22 @@ namespace Catel.Tests.Data
                         model.FirstName = "A";
                         model.LastName = "B";
 
-                        Assert.IsFalse(model.IsFirstNameCallbackInvoked);
-                        Assert.IsFalse(model.IsLastNameCallbackInvoked);
+                        Assert.That(model.IsFirstNameCallbackInvoked, Is.False);
+                        Assert.That(model.IsLastNameCallbackInvoked, Is.False);
                     }
 
                     model.FirstName = "A1";
                     model.LastName = "B1";
 
-                    Assert.IsFalse(model.IsFirstNameCallbackInvoked);
-                    Assert.IsFalse(model.IsLastNameCallbackInvoked);
+                    Assert.That(model.IsFirstNameCallbackInvoked, Is.False);
+                    Assert.That(model.IsLastNameCallbackInvoked, Is.False);
                 }
 
                 model.FirstName = "A2";
                 model.LastName = "B2";
 
-                Assert.IsTrue(model.IsFirstNameCallbackInvoked);
-                Assert.IsTrue(model.IsLastNameCallbackInvoked);
+                Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
+                Assert.That(model.IsLastNameCallbackInvoked, Is.True);
             }
         }
     }

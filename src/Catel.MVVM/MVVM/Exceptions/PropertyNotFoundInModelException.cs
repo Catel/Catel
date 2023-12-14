@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyNotFoundInModelException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
 
@@ -13,7 +7,6 @@ namespace Catel.MVVM
 	/// </summary>
 	public class PropertyNotFoundInModelException : Exception
 	{
-		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyNotFoundInModelException"/> class.
 		/// </summary>
@@ -21,15 +14,13 @@ namespace Catel.MVVM
 		/// <param name="modelName">Name of the model.</param>
 		/// <param name="modelPropertyName">Name of the model property.</param>
 		public PropertyNotFoundInModelException(string viewModelPropertyName, string modelName, string modelPropertyName)
-			: base(string.Format(ResourceHelper.GetString("PropertyNotFoundInModel"), viewModelPropertyName, modelPropertyName, modelName))
+			: base(string.Format(ResourceHelper.GetString("PropertyNotFoundInModel") ?? string.Empty, viewModelPropertyName, modelPropertyName, modelName))
 		{
 			ViewModelPropertyName = viewModelPropertyName;
 			ModelName = modelName;
 			ModelPropertyName = modelPropertyName;
 		}
-		#endregion
 
-		#region Properties
 		/// <summary>
 		/// Gets the name of the view model property.
 		/// </summary>
@@ -47,6 +38,5 @@ namespace Catel.MVVM
 		/// </summary>
 		/// <value>The name of the model property.</value>
 		public string ModelPropertyName { get; private set; }
-		#endregion
 	}
 }

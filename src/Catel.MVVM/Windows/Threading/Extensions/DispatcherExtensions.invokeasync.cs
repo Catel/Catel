@@ -1,25 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Threading
+﻿namespace Catel.Windows.Threading
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Logging;
-    using Catel.Threading;
-
-#if UWP
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
     using System.Windows.Threading;
-#else
-    using System.Windows.Threading;
-#endif
 
     /// <summary>
     /// Extension methods for the dispatcher.
@@ -28,7 +13,6 @@ namespace Catel.Windows.Threading
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -36,7 +20,7 @@ namespace Catel.Windows.Threading
         /// <param name="method">The method.</param>
         /// <param name="args">The arguments to pass into the method.</param>
         /// <returns>The task representing the action.</returns>
-        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, params object[] args)
+        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, params object?[] args)
         {
             return InvokeAsync(dispatcher, method, DispatcherPriority.Normal, args);
         }
@@ -49,7 +33,7 @@ namespace Catel.Windows.Threading
         /// <param name="priority">The priority.</param>
         /// <param name="args">The arguments to pass into the method.</param>
         /// <returns>The task representing the action.</returns>
-        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
+        public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object?[] args)
         {
             return RunAsync(dispatcher, () =>
             {
@@ -145,15 +129,11 @@ namespace Catel.Windows.Threading
 
         private static Task RunAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
         {
-#if UWP
-            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
-#endif
-
             // Only invoke if we really have to
             if (dispatcher.CheckAccess())
             {
                 action();
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             var tcs = new TaskCompletionSource<bool>();
@@ -185,7 +165,7 @@ namespace Catel.Windows.Threading
             await dispatcher.RunWithResultAsync(async token =>
             {
                 await actionAsync();
-                return (object)null;
+                return (object?)null;
             }, CancellationToken.None, priority);
         }
 
@@ -195,17 +175,13 @@ namespace Catel.Windows.Threading
             await dispatcher.RunWithResultAsync(async token =>
             {
                 await actionAsync(cancellationToken);
-                return (object)null;
+                return (object?)null;
             }, cancellationToken, priority);
         }
 
         private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<T> function, DispatcherPriority priority)
         {
             var result = default(T);
-
-#if UWP
-            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
-#endif
 
             // Only invoke if we really have to
             if (dispatcher.CheckAccess())
@@ -237,7 +213,7 @@ namespace Catel.Windows.Threading
 
             await tcs.Task;
 
-            return result;
+            return result!;
         }
 
         private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<Task<T>> functionAsync, DispatcherPriority priority)
@@ -249,10 +225,6 @@ namespace Catel.Windows.Threading
             CancellationToken cancellationToken, DispatcherPriority priority)
         {
             var tcs = new TaskCompletionSource<T>();
-
-#if UWP
-            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
-#endif
 
             // Only invoke if we really have to
             if (dispatcher.CheckAccess())
@@ -307,7 +279,7 @@ namespace Catel.Windows.Threading
 
             if (!tcs.TrySetResult(result))
             {
-                Log.Warning($"Failed to set the task result to '{result}', task was already completed. Current status is '{tcs.Task.Status}'");
+                Log.Warning($"Failed to set the task result to '{result}', task was already completed. Current status is '{Enum<TaskStatus>.ToString(tcs.Task.Status)}'");
                 return false;
             }
 
@@ -329,8 +301,5 @@ namespace Catel.Windows.Threading
 
             return true;
         }
-#endif
     }
 }
-
-#endif

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ManagedViewModelTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using Catel.MVVM;
@@ -12,7 +6,6 @@ namespace Catel.Tests.MVVM.ViewModels
     using TestClasses;
 
     using NUnit.Framework;
-    using System.Threading.Tasks;
 
     [TestFixture]
     public class ManagedViewModelTest
@@ -21,8 +14,8 @@ namespace Catel.Tests.MVVM.ViewModels
         [TestCase]
         public void Constructor()
         {
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
-            Assert.AreEqual(typeof (TestViewModel), viewModel.ViewModelType);
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
+            Assert.That(viewModel.ViewModelType, Is.EqualTo(typeof(TestViewModel)));
         }
 
         [TestCase]
@@ -30,9 +23,9 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
+            Assert.Throws<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
         }
 
         [TestCase]
@@ -40,7 +33,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
             try
             {
@@ -50,8 +43,8 @@ namespace Catel.Tests.MVVM.ViewModels
             }
             catch (WrongViewModelTypeException ex)
             {
-                Assert.AreEqual(ex.ActualType, typeof (TestViewModelWithDeferredValidation));
-                Assert.AreEqual(ex.ExpectedType, typeof (TestViewModel));
+                Assert.That(typeof(TestViewModelWithDeferredValidation), Is.EqualTo(ex.ActualType));
+                Assert.That(typeof(TestViewModel), Is.EqualTo(ex.ExpectedType));
             }
         }
 
@@ -60,7 +53,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
             viewModel.AddViewModelInstance(new TestViewModel());
         }
 
@@ -69,9 +62,9 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
+            Assert.Throws<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
         }
 
         [TestCase]
@@ -79,7 +72,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
             viewModel.RemoveViewModelInstance(new TestViewModel());
         }
 
@@ -88,7 +81,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestViewModel));
 
             var interestingViewModel = new TestViewModel();
             viewModel.AddViewModelInstance(interestingViewModel);

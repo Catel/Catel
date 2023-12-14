@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.mappings.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
-    using Catel.Data;
     using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
@@ -22,7 +13,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             var vm = new TestViewModelWithActionTimeout();
 
-            Assert.AreEqual(IViewModelExtensions.ViewModelActionAwaitTimeoutInMilliseconds, vm.ViewModelActionAwaitTimeoutInMilliseconds);
+            Assert.That(vm.ViewModelActionAwaitTimeoutInMilliseconds, Is.EqualTo(IViewModelExtensions.ViewModelActionAwaitTimeoutInMilliseconds));
         }
 
         [Test]
@@ -48,7 +39,7 @@ namespace Catel.Tests.MVVM.ViewModels
             await vm.InitializeViewModelAsync();
 
             vm.ViewModelActionAwaitTimeoutInMilliseconds = 70;
-            vm.ActionDuration = 50;
+            vm.ActionDuration = 40;
 
             // Need duplicate call
             _ = vm.SaveAndCloseViewModelAsync();

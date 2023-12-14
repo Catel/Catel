@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.commands.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System.Threading;
     using Catel.MVVM;
@@ -18,60 +11,58 @@ namespace Catel.Tests.MVVM.ViewModels
         public void InvalidateCommands_Manual()
         {
             bool canExecuteChangedTriggered = false;
-            var canExecuteChangedEvent = new ManualResetEvent(false);
-
-            var viewModel = new TestViewModel();
-            viewModel.SetInvalidateCommandsOnPropertyChanged(false);
-
-            ICatelCommand command = viewModel.GenerateData;
-            command.CanExecuteChanged += delegate
+            using (var canExecuteChangedEvent = new ManualResetEvent(false))
             {
-                canExecuteChangedTriggered = true;
-                canExecuteChangedEvent.Set();
-            };
+                var viewModel = new TestViewModel();
+                viewModel.SetInvalidateCommandsOnPropertyChanged(false);
 
-            // By default, command can be executed
-            Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
+                ICatelCommand command = viewModel.GenerateData;
+                command.CanExecuteChanged += delegate
+                {
+                    canExecuteChangedTriggered = true;
+                    canExecuteChangedEvent.Set();
+                };
 
-            viewModel.FirstName = "first name";
+                // By default, command can be executed
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.True);
 
-            Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
-#if NET || NETCORE
-            canExecuteChangedEvent.WaitOne(1000, false);
-#else
-            canExecuteChangedEvent.WaitOne(1000);
-#endif
-            Assert.IsFalse(canExecuteChangedTriggered);
+                viewModel.FirstName = "first name";
+
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.False);
+
+                canExecuteChangedEvent.WaitOne(1000, false);
+
+                Assert.That(canExecuteChangedTriggered, Is.False);
+            }
         }
 
         [TestCase]
         public void InvalidateCommands_AutomaticByPropertyChange()
         {
             bool canExecuteChangedTriggered = false;
-            var canExecuteChangedEvent = new ManualResetEvent(false);
-
-            var viewModel = new TestViewModel();
-            viewModel.SetInvalidateCommandsOnPropertyChanged(true);
-
-            ICatelCommand command = viewModel.GenerateData;
-            command.CanExecuteChanged += delegate
+            using (var canExecuteChangedEvent = new ManualResetEvent(false))
             {
-                canExecuteChangedTriggered = true;
-                canExecuteChangedEvent.Set();
-            };
+                var viewModel = new TestViewModel();
+                viewModel.SetInvalidateCommandsOnPropertyChanged(true);
 
-            // By default, command can be executed
-            Assert.IsTrue(viewModel.GenerateData.CanExecute(null));
+                ICatelCommand command = viewModel.GenerateData;
+                command.CanExecuteChanged += delegate
+                {
+                    canExecuteChangedTriggered = true;
+                    canExecuteChangedEvent.Set();
+                };
 
-            viewModel.FirstName = "first name";
+                // By default, command can be executed
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.True);
 
-            Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
-#if NET || NETCORE
-            canExecuteChangedEvent.WaitOne(1000, false);
-#else
-            canExecuteChangedEvent.WaitOne(1000);
-#endif
-            Assert.IsTrue(canExecuteChangedTriggered);
+                viewModel.FirstName = "first name";
+
+                Assert.That(viewModel.GenerateData.CanExecute(null), Is.False);
+
+                canExecuteChangedEvent.WaitOne(1000, false);
+
+                Assert.That(canExecuteChangedTriggered, Is.True);
+            }
         }
     }
 }

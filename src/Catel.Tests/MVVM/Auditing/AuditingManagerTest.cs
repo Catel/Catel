@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AuditingManagerTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Auditing
+﻿namespace Catel.Tests.MVVM.Auditing
 {
     using System;
     using Catel.MVVM.Auditing;
@@ -21,17 +15,17 @@ namespace Catel.Tests.MVVM.Auditing
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
             AuditingManager.Clear();
 
-            Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
         public void RegisterAuditor_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AuditingManager.RegisterAuditor(null));
+            Assert.Throws<ArgumentNullException>(() => AuditingManager.RegisterAuditor(null));
         }
 
         [TestCase]
@@ -42,7 +36,7 @@ namespace Catel.Tests.MVVM.Auditing
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
         }
 
         [TestCase]
@@ -54,13 +48,13 @@ namespace Catel.Tests.MVVM.Auditing
             AuditingManager.RegisterAuditor(auditor);
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
         }
 
         [TestCase]
         public void UnregisterAuditor_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AuditingManager.UnregisterAuditor(null));
+            Assert.Throws<ArgumentNullException>(() => AuditingManager.UnregisterAuditor(null));
         }
 
         [TestCase]
@@ -71,11 +65,11 @@ namespace Catel.Tests.MVVM.Auditing
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
             AuditingManager.UnregisterAuditor(auditor);
 
-            Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -86,7 +80,7 @@ namespace Catel.Tests.MVVM.Auditing
             var auditor = new TestAuditor();
             AuditingManager.UnregisterAuditor(auditor);
 
-            Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -99,11 +93,11 @@ namespace Catel.Tests.MVVM.Auditing
 
             AuditingManager.RegisterAuditor(auditor1);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
             AuditingManager.UnregisterAuditor(auditor2);
 
-            Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount, "Count should still be 1");
+            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1), "Count should still be 1");
         }
     }
 }

@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ComparableModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Xml.Serialization;
     using IoC;
-
-#if NET || NETCORE || NETSTANDARD
     using System.ComponentModel;
-    using System.Runtime.Serialization;
-#endif
 
     /// <summary>
     /// Comparable model base.
@@ -25,20 +13,12 @@ namespace Catel.Data
         /// <summary>
         /// Backing field for the <see cref="EqualityComparer{T}"/> property. Because it has custom logic, it needs a backing field.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
-        private IModelEqualityComparer _equalityComparer;
+        private IModelEqualityComparer? _equalityComparer;
 
         /// <summary>
         /// Backing field for the <see cref="GetHashCode"/> method so it only has to be calculated once to gain the best performance possible.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private int? _hashCode;
-
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
@@ -47,19 +27,6 @@ namespace Catel.Data
         {
         }
 
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
-        /// </summary>
-        /// <param name="info">The information.</param>
-        /// <param name="context">The context.</param>
-        protected ComparableModelBase(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
-
-        #region Operators
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
@@ -82,16 +49,11 @@ namespace Catel.Data
             return !(firstObject == secondObject);
         }
 
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Gets or sets the equality comparer used to compare model bases with each other.
         /// </summary>
         /// <value>The equality comparer.</value>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         [XmlIgnore]
         protected IModelEqualityComparer EqualityComparer
         {
@@ -101,7 +63,7 @@ namespace Catel.Data
                 {
                     var dependencyResolver = this.GetDependencyResolver();
 
-                    _equalityComparer = dependencyResolver.Resolve<IModelEqualityComparer>();
+                    _equalityComparer = dependencyResolver.ResolveRequired<IModelEqualityComparer>();
                 }
 
                 return _equalityComparer;
@@ -111,9 +73,7 @@ namespace Catel.Data
                 _equalityComparer = value;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
@@ -124,7 +84,7 @@ namespace Catel.Data
         /// <exception cref="T:System.NullReferenceException">
         /// The <paramref name="obj"/> parameter is null.
         /// </exception>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Note: at first we only implemented the EqualityComparer, but the IEqualityComparer of Microsoft
             // throws an exception when the 2 types are not the same. Although MS does recommend not to throw exceptions,
@@ -162,7 +122,5 @@ namespace Catel.Data
 
             return _hashCode.Value;
         }
-
-        #endregion
     }
 }

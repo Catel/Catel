@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotSupportedInPlatformException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
-    using Collections;
 
     /// <summary>
     /// Exception in case the functionality is not supported in the current platform.
@@ -19,7 +11,6 @@ namespace Catel
     /// </summary>
     public class NotSupportedInPlatformException : Exception
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NotSupportedInPlatformException"/> class.
         /// </summary>
@@ -33,7 +24,7 @@ namespace Catel
         /// </summary>
         /// <param name="message">The message.</param>
         public NotSupportedInPlatformException(string message)
-            : this(message, ArrayShim.Empty<object>())
+            : this(message, Array.Empty<object>())
         {
         }
 
@@ -48,9 +39,7 @@ namespace Catel
             Reason = string.Format(featureFormat, args);
             Platform = Platforms.CurrentPlatform;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Get the reason why the feature is not supported.
         /// </summary>
@@ -62,6 +51,5 @@ namespace Catel
         /// </summary>
         /// <value>The platform.</value>
         public SupportedPlatforms Platform { get; private set; }
-        #endregion
     }
 }

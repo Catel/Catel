@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WindowNotRegisteredExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Services.Exceptions
+﻿namespace Catel.Tests.Services.Exceptions
 {
     using Catel.Services;
 
@@ -23,7 +17,7 @@ namespace Catel.Tests.Services.Exceptions
             }
             catch (WindowNotRegisteredException ex)
             {
-                Assert.AreEqual("windowName", ex.Name);
+                Assert.That(ex.Name, Is.EqualTo("windowName"));
             }
         }
         #endregion

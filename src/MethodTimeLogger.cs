@@ -26,7 +26,7 @@
             // return;
         // }
 
-        // var finalMessage = $"[METHODTIMER] {type.Name}.{methodName} took '{milliseconds}' ms";
+        // var finalMessage = $"[METHODTIMER] {type.Name}.{methodName} took '{milliseconds.ToString()}' ms";
 
         // if (!string.IsNullOrWhiteSpace(message))
         // {

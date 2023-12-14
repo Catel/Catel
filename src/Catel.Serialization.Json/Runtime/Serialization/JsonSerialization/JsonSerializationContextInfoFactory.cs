@@ -1,16 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BinarySerializationContextFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-#if NET || NETCORE
-
-namespace Catel.Runtime.Serialization.Json
+﻿namespace Catel.Runtime.Serialization.Json
 {
-    using Json;
-
     /// <summary>
     /// Json serialization context factory.
     /// </summary>
@@ -26,7 +15,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContextInfo.
         /// </returns>
-        public ISerializationContextInfo GetSerializationContextInfo(ISerializer serializer, object model, object data, ISerializationConfiguration configuration = null)
+        public ISerializationContextInfo GetSerializationContextInfo(ISerializer serializer, object model, object data, ISerializationConfiguration? configuration = null)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
             jsonSerializer.ContractResolver = new CatelJsonContractResolver();
@@ -36,5 +25,3 @@ namespace Catel.Runtime.Serialization.Json
         }
     }
 }
-
-#endif

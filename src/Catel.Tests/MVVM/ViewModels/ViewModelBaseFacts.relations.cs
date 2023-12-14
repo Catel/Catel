@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.relations.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using System.Threading;
@@ -23,9 +16,9 @@ namespace Catel.Tests.MVVM.ViewModels
             var viewModel = new TestViewModel();
             var parentViewModel = new TestViewModel();
 
-            Assert.IsNull(viewModel.GetParentViewModelForTest());
+            Assert.That(viewModel.GetParentViewModelForTest(), Is.Null);
             ((IRelationalViewModel)viewModel).SetParentViewModel(parentViewModel);
-            Assert.AreEqual(parentViewModel, viewModel.GetParentViewModelForTest());
+            Assert.That(viewModel.GetParentViewModelForTest(), Is.EqualTo(parentViewModel));
         }
 
         [TestCase]
@@ -33,7 +26,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             var viewModel = new TestViewModel();
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
+            Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
         }
 
         /// <summary>
@@ -41,47 +34,42 @@ namespace Catel.Tests.MVVM.ViewModels
         /// being validated. Then, it unsubscribes the child view model by closing it.
         /// </summary>
         [TestCase]
-        public async Task RegisterChildViewModel_RemovedViaClosingChildViewModel()
+        public async Task RegisterChildViewModel_RemovedViaClosingChildViewModelAsync()
         {
             bool validationTriggered = false;
-            var validatedEvent = new ManualResetEvent(false);
-
-            var person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
-
-            var viewModel = new TestViewModel();
-            var childViewModel = new TestViewModel(person);
-
-            Assert.IsFalse(childViewModel.HasErrors);
-
-            ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            ((IValidatable)viewModel).Validating += delegate
+            using (var validatedEvent = new ManualResetEvent(false))
             {
-                validationTriggered = true;
-                validatedEvent.Set();
-            };
+                var person = new Person();
+                person.FirstName = "first name";
+                person.LastName = "last name";
 
-            childViewModel.FirstName = string.Empty;
+                var viewModel = new TestViewModel();
+                var childViewModel = new TestViewModel(person);
 
-#if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
-            Assert.IsTrue(validationTriggered, "Validating event is not triggered");
+                Assert.That(childViewModel.HasErrors, Is.False);
 
-            await childViewModel.CloseViewModelAsync(null);
+                ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
+                ((IValidatable)viewModel).Validating += delegate
+                {
+                    validationTriggered = true;
+                    validatedEvent.Set();
+                };
 
-            validationTriggered = false;
-            validatedEvent.Reset();
+                childViewModel.FirstName = string.Empty;
 
-#if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
-            Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
+                validatedEvent.WaitOne(2000, false);
+
+                Assert.That(validationTriggered, Is.True, "Validating event is not triggered");
+
+                await childViewModel.CloseViewModelAsync(null);
+
+                validationTriggered = false;
+                validatedEvent.Reset();
+
+                validatedEvent.WaitOne(2000, false);
+
+                Assert.That(validationTriggered, Is.False, "Validating event should not be triggered because child view model is removed");
+            }
         }
 
         /// <summary>
@@ -92,44 +80,39 @@ namespace Catel.Tests.MVVM.ViewModels
         public void RegisterChildViewModel_RemovedViaUnregisterChildViewModel()
         {
             bool validationTriggered = false;
-            ManualResetEvent validatedEvent = new ManualResetEvent(false);
-
-            Person person = new Person();
-            person.FirstName = "first_name";
-            person.LastName = "last_name";
-
-            var viewModel = new TestViewModel();
-            var childViewModel = new TestViewModel(person);
-
-            Assert.IsFalse(childViewModel.HasErrors);
-
-            ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            ((IValidatable)viewModel).Validating += delegate
+            using (ManualResetEvent validatedEvent = new ManualResetEvent(false))
             {
-                validationTriggered = true;
-                validatedEvent.Set();
-            };
+                Person person = new Person();
+                person.FirstName = "first_name";
+                person.LastName = "last_name";
 
-            childViewModel.FirstName = string.Empty;
+                var viewModel = new TestViewModel();
+                var childViewModel = new TestViewModel(person);
 
-#if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
-            Assert.IsTrue(validationTriggered, "Validating event is not triggered");
+                Assert.That(childViewModel.HasErrors, Is.False);
 
-            ((IRelationalViewModel)viewModel).UnregisterChildViewModel(childViewModel);
+                ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
+                ((IValidatable)viewModel).Validating += delegate
+                {
+                    validationTriggered = true;
+                    validatedEvent.Set();
+                };
 
-            validationTriggered = false;
-            validatedEvent.Reset();
+                childViewModel.FirstName = string.Empty;
 
-#if NET || NETCORE
-            validatedEvent.WaitOne(2000, false);
-#else
-            validatedEvent.WaitOne(2000);
-#endif
-            Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
+                validatedEvent.WaitOne(2000, false);
+
+                Assert.That(validationTriggered, Is.True, "Validating event is not triggered");
+
+                ((IRelationalViewModel)viewModel).UnregisterChildViewModel(childViewModel);
+
+                validationTriggered = false;
+                validatedEvent.Reset();
+
+                validatedEvent.WaitOne(2000, false);
+
+                Assert.That(validationTriggered, Is.False, "Validating event should not be triggered because child view model is removed");
+            }
         }
 
         [TestCase]
@@ -143,18 +126,18 @@ namespace Catel.Tests.MVVM.ViewModels
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
 
-            Assert.IsTrue(viewModel.HasErrors);
-            Assert.IsTrue(childViewModel.HasErrors);
+            Assert.That(viewModel.HasErrors, Is.True);
+            Assert.That(childViewModel.HasErrors, Is.True);
 
             person.LastName = "last_name";
 
-            Assert.IsFalse(viewModel.HasErrors);
-            Assert.IsFalse(childViewModel.HasErrors);
+            Assert.That(viewModel.HasErrors, Is.False);
+            Assert.That(childViewModel.HasErrors, Is.False);
 
             person.LastName = string.Empty;
 
-            Assert.IsTrue(viewModel.HasErrors);
-            Assert.IsTrue(childViewModel.HasErrors);
+            Assert.That(viewModel.HasErrors, Is.True);
+            Assert.That(childViewModel.HasErrors, Is.True);
         }
 
 
@@ -172,17 +155,17 @@ namespace Catel.Tests.MVVM.ViewModels
 
             public class GrantParentViewModel : DeferViewModelBase
             {
-                
+
             }
 
             public class ParentViewModel : DeferViewModelBase
             {
-                
+
             }
 
             public class ChildViewModel : DeferViewModelBase
             {
-                
+
             }
 
             [TestCase]
@@ -200,8 +183,8 @@ namespace Catel.Tests.MVVM.ViewModels
                 ((IRelationalViewModel)parentVm).RegisterChildViewModel(childVm);
                 ((IRelationalViewModel)childVm).SetParentViewModel(parentVm);
 
-                Assert.IsTrue(parentVm.DeferValidationUntilFirstSaveValue);
-                Assert.IsTrue(childVm.DeferValidationUntilFirstSaveValue);
+                Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.True);
+                Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.True);
             }
 
             [TestCase]
@@ -218,15 +201,15 @@ namespace Catel.Tests.MVVM.ViewModels
                 ((IRelationalViewModel)grantParentVm).RegisterChildViewModel(parentVm);
                 ((IRelationalViewModel)parentVm).RegisterChildViewModel(childVm);
 
-                Assert.IsFalse(grantParentVm.DeferValidationUntilFirstSaveValue);
-                Assert.IsFalse(parentVm.DeferValidationUntilFirstSaveValue);
-                Assert.IsFalse(childVm.DeferValidationUntilFirstSaveValue);
+                Assert.That(grantParentVm.DeferValidationUntilFirstSaveValue, Is.False);
+                Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.False);
+                Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.False);
 
                 parentVm.DeferValidationUntilFirstSaveValue = true;
 
-                Assert.IsFalse(grantParentVm.DeferValidationUntilFirstSaveValue);
-                Assert.IsTrue(parentVm.DeferValidationUntilFirstSaveValue);
-                Assert.IsTrue(childVm.DeferValidationUntilFirstSaveValue);
+                Assert.That(grantParentVm.DeferValidationUntilFirstSaveValue, Is.False);
+                Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.True);
+                Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.True);
             }
         }
     }

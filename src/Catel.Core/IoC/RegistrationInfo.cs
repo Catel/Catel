@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RegistrationInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -24,9 +18,6 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="implementingType" /> is <c>null</c>.</exception>
         internal RegistrationInfo(Type declaringType, Type implementingType, RegistrationType registrationType, bool isTypeInstantiatedForSingleton = false)
         {
-            Argument.IsNotNull("declaringType", declaringType);
-            Argument.IsNotNull("implementingType", implementingType);
-
             DeclaringType = declaringType;
             ImplementingType = implementingType;
             RegistrationType = registrationType;

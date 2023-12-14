@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="KnownTypesSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization.XmlSerialization
+﻿namespace Catel.Tests.Runtime.Serialization.XmlSerialization
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
-    using System.Linq;
     using System.Runtime.Serialization;
     using Catel.Collections;
     using Catel.Data;
@@ -34,7 +26,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     public class ParamsBase : ComparableModelBase, IParams
     {
         // This method returns the array of known types.
-        static Type[] KnownTypes()
+        public static Type[] KnownTypes()
         {
             return new[] { typeof(PluginA.Params), typeof(PluginB.Params) };
         }
@@ -51,7 +43,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
                 set { SetValue(SettingAProperty, value); }
             }
 
-            public static readonly PropertyData SettingAProperty = RegisterProperty("SettingA", typeof(String));
+            public static readonly IPropertyData SettingAProperty = RegisterProperty<String>("SettingA");
             #endregion
         }
     }
@@ -67,7 +59,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
                 set { SetValue(SettingBProperty, value); }
             }
 
-            public static readonly PropertyData SettingBProperty = RegisterProperty("SettingB", typeof(String));
+            public static readonly IPropertyData SettingBProperty = RegisterProperty<string>("SettingB");
             #endregion
         }
     }
@@ -81,7 +73,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly PropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<IParams>), new ObservableCollection<IParams>());
+        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", () => new ObservableCollection<IParams>());
         #endregion
     }
 
@@ -94,7 +86,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly PropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<ParamsBase>), new ObservableCollection<ParamsBase>());
+        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", () => new ObservableCollection<ParamsBase>());
         #endregion
     }
 
@@ -102,7 +94,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     public class DictionaryTestClass : ComparableModelBase
     {
         // This method returns the array of known types.
-        static Type[] GetKnownTypes()
+        private static Type[] GetKnownTypes()
         {
             return new[] { typeof(ModelBaseFacts.Person) };
         }
@@ -119,7 +111,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
         /// <summary>
         /// Register the Values property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValuesProperty = RegisterProperty("Values", typeof(Dictionary<string, object>), new Dictionary<string, object>());
+        public static readonly IPropertyData ValuesProperty = RegisterProperty("Values", () => new Dictionary<string, object>());
     }
 
     [TestFixture]
@@ -179,7 +171,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
 
                 var c2 = serializer.Deserialize<ContainerInterfaces>(memoryStream);
 
-                Assert.AreEqual(c, c2);
+                Assert.That(c2, Is.EqualTo(c));
             }
         }
 
@@ -205,7 +197,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
 
                 var c2 = serializer.Deserialize<ContainerAbstractClasses>(memoryStream);
 
-                Assert.AreEqual(c, c2);
+                Assert.That(c2, Is.EqualTo(c));
             }
         }
 
@@ -226,8 +218,8 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
                 var serializer = new DataContractSerializerFactory().
                     GetDataContractSerializer(typeof(ContainerAbstractClasses), collectionType, "TestXmlName", null, null);
 
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginA.Params)), Is.True);
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginB.Params)), Is.True);
             }
         }
 
@@ -258,8 +250,8 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
                 var serializer = new DataContractSerializerFactory().
                     GetDataContractSerializer(typeof(object), collection.GetType(), "TestXmlName");
 
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginA.Params)), Is.True);
+                Assert.That(serializer.KnownTypes.Contains(typeof(PluginB.Params)), Is.True);
             }
         }
     }

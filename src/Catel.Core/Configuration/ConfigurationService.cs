@@ -1,31 +1,17 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConfigurationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using Runtime.Serialization;
     using Services;
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Runtime.Serialization;
     using Data;
     using Catel.Logging;
     using Runtime.Serialization.Xml;
-
-#if UWP
-    using Windows.Storage;
-#else
-    using System.Configuration;
-    using System.Linq;
-    using Path = IO.Path;
     using System.Timers;
     using System.Diagnostics;
-#endif
+    using System.Threading.Tasks;
+    using Catel.Threading;
 
     /// <summary>
     /// Configuration service implementation that allows customization how configuration values
@@ -37,29 +23,35 @@ namespace Catel.Configuration
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly ISerializationManager _serializationManager;
+        /// <summary>
+        /// If the timer duration is smaller than this threshold, the
+        /// timer will not be used.
+        /// </summary>
+        private const int IgnoreTimerThresholdInMilliseconds = 10;
+
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
-        private readonly IAppDataService _appDataService;
+        private readonly IAppDataService _appDataService; 
+        private readonly IDispatcherService _dispatcherService;
 
-#if NET || NETCORE || NETSTANDARD
-        private DynamicConfiguration _localConfiguration;
-        private DynamicConfiguration _roamingConfiguration;
+        private DynamicConfiguration? _localConfiguration;
+        private DynamicConfiguration? _roamingConfiguration;
 
-        private readonly object _localConfigurationLock = new ();
-        private readonly object _roamingConfigurationLock = new ();
+        private readonly AsyncLock _localConfigurationLock = new()
+        {
+            Name = "ConfigurationService.Local"
+        };
 
-        private readonly Timer _localSaveConfigurationTimer = new ();
-        private readonly Timer _roamingSaveConfigurationTimer = new ();
+        private readonly AsyncLock _roamingConfigurationLock = new()
+        {
+            Name = "ConfigurationService.Roaming"
+        };
 
-        private IXmlSerializer _xmlSerializer;
+        private readonly Timer _localSaveConfigurationTimer = new();
+        private readonly Timer _roamingSaveConfigurationTimer = new();
 
-        private string _localConfigFilePath;
-        private string _roamingConfigFilePath;
-#elif ANDROID
-        private readonly global::Android.Content.ISharedPreferences _preferences =
-            global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(global::Android.App.Application.Context);
-#endif
+        private string? _localConfigFilePath;
+        private string? _roamingConfigFilePath;
 
         private bool _suspendNotifications = false;
         private bool _hasPendingNotifications = false;
@@ -67,54 +59,61 @@ namespace Catel.Configuration
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
-        /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
-        public ConfigurationService(ISerializationManager serializationManager,
-            IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
-            : this(serializationManager, objectConverterService, (ISerializer)serializer, appDataService)
+        /// <param name="dispatcherService">Dispatcher service.</param>
+        public ConfigurationService(IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService,
+            IDispatcherService dispatcherService)
+            : this(objectConverterService, (ISerializer)serializer, appDataService, dispatcherService)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
-        /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
-        public ConfigurationService(ISerializationManager serializationManager,
-            IObjectConverterService objectConverterService, ISerializer serializer,
-            IAppDataService appDataService)
+        /// <param name="dispatcherService">The application data service.</param>
+        public ConfigurationService(IObjectConverterService objectConverterService, ISerializer serializer,
+            IAppDataService appDataService, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
-            Argument.IsNotNull("objectConverterService", objectConverterService);
-            Argument.IsNotNull("serializer", serializer);
-            Argument.IsNotNull("appDataService", appDataService);
-
-            _serializationManager = serializationManager;
             _objectConverterService = objectConverterService;
             _serializer = serializer;
             _appDataService = appDataService;
+            _dispatcherService = dispatcherService;
 
-#if NET || NETCORE || NETSTANDARD
             _localSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _localSaveConfigurationTimer.Elapsed += OnLocalSaveConfigurationTimerElapsed;
 
             _roamingSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _roamingSaveConfigurationTimer.Elapsed += OnRoamingSaveConfigurationTimerElapsed;
+
+#if DEBUG
+            _localConfigurationLock.EnableExtremeLogging = true;
+            _roamingConfigurationLock.EnableExtremeLogging = true;
 #endif
+
+            // To prevent any deadlocks (when saving from timer tick), make sure to
+            // dispatch on timer ticks.
+            // 
+            // 1. Create a type in the type factory, that tries to read a value inside INeedCustomInitialization
+            // 2. At the *same* time, because other values were stored before, the timer in this class ticks
+            //    to save for the very first time, causing the modifiers to be constructed in a timer thread
+            //
+            // Since the TypeFactory is still creating the type, it cannot construct the newly required type thus
+            // causing a deadlock.
+            //
+            // For this reason, we have decided to dispatcher the timer tick events back to the 
+            // "main" thread
         }
 
-        #region Events
         /// <summary>
         /// Occurs when the configuration has changed.
         /// </summary>
-        public event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
-        #endregion
+        public event EventHandler<ConfigurationChangedEventArgs>? ConfigurationChanged;
 
-        #region Methods
         /// <summary>
         /// Gets the configuration file name for the specified application data target.
         /// </summary>
@@ -122,7 +121,7 @@ namespace Catel.Configuration
         /// <returns>Returns the full configuration filename for the specified application data target.</returns>
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget)
         {
-            var filename = Path.Combine(_appDataService.GetApplicationDataDirectory(applicationDataTarget), "configuration.xml");
+            var filename = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(applicationDataTarget), "configuration.xml");
             return filename;
         }
 
@@ -153,94 +152,76 @@ namespace Catel.Configuration
                 });
         }
 
-        /// <summary>
-        /// Gets the configuration value.
-        /// </summary>
-        /// <typeparam name="T">The type of the value to retrieve.</typeparam>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
-        /// <returns>The configuration value.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual T GetValue<T>(ConfigurationContainer container, string key, T defaultValue = default(T))
+        /// <inheritdoc />
+        public virtual T GetValue<T>(ConfigurationContainer container, string key, T defaultValue = default!)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             key = GetFinalKey(key);
 
-            lock (GetLockObject(container))
+            try
             {
-                try
+                var value = string.Empty;
+
+                var lockObject = GetLockObject(container);
+                using (lockObject.Lock())
                 {
                     if (!ValueExists(container, key))
                     {
                         return defaultValue;
                     }
 
-                    var value = GetValueFromStore(container, key);
-                    if (value is null)
-                    {
-                        return defaultValue;
-                    }
-
-                    // ObjectConverterService doesn't support object, but just return the value as is
-                    if (typeof(T) == typeof(object))
-                    {
-                        return (T)(object)value;
-                    }
-
-                    return (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture);
+                    value = GetValueFromStore(container, key);
                 }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, $"Failed to retrieve configuration value '{container}.{key}', returning default value");
 
+                if (value is null)
+                {
                     return defaultValue;
                 }
+
+                // ObjectConverterService doesn't support object, but just return the value as is
+                if (typeof(T) == typeof(object))
+                {
+                    return (T)(object)value;
+                }
+
+                var finalValue = (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture)!;
+                return finalValue;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
+
+                return defaultValue;
             }
         }
 
-        /// <summary>
-        /// Sets the configuration value.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual void SetValue(ConfigurationContainer container, string key, object value)
+        /// <inheritdoc />
+        public virtual void SetValue(ConfigurationContainer container, string key, object? value)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             var originalKey = key;
             key = GetFinalKey(key);
-            var raiseEvent = false;
 
-            lock (GetLockObject(container))
+            var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
+            var existingValue = string.Empty;
+
+            var lockObject = GetLockObject(container);
+            using (lockObject.Lock())
             {
-                var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
-                var existingValue = GetValueFromStore(container, key);
+                existingValue = GetValueFromStore(container, key);
 
                 SetValueToStore(container, key, stringValue);
-
-                if (!string.Equals(stringValue, existingValue))
-                {
-                    raiseEvent = true;
-                }
             }
 
-            if (raiseEvent)
+            if (!string.Equals(stringValue, existingValue))
             {
                 RaiseConfigurationChanged(container, originalKey, value);
             }
         }
 
-        /// <summary>
-        /// Determines whether the specified value is available.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        /// <inheritdoc />
         public virtual bool IsValueAvailable(ConfigurationContainer container, string key)
         {
             Argument.IsNotNullOrWhitespace("key", key);
@@ -250,18 +231,13 @@ namespace Catel.Configuration
             return ValueExists(container, key);
         }
 
-        /// <summary>
-        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public virtual void InitializeValue(ConfigurationContainer container, string key, object defaultValue)
+        /// <inheritdoc />
+        public virtual void InitializeValue(ConfigurationContainer container, string key, object? defaultValue)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (lockObject.Lock())
             {
                 if (!IsValueAvailable(container, key))
                 {
@@ -270,46 +246,79 @@ namespace Catel.Configuration
             }
         }
 
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// Sets the roaming config file path.
-        /// </summary>
-        /// <param name="filePath">The file path. </param>
-        public virtual void SetRoamingConfigFilePath(string filePath)
+        /// <inheritdoc />
+        public virtual async Task SetRoamingConfigFilePathAsync(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting roaming config file path to '{filePath}'");
 
-            lock (GetLockObject(ConfigurationContainer.Roaming))
+            var lockObject = GetLockObject(ConfigurationContainer.Roaming);
+            using (await lockObject.LockAsync())
             {
                 _roamingConfigFilePath = filePath;
-                _roamingConfiguration = LoadConfiguration(filePath);
+                _roamingConfiguration = await LoadConfigurationAsync(filePath);
             }
         }
 
-        /// <summary>
-        /// Sets the roaming config file path.
-        /// </summary>
-        /// <param name="filePath">The file path. </param>
-        public virtual void SetLocalConfigFilePath(string filePath)
+        /// <inheritdoc />
+        public virtual async Task SetLocalConfigFilePathAsync(string filePath)
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
             Log.Debug($"Setting local config file path to '{filePath}'");
 
-            lock (GetLockObject(ConfigurationContainer.Local))
+            var lockObject = GetLockObject(ConfigurationContainer.Local);
+            using (await lockObject.LockAsync())
             {
                 _localConfigFilePath = filePath;
-                _localConfiguration = LoadConfiguration(filePath);
+                _localConfiguration = await LoadConfigurationAsync(filePath);
             }
         }
 
-        protected virtual DynamicConfiguration LoadConfiguration(string fileName)
+        /// <inheritdoc />
+        public virtual async Task LoadAsync(ConfigurationContainer configuration)
+        {
+            switch (configuration)
+            {
+                case ConfigurationContainer.Local:
+                    if (_localConfiguration is null)
+                    {
+                        var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
+                        await SetLocalConfigFilePathAsync(defaultLocalConfigFilePath);
+                    }
+                    break;
+
+                case ConfigurationContainer.Roaming:
+                    if (_roamingConfiguration is null)
+                    {
+                        var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
+                        await SetRoamingConfigFilePathAsync(defaultRoamingConfigFilePath);
+                    }
+                    break;
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual async Task SaveAsync(ConfigurationContainer configuration)
+        {
+            switch (configuration)
+            {
+                case ConfigurationContainer.Local:
+                    await SaveLocalConfigurationAsync();
+                    break;
+
+                case ConfigurationContainer.Roaming:
+                    await SaveRoamingConfigurationAsync();
+                    break;
+            }
+        }
+
+        protected virtual async Task<DynamicConfiguration> LoadConfigurationAsync(string source)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            if (!File.Exists(fileName))
+            if (!File.Exists(source))
             {
                 // No file, we can really start from scratch
                 return new DynamicConfiguration();
@@ -320,14 +329,24 @@ namespace Catel.Configuration
             {
                 try
                 {
-                    using (var fileStream = File.Open(fileName, FileMode.Open))
+                    using (var fileStream = File.Open(source, FileMode.Open))
                     {
                         if (!fileStream.CanRead)
                         {
                             continue;
                         }
 
+                        if (fileStream.Length == 0)
+                        {
+                            return new DynamicConfiguration();
+                        }
+
                         var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
+                        if (configuration is null)
+                        {
+                            return new DynamicConfiguration();
+                        }
+
                         return configuration;
                     }
                 }
@@ -337,9 +356,8 @@ namespace Catel.Configuration
                 }
             }
 
-            throw Log.ErrorAndCreateException<InvalidOperationException>($"File '{fileName}' could not be used to load the configuration, it was locked for too long");
+            throw Log.ErrorAndCreateException<InvalidOperationException>($"File '{source}' could not be used to load the configuration, it was locked for too long");
         }
-#endif
 
         /// <summary>
         /// Determines whether the specified key value exists in the configuration.
@@ -349,19 +367,16 @@ namespace Catel.Configuration
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
         protected virtual bool ValueExists(ConfigurationContainer container, string key)
         {
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (lockObject.Lock())
             {
-#if (XAMARIN && !ANDROID)
-                throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
-#elif ANDROID
-                return _preferences.Contains(key);
-#elif UWP
                 var settings = GetSettingsContainer(container);
-                return settings.Values.ContainsKey(key);
-#else
-                var settings = GetSettingsContainer(container);
+                if (settings is null)
+                {
+                    return false;
+                }
+
                 return settings.IsConfigurationValueSet(key);
-#endif
             }
         }
 
@@ -373,19 +388,16 @@ namespace Catel.Configuration
         /// <returns>The value.</returns>
         protected virtual string GetValueFromStore(ConfigurationContainer container, string key)
         {
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (lockObject.Lock())
             {
-#if (XAMARIN && !ANDROID)
-                throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
-#elif ANDROID
-                return _preferences.GetString(key, null);
-#elif UWP
                 var settings = GetSettingsContainer(container);
-                return (string)settings.Values[key];
-#else
-                var settings = GetSettingsContainer(container);
-                return settings.GetConfigurationValue<string>(key, string.Empty);
-#endif
+                if (settings is null)
+                {
+                    return string.Empty;
+                }
+
+                return settings.GetConfigurationValue(key, string.Empty);
             }
         }
 
@@ -397,19 +409,14 @@ namespace Catel.Configuration
         /// <param name="value">The value.</param>
         protected virtual void SetValueToStore(ConfigurationContainer container, string key, string value)
         {
-            lock (GetLockObject(container))
+            var lockObject = GetLockObject(container);
+            using (lockObject.Lock())
             {
-#if (XAMARIN && !ANDROID)
-                throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
-#elif ANDROID
-                _preferences.Edit()
-                        .PutString(key, value)
-                        .Apply();
-#elif UWP
                 var settings = GetSettingsContainer(container);
-                settings.Values[key] = value;
-#else
-                var settings = GetSettingsContainer(container);
+                if (settings is null)
+                {
+                    return;
+                }
 
                 if (!settings.IsConfigurationValueSet(key))
                 {
@@ -419,7 +426,6 @@ namespace Catel.Configuration
                 settings.SetConfigurationValue(key, value);
 
                 ScheduleSaveConfiguration(container);
-#endif
             }
         }
 
@@ -435,7 +441,7 @@ namespace Catel.Configuration
             return key;
         }
 
-        protected object GetLockObject(ConfigurationContainer container)
+        protected AsyncLock GetLockObject(ConfigurationContainer container)
         {
             switch (container)
             {
@@ -449,7 +455,7 @@ namespace Catel.Configuration
             throw Log.ErrorAndCreateException<InvalidOperationException>($"Container type '{container}' has no lock object");
         }
 
-        protected void RaiseConfigurationChanged(ConfigurationContainer container, string key, object value)
+        protected void RaiseConfigurationChanged(ConfigurationContainer container, string key, object? value)
         {
             if (_suspendNotifications)
             {
@@ -459,6 +465,5 @@ namespace Catel.Configuration
 
             ConfigurationChanged?.Invoke(this, new ConfigurationChangedEventArgs(container, key, value));
         }
-        #endregion
     }
 }

@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SlidingExpirationPolicyFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Caching.Policies
+﻿namespace Catel.Tests.Caching.Policies
 {
     using System;
 
@@ -32,7 +27,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsTrue()
             {
-                Assert.IsTrue(new SlidingExpirationPolicy(TimeSpan.FromTicks(0)).CanReset);
+                Assert.That(new SlidingExpirationPolicy(TimeSpan.FromTicks(0)).CanReset, Is.True);
             }
 
             #endregion
@@ -55,7 +50,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsTrueIfTheExpirationDateTimeIsThePass()
             {
-                Assert.IsTrue(new SlidingExpirationPolicy(TimeSpan.FromDays(-1)).IsExpired);
+                Assert.That(new SlidingExpirationPolicy(TimeSpan.FromDays(-1)).IsExpired, Is.True);
             }
 
             /// <summary>
@@ -64,7 +59,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsFalseIfTheExpirationDateTimeIsTheFuture()
             {
-                Assert.IsFalse(new SlidingExpirationPolicy(TimeSpan.FromDays(1)).IsExpired);
+                Assert.That(new SlidingExpirationPolicy(TimeSpan.FromDays(1)).IsExpired, Is.False);
             }
 
             #endregion
@@ -91,10 +86,10 @@ namespace Catel.Tests.Caching.Policies
 
                 ThreadHelper.Sleep(500);
 
-                Assert.IsTrue(policy.IsExpired);
+                Assert.That(policy.IsExpired, Is.True);
 
                 policy.Reset();
-                Assert.IsFalse(policy.IsExpired);
+                Assert.That(policy.IsExpired, Is.False);
             }
 
             #endregion

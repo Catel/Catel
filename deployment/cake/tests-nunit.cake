@@ -1,4 +1,4 @@
-#tool "nuget:?package=NUnit.ConsoleRunner&version=3.12.0"
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.16.3"
 
 //-------------------------------------------------------------
 
@@ -6,7 +6,7 @@ private static void RunTestsUsingNUnit(BuildContext buildContext, string project
 {
     var testFile = System.IO.Path.Combine(GetProjectOutputDirectory(buildContext, projectName),
         testTargetFramework, $"{projectName}.dll");
-    var resultsFile = string.Format("{0}testresults.xml", testResultsDirectory);
+    var resultsFile = System.IO.Path.Combine(testResultsDirectory, "testresults.xml");
 
     var nunitSettings = new NUnit3Settings
     {

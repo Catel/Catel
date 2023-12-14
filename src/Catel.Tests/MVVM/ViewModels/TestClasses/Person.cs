@@ -1,21 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Person.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
     public interface IPerson
     {
-        #region Properties
         string FirstName { get; set; }
         string MiddleName { get; set; }
         string LastName { get; set; }
@@ -23,31 +14,22 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         uint Age { get; set; }
 
         IContactInfo ContactInfo { get; set; }
-        #endregion
     }
 
     public interface IContactInfo
     {
-        #region Properties
         string Street { get; set; }
         string City { get; set; }
         string Email { get; set; }
-        #endregion
     }
 
     /// <summary>
     /// Person Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class Person : ValidatableModelBase, IPerson
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
@@ -55,20 +37,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
         }
 
-#if NET || NETCORE
-        /// <summary>
-        /// Initializes a new object based on <see cref="SerializationInfo"/>.
-        /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-        /// <param name="context"><see cref="StreamingContext"/>.</param>
-        protected Person(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Gets or sets the FirstName.
         /// </summary>
@@ -81,7 +49,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), string.Empty);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
 
         /// <summary>
         /// Gets or sets the middle name.
@@ -95,7 +63,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string), string.Empty);
+        public static readonly IPropertyData MiddleNameProperty = RegisterProperty("MiddleName", string.Empty);
 
         /// <summary>
         /// Gets or sets the last name.
@@ -109,7 +77,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof (string), string.Empty);
+        public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", string.Empty);
 
         /// <summary>
         /// Gets a readonly property.
@@ -123,7 +91,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the MyReadOnlyProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MyReadOnlyPropertyProperty = RegisterProperty("MyReadOnlyProperty", typeof (object));
+        public static readonly IPropertyData MyReadOnlyPropertyProperty = RegisterProperty<object>("MyReadOnlyProperty");
 
         /// <summary>
         /// Gets or sets the contact info.
@@ -135,7 +103,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<Person, uint>(model => model.Age);
+        public static readonly IPropertyData AgeProperty = RegisterProperty<Person, uint>(model => model.Age);
 
         public uint Age
         {
@@ -146,10 +114,8 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof (IContactInfo), () => new ContactInfo());
-        #endregion
+        public static readonly IPropertyData ContactInfoProperty = RegisterProperty<IContactInfo>("ContactInfo", () => new ContactInfo());
 
-        #region Methods
         public void ClearIsDirty()
         {
             IsDirty = false;
@@ -185,19 +151,15 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
                 validationResults.Add(BusinessRuleValidationResult.CreateWarning("No middle name"));
             }
         }
-        #endregion
     }
 
     /// <summary>
     /// PersonWithDataAnnotations Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class PersonWithDataAnnotations : ValidatableModelBase, IPerson
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
@@ -205,20 +167,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
         }
 
-#if NET || NETCORE
-        /// <summary>
-        /// Initializes a new object based on <see cref="SerializationInfo"/>.
-        /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-        /// <param name="context"><see cref="StreamingContext"/>.</param>
-        protected PersonWithDataAnnotations(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Gets or sets the FirstName.
         /// </summary>
@@ -232,7 +180,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), string.Empty);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
 
         /// <summary>
         /// Gets or sets the middle name.
@@ -246,7 +194,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string), string.Empty);
+        public static readonly IPropertyData MiddleNameProperty = RegisterProperty("MiddleName", string.Empty);
 
         /// <summary>
         /// Gets or sets the last name.
@@ -259,7 +207,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+        public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", string.Empty);
 
         public uint Age
         {
@@ -270,7 +218,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<PersonWithDataAnnotations, uint>(model => model.Age);
+        public static readonly IPropertyData AgeProperty = RegisterProperty<PersonWithDataAnnotations, uint>(model => model.Age);
 
         /// <summary>
         /// Gets or sets the contact info.
@@ -284,23 +232,16 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof (IContactInfo), () => new ContactInfo());
-        #endregion
+        public static readonly IPropertyData ContactInfoProperty = RegisterProperty<IContactInfo>("ContactInfo", () => new ContactInfo());
     }
 
     /// <summary>
     /// ContactInfo Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ContactInfo : ModelBase, IContactInfo
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
@@ -308,20 +249,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
         }
 
-#if NET || NETCORE
-        /// <summary>
-        /// Initializes a new object based on <see cref="SerializationInfo"/>.
-        /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-        /// <param name="context"><see cref="StreamingContext"/>.</param>
-        protected ContactInfo(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Gets or sets the street.
         /// </summary>
@@ -334,7 +261,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Street property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData StreetProperty = RegisterProperty("Street", typeof (string), string.Empty);
+        public static readonly IPropertyData StreetProperty = RegisterProperty("Street", string.Empty);
 
         /// <summary>
         /// Gets or sets the city.
@@ -348,7 +275,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the City property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData CityProperty = RegisterProperty("City", typeof (string), string.Empty);
+        public static readonly IPropertyData CityProperty = RegisterProperty("City", string.Empty);
 
         /// <summary>
         /// Gets or sets the email.
@@ -362,10 +289,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Email property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData EmailProperty = RegisterProperty("Email", typeof (string), string.Empty);
-        #endregion
-
-        #region Methods
-        #endregion
+        public static readonly IPropertyData EmailProperty = RegisterProperty("Email", string.Empty);
     }
 }

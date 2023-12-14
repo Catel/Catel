@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObservableDictionaryFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2019 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Collections
+﻿namespace Catel.Tests.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -36,7 +29,7 @@ namespace Catel.Tests.Collections
                     }
                 };
 
-                Assert.AreEqual(defaultComparer, observableDictionary.Comparer);
+                Assert.That(observableDictionary.Comparer, Is.EqualTo(defaultComparer));
             }
 
             [Test]
@@ -51,7 +44,7 @@ namespace Catel.Tests.Collections
                     }
                 };
 
-                Assert.AreEqual(customComparer, observableDictionary.Comparer);
+                Assert.That(observableDictionary.Comparer, Is.EqualTo(customComparer));
             }
         }
 
@@ -81,7 +74,7 @@ namespace Catel.Tests.Collections
 
                 observableDictionary.Add(1, null);
 
-                Assert.IsNull(observableDictionary[1]);
+                Assert.That(observableDictionary[1], Is.Null);
             }
 
             [Test]
@@ -94,16 +87,16 @@ namespace Catel.Tests.Collections
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
 
                 observableDictionary.Add(new KeyValuePair<int, int>(1, 1));
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 observableDictionary.Add(new KeyValuePair<int, int>(2, 2));
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 observableDictionary.Add(new KeyValuePair<int, int>(3, 3));
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 observableDictionary.Add(new KeyValuePair<int, int>(4, 4));
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
 
             [Test]
@@ -116,16 +109,16 @@ namespace Catel.Tests.Collections
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
 
                 observableDictionary.Add((object)1, (object)1);
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 observableDictionary.Add((object)2, (object)2);
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 observableDictionary.Add((object)3, (object)3);
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 observableDictionary.Add((object)4, (object)4);
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
 
             [Test]
@@ -138,16 +131,16 @@ namespace Catel.Tests.Collections
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
 
                 observableDictionary.Add(1, 1);
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 observableDictionary.Add(2, 2);
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 observableDictionary.Add(3, 3);
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 observableDictionary.Add(4, 4);
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
         }
 
@@ -170,7 +163,7 @@ namespace Catel.Tests.Collections
 
                 observableDictionary.Clear();
 
-                Assert.IsTrue(wasRaised && observableDictionary.Count == 0);
+                Assert.That(wasRaised && observableDictionary.Count == 0, Is.True);
             }
         }
 
@@ -189,7 +182,7 @@ namespace Catel.Tests.Collections
 
                 var result = observableDictionary.Contains(new KeyValuePair<int, int>(1, 2));
 
-                Assert.IsTrue(result);
+                Assert.That(result, Is.True);
             }
 
             [Test]
@@ -204,7 +197,7 @@ namespace Catel.Tests.Collections
 
                 var result = observableDictionary.Contains((object)1);
 
-                Assert.IsTrue(result);
+                Assert.That(result, Is.True);
             }
 
             [Test]
@@ -219,7 +212,7 @@ namespace Catel.Tests.Collections
 
                 var result = observableDictionary.Contains((object)2);
 
-                Assert.IsFalse(result);
+                Assert.That(result, Is.False);
             }
 
             [Test]
@@ -234,7 +227,7 @@ namespace Catel.Tests.Collections
 
                 var result = observableDictionary.Contains((object)"1");
 
-                Assert.IsFalse(result);
+                Assert.That(result, Is.False);
             }
         }
 
@@ -253,7 +246,7 @@ namespace Catel.Tests.Collections
 
                 var success = observableDictionary.ContainsKey(1);
 
-                Assert.IsTrue(success);
+                Assert.That(success, Is.True);
             }
 
             [Test]
@@ -268,7 +261,7 @@ namespace Catel.Tests.Collections
 
                 var success = observableDictionary.ContainsKey(2);
 
-                Assert.IsFalse(success);
+                Assert.That(success, Is.False);
             }
         }
 
@@ -292,7 +285,7 @@ namespace Catel.Tests.Collections
 
                 observableDictionary.CopyTo(arr, 0);
 
-                Assert.IsTrue(arr.Length == 2);
+                Assert.That(arr.Length, Is.EqualTo(2));
             }
             [Test]
             public void PopulatesKvpArray()
@@ -311,7 +304,7 @@ namespace Catel.Tests.Collections
 
                 observableDictionary.CopyTo(arr, 0);
 
-                Assert.IsTrue(arr.Length == 2);
+                Assert.That(arr.Length, Is.EqualTo(2));
             }
         }
 
@@ -336,16 +329,16 @@ namespace Catel.Tests.Collections
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
 
                 observableDictionary[(object)1] = 1;
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 observableDictionary[(object)2] = 2;
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 observableDictionary[(object)3] = 3;
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 observableDictionary[(object)4] = 4;
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
 
             [Test]
@@ -358,16 +351,16 @@ namespace Catel.Tests.Collections
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
 
                 observableDictionary[1] = 1;
-                Assert.AreEqual(1, counter);
+                Assert.That(counter, Is.EqualTo(1));
 
                 observableDictionary[2] = 2;
-                Assert.AreEqual(2, counter);
+                Assert.That(counter, Is.EqualTo(2));
 
                 observableDictionary[3] = 3;
-                Assert.AreEqual(3, counter);
+                Assert.That(counter, Is.EqualTo(3));
 
                 observableDictionary[4] = 4;
-                Assert.AreEqual(4, counter);
+                Assert.That(counter, Is.EqualTo(4));
             }
 
             [Test]
@@ -386,7 +379,7 @@ namespace Catel.Tests.Collections
 
                 observableDictionary[(object)1] = 3;
 
-                Assert.IsTrue(isUpdated);
+                Assert.That(isUpdated, Is.True);
             }
 
             [Test]
@@ -405,7 +398,7 @@ namespace Catel.Tests.Collections
 
                 observableDictionary[1] = 3;
 
-                Assert.IsTrue(isUpdated);
+                Assert.That(isUpdated, Is.True);
             }
 
             [Test]
@@ -420,7 +413,7 @@ namespace Catel.Tests.Collections
 
                 var result = observableDictionary[(object)"1"];
 
-                Assert.IsNull(result);
+                Assert.That(result, Is.Null);
             }
         }
 
@@ -442,7 +435,7 @@ namespace Catel.Tests.Collections
                 observableDictionary.CollectionChanged += (sender, args) => counter--;
 
                 observableDictionary.Remove(1);
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
         }
 
@@ -461,7 +454,7 @@ namespace Catel.Tests.Collections
 
                 var success = observableDictionary.TryGetValue(1, out int value);
 
-                Assert.IsTrue(success && value == 1);
+                Assert.That(success && value == 1, Is.True);
             }
 
             [Test]
@@ -476,7 +469,7 @@ namespace Catel.Tests.Collections
 
                 var success = observableDictionary.TryGetValue(2, out int value);
 
-                Assert.IsTrue(!success && value == 0);
+                Assert.That(!success && value == 0, Is.True);
             }
         }
     }

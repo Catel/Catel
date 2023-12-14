@@ -1,14 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyDataTypeInfoFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
-    using System;
-    using System.Linq;
     using Catel.Data;
 
     using NUnit.Framework;
@@ -32,17 +23,17 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the CatelProperty property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData CatelPropertyProperty = RegisterProperty("CatelProperty", typeof(string), null);
+            public static readonly IPropertyData CatelPropertyProperty = RegisterProperty("CatelProperty", typeof(string), null);
         }
 
         [TestCase]
         public void CorrectlyRegistersCatelProperties()
         {
-            var catelTypeInfo = new CatelTypeInfo(typeof (CatelTypeInfoTestModel));
+            var catelTypeInfo = new CatelTypeInfo(typeof(CatelTypeInfoTestModel));
 
             var properties = catelTypeInfo.GetCatelProperties();
-            Assert.AreNotEqual(0, properties.Count);
-            Assert.IsTrue(properties.Keys.Contains("CatelProperty"));
+            Assert.That(properties.Count, Is.Not.EqualTo(0));
+            Assert.That(properties.Keys.Contains("CatelProperty"), Is.True);
         }
 
         [TestCase]
@@ -51,8 +42,8 @@ namespace Catel.Tests.Data
             var catelTypeInfo = new CatelTypeInfo(typeof(CatelTypeInfoTestModel));
 
             var properties = catelTypeInfo.GetNonCatelProperties();
-            Assert.AreNotEqual(0, properties.Count);
-            Assert.IsTrue(properties.Keys.Contains("NormalProperty"));
+            Assert.That(properties.Count, Is.Not.EqualTo(0));
+            Assert.That(properties.Keys.Contains("NormalProperty"), Is.True);
         }
     }
 }

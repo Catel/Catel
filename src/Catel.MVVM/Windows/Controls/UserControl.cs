@@ -1,32 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserControl.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls
 {
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using Catel.Threading;
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
-    using Catel.Reflection;
 
-#if UWP
-    using global::Windows.UI;
-    using global::Windows.UI.Xaml;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Markup;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// <see cref="UserControl"/> that supports MVVM by using a <see cref="IViewModel"/> typed parameter.
@@ -45,21 +28,14 @@ namespace Catel.Windows.Controls
     ///   </item>
     /// </list>
     /// </remarks>
-#if UWP
-    public class UserControl : global::Windows.UI.Xaml.Controls.UserControl, IUserControl
-#else
     public class UserControl : System.Windows.Controls.UserControl, IUserControl
-#endif
     {
-        #region Fields
         private readonly UserControlLogic _logic;
 
-        private event EventHandler<EventArgs> _viewLoaded;
-        private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        #endregion
+        private event EventHandler<EventArgs>? _viewLoaded;
+        private event EventHandler<EventArgs>? _viewUnloaded;
+        private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs>? _viewDataContextChanged;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UserControl"/> class.
         /// </summary>
@@ -73,7 +49,9 @@ namespace Catel.Windows.Controls
         /// Initializes a new instance of the <see cref="UserControl"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        public UserControl(IViewModel viewModel)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public UserControl(IViewModel? viewModel)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -86,12 +64,6 @@ namespace Catel.Windows.Controls
 
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET && !NETCORE
-                // WPF already calls this method automatically
-                OnPropertyChanged(e);
-
-                PropertyChanged?.Invoke(this, e);
-#else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
@@ -99,7 +71,6 @@ namespace Catel.Windows.Controls
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
-#endif
             };
 
             _logic.ViewModelClosedAsync += OnViewModelClosedAsync;
@@ -128,9 +99,7 @@ namespace Catel.Windows.Controls
 
             this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
@@ -140,45 +109,12 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the view model container should prevent the 
-        /// creation of a view model.
-        /// <para />
-        /// This property is very useful when using views in transitions where the view model is no longer required.
-        /// </summary>
-        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public bool PreventViewModelCreation
-        {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<UserControlLogic>(x => x.PreventViewModelCreation = value); }
-        }
-
-        /// <summary>
         /// Gets the view model that is contained by the container.
         /// </summary>
         /// <value>The view model.</value>
-        public IViewModel ViewModel
+        public IViewModel? ViewModel
         {
-            get { return _logic.GetValue<UserControlLogic, IViewModel>(x => x.ViewModel); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the user control should close any existing
-        /// view model when the control is unloaded from the visual tree.
-        /// <para />
-        /// Set this property to <c>false</c> if a view model should be kept alive and re-used
-        /// for unloading/loading instead of creating a new one.
-        /// <para />
-        /// By default, this value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
-        /// </value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.PartlyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public bool CloseViewModelOnUnloaded
-        {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.CloseViewModelOnUnloaded, true); }
-            set { _logic.SetValue<UserControlLogic>(x => x.CloseViewModelOnUnloaded = value); }
+            get { return _logic.GetValue<UserControlLogic, IViewModel?>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -249,7 +185,6 @@ namespace Catel.Windows.Controls
             set { UserControlLogic.DefaultUnloadBehaviorValue = value; }
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -315,7 +250,6 @@ namespace Catel.Windows.Controls
             get { return UserControlLogic.DefaultCreateWarningAndErrorValidatorForViewModelValue; }
             set { UserControlLogic.DefaultCreateWarningAndErrorValidatorForViewModelValue = value; }
         }
-#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether the user control should automatically be disabled when there is no
@@ -330,20 +264,6 @@ namespace Catel.Windows.Controls
             set { _logic.SetValue<UserControlLogic>(x => x.DisableWhenNoViewModel = value); }
         }
 
-#if !NET && !NETCORE && !UWP
-        /// <summary>
-        /// Gets a value indicating whether this instance is loaded.
-        /// </summary>
-        /// <value><c>true</c> if this instance is loaded; otherwise, <c>false</c>.</value>
-        public bool IsLoaded
-        {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.IsTargetViewLoaded, true); }
-        }
-#endif
-
-        #endregion
-
-        #region Events
         /// <summary>
         /// Occurs when a property on the container has changed.
         /// </summary>
@@ -351,22 +271,22 @@ namespace Catel.Windows.Controls
         /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
         /// (mostly the container of a view model) because the .NET Framework does not allows us to.
         /// </remarks>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> property has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ViewModelChanged;
+        public event EventHandler<EventArgs>? ViewModelChanged;
 
         /// <summary>
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
 
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Loaded
+        event EventHandler<EventArgs>? IView.Loaded
         {
             add { _viewLoaded += value; }
             remove { _viewLoaded -= value; }
@@ -375,7 +295,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Unloaded
+        event EventHandler<EventArgs>? IView.Unloaded
         {
             add { _viewUnloaded += value; }
             remove { _viewUnloaded -= value; }
@@ -384,14 +304,12 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> IView.DataContextChanged
+        event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs>? IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
         }
-        #endregion
 
-        #region Methods
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
@@ -414,7 +332,6 @@ namespace Catel.Windows.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Adds a specified object as the child of a System.Windows.Controls.ContentControl.
         /// </summary>
@@ -426,7 +343,7 @@ namespace Catel.Windows.Controls
             if (!CatelEnvironment.IsInDesignMode)
             {
                 var wrapper = _logic.CreateViewModelWrapper(true);
-                if (wrapper != null)
+                if (wrapper is not null)
                 {
                     // Pass on to the grid
                     ((IAddChild)Content).AddChild(value);
@@ -436,7 +353,6 @@ namespace Catel.Windows.Controls
 
             base.AddChild(value);
         }
-#endif
 
         /// <summary>
         /// Called when the <see cref="ViewModel"/> has changed.
@@ -465,7 +381,7 @@ namespace Catel.Windows.Controls
 
         protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -491,8 +407,5 @@ namespace Catel.Windows.Controls
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
         }
-        #endregion
     }
 }
-
-#endif

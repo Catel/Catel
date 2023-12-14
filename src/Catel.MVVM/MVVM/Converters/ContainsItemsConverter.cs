@@ -1,20 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ContainsItemsConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Collections;
+    using Catel.Data;
 
     /// <summary>
     /// Converter that converts whether a collection contains items or not.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(IEnumerable), typeof(bool))]
-#endif
     public class ContainsItemsConverter : ValueConverterBase
     {
         /// <summary>
@@ -24,20 +17,20 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var containsItems = false;
 
-            if (value != null)
+            if (value is not null)
             {
                 var collection = value as ICollection;
-                if (collection != null && collection.Count > 0)
+                if (collection is not null && collection.Count > 0)
                 {
                     containsItems = true;
                 }
 
                 var enumerable = value as IEnumerable;
-                if (!containsItems && enumerable != null)
+                if (!containsItems && enumerable is not null)
                 {
                     // TODO: Would MoveNext + reset be better?
                     //var item = enumerable.GetEnumerator();
@@ -56,7 +49,7 @@ namespace Catel.MVVM.Converters
                 containsItems = !containsItems;
             }
 
-            return containsItems;
+            return BoxingCache.GetBoxedValue(containsItems);
         }
     }
 }

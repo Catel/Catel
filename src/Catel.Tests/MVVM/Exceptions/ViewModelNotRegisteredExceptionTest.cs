@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelNotRegisteredExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Exceptions
+﻿namespace Catel.Tests.MVVM.Exceptions
 {
     using Catel.MVVM;
 
@@ -23,7 +17,7 @@ namespace Catel.Tests.MVVM.Exceptions
             }
             catch (ViewModelNotRegisteredException ex)
             {
-                Assert.AreEqual(typeof(ViewModelBase), ex.ViewModelType);
+                Assert.That(ex.ViewModelType, Is.EqualTo(typeof(ViewModelBase)));
             }
         }
         #endregion

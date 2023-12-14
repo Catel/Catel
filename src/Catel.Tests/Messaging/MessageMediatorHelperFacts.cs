@@ -1,14 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageMediatorHelperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging
 {
     using System;
     using Catel.Messaging;
-    using Catel.Reflection;
     using NUnit.Framework;
 
     public class MessageMediatorHelperFacts
@@ -19,7 +12,7 @@ namespace Catel.Tests.Messaging
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => MessageMediatorHelper.SubscribeRecipient(null));
+                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.SubscribeRecipient(null));
             }
 
             [TestCase]
@@ -28,16 +21,16 @@ namespace Catel.Tests.Messaging
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test");
                 messageMediator.SendMessage("test 2");
 
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(2));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -46,16 +39,16 @@ namespace Catel.Tests.Messaging
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test", "tag");
                 messageMediator.SendMessage("test 2", "tag");
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);              
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(2));
             }
         }
 
@@ -65,7 +58,7 @@ namespace Catel.Tests.Messaging
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => MessageMediatorHelper.UnsubscribeRecipient(null));
+                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.UnsubscribeRecipient(null));
             }
 
             [TestCase]
@@ -74,24 +67,24 @@ namespace Catel.Tests.Messaging
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test");
                 messageMediator.SendMessage("test 2");
 
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(2));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.UnsubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test 3");
                 messageMediator.SendMessage("test 4");
 
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(2));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -100,24 +93,24 @@ namespace Catel.Tests.Messaging
                 var messageMediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(0));
 
                 recipient.SubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test", "tag");
                 messageMediator.SendMessage("test 2", "tag");
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(2));
 
                 recipient.UnsubscribeViaMessageMediatorHelper(messageMediator);
 
                 messageMediator.SendMessage("test 3", "tag");
                 messageMediator.SendMessage("test 4", "tag");
 
-                Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithoutTag);
-                Assert.AreEqual(2, recipient.MessagesReceivedViaMessageMediatorWithTag);
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
+                Assert.That(recipient.MessagesReceivedViaMessageMediatorWithTag, Is.EqualTo(2));
             }
         }
     }

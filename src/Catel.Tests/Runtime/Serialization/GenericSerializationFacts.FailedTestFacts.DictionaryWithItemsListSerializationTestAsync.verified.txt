@@ -1,0 +1,12 @@
+﻿{
+  Items: [
+    {
+      Name: Part of list
+    }
+  ],
+  Roots: {
+    Key: {
+      Name: Part of dictionary
+    }
+  }
+}

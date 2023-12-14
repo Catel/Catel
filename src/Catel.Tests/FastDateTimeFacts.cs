@@ -1,33 +1,25 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FastDateTimeFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using System.Threading.Tasks;
-    using Catel.Threading;
     using NUnit.Framework;
 
     [TestFixture]
     public class FastDateTimeFacts
     {
         [Test]
-        public async Task ReturnsCorrectDateTime_Now()
+        public async Task ReturnsCorrectDateTime_NowAsync()
         {
-            await ValidateDateTimeRetrieval(() => DateTime.Now, () => FastDateTime.Now);
+            await ValidateDateTimeRetrievalAsync(() => DateTime.Now, () => FastDateTime.Now);
         }
 
         [Test]
-        public async Task ReturnsCorrectDateTime_UtcNow()
+        public async Task ReturnsCorrectDateTime_UtcNowAsync()
         {
-            await ValidateDateTimeRetrieval(() => DateTime.UtcNow, () => FastDateTime.UtcNow);
+            await ValidateDateTimeRetrievalAsync(() => DateTime.UtcNow, () => FastDateTime.UtcNow);
         }
 
-        private async Task ValidateDateTimeRetrieval(Func<DateTime> normal, Func<DateTime> fast)
+        private async Task ValidateDateTimeRetrievalAsync(Func<DateTime> normal, Func<DateTime> fast)
         {
             var normalNow1 = normal();
             var fastNow1 = fast();
@@ -38,9 +30,9 @@ namespace Catel.Tests
                 delta1 = TimeSpan.FromMilliseconds(delta1.TotalMilliseconds * -1);
             }
 
-            Assert.IsTrue(delta1.TotalMilliseconds < 15);
+            Assert.That(delta1.TotalMilliseconds < 15, Is.True);
 
-            await TaskShim.Delay(5000);
+            await Task.Delay(5000);
 
             var normalNow2 = normal();
             var fastNow2 = fast();
@@ -51,7 +43,7 @@ namespace Catel.Tests
                 delta2 = TimeSpan.FromMilliseconds(delta2.TotalMilliseconds * -1);
             }
 
-            Assert.IsTrue(delta2.TotalMilliseconds < 15);
+            Assert.That(delta2.TotalMilliseconds < 15, Is.True);
         }
     }
 }

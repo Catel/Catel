@@ -1,15 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyHelper.expression.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Linq.Expressions;
     using System.Reflection;
     using Caching;
+    using Catel.Data;
     using Logging;
 
     /// <summary>
@@ -17,7 +12,7 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class PropertyHelper
     {
-        private static readonly ICacheStorage<string, string> _expressionNameCache = new CacheStorage<string, string>(); 
+        private static readonly ICacheStorage<string, string> ExpressionNameCache = new CacheStorage<string, string>(); 
 
         /// <summary>
         /// Gets the name of the property based on the expression.
@@ -29,7 +24,7 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName(Expression propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             return GetPropertyName(propertyExpression, allowNested, false);
         }
@@ -45,7 +40,7 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName<TValue>(Expression<Func<TValue>> propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             var body = propertyExpression.Body;
             return GetPropertyName(body, allowNested);
@@ -63,7 +58,7 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         public static string GetPropertyName<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, bool allowNested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             var body = propertyExpression.Body;
             return GetPropertyName(body, allowNested);
@@ -80,18 +75,18 @@ namespace Catel.Reflection
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
         private static string GetPropertyName(Expression propertyExpression, bool allowNested = false, bool nested = false)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             const string NoMemberExpression = "The expression is not a member access expression";
 
-            string cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, allowNested, nested);
+            var cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, BoxingCache.GetBoxedValue(allowNested), BoxingCache.GetBoxedValue(nested));
 
-            return _expressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
+            return ExpressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
             {
-                MemberExpression memberExpression;
+                MemberExpression? memberExpression;
 
                 var unaryExpression = propertyExpression as UnaryExpression;
-                if (unaryExpression != null)
+                if (unaryExpression is not null)
                 {
                     memberExpression = unaryExpression.Operand as MemberExpression;
                 }
@@ -107,8 +102,7 @@ namespace Catel.Reflection
                         return string.Empty;
                     }
 
-                    Log.Error(NoMemberExpression);
-                    throw new NotSupportedException(NoMemberExpression);
+                    throw Log.ErrorAndCreateException<NotSupportedException>(NoMemberExpression);
                 }
 
                 var propertyInfo = memberExpression.Member as PropertyInfo;
@@ -119,11 +113,10 @@ namespace Catel.Reflection
                         return string.Empty;
                     }
 
-                    Log.Error(NoMemberExpression);
-                    throw new NotSupportedException(NoMemberExpression);
+                    throw Log.ErrorAndCreateException<NotSupportedException>(NoMemberExpression);
                 }
 
-                if (allowNested && (memberExpression.Expression != null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
+                if (allowNested && (memberExpression.Expression is not null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
                 {
                     var propertyName = GetPropertyName(memberExpression.Expression, true, true);
 

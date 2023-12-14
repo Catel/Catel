@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -27,7 +22,7 @@ namespace Catel.Tests.MVVM.ViewModels
                     set { SetValue(FirstNameProperty, value); }
                 }
 
-                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
             }
 
             [TestCase]
@@ -40,11 +35,7 @@ namespace Catel.Tests.MVVM.ViewModels
                 var lastUpdated = DateTime.Now.Ticks + 1;
 
                 // Only full .NET supports reliable stopwatch, all other frameworks always assume outdated
-#if NET || NETCORE
-                Assert.IsFalse(vm.IsValidationSummaryOutdated(lastUpdated, true));
-#else
-                Assert.IsTrue(vm.IsValidationSummaryOutdated(lastUpdated, true));
-#endif
+                Assert.That(vm.IsValidationSummaryOutdated(lastUpdated, true), Is.False);
             }
 
             [TestCase]
@@ -59,7 +50,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
                 vm.FirstName = null;
 
-                Assert.IsTrue(vm.IsValidationSummaryOutdated(lastUpdated, true));
+                Assert.That(vm.IsValidationSummaryOutdated(lastUpdated, true), Is.True);
             }
         }
     }

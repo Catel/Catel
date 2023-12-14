@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionExtensions.assembly.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#pragma warning disable 1591
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using MethodTimer;
     using System;
     using System.Reflection;
-
-#if NETFX_CORE || NET || NETSTANDARD
-    using System.Linq;
-#endif
 
     /// <summary>
     /// Reflection extension class.
@@ -23,16 +11,7 @@ namespace Catel.Reflection
     {
         public static Type[] GetExportedTypesEx(this Assembly assembly)
         {
-            Argument.IsNotNull("assembly", assembly);
-
-            Type[] results = null;
-
-#if NETFX_CORE
-            results = assembly.ExportedTypes.ToArray();
-#else
-            results = assembly.GetExportedTypes();
-#endif
-
+            var results = assembly.GetExportedTypes();
             return results;
         }
 
@@ -41,21 +20,11 @@ namespace Catel.Reflection
 #endif
         public static Type[] GetTypesEx(this Assembly assembly)
         {
-            Argument.IsNotNull("assembly", assembly);
-
-            Type[] results = null;
-
-#if NETFX_CORE
-            results = (from type in assembly.DefinedTypes
-                       select type.AsType()).ToArray();
-#else
-            results = assembly.GetTypes();
-#endif
-
+            var results = assembly.GetTypes();
             return results;
         }
 
-        public static Attribute GetCustomAttributeEx(this Assembly assembly, Type attributeType)
+        public static Attribute? GetCustomAttributeEx(this Assembly assembly, Type attributeType)
         {
             var attributes = GetCustomAttributesEx(assembly, attributeType);
             return (attributes.Length > 0) ? attributes[0] : null;
@@ -63,14 +32,7 @@ namespace Catel.Reflection
 
         public static Attribute[] GetCustomAttributesEx(this Assembly assembly, Type attributeType)
         {
-            Argument.IsNotNull("assembly", assembly);
-            Argument.IsNotNull("attributeType", attributeType);
-
-#if NETFX_CORE
-            return assembly.GetCustomAttributes(attributeType).ToArray();
-#else
             return assembly.GetCustomAttributes(attributeType, true).ToAttributeArray();
-#endif
         }
     }
 }

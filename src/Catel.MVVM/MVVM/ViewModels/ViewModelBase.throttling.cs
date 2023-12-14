@@ -1,78 +1,45 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBase.throttling.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using Catel.Data;
     using Catel.Logging;
     using Catel.Services;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows.Threading;
-#endif
 
     public partial class ViewModelBase
     {
-        #region Fields
         /// <summary>
         /// The throttling timer.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly DispatcherTimer _throttlingTimer = new DispatcherTimer();
 
         /// <summary>
         /// The throttling rate.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private TimeSpan _throttlingRate = new TimeSpan(0);
 
         /// <summary>
         /// A value indicating whether throttling is enabled.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _isThrottlingEnabled;
 
         /// <summary>
         /// A value indicating whether throttling is currently being handled.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _isHandlingThrottlingNotifications;
 
         /// <summary>
         /// Lock object for throttling.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly object _throttlingLockObject = new object();
 
         /// <summary>
         /// The properties queue used when throttling is enabled.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private Dictionary<string, DateTime> _throttlingQueue = new Dictionary<string, DateTime>();
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="RaisePropertyChanged"/> will be dispatched using
         /// the <see cref="IDispatcherService"/>.
@@ -98,7 +65,7 @@ namespace Catel.MVVM
             }
             set
             {
-                Log.Debug("Updating throttling rate of view model '{0}' to an interval of '{1}' ms", UniqueIdentifier, value.TotalMilliseconds);
+                Log.Debug("Updating throttling rate of view model '{0}' to an interval of '{1}' ms", BoxingCache.GetBoxedValue(UniqueIdentifier), BoxingCache.GetBoxedValue(value.TotalMilliseconds));
 
                 _throttlingRate = value;
                 if (_throttlingRate.TotalMilliseconds.Equals(0d))
@@ -117,13 +84,11 @@ namespace Catel.MVVM
                     _throttlingTimer.Interval = _throttlingRate;
                     _throttlingTimer.Start();
 
-                    Log.Debug("Throttling is enabled because the throttling rate is set to '{0}' ms", _throttlingRate.TotalMilliseconds);
+                    Log.Debug("Throttling is enabled because the throttling rate is set to '{0}' ms", BoxingCache.GetBoxedValue(_throttlingRate.TotalMilliseconds));
                 }
             }
         }
-        #endregion
 
-        #region Methods
         partial void InitializeThrottling()
         {
             _throttlingTimer.Tick += (sender, e) => OnThrottlingTimerTick();
@@ -171,13 +136,13 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (_isThrottlingEnabled && !_isHandlingThrottlingNotifications)
             {
                 lock (_throttlingLockObject)
                 {
-                    _throttlingQueue[e.PropertyName] = FastDateTime.Now;
+                    _throttlingQueue[e.PropertyName ?? string.Empty] = FastDateTime.Now;
                 }
 
                 return;
@@ -192,8 +157,5 @@ namespace Catel.MVVM
                 base.RaisePropertyChanged(sender, e);
             }
         }
-        #endregion
     }
 }
-
-#endif

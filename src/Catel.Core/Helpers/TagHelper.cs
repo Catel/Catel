@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TagHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     /// <summary>
     /// Helper class for comparing tags.
@@ -24,7 +18,7 @@ namespace Catel
         /// <remarks>
         /// When both tags are <c>null</c>, the tags are considered equal.
         /// </remarks>
-        public static bool AreTagsEqual(object firstTag, object secondTag)
+        public static bool AreTagsEqual(object? firstTag, object? secondTag)
         {
             return ObjectHelper.AreEqual(firstTag, secondTag);
         }
@@ -35,7 +29,7 @@ namespace Catel
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
-        public static string ToString(object tag)
+        public static string? ToString(object? tag)
         {
             return ObjectToStringHelper.ToString(tag);
         }

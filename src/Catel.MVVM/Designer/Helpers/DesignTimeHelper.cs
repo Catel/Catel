@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DesignTimeHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Linq;
@@ -56,7 +49,7 @@ namespace Catel
                                 try
                                 {
                                     // Note: instantiating is sufficient
-                                    var initializer = (DesignTimeInitializer)Activator.CreateInstance(initializerType);
+                                    var initializer = Activator.CreateInstance(initializerType);
                                 }
                                 catch (Exception)
                                 {

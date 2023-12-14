@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using Data;
@@ -22,7 +16,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public static IViewModelCommandManager GetViewModelCommandManager(this ViewModelBase viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             return viewModel.ViewModelCommandManager;
         }
@@ -37,13 +31,8 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public static bool IsValidationSummaryOutdated(this ViewModelBase viewModel, long lastUpdated, bool includeChildViewModelValidations)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
-#if !NET && !NETCORE
-            // Only full .NET supports a reliable stopwatch. The other target frameworks don't have a reliable tick count
-            // so always assume invalidated
-            return true;
-#else
             if (((IValidatable)viewModel).ValidationContext.LastModifiedTicks > lastUpdated)
             {
                 return true;
@@ -54,7 +43,7 @@ namespace Catel.MVVM
                 foreach (var childViewModel in viewModel.ChildViewModels)
                 {
                     var childAsViewModelBase = childViewModel as ViewModelBase;
-                    if (childAsViewModelBase != null)
+                    if (childAsViewModelBase is not null)
                     {
                         if (IsValidationSummaryOutdated(childAsViewModelBase, lastUpdated, true))
                         {
@@ -65,7 +54,6 @@ namespace Catel.MVVM
             }
 
             return false;
-#endif
         }
 
         /// <summary>
@@ -79,7 +67,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public static IValidationSummary GetValidationSummary(this ViewModelBase viewModel, bool includeChildViewModelValidations)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var validationContext = GetNestedValidationContext(viewModel, includeChildViewModelValidations);
 
@@ -98,7 +86,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public static IValidationSummary GetValidationSummary(this ViewModelBase viewModel, bool includeChildViewModelValidations, object tag)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var validationContext = GetNestedValidationContext(viewModel, includeChildViewModelValidations);
 
@@ -128,7 +116,7 @@ namespace Catel.MVVM
                 foreach (var childViewModel in viewModel.ChildViewModels)
                 {
                     var childAsViewModelBase = childViewModel as ViewModelBase;
-                    if (childAsViewModelBase != null)
+                    if (childAsViewModelBase is not null)
                     {
                         validationContext.SynchronizeWithContext(GetNestedValidationContext(childAsViewModelBase, true), true);
                     }

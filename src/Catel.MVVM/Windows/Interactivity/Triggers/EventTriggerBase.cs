@@ -1,24 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventTriggerBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
-    using IoC;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
-    using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Trigger base class that handles a safe unsubscribe and clean up because the default
@@ -28,22 +11,15 @@ namespace Catel.Windows.Interactivity
     /// which is automatically called when the trigger is attached.
     /// </summary>
     /// <typeparam name="T">The <see cref="FrameworkElement"/> this trigger should attach to.</typeparam>
-#if UWP
-    public abstract class EventTriggerBase<T> : EventTriggerBehavior
-#else
     public abstract class EventTriggerBase<T> : Microsoft.Xaml.Behaviors.EventTriggerBase<T>, ITrigger
-#endif
         where T : FrameworkElement
     {
-        #region Fields
         private bool _isClean = true;
         private int _loadCounter;
 
         private bool _isSubscribedToLoadedEvent = false;
         private bool _isSubscribedToUnloadedEvent = false;
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether the <c>AssociatedObject</c> is loaded.
         /// </summary>
@@ -80,15 +56,13 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The IsEnabled property registration.
         /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register(nameof(IsEnabled), typeof(bool),
             typeof(EventTriggerBase<T>), new PropertyMetadata(true, (sender, e) => ((EventTriggerBase<T>)sender).OnIsEnabledChanged()));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Specifies the name of the Event this EventTriggerBase is listening for.
         /// </summary>
-        protected override string GetEventName()
+        protected override string? GetEventName()
         {
             throw new InvalidOperationException("This method MUST be overriden and the base cannot be called");
         }
@@ -137,7 +111,7 @@ namespace Catel.Windows.Interactivity
 
             CleanUp();
 
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
                 _isSubscribedToLoadedEvent = false;
@@ -178,7 +152,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectLoadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectLoadedInternal(object? sender, EventArgs e)
         {
             _loadCounter++;
 
@@ -210,7 +184,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectUnloadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectUnloadedInternal(object? sender, EventArgs e)
         {
             _loadCounter--;
 
@@ -249,7 +223,7 @@ namespace Catel.Windows.Interactivity
 
             _isClean = true;
 
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
                 _isSubscribedToUnloadedEvent = false;
@@ -257,8 +231,5 @@ namespace Catel.Windows.Interactivity
 
             Uninitialize();
         }
-        #endregion
     }
 }
-
-#endif

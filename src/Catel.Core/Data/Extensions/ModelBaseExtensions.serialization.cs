@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System.IO;
-    using System.Xml.Serialization;
     using Catel.Runtime.Serialization;
 
     public static partial class ModelBaseExtensions
@@ -31,14 +23,9 @@ namespace Catel.Data
         /// <param name="serializer">The serializer.</param>
         public static void Save(this ModelBase model, Stream stream, ISerializer serializer)
         {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("stream", stream);
-            Argument.IsNotNull("serializer", serializer);
-
             serializer.Serialize(model, stream, null);
         }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Saves the specified model to the file as xml.
         /// </summary>
@@ -64,6 +51,5 @@ namespace Catel.Data
                 Save(model, fileStream, serializer);
             }
         }
-#endif
     }
 }

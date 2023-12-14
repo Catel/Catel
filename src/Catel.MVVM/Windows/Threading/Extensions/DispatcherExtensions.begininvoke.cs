@@ -1,29 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Threading
+﻿namespace Catel.Windows.Threading
 {
     using System;
-    using System.Threading.Tasks;
-
-    // Required for DispatcherOperation on all platforms
     using System.Windows.Threading;
-
-#if UWP
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#endif
 
     /// <summary>
     /// Extension methods for the dispatcher.
     /// </summary>
     public static partial class DispatcherExtensions
     {
-#if !UWP
         /// <summary>
         /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -61,9 +45,9 @@ namespace Catel.Windows.Threading
         /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
-        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, params object[] args)
+        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, params object?[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), false);
         }
@@ -77,13 +61,12 @@ namespace Catel.Windows.Threading
         /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
-        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
+        public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object?[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), priority, false);
         }
-#endif
 
         /// <summary>
         /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
@@ -101,7 +84,6 @@ namespace Catel.Windows.Threading
             return BeginInvoke(dispatcher, action, true);
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Executes the specified action asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
         /// <para />
@@ -118,7 +100,6 @@ namespace Catel.Windows.Threading
         {
             return BeginInvoke(dispatcher, action, priority, true);
         }
-#endif
 
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
@@ -132,12 +113,12 @@ namespace Catel.Windows.Threading
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static DispatcherOperation BeginInvokeIfRequired(this Dispatcher dispatcher, Delegate method, params object[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), true);
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Executes the specified delegate asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
         /// <para />
@@ -151,11 +132,11 @@ namespace Catel.Windows.Threading
         /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
         public static DispatcherOperation BeginInvokeIfRequired(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
         {
-            Argument.IsNotNull("method", method);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(method);
 
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), priority, true);
         }
-#endif
 
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
@@ -167,26 +148,18 @@ namespace Catel.Windows.Threading
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Action action, bool onlyBeginInvokeWhenNoAccess)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(action);
 
-            if (dispatcher != null)
+            if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
             {
-                if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
-                {
-#if UWP
-                    dispatcher.BeginInvoke(action);
-                    return DispatcherOperation.Default;
-#else
-                    return dispatcher.BeginInvoke(action, null);
-#endif
-                }
+                return dispatcher.BeginInvoke(action, null);
             }
 
             action.Invoke();
             return GetDefaultDispatcherOperation(dispatcher);
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Executes the specified delegate asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -198,20 +171,17 @@ namespace Catel.Windows.Threading
         /// <returns>The DispatcherOperation or <c>null</c> if the action was not dispatched but executed directly.</returns>
         public static DispatcherOperation BeginInvoke(this Dispatcher dispatcher, Action action, DispatcherPriority priority, bool onlyBeginInvokeWhenNoAccess)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(action);
 
-            if (dispatcher != null)
+            if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
             {
-                if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
-                {
-                    return dispatcher.BeginInvoke(action, priority, null);
-                }
+                return dispatcher.BeginInvoke(action, priority, null);
             }
 
             action.Invoke();
             return GetDefaultDispatcherOperation(dispatcher);
         }
-#endif
 
         private static readonly Action EmptyAction = new Action(() => { });
 
@@ -219,9 +189,6 @@ namespace Catel.Windows.Threading
         {
             // Fix for https://github.com/Catel/Catel/issues/1220
 
-#if UWP
-            return DispatcherOperation.Default;
-#else
             //[SecurityCritical]
             //internal DispatcherOperation(Dispatcher dispatcher, DispatcherPriority priority, Action action)
             //: this(dispatcher, (Delegate)action, priority, (object)null, 0, (DispatcherOperationTaskSource)new DispatcherOperationTaskSource<object>(), true)
@@ -235,9 +202,6 @@ namespace Catel.Windows.Threading
 
             // Unfortunately we will need to await a dispatcher operation anyway
             return dispatcher.BeginInvoke(EmptyAction);
-#endif
         }
     }
 }
-
-#endif

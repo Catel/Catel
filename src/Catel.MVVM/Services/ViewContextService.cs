@@ -4,7 +4,7 @@
 
     public class ViewContextService : IViewContextService
     {
-        public object GetContext(IView view)
+        public object? GetContext(IView view)
         {
             return view.DataContext;
         }

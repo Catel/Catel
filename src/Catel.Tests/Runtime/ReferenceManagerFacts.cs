@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReferenceManagerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime
+﻿namespace Catel.Tests.Runtime
 {
     using Catel.Runtime;
 
@@ -33,10 +26,10 @@ namespace Catel.Tests.Runtime
                 referenceManager.GetInfo(obj3);
 
                 var obj4ReferenceInfo = referenceManager.GetInfo(obj4);
-                Assert.AreEqual(2, obj4ReferenceInfo.Id);
+                Assert.That(obj4ReferenceInfo.Id, Is.EqualTo(2));
 
                 var obj3ReferenceInfo = referenceManager.GetInfo(obj3);
-                Assert.AreEqual(4, obj3ReferenceInfo.Id);
+                Assert.That(obj3ReferenceInfo.Id, Is.EqualTo(4));
             }
         }
 
@@ -56,7 +49,7 @@ namespace Catel.Tests.Runtime
                 referenceManager.GetInfo(obj2);
                 referenceManager.GetInfo(obj3);
 
-                Assert.IsNull(referenceManager.GetInfoById(5));
+                Assert.That(referenceManager.GetInfoById(5), Is.Null);
             }
 
             [TestCase]
@@ -72,7 +65,7 @@ namespace Catel.Tests.Runtime
                 referenceManager.GetInfo(obj2);
                 referenceManager.GetInfo(obj3);
 
-                Assert.IsNotNull(referenceManager.GetInfoById(3));
+                Assert.That(referenceManager.GetInfoById(3), Is.Not.Null);
             }
         }
 
@@ -84,7 +77,7 @@ namespace Catel.Tests.Runtime
             {
                 var referenceManager = new ReferenceManager();
 
-                Assert.IsNull(referenceManager.GetInfo(null, false));
+                Assert.That(referenceManager.GetInfo(null, false), Is.Null);
             }
 
             [TestCase]
@@ -93,7 +86,7 @@ namespace Catel.Tests.Runtime
                 var referenceManager = new ReferenceManager();
                 var referenceInfo = referenceManager.GetInfo(new object());
 
-                Assert.IsTrue(referenceInfo.IsFirstUsage);
+                Assert.That(referenceInfo.IsFirstUsage, Is.True);
             }
 
             [TestCase]
@@ -105,7 +98,7 @@ namespace Catel.Tests.Runtime
                 referenceManager.GetInfo(obj);
                 var referenceInfo = referenceManager.GetInfo(obj);
 
-                Assert.IsFalse(referenceInfo.IsFirstUsage);
+                Assert.That(referenceInfo.IsFirstUsage, Is.False);
             }
 
             [TestCase]
@@ -122,8 +115,8 @@ namespace Catel.Tests.Runtime
 
                 var referenceInfo = referenceManager.GetInfo(obj2);
 
-                Assert.AreEqual(2, referenceInfo.Id);
-                Assert.IsTrue(ReferenceEquals(obj2, referenceInfo.Instance));
+                Assert.That(referenceInfo.Id, Is.EqualTo(2));
+                Assert.That(ReferenceEquals(obj2, referenceInfo.Instance), Is.True);
             }
         }
     }

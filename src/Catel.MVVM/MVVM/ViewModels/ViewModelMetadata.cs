@@ -1,14 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelMetadata.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Class containing meta data for a view model type.
@@ -26,9 +19,9 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="mappings"/> is <c>null</c>.</exception>
         internal ViewModelMetadata(Type viewModelType, Dictionary<string, ModelInfo> models, Dictionary<string, ViewModelToModelMapping> mappings)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
-            Argument.IsNotNull("models", models);
-            Argument.IsNotNull("mappings", mappings);
+            ArgumentNullException.ThrowIfNull(viewModelType);
+            ArgumentNullException.ThrowIfNull(models);
+            ArgumentNullException.ThrowIfNull(mappings);
 
             ViewModelType = viewModelType;
             Models = models;

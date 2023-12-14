@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArgumentTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
 
@@ -18,10 +12,7 @@ namespace Catel.Tests
     using Catel.Tests.ViewModels;
 
     using NUnit.Framework;
-
-#if !NETFX_CORE
     using Moq;
-#endif
 
     public partial class ArgumentFacts
     {
@@ -30,13 +21,15 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNull<object>(null));
+#pragma warning disable CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotNull<object>(null));
+#pragma warning restore CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullParameterInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => IsNotNullInvokation(null));
+                Assert.Throws<ArgumentNullException>(() => IsNotNullInvokation(null));
             }
 
             [TestCase]
@@ -47,7 +40,9 @@ namespace Catel.Tests
 
             private void IsNotNullInvokation(object param01)
             {
+#pragma warning disable CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
                 Argument.IsNotNull(() => param01);
+#pragma warning restore CTL0008 // Use ArgumentNullException.ThrowIfNull for argument check
             }
         }
 
@@ -56,18 +51,18 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<string>>)null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid?>>)null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<string>>)null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid?>>)null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyParameterInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(string.Empty));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation((string)null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(null as Guid?));
+                Assert.Throws<ArgumentException>(() => IsNotNullInvokation(string.Empty));
+                Assert.Throws<ArgumentException>(() => IsNotNullInvokation((string)null));
+                Assert.Throws<ArgumentException>(() => IsNotNullInvokation(null as Guid?));
                 Guid? param01 = Guid.Empty;
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(param01));
+                Assert.Throws<ArgumentException>(() => IsNotNullInvokation(param01));
             }
 
             [TestCase]
@@ -95,13 +90,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrWhitespace(null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotNullOrWhitespace(null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullOrWhitespaceInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullOrWhitespaceInvokation(string.Empty));
+                Assert.Throws<ArgumentException>(() => IsNotNullOrWhitespaceInvokation(string.Empty));
             }
 
             [TestCase]
@@ -121,13 +116,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmptyArray(null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotNullOrEmptyArray(null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyArrayParameterInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullOrEmptyArrayInvokation(new object[] { }));
+                Assert.Throws<ArgumentException>(() => IsNotNullOrEmptyArrayInvokation(new object[] { }));
             }
 
             [TestCase]
@@ -147,17 +142,17 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<int>(null, 0, 0));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0, null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotOutOfRange<int>(null, 0, 0));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForOutOfRangeInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3, 1, 2));
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d));
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d, (d, d1, arg3) => false));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3, 1, 2));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d, (d, d1, arg3) => false));
             }
 
             [TestCase]
@@ -191,17 +186,17 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMinimal<double>(null, 0, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMinimal<double>(null, 0));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMinimal<int>(null, 0));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsMinimal<double>(null, 0, null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsMinimal<double>(null, 0));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsMinimal<int>(null, 0));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIsMinimalInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0, 1));
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0.0d, 1.0d));
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0.0d, 1.0d, (d, d1) => false));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0, 1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0.0d, 1.0d));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0.0d, 1.0d, (d, d1) => false));
             }
 
             [TestCase]
@@ -235,17 +230,17 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMaximum<double>(null, 0, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMaximum<double>(null, 0));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMaximum<int>(null, 0));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsMaximum<double>(null, 0, null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsMaximum<double>(null, 0));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsMaximum<int>(null, 0));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIsMaximumInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1, 0));
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1.0d, 0.0d));
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1.0d, 0.0d, (d, d1) => false));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1, 0));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1.0d, 0.0d));
+                Assert.Throws<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1.0d, 0.0d, (d, d1) => false));
             }
 
             [TestCase]
@@ -278,13 +273,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.ImplementsInterface<object>(null, typeof(IList)));
+                Assert.Throws<ArgumentNullException>(() => Argument.ImplementsInterface<object>(null, typeof(IList)));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForImplementsInterfaceInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ImplementsInterfaceInvokation(new List<int>(), typeof(INotifyPropertyChanged)));
+                Assert.Throws<ArgumentException>(() => ImplementsInterfaceInvokation(new List<int>(), typeof(INotifyPropertyChanged)));
             }
 
             [TestCase]
@@ -294,7 +289,7 @@ namespace Catel.Tests
                 ImplementsInterfaceInvokation(typeof(List<int>), typeof(IList));
             }
 
-            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType) 
+            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType)
                 where T : class
             {
                 Argument.ImplementsInterface(() => param, interfaceType);
@@ -306,13 +301,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsOfType<object>(null, typeof(IList)));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsOfType<object>(null, typeof(IList)));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsOfTypeInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsOfTypeInvokation(new List<int>(), typeof(INotifyPropertyChanged)));
+                Assert.Throws<ArgumentException>(() => IsOfTypeInvokation(new List<int>(), typeof(INotifyPropertyChanged)));
             }
 
             [TestCase]
@@ -322,7 +317,7 @@ namespace Catel.Tests
                 IsOfTypeInvokation(typeof(PersonViewModel), typeof(ViewModelBase));
             }
 
-            public void IsOfTypeInvokation<T>(T param, Type interfaceType) 
+            public void IsOfTypeInvokation<T>(T param, Type interfaceType)
                 where T : class
             {
                 Argument.IsOfType(() => param, interfaceType);
@@ -334,13 +329,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMatch(null, null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsMatch(null, null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsMatchInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsMatchInvokation("Match a single digit, between one and unlimited times", "\\d+"));
+                Assert.Throws<ArgumentException>(() => IsMatchInvokation("Match a single digit, between one and unlimited times", "\\d+"));
             }
 
             [TestCase]
@@ -360,13 +355,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotMatch(null, null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsNotMatch(null, null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsNotMatchInvokation()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotMatchInvokation("Match any single character that is not a line break character, between one and unlimited times", ".+"));
+                Assert.Throws<ArgumentException>(() => IsNotMatchInvokation("Match any single character that is not a line break character, between one and unlimited times", ".+"));
             }
 
             [TestCase]
@@ -386,84 +381,80 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullExpression1()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsValid<object>(null, (Func<bool>)null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsValid<object>(null, (Func<bool>)null));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullExpression2()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsValid(null, (Func<object, bool>)null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsValid(null, (Func<object, bool>)null));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionifValidatorIsNull2()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsValid(() => string.Empty, (IValueValidator<string>)null));
+                Assert.Throws<ArgumentNullException>(() => Argument.IsValid(() => string.Empty, (IValueValidator<string>)null));
             }
 
             [TestCase]
             public void SucceedsForIsValidInvokation1()
             {
-                this.IsValidInvokation("myValue", () => true);
-                this.IsValidInvokation((string)null, () => true);
+                IsValidInvokation("myValue", () => true);
+                IsValidInvokation((string)null, () => true);
             }
 
             [TestCase]
             public void SucceedsForIsValidInvokation2()
             {
-                this.IsValidInvokation("myValue", s => s.Length < 10);
-                this.IsValidInvokation((string)null, s => s is null);
+                IsValidInvokation("myValue", s => s.Length < 10);
+                IsValidInvokation((string)null, s => s is null);
             }
 
             [TestCase]
             public void SucceedsForIsValidInvokation3()
             {
-                this.IsValidInvokation("myValue", true);
-                this.IsValidInvokation((string)null, true);
+                IsValidInvokation("myValue", true);
+                IsValidInvokation((string)null, true);
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void SucceedsForIsValidInvokation4()
             {
                 var mock = new Mock<IValueValidator<string>>();
                 mock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(true);
-                this.IsValidInvokation("myValue", mock.Object);
-                this.IsValidInvokation((string)null, mock.Object);
+                IsValidInvokation("myValue", mock.Object);
+                IsValidInvokation((string)null, mock.Object);
             }
-#endif
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation1()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", () => false));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, () => false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", () => false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, () => false));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation2()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", s => s.Length > 10));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, s => s != null));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", s => s.Length > 10));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, s => s is not null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation3()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", false));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", false));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, false));
             }
 
-#if !NETFX_CORE
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation4()
             {
                 var mock = new Mock<IValueValidator<string>>();
                 mock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(false);
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", mock.Object));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, mock.Object));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation("myValue", mock.Object));
+                Assert.Throws<ArgumentException>(() => IsValidInvokation((string)null, mock.Object));
             }
-#endif
 
             public void IsValidInvokation<T>(T value, Func<T, bool> validation)
             {
@@ -493,13 +484,13 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.ImplementsOneOfTheInterfaces<object>(null, new[] { typeof(IList) }));
+                Assert.Throws<ArgumentNullException>(() => Argument.ImplementsOneOfTheInterfaces<object>(null, new[] { typeof(IList) }));
             }
 
             [TestCase]
              public void ThrowsArgumentExceptionForImplementsOneOfTheInterfacesInvokation()
              {
-                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ImplementsOneOfTheInterfacesInvokation(new List<int>(), new[] { typeof(INotifyPropertyChanged) }));
+                 Assert.Throws<ArgumentException>(() => ImplementsOneOfTheInterfacesInvokation(new List<int>(), new[] { typeof(INotifyPropertyChanged) }));
              }
 
             [TestCase]

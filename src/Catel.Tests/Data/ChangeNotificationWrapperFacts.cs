@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeNotificationWrapperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -30,7 +25,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the FirstName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
         }
 
         [TestFixture]
@@ -39,7 +34,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ChangeNotificationWrapper(null));
+                Assert.Throws<ArgumentNullException>(() => new ChangeNotificationWrapper(null));
             }
         }
 
@@ -52,7 +47,7 @@ namespace Catel.Tests.Data
                 var model = new TestModel();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                Assert.IsTrue(wrapper.SupportsNotifyPropertyChanged);
+                Assert.That(wrapper.SupportsNotifyPropertyChanged, Is.True);
             }
 
             [TestCase]
@@ -61,7 +56,7 @@ namespace Catel.Tests.Data
                 var model = new object();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                Assert.IsFalse(wrapper.SupportsNotifyPropertyChanged);                
+                Assert.That(wrapper.SupportsNotifyPropertyChanged, Is.False);
             }
         }
 
@@ -74,7 +69,7 @@ namespace Catel.Tests.Data
                 var collection = new ObservableCollection<int>();
                 var wrapper = new ChangeNotificationWrapper(collection);
 
-                Assert.IsTrue(wrapper.SupportsNotifyCollectionChanged);
+                Assert.That(wrapper.SupportsNotifyCollectionChanged, Is.True);
             }
 
             [TestCase]
@@ -83,7 +78,7 @@ namespace Catel.Tests.Data
                 var collection = new List<int>();
                 var wrapper = new ChangeNotificationWrapper(collection);
 
-                Assert.IsFalse(wrapper.SupportsNotifyCollectionChanged);
+                Assert.That(wrapper.SupportsNotifyCollectionChanged, Is.False);
             }
         }
 
@@ -93,19 +88,19 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ReturnsFalseForNullObject()
             {
-                Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(null));
+                Assert.That(ChangeNotificationWrapper.IsUsefulForObject(null), Is.False);
             }
 
             [TestCase]
             public void ReturnsFalseForObjectNotImplementingINotifyPropertyChanged()
             {
-                Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(15));
+                Assert.That(ChangeNotificationWrapper.IsUsefulForObject(15), Is.False);
             }
 
             [TestCase]
             public void ReturnsTrueForObjectImplementingINotifyPropertyChanged()
             {
-                Assert.IsTrue(ChangeNotificationWrapper.IsUsefulForObject(new TestModel()));
+                Assert.That(ChangeNotificationWrapper.IsUsefulForObject(new TestModel()), Is.True);
             }
         }
 
@@ -126,7 +121,7 @@ namespace Catel.Tests.Data
 
                 testModel.FirstName = "Geert";
 
-                Assert.IsFalse(eventRaised);
+                Assert.That(eventRaised, Is.False);
             }
 
             [TestCase]
@@ -142,7 +137,7 @@ namespace Catel.Tests.Data
 
                 collection.Add(new TestModel());
 
-                Assert.IsFalse(eventRaised);
+                Assert.That(eventRaised, Is.False);
             }
 
             [TestCase]
@@ -160,12 +155,12 @@ namespace Catel.Tests.Data
 
                 testModel.FirstName = "Geert";
 
-                Assert.IsFalse(eventRaised);
+                Assert.That(eventRaised, Is.False);
             }
         }
 
         [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
-        public class ThePropertyChangesLogic 
+        public class ThePropertyChangesLogic
         {
             [TestCase]
             public void HandlesPropertyChangesCorrectly()
@@ -179,7 +174,7 @@ namespace Catel.Tests.Data
 
                 model.FirstName = "Geert";
 
-                Assert.IsTrue(propertyChanged);
+                Assert.That(propertyChanged, Is.True);
             }
         }
 
@@ -197,12 +192,12 @@ namespace Catel.Tests.Data
 
                 wrapper.CollectionChanged += (sender, e) =>
                 {
-                    if (e.OldItems != null)
+                    if (e.OldItems is not null)
                     {
                         itemsRemoved = true;
                     }
 
-                    if (e.NewItems != null)
+                    if (e.NewItems is not null)
                     {
                         itemsAdded = true;
                     }
@@ -210,11 +205,11 @@ namespace Catel.Tests.Data
 
                 var model = new TestModel();
                 collection.Add(model);
-                Assert.IsTrue(itemsAdded, "Item should have been added");
-                Assert.IsFalse(itemsRemoved, "Item should not (yet) have been removed");
+                Assert.That(itemsAdded, Is.True, "Item should have been added");
+                Assert.That(itemsRemoved, Is.False, "Item should not (yet) have been removed");
 
-                Assert.IsTrue(collection.Remove(model), "Item should have been removed from collection");
-                Assert.IsTrue(itemsRemoved, "Item should have been removed");
+                Assert.That(collection.Remove(model), Is.True, "Item should have been removed from collection");
+                Assert.That(itemsRemoved, Is.True, "Item should have been removed");
             }
 
             [TestCase]
@@ -236,7 +231,7 @@ namespace Catel.Tests.Data
 
                 wrapper.CollectionChanged += (sender, e) =>
                 {
-                    if (e.OldItems != null)
+                    if (e.OldItems is not null)
                     {
                         itemsRemoved = true;
                     }
@@ -246,7 +241,7 @@ namespace Catel.Tests.Data
                         itemsReset = true;
                     }
 
-                    if (e.NewItems != null)
+                    if (e.NewItems is not null)
                     {
                         itemsAdded = true;
                     }
@@ -254,12 +249,12 @@ namespace Catel.Tests.Data
 
                 using (collection.SuspendChangeNotifications(SuspensionMode.MixedConsolidate))
                 {
-                    collection.ReplaceRange(new [] { new TestModel() });
+                    collection.ReplaceRange(new[] { new TestModel() });
                 }
 
-                Assert.IsTrue(itemsAdded, "Items should be added");
-                Assert.IsTrue(itemsRemoved, "Items should be removed");
-                Assert.IsFalse(itemsReset, "Items should not be reset");
+                Assert.That(itemsAdded, Is.True, "Items should be added");
+                Assert.That(itemsRemoved, Is.True, "Items should be removed");
+                Assert.That(itemsReset, Is.False, "Items should not be reset");
             }
 
             [TestCase]
@@ -277,7 +272,7 @@ namespace Catel.Tests.Data
 
                 model.FirstName = "Geert";
 
-                Assert.IsTrue(collectionItemPropertyChanged);
+                Assert.That(collectionItemPropertyChanged, Is.True);
             }
 
             [TestCase]
@@ -301,10 +296,10 @@ namespace Catel.Tests.Data
                 wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
 
                 collection.Clear();
-                
+
                 model.FirstName = "Geert";
 
-                Assert.IsFalse(collectionItemPropertyChanged);
+                Assert.That(collectionItemPropertyChanged, Is.False);
             }
 
             [TestCase]
@@ -336,7 +331,7 @@ namespace Catel.Tests.Data
 
                 newModel.FirstName = "Geert";
 
-                Assert.IsTrue(collectionItemPropertyChanged, "Collection item property should have changed");
+                Assert.That(collectionItemPropertyChanged, Is.True, "Collection item property should have changed");
             }
 
             [TestCase]
@@ -369,7 +364,7 @@ namespace Catel.Tests.Data
 
                 model.FirstName = "Geert";
 
-                Assert.IsFalse(collectionItemPropertyChanged);
+                Assert.That(collectionItemPropertyChanged, Is.False);
             }
         }
 
@@ -382,29 +377,29 @@ namespace Catel.Tests.Data
                 var model = new TestModel();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                Assert.IsTrue(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.True);
 
                 model = null;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.IsFalse(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.False);
             }
 
             [TestCase]
             public void DoesNotLeakForCollectionChanged()
             {
                 var model = new TestModel();
-                var collectionModel = new ObservableCollection<TestModel>(new[] {model});
+                var collectionModel = new ObservableCollection<TestModel>(new[] { model });
                 var wrapper = new ChangeNotificationWrapper(collectionModel);
 
-                Assert.IsTrue(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.True);
 
                 collectionModel = null;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.IsFalse(wrapper.IsObjectAlive);
+                Assert.That(wrapper.IsObjectAlive, Is.False);
             }
         }
     }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelCommandManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -13,16 +7,15 @@ namespace Catel.MVVM
     using System.Windows.Input;
     using Logging;
     using Reflection;
-    using Threading;
-    using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object>;
-    using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object, System.Threading.Tasks.Task>;
+    using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object?>;
+    using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object?, System.Threading.Tasks.Task>;
+    using Catel.Data;
 
     /// <summary>
     /// Command manager that manages the execution state of all commands of a view model.
     /// </summary>
     public class ViewModelCommandManager : IViewModelCommandManager
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
@@ -32,9 +25,7 @@ namespace Catel.MVVM
         /// Dictionary containing all instances of all view model command managers.
         /// </summary>
         private static readonly Dictionary<int, ViewModelCommandManager> _instances = new Dictionary<int, ViewModelCommandManager>();
-        #endregion
 
-        #region Fields
         /// <summary>
         /// The lock object.
         /// </summary>
@@ -62,7 +53,7 @@ namespace Catel.MVVM
         /// <summary>
         /// The view model.
         /// </summary>
-        private IViewModel _viewModel;
+        private readonly IViewModel _viewModel;
 
         /// <summary>
         /// The view model type;
@@ -73,9 +64,7 @@ namespace Catel.MVVM
         /// A list of reflection properties for the commands.
         /// </summary>
         private readonly List<PropertyInfo> _commandProperties = new List<PropertyInfo>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelCommandManager" /> class.
         /// </summary>
@@ -83,9 +72,9 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         private ViewModelCommandManager(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
-            Log.Debug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
+            Log.Debug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             _viewModel = viewModel;
             _viewModelType = viewModel.GetType();
@@ -105,11 +94,9 @@ namespace Catel.MVVM
 
             RegisterCommands(false);
 
-            Log.Debug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
+            Log.Debug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the commands in a specific <see cref="IViewModel" /> instance. By subscribing
         /// to all commands, the <see cref="IViewModel.CommandExecutedAsync" /> can be intercepted.
@@ -121,7 +108,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public static IViewModelCommandManager Create(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             lock (_instances)
             {
@@ -129,8 +116,7 @@ namespace Catel.MVVM
                 // in the meantime
                 if (viewModel.IsClosed)
                 {
-                    Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
-                    return null;
+                    throw Log.ErrorAndCreateException<CatelException>($"View model '{viewModel.GetType().GetSafeFullName()}' with unique identifier '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}' is already closed, cannot manage commands of a closed view model");
                 }
 
                 if (!_instances.TryGetValue(viewModel.UniqueIdentifier, out var commandManager))
@@ -175,21 +161,21 @@ namespace Catel.MVVM
                     UnregisterCommands();
                 }
 
-                Log.Debug("Registering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+                Log.Debug("Registering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
                 foreach (var propertyInfo in _commandProperties)
                 {
                     try
                     {
                         var command = propertyInfo.GetValue(_viewModel, null) as ICommand;
-                        if (command != null)
+                        if (command is not null)
                         {
                             if (!_commands.ContainsKey(command))
                             {
                                 Log.Debug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
 
                                 var commandAsICatelCommand = command as ICatelCommand;
-                                if (commandAsICatelCommand != null)
+                                if (commandAsICatelCommand is not null)
                                 {
                                     commandAsICatelCommand.Executed += OnViewModelCommandExecuted;
                                 }
@@ -204,7 +190,7 @@ namespace Catel.MVVM
                     }
                 }
 
-                Log.Debug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+                Log.Debug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
             }
         }
 
@@ -215,7 +201,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public void AddHandler(AsyncCommandHandler handler)
         {
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             lock (_lock)
             {
@@ -237,7 +223,7 @@ namespace Catel.MVVM
                 foreach (var command in _commands.Keys)
                 {
                     var commandAsICatelCommand = command as ICatelCommand;
-                    if (commandAsICatelCommand != null)
+                    if (commandAsICatelCommand is not null)
                     {
                         commandAsICatelCommand.RaiseCanExecuteChanged();
                     }
@@ -250,14 +236,14 @@ namespace Catel.MVVM
         /// </summary>
         private void UnregisterCommands()
         {
-            Log.Debug("Unregistering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+            Log.Debug("Unregistering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
             lock (_lock)
             {
                 foreach (var command in _commands.Keys)
                 {
                     var commandAsICatelCommand = command as ICatelCommand;
-                    if (commandAsICatelCommand != null)
+                    if (commandAsICatelCommand is not null)
                     {
                         commandAsICatelCommand.Executed -= OnViewModelCommandExecuted;
                     }
@@ -266,11 +252,11 @@ namespace Catel.MVVM
                 _commands.Clear();
             }
 
-            Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+            Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
         }
 
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
+        private async void OnViewModelCommandExecuted(object? sender, CommandExecutedEventArgs e)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             CommandHandler[] syncHandlers;
@@ -290,7 +276,7 @@ namespace Catel.MVVM
 
             foreach (var handler in syncHandlers)
             {
-                if (handler != null)
+                if (handler is not null)
                 {
                     handler(_viewModel, commandName, e.Command, e.CommandParameter);
                 }
@@ -298,21 +284,21 @@ namespace Catel.MVVM
 
             foreach (var handler in asyncHandlers)
             {
-                if (handler != null)
+                if (handler is not null)
                 {
                     await handler(_viewModel, commandName, e.Command, e.CommandParameter);
                 }
             }
         }
 
-        private Task OnViewModelInitializedAsync(object sender, EventArgs e)
+        private Task OnViewModelInitializedAsync(object? sender, EventArgs e)
         {
             InvalidateCommands(true);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
-        private Task OnViewModelClosedAsync(object sender, EventArgs e)
+        private Task OnViewModelClosedAsync(object? sender, EventArgs e)
         {
             lock (_lock)
             {
@@ -327,11 +313,9 @@ namespace Catel.MVVM
 
                 _viewModel.InitializedAsync -= OnViewModelInitializedAsync;
                 _viewModel.ClosedAsync -= OnViewModelClosedAsync;
-                _viewModel = null;
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
-        #endregion
     }
 }

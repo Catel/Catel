@@ -93,12 +93,12 @@
 
 Make sure that the property is a Catel property, not a regular property.
 
-If you are sure that you have a model with this name, make sure it's public instead of private or protected for Silverlight and WP7 because non-public reflection is not allowed in Silverlight.</source>
+If you are sure that you have a model with this name, make sure it's public instead of private or protected for UWP because non-public reflection is not allowed in UWP.</source>
           <target state="new">There is no model '{0}' registered with the model attribute, so the ViewModelToModel attribute on property '{1}' is invalid.
 
 Make sure that the property is a Catel property, not a regular property.
 
-If you are sure that you have a model with this name, make sure it's public instead of private or protected for Silverlight and WP7 because non-public reflection is not allowed in Silverlight.</target>
+If you are sure that you have a model with this name, make sure it's public instead of private or protected for UWP because non-public reflection is not allowed in UWP.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">{0} = model name
 {1} = property that points to the model</note>
         </trans-unit>

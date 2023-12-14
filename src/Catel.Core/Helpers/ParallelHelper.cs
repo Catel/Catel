@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ParallelHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +6,6 @@ namespace Catel
     using System.Threading.Tasks;
 
     using Catel.Logging;
-    using Catel.Threading;
 
     /// <summary>
     /// Helper class to execute groups of methods in parallel.
@@ -35,23 +27,20 @@ namespace Catel
         /// <param name="taskName">Name of the task, can be <c>null</c>.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="items" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="actionToInvoke" /> is <c>null</c>.</exception>
-        public static void ExecuteInParallel<T>(List<T> items, Action<T> actionToInvoke, int itemsPerBatch = 1000, string taskName = null)
+        public static void ExecuteInParallel<T>(List<T> items, Action<T> actionToInvoke, int itemsPerBatch = 1000, string? taskName = null)
         {
-            Argument.IsNotNull("items", items);
-            Argument.IsNotNull("actionToInvoke", actionToInvoke);
-
             taskName = ObjectToStringHelper.ToString(taskName);
 
-            Log.Debug("[{0}] Executing '{1}' actions in parallel in batches of '{2}' items per batch", taskName, items.Count, itemsPerBatch);
+            Log.Debug($"[{taskName}] Executing '{items.Count}' actions in parallel in batches of '{itemsPerBatch}' items per batch");
 
             var batches = new List<List<T>>();
             if (itemsPerBatch > 0)
             {
                 var typeCount = items.Count;
-                for (int i = 0; i < typeCount; i = i + itemsPerBatch)
+                for (var i = 0; i < typeCount; i = i + itemsPerBatch)
                 {
-                    int itemsToSkip = i;
-                    int itemsToTake = itemsPerBatch;
+                    var itemsToSkip = i;
+                    var itemsToTake = itemsPerBatch;
                     if (itemsToTake >= typeCount)
                     {
                         itemsToTake = typeCount - i;
@@ -80,10 +69,10 @@ namespace Catel
                     actions.Add(() => ExecuteBatch(taskName, innerI.ToString(), batch, actionToInvoke));
                 }
 
-                TaskHelper.RunAndWait(actions.ToArray());
+                Parallel.Invoke(actions.ToArray());
             }
 
-            Log.Debug("[{0}] Executed '{1}' actions in parallel in '{2}' batches of '{3}' items per batch", taskName, items.Count, batches.Count, itemsPerBatch);
+            Log.Debug($"[{taskName}] Executed '{items.Count}' actions in parallel in '{batches.Count}' batches of '{itemsPerBatch}' items per batch");
         }
 
         /// <summary>
@@ -94,11 +83,11 @@ namespace Catel
         /// <param name="batchName">Name of the type group.</param>
         /// <param name="items">The items.</param>
         /// <param name="actionToInvoke">The action to invoke.</param>
-        private static void ExecuteBatch<T>(string taskName, string batchName, List<T> items, Action<T> actionToInvoke)
+        private static void ExecuteBatch<T>(string? taskName, string batchName, List<T> items, Action<T> actionToInvoke)
         {
-            string finalName = string.Format("[{0} | {1}]", taskName, batchName);
+            var finalName = string.Format("[{0} | {1}]", taskName, batchName);
 
-            Log.Debug("{0} Starting batch for '{1}' items", finalName, items.Count);
+            Log.Debug($"{finalName} Starting batch for '{items.Count}' items");
 
             foreach (var item in items)
             {
@@ -112,7 +101,7 @@ namespace Catel
                 }
             }
 
-            Log.Debug("{0} Finished batch for '{1}' items", finalName, items.Count);
+            Log.Debug($"{finalName} Finished batch for '{items.Count}' items");
         }
 
         /// <summary>
@@ -121,17 +110,20 @@ namespace Catel
         /// <param name="tasks">The task list.</param>
         /// <param name="taskName">The task name.</param>
         /// <param name="batchSize">The batch size.</param>
-        public static async Task ExecuteInParallelAsync(List<Func<Task>> tasks, int batchSize = 1000, string taskName = null)
+        public static async Task ExecuteInParallelAsync(List<Func<Task>> tasks, int batchSize = 1000, string? taskName = null)
         {
-            Argument.IsNotNull(nameof(tasks), tasks);
-
             taskName = ObjectToStringHelper.ToString(taskName);
 
-            Log.Debug("[{0}] Executing '{1}' async tasks in parallel in batches of size '{2}'", taskName, tasks.Count, batchSize);
+            Log.Debug($"[{taskName}] Executing '{tasks.Count}' async tasks in parallel in batches of size '{batchSize}'");
 
-            for (int i = 0; i < tasks.Count; i = i + batchSize)
+            for (var i = 0; i < tasks.Count; i = i + batchSize)
             {
-                await TaskHelper.RunAndWaitAsync(tasks.Skip(i).Take(Math.Min(batchSize, tasks.Count - i)).ToArray());
+                var batchTasks = tasks.Skip(i).Take(Math.Min(batchSize, tasks.Count - i)).ToArray();
+
+                var runningBatchTasks = (from batchTask in batchTasks
+                                         select batchTask()).ToArray();
+
+                await Task.WhenAll(runningBatchTasks);
             }
         }
     }

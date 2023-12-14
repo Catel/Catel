@@ -1,19 +1,45 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IConfigurationServiceExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Extensions for the <see cref="IConfigurationService"/>.
     /// </summary>
     public static class IConfigurationServiceExtensions
     {
+        /// <summary>
+        /// Explicitly saves the configuration.
+        /// <para />
+        /// This call can be useful when the saving of the configuration should not be done in the background.
+        /// </summary>
+        /// <returns>The task that can be awaited.</returns>
+        public static async Task SaveAsync(this IConfigurationService configurationService)
+        {
+            ArgumentNullException.ThrowIfNull(configurationService);
+
+            foreach (var configurationContainer in Enum<ConfigurationContainer>.GetValues())
+            {
+                await configurationService.SaveAsync(configurationContainer);
+            }
+        }
+
+        /// <summary>
+        /// Explicitly loads the configuration.
+        /// <para />
+        /// This call can be useful when the saving of the configuration should not be done in the background.
+        /// </summary>
+        /// <returns>The task that can be awaited.</returns>
+        public static async Task LoadAsync(this IConfigurationService configurationService)
+        {
+            ArgumentNullException.ThrowIfNull(configurationService);
+
+            foreach (var configurationContainer in Enum<ConfigurationContainer>.GetValues())
+            {
+                await configurationService.LoadAsync(configurationContainer);
+            }
+        }
+
         /// <summary>
         /// Determines whether the specified value is available using <see cref="ConfigurationContainer.Local" />.
         /// </summary>
@@ -24,8 +50,6 @@ namespace Catel.Configuration
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static bool IsLocalValueAvailable(this IConfigurationService configurationService, string key)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.IsValueAvailable(ConfigurationContainer.Local, key);
         }
 
@@ -39,8 +63,6 @@ namespace Catel.Configuration
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         public static bool IsRoamingValueAvailable(this IConfigurationService configurationService, string key)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.IsValueAvailable(ConfigurationContainer.Roaming, key);
         }
 
@@ -52,10 +74,8 @@ namespace Catel.Configuration
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="configurationService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public static void InitializeLocalValue(this IConfigurationService configurationService, string key, object defaultValue)
+        public static void InitializeLocalValue(this IConfigurationService configurationService, string key, object? defaultValue)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             configurationService.InitializeValue(ConfigurationContainer.Local, key, defaultValue);
         }
 
@@ -67,10 +87,8 @@ namespace Catel.Configuration
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="configurationService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public static void InitializeRoamingValue(this IConfigurationService configurationService, string key, object defaultValue)
+        public static void InitializeRoamingValue(this IConfigurationService configurationService, string key, object? defaultValue)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             configurationService.InitializeValue(ConfigurationContainer.Roaming, key, defaultValue);
         }
 
@@ -84,10 +102,8 @@ namespace Catel.Configuration
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="configurationService"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public static T GetLocalValue<T>(this IConfigurationService configurationService, string key, T defaultValue = default(T))
+        public static T GetLocalValue<T>(this IConfigurationService configurationService, string key, T defaultValue = default!)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.GetValue(ConfigurationContainer.Local, key, defaultValue);
         }
 
@@ -101,10 +117,8 @@ namespace Catel.Configuration
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="configurationService"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public static T GetRoamingValue<T>(this IConfigurationService configurationService, string key, T defaultValue = default(T))
+        public static T GetRoamingValue<T>(this IConfigurationService configurationService, string key, T defaultValue = default!)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             return configurationService.GetValue(ConfigurationContainer.Roaming, key, defaultValue);
         }
          
@@ -117,10 +131,8 @@ namespace Catel.Configuration
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="configurationService"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public static void SetLocalValue(this IConfigurationService configurationService, string key, object value)
+        public static void SetLocalValue(this IConfigurationService configurationService, string key, object? value)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             configurationService.SetValue(ConfigurationContainer.Local, key, value);
         }
 
@@ -132,10 +144,8 @@ namespace Catel.Configuration
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="configurationService"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        public static void SetRoamingValue(this IConfigurationService configurationService, string key, object value)
+        public static void SetRoamingValue(this IConfigurationService configurationService, string key, object? value)
         {
-            Argument.IsNotNull("configurationService", configurationService);
-
             configurationService.SetValue(ConfigurationContainer.Roaming, key, value);
         }
     }

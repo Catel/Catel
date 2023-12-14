@@ -1,28 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VisibilityConverterBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS || ANDROID
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#else
+    using Catel.Data;
     using System.Windows;
-#endif
 
     /// <summary>
     /// A base class that makes it easier to create values to visibility converters.
     /// </summary>
     public abstract class VisibilityConverterBase : ValueConverterBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="VisibilityConverterBase"/> class.
         /// </summary>
@@ -37,17 +23,13 @@ namespace Catel.MVVM.Converters
 
             NotVisibleVisibility = notVisibleVisibility;
         }
-        #endregion
 
-        #region
         /// <summary>
         /// Gets the <see cref="Visibility"/> state when not visibible should be returned.
         /// </summary>
         /// <value>The not visible visibility.</value>
         public Visibility NotVisibleVisibility { get; private set; }
-        #endregion
-
-        #region Methods
+        
         /// <summary>
         /// Determines what value this converter should return.
         /// </summary>
@@ -55,7 +37,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The type of the binding target property.</param>
         /// <param name="parameter">The converter parameter to use.</param>
         /// <returns><c>true</c> if the specified value is visible; otherwise, <c>false</c>.</returns>
-        protected abstract bool IsVisible(object value, Type targetType, object parameter);
+        protected abstract bool IsVisible(object? value, Type targetType, object? parameter);
 
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -64,7 +46,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var isVisible = IsVisible(value, targetType, parameter);
 
@@ -73,9 +55,8 @@ namespace Catel.MVVM.Converters
                 isVisible = !isVisible;
             }
 
-            return isVisible ? Visibility.Visible : NotVisibleVisibility;
+            return BoxingCache.GetBoxedValue(isVisible ? Visibility.Visible : NotVisibleVisibility);
         }
-        #endregion
     }
 
     /// <summary>
@@ -94,7 +75,6 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET || NETCORE
     /// <summary>
     /// A base class that makes it easier to create values to visibility converters.
     /// <para />
@@ -110,7 +90,4 @@ namespace Catel.MVVM.Converters
         {
         }
     }
-#endif
 }
-
-#endif

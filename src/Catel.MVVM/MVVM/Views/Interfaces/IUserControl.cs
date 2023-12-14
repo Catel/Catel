@@ -1,22 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IUserControl.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using MVVM;
-
-#if XAMARIN || XAMARIN_FORMS
-    using ViewType = System.Object;
-#elif UWP
-    using ViewType = global::Windows.UI.Xaml.DependencyObject;
-#else
-    using ViewType = System.Windows.DependencyObject;
-
     using Windows.Controls;
-#endif
+    using System.Windows;
 
     /// <summary>
     /// Interface defining functionality for user controls.
@@ -24,18 +10,14 @@ namespace Catel.MVVM.Views
     public interface IUserControl : IView
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the user control should close any existing
-        /// view model when the control is unloaded from the visual tree.
+        /// Gets or sets a the view model lifetime management.
         /// <para />
-        /// Set this property to <c>false</c> if a view model should be kept alive and re-used
-        /// for unloading/loading instead of creating a new one.
-        /// <para />
-        /// By default, this value is <c>true</c>.
+        /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
+        /// The view model lifetime management.
         /// </value>
-        bool CloseViewModelOnUnloaded { get; set; }
+        ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether parent view model containers are supported. If supported,
@@ -53,7 +35,6 @@ namespace Catel.MVVM.Views
         /// </value>
         bool SupportParentViewModelContainers { get; set; }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -69,7 +50,6 @@ namespace Catel.MVVM.Views
         /// 	<c>true</c> if the search for an info bar message control should be skipped; otherwise, <c>false</c>.
         /// </value>
         bool SkipSearchingForInfoBarMessageControl { get; set; }
-#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether the user control should automatically be disabled when there is no
@@ -84,6 +64,6 @@ namespace Catel.MVVM.Views
         /// Gets the parent of the view.
         /// </summary>
         /// <value>The parent.</value>
-        ViewType Parent { get; }
+        DependencyObject? Parent { get; }
     }
 }

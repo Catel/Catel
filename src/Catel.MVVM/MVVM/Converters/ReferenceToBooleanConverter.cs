@@ -1,19 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReferenceToBooleanConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Implementation of class ReferenceToBooleanConverter
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(object), typeof(bool))]
-#endif
     public class ReferenceToBooleanConverter : ValueConverterBase
     {
         /// <summary>
@@ -23,7 +16,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var isNull = value is null;
 
@@ -32,7 +25,7 @@ namespace Catel.MVVM.Converters
                 isNull = !isNull;
             }
 
-            return !isNull;
+            return BoxingCache.GetBoxedValue(!isNull);
         }
     }
 }

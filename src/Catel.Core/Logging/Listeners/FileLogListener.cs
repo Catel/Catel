@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || NETSTANDARD
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Diagnostics;
@@ -100,19 +92,20 @@ namespace Catel.Logging
             public const string WorkDir = "{WorkDir}";
         }
 
-        private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", FilePathKeyword.AssemblyName, FilePathKeyword.Date, FilePathKeyword.Time, FilePathKeyword.ProcessId);
+        private readonly string AutoLogFileNameReplacement = $"{FilePathKeyword.AssemblyName}_{FilePathKeyword.Date}_{FilePathKeyword.Time}_{FilePathKeyword.ProcessId}";
 
         private Assembly _assembly;
-        private string _filePath;
+        private string _filePath = string.Empty;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogListener" /> class.
         /// </summary>
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
-        public FileLogListener(Assembly assembly = null)
+        public FileLogListener(Assembly? assembly = null)
         {
-            Initialize(true, assembly);
+            _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+
+            Initialize(true);
 
             MaxSizeInKiloBytes = 1000 * 10; // 10 MB
         }
@@ -124,18 +117,18 @@ namespace Catel.Logging
         /// <param name="maxSizeInKiloBytes">The max size in kilo bytes.</param>
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <exception cref="ArgumentException">The <paramref name="filePath" /> is <c>null</c> or whitespace.</exception>
-        public FileLogListener(string filePath, int maxSizeInKiloBytes, Assembly assembly = null)
+        public FileLogListener(string filePath, int maxSizeInKiloBytes, Assembly? assembly = null)
         {
             Argument.IsNotNullOrWhitespace(nameof(filePath), filePath);
 
-            Initialize(false, assembly);
+            _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+            
+            Initialize(false);
 
             FilePath = filePath;
             MaxSizeInKiloBytes = maxSizeInKiloBytes;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the file path.
         /// </summary>
@@ -151,9 +144,7 @@ namespace Catel.Logging
         /// </summary>
         /// <value>The maximum size information kilo bytes.</value>
         public int MaxSizeInKiloBytes { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines the real file path.
         /// </summary>
@@ -171,32 +162,40 @@ namespace Catel.Logging
                 filePath = filePath.Replace(FilePathKeyword.AutoLogFileName, AutoLogFileNameReplacement);
             }
 
-            var isWebApp = HttpContextHelper.HasHttpContext();
+            var company = _assembly?.Company() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(company))
+            {
+                throw new CatelException("Assembly does not contain a company attribute");
+            }
+
+            var product = _assembly?.Product() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(product))
+            {
+                throw new CatelException("Assembly does not contain a product attribute");
+            }
 
             string dataDirectory;
 
-            if (_assembly != null)
+            if (_assembly is not null)
             {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product())
-                                         : IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
+                dataDirectory = IO.Path.GetApplicationDataDirectory(company, product);
             }
             else
             {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers()
-                                         : IO.Path.GetApplicationDataDirectory();
+                dataDirectory = IO.Path.GetApplicationDataDirectory();
             }
 
-            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyName))
+            if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyName))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyName, _assembly.GetName().Name);
             }
 
-            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyProduct))
+            if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyProduct))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyProduct, _assembly.Product());
             }
 
-            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyCompany))
+            if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyCompany))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyCompany, _assembly.Company());
             }
@@ -223,9 +222,7 @@ namespace Catel.Logging
 
             if (filePath.Contains(FilePathKeyword.AppDataLocal))
             {
-                var dataDirectoryLocal = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal,
-                                                                                                 _assembly.Company(),
-                                                                                                 _assembly.Product())
+                var dataDirectoryLocal = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal, company, product)
                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal);
 
 
@@ -234,9 +231,7 @@ namespace Catel.Logging
 
             if (filePath.Contains(FilePathKeyword.AppDataRoaming))
             {
-                var dataDirectoryRoaming = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming,
-                                                                                                   _assembly.Company(),
-                                                                                                   _assembly.Product())
+                var dataDirectoryRoaming = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, company, product)
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming);
 
 
@@ -245,9 +240,7 @@ namespace Catel.Logging
 
             if (filePath.Contains(FilePathKeyword.AppDataMachine))
             {
-                var dataDirectoryMachine = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine,
-                                                                                                   _assembly.Company(),
-                                                                                                   _assembly.Product())
+                var dataDirectoryMachine = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine, company, product)
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine);
 
                 filePath = filePath.Replace(FilePathKeyword.AppDataMachine, dataDirectoryMachine);
@@ -297,16 +290,17 @@ namespace Catel.Logging
 
                 using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
                 {
-                    var writer = new StreamWriter(fileStream);
-
-                    foreach (var batchEntry in batchEntries)
+                    using (var writer = new StreamWriter(fileStream))
                     {
-                        var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
+                        foreach (var batchEntry in batchEntries)
+                        {
+                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
 
-                        await writer.WriteLineAsync(message);
+                            await writer.WriteLineAsync(message);
+                        }
+
+                        await writer.FlushAsync();
                     }
-
-                    await writer.FlushAsync();
                 }
             }
             catch (Exception)
@@ -315,10 +309,8 @@ namespace Catel.Logging
             }
         }
 
-        private void Initialize(bool initFilePath, Assembly assembly = null)
+        private void Initialize(bool initFilePath)
         {
-            _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-
             if (initFilePath && string.IsNullOrWhiteSpace(_filePath))
             {
                 _filePath = DetermineFilePath(FilePathKeyword.AutoLogFileName);
@@ -327,17 +319,14 @@ namespace Catel.Logging
 
         private void CreateCopyOfCurrentLogFile(string filePath)
         {
-            for (int i = 1; i < 999; i++)
+            for (var i = 1; i < 999; i++)
             {
-                var possibleFilePath = string.Format("{0}.{1:000}", filePath, i);
+                var possibleFilePath = string.Format("{0}.{1:000}", filePath, i.ToString());
                 if (!File.Exists(possibleFilePath))
                 {
                     File.Move(filePath, possibleFilePath);
                 }
             }
         }
-        #endregion
     }
 }
-
-#endif

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UrlLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -13,12 +7,7 @@ namespace Catel.MVVM
 
     using Logging;
     using Reflection;
-
-#if XAMARIN
-
-#else
     using Windows;
-#endif
 
     /// <summary>
     /// Locator for urls.
@@ -40,10 +29,10 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="url"/> is <c>null</c> or whitespace.</exception>
         public void Register(Type viewModelType, string url)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
             Argument.IsNotNullOrWhitespace("url", url);
 
-            var typeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
+            var typeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.GetSafeFullName(true));
 
             Register(typeName, url);
         }
@@ -60,24 +49,29 @@ namespace Catel.MVVM
         /// <see cref="ILocator.NamingConventions"/> are changed. If the <see cref="ILocator.NamingConventions"/> are changed,
         /// the cache must be cleared manually.
         /// </remarks>
-        public virtual string ResolveUrl(Type viewModelType, bool ensurePageExists = true)
+        public virtual string? ResolveUrl(Type viewModelType, bool ensurePageExists = true)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
-            string assembly = TypeHelper.GetAssemblyName(viewModelType.AssemblyQualifiedName);
-            string viewModelTypeName = viewModelType.Name;
+            var assembly = TypeHelper.GetAssemblyName(viewModelType.GetSafeFullName(true));
+            if (assembly is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Cannot resolve value '{viewModelType.GetSafeFullName()}', assembly name returned null");
+            }
 
-            var viewModelTypeNameWithAssembly = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
+            var viewModelTypeName = viewModelType.Name;
+
+            var viewModelTypeNameWithAssembly = TypeHelper.GetTypeNameWithAssembly(viewModelType.GetSafeFullName(true));
 
             var itemInCache = GetItemFromCache(viewModelTypeNameWithAssembly);
-            if (itemInCache != null)
+            if (itemInCache is not null)
             {
                 return itemInCache;
             }
 
             foreach (var convention in NamingConventions)
             {
-                string viewUri = NamingConvention.ResolveViewByViewModelName(assembly, viewModelTypeName, convention);
+                var viewUri = NamingConvention.ResolveViewByViewModelName(assembly, viewModelTypeName, convention);
 
                 if (!ensurePageExists)
                 {
@@ -85,11 +79,7 @@ namespace Catel.MVVM
                     return viewUri;
                 }
 
-#if XAMARIN || XAMARIN_FORMS
-
-                throw new MustBeImplementedException();
-#else
-                string shortAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(viewModelType.GetAssemblyFullNameEx());
+                var shortAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(viewModelType.GetAssemblyFullNameEx() ?? string.Empty);
                 var viewAsResourceUri = ResourceHelper.GetResourceUri(viewUri, shortAssemblyName);
 
                 if (ResourceHelper.XamlPageExists(viewAsResourceUri))
@@ -98,7 +88,6 @@ namespace Catel.MVVM
                     AddItemToCache(viewModelTypeNameWithAssembly, viewUri);
                     return viewUri;
                 }
-#endif
             }
 
             Log.Warning("Tried resolving the view for '{0}' via all naming conventions, but it did not succeed", viewModelTypeName);
@@ -112,7 +101,7 @@ namespace Catel.MVVM
         /// <param name="typeToResolveName">The full type name of the type to resolve.</param>
         /// <param name="namingConvention">The naming convention to use for resolving.</param>
         /// <returns>Nothing, this method throws a <see cref="NotSupportedException"/>.</returns>
-        protected override string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention)
+        protected override string? ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention)
         {
             throw new NotSupportedException();
         }

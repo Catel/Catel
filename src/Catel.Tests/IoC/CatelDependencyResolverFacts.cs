@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CatelDependencyResolverFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using Catel.IoC;
@@ -20,7 +13,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNulServiceLocator()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CatelDependencyResolver(null));
+                Assert.Throws<ArgumentNullException>(() => new CatelDependencyResolver(null));
             }
         }
 
@@ -30,29 +23,35 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.CanResolve(null));
+                    Assert.Throws<ArgumentNullException>(() => dependencyResolver.CanResolve(null));
+                }
             }
 
             [TestCase]
             public void ReturnsFalseForNonRegisteredType()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                Assert.IsFalse(dependencyResolver.CanResolve(typeof(ITestInterface)));
+                    Assert.That(dependencyResolver.CanResolve(typeof(ITestInterface)), Is.False);
+                }
             }
 
             [TestCase]
             public void ReturnsTrueForRegisteredType()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                serviceLocator.RegisterType<IMessageService, MessageService>();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    serviceLocator.RegisterType<IMessageService, MessageService>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                Assert.IsTrue(dependencyResolver.CanResolve(typeof(IMessageService)));
+                    Assert.That(dependencyResolver.CanResolve(typeof(IMessageService)), Is.True);
+                }
             }
         }
 
@@ -62,43 +61,51 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentExceptionForNullTypes()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.CanResolveMultiple(null));
+                    Assert.Throws<ArgumentNullException>(() => dependencyResolver.CanResolveMultiple(null));
+                }
             }
 
             [TestCase]
             public void ReturnsTrueForEmptyArray()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                Assert.IsTrue(dependencyResolver.CanResolveMultiple(new Type[] { }));
+                    Assert.That(dependencyResolver.CanResolveMultiple(new Type[] { }), Is.True);
+                }
             }
 
             [TestCase]
             public void ReturnsFalseWhenNotAllTypesCanBeResolved()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                serviceLocator.RegisterType<IMessageService, MessageService>();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    serviceLocator.RegisterType<IMessageService, MessageService>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(ITestInterface), typeof(INavigationService), typeof(ITypeFactory) };
+                    var typesToResolve = new[] { typeof(ITestInterface), typeof(INavigationService), typeof(ITypeFactory) };
 
-                Assert.IsFalse(dependencyResolver.CanResolveMultiple(typesToResolve));
+                    Assert.That(dependencyResolver.CanResolveMultiple(typesToResolve), Is.False);
+                }
             }
 
             [TestCase]
             public void ReturnsTrueWhenAllTypesCanBeResolved()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                serviceLocator.RegisterType<IMessageService, MessageService>();
-                serviceLocator.RegisterType<INavigationService, NavigationService>();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    serviceLocator.RegisterType<IMessageService, MessageService>();
+                    serviceLocator.RegisterType<INavigationService, NavigationService>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
-                Assert.IsTrue(dependencyResolver.CanResolveMultiple(typesToResolve));
+                    var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
+                    Assert.That(dependencyResolver.CanResolveMultiple(typesToResolve), Is.True);
+                }
             }
         }
 
@@ -108,29 +115,35 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.Resolve(null));
+                    Assert.Throws<ArgumentNullException>(() => dependencyResolver.Resolve(null));
+                }
             }
 
             [TestCase]
             public void ThrowsTypeNotRegisteredForNonRegisteredType()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => dependencyResolver.Resolve(typeof(ITestInterface)));
+                    Assert.That(dependencyResolver.Resolve(typeof(ITestInterface)), Is.Null);
+                }
             }
 
             [TestCase]
             public void ReturnsInstanceForRegisteredType()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                serviceLocator.RegisterType<IMessageService, MessageService>();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    serviceLocator.RegisterType<IMessageService, MessageService>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                Assert.IsNotNull(dependencyResolver.Resolve(typeof(IMessageService)));
+                    Assert.That(dependencyResolver.Resolve(typeof(IMessageService)), Is.Not.Null);
+                }
             }
         }
 
@@ -140,51 +153,59 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentExceptionForNullTypes()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.ResolveMultiple(null));
+                    Assert.Throws<ArgumentNullException>(() => dependencyResolver.ResolveMultiple(null));
+                }
             }
 
             [TestCase]
             public void ReturnsEmptyArrayForEmptyArray()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                var resolvedObjects = dependencyResolver.ResolveMultiple(new Type[] {});
-                Assert.AreEqual(0, resolvedObjects.Length);
+                    var resolvedObjects = dependencyResolver.ResolveMultiple(new Type[] { });
+                    Assert.That(resolvedObjects.Length, Is.EqualTo(0));
+                }
             }
 
             [TestCase]
             public void ReturnsArrayWithNullValuesForNonRegisteredTypes()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                serviceLocator.RegisterType<IMessageService, MessageService>();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    serviceLocator.RegisterType<IMessageService, MessageService>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(IMessageService), typeof(ITestInterface), typeof(ITypeFactory) };
-                var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
+                    var typesToResolve = new[] { typeof(IMessageService), typeof(ITestInterface), typeof(ITypeFactory) };
+                    var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
 
-                Assert.IsNotNull(resolvedTypes[0] as IMessageService);
-                Assert.IsNull(resolvedTypes[1]);
-                Assert.IsNotNull(resolvedTypes[2] as ITypeFactory);
+                    Assert.That(resolvedTypes[0] as IMessageService, Is.Not.Null);
+                    Assert.That(resolvedTypes[1], Is.Null);
+                    Assert.That(resolvedTypes[2] as ITypeFactory, Is.Not.Null);
+                }
             }
 
             [TestCase]
             public void ReturnsArrayWithAllValuesForRegisteredTypes()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                serviceLocator.RegisterType<IMessageService, MessageService>();
-                serviceLocator.RegisterType<INavigationService, NavigationService>();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    serviceLocator.RegisterType<IMessageService, MessageService>();
+                    serviceLocator.RegisterType<INavigationService, NavigationService>();
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
-                var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
+                    var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
+                    var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
 
-                Assert.IsNotNull(resolvedTypes[0] as IMessageService);
-                Assert.IsNotNull(resolvedTypes[1] as INavigationService);
-                Assert.IsNotNull(resolvedTypes[2] as ITypeFactory);
+                    Assert.That(resolvedTypes[0] as IMessageService, Is.Not.Null);
+                    Assert.That(resolvedTypes[1] as INavigationService, Is.Not.Null);
+                    Assert.That(resolvedTypes[2] as ITypeFactory, Is.Not.Null);
+                }
             }
         }
     }

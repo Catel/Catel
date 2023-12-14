@@ -1,32 +1,16 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReferenceToVisibilityConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS || ANDROID
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
-
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Convert from reference to <see cref="Visibility"/>. 
     /// If the reference contains a value, Visibility.Visible will be returned. 
     /// If the reference is null, Visibility.Collapsed will be returned.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof (object), typeof (Visibility))]
-#endif
     public class ReferenceToCollapsingVisibilityConverter : VisibilityConverterBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -44,7 +28,6 @@ namespace Catel.MVVM.Converters
             : base(notVisibleVisibility)
         {
         }
-        #endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -55,9 +38,9 @@ namespace Catel.MVVM.Converters
         /// <returns>
         /// 	<c>true</c> if the specified value is visible; otherwise, <c>false</c>.
         /// </returns>
-        protected override bool IsVisible(object value, Type targetType, object parameter)
+        protected override bool IsVisible(object? value, Type targetType, object? parameter)
         {
-            var isNull = ReferenceEquals(value, null);
+            var isNull = value is null;
 
             // Note: base class will invert if needed
 
@@ -65,7 +48,6 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET || NETCORE
     /// <summary>
     /// Convert from reference to <see cref="Visibility"/>. 
     /// If the reference contains a value, Visibility.Visible will be returned. 
@@ -82,7 +64,4 @@ namespace Catel.MVVM.Converters
         {
         }
     }
-#endif
 }
-
-#endif

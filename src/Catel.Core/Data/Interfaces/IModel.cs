@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IDataObjectBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
@@ -17,7 +11,6 @@ namespace Catel.Data
     /// </remarks>
     public interface IModel : INotifyPropertyChanged, IAdvancedEditableObject, IModelEditor, IModelSerialization, IFreezable
     {
-        #region Properties
         /// <summary>
         /// Gets the name of the object. By default, this is the name of the inherited class.
         /// </summary>
@@ -37,16 +30,14 @@ namespace Catel.Data
         /// <c>true</c> if this instance is currently in an edit session; otherwise, <c>false</c>.
         /// </value>
         bool IsInEditSession { get; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Returns the default value of a specific property.
         /// </summary>
         /// <param name="name">Name of the property.</param>
         /// <returns>Default value of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
-        object GetDefaultValue(string name);
+        object? GetDefaultValue(string name);
 
         /// <summary>
         /// Returns the typed default value of a specific property.
@@ -64,6 +55,5 @@ namespace Catel.Data
         /// <returns>Type of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
         Type GetPropertyType(string name);
-        #endregion
     }
 }

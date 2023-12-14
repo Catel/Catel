@@ -1,15 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenericSerializationFacts.generic.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
-    using System.IO;
-    using System.Runtime.Serialization;
     using Catel.Data;
     using Catel.Runtime.Serialization;
     using NUnit.Framework;
@@ -29,7 +20,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(b, serializer, config);
 
-                    Assert.IsNotNull(clonedObject?.Item);
+                    Assert.That(clonedObject?.Item, Is.Not.Null);
                     Assert.That(clonedObject.Item.Count, Is.EqualTo(a.Count));
                 });
             }
@@ -48,11 +39,6 @@ namespace Catel.Tests.Runtime.Serialization
                 public A()
                 {
                     //empty for deserialization
-                }
-
-                protected A(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
                 }
 
                 public int Count
@@ -76,11 +62,6 @@ namespace Catel.Tests.Runtime.Serialization
                 public B()
                 {
                     //empty for deserialization
-                }
-
-                protected B(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
                 }
 
                 public T Item

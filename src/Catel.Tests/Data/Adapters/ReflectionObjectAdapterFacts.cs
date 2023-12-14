@@ -1,10 +1,5 @@
 ﻿namespace Catel.Tests.Data.Adapters
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Data;
     using NUnit.Framework;
 
@@ -18,7 +13,7 @@
         }
 
         [TestFixture]
-        public class TheSetValueMethod
+        public class TheTrySetValueMethod
         {
             [TestCase]
             public void SetsCatelModelPropertyValue()
@@ -26,8 +21,8 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new PersonTestModel();
 
-                Assert.IsTrue(adapter.SetMemberValue(model, nameof(PersonTestModel.FirstName), "John"));
-                Assert.AreEqual("John", model.FirstName);
+                Assert.That(adapter.TrySetMemberValue(model, nameof(PersonTestModel.FirstName), "John"), Is.True);
+                Assert.That(model.FirstName, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -36,8 +31,8 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(adapter.SetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), "John"));
-                Assert.AreEqual("John", model.StringProperty);
+                Assert.That(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), "John"), Is.True);
+                Assert.That(model.StringProperty, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -46,8 +41,8 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsTrue(adapter.SetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), "John"));
-                Assert.AreEqual("John", model.StringField);
+                Assert.That(adapter.TrySetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), "John"), Is.True);
+                Assert.That(model.StringField, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -56,12 +51,12 @@
                 var adapter = new ReflectionObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
-                Assert.IsFalse(adapter.SetMemberValue(model, "NotExistingMember", "John"));
+                Assert.That(adapter.TrySetMemberValue(model, "NotExistingMember", "John"), Is.False);
             }
         }
 
         [TestFixture]
-        public class TheGetValueMethod
+        public class TheTryGetValueMethod
         {
             [TestCase]
             public void GetsCatelModelPropertyValue()
@@ -74,8 +69,8 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.GetMemberValue(model, nameof(PersonTestModel.FirstName), out value));
-                Assert.AreEqual("John", model.FirstName);
+                Assert.That(adapter.TryGetMemberValue(model, nameof(PersonTestModel.FirstName), out value), Is.True);
+                Assert.That(model.FirstName, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -89,8 +84,8 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.GetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), out value));
-                Assert.AreEqual("John", value);
+                Assert.That(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), out value), Is.True);
+                Assert.That(value, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -104,8 +99,8 @@
 
                 string value = string.Empty;
 
-                Assert.IsTrue(adapter.GetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), out value));
-                Assert.AreEqual("John", value);
+                Assert.That(adapter.TryGetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), out value), Is.True);
+                Assert.That(value, Is.EqualTo("John"));
             }
 
             [TestCase]
@@ -115,7 +110,7 @@
                 var model = new TestClassWithRegularMembers();
                 string value = string.Empty;
 
-                Assert.IsFalse(adapter.GetMemberValue(model, "NotExistingMember", out value));
+                Assert.That(adapter.TryGetMemberValue(model, "NotExistingMember", out value), Is.False);
             }
         }
     }

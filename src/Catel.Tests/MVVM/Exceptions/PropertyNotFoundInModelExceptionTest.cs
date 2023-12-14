@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyNotFoundInModelExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Exceptions
+﻿namespace Catel.Tests.MVVM.Exceptions
 {
     using Catel.MVVM;
 
@@ -23,9 +17,9 @@ namespace Catel.Tests.MVVM.Exceptions
             }
             catch (PropertyNotFoundInModelException ex)
             {
-                Assert.AreEqual("viewModelProperty", ex.ViewModelPropertyName);
-                Assert.AreEqual("modelName", ex.ModelName);
-                Assert.AreEqual("modelPropertyName", ex.ModelPropertyName);
+                Assert.That(ex.ViewModelPropertyName, Is.EqualTo("viewModelProperty"));
+                Assert.That(ex.ModelName, Is.EqualTo("modelName"));
+                Assert.That(ex.ModelPropertyName, Is.EqualTo("modelPropertyName"));
             }
         }
         #endregion

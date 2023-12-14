@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectToDisplayNameConverterFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System;
     using System.Globalization;
@@ -58,37 +51,37 @@ namespace Catel.Tests.MVVM.Converters
         [TestCase(typeof(EnumWithDisplayNameClass), "EnumValue", "My enum value")]
         [TestCase(typeof(EnumWithoutDisplayNameClass), null, "EnumWithoutDisplayNameClass")]
         [TestCase(typeof(EnumWithoutDisplayNameClass), "EnumValue", "EnumValue")]
-        public void TheConvertMethod(Type type, string memberName, string expectedValue)
+        public void TheConvertMethod(Type type, string? memberName, string expectedValue)
         {
             var actualValue = string.Empty;
 
             if (string.IsNullOrWhiteSpace(memberName))
             {
                 actualValue = ConvertValue(type);
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
                 return;
             }
 
             var propertyInfo = type.GetPropertyEx(memberName);
-            if (propertyInfo != null)
+            if (propertyInfo is not null)
             {
                 actualValue = ConvertValue(propertyInfo);
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
                 return;
             }
 
             var fieldInfo = type.GetFieldEx(memberName);
-            if (fieldInfo != null)
+            if (fieldInfo is not null)
             {
                 actualValue = ConvertValue(fieldInfo);
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
                 return;
             }
 
             // This must be an enum
             var enumValue = Enum.Parse(type, memberName);
             actualValue = ConvertValue(enumValue);
-            Assert.AreEqual(expectedValue, actualValue);
+            Assert.That(actualValue, Is.EqualTo(expectedValue));
         }
 
         private static string ConvertValue(object value)

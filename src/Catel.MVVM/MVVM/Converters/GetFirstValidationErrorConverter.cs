@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GetFirstValidationErrorConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Collections.Generic;
@@ -17,9 +9,7 @@ namespace Catel.MVVM.Converters
     /// Converts a collection containing <see cref="ValidationError"/> objects to return the first error
     /// or an empty string in case there are no errors.
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(ICollection<ValidationError>), typeof(string))]
-#endif
     public class GetFirstValidationErrorConverter : ValueConverterBase
     {
         /// <summary>
@@ -29,7 +19,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             if (value is null)
             {
@@ -57,5 +47,3 @@ namespace Catel.MVVM.Converters
         }
     }
 }
-
-#endif

@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputGestureExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System.Windows.Input;
-    using Windows.Input;
     using NUnit.Framework;
     using Catel.Windows.Input;
     using InputGesture = Catel.Windows.Input.InputGesture;
@@ -25,7 +17,7 @@ namespace Catel.Tests
         {
             var inputGesture = new InputGesture(key, modifierKeys);
 
-            Assert.AreEqual(expectedValue, inputGesture.IsEmpty());
+            Assert.That(inputGesture.IsEmpty(), Is.EqualTo(expectedValue));
         }
     }
 }

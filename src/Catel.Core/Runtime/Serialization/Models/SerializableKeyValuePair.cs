@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializableKeyValuePair.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Runtime.Serialization;
@@ -21,7 +14,7 @@ namespace Catel.Runtime.Serialization
         /// Gets or sets the key.
         /// </summary>
         /// <value>The key.</value>
-        public object Key { get; set; }
+        public object? Key { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the key.
@@ -29,13 +22,13 @@ namespace Catel.Runtime.Serialization
         /// <value>The type of the key.</value>
         [ExcludeFromSerialization]
         [XmlIgnore]
-        public Type KeyType { get; set; }
+        public Type? KeyType { get; set; }
 
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public object Value { get; set; }
+        public object? Value { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the value.
@@ -43,7 +36,7 @@ namespace Catel.Runtime.Serialization
         /// <value>The type of the value.</value>
         [ExcludeFromSerialization]
         [XmlIgnore]
-        public Type ValueType { get; set; }
+        public Type? ValueType { get; set; }
 
         public SerializableKeyValuePair()
         {

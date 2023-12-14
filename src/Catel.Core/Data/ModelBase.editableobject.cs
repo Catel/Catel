@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.editableobject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -16,27 +10,15 @@ namespace Catel.Data
     using Logging;
     using Runtime.Serialization;
 
-#if !NET && !NETCORE && !NETSTANDARD
-    using System.Runtime.Serialization;
-#endif
-
     public partial class ModelBase
     {
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
-        internal ISerializer _editableObjectSerializer;
+        internal ISerializer? _editableObjectSerializer;
 
-        #region Internal classes
         /// <summary>
         /// Class containing backup information.
         /// </summary>
-#if !NET && !NETCORE && !NETSTANDARD
-        [DataContract]
-#endif
         private class BackupData
         {
-            #region Fields
             /// <summary>
             /// The <see cref="ModelBase"/> object that this backup is created for.
             /// </summary>
@@ -50,15 +32,13 @@ namespace Catel.Data
             /// <summary>
             /// Backup of the property values.
             /// </summary>
-            private byte[] _propertyValuesBackup;
+            private readonly byte[] _propertyValuesBackup;
 
             /// <summary>
             /// Backup of the object values.
             /// </summary>
-            private Dictionary<string, object> _objectValuesBackup;
-            #endregion
+            private readonly Dictionary<string, object?> _objectValuesBackup;
 
-            #region Constructors
             /// <summary>
             /// Initializes a new instance of the <see cref="ModelBase.BackupData" /> class.
             /// </summary>
@@ -69,16 +49,6 @@ namespace Catel.Data
                 _object = obj;
                 _serializer = serializer;
 
-                CreateBackup();
-            }
-            #endregion
-
-            #region Methods
-            /// <summary>
-            /// Creates a backup of the object property values.
-            /// </summary>
-            private void CreateBackup()
-            {
                 using (var stream = new MemoryStream())
                 {
                     var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(_object.GetType());
@@ -86,13 +56,15 @@ namespace Catel.Data
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
-                    _serializer?.SerializeMembers(_object, stream, null, propertiesToIgnore);
+                    _serializer.SerializeMembers(_object, stream, null, propertiesToIgnore);
 
                     _propertyValuesBackup = stream.ToByteArray();
                 }
 
-                _objectValuesBackup = new Dictionary<string, object>();
-                _objectValuesBackup.Add(nameof(IsDirty), _object.IsDirty);
+                _objectValuesBackup = new Dictionary<string, object?>
+                {
+                    { nameof(IsDirty), BoxingCache.GetBoxedValue(_object.IsDirty) }
+                };
             }
 
             /// <summary>
@@ -100,7 +72,7 @@ namespace Catel.Data
             /// </summary>
             public void RestoreBackup()
             {
-                Dictionary<string, object> oldPropertyValues = null;
+                Dictionary<string, object?>? oldPropertyValues = null;
 
                 using (var stream = new MemoryStream(_propertyValuesBackup))
                 {
@@ -108,7 +80,7 @@ namespace Catel.Data
                     {
                         var properties = new List<MemberValue>();
 
-                        if (_serializer != null)
+                        if (_serializer is not null)
                         {
                             properties = _serializer.DeserializeMembers(_object, stream, null);
                         }
@@ -135,24 +107,21 @@ namespace Catel.Data
                     }
                 }
 
-                _object.IsDirty = (bool)_objectValuesBackup[nameof(IsDirty)];
+                var isDirty = _objectValuesBackup[nameof(IsDirty)] as bool?;
+                if (isDirty is not null)
+                {
+                    _object.IsDirty = isDirty.Value;
+                }
             }
-            #endregion
         }
-        #endregion
 
         /// <summary>
         /// The backup of the current object if any backup is initiated.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
-        private BackupData _backup;
+        private BackupData? _backup;
 
-#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
-#endif
-        private event EventHandler<BeginEditEventArgs> _beginEditingEvent;
+        private event EventHandler<BeginEditEventArgs>? _beginEditingEvent;
 
         /// <summary>
         /// Occurs when the edit cancel has been completed or canceled.
@@ -164,40 +133,34 @@ namespace Catel.Data
         /// be no need for the <see cref="EditEventArgs.EditableObject"/> as
         /// the sender of the event should be the same information.
         /// </remarks>
-#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
-#endif
-        private event EventHandler<EventArgs> _cancelEditingCompletedEvent;
+        private event EventHandler<EventArgs>? _cancelEditingCompletedEvent;
 
-#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
-#endif
-        private event EventHandler<CancelEditEventArgs> _cancelEditingEvent;
+        private event EventHandler<CancelEditEventArgs>? _cancelEditingEvent;
 
-#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
-#endif
-        private event EventHandler<EndEditEventArgs> _endEditingEvent;
+        private event EventHandler<EndEditEventArgs>? _endEditingEvent;
 
-        event EventHandler<BeginEditEventArgs> IAdvancedEditableObject.BeginEditing
+        event EventHandler<BeginEditEventArgs>? IAdvancedEditableObject.BeginEditing
         {
             add { _beginEditingEvent += value; }
             remove { _beginEditingEvent -= value; }
         }
 
-        event EventHandler<EventArgs> IAdvancedEditableObject.CancelEditingCompleted
+        event EventHandler<EventArgs>? IAdvancedEditableObject.CancelEditingCompleted
         {
             add { _cancelEditingCompletedEvent += value; }
             remove { _cancelEditingCompletedEvent += value; }
         }
 
-        event EventHandler<CancelEditEventArgs> IAdvancedEditableObject.CancelEditing
+        event EventHandler<CancelEditEventArgs>? IAdvancedEditableObject.CancelEditing
         {
             add { _cancelEditingEvent += value; }
             remove { _cancelEditingEvent += value; }
         }
 
-        event EventHandler<EndEditEventArgs> IAdvancedEditableObject.EndEditing
+        event EventHandler<EndEditEventArgs>? IAdvancedEditableObject.EndEditing
         {
             add { _endEditingEvent += value; }
             remove { _endEditingEvent += value; }
@@ -248,7 +211,7 @@ namespace Catel.Data
 
             var dependencyResolver = this.GetDependencyResolver();
 
-            var serializer = dependencyResolver.Resolve<ISerializer>();
+            var serializer = dependencyResolver.ResolveRequired<ISerializer>();
             return serializer;
         }
 
@@ -257,7 +220,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.BeginEdit()
         {
-            if (_backup != null)
+            if (_backup is not null)
             {
                 Log.Debug("IEditableObject is already in edit state");
                 return;

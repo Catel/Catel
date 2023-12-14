@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationObjectFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using Catel.Runtime.Serialization;
@@ -19,14 +13,14 @@ namespace Catel.Tests.Runtime.Serialization
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => SerializationObject.FailedToDeserialize(null, SerializationMemberGroup.CatelProperty,  "property"));
+                Assert.Throws<ArgumentNullException>(() => SerializationObject.FailedToDeserialize(null, SerializationMemberGroup.CatelProperty, "property"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyPropertyName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => SerializationObject.FailedToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => SerializationObject.FailedToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, string.Empty));
+                Assert.Throws<ArgumentException>(() => SerializationObject.FailedToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, null));
+                Assert.Throws<ArgumentException>(() => SerializationObject.FailedToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, string.Empty));
             }
         }
 
@@ -36,14 +30,14 @@ namespace Catel.Tests.Runtime.Serialization
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => SerializationObject.SucceededToDeserialize(null, SerializationMemberGroup.CatelProperty, "property", null));
+                Assert.Throws<ArgumentNullException>(() => SerializationObject.SucceededToDeserialize(null, SerializationMemberGroup.CatelProperty, "property", null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyPropertyName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => SerializationObject.SucceededToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, null, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => SerializationObject.SucceededToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, string.Empty, null));
+                Assert.Throws<ArgumentException>(() => SerializationObject.SucceededToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, null, null));
+                Assert.Throws<ArgumentException>(() => SerializationObject.SucceededToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, string.Empty, null));
             }
         }
 
@@ -56,9 +50,9 @@ namespace Catel.Tests.Runtime.Serialization
                 var serializationObject = SerializationObject.FailedToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, "property");
                 object propertyValue = null;
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => propertyValue = serializationObject.MemberValue);
+                Assert.Throws<InvalidOperationException>(() => propertyValue = serializationObject.MemberValue);
 
-                Assert.IsNull(propertyValue);
+                Assert.That(propertyValue, Is.Null);
             }
 
             [TestCase]
@@ -67,7 +61,7 @@ namespace Catel.Tests.Runtime.Serialization
                 var serializationObject = SerializationObject.SucceededToDeserialize(typeof(SerializationObject), SerializationMemberGroup.CatelProperty, "property", 42);
                 object propertyValue = serializationObject.MemberValue;
 
-                Assert.AreEqual(42, propertyValue);
+                Assert.That(propertyValue, Is.EqualTo(42));
             }
         }
     }

@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelWrapper.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
-#if UWP
-    using global::Windows.UI.Xaml.Controls;
-#else
     using System.Windows.Controls;
-#endif
 
     public partial class ViewModelWrapper
     {
-        private Grid _grid;
+        private Grid? _grid;
 
         partial void CreateWrapper(object viewModelWrapper)
         {
@@ -25,9 +13,11 @@ namespace Catel.MVVM.Views
 
         partial void SetViewModel(IViewModel viewModel)
         {
-            _grid.DataContext = viewModel;
+            var grid = _grid;
+            if (grid is not null)
+            {
+                grid.DataContext = viewModel;
+            }
         }
     }
 }
-
-#endif

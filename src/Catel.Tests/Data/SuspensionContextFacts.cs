@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SuspensionContextFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Linq;
     using Catel.Data;
@@ -18,16 +11,16 @@ namespace Catel.Tests.Data
         public void CorrectlyAddsProperties()
         {
             var suspensionContext = new SuspensionContext();
-            
+
             suspensionContext.Add(null);
             suspensionContext.Add("A");
             suspensionContext.Add("B");
 
             var items = suspensionContext.Properties.ToList();
 
-            Assert.AreEqual(string.Empty, items[0]);
-            Assert.AreEqual("A", items[1]);
-            Assert.AreEqual("B", items[2]);
+            Assert.That(items[0], Is.EqualTo(string.Empty));
+            Assert.That(items[1], Is.EqualTo("A"));
+            Assert.That(items[2], Is.EqualTo("B"));
         }
 
         [TestCase]
@@ -42,9 +35,9 @@ namespace Catel.Tests.Data
 
             var items = suspensionContext.Properties.ToList();
 
-            Assert.AreEqual(2, items.Count);
-            Assert.AreEqual(string.Empty, items[0]);
-            Assert.AreEqual("A", items[1]);
+            Assert.That(items.Count, Is.EqualTo(2));
+            Assert.That(items[0], Is.EqualTo(string.Empty));
+            Assert.That(items[1], Is.EqualTo("A"));
         }
     }
 }

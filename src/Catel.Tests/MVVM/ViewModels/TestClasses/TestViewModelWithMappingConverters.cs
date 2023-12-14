@@ -1,11 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TestViewModelWithMappingConverters.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using Catel.Data;
     using Catel.MVVM;
@@ -27,7 +20,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(Person), null);
+        public static readonly IPropertyData PersonProperty = RegisterProperty<Person>("Person");
 
         /// <summary>
         /// Gets or sets the first name.
@@ -42,7 +35,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName");
 
 
         /// <summary>
@@ -59,7 +52,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string));
+        public static readonly IPropertyData MiddleNameProperty = RegisterProperty<string>("MiddleName");
 
 
         /// <summary>
@@ -75,9 +68,9 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string));
+        public static readonly IPropertyData LastNameProperty = RegisterProperty<string>("LastName");
 
-  
+
         [ViewModelToModel("Person", ConverterType = typeof(UIntToStringMapping))]
         public string Age
         {
@@ -86,26 +79,26 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<TestViewModelWithMappingConverters, string>(model => model.Age);
+        public static readonly IPropertyData AgeProperty = RegisterProperty<TestViewModelWithMappingConverters, string>(model => model.Age);
 
         /// <summary>
         /// Gets or sets the full name.
         /// </summary>
-        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, 
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" },
             ConverterType = typeof(CollapsMapping))]
         public string FullName
         {
             get { return GetValue<string>(FullNameProperty); }
             set { SetValue(FullNameProperty, value); }
         }
-        
+
         /// <summary>Register the FullName property so it is known in the class.</summary>
-        public static readonly PropertyData FullNameProperty = RegisterProperty<TestViewModelWithMappingConverters, string>(model => model.FullName);
+        public static readonly IPropertyData FullNameProperty = RegisterProperty<TestViewModelWithMappingConverters, string>(model => model.FullName);
 
         /// <summary>
         /// Gets or sets the full name with separated names with ';'.
         /// </summary>
-        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, 
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" },
             ConverterType = typeof(CollapsMapping), AdditionalConstructorArgs = new object[] { ';' })]
         public string FullNameWithCustomSeparator
         {
@@ -114,6 +107,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>Register the FullNameWithCustomSeparator property so it is known in the class.</summary>
-        public static readonly PropertyData FullNameWithCustomSeparatorProperty = RegisterProperty<TestViewModelWithMappingConverters, string>(model => model.FullNameWithCustomSeparator);
+        public static readonly IPropertyData FullNameWithCustomSeparatorProperty = RegisterProperty<TestViewModelWithMappingConverters, string>(model => model.FullNameWithCustomSeparator);
     }
 }

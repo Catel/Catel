@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManager.wpf.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2018 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Runtime.CompilerServices;
@@ -52,14 +44,14 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         public void SubscribeToKeyboardEvents(FrameworkElement view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             if (!_subscribedViews.TryGetValue(view, out var commandManagerWrapper))
             {
                 // Note: also check for dispatcher, see https://github.com/Catel/Catel/issues/1205
                 var app = Application.Current;
                 var dispatcher = Dispatcher.CurrentDispatcher;
-                if (app != null && ReferenceEquals(app.Dispatcher, dispatcher))
+                if (app is not null && ReferenceEquals(app.Dispatcher, dispatcher))
                 {
                     _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
 
@@ -75,12 +67,10 @@ namespace Catel.MVVM
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             var view = sender as FrameworkElement;
-            if (view != null)
+            if (view is not null)
             {
                 SubscribeToKeyboardEvents(view);
             }
         }
     }
 }
-
-#endif

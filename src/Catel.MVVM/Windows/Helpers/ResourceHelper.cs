@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResourceHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Windows;
@@ -28,14 +20,12 @@ namespace Catel.Windows
         /// </summary>
         public static void EnsurePackUriIsAllowed()
         {
-#if !UWP
             if (!UriParser.IsKnownScheme("pack"))
             {
                 Log.Debug("Pack uri is not yet allowed, adding it as known scheme");
 
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
             }
-#endif
         }
 
         /// <summary>
@@ -55,7 +45,7 @@ namespace Catel.Windows
         /// If used, this must be the short name of the assembly.</param>
         /// <returns>The resource uri.</returns>
         /// <exception cref="ArgumentException">The <paramref name="resourceUri"/> is <c>null</c> or whitespace.</exception>
-        public static string GetResourceUri(string resourceUri, string shortAssemblyName = null)
+        public static string GetResourceUri(string resourceUri, string? shortAssemblyName = null)
         {
             Argument.IsNotNullOrWhitespace("resourceUri", resourceUri);
 
@@ -67,18 +57,10 @@ namespace Catel.Windows
             if (string.IsNullOrEmpty(shortAssemblyName))
             {
                 // Current app resource
-#if NET || NETCORE
                 return string.Format("pack://application:,,,/{0}", resourceUri);
-#else
-                return string.Format("/{0}", resourceUri);
-#endif
             }
 
-#if NET || NETCORE
             return string.Format("pack://application:,,,/{0};component/{1}", shortAssemblyName, resourceUri);
-#else
-            return string.Format("/{0};component/{1}", shortAssemblyName, resourceUri);
-#endif
         }
 
         /// <summary>
@@ -110,22 +92,16 @@ namespace Catel.Windows
         /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
         public static bool XamlPageExists(Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
-#if UWP
-            return false;
-#else
             try
             {
-                return Application.GetResourceStream(uri) != null;
+                return Application.GetResourceStream(uri) is not null;
             }
             catch (Exception)
             {
                 return false;
             }
-#endif
         }
     }
 }
-
-#endif

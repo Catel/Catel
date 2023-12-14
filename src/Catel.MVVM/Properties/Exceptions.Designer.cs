@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Catel.MVVM.Properties {
+namespace Catel.Properties {
     using System;
-    using Catel.Reflection;
+    
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -19,7 +19,7 @@ namespace Catel.MVVM.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Exceptions {
@@ -39,7 +39,7 @@ namespace Catel.MVVM.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Catel.MVVM.Properties.Exceptions", typeof(Exceptions).GetAssemblyEx());
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Catel.Properties.Exceptions", typeof(Exceptions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -119,7 +119,7 @@ namespace Catel.MVVM.Properties {
         ///
         ///Make sure that the property is a Catel property, not a regular property.
         ///
-        ///If you are sure that you have a model with this name, make sure it&apos;s public instead of private or protected for Silverlight and WP7 because non-public reflection is not allowed in Silverlight..
+        ///If you are sure that you have a model with this name, make sure it&apos;s public instead of private or protected for UWP because non-public reflection is not allowed in UWP..
         /// </summary>
         internal static string ModelNotRegistered {
             get {

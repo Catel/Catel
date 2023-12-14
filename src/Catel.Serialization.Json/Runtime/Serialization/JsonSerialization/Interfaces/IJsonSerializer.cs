@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IJsonSerializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization.Json
+﻿namespace Catel.Runtime.Serialization.Json
 {
     using System;
-    using System.Globalization;
-    using Data;
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Interface for the binary serializer.
+    /// Interface for the json serializer.
     /// </summary>
     public interface IJsonSerializer : ISerializer
     {
@@ -37,7 +28,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
         /// <param name="configuration">The configuration.</param>
-        void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration = null);
+        void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration? configuration = null);
 
         /// <summary>
         /// Deserializes the specified model from the json reader.
@@ -48,6 +39,6 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ModelBase.
         /// </returns>
-        object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration = null);
+        object? Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration? configuration = null);
     }
 }

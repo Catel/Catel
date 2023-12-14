@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System.Linq;
     using System.Threading;
@@ -25,7 +18,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             var vm = new TestViewModel();
 
-            Assert.IsFalse(vm.IsDirty);
+            Assert.That(vm.IsDirty, Is.False);
         }
 
         [TestCase]
@@ -37,95 +30,95 @@ namespace Catel.Tests.MVVM.ViewModels
             await vm.InitializeViewModelAsync();
 
             vm.FirstName = "John";
-            Assert.AreEqual("John", vm.FirstName);
-            Assert.IsFalse(freezable.IsFrozen);
+            Assert.That(vm.FirstName, Is.EqualTo("John"));
+            Assert.That(freezable.IsFrozen, Is.False);
 
             await vm.SaveAndCloseViewModelAsync();
 
             vm.FirstName = "Jane";
-            Assert.AreEqual("John", vm.FirstName);
-            Assert.IsTrue(freezable.IsFrozen);
+            Assert.That(vm.FirstName, Is.EqualTo("John"));
+            Assert.That(freezable.IsFrozen, Is.True);
 
             await vm.InitializeViewModelAsync();
 
             vm.FirstName = "Jane";
-            Assert.AreEqual("Jane", vm.FirstName);
-            Assert.IsFalse(freezable.IsFrozen);
+            Assert.That(vm.FirstName, Is.EqualTo("Jane"));
+            Assert.That(freezable.IsFrozen, Is.False);
         }
 
         [TestCase]
-        public async Task CancelAfterCloseProtection()
+        public async Task CancelAfterCloseProtectionAsync()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
 
-            Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
-            Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(false));
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
 
             await vm.CancelAndCloseViewModelAsync();
 
-            Assert.AreEqual(true, auditor.OnViewModelCanceledCalled);
-            Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
 
             auditor.OnViewModelCanceledCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
             await vm.CancelAndCloseViewModelAsync();
 
-            Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
-            Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(false));
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
         }
 
         [TestCase]
-        public async Task SaveAfterCloseProtection()
+        public async Task SaveAfterCloseProtectionAsync()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
 
-            Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
-            Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(false));
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
 
             await vm.SaveAndCloseViewModelAsync();
 
-            Assert.AreEqual(true, auditor.OnViewModelSavedCalled);
-            Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(true));
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
 
             auditor.OnViewModelSavedCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
             await vm.SaveAndCloseViewModelAsync();
 
-            Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
-            Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(false));
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
         }
 
         [TestCase]
-        public async Task CloseAfterCloseProtection()
+        public async Task CloseAfterCloseProtectionAsync()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
 
-            Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
 
             await vm.CloseViewModelAsync(null);
 
-            Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
 
             auditor.OnViewModelClosedCalled = false;
 
             await vm.CloseViewModelAsync(null);
 
-            Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
         }
 
         [Test]
-        public async Task MultipleViewModelsCanBeCreatedConcurrently()
+        public async Task MultipleViewModelsCanBeCreatedConcurrentlyAsync()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;
@@ -175,7 +168,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public async Task PropertiesCanBeSetConcurrentlyWithObjectCreation()
+        public async Task PropertiesCanBeSetConcurrentlyWithObjectCreationAsync()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;
@@ -230,7 +223,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public async Task CommandsCanBeCalledConcurrentlyWithObjectCreation()
+        public async Task CommandsCanBeCalledConcurrentlyWithObjectCreationAsync()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;

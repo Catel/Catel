@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UriExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using NUnit.Framework;
@@ -18,7 +11,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullUri()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => UriExtensions.GetSafeUriString(null));
+                Assert.Throws<ArgumentNullException>(() => UriExtensions.GetSafeUriString(null));
             }
 
             [TestCase]
@@ -27,7 +20,7 @@ namespace Catel.Tests
                 var inputUri = new Uri("/Views/MainPage.xaml", UriKind.RelativeOrAbsolute);
                 var uri = UriExtensions.GetSafeUriString(inputUri);
 
-                Assert.AreEqual("/Views/MainPage.xaml", uri);
+                Assert.That(uri, Is.EqualTo("/Views/MainPage.xaml"));
             }
 
             // Test case for https://catelproject.atlassian.net/browse/CTL-240
@@ -37,7 +30,7 @@ namespace Catel.Tests
                 var inputUri = new Uri("//Views/MainPage.xaml", UriKind.RelativeOrAbsolute);
                 var uri = UriExtensions.GetSafeUriString(inputUri);
 
-                Assert.AreEqual("/Views/MainPage.xaml", uri);
+                Assert.That(uri, Is.EqualTo("/Views/MainPage.xaml"));
             }
         }
     }

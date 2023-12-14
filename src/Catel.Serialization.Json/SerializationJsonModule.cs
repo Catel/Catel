@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationJsonModule.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
+    using System;
     using IoC;
     using Runtime.Serialization.Json;
 
@@ -15,17 +9,15 @@ namespace Catel
     /// </summary>
     public class SerializationJsonModule : IServiceLocatorInitializer
     {
-        #region Methods
         /// <summary>
         /// Initializes the specified service locator.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
         public void Initialize(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             serviceLocator.RegisterType<IJsonSerializer, JsonSerializer>();
         }
-        #endregion
     }
 }

@@ -1,20 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationEventArgsExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Navigation
+﻿namespace Catel.MVVM.Navigation
 {
     using System;
-
-#if !XAMARIN && !XAMARIN_FORMS
-#if UWP
-    using global::Windows.UI.Xaml.Navigation;
-#else
     using System.Windows.Navigation;
-#endif
-#endif
 
     /// <summary>
     /// Navigation event args extensions.
@@ -29,7 +16,7 @@ namespace Catel.MVVM.Navigation
         /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
         public static bool IsNavigationToExternal(this Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
             return IsNavigationToExternal(uri.ToString());
         }
@@ -47,7 +34,6 @@ namespace Catel.MVVM.Navigation
             return uriString.Contains("app://external");
         }
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Determines whether the navigation is for the specified view.
         /// </summary>
@@ -58,8 +44,8 @@ namespace Catel.MVVM.Navigation
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static bool IsNavigationForView(this NavigatingCancelEventArgs e, Type viewType)
         {
-            Argument.IsNotNull("e", e);
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(e);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             var uriString = GetUriWithoutQueryInfo(e);
             return IsNavigationForView(uriString, viewType);
@@ -75,13 +61,12 @@ namespace Catel.MVVM.Navigation
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static bool IsNavigationForView(this NavigationEventArgs e, Type viewType)
         {
-            Argument.IsNotNull("e", e);
-            Argument.IsNotNull("viewType", viewType);
+            ArgumentNullException.ThrowIfNull(e);
+            ArgumentNullException.ThrowIfNull(viewType);
 
             var uriString = GetUriWithoutQueryInfo(e);
             return IsNavigationForView(uriString, viewType);
         }
-#endif
 
         /// <summary>
         /// Determines whether the navigation is for the specified view model.
@@ -94,17 +79,11 @@ namespace Catel.MVVM.Navigation
         public static bool IsNavigationForView(this string uriString, Type viewType)
         {
             Argument.IsNotNullOrWhitespace("uriString", uriString);
-            Argument.IsNotNull("viewType", viewType);
-
-#if NETFX_CORE
-            return string.Equals(uriString, viewType.FullName, StringComparison.OrdinalIgnoreCase);
-#else
+            ArgumentNullException.ThrowIfNull(viewType);
 
             return uriString.ContainsIgnoreCase(viewType.Name + ".xaml");
-#endif
         }
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the URI from the navigating context.
         /// </summary>
@@ -113,14 +92,9 @@ namespace Catel.MVVM.Navigation
         /// <exception cref="ArgumentNullException">The <paramref name="e"/> is <c>null</c>.</exception>
         public static string GetUriWithoutQueryInfo(this NavigatingCancelEventArgs e)
         {
-            Argument.IsNotNull("e", e);
+            ArgumentNullException.ThrowIfNull(e);
 
-#if NETFX_CORE
-            string uriString = e.SourcePageType.FullName;
-#else
-            string uriString = UriExtensions.GetSafeUriString(e.Uri);
-#endif
-
+            var uriString = UriExtensions.GetSafeUriString(e.Uri);
             return uriString;
         }
 
@@ -132,17 +106,11 @@ namespace Catel.MVVM.Navigation
         /// <exception cref="ArgumentNullException">The <paramref name="e"/> is <c>null</c>.</exception>
         public static string GetUriWithoutQueryInfo(this NavigationEventArgs e)
         {
-            Argument.IsNotNull("e", e);
+            ArgumentNullException.ThrowIfNull(e);
 
-#if NETFX_CORE
-            string uriString = e.SourcePageType.FullName;
-#else
-            string uriString = UriExtensions.GetSafeUriString(e.Uri);
-#endif
-
+            var uriString = UriExtensions.GetSafeUriString(e.Uri);
             return uriString;
         }
-#endif
 
         /// <summary>
         /// Gets the URI from the navigated context.
@@ -152,10 +120,9 @@ namespace Catel.MVVM.Navigation
         /// <exception cref="ArgumentNullException">The <paramref name="uri" /> is <c>null</c> or whitespace.</exception>
         public static string GetUriWithoutQueryInfo(this string uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
-            string uriString = uri;
-
+            var uriString = uri;
             return uriString;
         }
     }

@@ -1,23 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TriggerActionBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-    using System;
     using System.Windows;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// TriggerAction base class that handles a safe unsubscribe and clean up because the default
@@ -30,18 +15,12 @@ namespace Catel.Windows.Interactivity
     public abstract class TriggerActionBase<T> : TriggerAction<T> 
         where T : FrameworkElement
     {
-        #region Fields
         private bool _isClean = true;
         private int _loadCounter;
 
         private bool _isSubscribedToLoadedEvent = false;
         private bool _isSubscribedToUnloadedEvent = false;
-        #endregion
 
-        #region Constructors
-        #endregion
-
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether the <c>TriggerActionBase{T}.AssociatedObject</c> is loaded.
         /// </summary>
@@ -58,9 +37,7 @@ namespace Catel.Windows.Interactivity
         {
             get { return CatelEnvironment.IsInDesignMode; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called after the action is attached to an AssociatedObject.
         /// </summary>
@@ -98,7 +75,7 @@ namespace Catel.Windows.Interactivity
 
             CleanUp();
 
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
                 _isSubscribedToLoadedEvent = false;
@@ -142,7 +119,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
+        private void OnAssociatedObjectLoadedInternal(object? sender, UIEventArgs e)
         {
             _loadCounter++;
 
@@ -174,7 +151,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
+        private void OnAssociatedObjectUnloadedInternal(object? sender, UIEventArgs e)
         {
             _loadCounter--;
 
@@ -207,7 +184,7 @@ namespace Catel.Windows.Interactivity
 
             _isClean = true;
 
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
                 _isSubscribedToUnloadedEvent = false;
@@ -215,8 +192,5 @@ namespace Catel.Windows.Interactivity
 
             Uninitialize();
         }
-        #endregion
     }
 }
-
-#endif

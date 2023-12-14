@@ -1,35 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.serialization.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Reflection;
     using System.Xml;
-    using System.Xml.Schema;
     using System.Xml.Serialization;
     using Catel.Data;
-    using Catel.Logging;
     using Newtonsoft.Json;
-
-#if NET || NETCORE
     using System;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
-#endif
-
     using NUnit.Framework;
-
-#if !UWP
-    using Catel.Reflection;
-    using Catel.Runtime.Serialization;
-#endif
 
     public partial class ModelBaseFacts
     {
@@ -59,7 +36,7 @@ namespace Catel.Tests.Data
             /// <summary> 
             /// Register the Name property so it is known in the class.
             /// </summary> 
-            public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), "MyName");
+            public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name", "MyName");
             #endregion
 
             #region Methods
@@ -92,7 +69,7 @@ namespace Catel.Tests.Data
             /// <summary> 
             /// Register the Name property so it is known in the class.
             /// </summary> 
-            public static readonly PropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<Item>), null);
+            public static readonly IPropertyData ItemsProperty = RegisterProperty<ObservableCollection<Item>>("Items");
             #endregion
 
             #region Methods
@@ -128,7 +105,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the FirstName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName");
 
             /// <summary>
             /// Gets or sets the middle name.
@@ -143,7 +120,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the MiddleName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string));
+            public static readonly IPropertyData MiddleNameProperty = RegisterProperty<string>("MiddleName");
 
             /// <summary>
             /// Gets or sets the last name.
@@ -158,7 +135,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the LastName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string));
+            public static readonly IPropertyData LastNameProperty = RegisterProperty<string>("LastName");
 
             /// <summary>
             /// Gets or sets the age.
@@ -173,7 +150,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Age property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData AgeProperty = RegisterProperty("Age", typeof(int));
+            public static readonly IPropertyData AgeProperty = RegisterProperty<int>("Age");
 
             [XmlIgnore]
             public string FullName
@@ -186,9 +163,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Customer
         /// </summary>
-#if NET || NETCORE
         [Serializable]
-#endif
         public partial class Customer : ComparableModelBase
         {
             #region Constructors
@@ -198,18 +173,6 @@ namespace Catel.Tests.Data
             public Customer()
             {
             }
-
-#if NET || NETCORE
-            /// <summary>
-            /// Initializes a new object based on <see cref="SerializationInfo"/>.
-            /// </summary>
-            /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-            /// <param name="context"><see cref="StreamingContext"/>.</param>
-            protected Customer(SerializationInfo info, StreamingContext context)
-                : base(info, context)
-            {
-            }
-#endif
             #endregion
 
             #region Properties
@@ -228,7 +191,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the ID property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData IdProperty = RegisterProperty("Id", typeof(int), null);
+            public static readonly IPropertyData IdProperty = RegisterProperty<int>("Id");
 
             /// <summary>
             /// Gets or sets the name.
@@ -245,7 +208,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Name property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name");
 
             /// <summary>
             /// Gets or sets the projects.
@@ -262,8 +225,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Projects property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData ProjectsProperty = RegisterProperty("Projects", typeof(ObservableCollection<Project>),
-                () => new ObservableCollection<Project>());
+            public static readonly IPropertyData ProjectsProperty = RegisterProperty<ObservableCollection<Project>>("Projects", () => new ObservableCollection<Project>());
             #endregion
         }
         #endregion
@@ -272,9 +234,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Project
         /// </summary>
-#if NET || NETCORE
         [Serializable]
-#endif
         public class Project : ComparableModelBase
         {
             #region Constructors
@@ -284,18 +244,6 @@ namespace Catel.Tests.Data
             public Project()
             {
             }
-
-#if NET || NETCORE
-            /// <summary>
-            /// Initializes a new object based on <see cref="SerializationInfo"/>.
-            /// </summary>
-            /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-            /// <param name="context"><see cref="StreamingContext"/>.</param>
-            protected Project(SerializationInfo info, StreamingContext context)
-                : base(info, context)
-            {
-            }
-#endif
             #endregion
 
             #region Properties
@@ -314,7 +262,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the ID property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData IdProperty = RegisterProperty("Id", typeof(int), null);
+            public static readonly IPropertyData IdProperty = RegisterProperty("Id", 0);
 
             /// <summary>
             /// Gets or sets the name.
@@ -331,7 +279,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Name property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
             /// <summary>
             /// Gets or sets the CustomerId.
@@ -348,7 +296,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the CustomerId property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData CustomerIdProperty = RegisterProperty("CustomerId", typeof(int), null);
+            public static readonly IPropertyData CustomerIdProperty = RegisterProperty("CustomerId", 0);
 
             /// <summary>
             /// Gets or sets the customer.
@@ -366,7 +314,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Customer property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData CustomerProperty = RegisterProperty("Customer", typeof(Customer), null);
+            public static readonly IPropertyData CustomerProperty = RegisterProperty<Customer>("Customer");
             #endregion
         }
         #endregion
@@ -374,9 +322,7 @@ namespace Catel.Tests.Data
         [TestFixture]
         public class TheJsonSerialization
         {
-#if NET || NETCORE
             [Serializable]
-#endif
             [JsonObject(MemberSerialization.OptIn)]
             public class JsonInnerModel : ModelBase
             {
@@ -387,17 +333,6 @@ namespace Catel.Tests.Data
                 {
                 }
 
-#if NET || NETCORE
-                /// <summary>
-                /// Initializes a new object based on <see cref="SerializationInfo"/>.
-                /// </summary>
-                /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-                /// <param name="context"><see cref="StreamingContext"/>.</param>
-                protected JsonInnerModel(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
 
                 #region Properties
                 /// <summary>
@@ -413,13 +348,11 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the Place property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
                 #endregion
             }
 
-#if NET || NETCORE
             [Serializable]
-#endif
             [JsonObject(MemberSerialization.OptIn)]
             public class JsonExampleModel : ModelBase
             {
@@ -430,17 +363,6 @@ namespace Catel.Tests.Data
                 {
                 }
 
-#if NET || NETCORE
-                /// <summary>
-                /// Initializes a new object based on <see cref="SerializationInfo"/>.
-                /// </summary>
-                /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-                /// <param name="context"><see cref="StreamingContext"/>.</param>
-                protected JsonExampleModel(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
                 #region Properties
                 /// <summary>
                 /// Gets or sets the property value.
@@ -455,7 +377,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the Place property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
                 /// <summary>
                 /// Gets or sets the modules.
@@ -470,7 +392,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the Modules property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData ModulesProperty = RegisterProperty("Modules", typeof(ObservableCollection<JsonInnerModel>), () => new ObservableCollection<JsonInnerModel>());
+                public static readonly IPropertyData ModulesProperty = RegisterProperty<ObservableCollection<JsonInnerModel>>("Modules", () => new ObservableCollection<JsonInnerModel>());
                 #endregion
             }
 
@@ -481,12 +403,12 @@ namespace Catel.Tests.Data
                 model.Name = "Geert";
                 for (int i = 0; i < 3; i++)
                 {
-                    model.Modules.Add(new JsonInnerModel { Name = "Name " + (i + 1) });
+                    model.Modules.Add(new JsonInnerModel { Name = "Name " + BoxingCache.GetBoxedValue(i + 1) });
                 }
 
                 var json = JsonConvert.SerializeObject(model);
 
-                Assert.AreEqual("{\"name\":\"Geert\",\"modules\":[{\"name\":\"Name 1\"},{\"name\":\"Name 2\"},{\"name\":\"Name 3\"}]}", json);
+                Assert.That(json, Is.EqualTo("{\"name\":\"Geert\",\"modules\":[{\"name\":\"Name 1\"},{\"name\":\"Name 2\"},{\"name\":\"Name 3\"}]}"));
             }
 
             [TestCase]
@@ -496,50 +418,8 @@ namespace Catel.Tests.Data
 
                 var model = JsonConvert.DeserializeObject<JsonExampleModel>(json);
 
-                Assert.AreEqual("Geert", model.Name);
+                Assert.That(model.Name, Is.EqualTo("Geert"));
             }
         }
-
-#if NET || NETCORE
-        [TestFixture]
-        public class TheBinarySerializationWithCircularReferencesIssue
-        {
-            [TestCase]
-            public void CanSerializeAndDeserializeObjects()
-            {
-                var customer = new Customer();
-                customer.Id = 1;
-                customer.Name = "John Doe";
-
-                var catelProject = new Project();
-                catelProject.Id = 1;
-                catelProject.Name = "Catel";
-                catelProject.Customer = customer;
-
-                Project restoredProject = null;
-
-                var binaryFormatter = new BinaryFormatter();
-                using (var memoryStream = new MemoryStream())
-                {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    binaryFormatter.Serialize(memoryStream, catelProject);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-
-                    memoryStream.Position = 0L;
-
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    restoredProject = (Project)binaryFormatter.Deserialize(memoryStream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                }
-
-                var projectAsEditableObject = catelProject as IEditableObject;
-                projectAsEditableObject.BeginEdit();
-
-                projectAsEditableObject.BeginEdit();
-
-                Assert.AreEqual(catelProject, restoredProject);
-            }
-        }
-#endif
     }
 }

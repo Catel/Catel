@@ -1,32 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BatchLogListenerBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
-    using Threading;
 
     /// <summary>
     /// Base class for log listeners that can write in batches.
     /// </summary>
     public abstract class BatchLogListenerBase : LogListenerBase, IBatchLogListener
     {
-        #region Fields
         private readonly object _lock = new object();
 
-        private readonly Catel.Threading.Timer _timer;
+#pragma warning disable IDISP006 // Implement IDisposable.
+        private readonly Timer _timer;
+#pragma warning restore IDISP006 // Implement IDisposable.
+        private TimeSpan _timerInterval;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
 
         private bool _isFlushing;
         private bool _needsFlushing;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchLogListenerBase" /> class.
         /// </summary>
@@ -48,9 +42,7 @@ namespace Catel.Logging
             MaximumBatchCount = maxBatchCount;
             Interval = interval;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the maximum batch count.
         /// </summary>
@@ -67,8 +59,12 @@ namespace Catel.Logging
         /// </value>
         protected TimeSpan Interval
         {
-            get { return TimeSpan.FromMilliseconds(_timer.Interval); }
-            set { _timer.Change(value, value); }
+            get { return _timerInterval; }
+            set
+            {
+                _timerInterval = value;
+                _timer.Change(value, value);
+            }
         }
 
         /// <summary>
@@ -78,9 +74,7 @@ namespace Catel.Logging
         ///   <c>true</c> if the listener should be flushed, even when the batch is empty; otherwise, <c>false</c>.
         /// </value>
         internal bool FlushWhenBatchIsEmpty { get; set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when any message is written to the log.
         /// </summary>
@@ -90,7 +84,7 @@ namespace Catel.Logging
         /// <param name="extraData">The additional data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
         {
             var logEntry = new LogBatchEntry(log, message, logEvent, extraData, logData, time);
 
@@ -115,7 +109,7 @@ namespace Catel.Logging
             }
         }
 
-        private void OnTimerTick(object state)
+        private void OnTimerTick(object? state)
         {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             FlushAsync();
@@ -128,7 +122,7 @@ namespace Catel.Logging
         /// <returns>Task so it can be awaited.</returns>
         public async Task FlushAsync()
         {
-            List<LogBatchEntry> batchToSubmit = null;
+            List<LogBatchEntry>? batchToSubmit = null;
 
             lock (_lock)
             {
@@ -151,7 +145,7 @@ namespace Catel.Logging
                 }
             }
 
-            if (batchToSubmit != null)
+            if (batchToSubmit is not null)
             {
                 try
                 {
@@ -182,8 +176,7 @@ namespace Catel.Logging
         /// <returns>Task so this can be done asynchronously.</returns>
         protected virtual Task WriteBatchAsync(List<LogBatchEntry> batchEntries)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
-        #endregion
     }
 }

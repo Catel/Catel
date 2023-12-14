@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelBaseFacts.models.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System.Threading.Tasks;
     using Catel.Data;
@@ -16,7 +9,7 @@ namespace Catel.Tests.MVVM.ViewModels
     public partial class ViewModelBaseFacts
     {
         [TestCase]
-        public void GetAllModels()
+        public void GetAllModels_With_Null()
         {
             var person = new Person();
             person.FirstName = "first_name";
@@ -26,12 +19,31 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var models = viewModel.GetAllModelsForTest();
 
-            Assert.AreEqual(2, models.Length);
-            Assert.AreEqual(person, models[0]);
+            Assert.That(models.Length, Is.EqualTo(1));
+            Assert.That(models[0], Is.EqualTo(person));
         }
 
         [TestCase]
-        public async Task ModelsSavedBySave()
+        public void GetAllModels()
+        {
+            var person = new Person();
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
+
+            var viewModel = new TestViewModel(person);
+
+            var specialValidationModel = new SpecialValidationModel();
+            viewModel.SpecialValidationModel = specialValidationModel;
+
+            var models = viewModel.GetAllModelsForTest();
+
+            Assert.That(models.Length, Is.EqualTo(2));
+            Assert.That(models[0], Is.EqualTo(person));
+            Assert.That(models[1], Is.EqualTo(specialValidationModel));
+        }
+
+        [TestCase]
+        public async Task ModelsSavedBySaveAsync()
         {
             var person = new Person();
             person.FirstName = "first name";
@@ -39,18 +51,18 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(model.IsInEditSession);
+            Assert.That(model.IsInEditSession, Is.True);
 
             viewModel.FirstName = "new";
 
             await viewModel.SaveAndCloseViewModelAsync();
 
-            Assert.IsFalse(model.IsInEditSession);
-            Assert.AreEqual("new", person.FirstName);
+            Assert.That(model.IsInEditSession, Is.False);
+            Assert.That(person.FirstName, Is.EqualTo("new"));
         }
 
         [TestCase]
-        public async Task ModelsCanceledByCancel()
+        public async Task ModelsCanceledByCancelAsync()
         {
             var person = new Person();
             person.FirstName = "first name";
@@ -58,14 +70,14 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(model.IsInEditSession);
+            Assert.That(model.IsInEditSession, Is.True);
 
             viewModel.FirstName = "new first name";
 
             await viewModel.CancelAndCloseViewModelAsync();
 
-            Assert.IsFalse(model.IsInEditSession);
-            Assert.AreEqual("first name", person.FirstName);
+            Assert.That(model.IsInEditSession, Is.False);
+            Assert.That(person.FirstName, Is.EqualTo("first name"));
         }
 
         [TestCase]
@@ -77,7 +89,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var viewModel = new TestViewModel(person);
 
-            Assert.IsTrue(viewModel.IsModelRegisteredForTest("Person"));
+            Assert.That(viewModel.IsModelRegisteredForTest("Person"), Is.True);
         }
 
         [TestCase]
@@ -89,7 +101,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var viewModel = new TestViewModel(person);
 
-            Assert.IsFalse(viewModel.IsModelRegisteredForTest("SecondPerson"));
+            Assert.That(viewModel.IsModelRegisteredForTest("SecondPerson"), Is.False);
         }
 
     }

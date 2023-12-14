@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelToModelAttributeFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.ViewModels.Attributes
+﻿namespace Catel.Tests.MVVM.ViewModels.Attributes
 {
     using Catel.MVVM;
 
@@ -20,8 +14,8 @@ namespace Catel.Tests.MVVM.ViewModels.Attributes
             {
                 var viewModelToModelAttribute = new ViewModelToModelAttribute("model");
 
-                Assert.AreEqual("model", viewModelToModelAttribute.Model);
-                Assert.AreEqual(string.Empty, viewModelToModelAttribute.Property);
+                Assert.That(viewModelToModelAttribute.Model, Is.EqualTo("model"));
+                Assert.That(viewModelToModelAttribute.Property, Is.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -29,8 +23,8 @@ namespace Catel.Tests.MVVM.ViewModels.Attributes
             {
                 var viewModelToModelAttribute = new ViewModelToModelAttribute("model", "property");
 
-                Assert.AreEqual("model", viewModelToModelAttribute.Model);
-                Assert.AreEqual("property", viewModelToModelAttribute.Property);
+                Assert.That(viewModelToModelAttribute.Model, Is.EqualTo("model"));
+                Assert.That(viewModelToModelAttribute.Property, Is.EqualTo("property"));
             }
         }
     }

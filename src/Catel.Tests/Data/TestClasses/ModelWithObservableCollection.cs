@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelWithObservableCollection.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -16,7 +9,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Register the Collection property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData CollectionProperty = RegisterProperty("Collection", typeof(ObservableCollection<int>), () => new ObservableCollection<int>());
+        public static readonly IPropertyData CollectionProperty = RegisterProperty("Collection", () => new ObservableCollection<int>());
 
         /// <summary>
         /// Gets or sets the property value.

@@ -1,24 +1,11 @@
-﻿#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using System.Windows;
     using MVVM;
-
-    using IoC;
     using Logging;
-    using Reflection;
-    using Catel.Windows.Threading;
-    using Threading;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
-    using System.Windows.Controls;
-#endif
+    using Catel.Reflection;
 
     /// <summary>
     /// Service to show modal or non-modal popup windows.
@@ -27,26 +14,12 @@ namespace Catel.Services
     /// </summary>
     public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
 
         private readonly IViewLocator _viewLocator;
         private readonly IDispatcherService _dispatcherService;
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
-        /// </summary>
-        /// <param name="viewLocator">The view locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "ctor(IViewLocator viewLocator, IDispatcherService dispatcherService)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public UIVisualizerService(IViewLocator viewLocator)
-            : this(viewLocator, ServiceLocator.Default.ResolveType<IDispatcherService>())
-        {
-            // DON'T USE THIS CTOR
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
@@ -57,14 +30,13 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
         public UIVisualizerService(IViewLocator viewLocator, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull("viewLocator", viewLocator);
-            Argument.IsNotNull("dispatcherService", dispatcherService);
+            ArgumentNullException.ThrowIfNull(viewLocator);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _viewLocator = viewLocator;
             _dispatcherService = dispatcherService;
         }
 
-        #region Methods
         /// <summary>
         /// Determines whether the specified name is registered.
         /// </summary>
@@ -93,7 +65,7 @@ namespace Catel.Services
         public virtual void Register(string name, Type windowType, bool throwExceptionIfExists = true)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("windowType", windowType);
+            ArgumentNullException.ThrowIfNull(windowType);
 
             lock (RegisteredWindows)
             {
@@ -101,7 +73,7 @@ namespace Catel.Services
                 {
                     if (existingRegistration != windowType && throwExceptionIfExists)
                     {
-                        throw new InvalidOperationException($"View model '{name}' already registered");
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"View model '{name}' already registered");
                     }
                 }
 
@@ -133,113 +105,13 @@ namespace Catel.Services
         }
 
         /// <summary>
-        /// Shows a window that is registered with the specified view model in a non-modal state.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNull("viewModel", viewModel);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Data = viewModel,
-                CompletedCallback = completedProc,
-                IsModal = false,
-            });
-
-            return result;
-        }
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a non-modal state.
-        /// </summary>
-        /// <param name="name">The name that the window is registered with.</param>
-        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type, bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Name = name,
-                Data = data,
-                CompletedCallback = completedProc,
-                IsModal = false,
-            });
-
-            return result;
-        }
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a modal state.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// Nullable boolean representing the dialog result.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNull("viewModel", viewModel);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Data = viewModel,
-                CompletedCallback = completedProc,
-                IsModal = true,
-            });
-
-            return result;
-        }
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a modal state.
-        /// </summary>
-        /// <param name="name">The name that the window is registered with.</param>
-        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// Nullable boolean representing the dialog result.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Name = name,
-                Data = data,
-                CompletedCallback = completedProc,
-                IsModal = true,
-            });
-
-            return result;
-        }
-
-        /// <summary>
         /// Shows a window with the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>The dialog result.</returns>
-        public virtual async Task<bool?> ShowContextAsync(UIVisualizerContext context)
+        public virtual async Task<UIVisualizerResult> ShowContextAsync(UIVisualizerContext context)
         {
-            Argument.IsNotNull("context", context);
+            ArgumentNullException.ThrowIfNull(context);
 
             var viewModel = context.Data as IViewModel;
             if (viewModel is not null)
@@ -250,7 +122,7 @@ namespace Catel.Services
 
                 if (string.IsNullOrWhiteSpace(context.Name))
                 {
-                    context.Name = viewModelType.FullName;
+                    context.Name = viewModelType.GetSafeFullName();
                 }
             }
 
@@ -260,13 +132,13 @@ namespace Catel.Services
             }
 
             var window = await CreateWindowAsync(context);
-            if (window != null)
+            if (window is not null)
             {
                 var result = await ShowWindowAsync(window, context);
                 return result;
             }
 
-            return false;
+            return new UIVisualizerResult(null, context, null);
         }
 
         /// <summary>
@@ -280,7 +152,7 @@ namespace Catel.Services
             {
                 if (!RegisteredWindows.ContainsKey(name))
                 {
-                    throw new WindowNotRegisteredException(name);
+                    throw Log.ErrorAndCreateException<WindowNotRegisteredException>(name);
                 }
             }
         }
@@ -293,18 +165,17 @@ namespace Catel.Services
         {
             lock (RegisteredWindows)
             {
-                if (!RegisteredWindows.ContainsKey(viewModelType.FullName))
+                var fullName = viewModelType.GetSafeFullName();
+
+                if (!RegisteredWindows.ContainsKey(fullName))
                 {
                     var viewType = _viewLocator.ResolveView(viewModelType);
-                    if (viewType != null)
+                    if (viewType is not null)
                     {
-                        Register(viewModelType.FullName, viewType);
+                        Register(fullName, viewType);
                     }
                 }
             }
         }
-        #endregion
     }
 }
-
-#endif

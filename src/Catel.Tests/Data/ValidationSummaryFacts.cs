@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidationSummaryTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using Catel.Data;
@@ -19,13 +13,13 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContextWithoutTag()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationSummary(null));
+                Assert.Throws<ArgumentNullException>(() => new ValidationSummary(null));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContextWithTag()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationSummary(null, "tag"));
+                Assert.Throws<ArgumentNullException>(() => new ValidationSummary(null, "tag"));
             }
 
             [TestCase]
@@ -35,10 +29,10 @@ namespace Catel.Tests.Data
 
                 var summary = new ValidationSummary(context);
 
-                Assert.AreEqual(2, summary.FieldWarnings.Count);
-                Assert.AreEqual(2, summary.FieldErrors.Count);
-                Assert.AreEqual(2, summary.BusinessRuleWarnings.Count);
-                Assert.AreEqual(2, summary.BusinessRuleErrors.Count);
+                Assert.That(summary.FieldWarnings.Count, Is.EqualTo(2));
+                Assert.That(summary.FieldErrors.Count, Is.EqualTo(2));
+                Assert.That(summary.BusinessRuleWarnings.Count, Is.EqualTo(2));
+                Assert.That(summary.BusinessRuleErrors.Count, Is.EqualTo(2));
             }
 
             [TestCase]
@@ -48,10 +42,10 @@ namespace Catel.Tests.Data
 
                 var summary = new ValidationSummary(context, "tag");
 
-                Assert.AreEqual(1, summary.FieldWarnings.Count);
-                Assert.AreEqual(1, summary.FieldErrors.Count);
-                Assert.AreEqual(1, summary.BusinessRuleWarnings.Count);
-                Assert.AreEqual(1, summary.BusinessRuleErrors.Count);
+                Assert.That(summary.FieldWarnings.Count, Is.EqualTo(1));
+                Assert.That(summary.FieldErrors.Count, Is.EqualTo(1));
+                Assert.That(summary.BusinessRuleWarnings.Count, Is.EqualTo(1));
+                Assert.That(summary.BusinessRuleErrors.Count, Is.EqualTo(1));
             }
         }
     }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogTest.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Logging
+﻿namespace Catel.Tests.Logging
 {
     using System;
     using Catel.Logging;
@@ -30,7 +24,7 @@ namespace Catel.Tests.Logging
 
                 var averageDuration = TimeMeasureHelper.MeasureAction(5000, "Log.Write", () => log.WriteWithData("this is a test", null, LogEvent.Error));
 
-                Assert.IsTrue(averageDuration < 1d);
+                Assert.That(averageDuration < 1d, Is.True);
             }
         }
 
@@ -43,11 +37,11 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                Assert.AreEqual(0, log.IndentLevel);
+                Assert.That(log.IndentLevel, Is.EqualTo(0));
 
                 log.Indent();
 
-                Assert.AreEqual(1, log.IndentLevel);
+                Assert.That(log.IndentLevel, Is.EqualTo(1));
             }
 
             [Test]
@@ -62,10 +56,10 @@ namespace Catel.Tests.Logging
                 log.Indent();
                 log.Info("Indented message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("  Indented message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo("  Indented message"));
             }
         }
 
@@ -78,11 +72,11 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int)) { IndentLevel = 2 };
 
-                Assert.AreEqual(2, log.IndentLevel);
+                Assert.That(log.IndentLevel, Is.EqualTo(2));
 
                 log.Unindent();
 
-                Assert.AreEqual(1, log.IndentLevel);
+                Assert.That(log.IndentLevel, Is.EqualTo(1));
             }
 
             [Test]
@@ -99,10 +93,10 @@ namespace Catel.Tests.Logging
                 log.Unindent();
                 log.Info("Unindented message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("Unindented message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo("Unindented message"));
             }
         }
 
@@ -115,7 +109,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                Assert.AreEqual(0, log.IndentLevel);
+                Assert.That(log.IndentLevel, Is.EqualTo(0));
             }
 
             [Test]
@@ -124,7 +118,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int)) { IndentSize = 5 };
 
-                Assert.AreEqual(5, log.IndentSize);
+                Assert.That(log.IndentSize, Is.EqualTo(5));
             }
 
             [Test]
@@ -134,7 +128,7 @@ namespace Catel.Tests.Logging
                 var log = new Log(typeof(int));
 
                 // TODO: IndentLevel should be settable
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentLevel = -1);
+                Assert.Throws<ArgumentOutOfRangeException>(() => log.IndentLevel = -1);
             }
         }
 
@@ -147,7 +141,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                Assert.AreEqual(2, log.IndentSize);
+                Assert.That(log.IndentSize, Is.EqualTo(2));
             }
 
             [Test]
@@ -156,7 +150,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int)) { IndentSize = 5 };
 
-                Assert.AreEqual(5, log.IndentSize);
+                Assert.That(log.IndentSize, Is.EqualTo(5));
             }
 
             [Test]
@@ -166,7 +160,7 @@ namespace Catel.Tests.Logging
                 var log = new Log(typeof(int));
 
                 // TODO: IndentSize should be settable
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentSize = -1);
+                Assert.Throws<ArgumentOutOfRangeException>(() => log.IndentSize = -1);
             }
         }
 
@@ -176,31 +170,31 @@ namespace Catel.Tests.Logging
             [Test]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log((Type) null));
+                Assert.Throws<ArgumentNullException>(() => new Log((Type)null));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForNullString()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log((string)null));
+                Assert.Throws<ArgumentException>(() => new Log((string)null));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForWhitespaceString()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(String.Empty));
+                Assert.Throws<ArgumentException>(() => new Log(String.Empty));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForNullString_WithStringAndType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(null, typeof(object)));
+                Assert.Throws<ArgumentException>(() => new Log(null, typeof(object)));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForWhitespaceString_WithStringAndType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(String.Empty, typeof(object)));
+                Assert.Throws<ArgumentException>(() => new Log(String.Empty, typeof(object)));
             }
 
             [Test]
@@ -209,7 +203,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                Assert.AreEqual(typeof(int), log.TargetType);
+                Assert.That(log.TargetType, Is.EqualTo(typeof(int)));
             }
 
             [Test]
@@ -218,8 +212,8 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log("log");
 
-                Assert.AreEqual("log", log.Name);
-                Assert.IsNull(log.TargetType);
+                Assert.That(log.Name, Is.EqualTo("log"));
+                Assert.That(log.TargetType, Is.EqualTo(typeof(object)));
             }
 
             [Test]
@@ -228,8 +222,8 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log("log", typeof(int));
 
-                Assert.AreEqual("log", log.Name);
-                Assert.AreEqual(typeof(int), log.TargetType);
+                Assert.That(log.Name, Is.EqualTo("log"));
+                Assert.That(log.TargetType, Is.EqualTo(typeof(int)));
             }
         }
 
@@ -265,10 +259,10 @@ namespace Catel.Tests.Logging
 
                 log.Debug("log message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual("log message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message"));
             }
 
             [Test]
@@ -291,10 +285,10 @@ namespace Catel.Tests.Logging
 
                 log.Debug("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual("log message 1", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
             }
 
             [Test]
@@ -303,7 +297,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Debug((Exception)null));
             }
 
             [Test]
@@ -318,10 +312,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Debug(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -333,7 +327,7 @@ namespace Catel.Tests.Logging
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
 
-                var exception = new AggregateException("log test", new []
+                var exception = new AggregateException("log test", new[]
                 {
                     new ArgumentNullException("arg1"),
                     new ArgumentNullException("arg2"),
@@ -341,10 +335,10 @@ namespace Catel.Tests.Logging
 
                 log.Debug(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
+                Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
             }
 
             [Test]
@@ -353,7 +347,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Debug(null, string.Empty));
             }
 
             [Test]
@@ -379,10 +373,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Debug(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -391,7 +385,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
             }
 
             [Test]
@@ -417,10 +411,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Debug(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Debug));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
         }
 
@@ -456,10 +450,10 @@ namespace Catel.Tests.Logging
 
                 log.Info("log message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("log message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message"));
             }
 
             [Test]
@@ -482,10 +476,10 @@ namespace Catel.Tests.Logging
 
                 log.Info("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("log message 1", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
             }
 
             [Test]
@@ -494,7 +488,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Info((Exception)null));
             }
 
             [Test]
@@ -509,10 +503,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Info(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
 
@@ -533,10 +527,10 @@ namespace Catel.Tests.Logging
 
                 log.Info(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
             }
 
             [Test]
@@ -545,7 +539,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Info(null, string.Empty));
             }
 
             [Test]
@@ -571,10 +565,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Info(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -583,7 +577,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Info(null, "additional message", 1));
             }
 
             [Test]
@@ -609,10 +603,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Info(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
         }
 
@@ -648,10 +642,10 @@ namespace Catel.Tests.Logging
 
                 log.Warning("log message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual("log message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message"));
             }
 
             [Test]
@@ -674,10 +668,10 @@ namespace Catel.Tests.Logging
 
                 log.Warning("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual("log message 1", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
             }
 
             [Test]
@@ -686,7 +680,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Warning((Exception)null));
             }
 
             [Test]
@@ -701,10 +695,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Warning(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -724,10 +718,10 @@ namespace Catel.Tests.Logging
 
                 log.Warning(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
+                Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
             }
 
             [Test]
@@ -736,7 +730,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Warning(null, string.Empty));
             }
 
             [Test]
@@ -762,10 +756,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Warning(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -774,7 +768,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
             }
 
             [Test]
@@ -800,10 +794,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Warning(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Warning));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
         }
 
@@ -839,10 +833,10 @@ namespace Catel.Tests.Logging
 
                 log.Error("log message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual("log message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message"));
             }
 
             [Test]
@@ -865,10 +859,10 @@ namespace Catel.Tests.Logging
 
                 log.Error("log message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual("log message 1", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message 1"));
             }
 
             [Test]
@@ -877,7 +871,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Error((Exception)null));
             }
 
             [Test]
@@ -892,10 +886,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Error(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -915,10 +909,10 @@ namespace Catel.Tests.Logging
 
                 log.Error(exception);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
+                Assert.That(eventArgs.Message, Is.EqualTo("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n"));
             }
 
             [Test]
@@ -927,7 +921,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Error(null, string.Empty));
             }
 
             [Test]
@@ -953,10 +947,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Error(exception, "additional message");
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -965,7 +959,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Error(null, "additional message", 1));
             }
 
             [Test]
@@ -991,10 +985,10 @@ namespace Catel.Tests.Logging
                 var exception = new ArgumentNullException("log test");
                 log.Error(exception, "additional message {0}", 1);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Error));
+                Assert.That(eventArgs.Message, Is.EqualTo(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText)));
             }
 
             [Test]
@@ -1003,7 +997,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>(null); });
+                Assert.Throws<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>(null); });
             }
 
             [Test]
@@ -1012,7 +1006,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ExceptionWithoutStringConstructor>(() => { throw log.ErrorAndCreateException<ExceptionWithoutStringConstructor>("exception test"); });
+                Assert.Throws<ExceptionWithoutStringConstructor>(() => { throw log.ErrorAndCreateException<ExceptionWithoutStringConstructor>("exception test"); });
             }
 
             [Test]
@@ -1022,9 +1016,9 @@ namespace Catel.Tests.Logging
                 var log = new Log(typeof(int));
 
                 // Several tests to make sure we are not testing the NotSupportedException of the class itself
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>("exception test"); });
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => { throw log.ErrorAndCreateException<ArgumentNullException>("exception test"); });
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => { throw log.ErrorAndCreateException<ArgumentException>("exception test"); });
+                Assert.Throws<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>("exception test"); });
+                Assert.Throws<ArgumentNullException>(() => { throw log.ErrorAndCreateException<ArgumentNullException>("exception test"); });
+                Assert.Throws<ArgumentException>(() => { throw log.ErrorAndCreateException<ArgumentException>("exception test"); });
             }
         }
 
@@ -1042,14 +1036,14 @@ namespace Catel.Tests.Logging
 
                 log.InfoWithData("log message", null);
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("log message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message"));
 
                 var logData = eventArgs.LogData;
 
-                Assert.IsNull(logData);
+                Assert.That(logData, Is.Not.Null);
             }
 
             [Test]
@@ -1068,15 +1062,15 @@ namespace Catel.Tests.Logging
                     { "ThreadId", threadId }
                 });
 
-                Assert.IsNotNull(eventArgs);
-                Assert.AreEqual(log, eventArgs.Log);
-                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("log message", eventArgs.Message);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Log, Is.EqualTo(log));
+                Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+                Assert.That(eventArgs.Message, Is.EqualTo("log message"));
 
                 var logData = eventArgs.LogData;
 
-                Assert.IsNotNull(logData);
-                Assert.IsTrue(ObjectHelper.AreEqual(logData["ThreadId"], threadId));
+                Assert.That(logData, Is.Not.Null);
+                Assert.That(ObjectHelper.AreEqual(logData["ThreadId"], threadId), Is.True);
             }
         }
     }

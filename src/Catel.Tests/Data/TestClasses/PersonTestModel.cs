@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PersonTestModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using Catel.Data;
 
@@ -17,7 +10,7 @@ namespace Catel.Tests.Data
             set { SetValue(FirstNameProperty, value); }
         }
 
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
 
 
         public string LastName
@@ -26,7 +19,7 @@ namespace Catel.Tests.Data
             set { SetValue(LastNameProperty, value); }
         }
 
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+        public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", string.Empty);
 
 
         public bool IsEnabled
@@ -35,6 +28,6 @@ namespace Catel.Tests.Data
             set { SetValue(IsEnabledProperty, value); }
         }
 
-        public static readonly PropertyData IsEnabledProperty = RegisterProperty("IsEnabled", typeof(bool), null);
+        public static readonly IPropertyData IsEnabledProperty = RegisterProperty("IsEnabled", false);
     }
 }

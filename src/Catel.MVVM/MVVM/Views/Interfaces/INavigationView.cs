@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="INavigationView.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     /// <summary>
     /// Interface defining functionality for a view with navigation.
@@ -15,16 +8,16 @@ namespace Catel.MVVM.Views
         ///// <summary>
         ///// Occurs when the app has navigated to this view.
         ///// </summary>
-        //event EventHandler<NavigatedEventArgs> NavigatedTo;
+        //event EventHandler<NavigatedEventArgs>? NavigatedTo;
 
         ///// <summary>
         ///// Occurs when the app is about to navigate away from this view.
         ///// </summary>
-        //event EventHandler<NavigatingEventArgs> NavigatingAway;
+        //event EventHandler<NavigatingEventArgs>? NavigatingAway;
 
         ///// <summary>
         ///// Occurs when the app has navigated away from this view.
         ///// </summary>
-        //event EventHandler<NavigatedEventArgs> NavigatedAway;
+        //event EventHandler<NavigatedEventArgs>? NavigatedAway;
     }
 }

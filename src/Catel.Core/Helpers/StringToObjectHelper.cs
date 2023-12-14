@@ -1,15 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringToObjectHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Globalization;
     using System.Text;
-    using Collections;
+    using Catel.Data;
     using Logging;
     using Reflection;
 
@@ -32,7 +26,7 @@ namespace Catel
         /// Gets or sets the default culture to use for parsing.
         /// </summary>
         /// <value>The default culture.</value>
-        public static CultureInfo DefaultCulture { get; set; }
+        public static CultureInfo? DefaultCulture { get; set; }
 
         /// <summary>
         /// Converts a string to a boolean.
@@ -78,8 +72,8 @@ namespace Catel
         /// <returns>The byte array value of the string.</returns>
         public static byte ToByte(string value)
         {
-            var bytes = ToByteArray(value);
-            return bytes.Length > 0 ? bytes[0] : default;
+            var intValue = ToInt(value);
+            return (byte)intValue;
         }
 
         /// <summary>
@@ -91,7 +85,7 @@ namespace Catel
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return ArrayShim.Empty<byte>();
+                return Array.Empty<byte>();
             }
 
             var encoding = UTF8Encoding.UTF8;
@@ -114,7 +108,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The date/time value of the string.</returns>
-        public static DateTime ToDateTime(string value, CultureInfo cultureInfo)
+        public static DateTime ToDateTime(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -142,7 +136,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The timespan value of the string.</returns>
-        public static TimeSpan ToTimeSpan(string value, CultureInfo cultureInfo)
+        public static TimeSpan ToTimeSpan(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -170,7 +164,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The decimal value of the string.</returns>
-        public static decimal ToDecimal(string value, CultureInfo cultureInfo)
+        public static decimal ToDecimal(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -198,7 +192,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The double value of the string.</returns>
-        public static double ToDouble(string value, CultureInfo cultureInfo)
+        public static double ToDouble(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -226,7 +220,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The float value of the string.</returns>
-        public static float ToFloat(string value, CultureInfo cultureInfo)
+        public static float ToFloat(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -271,7 +265,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The short value of the string.</returns>
-        public static short ToShort(string value, CultureInfo cultureInfo)
+        public static short ToShort(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -299,7 +293,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The unsigned short value of the string.</returns>
-        public static ushort ToUShort(string value, CultureInfo cultureInfo)
+        public static ushort ToUShort(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -327,7 +321,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The integer value of the string.</returns>
-        public static int ToInt(string value, CultureInfo cultureInfo)
+        public static int ToInt(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -355,7 +349,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The unsigned integer value of the string.</returns>
-        public static uint ToUInt(string value, CultureInfo cultureInfo)
+        public static uint ToUInt(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -383,7 +377,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The long value of the string.</returns>
-        public static long ToLong(string value, CultureInfo cultureInfo)
+        public static long ToLong(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -411,7 +405,7 @@ namespace Catel
         /// <param name="value">The value.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The unsigned long value of the string.</returns>
-        public static ulong ToULong(string value, CultureInfo cultureInfo)
+        public static ulong ToULong(string value, CultureInfo? cultureInfo)
         {
             value = CleanString(value);
 
@@ -428,7 +422,7 @@ namespace Catel
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The Uri value of the string.</returns>
-        public static Uri ToUri(string value)
+        public static Uri? ToUri(string value)
         {
             value = CleanString(value);
 
@@ -445,13 +439,13 @@ namespace Catel
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The Type value of the string.</returns>
-        public static Type ToType(string value)
+        public static Type? ToType(string value)
         {
             value = CleanString(value);
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                return default(Type);
+                return default;
             }
 
             return Type.GetType(value);
@@ -462,9 +456,19 @@ namespace Catel
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The string value of the string.</returns>
-        public static string ToString(string value)
+        public static string? ToString(string value)
         {
             return value;
+        }
+
+        /// <summary>
+        /// Converts a string to the right target type, such as <see cref="string"/>, <see cref="bool"/> and <see cref="DateTime"/>.
+        /// </summary>
+        /// <param name="value">The value to convert to the specified target type.</param>
+        /// <returns>The converted value. If the <paramref name="value"/> is <c>null</c>, this method will return <c>null</c>.</returns>
+        public static TTarget? ToRightType<TTarget>(string value)
+        {
+            return (TTarget?)ToRightType(typeof(TTarget), value, DefaultCulture);
         }
 
         /// <summary>
@@ -474,7 +478,7 @@ namespace Catel
         /// <param name="value">The value to convert to the specified target type.</param>
         /// <returns>The converted value. If the <paramref name="value"/> is <c>null</c>, this method will return <c>null</c>.</returns>
         /// <exception cref="NotSupportedException">The specified <paramref name="targetType"/> is not supported.</exception>
-        public static object ToRightType(Type targetType, string value)
+        public static object? ToRightType(Type targetType, string value)
         {
             return ToRightType(targetType, value, DefaultCulture);
         }
@@ -487,7 +491,7 @@ namespace Catel
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The converted value. If the <paramref name="value" /> is <c>null</c>, this method will return <c>null</c>.</returns>
         /// <exception cref="NotSupportedException">The specified <paramref name="targetType" /> is not supported.</exception>
-        public static object ToRightType(Type targetType, string value, CultureInfo cultureInfo)
+        public static object? ToRightType(Type targetType, string value, CultureInfo? cultureInfo)
         {
             if (value is null)
             {
@@ -502,12 +506,12 @@ namespace Catel
             if (targetType == typeof(bool) ||
                 targetType == typeof(bool?))
             {
-                return ToBool(value);
+                return BoxingCache<bool>.Default.GetBoxedValue(ToBool(value));
             }
 
             if (targetType == typeof(byte))
             {
-                return ToByte(value);
+                return BoxingCache<byte>.Default.GetBoxedValue(ToByte(value));
             }
 
             if (targetType == typeof(byte[]))
@@ -518,73 +522,73 @@ namespace Catel
             if (targetType == typeof(DateTime) ||
                 targetType == typeof(DateTime?))
             {
-                return ToDateTime(value, cultureInfo);
+                return BoxingCache<DateTime>.Default.GetBoxedValue(ToDateTime(value, cultureInfo));
             }
 
             if (targetType == typeof(TimeSpan) ||
                 targetType == typeof(TimeSpan?))
             {
-                return ToTimeSpan(value, cultureInfo);
+                return BoxingCache<TimeSpan>.Default.GetBoxedValue(ToTimeSpan(value, cultureInfo));
             }
 
             if (targetType == typeof(decimal) ||
                 targetType == typeof(decimal?))
             {
-                return ToDecimal(value, cultureInfo);
+                return BoxingCache<decimal>.Default.GetBoxedValue(ToDecimal(value, cultureInfo));
             }
 
             if (targetType == typeof(double) ||
                 targetType == typeof(double?))
             {
-                return ToDouble(value, cultureInfo);
+                return BoxingCache<double>.Default.GetBoxedValue(ToDouble(value, cultureInfo));
             }
 
             if (targetType == typeof(float) ||
                 targetType == typeof(float?))
             {
-                return ToFloat(value, cultureInfo);
+                return BoxingCache<float>.Default.GetBoxedValue(ToFloat(value, cultureInfo));
             }
 
             if (targetType == typeof(Guid) ||
                 targetType == typeof(Guid?))
             {
-                return ToGuid(value);
+                return BoxingCache<Guid>.Default.GetBoxedValue(ToGuid(value));
             }
 
             if (targetType == typeof(short) ||
                 targetType == typeof(short?))
             {
-                return ToShort(value, cultureInfo);
+                return BoxingCache<short>.Default.GetBoxedValue(ToShort(value, cultureInfo));
             }
 
             if (targetType == typeof(ushort) ||
                 targetType == typeof(ushort?))
             {
-                return ToUShort(value, cultureInfo);
+                return BoxingCache<ushort>.Default.GetBoxedValue(ToUShort(value, cultureInfo));
             }
 
             if (targetType == typeof(int) ||
                 targetType == typeof(int?))
             {
-                return ToInt(value, cultureInfo);
+                return BoxingCache<int>.Default.GetBoxedValue(ToInt(value, cultureInfo));
             }
 
             if (targetType == typeof(uint) ||
                 targetType == typeof(uint?))
             {
-                return ToUInt(value, cultureInfo);
+                return BoxingCache<uint>.Default.GetBoxedValue(ToUInt(value, cultureInfo));
             }
 
             if (targetType == typeof(long) ||
                 targetType == typeof(long?))
             {
-                return ToLong(value, cultureInfo);
+                return BoxingCache<long>.Default.GetBoxedValue(ToLong(value, cultureInfo));
             }
 
             if (targetType == typeof(ulong) ||
                 targetType == typeof(ulong?))
             {
-                return ToULong(value, cultureInfo);
+                return BoxingCache<ulong>.Default.GetBoxedValue(ToULong(value, cultureInfo));
             }
 
             if (targetType == typeof(Uri))

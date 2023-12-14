@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRegisteredEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -37,12 +31,9 @@ namespace Catel.IoC
         /// <param name="instance">The instance of the service was instantiated.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
-        public TypeUnregisteredEventArgs(Type serviceType, Type serviceImplementationType, object tag, 
-            RegistrationType registrationType, object instance)
+        public TypeUnregisteredEventArgs(Type serviceType, Type serviceImplementationType, object? tag, 
+            RegistrationType registrationType, object? instance)
         {
-            Argument.IsNotNull("serviceType", serviceType);
-            Argument.IsNotNull("serviceImplementationType", serviceImplementationType);
-
             ServiceType = serviceType;
             ServiceImplementationType = serviceImplementationType;
             Tag = tag;
@@ -60,7 +51,7 @@ namespace Catel.IoC
         /// Gets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object? Tag { get; private set; }
 
         /// <summary>
         /// Gets the type of the actual implementation.
@@ -71,7 +62,7 @@ namespace Catel.IoC
         /// <summary>
         /// Gets the instance of the service if it was instantiated.
         /// </summary>
-        public object Instance { get; private set; }
+        public object? Instance { get; private set; }
 
         /// <summary>
         /// Gets the type of the registration.

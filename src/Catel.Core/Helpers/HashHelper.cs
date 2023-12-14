@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HashHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     /// <summary>
     /// Hash helper class to generate hashCodes for objects.
@@ -19,9 +13,9 @@ namespace Catel
         /// <remarks>Based on System.Web.UI.HashCodeCombiner (use Reflector).</remarks>
         public static int CombineHash(params int[] hashCodes)
         {
-            int hash = 5381; // 0x1505L
+            var hash = 5381; // 0x1505L
 
-            foreach (int inp in hashCodes)
+            foreach (var inp in hashCodes)
             {
                 hash = ((hash << 5) + hash) ^ inp;
             }

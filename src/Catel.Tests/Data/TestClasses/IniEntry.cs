@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq.Expressions;
-    using System.Runtime.Serialization;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
@@ -10,12 +9,9 @@
     /// IniEntry Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     public class IniEntry : ComparableModelBase
     {
-        #region Serialization test code
         [ExcludeFromSerialization]
         public int _onSerializingCalls;
         [ExcludeFromSerialization]
@@ -60,12 +56,7 @@
 
             base.OnDeserialized();
         }
-        #endregion
 
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -73,20 +64,6 @@
         {
         }
 
-#if NET || NETCORE
-        /// <summary>
-        ///   Initializes a new object based on <see cref = "SerializationInfo" />.
-        /// </summary>
-        /// <param name = "info"><see cref = "SerializationInfo" /> that contains the information.</param>
-        /// <param name = "context"><see cref = "StreamingContext" />.</param>
-        protected IniEntry(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
-        #endregion
-
-        #region Properties
         /// <summary>
         ///   Gets or sets the group.
         /// </summary>
@@ -99,7 +76,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData GroupProperty = RegisterProperty("Group", typeof(string), string.Empty);
+        public static readonly IPropertyData GroupProperty = RegisterProperty("Group", string.Empty);
 
         /// <summary>
         ///   Gets or sets the key.
@@ -113,7 +90,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData KeyProperty = RegisterProperty("Key", typeof(string), string.Empty);
+        public static readonly IPropertyData KeyProperty = RegisterProperty("Key", string.Empty);
 
         /// <summary>
         ///   Gets or sets the value.
@@ -127,7 +104,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueProperty = RegisterProperty("Value", typeof(string), string.Empty);
+        public static readonly IPropertyData ValueProperty = RegisterProperty("Value", string.Empty);
 
         /// <summary>
         /// Gets or sets the ini entry type.
@@ -141,10 +118,8 @@
         /// <summary>
         /// Register the IniEntryType property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IniEntryTypeProperty = RegisterProperty("IniEntryType", typeof(IniEntryType), IniEntryType.Public);
-        #endregion
+        public static readonly IPropertyData IniEntryTypeProperty = RegisterProperty("IniEntryType", IniEntryType.Public);
 
-        #region Methods
         /// <summary>
         ///   Allows a test to invoke the Notify Property Changed on an object.
         /// </summary>
@@ -182,6 +157,5 @@
         {
             return base.GetValue<TValue>(propertyName);
         }
-        #endregion
     }
 }

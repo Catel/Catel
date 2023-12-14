@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -13,11 +7,8 @@ namespace Catel.Logging
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using Reflection;
-
-#if NET || NETCORE
     using System.Configuration;
     using Catel.Configuration;
-#endif
 
     /// <summary>
     /// Log manager that allows external libraries to subscribe to logging of Catel.
@@ -28,7 +19,6 @@ namespace Catel.Logging
     /// </summary>
     public static class LogManager
     {
-        #region Classes
         /// <summary>
         /// Class containing log info.
         /// </summary>
@@ -227,9 +217,7 @@ namespace Catel.Logging
             }
             #endregion
         }
-        #endregion
 
-        #region Constants
         /// <summary>
         /// List of all registered <see cref="ILogListener"/> instances.
         /// </summary>
@@ -240,11 +228,6 @@ namespace Catel.Logging
         /// </summary>
         private static readonly Dictionary<string, ILog> _loggers = new Dictionary<string, ILog>();
 
-        /// <summary>
-        /// Logging of the class. Must be declared after the log listeners and loggers.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private static bool? _ignoreCatelLogging;
         private static bool? _ignoreDuplicateExceptionLogging;
         private static bool? _isDebugEnabled;
@@ -253,25 +236,15 @@ namespace Catel.Logging
         private static bool? _isErrorEnabled;
         private static bool? _isStatusEnabled;
 
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="LogManager" /> class.
         /// </summary>
         static LogManager()
         {
-#if NET
-            AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
-#elif NETCORE
-            AppDomain.CurrentDomain.ProcessExit += (sender, e) => FlushAll();
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
-#endif
+            AppDomain.CurrentDomain.DomainUnload += async (sender, e) => await FlushAllAsync();
+            AppDomain.CurrentDomain.UnhandledException += async (sender, e) => await FlushAllAsync();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether the global IgnoreCatelLogging should be overriden.
         /// <para />
@@ -388,16 +361,12 @@ namespace Catel.Logging
                 LogInfo.UpdateLogInfo();
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a log message is written to one of the logs.
         /// </summary>
-        public static event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
+        public static event EventHandler<LogMessageEventArgs>? LogMessage;
 
-        #region Methods
         /// <summary>
         /// Gets the current class logger.
         /// </summary>
@@ -407,16 +376,15 @@ namespace Catel.Logging
         {
             var callingType = StaticHelper.GetCallingType();
 
-            return GetLogger(callingType);
+            return GetLogger(callingType ?? typeof(object));
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Loads the listeners from the specified configuration file.
         /// </summary>
         /// <param name="configurationFilePath">The configuration file path.</param>
         /// <param name="assembly">The assembly to determine product info. If <c>null</c>, the entry assembly will be used.</param>
-        public static void LoadListenersFromConfigurationFile(string configurationFilePath, Assembly assembly = null)
+        public static void LoadListenersFromConfigurationFile(string configurationFilePath, Assembly? assembly = null)
         {
             if (string.IsNullOrWhiteSpace(configurationFilePath))
             {
@@ -446,7 +414,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="assembly">The assembly to determine product info. If <c>null</c>, the entry assembly will be used.</param>
-        public static void LoadListenersFromConfiguration(Configuration configuration, Assembly assembly = null)
+        public static void LoadListenersFromConfiguration(Configuration configuration, Assembly? assembly = null)
         {
             if (configuration is null)
             {
@@ -456,7 +424,7 @@ namespace Catel.Logging
             try
             {
                 var configurationSection = configuration.GetSection<LoggingConfigurationSection>("logging", "catel");
-                if (configurationSection != null)
+                if (configurationSection is not null)
                 {
                     var logListeners = configurationSection.GetLogListeners(assembly);
                     foreach (var logListener in logListeners)
@@ -470,7 +438,6 @@ namespace Catel.Logging
                 // Swallow
             }
         }
-#endif
 
         /// <summary>
         /// Registers the default debug listener. Starting with Catel 2.4, the debug listener is no longer
@@ -517,9 +484,9 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public static ILog GetLogger(Type type)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
-            return GetLogger(type.FullName, type);
+            return GetLogger(type.GetSafeFullName(), type);
         }
 
         /// <summary>
@@ -530,20 +497,7 @@ namespace Catel.Logging
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
         public static ILog GetLogger(string name)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            lock (_loggers)
-            {
-                if (!_loggers.TryGetValue(name, out var log))
-                {
-                    log = new Log(name);
-                    log.LogMessage += OnLogMessage;
-
-                    _loggers.Add(name, log);
-                }
-
-                return log;
-            }
+            return GetLogger(name, typeof(object));
         }
 
         /// <summary>
@@ -557,7 +511,7 @@ namespace Catel.Logging
         public static ILog GetLogger(string name, Type type)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
             lock (_loggers)
             {
@@ -583,15 +537,15 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         internal static ICatelLog GetCatelLogger(Type type, bool alwaysLog = false)
         {
-            Argument.IsNotNull("type", type);
+            ArgumentNullException.ThrowIfNull(type);
 
-            var name = type.FullName;
+            var name = type.GetSafeFullName();
 
             lock (_loggers)
             {
                 if (!_loggers.TryGetValue(name, out var log))
                 {
-                    log = new CatelLog(name, alwaysLog);
+                    log = new CatelLog(type, alwaysLog);
                     log.LogMessage += OnLogMessage;
 
                     _loggers.Add(name, log);
@@ -642,7 +596,7 @@ namespace Catel.Logging
             foreach (var listener in logListeners)
             {
                 var batchListener = listener as IBatchLogListener;
-                if (batchListener != null)
+                if (batchListener is not null)
                 {
                     logListenersToFlush.Add(batchListener);
                 }
@@ -652,17 +606,6 @@ namespace Catel.Logging
             {
                 await logListenerToFlush.FlushAsync();
             }
-        }
-
-        /// <summary>
-        /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.FlushAsync" />.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(FlushAllAsync), Message = "Since listeners only have FlushAsync, a non-async flush doesn't make sense", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-#pragma warning disable AvoidAsyncVoid // Avoid async void
-        public static async void FlushAll()
-#pragma warning restore AvoidAsyncVoid // Avoid async void
-        {
-            await FlushAllAsync();
         }
 
         /// <summary>
@@ -684,7 +627,7 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="listener"/> is <c>null</c>.</exception>
         public static void AddListener(ILogListener listener)
         {
-            Argument.IsNotNull("listener", listener);
+            ArgumentNullException.ThrowIfNull(listener);
 
             lock (_logListeners)
             {
@@ -692,8 +635,6 @@ namespace Catel.Logging
             }
 
             LogInfo.UpdateLogInfo();
-
-            Log.Debug("Added listener '{0}' to log manager", listener.GetType().FullName);
         }
 
         /// <summary>
@@ -703,7 +644,7 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="listener"/> is <c>null</c>.</exception>
         public static void RemoveListener(ILogListener listener)
         {
-            Argument.IsNotNull("listener", listener);
+            ArgumentNullException.ThrowIfNull(listener);
 
             lock (_logListeners)
             {
@@ -711,8 +652,6 @@ namespace Catel.Logging
             }
 
             LogInfo.UpdateLogInfo();
-
-            Log.Debug("Removed listener '{0}' from log manager", listener.GetType().FullName);
         }
 
         /// <summary>
@@ -725,7 +664,7 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="listener"/> is <c>null</c>.</exception>
         public static bool IsListenerRegistered(ILogListener listener)
         {
-            Argument.IsNotNull("listener", listener);
+            ArgumentNullException.ThrowIfNull(listener);
 
             lock (_logListeners)
             {
@@ -742,8 +681,6 @@ namespace Catel.Logging
             {
                 _logListeners.Clear();
             }
-
-            Log.Debug("Cleared all listeners");
         }
 
         /// <summary>
@@ -768,7 +705,7 @@ namespace Catel.Logging
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.Logging.LogMessageEventArgs"/> instance containing the event data.</param>
         /// <exception cref="ArgumentOutOfRangeException">The <see cref="LogEvent"/> is not supported.</exception>
-        private static void OnLogMessage(object sender, LogMessageEventArgs e)
+        private static void OnLogMessage(object? sender, LogMessageEventArgs e)
         {
             if (LogInfo.IgnoreCatelLogging && e.Log.IsCatelLoggingAndCanBeIgnored())
             {
@@ -793,29 +730,6 @@ namespace Catel.Logging
                 if (IsListenerInterested(listener, e.LogEvent))
                 {
                     listener.Write(e.Log, e.Message, e.LogEvent, e.ExtraData, e.LogData, e.Time);
-
-                    switch (e.LogEvent)
-                    {
-                        case LogEvent.Debug:
-                            listener.Debug(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
-                            break;
-
-                        case LogEvent.Info:
-                            listener.Info(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
-                            break;
-
-                        case LogEvent.Warning:
-                            listener.Warning(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
-                            break;
-
-                        case LogEvent.Error:
-                            listener.Error(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
-                            break;
-
-                        case LogEvent.Status:
-                            listener.Status(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
-                            break;
-                    }
                 }
             }
         }
@@ -831,8 +745,6 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="listener"/> is <c>null</c>.</exception>
         private static bool IsListenerInterested(ILogListener listener, LogEvent logEvent)
         {
-            Argument.IsNotNull("listener", listener);
-
             switch (logEvent)
             {
                 case LogEvent.Debug:
@@ -853,7 +765,5 @@ namespace Catel.Logging
 
             return false;
         }
-
-        #endregion
     }
 }

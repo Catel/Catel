@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyChangedEventArgsExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.ComponentModel
+﻿namespace Catel.Tests.ComponentModel
 {
     using System;
     using System.ComponentModel;
@@ -20,7 +14,7 @@ namespace Catel.Tests.ComponentModel
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChangedArguments()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.AllPropertiesChanged(null));
+                Assert.Throws<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.AllPropertiesChanged(null));
             }
 
             [TestCase]
@@ -28,7 +22,7 @@ namespace Catel.Tests.ComponentModel
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs(null);
 
-                Assert.IsTrue(propertyChangedEventArgs.AllPropertiesChanged());
+                Assert.That(propertyChangedEventArgs.AllPropertiesChanged(), Is.True);
             }
 
             [TestCase]
@@ -36,7 +30,7 @@ namespace Catel.Tests.ComponentModel
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs(string.Empty);
 
-                Assert.IsTrue(propertyChangedEventArgs.AllPropertiesChanged());
+                Assert.That(propertyChangedEventArgs.AllPropertiesChanged(), Is.True);
             }
 
             [TestCase]
@@ -44,7 +38,7 @@ namespace Catel.Tests.ComponentModel
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("MyProperty");
 
-                Assert.IsFalse(propertyChangedEventArgs.AllPropertiesChanged());
+                Assert.That(propertyChangedEventArgs.AllPropertiesChanged(), Is.False);
             }
         }
 
@@ -56,7 +50,7 @@ namespace Catel.Tests.ComponentModel
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChangedArguments()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.HasPropertyChanged(null, () => TestProperty));
+                Assert.Throws<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.HasPropertyChanged(null, () => TestProperty));
             }
 
             [TestCase]
@@ -64,7 +58,7 @@ namespace Catel.Tests.ComponentModel
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestProperty");
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyChangedEventArgs.HasPropertyChanged((Expression<Func<string>>)null));
+                Assert.Throws<ArgumentNullException>(() => propertyChangedEventArgs.HasPropertyChanged((Expression<Func<string>>)null));
             }
 
             [TestCase]
@@ -72,7 +66,7 @@ namespace Catel.Tests.ComponentModel
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestProperty");
 
-                Assert.IsTrue(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty));
+                Assert.That(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty), Is.True);
             }
 
             [TestCase]
@@ -80,7 +74,7 @@ namespace Catel.Tests.ComponentModel
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestPropertyNotExisting");
 
-                Assert.IsFalse(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty));
+                Assert.That(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty), Is.False);
             }
         }
     }

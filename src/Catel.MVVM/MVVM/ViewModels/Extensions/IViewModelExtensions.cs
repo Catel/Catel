@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewModelExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Threading.Tasks;
@@ -26,9 +19,9 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         /// <returns><c>true</c> if the view model is saved; <c>false</c> if the view model is canceled; otherwise <c>null</c>.</returns>
-        public static bool? GetResult(this IViewModel viewModel)
+        public static bool? GetResult(this IViewModel? viewModel)
         {
-            if (viewModel != null)
+            if (viewModel is not null)
             {
                 if (viewModel.IsSaved)
                 {
@@ -73,10 +66,10 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static async Task<bool> SaveAndCloseViewModelAsync(this IViewModel viewModel, int timeout)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var viewModelBase = viewModel as ViewModelBase;
-            if (viewModelBase != null)
+            if (viewModelBase is not null)
             {
                 var exitAfterBlock = false;
 
@@ -130,10 +123,10 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static async Task<bool> CancelAndCloseViewModelAsync(this IViewModel viewModel, int timeout)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var viewModelBase = viewModel as ViewModelBase;
-            if (viewModelBase != null)
+            if (viewModelBase is not null)
             {
                 var exitAfterBlock = false;
 
@@ -281,7 +274,7 @@ namespace Catel.MVVM
             // on the vm, so we will listen to events
             //
             // To "solve" this, we'll give the VM only 50ms to save itself, which is extremely reasonable
-            var tcs = new TaskCompletionSource<object>();
+            var tcs = new TaskCompletionSource<bool>();
 
             var closedHandler = new AsyncEventHandler<ViewModelClosedEventArgs>(async (sender, e) =>
             {

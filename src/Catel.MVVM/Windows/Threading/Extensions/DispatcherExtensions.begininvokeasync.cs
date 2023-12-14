@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2018 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Threading
+﻿namespace Catel.Windows.Threading
 {
     using System;
     using System.Threading.Tasks;
 
     // Required for DispatcherOperation on all platforms
     using System.Windows.Threading;
-
-#if UWP
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#endif
 
     /// <summary>
     /// Extension methods for the dispatcher.
@@ -38,10 +26,10 @@ namespace Catel.Windows.Threading
         /// </remarks>
         public static async Task BeginInvokeAsync(this Dispatcher dispatcher, Func<Task> func)
         {
-            Argument.IsNotNull(nameof(dispatcher), dispatcher);
-            Argument.IsNotNull(nameof(func), func);
+            ArgumentNullException.ThrowIfNull(dispatcher);
+            ArgumentNullException.ThrowIfNull(func);
 
-            var tcs = new TaskCompletionSource<object>();
+            var tcs = new TaskCompletionSource<object?>();
 
 #pragma warning disable AvoidAsyncVoid // Avoid async void
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -66,5 +54,3 @@ namespace Catel.Windows.Threading
         }
     }
 }
-
-#endif

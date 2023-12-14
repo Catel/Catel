@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EnumerableExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Linq
+﻿namespace Catel.Linq
 {
     using System;
     using System.Collections;
@@ -14,7 +7,6 @@ namespace Catel.Linq
     using System.Reflection;
 
     using Catel.Caching;
-    using Catel.Collections;
     using Catel.Reflection;
 
     /// <summary>
@@ -22,19 +14,18 @@ namespace Catel.Linq
     /// </summary>
     public static class EnumerableExtensions
     {
-        private static readonly MethodInfo CastMethodInfo = typeof(Enumerable).GetMethodEx("Cast", BindingFlags.Static | BindingFlags.Public);
-
-        private static readonly MethodInfo ToArrayMethodInfo = typeof(Enumerable).GetMethodEx("ToArray", BindingFlags.Static | BindingFlags.Public);
-
-        private static readonly MethodInfo ToListMethodInfo = typeof(Enumerable).GetMethodEx("ToList", BindingFlags.Static | BindingFlags.Public);
+        private static readonly MethodInfo CastMethodInfo = typeof(Enumerable).GetMethodEx("Cast", BindingFlags.Static | BindingFlags.Public)!;
+        private static readonly MethodInfo ToArrayMethodInfo = typeof(Enumerable).GetMethodEx("ToArray", BindingFlags.Static | BindingFlags.Public)!;
+        private static readonly MethodInfo ToListMethodInfo = typeof(Enumerable).GetMethodEx("ToList", BindingFlags.Static | BindingFlags.Public)!;
 
         private static readonly CacheStorage<Type, MethodInfo> CastGenericMethodInfo = new CacheStorage<Type, MethodInfo>();
-
         private static readonly CacheStorage<Type, MethodInfo> ToArrayGenericMethodInfoCache = new CacheStorage<Type, MethodInfo>();
-
         private static readonly CacheStorage<Type, MethodInfo> ToListGenericMethodInfoCache = new CacheStorage<Type, MethodInfo>();
-
         private static readonly CacheStorage<Type, MethodInfo> AsReadOnlyGenericMethodInfoCache = new CacheStorage<Type, MethodInfo>();
+
+        static EnumerableExtensions()
+        {
+        }
 
         /// <summary>
         /// Element wise cast an <see cref="Enumerable" /> to <paramref name="type" />.
@@ -44,11 +35,19 @@ namespace Catel.Linq
         /// <returns>The <see cref="IEnumerable" /> with element cast to <paramref name="type" /></returns>
         public static IEnumerable Cast(this IEnumerable instance, Type type)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("type", type);
+            var methodInfo = CastGenericMethodInfo.GetFromCacheOrFetch(type, () => CastMethodInfo!.MakeGenericMethod(type));
+            if (methodInfo is null)
+            {
+                throw new CatelException("Cannot create generic Cast method");
+            }
 
-            var methodInfo = CastGenericMethodInfo.GetFromCacheOrFetch(type, () => CastMethodInfo.MakeGenericMethod(type));
-            return (IEnumerable)methodInfo.Invoke(null, new object[] { instance });
+            var result = methodInfo.Invoke(null, new object[] { instance }) as IEnumerable;
+            if (result is null)
+            {
+                throw new CatelException("Could not create IEnumerable using the Cast method");
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -59,11 +58,19 @@ namespace Catel.Linq
         /// <returns>The array of <paramref name="type" /> as <see cref="IEnumerable" /></returns>
         public static IEnumerable ToSystemArray(this IEnumerable instance, Type type)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("type", type);
+            var methodInfo = ToArrayGenericMethodInfoCache.GetFromCacheOrFetch(type, () => ToArrayMethodInfo!.MakeGenericMethod(type));
+            if (methodInfo is null)
+            {
+                throw new CatelException("Cannot create generic ToArray method");
+            }
 
-            var methodInfo = ToArrayGenericMethodInfoCache.GetFromCacheOrFetch(type, () => ToArrayMethodInfo.MakeGenericMethod(type));
-            return (IEnumerable)methodInfo.Invoke(null, new object[] { instance });
+            var result = methodInfo.Invoke(null, new object[] { instance }) as IEnumerable;
+            if (result is null)
+            {
+                throw new CatelException("Could not create IEnumerable using the ToArray method");
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -74,11 +81,19 @@ namespace Catel.Linq
         /// <returns>The <see cref="IList{T}" /> as <see cref="IEnumerable" /></returns>
         public static IEnumerable ToList(this IEnumerable instance, Type type)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("type", type);
+            var methodInfo = ToListGenericMethodInfoCache.GetFromCacheOrFetch(type, () => ToListMethodInfo!.MakeGenericMethod(type));
+            if (methodInfo is null)
+            {
+                throw new CatelException("Cannot create generic ToList method");
+            }
 
-            var methodInfo = ToListGenericMethodInfoCache.GetFromCacheOrFetch(type, () => ToListMethodInfo.MakeGenericMethod(type));
-            return (IEnumerable)methodInfo.Invoke(null, new object[] { instance });
+            var result = methodInfo.Invoke(null, new object[] { instance }) as IEnumerable;
+            if (result is null)
+            {
+                throw new CatelException("Could not create IEnumerable using the ToList method");
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -90,8 +105,19 @@ namespace Catel.Linq
         public static IEnumerable AsReadOnly(this IEnumerable instance, Type type)
         {
             var list = instance.ToList(type);
-            var methodInfo = AsReadOnlyGenericMethodInfoCache.GetFromCacheOrFetch(type, () => list.GetType().GetMethodEx("AsReadOnly"));
-            return (IEnumerable)methodInfo.Invoke(list, ArrayShim.Empty<object>());
+            var methodInfo = AsReadOnlyGenericMethodInfoCache.GetFromCacheOrFetch(type, () => list.GetType().GetMethodEx("AsReadOnly")!);
+            if (methodInfo is null)
+            {
+                throw new CatelException("Cannot create generic AsReadOnly method");
+            }
+
+            var result = methodInfo.Invoke(list, Array.Empty<object>()) as IEnumerable;
+            if (result is null)
+            {
+                throw new CatelException("Could not create IEnumerable using the AsReadOnly method");
+            }
+
+            return result;
         }
     }
 }

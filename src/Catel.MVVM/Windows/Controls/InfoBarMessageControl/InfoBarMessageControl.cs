@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InfoBarMessageControl.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls
 {
     using System;
     using System.Collections.Generic;
@@ -16,29 +8,9 @@ namespace Catel.Windows.Controls
     using Catel.Services;
     using IoC;
     using Logging;
-
-#if NET || NETCORE
     using System.ComponentModel;
     using System.Windows.Data;
-    using Exceptions = MVVM.Properties.Exceptions;
-#endif
-
-    /// <summary>
-    /// The display mode for the <see cref="InfoBarMessageControl"/>.
-    /// </summary>
-    public enum InfoBarMessageControlMode
-    {
-        /// <summary>
-        /// Displays the control inline, which means all controls below are moved down a bit when the
-        /// control becomes visible.
-        /// </summary>
-        Inline,
-
-        /// <summary>
-        /// Displays the control as an overlay, which might lead to overlapping of existing controls.
-        /// </summary>
-        Overlay
-    }
+    using Exceptions = Properties.Exceptions;
 
     /// <summary>
     /// Control for displaying messages to the user.
@@ -53,14 +25,11 @@ namespace Catel.Windows.Controls
     [TemplatePart(Name = ElementMessageBar, Type = typeof(FrameworkElement))]
     public class InfoBarMessageControl : ContentControl
     {
-        #region Constants
         /// <summary>
         /// The bar that will show the initial message bar.
         /// </summary>
         private const string ElementMessageBar = "PART_MessageBar";
-        #endregion
 
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -77,20 +46,15 @@ namespace Catel.Windows.Controls
 
         private readonly Dictionary<int, WarningAndErrorValidator> _warningAndErrorValidators = new Dictionary<int, WarningAndErrorValidator>();
         private bool _subscribedToEvents;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="InfoBarMessageControl"/> class.
         /// </summary>
         static InfoBarMessageControl()
         {
-            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
-            DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle");
-
-#if NET || NETCORE
+            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
+            DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle") ?? string.Empty;
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InfoBarMessageControl), new FrameworkPropertyMetadata(typeof(InfoBarMessageControl)));
-#endif
         }
 
         /// <summary>
@@ -100,14 +64,7 @@ namespace Catel.Windows.Controls
         {
             Text = DefaultTextPropertyValue;
             IsTabStop = false;
-
-#if !NET && !NETCORE
-            DefaultStyleKey = typeof (InfoBarMessageControl);
-#endif
-
-#if NET || NETCORE
             Focusable = false;
-#endif
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -117,9 +74,7 @@ namespace Catel.Windows.Controls
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the default property value for the <see cref="Text"/> property.
         /// </summary>
@@ -140,7 +95,7 @@ namespace Catel.Windows.Controls
         /// DependencyProperty definition as the backing store for Mode.
         /// </summary>
         public static readonly DependencyProperty ModeProperty =
-            DependencyProperty.Register("Mode", typeof(InfoBarMessageControlMode), typeof(InfoBarMessageControl),
+            DependencyProperty.Register(nameof(Mode), typeof(InfoBarMessageControlMode), typeof(InfoBarMessageControl),
             new PropertyMetadata(InfoBarMessageControlMode.Inline, (sender, e) => ((InfoBarMessageControl)sender).OnModeChanged()));
 
         /// <summary>
@@ -157,7 +112,7 @@ namespace Catel.Windows.Controls
         /// DependencyProperty definition as the backing store for Text.
         /// </summary>
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(CatelEnvironment.DefaultMultiLingualDependencyPropertyValue));
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(CatelEnvironment.DefaultMultiLingualDependencyPropertyValue));
 
         /// <summary>
         /// Info message for the info bar.
@@ -172,7 +127,7 @@ namespace Catel.Windows.Controls
         /// DependencyProperty definition as the backing store for InfoMessage.
         /// </summary>
         public static readonly DependencyProperty InfoMessageProperty =
-            DependencyProperty.Register("InfoMessage", typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(InfoMessage), typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(string.Empty));
 
         /// <summary>
         /// Gets or sets MessageCount.
@@ -190,7 +145,7 @@ namespace Catel.Windows.Controls
         /// Definition of the dependency property is private.
         /// </summary>
         public static readonly DependencyProperty MessageCountProperty =
-            DependencyProperty.Register("MessageCount", typeof(int), typeof(InfoBarMessageControl), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(MessageCount), typeof(int), typeof(InfoBarMessageControl), new PropertyMetadata(0));
 
         /// <summary>
         /// Gets the warning message collection.
@@ -217,15 +172,13 @@ namespace Catel.Windows.Controls
         {
             get { return _errorMessages; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the control is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object? sender, RoutedEventArgs e)
         {
             SubscribeToEvents();
 
@@ -237,7 +190,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnUnloaded(object sender, RoutedEventArgs e)
+        private void OnUnloaded(object? sender, RoutedEventArgs e)
         {
             UnsubscribeFromEvents();
         }
@@ -249,12 +202,10 @@ namespace Catel.Windows.Controls
         {
             base.OnApplyTemplate();
 
-#if NET || NETCORE
             if (GetTemplateChild(ElementMessageBar) is null)
             {
-                throw new NotSupportedException(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
+                throw Log.ErrorAndCreateException<NotSupportedException>(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
             }
-#endif
 
             OnModeChanged();
         }
@@ -265,7 +216,7 @@ namespace Catel.Windows.Controls
         private void OnModeChanged()
         {
             var messageBar = GetTemplateChild(ElementMessageBar) as FrameworkElement;
-            if (messageBar != null)
+            if (messageBar is not null)
             {
                 int gridRow = 0;
 
@@ -295,7 +246,7 @@ namespace Catel.Windows.Controls
         /// <exception cref="ArgumentNullException">The <paramref name="validator"/> is <c>null</c>.</exception>
         public void SubscribeWarningAndErrorValidator(WarningAndErrorValidator validator)
         {
-            Argument.IsNotNull("validator", validator);
+            ArgumentNullException.ThrowIfNull(validator);
 
             if (!_warningAndErrorValidators.ContainsKey(validator.UniqueIdentifier))
             {
@@ -315,7 +266,7 @@ namespace Catel.Windows.Controls
         /// <exception cref="ArgumentNullException">The <paramref name="validator"/> is <c>null</c>.</exception>
         public void UnsubscribeWarningAndErrorValidator(WarningAndErrorValidator validator)
         {
-            Argument.IsNotNull("validator", validator);
+            ArgumentNullException.ThrowIfNull(validator);
 
             if (_warningAndErrorValidators.ContainsKey(validator.UniqueIdentifier))
             {
@@ -334,9 +285,7 @@ namespace Catel.Windows.Controls
                 return;
             }
 
-#if NET || NETCORE
             Validation.AddErrorHandler(this, OnInfoBarMessageErrorValidation);
-#endif
 
             _subscribedToEvents = true;
         }
@@ -351,9 +300,7 @@ namespace Catel.Windows.Controls
                 return;
             }
 
-#if NET || NETCORE
             Validation.RemoveErrorHandler(this, OnInfoBarMessageErrorValidation);
-#endif
 
             foreach (var warningAndErrorValidator in _warningAndErrorValidators)
             {
@@ -377,8 +324,8 @@ namespace Catel.Windows.Controls
         {
             object realBindingObject = bindingObject;
 
-            ProcessValidationMessage(realBindingObject, null, ValidationEventAction.ClearAll, ValidationType.Warning);
-            ProcessValidationMessage(realBindingObject, null, ValidationEventAction.ClearAll, ValidationType.Error);
+            ProcessValidationMessage(realBindingObject, string.Empty, ValidationEventAction.ClearAll, ValidationType.Warning);
+            ProcessValidationMessage(realBindingObject, string.Empty, ValidationEventAction.ClearAll, ValidationType.Error);
 
             UpdateMessages();
         }
@@ -396,13 +343,12 @@ namespace Catel.Windows.Controls
             ClearObjectMessages(bindingObject);
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Handling data errors.
         /// </summary>
         /// <param name="sender">A sender.</param>
         /// <param name="e">The event arguments</param>
-        private void OnInfoBarMessageErrorValidation(object sender, ValidationErrorEventArgs e)
+        private void OnInfoBarMessageErrorValidation(object? sender, ValidationErrorEventArgs e)
         {
             e.Handled = true;
 
@@ -417,15 +363,15 @@ namespace Catel.Windows.Controls
             }
 
             object bindingObject = GetBindingObject(e.Error.BindingInError);
-            string message = (e.Error != null) ? e.Error.ErrorContent.ToString() : string.Empty;
+            string message = (e.Error is not null) ? e.Error.ErrorContent.ToString() ?? string.Empty : string.Empty;
 
             // There seems to be an issue where validations are removed, even when 
             // ((IDataErrorInfo)bindingObject)["property"] has a value, so check for that
 
             var bindingObjectAsIDataErrorInfo = bindingObject as IDataErrorInfo;
-            var bindingInErrorAsBindingExpression = e.Error.BindingInError as BindingExpression;
-            if ((validationEventAction == ValidationEventAction.Removed) && (bindingObjectAsIDataErrorInfo != null) &&
-                (bindingInErrorAsBindingExpression != null))
+            var bindingInErrorAsBindingExpression = e.Error?.BindingInError as BindingExpression;
+            if ((validationEventAction == ValidationEventAction.Removed) && (bindingObjectAsIDataErrorInfo is not null) &&
+                (bindingInErrorAsBindingExpression is not null))
             {
                 if (!string.IsNullOrEmpty(bindingObjectAsIDataErrorInfo[bindingInErrorAsBindingExpression.ParentBinding.Path.Path]))
                 {
@@ -438,21 +384,19 @@ namespace Catel.Windows.Controls
 
             UpdateMessages();
         }
-#endif
 
         /// <summary>
         /// Handling business data errors.
         /// </summary>
         /// <param name="sender">A sender.</param>
         /// <param name="e">The event arguments</param>
-        private void OnInfoBarMessageValidation(object sender, ValidationEventArgs e)
+        private void OnInfoBarMessageValidation(object? sender, ValidationEventArgs e)
         {
             ProcessValidationMessage(e.Value, e.Message, e.Action, e.Type);
 
             UpdateMessages();
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets the binding object.
         /// </summary>
@@ -460,15 +404,15 @@ namespace Catel.Windows.Controls
         /// <returns>object from the binding.</returns>
         private static object GetBindingObject(object bindingObject)
         {
-            object result;
+            object? result;
 
             // Check whether the data error is throwed on an single binding or a bindinggroup and process the error message
-            if (bindingObject as BindingExpression != null)
+            if (bindingObject as BindingExpression is not null)
             {
                 // Use data item of binding
                 result = ((BindingExpression)bindingObject).DataItem;
             }
-            else if (bindingObject as BindingGroup != null)
+            else if (bindingObject as BindingGroup is not null)
             {
                 // Use data group (object itself)
                 // ReSharper disable RedundantCast
@@ -483,7 +427,6 @@ namespace Catel.Windows.Controls
 
             return result;
         }
-#endif
 
         /// <summary>
         /// Process an validation message.
@@ -534,7 +477,7 @@ namespace Catel.Windows.Controls
                         break;
 
                     case ValidationEventAction.ClearAll:
-                        if (bindingObject != null)
+                        if (bindingObject is not null)
                         {
                             messages.Remove(bindingObject);
                         }
@@ -601,8 +544,5 @@ namespace Catel.Windows.Controls
                 }
             }
         }
-        #endregion
     }
 }
-
-#endif

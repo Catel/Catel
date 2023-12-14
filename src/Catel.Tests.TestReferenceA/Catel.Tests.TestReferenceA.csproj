@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <AssemblyName>A</AssemblyName>
     <RootNamespace>A</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -19,10 +19,6 @@
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
     <ProjectReference Include="..\Catel.Tests.TestReferenceB\Catel.Tests.TestReferenceB.csproj" />
     <ProjectReference Include="..\Catel.Tests.TestReferenceC\Catel.Tests.TestReferenceC.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />

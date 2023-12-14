@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyAlreadyRegisteredExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data.Exceptions
+﻿namespace Catel.Tests.Data.Exceptions
 {
     using Catel.Data;
 
@@ -19,8 +13,8 @@ namespace Catel.Tests.Data.Exceptions
             public void SetsValuesCorrectly()
             {
                 var exception = new PropertyAlreadyRegisteredException("PropertyName", typeof(string));
-                Assert.AreEqual("PropertyName", exception.PropertyName);
-                Assert.AreEqual(typeof(string), exception.PropertyType);
+                Assert.That(exception.PropertyName, Is.EqualTo("PropertyName"));
+                Assert.That(exception.PropertyType, Is.EqualTo(typeof(string)));
             }
         }
     }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MustBeImplementedException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -17,7 +10,6 @@ namespace Catel
     /// </summary>
     public class MustBeImplementedException : Exception
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NotSupportedInPlatformException"/> class.
         /// </summary>
@@ -25,6 +17,5 @@ namespace Catel
             : base("Unfortunately, the team has limited resources and must focus on the most requested features. Feel free to create a pull request or notify the team that you are missing this feature.")
         {
         }
-        #endregion
     }
 }

@@ -1,31 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DelayBindingUpdate.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using TimerTickEventArgs = System.Object;
-#else
     using System.Windows;
     using System.Windows.Data;
     using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
-    using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;
-#endif
-
     using System;
     using Data;
     using Logging;
@@ -37,7 +19,6 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class DelayBindingUpdate : BehaviorBase<FrameworkElement>
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -47,12 +28,10 @@ namespace Catel.Windows.Interactivity
 
         private readonly DispatcherTimer _timer;
 
-        private Binding _originalBinding;
+        private Binding? _originalBinding;
 
-        private DependencyProperty _dependencyPropertyCache;
-        #endregion
+        private DependencyProperty? _dependencyPropertyCache;
 
-        #region Constructors
         static DelayBindingUpdate()
         {
             BindingProperties = new List<PropertyInfo>(from property in typeof(Binding).GetPropertiesEx()
@@ -69,9 +48,7 @@ namespace Catel.Windows.Interactivity
 
             _timer = new DispatcherTimer();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the update delay. 
         /// <para />
@@ -93,7 +70,7 @@ namespace Catel.Windows.Interactivity
         /// This property does not reflect to any changes, so this property must be set when the 
         /// <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </remarks>
-        public string PropertyName { get; set; }
+        public string? PropertyName { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the dependency property. This property is used before the <see cref="PropertyName"/>. By
@@ -108,23 +85,23 @@ namespace Catel.Windows.Interactivity
         /// <para />
         /// This property should only be used as backup if the <see cref="PropertyName"/> property does not work.
         /// </remarks>
-        public string DependencyPropertyName { get; set; }
+        public string? DependencyPropertyName { get; set; }
 
         /// <summary>
         /// Gets the name of the used dependency property.
         /// </summary>
         /// <value>The name of the used property or <c>null</c> if no property is used.</value>
-        private string UsedDependencyPropertyName
+        private string? UsedDependencyPropertyName
         {
             get
             {
-                DependencyProperty property;
+                DependencyProperty? property;
 
                 // Fallback first
                 if (!string.IsNullOrEmpty(DependencyPropertyName))
                 {
                     property = GetDependencyProperty(DependencyPropertyName);
-                    if (property != null)
+                    if (property is not null)
                     {
                         return DependencyPropertyName;
                     }
@@ -132,7 +109,7 @@ namespace Catel.Windows.Interactivity
 
                 var propertyName = string.Format("{0}Property", PropertyName);
                 property = GetDependencyProperty(propertyName);
-                if (property != null)
+                if (property is not null)
                 {
                     return propertyName;
                 }
@@ -140,9 +117,7 @@ namespace Catel.Windows.Interactivity
                 return null;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Validates the required properties.
         /// </summary>
@@ -164,14 +139,14 @@ namespace Catel.Windows.Interactivity
             var dependencyProperty = GetDependencyProperty();
             if (dependencyProperty is null)
             {
-                Log.Error("No dependency property found on '{0}'", dependencyPropertyName);
+                Log.Error($"No dependency property found on '{dependencyPropertyName}'");
                 return;
             }
 
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
             if (bindingExpression is null)
             {
-                Log.Error("No binding expression found on '{0}'", dependencyPropertyName);
+                Log.Error($"No binding expression found on '{dependencyPropertyName}'");
                 return;
             }
 
@@ -188,6 +163,12 @@ namespace Catel.Windows.Interactivity
             Log.Debug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", dependencyPropertyName);
 
             var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
+            if (finalDependencyPropertyName is null)
+            {
+                Log.Error($"Dependency property '{dependencyPropertyName}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
+                return;
+            }
+
             AssociatedObject.SubscribeToDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
             Log.Debug("Subscribed to property changes of the original object");
@@ -201,7 +182,7 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectUnloaded()
         {
             var dependencyProperty = GetDependencyProperty();
-            if (dependencyProperty != null)
+            if (dependencyProperty is not null)
             {
                 var associatedObject = AssociatedObject;
                 associatedObject.ClearValue(dependencyProperty);
@@ -210,6 +191,12 @@ namespace Catel.Windows.Interactivity
                 Log.Debug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
 
                 var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
+                if (finalDependencyPropertyName is null)
+                {
+                    Log.Error($"Dependency property '{dependencyProperty}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
+                    return;
+                }
+
                 AssociatedObject.UnsubscribeFromDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
                 Log.Debug("Unsubscribed from property changes of the original object");
@@ -222,7 +209,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the associated dependency property has changed.
         /// </summary>
-        private void OnDependencyPropertyChanged(object sender, DependencyPropertyValueChangedEventArgs e)
+        private void OnDependencyPropertyChanged(object? sender, DependencyPropertyValueChangedEventArgs e)
         {
             if (UpdateDelay < 50)
             {
@@ -249,7 +236,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name = "sender">The sender.</param>
         /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
-        private void OnTimerTick(object sender, TimerTickEventArgs e)
+        private void OnTimerTick(object? sender, TimerTickEventArgs e)
         {
             _timer.Stop();
 
@@ -289,20 +276,20 @@ namespace Catel.Windows.Interactivity
         /// Gets the dependency property based on the properties of this behavior.
         /// </summary>
         /// <returns>The <see cref="DependencyProperty"/> of <c>null</c> if the dependency property is not found.</returns>
-        private DependencyProperty GetDependencyProperty()
+        private DependencyProperty? GetDependencyProperty()
         {
-            if (_dependencyPropertyCache != null)
+            if (_dependencyPropertyCache is not null)
             {
                 return _dependencyPropertyCache;
             }
 
-            DependencyProperty property;
+            DependencyProperty? property;
 
             // Fallback first
             if (!string.IsNullOrEmpty(DependencyPropertyName))
             {
                 property = GetDependencyProperty(DependencyPropertyName);
-                if (property != null)
+                if (property is not null)
                 {
                     _dependencyPropertyCache = property;
                     return property;
@@ -310,7 +297,7 @@ namespace Catel.Windows.Interactivity
             }
 
             property = GetDependencyProperty(string.Format("{0}Property", PropertyName));
-            if (property != null)
+            if (property is not null)
             {
                 _dependencyPropertyCache = property;
                 return property;
@@ -324,7 +311,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="dependencyPropertyName">Name of the property.</param>
         /// <returns>The <see cref="DependencyProperty"/> or <c>null</c> if the dependency property is not found.</returns>
-        private DependencyProperty GetDependencyProperty(string dependencyPropertyName)
+        private DependencyProperty? GetDependencyProperty(string dependencyPropertyName)
         {
             if (dependencyPropertyName.EndsWith("Property"))
             {
@@ -352,10 +339,10 @@ namespace Catel.Windows.Interactivity
         /// <exception cref="ArgumentNullException">The <paramref name="binding"/> is <c>null</c>.</exception>
         private static Binding CreateBindingCopy(Binding binding)
         {
-            Argument.IsNotNull("binding", binding);
+            ArgumentNullException.ThrowIfNull(binding);
 
             // Copy all properties with a setter via reflection
-            // only copy when value != null, otherwise exceptions will be thrown
+            // only copy when value is not null, otherwise exceptions will be thrown
 
             var newBinding = new Binding();
 
@@ -369,7 +356,7 @@ namespace Catel.Windows.Interactivity
                     }
 
                     var propertyValue = property.GetValue(binding, null);
-                    if (propertyValue != null)
+                    if (propertyValue is not null)
                     {
                         property.SetValue(newBinding, propertyValue, null);
                     }
@@ -382,8 +369,5 @@ namespace Catel.Windows.Interactivity
 
             return newBinding;
         }
-        #endregion
     }
 }
-
-#endif

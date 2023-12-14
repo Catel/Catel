@@ -1,10 +1,7 @@
-﻿#if !XAMARIN
-
-namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing
 {
     using System;
     using System.Threading;
-    using Catel.MVVM.Auditing;
     using Catel.Services;
 
     public class InvalidateCommandManagerOnViewModelInitializationAuditor : AuditorBase
@@ -14,13 +11,15 @@ namespace Catel.MVVM.Auditing
         private readonly ICommandManager _commandManager;
         private readonly IDispatcherService _dispatcherService;
 
+#pragma warning disable IDISP006 // Implement IDisposable.
         private readonly Timer _timer;
+#pragma warning restore IDISP006 // Implement IDisposable.
 
         public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager,
             IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(nameof(commandManager), commandManager);
-            Argument.IsNotNull(nameof(dispatcherService), dispatcherService);
+            ArgumentNullException.ThrowIfNull(commandManager);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _commandManager = commandManager;
             _dispatcherService = dispatcherService;
@@ -36,7 +35,7 @@ namespace Catel.MVVM.Auditing
             _timer.Change(TimerDuration, Timeout.InfiniteTimeSpan);
         }
 
-        private void OnTimerTick(object e)
+        private void OnTimerTick(object? e)
         {
             _dispatcherService.BeginInvokeIfRequired(() =>
             {
@@ -45,5 +44,3 @@ namespace Catel.MVVM.Auditing
         }
     }
 }
-
-#endif

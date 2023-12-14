@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewStackPartLoaded.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
 
@@ -20,7 +13,7 @@ namespace Catel.MVVM.Views
         /// <param name="view">The view.</param>
         public ViewStackPartEventArgs(IView view)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
             View = view;
         }

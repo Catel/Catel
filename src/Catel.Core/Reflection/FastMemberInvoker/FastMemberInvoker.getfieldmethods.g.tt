@@ -89,7 +89,7 @@ foreach (TypeCode typeCode in typeCodes)
         public bool TryGetFieldValue(TEntity entity, string fieldName, out <#= typeCode #> item)
         {
             var getter = Get<#= typeCode #>FieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;

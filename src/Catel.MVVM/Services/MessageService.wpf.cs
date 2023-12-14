@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageService.wpf.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
@@ -50,7 +41,7 @@ namespace Catel.Services
                 var messageBoxImage = TranslateMessageImage(icon);
 
                 var activeWindow = Application.Current.GetActiveWindow();
-                if (activeWindow != null)
+                if (activeWindow is not null)
                 {
                     result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
                 }
@@ -66,5 +57,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

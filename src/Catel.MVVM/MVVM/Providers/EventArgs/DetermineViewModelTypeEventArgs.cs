@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DetermineViewModelInstanceEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
     using MVVM;
@@ -18,7 +12,7 @@ namespace Catel.MVVM.Providers
         /// Initializes a new instance of the <see cref="DetermineViewModelInstanceEventArgs"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        public DetermineViewModelInstanceEventArgs(object dataContext)
+        public DetermineViewModelInstanceEventArgs(object? dataContext)
         {
             DataContext = dataContext;
         }
@@ -26,7 +20,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Gets the data context.
         /// </summary>
-        public object DataContext { get; private set; }
+        public object? DataContext { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the logic should create a view model by itself when the
@@ -42,6 +36,6 @@ namespace Catel.MVVM.Providers
         /// Gets or sets the view model.
         /// </summary>
         /// <value>The type of the view model.</value>
-        public IViewModel ViewModel { get; set; }
+        public IViewModel? ViewModel { get; set; }
     }
 }

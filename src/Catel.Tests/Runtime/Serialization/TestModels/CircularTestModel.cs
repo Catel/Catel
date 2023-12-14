@@ -1,29 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CircularTestModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using Catel.Data;
 
-#if NET || NETCORE
-    using System.Runtime.Serialization;
-#endif
-
-#if NET || NETCORE
     [Serializable]
-#endif
     public class CircularTestModel : ModelBase
     {
-#if NET || NETCORE
-        protected CircularTestModel(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
-#endif
-
         public CircularTestModel()
         {
             Name = UniqueIdentifierHelper.GetUniqueIdentifier<CircularTestModel>().ToString();
@@ -35,7 +17,7 @@ namespace Catel.Tests.Runtime.Serialization
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), "Test name");
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", "Test name");
 
         public CircularTestModel CircularModel
         {
@@ -43,6 +25,6 @@ namespace Catel.Tests.Runtime.Serialization
             set { SetValue(CircularModelProperty, value); }
         }
 
-        public static readonly PropertyData CircularModelProperty = RegisterProperty("CircularModel", typeof(CircularTestModel), null);
+        public static readonly IPropertyData CircularModelProperty = RegisterProperty<CircularTestModel>("CircularModel");
     }
 }

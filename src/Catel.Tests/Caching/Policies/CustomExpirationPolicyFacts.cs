@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SlidingExpirationPolicyFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.Caching.Policies
+﻿namespace Catel.Tests.Caching.Policies
 {
     using Catel.Caching.Policies;
 
@@ -27,13 +22,13 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsTrueIfAnActionIsSpecified()
             {
-                Assert.IsTrue(new CustomExpirationPolicy(() => true, () => ThreadHelper.Sleep(0)).CanReset);
-            }         
-            
+                Assert.That(new CustomExpirationPolicy(() => true, () => ThreadHelper.Sleep(0)).CanReset, Is.True);
+            }
+
             [TestCase]
             public void ReturnsFalseIfAnActionNotIsSpecified()
             {
-                Assert.IsFalse(new CustomExpirationPolicy(() => true).CanReset);
+                Assert.That(new CustomExpirationPolicy(() => true).CanReset, Is.False);
             }
 
             #endregion
@@ -53,19 +48,19 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ReturnsTrueIfFunctionRetursTrue()
             {
-                Assert.IsTrue(new CustomExpirationPolicy(() => true).IsExpired);
-            }         
-            
+                Assert.That(new CustomExpirationPolicy(() => true).IsExpired, Is.True);
+            }
+
             [TestCase]
             public void ReturnsTrueIfActionIsNull()
             {
-                Assert.IsTrue(new CustomExpirationPolicy().IsExpired);
+                Assert.That(new CustomExpirationPolicy().IsExpired, Is.True);
             }
 
             [TestCase]
             public void ReturnsTrueIfFunctionRetursFalse()
             {
-                Assert.IsFalse(new CustomExpirationPolicy(() => false).IsExpired);
+                Assert.That(new CustomExpirationPolicy(() => false).IsExpired, Is.False);
             }
 
             #endregion
@@ -92,8 +87,8 @@ namespace Catel.Tests.Caching.Policies
 
                 var customExpirationPolicy = new CustomExpirationPolicy(() => true, () => actionInvoked = true);
                 customExpirationPolicy.Reset();
-                
-                Assert.IsTrue(actionInvoked);
+
+                Assert.That(actionInvoked, Is.True);
             }
 
             #endregion

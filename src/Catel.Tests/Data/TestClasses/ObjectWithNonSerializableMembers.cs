@@ -16,6 +16,6 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the NonSerializableValue property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData NonSerializableValueProperty = RegisterProperty("NonSerializableValue", typeof(NonSerializableClass), null);
+        public static readonly IPropertyData NonSerializableValueProperty = RegisterProperty("NonSerializableValue", typeof(NonSerializableClass), null);
     }
 }

@@ -1,34 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelWrapperService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
-    using System;
-    using System.Runtime.CompilerServices;
     using Catel.Logging;
     using Catel.MVVM.Views;
     using Catel.Reflection;
-    using Catel.Windows;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Data;
-    using Page = global::Windows.UI.Xaml.Controls.Page;
-    using UserControl = global::Windows.UI.Xaml.Controls.UserControl;
-#else
     using Catel.Windows.Controls;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using Page = System.Windows.Controls.Page;
     using UserControl = System.Windows.Controls.UserControl;
-#endif
 
     public partial class ViewModelWrapperService
     {
@@ -50,7 +30,7 @@ namespace Catel.Services
             if (content.Name.StartsWith(InnerWrapperName))
             {
                 var binding = content.GetBindingExpression(FrameworkElement.DataContextProperty);
-                if (binding != null)
+                if (binding is not null)
                 {
                     return true;
                 }
@@ -59,7 +39,7 @@ namespace Catel.Services
             return false;
         }
 
-        private IViewModelWrapper CreateViewModelGrid(IView view, object viewModelSource, WrapOptions wrapOptions)
+        private IViewModelWrapper? CreateViewModelGrid(IView view, object viewModelSource, WrapOptions wrapOptions)
         {
             var content = GetContent(view) as FrameworkElement;
             if (!Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.Force) && content is null)
@@ -69,10 +49,10 @@ namespace Catel.Services
 
             var viewTypeName = view.GetType().Name;
 
-            Grid vmGrid = null;
+            Grid? vmGrid = null;
 
             var existingGrid = GetContent(view) as Grid;
-            if (existingGrid != null)
+            if (existingGrid is not null)
             {
                 if (existingGrid.Name.StartsWith(InnerWrapperName))
                 {
@@ -89,7 +69,6 @@ namespace Catel.Services
                 vmGrid = new Grid();
                 vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
-#if NET || NETCORE
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
                 {
                     var warningAndErrorValidator = new WarningAndErrorValidator();
@@ -97,11 +76,10 @@ namespace Catel.Services
 
                     vmGrid.Children.Add(warningAndErrorValidator);
                 }
-#endif
 
                 SetContent(view, null);
 
-                if (content != null)
+                if (content is not null)
                 {
                     vmGrid.Children.Add(content);
                 }
@@ -124,54 +102,54 @@ namespace Catel.Services
             return new ViewModelWrapper(vmGrid);
         }
 
-        private object GetContent(IView view)
+        private UIElement? GetContent(IView view)
         {
             var userControl = view as UserControl;
-            if (userControl != null)
+            if (userControl is not null)
             {
                 var content = userControl.Content as FrameworkElement;
                 return content;
             }
 
             var contentControl = view as ContentControl;
-            if (contentControl != null)
+            if (contentControl is not null)
             {
                 var content = contentControl.Content as FrameworkElement;
                 return content;
             }
 
             var page = view as Page;
-            if (page != null)
+            if (page is not null)
             {
                 var content = page.Content as FrameworkElement;
                 return content;
             }
 
-            var lastResortContent = PropertyHelper.GetPropertyValue(view, "Content", false);
+            var lastResortContent = PropertyHelper.GetPropertyValue(view, "Content", false) as UIElement;
             return lastResortContent;
         }
 
-        private void SetContent(IView view, object content)
+        private void SetContent(IView view, UIElement? content)
         {
             var userControl = view as UserControl;
-            if (userControl != null)
+            if (userControl is not null)
             {
-                userControl.Content = (UIElement)content;
+                userControl.Content = content;
                 return;
             }
 
             var contentControl = view as ContentControl;
-            if (contentControl != null)
+            if (contentControl is not null)
             {
                 contentControl.Content = content;
                 return;
             }
 
             var page = view as Page;
-            if (page != null)
+            if (page is not null)
             {
                 // Note: cast required or SL
-                page.Content = (UIElement)content;
+                page.Content = content;
                 return;
             }
 
@@ -179,5 +157,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

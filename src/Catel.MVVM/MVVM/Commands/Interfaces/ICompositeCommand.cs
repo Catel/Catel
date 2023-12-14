@@ -1,20 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompositeCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
     /// </summary>
-    public interface ICompositeCommand : ICatelCommand
+    public interface ICompositeCommand : ICatelTaskCommand<ITaskProgressReport>
     {
         /// <summary>
         /// Gets or sets a value indicating whether partial execution of commands is allowed. If this value is <c>true</c>, this composite
@@ -50,7 +44,19 @@ namespace Catel.MVVM
         /// Gets the actions with parameters currently registered to this composite command.
         /// </summary>
         /// <returns>IEnumerable.</returns>
-        IEnumerable<Action<object>> GetActionsWithParameter();
+        IEnumerable<Action<object?>> GetActionsWithParameter();
+
+        /// <summary>
+        /// Gets the actions currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        IEnumerable<Func<Task>> GetAsyncActions();
+
+        /// <summary>
+        /// Gets the actions with parameters currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        IEnumerable<Func<object?, Task>> GetAsyncActionsWithParameter();
 
         /// <summary>
         /// Registers the specified command.
@@ -61,14 +67,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// Note that if the view model is not specified, the command must be unregistered manually in order to prevent memory leaks.
         /// </remarks>
-        void RegisterCommand(ICommand command, IViewModel viewModel = null);
-
-        /// <summary>
-        /// Registers the specified action.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void RegisterAction(Action action);
+        void RegisterCommand(ICommand command, IViewModel? viewModel = null);
 
         /// <summary>
         /// Unregisters the specified command.
@@ -76,6 +75,13 @@ namespace Catel.MVVM
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         void UnregisterCommand(ICommand command);
+
+        /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void RegisterAction(Action action);
 
         /// <summary>
         /// Unregisters the specified action.
@@ -89,13 +95,41 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void RegisterAction(Action<object> action);
+        void RegisterAction(Action<object?> action);
 
         /// <summary>
         /// Unregisters the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void UnregisterAction(Action<object> action);        
+        void UnregisterAction(Action<object?> action);
+
+        /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void RegisterAction(Func<Task> action);
+
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void UnregisterAction(Func<Task> action);
+
+        /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void RegisterAction(Func<object?, Task> action);
+
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void UnregisterAction(Func<object?, Task> action);
     }
 }

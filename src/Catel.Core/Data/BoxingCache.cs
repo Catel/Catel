@@ -1,15 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BoxingCache.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
-    using Catel.Reflection;
+    using System.Timers;
+    using Catel.Logging;
 
     /// <summary>
     /// Boxing cache helper.
@@ -23,22 +17,60 @@ namespace Catel.Data
     /// Caches boxed objects to minimize the memory footprint for boxed value types.
     /// </summary>
     public class BoxingCache<T>
+        where T : notnull
     {
-        private readonly Dictionary<T, object> _boxedValues = new Dictionary<T, object>();
-        //private readonly Dictionary<object, T> _unboxedValues = new Dictionary<object, T>();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly Dictionary<T, object?> _boxedValues = new();
+        private TimeSpan _cleanUpInterval = TimeSpan.FromMinutes(5);
+
+#pragma warning disable IDISP006 // Implement IDisposable.
+        private readonly Timer _cleanUpTimer;
+#pragma warning restore IDISP006 // Implement IDisposable.
 
         /// <summary>
         /// Gets the default instance of the boxing cache.
         /// </summary>
         public static BoxingCache<T> Default { get; private set; } = new BoxingCache<T>();
 
+        public BoxingCache()
+        {
+            _cleanUpTimer = new Timer();
+            _cleanUpTimer.AutoReset = false;
+            _cleanUpTimer.Elapsed += OnCleanUpTimerElapsed;
+        }
+
+        /// <summary>
+        /// Gets or sets the clean up interval.
+        /// <para />
+        /// The default value is 5 minutes.
+        /// <para />
+        /// To disable automatic clean up, set a value of 0.
+        /// </summary>
+        public TimeSpan CleanUpInterval
+        {
+            get
+            {
+                return _cleanUpInterval;
+            }
+            set
+            {
+                _cleanUpInterval = value;
+
+                Log.Debug($"Cleanup interval is set to '{value}'");
+
+                _cleanUpTimer.Stop();
+
+                StartTimerIfRequired();
+            }
+        }
+
         /// <summary>
         /// Adds the value to the cache.
         /// </summary>
         /// <param name="value">The value to add to the cache.</param>
-        protected object AddUnboxedValue(T value)
+        protected object? AddUnboxedValue(T value)
         {
-            var boxedValue = (object)value;
+            var boxedValue = (object?)value;
 
             lock (_boxedValues)
             {
@@ -50,6 +82,8 @@ namespace Catel.Data
             //    _unboxedValues[boxedValue] = value;
             //}
 
+            StartTimerIfRequired();
+
             return boxedValue;
         }
 
@@ -57,8 +91,14 @@ namespace Catel.Data
         /// Adds the value to the cache.
         /// </summary>
         /// <param name="boxedValue">The value to add to the cache.</param>
-        protected T AddBoxedValue(object boxedValue)
+        protected T AddBoxedValue(object? boxedValue)
         {
+            if (boxedValue is null)
+            {
+                // Don't store
+                return default!;
+            }
+
             var unboxedValue = (T)boxedValue;
 
             lock (_boxedValues)
@@ -71,6 +111,8 @@ namespace Catel.Data
             //    _unboxedValues[boxedValue] = unboxedValue;
             //}
 
+            StartTimerIfRequired();
+
             return unboxedValue;
         }
 
@@ -79,13 +121,8 @@ namespace Catel.Data
         /// </summary>
         /// <param name="value">The value to box.</param>
         /// <returns>The boxed value.</returns>
-        public object GetBoxedValue(T value)
+        public object? GetBoxedValue(T value)
         {
-            if (ReferenceEquals(value, null))
-            {
-                return null;
-            }
-
             lock (_boxedValues)
             {
                 if (!_boxedValues.TryGetValue(value, out var boxedValue))
@@ -105,6 +142,7 @@ namespace Catel.Data
         public T GetUnboxedValue(object boxedValue)
         {
             return (T)boxedValue;
+
             //lock (_unboxedValues)
             //{
             //    if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
@@ -114,6 +152,44 @@ namespace Catel.Data
 
             //    return unboxedValue;
             //}
+        }
+
+        /// <summary>
+        /// Invokes a clean up on the cache to release boxed objects from memory allowing them to be garbage collected.
+        /// </summary>
+        public void CleanUp()
+        {
+            Log.Debug("Cleaning up boxed values from the cache to decrease memory pressure");
+
+            lock (_boxedValues)
+            {
+                _boxedValues.Clear();
+            }
+
+            //lock (_unboxedValues)
+            //{
+            //    _unboxedValues.Clear();
+            //}
+        }
+
+        private void OnCleanUpTimerElapsed(object? sender, ElapsedEventArgs e)
+        {
+            _cleanUpTimer.Stop();
+
+            CleanUp();
+        }
+
+        private void StartTimerIfRequired()
+        {
+            if (!_cleanUpTimer.Enabled)
+            {
+                var totalMilliseconds = _cleanUpInterval.TotalMilliseconds;
+                if (totalMilliseconds > 0)
+                {
+                    _cleanUpTimer.Interval = totalMilliseconds;
+                    _cleanUpTimer.Start();
+                }
+            }
         }
     }
 }

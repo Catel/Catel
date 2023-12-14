@@ -1,10 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SynchronizationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
     using System.Threading;
@@ -17,8 +11,6 @@ namespace Catel.Threading
     /// </remarks>
     public class SynchronizationContext
     {
-        #region Fields
-
         /// <summary>
         /// The sync obj.
         /// </summary>
@@ -26,9 +18,6 @@ namespace Catel.Threading
 
         private volatile bool _isLockAcquired = false;
         private int _calls = 0;
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether is the lock is acquired.
@@ -38,9 +27,6 @@ namespace Catel.Threading
             get { return _isLockAcquired; }
             private set { _isLockAcquired = value; }
         }
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// This method execute the <paramref name="code" /> into a exclusive lock.
@@ -50,8 +36,6 @@ namespace Catel.Threading
         /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released.</remarks>
         public void Execute(Action code)
         {
-            Argument.IsNotNull("code", code);
-
             Acquire();
             _calls++;
             try
@@ -77,8 +61,6 @@ namespace Catel.Threading
         /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released, blocking the current thread.</remarks>
         public T Execute<T>(Func<T> code)
         {
-            Argument.IsNotNull("code", code);
-
             Acquire();
             _calls++;
             try
@@ -114,7 +96,5 @@ namespace Catel.Threading
                 Monitor.Exit(_syncObj);
             }
         }
-
-        #endregion
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakAction.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using Logging;
@@ -15,35 +9,29 @@ namespace Catel
     /// </summary>
     public abstract class WeakActionBase : IWeakReference
     {
-        #region Fields
         /// <summary>
         /// WeakReference to the target listening for the event.
         /// </summary>
-        private readonly WeakReference _weakTarget;
-        #endregion
-
-        #region Constructors
+        private readonly WeakReference? _weakTarget;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakActionBase"/> class.
         /// </summary>
         /// <param name="target">The target of the weak action.</param>
         /// <exception cref="ArgumentException">The <paramref name="target"/> is <c>null</c> or whitespace.</exception>
-        protected WeakActionBase(object target)
+        protected WeakActionBase(object? target)
         {
-            if (target != null)
+            if (target is not null)
             {
                 _weakTarget = new WeakReference(target);
             }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the target or <c>null</c> if the target is garbage collected.
         /// </summary>
         /// <value>The target.</value>
-        public object Target { get { return (_weakTarget != null) ? _weakTarget.Target : null; } }
+        public object? Target { get { return (_weakTarget is not null) ? _weakTarget.Target : null; } }
 
         /// <summary>
         /// Gets a value indicating whether the event target has not yet been garbage collected.
@@ -54,11 +42,7 @@ namespace Catel
         /// <remarks>
         /// In case of static event handlers, this property always returns <c>false</c>.
         /// </remarks>
-        public bool IsTargetAlive { get { return (_weakTarget != null) && _weakTarget.IsAlive; } }
-        #endregion
-
-        #region Methods
-        #endregion
+        public bool IsTargetAlive { get { return (_weakTarget is not null) && _weakTarget.IsAlive; } }
     }
 
     /// <summary>
@@ -81,7 +65,7 @@ namespace Catel
         /// <summary>
         /// The action that must be invoked on the action.
         /// </summary>
-        private Delegate _action;
+        private Delegate? _action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakAction"/> class.
@@ -93,18 +77,21 @@ namespace Catel
         public WeakAction(object target, Action action)
             : base(target)
         {
-            Argument.IsNotNull("action", action);
-
             var methodInfo = action.GetMethodInfoEx();
-            MethodName = methodInfo.ToString();
+            if (methodInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
+            }
+
+            MethodName = methodInfo.ToString() ?? string.Empty;
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
-            var targetType = (target != null) ? target.GetType() : typeof(object);
-            var delegateType = typeof(OpenInstanceAction<>).MakeGenericType(targetType);
+            var targetType = (target is not null) ? target.GetType() : typeof(object);
+            var delegateType = typeof(OpenInstanceAction<>).MakeGenericTypeEx(targetType);
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
@@ -122,7 +109,7 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        public Delegate Action { get { return _action; } }
+        public Delegate? Action { get { return _action; } }
 
         /// <summary>
         /// Executes the action. This only happens if the action's target is still alive.
@@ -132,11 +119,13 @@ namespace Catel
         /// </returns>
         public bool Execute()
         {
-            if (_action != null)
+            if (_action is not null)
             {
                 if (IsTargetAlive)
                 {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     _action.DynamicInvoke(Target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     return true;
                 }
 
@@ -169,7 +158,7 @@ namespace Catel
         /// <summary>
         /// The action that must be invoked on the action.
         /// </summary>
-        private Delegate _action;
+        private Delegate? _action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakAction"/> class.
@@ -181,18 +170,23 @@ namespace Catel
         public WeakAction(object target, Action<TParameter> action)
             : base(target)
         {
-            Argument.IsNotNull("action", action);
-
             var methodInfo = action.GetMethodInfoEx();
-            MethodName = methodInfo.ToString();
+            if (methodInfo is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
+            }
+
+            MethodName = methodInfo.ToString() ?? string.Empty;
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
-            var targetType = (target != null) ? target.GetType() : typeof(object);
+            var targetType = (target is not null) ? target.GetType() : typeof(object);
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericType(typeof(TParameter), targetType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
@@ -210,7 +204,7 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        public Delegate Action { get { return _action; } }
+        public Delegate? Action { get { return _action; } }
 
         /// <summary>
         /// Executes the action. This only happens if the action's target is still alive.
@@ -218,11 +212,13 @@ namespace Catel
         /// <param name="parameter">The parameter.</param>
         public bool Execute(TParameter parameter)
         {
-            if (_action != null)
+            if (_action is not null)
             {
                 if (IsTargetAlive)
                 {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     _action.DynamicInvoke(Target, parameter);
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     return true;
                 }
 
@@ -247,6 +243,21 @@ namespace Catel
         bool IExecuteWithObject.ExecuteWithObject(object parameter)
         {
             return Execute((TParameter)parameter);
+        }
+
+        /// <summary>
+        /// Executes the object with the object parameter.
+        /// <para/>
+        /// The class implementing this interface is responsible for casting the <paramref name="parameter"/>
+        /// to the right type and to determine whether <c>null</c> is allowed as parameter.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>
+        /// <c>true</c> if the action is executed successfully; otherwise <c>false</c>.
+        /// </returns>
+        bool IExecuteWithObject<TParameter>.ExecuteWithObject(TParameter parameter)
+        {
+            return Execute(parameter);
         }
     }
 }

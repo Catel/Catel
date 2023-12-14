@@ -1,23 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UIElementExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
-#if UWP
-    using global::Windows.Foundation;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Media;
-#else
+    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
-#endif
 
     /// <summary>
     /// Extensions for <see cref="FrameworkElement"/>.
@@ -31,12 +17,9 @@ namespace Catel.Windows
         /// <param name="element">The UI element.</param>
         public static void FixBlurriness(this FrameworkElement element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
-#if NET || NETCORE
             element.SnapsToDevicePixels = true;
-#endif
-
             element.UseLayoutRounding = true;
         }
 
@@ -47,13 +30,9 @@ namespace Catel.Windows
         /// <returns><c>true</c> if the specified element is visible; otherwise, <c>false</c>.</returns>
         public static bool IsVisible(this FrameworkElement element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
-#if UWP
-            return element.Visibility == Visibility.Visible;
-#else
             return element.IsVisible;
-#endif
         }
 
         /// <summary>
@@ -62,10 +41,10 @@ namespace Catel.Windows
         /// <returns><c>true</c> if the framework element is currently visible to the user; otherwise, <c>false</c>.</returns>
         public static bool IsVisibleToUser(this FrameworkElement element)
         {
-            Argument.IsNotNull("element", element);
+            ArgumentNullException.ThrowIfNull(element);
 
             var container = GetRelevantParent<FrameworkElement>(element);
-            if (container != null)
+            if (container is not null)
             {
                 var visible = element.IsVisibleToUser(container);
                 if (!visible)
@@ -85,30 +64,19 @@ namespace Catel.Windows
         /// <returns><c>true</c> if if the specified element is currently visible to the user; otherwise, <c>false</c>.</returns>
         public static bool IsVisibleToUser(this FrameworkElement element, FrameworkElement container)
         {
-            Argument.IsNotNull("element", element);
-            Argument.IsNotNull("container", container);
+            ArgumentNullException.ThrowIfNull(element);
+            ArgumentNullException.ThrowIfNull(container);
 
             if (!container.IsVisible() || !element.IsVisible())
             {
                 return false;
             }
 
-#if UWP
-            var transform = element.TransformToVisual(container);
-#else
             var transform = element.TransformToAncestor(container);
-#endif
-
             var bounds = transform.TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
             var rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
-
-#if UWP
-            var topLeft = new Point(bounds.Left, bounds.Top);
-            var bottomRight = new Point(bounds.Right, bounds.Bottom);
-#else
             var topLeft = bounds.TopLeft;
             var bottomRight = bounds.BottomRight;
-#endif
 
             return rect.Contains(topLeft) || rect.Contains(bottomRight);
         }
@@ -119,31 +87,29 @@ namespace Catel.Windows
         /// <typeparam name="T">Type of the relevant parent</typeparam>
         /// <param name="obj">The object.</param>
         /// <returns>The relevant parent.</returns>
-        private static FrameworkElement GetRelevantParent<T>(FrameworkElement obj)
+        private static T? GetRelevantParent<T>(FrameworkElement obj)
             where T : FrameworkElement
         {
             var container = VisualTreeHelper.GetParent(obj) as FrameworkElement;
 
             var contentPresenter = container as ContentPresenter;
-            if (contentPresenter != null)
+            if (contentPresenter is not null)
             {
                 container = GetRelevantParent<T>(contentPresenter);
             }
 
             var panel = container as Panel;
-            if (panel != null)
+            if (panel is not null)
             {
                 container = GetRelevantParent<ScrollViewer>(panel);
             }
 
-            if (!(container is T) && (container != null))
+            if (!(container is T) && (container is not null))
             {
                 container = GetRelevantParent<T>(container);
             }
 
-            return container;
+            return container as T;
         }
     }
 }
-
-#endif

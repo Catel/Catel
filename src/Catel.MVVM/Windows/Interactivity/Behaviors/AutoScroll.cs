@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScrollToBottom.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
     using System.Collections.Specialized;
@@ -37,10 +29,9 @@ namespace Catel.Windows.Interactivity
     public class AutoScroll : BehaviorBase<ItemsControl>
     {
         private bool _isScrollbarAtEnd;
-        private ScrollViewer _scrollViewer;
-        private INotifyCollectionChanged _collection;
+        private ScrollViewer? _scrollViewer;
+        private INotifyCollectionChanged? _collection;
 
-        #region Properties
         /// <summary>
         /// A boolean that determines whether the behavior should automatically scroll as soon as the 
         /// control is loaded.
@@ -57,7 +48,7 @@ namespace Catel.Windows.Interactivity
         /// The scroll on loaded property.
         /// </summary>
         public static readonly DependencyProperty ScrollOnLoadedProperty =
-            DependencyProperty.Register("ScrollOnLoaded", typeof(bool), typeof(AutoScroll), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ScrollOnLoaded), typeof(bool), typeof(AutoScroll), new PropertyMetadata(true));
 
         /// <summary>
         /// The scoll direction.
@@ -74,7 +65,7 @@ namespace Catel.Windows.Interactivity
         /// The scroll direction property.
         /// </summary>
         public static readonly DependencyProperty ScrollDirectionProperty =
-            DependencyProperty.Register("ScrollDirection", typeof(ScrollDirection), typeof(AutoScroll), new PropertyMetadata(ScrollDirection.Bottom));
+            DependencyProperty.Register(nameof(ScrollDirection), typeof(ScrollDirection), typeof(AutoScroll), new PropertyMetadata(ScrollDirection.Bottom));
 
         /// <summary>
         /// The scoll threshold in which the behavior will scroll down even when it is not fully down.
@@ -91,8 +82,7 @@ namespace Catel.Windows.Interactivity
         /// The scroll treshold property.
         /// </summary>
         public static readonly DependencyProperty ScrollTresholdProperty =
-            DependencyProperty.Register("ScrollTreshold", typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
-        #endregion
+            DependencyProperty.Register(nameof(ScrollTreshold), typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
 
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
@@ -104,7 +94,7 @@ namespace Catel.Windows.Interactivity
             SubscribeToCollection();
 
             _scrollViewer = AssociatedObject.FindVisualDescendantByType<ScrollViewer>();
-            if (_scrollViewer != null)
+            if (_scrollViewer is not null)
             {
                 _scrollViewer.ScrollChanged += OnScrollChanged;
             }
@@ -124,7 +114,7 @@ namespace Catel.Windows.Interactivity
             base.OnAssociatedObjectUnloaded();
         }
 
-        private void OnItemsSourceChanged(object sender, DependencyPropertyValueChangedEventArgs e)
+        private void OnItemsSourceChanged(object? sender, DependencyPropertyValueChangedEventArgs e)
         {
             UnsubscribeFromCollection();
             SubscribeToCollection();
@@ -132,7 +122,7 @@ namespace Catel.Windows.Interactivity
 
         private void UnsubscribeFromCollection()
         {
-            if (_collection != null)
+            if (_collection is not null)
             {
                 _collection.CollectionChanged -= OnCollectionChanged;
                 _collection = null;
@@ -144,7 +134,7 @@ namespace Catel.Windows.Interactivity
             if (IsAssociatedObjectLoaded)
             {
                 _collection = AssociatedObject.ItemsSource as INotifyCollectionChanged;
-                if (_collection != null)
+                if (_collection is not null)
                 {
                     _collection.CollectionChanged += OnCollectionChanged;
 
@@ -156,7 +146,7 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (_isScrollbarAtEnd)
             {
@@ -191,8 +181,13 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-        private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
+        private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
         {
+            if (_scrollViewer is null)
+            {
+                return;
+            }
+
             switch (ScrollDirection)
             {
                 case ScrollDirection.Top:
@@ -209,5 +204,3 @@ namespace Catel.Windows.Interactivity
         }
     }
 }
-
-#endif

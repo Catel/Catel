@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TextToLowerCaseConverterFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters
 {
     using System.Diagnostics;
     using System.Globalization;
@@ -24,9 +17,9 @@ namespace Catel.Tests.MVVM.Converters
             public void ReturnsLowerCaseString()
             {
                 var converter = new TextToLowerCaseConverter();
-                var actualValue = converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
+                var actualValue = converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo)null);
 
-                Assert.AreEqual("lowercase", actualValue);
+                Assert.That(actualValue, Is.EqualTo("lowercase"));
             }
 
             [TestCase]
@@ -36,15 +29,15 @@ namespace Catel.Tests.MVVM.Converters
 
                 var stopwatch1 = new Stopwatch();
                 stopwatch1.Start();
-                converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
+                converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo)null);
                 stopwatch1.Stop();
 
                 var stopwatch2 = new Stopwatch();
                 stopwatch2.Start();
-                converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
+                converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo)null);
                 stopwatch2.Stop();
 
-                Assert.Less(stopwatch2.Elapsed, stopwatch1.Elapsed);
+                Assert.That(stopwatch2.Elapsed, Is.LessThan(stopwatch1.Elapsed));
             }
 
             [TestCase]
@@ -52,7 +45,7 @@ namespace Catel.Tests.MVVM.Converters
             {
                 var converter = new TextToLowerCaseConverter();
 
-                Assert.AreEqual(null, converter.Convert(null, typeof (string), null, (CultureInfo) null));
+                Assert.That(converter.Convert(null, typeof(string), null, (CultureInfo)null), Is.EqualTo(null));
             }
             #endregion
         }

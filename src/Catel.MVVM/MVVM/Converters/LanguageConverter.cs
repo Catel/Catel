@@ -1,14 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
-    using Converters;
     using IoC;
     using Services;
 
@@ -24,7 +17,7 @@ namespace Catel.MVVM.Converters
         /// </summary>
         public LanguageConverter()
         {
-            _languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            _languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
         }
 
         /// <summary>
@@ -34,18 +27,18 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <returns>System.Object.</returns>
-        protected override object Convert(string value, Type targetType, object parameter)
+        protected override object? Convert(string? value, Type targetType, object? parameter)
         {
             var translatedValue = string.Empty;
 
             var culture = parameter as CultureInfo;
-            if (culture != null)
+            if (culture is not null)
             {
-                translatedValue = _languageService.GetString(value, culture);
+                translatedValue = _languageService.GetString(value ?? string.Empty, culture);
             }
             else
             {
-                translatedValue = _languageService.GetString(value);
+                translatedValue = _languageService.GetString(value ?? string.Empty);
             }
 
             return translatedValue;

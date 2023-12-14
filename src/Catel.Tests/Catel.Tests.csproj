@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <AssemblyName>Catel.Tests</AssemblyName>
     <RootNamespace>Catel.Tests</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -8,6 +8,7 @@
     <PackageVersion>1.0.0-alpha0001</PackageVersion>
     <Description></Description>
     <PackageTags></PackageTags>
+    <Nullable>annotations</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
@@ -16,26 +17,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="5.7.1" />
-    <PackageReference Include="Fody" Version="6.6.0" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.6.0" PrivateAssets="all" />
-    <PackageReference Include="MethodTimer.Fody" Version="3.2.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="NUnit" Version="3.13.2" PrivateAssets="all" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.1.0">
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="NUnit" Version="4.0.1" PrivateAssets="all" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="PublicApiGenerator" Version="10.2.0" PrivateAssets="all" />
+    <PackageReference Include="PublicApiGenerator" Version="11.1.0" PrivateAssets="all" />
+    <PackageReference Include="Verify.NUnit" Version="22.8.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
+    <!-- No net6.0 specific packages yet -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
+    <!-- No net7.0 specific packages yet -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
+    <!-- No net8.0 specific packages yet -->
   </ItemGroup>
 
   <ItemGroup>
@@ -58,4 +66,5 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.tests.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.tests.props')" />
 </Project>

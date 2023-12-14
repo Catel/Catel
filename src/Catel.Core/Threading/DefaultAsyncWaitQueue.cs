@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DefaultAsyncWaitQueue.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
     using System.Diagnostics;
@@ -25,7 +18,7 @@ namespace Catel.Threading
     {
         private readonly Dequeue<TaskCompletionSource<T>> _queue = new Dequeue<TaskCompletionSource<T>>();
 
-        private int Count
+        public int Count
         {
             get
             {
@@ -93,7 +86,7 @@ namespace Catel.Threading
 
         IDisposable IAsyncWaitQueue<T>.TryCancel(Task task)
         {
-            TaskCompletionSource<T> tcs = null;
+            TaskCompletionSource<T>? tcs = null;
 
             lock (_queue)
             {

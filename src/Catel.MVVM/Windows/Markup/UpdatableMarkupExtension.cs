@@ -1,26 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdatableMarkupExtension.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Markup
+﻿namespace Catel.Windows.Markup
 {
     using Catel.Logging;
     using System;
     using System.ComponentModel;
     using System.Reflection;
-
-#if !UWP
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Markup;
-#else
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// Markup extension that allows an update of the binding values.
@@ -30,21 +16,15 @@ namespace Catel.Windows.Markup
     /// </remarks>
     public abstract class UpdatableMarkupExtension : MarkupExtension, INotifyPropertyChanged
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private WeakReference<object> _targetObject;
-        private object _targetProperty;
+        private WeakReference<object>? _targetObject;
+        private object? _targetProperty;
         private bool _isFrameworkElementLoaded;
-        private IServiceProvider _serviceProvider;
+        private IServiceProvider? _serviceProvider;
 
         private bool _hasBeenLoadedOnce = false;
-        #endregion
 
-        #region Constructors
-        #endregion
-
-        #region Properties
         /// <summary>
         /// If set the <c>true</c>, this markup extension can replace the value by a dynamic binding
         /// in case this markup extension is used inside a setter inside a style.
@@ -57,7 +37,7 @@ namespace Catel.Windows.Markup
         /// Gets the target object.
         /// </summary>
         /// <value>The target object.</value>
-        protected object TargetObject
+        protected object? TargetObject
         {
             get
             {
@@ -83,7 +63,7 @@ namespace Catel.Windows.Markup
         /// Gets the target property.
         /// </summary>
         /// <value>The target property.</value>
-        protected object TargetProperty
+        protected object? TargetProperty
         {
             get { return _targetProperty; }
         }
@@ -91,41 +71,30 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// Gets the value of this markup extension.
         /// </summary>
-        public object Value
+        public object? Value
         {
             get
             {
                 return GetValue();
             }
         }
-        #endregion
 
-        #region Events
-#if !UWP
-        public event PropertyChangedEventHandler PropertyChanged;
-#endif
-        #endregion
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        #region Methods
         /// <summary>
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
         /// </summary>
         /// <param name="serviceProvider">A service provider helper that can provide services for the markup extension.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public sealed override object ProvideValue(IServiceProvider serviceProvider)
+        public sealed override object? ProvideValue(IServiceProvider serviceProvider)
         {
-#if UWP
-            _targetObject = null;
-            _targetProperty = null;
-            _serviceProvider = null;
-#else
             _serviceProvider = serviceProvider;
 
             var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
-            if (target != null)
+            if (target is not null)
             {
                 var targetObject = target.TargetObject;
-                if (targetObject != null)
+                if (targetObject is not null)
                 {
                     // CTL-636
                     // In a template the TargetObject is a SharedDp (internal WPF class)
@@ -143,14 +112,11 @@ namespace Catel.Windows.Markup
 
                     if (targetObject is FrameworkElement frameworkElement)
                     {
-#if NET || NETCORE
                         _isFrameworkElementLoaded = frameworkElement.IsLoaded;
-#endif
 
                         frameworkElement.Loaded += OnTargetObjectLoadedInternal;
                         frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
                     }
-#if !UWP
                     else if (targetObject is FrameworkContentElement frameworkContentElement)
                     {
                         _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;
@@ -179,16 +145,14 @@ namespace Catel.Windows.Markup
                         //throw Log.ErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
                         Log.Warning($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
                     }
-#endif
                 }
             }
-#endif
 
             var value = GetValue();
             return value;
         }
 
-        private void OnTargetObjectLoadedInternal(object sender, RoutedEventArgs e)
+        private void OnTargetObjectLoadedInternal(object? sender, RoutedEventArgs e)
         {
             if (_isFrameworkElementLoaded)
             {
@@ -216,7 +180,7 @@ namespace Catel.Windows.Markup
         {
         }
 
-        private void OnTargetObjectUnloadedInternal(object sender, RoutedEventArgs e)
+        private void OnTargetObjectUnloadedInternal(object? sender, RoutedEventArgs? e)
         {
             if (!_isFrameworkElementLoaded)
             {
@@ -266,25 +230,8 @@ namespace Catel.Windows.Markup
                     return;
                 }
 
-                Action updateAction =
-#if UWP
-                () => obj.SetValue(targetPropertyAsDependencyProperty, value);
-#else
-                () => obj.SetCurrentValue(targetPropertyAsDependencyProperty, value);
-#endif
+                Action updateAction = () => obj.SetCurrentValue(targetPropertyAsDependencyProperty, value);
 
-#if UWP
-                if (obj.Dispatcher.HasThreadAccess)
-                {
-                    UpdateValue();
-                }
-                else
-                {
-#pragma warning disable 4014
-                    obj.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => updateAction());
-#pragma warning restore 4014
-                }
-#else
                 if (obj.CheckAccess())
                 {
                     updateAction();
@@ -293,15 +240,12 @@ namespace Catel.Windows.Markup
                 {
                     obj.Dispatcher.Invoke(updateAction);
                 }
-#endif
             }
-#if !UWP
             else if (targetObject is Setter setter)
             {
                 setter.Value = value;
                 //Setter.ReceiveMarkupExtension(targetObject, new XamlSetMarkupExtensionEventArgs(null, this, _serviceProvider));
             }
-#endif
             else if (targetProperty is PropertyInfo propertyInfo)
             {
                 propertyInfo.SetValue(targetObject, value, null);
@@ -310,22 +254,20 @@ namespace Catel.Windows.Markup
             RaisePropertyChanged(nameof(Value));
         }
 
-#if !UWP
         protected void RaisePropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-#endif
 
         /// <summary>
         /// Gets the value by combining the rights methods (so we don't have to repeat ourselves).
         /// </summary>
         /// <returns>System.Object.</returns>
-        private object GetValue()
+        private object? GetValue()
         {
             var value = ProvideDynamicValue(_serviceProvider);
             return value;
@@ -336,11 +278,9 @@ namespace Catel.Windows.Markup
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <returns>System.Object.</returns>
-        protected virtual object ProvideDynamicValue(IServiceProvider serviceProvider)
+        protected virtual object? ProvideDynamicValue(IServiceProvider? serviceProvider)
         {
             return null;
         }
-        #endregion
     }
 }
-#endif

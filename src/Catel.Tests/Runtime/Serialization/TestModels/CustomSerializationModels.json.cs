@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CustomSerializationModels.json.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization.TestModels
+﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System.Linq;
     using Catel.Data;
@@ -45,7 +38,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
 
         public CustomJsonSerializationModel NestedModel
@@ -53,8 +46,8 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             get { return GetValue<CustomJsonSerializationModel>(NestedModelProperty); }
             set { SetValue(NestedModelProperty, value); }
         }
-        
-        public static readonly PropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomJsonSerializationModel), null);
+
+        public static readonly IPropertyData NestedModelProperty = RegisterProperty<CustomJsonSerializationModel>("NestedModel");
     }
 
     public class CustomJsonSerializationModelWithEnum : ModelBase
@@ -65,7 +58,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
         [SerializeEnumAsString]
         public CustomSerializationEnum EnumWithAttribute
@@ -74,8 +67,8 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(EnumWithAttributeProperty, value); }
         }
 
-        public static readonly PropertyData EnumWithAttributeProperty = RegisterProperty(nameof(EnumWithAttribute), typeof(CustomSerializationEnum));
-        
+        public static readonly IPropertyData EnumWithAttributeProperty = RegisterProperty<CustomSerializationEnum>(nameof(EnumWithAttribute));
+
 
 
         public CustomSerializationEnum EnumWithoutAttribute
@@ -84,7 +77,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(EnumWithoutAttributeProperty, value); }
         }
 
-        public static readonly PropertyData EnumWithoutAttributeProperty = RegisterProperty(nameof(EnumWithoutAttribute), typeof(CustomSerializationEnum));
+        public static readonly IPropertyData EnumWithoutAttributeProperty = RegisterProperty<CustomSerializationEnum>(nameof(EnumWithoutAttribute));
 
     }
 

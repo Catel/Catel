@@ -1,14 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FocusFirstControl.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-    using System;
     using System.Windows;
 
     /// <summary>
@@ -16,7 +7,6 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class FocusFirstControl : BehaviorBase<FrameworkElement>
     {
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the parent should be focused first. 
         /// <para />
@@ -32,11 +22,9 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Dependency property for the <see cref="FocusParentsFirst"/> property.
         /// </summary>
-        public static readonly DependencyProperty FocusParentsFirstProperty = DependencyProperty.Register("FocusParentsFirst",
+        public static readonly DependencyProperty FocusParentsFirstProperty = DependencyProperty.Register(nameof(FocusParentsFirst),
             typeof(bool), typeof(FocusFirstControl), new PropertyMetadata(true));
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when the associated object is loaded.
         /// </summary>
@@ -46,8 +34,5 @@ namespace Catel.Windows.Interactivity
 
             AssociatedObject.FocusFirstControl(FocusParentsFirst);
         }
-        #endregion
     }
 }
-
-#endif

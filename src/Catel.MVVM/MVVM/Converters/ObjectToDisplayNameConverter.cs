@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectToDisplayNameConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Linq;
@@ -24,7 +17,7 @@ namespace Catel.MVVM
         /// Gets or sets the language service. If this value is set, it will be used inside the <see cref="DisplayNameAttribute"/>.
         /// </summary>
         /// <value>The language service.</value>
-        public ILanguageService LanguageService { get; set; }
+        public ILanguageService? LanguageService { get; set; }
 
         /// <summary>
         /// Converts the specified value.
@@ -33,13 +26,12 @@ namespace Catel.MVVM
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <returns>System.Object.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var type = value as Type;
-            if (type != null)
+            if (type is not null)
             {
-                DisplayNameAttribute displayAttribute = null;
-                if (type.TryGetAttribute(out displayAttribute))
+                if (type.TryGetAttribute<DisplayNameAttribute>(out var displayAttribute))
                 {
                     return GetDisplayName(displayAttribute);
                 }
@@ -48,10 +40,9 @@ namespace Catel.MVVM
             }
 
             var memberInfo = value as MemberInfo;
-            if (memberInfo != null)
+            if (memberInfo is not null)
             {
-                DisplayNameAttribute displayAttribute = null;
-                if (memberInfo.TryGetAttribute(out displayAttribute))
+                if (memberInfo.TryGetAttribute<DisplayNameAttribute>(out var displayAttribute))
                 {
                     return GetDisplayName(displayAttribute);
                 }
@@ -60,16 +51,15 @@ namespace Catel.MVVM
             }
 
             // Support enum values
-            if (value != null)
+            if (value is not null)
             {
                 var valueType = value.GetType();
                 if (valueType.IsEnumEx())
                 {
-                    memberInfo = valueType.GetMemberEx(value.ToString(), allowStaticMembers: true).FirstOrDefault();
-                    if (memberInfo != null)
+                    memberInfo = valueType.GetMemberEx(value.ToString() ?? string.Empty, allowStaticMembers: true).FirstOrDefault();
+                    if (memberInfo is not null)
                     {
-                        DisplayNameAttribute displayAttribute = null;
-                        if (memberInfo.TryGetAttribute(out displayAttribute))
+                        if (memberInfo.TryGetAttribute<DisplayNameAttribute>(out var displayAttribute))
                         {
                             return GetDisplayName(displayAttribute);
                         }
@@ -90,7 +80,7 @@ namespace Catel.MVVM
         protected string GetDisplayName(DisplayNameAttribute attribute)
         {
             var languageService = LanguageService;
-            if (languageService != null)
+            if (languageService is not null)
             {
                 attribute.LanguageService = languageService;
             }

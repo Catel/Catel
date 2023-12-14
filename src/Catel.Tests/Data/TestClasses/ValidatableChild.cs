@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidatableChild.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data.TestClasses
+﻿namespace Catel.Tests.Data.TestClasses
 {
     using System.Collections.Generic;
     using Catel.Data;
@@ -22,7 +15,7 @@ namespace Catel.Tests.Data.TestClasses
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty<ValidatableChild, string>(model => model.Name, "Geert");
+        public static readonly IPropertyData NameProperty = RegisterProperty<ValidatableChild, string>(model => model.Name, "Geert");
 
 
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)

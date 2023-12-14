@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelNotRegisteredExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Exceptions
+﻿namespace Catel.Tests.MVVM.Exceptions
 {
     using Catel.MVVM;
 
@@ -23,8 +17,8 @@ namespace Catel.Tests.MVVM.Exceptions
             }
             catch (ModelNotRegisteredException ex)
             {
-                Assert.AreEqual("model", ex.ModelName);
-                Assert.AreEqual("property", ex.PropertyDeclaringViewModelToModelAttribute);
+                Assert.That(ex.ModelName, Is.EqualTo("model"));
+                Assert.That(ex.PropertyDeclaringViewModelToModelAttribute, Is.EqualTo("property"));
             }
         }
         #endregion

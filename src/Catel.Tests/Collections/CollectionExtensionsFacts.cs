@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionExtensionsTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Collections
+﻿namespace Catel.Tests.Collections
 {
     using System;
     using System.Collections.Generic;
@@ -22,15 +16,15 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemUp(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemUp(null, item));
             }
 
             [TestCase]
             public void ReturnsFalseForNullItem()
             {
-                var list = new List<int> {};
+                var list = new List<int> { };
 
-                Assert.IsFalse(list.CanMoveItemUp(null));
+                Assert.That(list.CanMoveItemUp(null), Is.False);
             }
 
             [TestCase]
@@ -38,7 +32,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1 };
 
-                Assert.IsFalse(list.CanMoveItemUp(1));
+                Assert.That(list.CanMoveItemUp(1), Is.False);
             }
 
             [TestCase]
@@ -46,7 +40,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2 };
 
-                Assert.IsFalse(list.CanMoveItemUp(3));                
+                Assert.That(list.CanMoveItemUp(3), Is.False);
             }
 
             [TestCase]
@@ -54,7 +48,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsFalse(list.CanMoveItemUp(1));
+                Assert.That(list.CanMoveItemUp(1), Is.False);
             }
 
             [TestCase]
@@ -62,7 +56,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.CanMoveItemUp(2));
+                Assert.That(list.CanMoveItemUp(2), Is.True);
             }
         }
 
@@ -73,14 +67,14 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUp(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUp(null, item));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullItem()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => list.MoveItemUp(null));
+                Assert.Throws<ArgumentNullException>(() => list.MoveItemUp(null));
             }
 
             [TestCase]
@@ -88,11 +82,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsFalse(list.MoveItemUp(4));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(2, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemUp(4), Is.False);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(2));
+                Assert.That(list[2], Is.EqualTo(3));
             }
 
             [TestCase]
@@ -100,11 +94,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemUp(1));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(2, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemUp(1), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(2));
+                Assert.That(list[2], Is.EqualTo(3));
             }
 
             [TestCase]
@@ -112,11 +106,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemUp(2));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(2, list[0]);
-                Assert.AreEqual(1, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemUp(2), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(2));
+                Assert.That(list[1], Is.EqualTo(1));
+                Assert.That(list[2], Is.EqualTo(3));
             }
         }
 
@@ -127,7 +121,7 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemDown(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemDown(null, item));
             }
 
             [TestCase]
@@ -135,7 +129,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { };
 
-                Assert.IsFalse(list.CanMoveItemDown(null));
+                Assert.That(list.CanMoveItemDown(null), Is.False);
             }
 
             [TestCase]
@@ -143,7 +137,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1 };
 
-                Assert.IsFalse(list.CanMoveItemDown(1));
+                Assert.That(list.CanMoveItemDown(1), Is.False);
             }
 
             [TestCase]
@@ -151,7 +145,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2 };
 
-                Assert.IsFalse(list.CanMoveItemDown(3));
+                Assert.That(list.CanMoveItemDown(3), Is.False);
             }
 
             [TestCase]
@@ -159,7 +153,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsFalse(list.CanMoveItemDown(3));
+                Assert.That(list.CanMoveItemDown(3), Is.False);
             }
 
             [TestCase]
@@ -167,7 +161,7 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.CanMoveItemDown(2));
+                Assert.That(list.CanMoveItemDown(2), Is.True);
             }
         }
 
@@ -177,21 +171,21 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 2));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 2));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexSmallerThanZero()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, -1));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, -1));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexLargerThanListCount()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 3));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 3));
             }
 
             [TestCase]
@@ -199,11 +193,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemUpByIndex(0));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(2, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemUpByIndex(0), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(2));
+                Assert.That(list[2], Is.EqualTo(3));
             }
 
             [TestCase]
@@ -211,11 +205,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemUpByIndex(1));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(2, list[0]);
-                Assert.AreEqual(1, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemUpByIndex(1), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(2));
+                Assert.That(list[1], Is.EqualTo(1));
+                Assert.That(list[2], Is.EqualTo(3));
             }
         }
 
@@ -226,14 +220,14 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDown(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDown(null, item));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullItem()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => list.MoveItemDown(null));
+                Assert.Throws<ArgumentNullException>(() => list.MoveItemDown(null));
             }
 
             [TestCase]
@@ -241,11 +235,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsFalse(list.MoveItemDown(4));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(2, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemDown(4), Is.False);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(2));
+                Assert.That(list[2], Is.EqualTo(3));
             }
 
             [TestCase]
@@ -253,11 +247,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemDown(3));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(2, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemDown(3), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(2));
+                Assert.That(list[2], Is.EqualTo(3));
             }
 
             [TestCase]
@@ -265,12 +259,12 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemDown(2));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(3, list[1]);
-                Assert.AreEqual(2, list[2]);
-            }            
+                Assert.That(list.MoveItemDown(2), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(3));
+                Assert.That(list[2], Is.EqualTo(2));
+            }
         }
 
         [TestFixture]
@@ -279,21 +273,21 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDownByIndex(null, 2));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDownByIndex(null, 2));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexSmallerThanZero()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(-1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(-1));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexLargerThanListCount()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(3));
+                Assert.Throws<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(3));
             }
 
             [TestCase]
@@ -301,11 +295,11 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemDownByIndex(2));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(2, list[1]);
-                Assert.AreEqual(3, list[2]);
+                Assert.That(list.MoveItemDownByIndex(2), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(2));
+                Assert.That(list[2], Is.EqualTo(3));
             }
 
             [TestCase]
@@ -313,12 +307,12 @@ namespace Catel.Tests.Collections
             {
                 var list = new List<int> { 1, 2, 3 };
 
-                Assert.IsTrue(list.MoveItemDownByIndex(1));
-                Assert.AreEqual(3, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(3, list[1]);
-                Assert.AreEqual(2, list[2]);
-            }            
+                Assert.That(list.MoveItemDownByIndex(1), Is.True);
+                Assert.That(list.Count, Is.EqualTo(3));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(3));
+                Assert.That(list[2], Is.EqualTo(2));
+            }
         }
 
         [TestFixture]
@@ -327,7 +321,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveFirst(null));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveFirst(null));
             }
 
             [TestCase]
@@ -341,13 +335,13 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void RemovesFirstItemFromList()
             {
-                var list = new List<int>(new [] { 1, 2, 3 });
+                var list = new List<int>(new[] { 1, 2, 3 });
 
                 list.RemoveFirst();
 
-                Assert.AreEqual(2, list.Count);
-                Assert.AreEqual(2, list[0]);
-                Assert.AreEqual(3, list[1]);
+                Assert.That(list.Count, Is.EqualTo(2));
+                Assert.That(list[0], Is.EqualTo(2));
+                Assert.That(list[1], Is.EqualTo(3));
             }
         }
 
@@ -357,7 +351,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveLast(null));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveLast(null));
             }
 
             [TestCase]
@@ -375,9 +369,9 @@ namespace Catel.Tests.Collections
 
                 list.RemoveLast();
 
-                Assert.AreEqual(2, list.Count);
-                Assert.AreEqual(1, list[0]);
-                Assert.AreEqual(2, list[1]);
+                Assert.That(list.Count, Is.EqualTo(2));
+                Assert.That(list[0], Is.EqualTo(1));
+                Assert.That(list[1], Is.EqualTo(2));
             }
         }
 
@@ -389,7 +383,7 @@ namespace Catel.Tests.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.AddRange((ICollection<int>)null, newList));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.AddRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
@@ -397,7 +391,7 @@ namespace Catel.Tests.Collections
             {
                 var collection = new Collection<int> { 1, 2, 3 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.AddRange(null));
+                Assert.Throws<ArgumentNullException>(() => collection.AddRange(null));
             }
 
             [TestCase]
@@ -408,10 +402,10 @@ namespace Catel.Tests.Collections
 
                 collection.AddRange(newList);
 
-                Assert.AreEqual(3, collection.Count);
-                Assert.AreEqual(4, collection[0]);
-                Assert.AreEqual(5, collection[1]);
-                Assert.AreEqual(6, collection[2]);
+                Assert.That(collection.Count, Is.EqualTo(3));
+                Assert.That(collection[0], Is.EqualTo(4));
+                Assert.That(collection[1], Is.EqualTo(5));
+                Assert.That(collection[2], Is.EqualTo(6));
             }
 
             [TestCase]
@@ -422,13 +416,13 @@ namespace Catel.Tests.Collections
 
                 collection.AddRange(newList);
 
-                Assert.AreEqual(6, collection.Count);
-                Assert.AreEqual(1, collection[0]);
-                Assert.AreEqual(2, collection[1]);
-                Assert.AreEqual(3, collection[2]);
-                Assert.AreEqual(4, collection[3]);
-                Assert.AreEqual(5, collection[4]);
-                Assert.AreEqual(6, collection[5]);
+                Assert.That(collection.Count, Is.EqualTo(6));
+                Assert.That(collection[0], Is.EqualTo(1));
+                Assert.That(collection[1], Is.EqualTo(2));
+                Assert.That(collection[2], Is.EqualTo(3));
+                Assert.That(collection[3], Is.EqualTo(4));
+                Assert.That(collection[4], Is.EqualTo(5));
+                Assert.That(collection[5], Is.EqualTo(6));
             }
 
             [TestCase]
@@ -439,11 +433,11 @@ namespace Catel.Tests.Collections
 
                 collection.AddRange(newList);
 
-                Assert.AreEqual(3, collection.Count);
-                Assert.AreEqual(1, collection[0]);
-                Assert.AreEqual(2, collection[1]);
-                Assert.AreEqual(3, collection[2]);
-            }    
+                Assert.That(collection.Count, Is.EqualTo(3));
+                Assert.That(collection[0], Is.EqualTo(1));
+                Assert.That(collection[1], Is.EqualTo(2));
+                Assert.That(collection[2], Is.EqualTo(3));
+            }
         }
 
         [TestFixture]
@@ -454,7 +448,7 @@ namespace Catel.Tests.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
@@ -462,7 +456,7 @@ namespace Catel.Tests.Collections
             {
                 var collection = new Collection<int> { 1, 2, 3 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.ReplaceRange(null));
+                Assert.Throws<ArgumentNullException>(() => collection.ReplaceRange(null));
             }
 
             [TestCase]
@@ -473,7 +467,7 @@ namespace Catel.Tests.Collections
 
                 collection.ReplaceRange(newList);
 
-                Assert.AreEqual(0, collection.Count);
+                Assert.That(collection.Count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -484,10 +478,10 @@ namespace Catel.Tests.Collections
 
                 collection.ReplaceRange(newList);
 
-                Assert.AreEqual(3, collection.Count);
-                Assert.AreEqual(4, collection[0]);
-                Assert.AreEqual(5, collection[1]);
-                Assert.AreEqual(6, collection[2]);
+                Assert.That(collection.Count, Is.EqualTo(3));
+                Assert.That(collection[0], Is.EqualTo(4));
+                Assert.That(collection[1], Is.EqualTo(5));
+                Assert.That(collection[2], Is.EqualTo(6));
             }
 
             [TestCase]
@@ -498,10 +492,10 @@ namespace Catel.Tests.Collections
 
                 collection.ReplaceRange(newList);
 
-                Assert.AreEqual(3, collection.Count);
-                Assert.AreEqual(4, collection[0]);
-                Assert.AreEqual(5, collection[1]);
-                Assert.AreEqual(6, collection[2]);
+                Assert.That(collection.Count, Is.EqualTo(3));
+                Assert.That(collection[0], Is.EqualTo(4));
+                Assert.That(collection[1], Is.EqualTo(5));
+                Assert.That(collection[2], Is.EqualTo(6));
             }
         }
     }

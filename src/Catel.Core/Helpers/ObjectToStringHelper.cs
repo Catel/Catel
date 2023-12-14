@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectToStringHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Globalization;
@@ -27,7 +21,7 @@ namespace Catel
         /// Gets or sets the default culture to use for parsing.
         /// </summary>
         /// <value>The default culture.</value>
-        public static CultureInfo DefaultCulture { get; set; }
+        public static CultureInfo? DefaultCulture { get; set; }
 
         /// <summary>
         /// Returns a <see cref="string"/> that represents the instance.
@@ -37,7 +31,7 @@ namespace Catel
         /// </summary>
         /// <param name="instance">The instance, can be <c>null</c>.</param>
         /// <returns>A <see cref="string"/> that represents the instance.</returns>
-        public static string ToString(object instance)
+        public static string ToString(object? instance)
         {
             return ToString(instance, DefaultCulture);
         }
@@ -51,19 +45,17 @@ namespace Catel
         /// <param name="instance">The instance, can be <c>null</c>.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>A <see cref="string" /> that represents the instance.</returns>
-        public static string ToString(object instance, CultureInfo cultureInfo)
+        public static string ToString(object? instance, CultureInfo? cultureInfo)
         {
             if (instance is null)
             {
                 return "null";
             }
 
-#if !NETFX_CORE
             if (instance == DBNull.Value)
             {
                 return "dbnull";
             }
-#endif
 
             var instanceType = instance.GetType();
             if (instanceType == typeof (DateTime) || instanceType == typeof (DateTime?))
@@ -71,19 +63,21 @@ namespace Catel
                 return ((DateTime) instance).ToString(cultureInfo);
             }
 
-#if !NETFX_CORE
-			// Note: Not supported on NETFX_CORE, don't enable, really doesn't work. If you need a ToString
-			// for a specific string, use a cast like the DateTime about
+            // Note: Not supported on NETFX_CORE, don't enable, really doesn't work. If you need a ToString
+            // for a specific string, use a cast like the DateTime about
 
             // Check if there is a culture specific version
             var toStringMethod = instanceType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>());
-            if (toStringMethod != null)
+            if (toStringMethod is not null)
             {
-                return (string)toStringMethod.Invoke(instance, new object[] { cultureInfo });
+                var toStringResult = (string?)toStringMethod.Invoke(instance, new object?[] { cultureInfo });
+                if (toStringResult is not null)
+                {
+                    return toStringResult;
+                }
             }
-#endif
 
-            return instance.ToString();
+            return instance.ToString() ?? "null";
         }
 
         /// <summary>
@@ -94,7 +88,7 @@ namespace Catel
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <returns>A <see cref="string"/> that represents the type of the instance.</returns>
-        public static string ToTypeString(object instance)
+        public static string ToTypeString(object? instance)
         {
             if (instance is null)
             {
@@ -102,7 +96,7 @@ namespace Catel
             }
 
             var instanceAsType = instance as Type;
-            if (instanceAsType != null)
+            if (instanceAsType is not null)
             {
                 return instanceAsType.Name;
             }
@@ -118,7 +112,7 @@ namespace Catel
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <returns>A <see cref="string"/> that represents the type of the instance.</returns>
-        public static string ToFullTypeString(object instance)
+        public static string ToFullTypeString(object? instance)
         {
             if (instance is null)
             {

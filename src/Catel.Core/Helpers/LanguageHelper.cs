@@ -1,61 +1,40 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
+    using System;
     using System.Globalization;
-    using IoC;
-    using Services;
+    using Catel.IoC;
+    using Catel.Services;
 
-    /// <summary>
-    /// Static wrapper around the service locator to easily retrieve language values.
-    /// </summary>
     public static class LanguageHelper
     {
-        private static ILanguageService LanguageService;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="LanguageHelper"/> class.
-        /// </summary>
-        static LanguageHelper()
+        private static readonly Lazy<ILanguageService> LanguageService = new Lazy<ILanguageService>(() =>
         {
-            var serviceLocator = ServiceLocator.Default;
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            return dependencyResolver.ResolveRequired<ILanguageService>();
+        });
 
-            LanguageService = serviceLocator.ResolveType<ILanguageService>();
-
-            serviceLocator.TypeRegistered += (sender, e) =>
-            {
-                if (e.ServiceType == typeof (ILanguageService))
-                {
-                    LanguageService = serviceLocator.ResolveType<ILanguageService>();
-                }
-            };
+        public static string? GetString(string resourceName) 
+        {
+            var languageService = LanguageService.Value;
+            return languageService.GetString(resourceName);
         }
 
-        /// <summary>
-        /// Gets the string value using the specified culture.
-        /// </summary>
-        /// <param name="resourceName">Name of the resource.</param>
-        /// <param name="culture">The culture.</param>
-        /// <returns>System.String.</returns>
-        public static string GetString(string resourceName, CultureInfo culture = null)
+        public static string? GetString(string resourceName, CultureInfo cultureInfo)
         {
-            var value = string.Empty;
+            var languageService = LanguageService.Value;
+            return languageService.GetString(resourceName, cultureInfo);
+        }
 
-            if (culture != null)
-            {
-                value = LanguageService.GetString(resourceName, culture);
-            }
-            else
-            {
-                value = LanguageService.GetString(resourceName);
-            }
+        public static string GetRequiredString(string resourceName)
+        {
+            var languageService = LanguageService.Value;
+            return languageService.GetRequiredString(resourceName);
+        }
 
-            return value;
+        public static string GetRequiredString(string resourceName, CultureInfo cultureInfo)
+        {
+            var languageService = LanguageService.Value;
+            return languageService.GetRequiredString(resourceName, cultureInfo);
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TestViewModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM.Auditing
+﻿namespace Catel.Tests.MVVM.Auditing
 {
     using Catel.Data;
     using Catel.MVVM;
@@ -18,7 +12,7 @@ namespace Catel.Tests.MVVM.Auditing
         /// <summary>
         /// Register the TestProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData TestPropertyProperty = RegisterProperty("TestProperty", typeof (string), "defaultvalue");
+        public static readonly IPropertyData TestPropertyProperty = RegisterProperty("TestProperty", "defaultvalue");
         #endregion
 
         #region Commands

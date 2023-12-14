@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidatable.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
@@ -21,7 +14,7 @@ namespace Catel.Data
         /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
         /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
-        IValidator Validator { get; set; }
+        IValidator? Validator { get; set; }
 
         /// <summary>
         /// Gets the validation context which contains all information about the validation.
@@ -44,12 +37,12 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is validating.
         /// </summary>
-        event EventHandler<ValidationEventArgs> Validating;
+        event EventHandler<ValidationEventArgs>? Validating;
 
         /// <summary>
         /// Occurs when the object is validated.
         /// </summary>
-        event EventHandler<ValidationEventArgs> Validated;
+        event EventHandler<ValidationEventArgs>? Validated;
 
         /// <summary>
         /// Validates the current object for field and business rule errors.

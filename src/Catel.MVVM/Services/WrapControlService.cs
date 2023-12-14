@@ -1,32 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WrapControlService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Windows;
     using Windows;
 
     using Catel.Windows.Controls;
-    using Collections;
     using Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Controls.Primitives;
-    using global::Windows.UI.Xaml.Data;
-#else
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Documents;
-#endif
 
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.
@@ -74,9 +57,9 @@ namespace Catel.Services
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl parentContentControl = null)
+        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl? parentContentControl = null)
         {
-            return Wrap(frameworkElement, wrapOptions, ArrayShim.Empty<DataWindowButton>(), parentContentControl);
+            return Wrap(frameworkElement, wrapOptions, Array.Empty<DataWindowButton>(), parentContentControl);
         }
 
         /// <summary>
@@ -93,10 +76,10 @@ namespace Catel.Services
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl)
+        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl? parentContentControl = null)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-            Argument.IsNotNull("buttons", buttons);
+            ArgumentNullException.ThrowIfNull(frameworkElement);
+            ArgumentNullException.ThrowIfNull(buttons);
 
             if (!string.IsNullOrWhiteSpace(frameworkElement.Name))
             {
@@ -106,7 +89,7 @@ namespace Catel.Services
                 }
             }
 
-            if (parentContentControl != null)
+            if (parentContentControl is not null)
             {
                 SetControlContent(parentContentControl, null);
             }
@@ -121,14 +104,13 @@ namespace Catel.Services
 
             if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary))
             {
-                if (Application.Current != null)
+                if (Application.Current is not null)
                 {
                     outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
                 }
             }
 
             #region Generate buttons
-#if !NETFX_CORE
             if (buttons.Length > 0)
             {
                 // Add wrappanel containing the buttons
@@ -142,7 +124,7 @@ namespace Catel.Services
                 foreach (var dataWindowButton in buttons)
                 {
                     var button = new Button();
-                    if (dataWindowButton.CommandBindingPath != null)
+                    if (dataWindowButton.CommandBindingPath is not null)
                     {
                         button.SetBinding(ButtonBase.CommandProperty, new Binding(dataWindowButton.CommandBindingPath));
                     }
@@ -151,10 +133,10 @@ namespace Catel.Services
                         button.Command = dataWindowButton.Command;
                     }
 
-                    if (dataWindowButton.ContentBindingPath != null)
+                    if (dataWindowButton.ContentBindingPath is not null)
                     {
                         var contentBinding = new Binding(dataWindowButton.ContentBindingPath);
-                        if (dataWindowButton.ContentValueConverter != null)
+                        if (dataWindowButton.ContentValueConverter is not null)
                         {
                             contentBinding.Converter = dataWindowButton.ContentValueConverter;
                         }
@@ -165,22 +147,19 @@ namespace Catel.Services
                         button.Content = dataWindowButton.Text;
                     }
 
-                    if (dataWindowButton.VisibilityBindingPath != null)
+                    if (dataWindowButton.VisibilityBindingPath is not null)
                     {
                         var visibilityBinding = new Binding(dataWindowButton.VisibilityBindingPath);
-                        if (dataWindowButton.VisibilityValueConverter != null)
+                        if (dataWindowButton.VisibilityValueConverter is not null)
                         {
                             visibilityBinding.Converter = dataWindowButton.VisibilityValueConverter;
                         }
                         button.SetBinding(ButtonBase.VisibilityProperty, visibilityBinding);
                     }
-#if NET || NETCORE
+
                     button.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonStyle");
                     button.IsDefault = dataWindowButton.IsDefault;
                     button.IsCancel = dataWindowButton.IsCancel;
-#else
-                    button.Style = Application.Current.Resources["DataWindowButtonStyle"] as Style;
-#endif
 
                     if (dataWindowButton.IsDefault)
                     {
@@ -208,7 +187,6 @@ namespace Catel.Services
                 // The dockpanel is now the main content
                 mainContent = subDockPanel;
             }
-#endif
             #endregion
 
             #region Generate internal grid
@@ -250,7 +228,6 @@ namespace Catel.Services
             #endregion
 
             #region Generate InfoBarMessageControl
-#if !NETFX_CORE
             if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
             {
@@ -269,13 +246,12 @@ namespace Catel.Services
                 // This is now the main content
                 mainContent = infoBarMessageControl;
             }
-#endif
             #endregion
 
             // Set content of the outside grid
             outsideGrid.Children.Add(mainContent);
 
-            if (parentContentControl != null)
+            if (parentContentControl is not null)
             {
                 SetControlContent(parentContentControl, outsideGrid);
             }
@@ -286,7 +262,6 @@ namespace Catel.Services
         /// <summary>
         /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
         /// </summary>
-        /// <typeparam name="T">Type of the control to return.</typeparam>
         /// <param name="wrappedGrid">The wrapped grid.</param>
         /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
         /// <returns>
@@ -294,25 +269,9 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
-        public T GetWrappedElement<T>(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
-            where T : FrameworkElement
+        public FrameworkElement? GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
         {
-            return GetWrappedElement(wrappedGrid, wrapOption) as T;
-        }
-
-        /// <summary>
-        /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
-        /// </summary>
-        /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
-        /// <returns>
-        /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
-        public FrameworkElement GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
-        {
-            Argument.IsNotNull("wrappedGrid", wrappedGrid);
+            ArgumentNullException.ThrowIfNull(wrappedGrid);
 
             if (wrapOption == WrapControlServiceWrapOptions.All)
             {
@@ -334,7 +293,6 @@ namespace Catel.Services
         /// <summary>
         /// Gets a wrapped element by name.
         /// </summary>
-        /// <typeparam name="T">Type of the control to return.</typeparam>
         /// <param name="wrappedGrid">The wrapped grid.</param>
         /// <param name="controlName">Name of the control.</param>
         /// <returns>
@@ -343,26 +301,9 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="controlName"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="controlName"/> is not a valid control name.</exception>
-        public T GetWrappedElement<T>(Grid wrappedGrid, string controlName)
-            where T : FrameworkElement
+        public FrameworkElement? GetWrappedElement(Grid wrappedGrid, string controlName)
         {
-            return GetWrappedElement(wrappedGrid, controlName) as T;
-        }
-
-        /// <summary>
-        /// Gets a wrapped element by name.
-        /// </summary>
-        /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="controlName">Name of the control.</param>
-        /// <returns>
-        /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="controlName"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="controlName"/> is not a valid control name.</exception>
-        public FrameworkElement GetWrappedElement(Grid wrappedGrid, string controlName)
-        {
-            Argument.IsNotNull("wrappedGrid", wrappedGrid);
+            ArgumentNullException.ThrowIfNull(wrappedGrid);
             Argument.IsNotNullOrEmpty("controlName", controlName);
 
             if ((controlName != WrapControlServiceControlNames.DefaultOkButtonName) &&
@@ -382,14 +323,12 @@ namespace Catel.Services
         /// <param name="contentControl">The content control.</param>
         /// <param name="element">The element.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="contentControl"/> is <c>null</c>.</exception>
-        private static void SetControlContent(object contentControl, FrameworkElement element)
+        private static void SetControlContent(object contentControl, FrameworkElement? element)
         {
-            Argument.IsNotNull("contentControl", contentControl);
+            ArgumentNullException.ThrowIfNull(contentControl);
 
             var propertyInfo = contentControl.GetType().GetPropertyEx("Content");
-            propertyInfo.SetValue(contentControl, element, null);
+            propertyInfo?.SetValue(contentControl, element, null);
         }
     }
 }
-
-#endif

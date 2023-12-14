@@ -1,21 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChildAwareModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
-
-#if NET || NETCORE || NETSTANDARD
-    using System.Runtime.Serialization;
-#endif
 
     /// <summary>
     /// Class that is aware of changes of child objects by using the <see cref="ChangeNotificationWrapper"/>.
@@ -25,10 +12,7 @@ namespace Catel.Data
         /// <summary>
         /// The change notification wrappers for all property values.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
-        private Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers;
+        private Dictionary<string, ChangeNotificationWrapper>? _propertyValueChangeNotificationWrappers;
 
         /// <summary>
         /// Initializes the <see cref="ChildAwareModelBase"/> class.
@@ -45,24 +29,6 @@ namespace Catel.Data
         {
             InitializeChildAwareModelBase();
         }
-
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase"/> class.
-        /// <para />
-        /// Only constructor for the ModelBase.
-        /// </summary>
-        /// <param name="info">SerializationInfo object, null if this is the first time construction.</param>
-        /// <param name="context">StreamingContext object, simple pass a default new StreamingContext() if this is the first time construction.</param>
-        /// <remarks>
-        /// Call this method, even when constructing the object for the first time (thus not deserializing).
-        /// </remarks>
-        protected ChildAwareModelBase(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            InitializeChildAwareModelBase();
-        }
-#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
@@ -81,9 +47,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object should handle (thus invoke the specific events) when
         /// a property or collection value has changed.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
-#endif
         protected bool HandlePropertyAndCollectionChanges { get; set; }
 
         /// <summary>
@@ -117,7 +81,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="propertyValue">The property value.</param>
-        private void HandleObjectEventsSubscription(string propertyName, object propertyValue)
+        private void HandleObjectEventsSubscription(string propertyName, object? propertyValue)
         {
             if (DisableEventSubscriptionsOfChildValues)
             {
@@ -141,12 +105,12 @@ namespace Catel.Data
 
                 if (!ChangeNotificationWrapper.IsUsefulForObject(propertyValue))
                 {
-                    if (oldWrapper != null)
+                    if (oldWrapper is not null)
                     {
                         _propertyValueChangeNotificationWrappers.Remove(propertyName);
                     }
                 }
-                else
+                else if (propertyValue is not null)
                 {
                     var wrapper = new ChangeNotificationWrapper(propertyValue);
                     wrapper.PropertyChanged += OnPropertyObjectPropertyChanged;
@@ -162,7 +126,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnPropertyObjectPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // It is possible that the sender used string.Empty or null for the property name, then exit
             var propertyName = e.PropertyName;
@@ -184,7 +148,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        protected virtual void OnPropertyObjectCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             SetDirty(string.Empty);
 
@@ -197,7 +161,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             SetDirty(string.Empty);
 

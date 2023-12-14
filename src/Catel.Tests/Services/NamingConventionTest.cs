@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NamingConventionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Services
+﻿namespace Catel.Tests.Services
 {
     using System;
     using System.Collections.Generic;
@@ -20,37 +14,37 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(null, "MyView", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(null, "MyView", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(string.Empty, "MyView", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(string.Empty, "MyView", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullViewName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", null, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", null, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyViewName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", string.Empty, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", string.Empty, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", string.Empty));
             }
 
             [TestCase]
@@ -61,7 +55,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("ViewModels.TestViewModel", result);
+                Assert.That(result, Is.EqualTo("ViewModels.TestViewModel"));
             }
 
             [TestCase]
@@ -72,7 +66,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -83,7 +77,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("ViewModels.ExampleVWViewModel", result);
+                Assert.That(result, Is.EqualTo("ViewModels.ExampleVWViewModel"));
             }
 
             [TestCase]
@@ -94,7 +88,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -105,7 +99,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -116,7 +110,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -127,7 +121,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -138,7 +132,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleViewModel"));
             }
 
             [TestCase]
@@ -149,7 +143,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleControlViewModel", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.ViewModels.ExampleControlViewModel"));
             }
         }
 
@@ -159,37 +153,37 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(null, "MyViewModel", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(null, "MyViewModel", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(string.Empty, "MyViewModel", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(string.Empty, "MyViewModel", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullViewModelName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", null, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", null, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyViewModelName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", string.Empty, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", string.Empty, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", string.Empty));
             }
 
             [TestCase]
@@ -200,7 +194,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("/Views/TestView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/TestView.xaml"));
             }
 
             [TestCase]
@@ -211,7 +205,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("/Views/ExampleView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/ExampleView.xaml"));
             }
 
             [TestCase]
@@ -222,7 +216,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("/Views/ExampleVMView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/ExampleVMView.xaml"));
             }
 
             [TestCase]
@@ -233,7 +227,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", viewModelName, convention);
 
-                Assert.AreEqual("MyProject.MyAssembly.Views.Examples.ExampleView", result);
+                Assert.That(result, Is.EqualTo("MyProject.MyAssembly.Views.Examples.ExampleView"));
             }
         }
 
@@ -243,19 +237,19 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullConstantsWithValues()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention"));
+                Assert.Throws<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty));
             }
 
             [TestCase]
@@ -268,7 +262,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveNamingConvention(constantValues, convention);
 
-                Assert.AreEqual("/Views/VmValueView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/VmValueView.xaml"));
             }
 
             [TestCase]
@@ -281,7 +275,7 @@ namespace Catel.Tests.Services
 
                 string result = NamingConvention.ResolveNamingConvention(constantValues, convention);
 
-                Assert.AreEqual("/Views/TestValue/VmValueView.xaml", result);
+                Assert.That(result, Is.EqualTo("/Views/TestValue/VmValueView.xaml"));
             }
         }
 
@@ -291,31 +285,31 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullConstantsWithValues()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention", "MyValue"));
+                Assert.Throws<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention", "MyValue"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null, "MyValue"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null, "MyValue"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty, "MyValue"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty, "MyValue"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", string.Empty));
             }
 
             [TestCase]
@@ -327,7 +321,7 @@ namespace Catel.Tests.Services
 
                 var result = NamingConvention.ResolveNamingConvention(constantValues, convention, value);
 
-                Assert.AreEqual("Catel.Views.MyView", result);
+                Assert.That(result, Is.EqualTo("Catel.Views.MyView"));
             }
 
             [TestCase]
@@ -339,7 +333,7 @@ namespace Catel.Tests.Services
 
                 var result = NamingConvention.ResolveNamingConvention(constantValues, convention, value);
 
-                Assert.AreEqual("Catel.Examples.Views.MyView", result);
+                Assert.That(result, Is.EqualTo("Catel.Examples.Views.MyView"));
             }
 
             [TestCase]
@@ -351,7 +345,7 @@ namespace Catel.Tests.Services
 
                 var result = NamingConvention.ResolveNamingConvention(constantValues, convention, value);
 
-                Assert.AreEqual("Catel.Examples.ViewModels.Wizards.MyWizardViewModel", result);
+                Assert.That(result, Is.EqualTo("Catel.Examples.ViewModels.Wizards.MyWizardViewModel"));
             }
         }
 
@@ -361,39 +355,39 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(null, "\\"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(null, "\\"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty, "\\"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty, "\\"));
             }
 
             [TestCase]
             public void ReturnsInputWhenNoPathSeparatorIsAutomaticallyDetected()
             {
-                Assert.AreEqual("pathwithoutseparator", NamingConvention.GetParentPath("pathwithoutseparator"));
+                Assert.That(NamingConvention.GetParentPath("pathwithoutseparator"), Is.EqualTo("pathwithoutseparator"));
             }
 
             [TestCase]
             public void ReturnsInputWhenPathSeparatorIsAutomaticallyDetected()
             {
-                Assert.AreEqual("Catel.Examples", NamingConvention.GetParentPath("Catel.Examples.Views"));
+                Assert.That(NamingConvention.GetParentPath("Catel.Examples.Views"), Is.EqualTo("Catel.Examples"));
             }
 
             [TestCase]
             public void ReturnsRightParentPathForDotSeparator()
             {
-                Assert.AreEqual("Catel.Examples", NamingConvention.GetParentPath("Catel.Examples.Views", "."));
+                Assert.That(NamingConvention.GetParentPath("Catel.Examples.Views", "."), Is.EqualTo("Catel.Examples"));
             }
 
             [TestCase]
             public void ReturnsRightParentPathForSlashSeparator()
             {
-                Assert.AreEqual("Catel\\Examples", NamingConvention.GetParentPath("Catel\\Examples\\Views.xaml", "\\"));
+                Assert.That(NamingConvention.GetParentPath("Catel\\Examples\\Views.xaml", "\\"), Is.EqualTo("Catel\\Examples"));
             }
         }
 
@@ -403,43 +397,43 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentSeparator(null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentSeparator(null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentSeparator(string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentSeparator(string.Empty));
             }
 
             [TestCase]
-            public void ReturnsNullWhenNoKnownSeparatorIsUsed()
+            public void ReturnsDefaultWhenNoKnownSeparatorIsUsed()
             {
-                Assert.AreEqual(null, NamingConvention.GetParentSeparator("noknownseparators"));
+                Assert.That(NamingConvention.GetParentSeparator("noknownseparators"), Is.EqualTo("."));
             }
 
             [TestCase]
             public void ReturnsBackSlashWhenUsed()
             {
-                Assert.AreEqual("\\", NamingConvention.GetParentSeparator("Catel\\Views\\MyView.xaml"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel\\Views\\MyView.xaml"), Is.EqualTo("\\"));
             }
 
             [TestCase]
             public void ReturnsSlashWhenUsed()
             {
-                Assert.AreEqual("/", NamingConvention.GetParentSeparator("Catel/Views/MyView.xaml"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel/Views/MyView.xaml"), Is.EqualTo("/"));
             }
 
             [TestCase]
             public void ReturnsPipeWhenUsed()
             {
-                Assert.AreEqual("|", NamingConvention.GetParentSeparator("Catel|Views|MyView.xaml"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel|Views|MyView.xaml"), Is.EqualTo("|"));
             }
 
             [TestCase]
             public void ReturnsDotWhenUsed()
             {
-                Assert.AreEqual(".", NamingConvention.GetParentSeparator("Catel.Views.MyView"));
+                Assert.That(NamingConvention.GetParentSeparator("Catel.Views.MyView"), Is.EqualTo("."));
             }
         }
     }

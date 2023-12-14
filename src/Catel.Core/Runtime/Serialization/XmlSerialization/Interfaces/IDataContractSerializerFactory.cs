@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IDataContractFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections.Generic;
@@ -25,7 +19,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><see cref="DataContractSerializer" /> for the given type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
-        List<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, List<Type> additionalKnownTypes = null);
+        IReadOnlyCollection<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, IReadOnlyCollection<Type>? additionalKnownTypes = null);
 
         /// <summary>
         /// Gets the Data Contract serializer for a specific type. This method caches serializers so the
@@ -40,16 +34,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
-        DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null);
-
-#if NET
-        /// <summary>
-        /// Gets or sets the <see cref="IDataContractSurrogate"/> passed in constructor to <see cref="DataContractSerializer"/>.
-        /// <para />
-        /// The default value is <null/>.
-        /// </summary>
-        /// <value>The <see cref="IDataContractSurrogate"/>.</value>
-        IDataContractSurrogate DataContractSurrogate { get; set; }
+        DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string? rootNamespace = null, IReadOnlyCollection<Type>? additionalKnownTypes = null);
 
         /// <summary>
         /// Gets or sets the <see cref="DataContractResolver"/> passed in constructor to <see cref="DataContractSerializer"/>.
@@ -57,8 +42,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// The default value is <null/>.
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
-        DataContractResolver DataContractResolver { get; set; }
-#endif
-
+        DataContractResolver? DataContractResolver { get; set; }
     }
 }

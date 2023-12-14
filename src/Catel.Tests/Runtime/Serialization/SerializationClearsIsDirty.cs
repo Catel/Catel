@@ -1,10 +1,5 @@
 ﻿namespace Catel.Tests.Runtime.Serialization
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Runtime.Serialization;
     using Catel.Tests.Runtime.Serialization.TestModels;
     using NUnit.Framework;
@@ -16,8 +11,8 @@
         public void MyCatelModel_ConstructorTest()
         {
             var cm = new IsDirtyModelTestModel();
-            Assert.IsNotNull(cm, "The IsDirtyModelTestModel constructor returned a null instance.");
-            Assert.IsInstanceOf(typeof(IsDirtyModelTestModel), cm, "The IsDirtyModelTestModel constructor did not return the correct type.");
+            Assert.That(cm, Is.Not.Null, "The IsDirtyModelTestModel constructor returned a null instance.");
+            Assert.That(cm, Is.InstanceOf(typeof(IsDirtyModelTestModel)), "The IsDirtyModelTestModel constructor did not return the correct type.");
         }
 
         [Test]
@@ -30,15 +25,15 @@
                 MyString = "This is a serialization test."
             };
 
-            // Round-trip the instance: Serialize and de-serialize with a BinaryFormatter
+            // Round-trip the instance: Serialize and de-serialize
             var actual = SerializationTestHelper.SerializeAndDeserialize(input, SerializationFactory.GetXmlSerializer());
 
             // Double-check that the internal values are preserved
-            Assert.AreEqual(input.MyDecimal, actual.MyDecimal, "MyDecimal values do not match.");
-            Assert.AreEqual(input.MyInteger, actual.MyInteger, "MyInteger values do not match.");
-            Assert.AreEqual(input.MyString, actual.MyString, "MyString values do not match.");
+            Assert.That(actual.MyDecimal, Is.EqualTo(input.MyDecimal), "MyDecimal values do not match.");
+            Assert.That(actual.MyInteger, Is.EqualTo(input.MyInteger), "MyInteger values do not match.");
+            Assert.That(actual.MyString, Is.EqualTo(input.MyString), "MyString values do not match.");
             //Assert.AreEqual(input.IsDirty, actual.IsDirty, "IsDirty values do not match.");
-            Assert.IsFalse(actual.IsDirty);
+            Assert.That(actual.IsDirty, Is.False);
         }
     }
 }

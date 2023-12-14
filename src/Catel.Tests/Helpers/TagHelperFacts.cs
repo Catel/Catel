@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TagHelperTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using Data;
 
@@ -18,25 +12,25 @@ namespace Catel.Tests
             [TestCase]
             public void ReturnsTrueForBothNull()
             {
-                Assert.IsTrue(TagHelper.AreTagsEqual(null, null));
+                Assert.That(TagHelper.AreTagsEqual(null, null), Is.True);
             }
 
             [TestCase]
             public void ReturnsTrueForEqualStrings()
             {
-                Assert.IsTrue(TagHelper.AreTagsEqual("Catel", "Catel"));
+                Assert.That(TagHelper.AreTagsEqual("Catel", "Catel"), Is.True);
             }
 
             [TestCase]
             public void ReturnsFalseForDifferentStrings()
             {
-                Assert.IsFalse(TagHelper.AreTagsEqual("Catel", "mvvm"));
+                Assert.That(TagHelper.AreTagsEqual("Catel", "mvvm"), Is.False);
             }
 
             [TestCase]
             public void ReturnsFalseForDifferentCasingStrings()
             {
-                Assert.IsFalse(TagHelper.AreTagsEqual("Catel", "catel"));
+                Assert.That(TagHelper.AreTagsEqual("Catel", "catel"), Is.False);
             }
 
             [TestCase]
@@ -46,10 +40,10 @@ namespace Catel.Tests
                 var secondEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
 
                 // References equal
-                Assert.IsTrue(TagHelper.AreTagsEqual(firstEntry, firstEntry));
+                Assert.That(TagHelper.AreTagsEqual(firstEntry, firstEntry), Is.True);
 
                 // Objects equal
-                Assert.IsTrue(TagHelper.AreTagsEqual(firstEntry, secondEntry));
+                Assert.That(TagHelper.AreTagsEqual(firstEntry, secondEntry), Is.True);
             }
 
             [TestCase]
@@ -58,7 +52,7 @@ namespace Catel.Tests
                 var firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
                 var secondEntry = ModelBaseTestHelper.CreateIniEntryObject("D", "E", "F");
 
-                Assert.IsFalse(TagHelper.AreTagsEqual(firstEntry, secondEntry));
+                Assert.That(TagHelper.AreTagsEqual(firstEntry, secondEntry), Is.False);
             }
         }
     }

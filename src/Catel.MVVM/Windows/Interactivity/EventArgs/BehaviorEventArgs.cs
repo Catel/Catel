@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BehaviorEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
     using System;
 
@@ -22,7 +14,7 @@ namespace Catel.Windows.Interactivity
         /// <exception cref="ArgumentNullException">The <paramref name="behavior"/> is <c>null</c>.</exception>
         public BehaviorEventArgs(IBehavior behavior)
         {
-            Argument.IsNotNull("behavior", behavior);
+            ArgumentNullException.ThrowIfNull(behavior);
 
             Behavior = behavior;
         }
@@ -33,5 +25,3 @@ namespace Catel.Windows.Interactivity
         public IBehavior Behavior { get; private set; }
     }
 }
-
-#endif

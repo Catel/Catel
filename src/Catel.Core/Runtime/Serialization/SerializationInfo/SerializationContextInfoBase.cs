@@ -21,7 +21,7 @@
         void ISerializationContextContainer.SetSerializationContext<T>(ISerializationContext<T> serializationContext)
         {
             var context = (ISerializationContext<TSerializationContextInfo>)serializationContext;
-            if (context != null)
+            if (context is not null)
             {
                 Context = context;
                 OnContextUpdated(context);
@@ -44,7 +44,7 @@
         /// <value>
         /// The parent context.
         /// </value>
-        public ISerializationContext<TSerializationContextInfo> Context { get; private set; }
+        public ISerializationContext<TSerializationContextInfo>? Context { get; private set; }
 
         /// <summary>
         /// Called when the <see cref="Context"/> is updated to a value other than <c>null</c>.

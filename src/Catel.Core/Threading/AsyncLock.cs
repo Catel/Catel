@@ -1,40 +1,37 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AsyncLock.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+﻿#if DEBUG
+#define EXTREME_LOGGING
+#endif
 
 namespace Catel.Threading
 {
     using System;
     using System.Diagnostics;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using Catel.Logging;
 
     /// <summary>
-    /// A mutual exclusion lock that is compatible with async. Note that this lock is <b>not</b> recursive!
+    /// A mutual exclusion lock that is compatible with async.
     /// </summary>
     /// <remarks>
     /// This code originally comes from AsyncEx: https://github.com/StephenCleary/AsyncEx
     /// </remarks>
     [DebuggerDisplay("Id = {Id}, Taken = {_taken}")]
-    [DebuggerTypeProxy(typeof (DebugView))]
-    public sealed class AsyncLock
+    [DebuggerTypeProxy(typeof(DebugView))]
+    public sealed partial class AsyncLock
     {
-        /// <summary>
-        /// A task that is completed with the key object for this lock.
-        /// </summary>
-        private readonly Task<IDisposable> _cachedKeyTask;
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+#pragma warning disable IDISP006 // Implement IDisposable
+        private readonly Key _cachedKey;
+#pragma warning restore IDISP006 // Implement IDisposable
 
         /// <summary>
         /// The object used for mutual exclusion.
         /// </summary>
         private readonly object _mutex;
 
-        /// <summary>
-        /// The queue of TCSs that other tasks are awaiting to acquire the lock.
-        /// </summary>
         private readonly IAsyncWaitQueue<IDisposable> _queue;
 
         /// <summary>
@@ -42,10 +39,10 @@ namespace Catel.Threading
         /// </summary>
         private readonly int _id = UniqueIdentifierHelper.GetUniqueIdentifier<AsyncLock>();
 
-        /// <summary>
-        /// Whether the lock is taken by a task.
-        /// </summary>
+        private readonly AsyncLocal<bool> _takenByCurrentTask = new AsyncLocal<bool>();
+
         private bool _taken;
+        private bool _allowTakeoverByTask;
 
         /// <summary>
         /// Creates a new async-compatible mutual exclusion lock.
@@ -62,9 +59,13 @@ namespace Catel.Threading
         public AsyncLock(IAsyncWaitQueue<IDisposable> queue)
         {
             _queue = queue;
-            _cachedKeyTask = TaskShim.FromResult<IDisposable>(new Key(this));
+            _cachedKey = new Key(this);
             _mutex = new object();
         }
+
+#if EXTREME_LOGGING
+        public bool EnableExtremeLogging { get; set; }
+#endif
 
         /// <summary>
         /// Gets a semi-unique identifier for this asynchronous lock.
@@ -90,67 +91,77 @@ namespace Catel.Threading
         }
 
         /// <summary>
+        /// Gets a value indicating whether the current task has taken this lock.
+        /// </summary>
+        public bool IsTakenByCurrentTask
+        {
+            get
+            {
+                lock (_mutex)
+                {
+                    return _takenByCurrentTask.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Optional extra identifier to identify this async lock.
+        /// </summary>
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tag of this async lock.
+        /// </summary>
+        public object? Tag { get; set; }
+
+        /// <summary>
+        /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
+        /// </summary>
+        /// <returns>A disposable that releases the lock when disposed.</returns>
+        public AwaitableDisposable<IDisposable> LockAsync()
+        {
+            return LockAsync(CancellationToken.None);
+        }
+
+        /// <summary>
         /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>
         /// <returns>A disposable that releases the lock when disposed.</returns>
-#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
         public AwaitableDisposable<IDisposable> LockAsync(CancellationToken cancellationToken)
-#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             Task<IDisposable> ret;
 
+            LogDebug($"[ASYNC] Requesting lock");
+
             lock (_mutex)
             {
-                if (!_taken)
+                if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
                 {
+                    LogDebug($"[ASYNC] Lock was not yet taken, taking lock");
+
                     // If the lock is available, take it immediately.
                     _taken = true;
-                    ret = _cachedKeyTask;
+                    _takenByCurrentTask.Value = true;
+                    _allowTakeoverByTask = false;
+
+                    ret = Task.FromResult<IDisposable>(_cachedKey);
                 }
                 else
                 {
-                    // Wait for the lock to become available or cancellation.
-                    ret = _queue.EnqueueAsync(_mutex, cancellationToken);
-                }
+                    LogDebug($"[ASYNC] Lock was already taken, queueing lock request");
 
-                //Enlightenment.Trace.AsyncLock_TrackLock(this, ret);
+                    // Wait for the lock to become available or cancellation.
+                    ret = _queue.EnqueueAsync(_mutex, () =>
+                    {
+                        _allowTakeoverByTask = true;
+                    }, cancellationToken);
+
+                    LogDebug($"[ASYNC] New queue length: {_queue.Count}");
+                }
             }
 
             return new AwaitableDisposable<IDisposable>(ret);
-        }
-
-        /// <summary>
-        /// Synchronously acquires the lock. Returns a disposable that releases the lock when disposed. This method may block the calling thread.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>
-        public IDisposable Lock(CancellationToken cancellationToken)
-        {
-            Task<IDisposable> enqueuedTask;
-
-            lock (_mutex)
-            {
-                if (!_taken)
-                {
-                    _taken = true;
-                    return _cachedKeyTask.Result;
-                }
-
-                enqueuedTask = _queue.EnqueueAsync(_mutex, cancellationToken);
-            }
-
-            return enqueuedTask.WaitAndUnwrapException();
-        }
-
-        /// <summary>
-        /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
-        /// </summary>
-        /// <returns>A disposable that releases the lock when disposed.</returns>
-#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
-        public AwaitableDisposable<IDisposable> LockAsync()
-#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
-        {
-            return LockAsync(CancellationToken.None);
         }
 
         /// <summary>
@@ -162,29 +173,99 @@ namespace Catel.Threading
         }
 
         /// <summary>
+        /// Synchronously acquires the lock. Returns a disposable that releases the lock when disposed. This method may block the calling thread.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>
+        public IDisposable Lock(CancellationToken cancellationToken)
+        {
+            Task<IDisposable> enqueuedTask;
+
+            LogDebug($"[SYNC] Requesting lock");
+
+            lock (_mutex)
+            {
+                if (!_taken || _allowTakeoverByTask || _takenByCurrentTask.Value)
+                {
+                    LogDebug($"[SYNC] Lock was not yet taken, taking lock");
+
+                    _taken = true;
+                    _takenByCurrentTask.Value = true;
+                    _allowTakeoverByTask = false;
+
+                    var task = Task.FromResult<IDisposable>(_cachedKey);
+                    return task.Result;
+                }
+
+                LogDebug($"[SYNC] Lock was already taken, queueing lock request");
+
+                enqueuedTask = _queue.EnqueueAsync(_mutex, () =>
+                {
+                    _allowTakeoverByTask = true;
+                }, cancellationToken);
+
+                LogDebug($"[SYNC] New queue length: {_queue.Count}");
+            }
+
+            return enqueuedTask.WaitAndUnwrapException();
+        }
+
+        /// <summary>
         /// Releases the lock.
         /// </summary>
         internal void ReleaseLock()
         {
-            IDisposable finish = null;
+            IDisposable? queuedLocker = null;
+
+            LogDebug($"[SYNC] Releasing lock");
 
             lock (_mutex)
             {
-                //Enlightenment.Trace.AsyncLock_Unlocked(this);
-                if (_queue.IsEmpty)
+                _takenByCurrentTask.Value = false;
+
+                if (!_queue.IsEmpty)
                 {
-                    _taken = false;
+                    LogDebug($"[SYNC] Queue is not yet empty ({_queue.Count}), dequeuing next");
+
+                    queuedLocker = _queue.Dequeue(_cachedKey);
+
+                    LogDebug($"[SYNC] New queue length: {_queue.Count}");
+
+                    // Important: dispose inside lock to prevent hard to reproduce deadlocks
+                    LogDebug($"[SYNC] Disposing queued locker");
+
+                    queuedLocker.Dispose();
                 }
                 else
                 {
-                    finish = _queue.Dequeue(_cachedKeyTask.Result);
+                    LogDebug($"[SYNC] Lock has no pending requests left, now fully free");
+
+                    // No lock and no queue, fully free
+                    _taken = false;
                 }
             }
-            if (finish != null)
+        }
+
+        partial void LogDebug(string message);
+
+#if DEBUG && EXTREME_LOGGING
+        partial void LogDebug(string message)
+        {
+            if (EnableExtremeLogging)
             {
-                finish.Dispose();
+                var logBuilder = new StringBuilder();
+
+                var name = Name;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    logBuilder.Append($"[{name}] ");
+                }
+
+                logBuilder.Append($"[{_id}] {message}");
+
+                Log.Debug(logBuilder.ToString());
             }
         }
+#endif
 
         /// <summary>
         /// The disposable which releases the lock.
@@ -210,6 +291,8 @@ namespace Catel.Threading
             /// </summary>
             public void Dispose()
             {
+                _asyncLock.LogDebug("Releasing key");
+
                 _asyncLock.ReleaseLock();
             }
         }

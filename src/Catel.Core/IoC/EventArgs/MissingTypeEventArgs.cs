@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MissingTypeEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -17,8 +11,6 @@ namespace Catel.IoC
     /// </summary>
     public class MissingTypeEventArgs : EventArgs
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MissingTypeEventArgs"/> class. 
         /// </summary>
@@ -39,18 +31,15 @@ namespace Catel.IoC
         /// </param>
         /// <param name="tag">a tag</param>
         /// <exception cref="ArgumentNullException">The <paramref name="interfaceType"/> is <c>null</c>.</exception>
-        public MissingTypeEventArgs(Type interfaceType, object tag)
+        public MissingTypeEventArgs(Type interfaceType, object? tag)
         {
-            Argument.IsNotNull("interfaceType", interfaceType);
+            ArgumentNullException.ThrowIfNull(interfaceType);
 
             InterfaceType = interfaceType;
             RegistrationType = RegistrationType.Singleton;
             Tag = tag;
         }
-        #endregion
-
-        #region Properties
-
+        
         /// <summary>
         /// Gets the type of the interface that is currently unresolved.
         /// </summary>
@@ -63,7 +52,7 @@ namespace Catel.IoC
         /// Set if the registration of an instance is required.
         /// </summary>
         /// <value>The implementing instance.</value>
-        public object ImplementingInstance { get; set; }
+        public object? ImplementingInstance { get; set; }
 
         /// <summary>
         /// Gets or sets the implementing type.
@@ -71,13 +60,13 @@ namespace Catel.IoC
         /// Set if the registration of a type is required.
         /// </summary>
         /// <value>The implementing type.</value>
-        public Type ImplementingType { get; set; }
+        public Type? ImplementingType { get; set; }
 
         /// <summary>
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         /// Gets or sets the life style of the type that will be registered. 
@@ -86,6 +75,5 @@ namespace Catel.IoC
         /// If the <see cref="ImplementingInstance"/> is set then this value will be ignored.
         /// </remarks>
         public RegistrationType RegistrationType { get; set; }
-        #endregion
     }
 }

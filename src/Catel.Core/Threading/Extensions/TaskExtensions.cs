@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TaskExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
     using System.Threading;
@@ -27,17 +20,24 @@ namespace Catel.Threading
         /// <returns></returns>
         public static async Task AwaitWithTimeoutAsync(this Task task, int timeout)
         {
-            var cts = new CancellationTokenSource();
-
-            // If the task is the first one to be returned, the task completed faster than the delay task
-            if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
+            using (var cts = new CancellationTokenSource())
             {
-                cts.Cancel();
-                return;
-            }
+                // If the task is the first one to be returned, the task completed faster than the delay task
+#pragma warning disable HAA0101 // Array allocation for params parameter
+                if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
+#pragma warning restore HAA0101 // Array allocation for params parameter
+                {
+#if NET8_0_OR_GREATER
+                    await cts.CancelAsync();
+#else
+                    cts.Cancel();
+#endif
+                    return;
+                }
 
-            // Failed
-            throw Log.ErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout}' ms");
+                // Failed
+                throw Log.ErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
+            }
         }
 
         /// <summary>
@@ -63,8 +63,12 @@ namespace Catel.Threading
             }
             catch (AggregateException ex)
             {
-                //throw ExceptionHelpers.PrepareForRethrow(ex.InnerException);
-                throw ex.InnerException;
+                if (ex.InnerException is not null)
+                {
+                    throw ex.InnerException;
+                }
+
+                throw;
             }
         }
 
@@ -96,8 +100,12 @@ namespace Catel.Threading
             }
             catch (AggregateException ex)
             {
-                //throw ExceptionHelpers.PrepareForRethrow(ex.InnerException);
-                throw ex.InnerException;
+                if (ex.InnerException is not null)
+                {
+                    throw ex.InnerException;
+                }
+
+                throw;
             }
         }
     }

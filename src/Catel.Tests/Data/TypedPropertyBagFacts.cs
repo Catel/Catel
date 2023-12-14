@@ -1,10 +1,6 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Data;
     using NUnit.Framework;
 
@@ -26,7 +22,7 @@
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => propertyBag.SetValue("Int", (object)null));
+            Assert.Throws<InvalidOperationException>(() => propertyBag.SetValue("Int", (object)null));
         }
 
         [TestCase]
@@ -35,7 +31,7 @@
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
-            ExceptionTester.CallMethodAndExpectException<InvalidCastException>(() => propertyBag.SetValue("Int", (object)true));
+            Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", (object)true));
         }
 
         [TestCase]
@@ -44,7 +40,7 @@
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
-            ExceptionTester.CallMethodAndExpectException<InvalidCastException>(() => propertyBag.SetValue("Int", new object()));
+            Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", new object()));
         }
 
         [TestCase]
@@ -55,7 +51,7 @@
             propertyBag.SetValue("Int", 42);
             propertyBag.SetValue("Int", (object)52);
 
-            Assert.AreEqual(52, propertyBag.GetValue("Int", 0));
+            Assert.That(propertyBag.GetValue("Int", 0), Is.EqualTo(52));
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -19,8 +13,9 @@ namespace Catel.Runtime.Serialization
     public class SerializationContext<TSerializationContextInfo> : Disposable, ISerializationContext<TSerializationContextInfo>
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
-        private ScopeManager<SerializationContextScope<TSerializationContextInfo>> _scopeManager;
-        private int? _depth;
+#pragma warning disable IDISP006 // Implement IDisposable
+        private ScopeManager<SerializationContextScope<TSerializationContextInfo>>? _scopeManager;
+#pragma warning restore IDISP006 // Implement IDisposable
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
@@ -30,22 +25,14 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <param name="configuration">The configuration.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         public SerializationContext(object model, Type modelType, TSerializationContextInfo context,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+            SerializationContextMode contextMode, ISerializationConfiguration? configuration = null)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", context);
-            Argument.IsNotNull("configuration", configuration);
-
             Model = model;
             ModelType = modelType;
             ModelTypeName = modelType.GetSafeFullName(false);
             Context = context;
             ContextMode = contextMode;
-            TypeStack = new Stack<Type>();
             Configuration = configuration;
 
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
@@ -64,7 +51,7 @@ namespace Catel.Runtime.Serialization
             }
 
             var serializationContextInfoParentSetter = context as ISerializationContextContainer;
-            if (serializationContextInfoParentSetter != null)
+            if (serializationContextInfoParentSetter is not null)
             {
                 serializationContextInfoParentSetter.SetSerializationContext(this);
             }
@@ -101,22 +88,7 @@ namespace Catel.Runtime.Serialization
         {
             get
             {
-                if (!_depth.HasValue)
-                {
-                    // Note: changed to STackCount, that's more reliable than ReferenceManager since instances
-                    // can be re-used and this won't increase the depth
-                    //_depth = ReferenceManager.Count;
-                    var depth = TypeStack.Count;
-                    if (depth > 0)
-                    {
-                        // The type itself is pushed to the typestack, so the depth is - 1
-                        depth--;
-                    }
-
-                    _depth = depth;
-                }
-
-                return _depth.Value;
+                return TypeStack.Count;
             }
         }
 
@@ -136,7 +108,7 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Gets the serialization configuration.
         /// </summary>
-        public ISerializationConfiguration Configuration { get; private set; }
+        public ISerializationConfiguration? Configuration { get; private set; }
 
         /// <summary>
         /// Gets the context mode.
@@ -156,7 +128,7 @@ namespace Catel.Runtime.Serialization
         /// <value>
         /// The parent context.
         /// </value>
-        public ISerializationContext<TSerializationContextInfo> Parent { get; private set; }
+        public ISerializationContext<TSerializationContextInfo>? Parent { get; private set; }
 
         /// <summary>
         /// Gets the reference manager.
@@ -164,13 +136,11 @@ namespace Catel.Runtime.Serialization
         /// <value>The reference manager.</value>
         public ReferenceManager ReferenceManager { get; private set; }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Gets or sets the serialization information.
         /// </summary>
         /// <value>The serialization information.</value>
-        public SerializationInfo SerializationInfo { get; set; }
-#endif
+        public SerializationInfo? SerializationInfo { get; set; }
 
         /// <summary>
         /// Disposes the managed resources.
@@ -179,7 +149,7 @@ namespace Catel.Runtime.Serialization
         {
             base.DisposeManaged();
 
-            if (_scopeManager != null)
+            if (_scopeManager is not null)
             {
                 _scopeManager.Dispose();
                 _scopeManager = null;
@@ -194,12 +164,14 @@ namespace Catel.Runtime.Serialization
             TypeStack.Push(ModelType);
 
             var serializable = Model as ISerializable;
-            if (serializable != null)
+            if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
+                if (registrationInfo is null)
+                {
+                    return;
+                }
 
-                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                //switch ((SerializationContextMode)x.Tag)
                 switch (ContextMode)
                 {
                     case SerializationContextMode.Serialization:
@@ -227,12 +199,14 @@ namespace Catel.Runtime.Serialization
         private void Uninitialize()
         {
             var serializable = Model as ISerializable;
-            if (serializable != null)
+            if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
+                if (registrationInfo is null)
+                {
+                    return;
+                }
 
-                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                //switch ((SerializationContextMode)x.Tag)
                 switch (ContextMode)
                 {
                     case SerializationContextMode.Serialization:

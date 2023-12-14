@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeRequestInfoFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using Catel.IoC;
@@ -17,7 +12,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new TypeRequestInfo(null));
+                Assert.Throws<ArgumentNullException>(() => new TypeRequestInfo(null));
             }
 
             [TestCase]
@@ -25,8 +20,8 @@ namespace Catel.Tests.IoC
             {
                 var typeRequestInfo = new TypeRequestInfo(typeof(int), "mytag");
 
-                Assert.AreEqual(typeof(int), typeRequestInfo.Type);
-                Assert.AreEqual("mytag", typeRequestInfo.Tag);
+                Assert.That(typeRequestInfo.Type, Is.EqualTo(typeof(int)));
+                Assert.That(typeRequestInfo.Tag, Is.EqualTo("mytag"));
             }
         }
 
@@ -39,14 +34,14 @@ namespace Catel.Tests.IoC
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag");
                 var obj2 = new TypeRequestInfo(typeof(int), "mytag");
 
-                Assert.IsTrue(obj1 == obj2);
-                Assert.IsTrue(obj2 == obj1);
+                Assert.That(obj1, Is.EqualTo(obj2));
+                Assert.That(obj2, Is.EqualTo(obj1));
 
-                Assert.IsFalse(obj1 != obj2);
-                Assert.IsFalse(obj2 != obj1);
+                Assert.That(obj1, Is.EqualTo(obj2));
+                Assert.That(obj2, Is.EqualTo(obj1));
 
-                Assert.IsTrue(obj1.Equals(obj2));
-                Assert.IsTrue(obj2.Equals(obj1));
+                Assert.That(obj1, Is.EqualTo(obj2));
+                Assert.That(obj2, Is.EqualTo(obj1));
             }
 
             [TestCase]
@@ -55,14 +50,14 @@ namespace Catel.Tests.IoC
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag");
                 var obj2 = new TypeRequestInfo(typeof(double), "mytag");
 
-                Assert.IsFalse(obj1 == obj2);
-                Assert.IsFalse(obj2 == obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsTrue(obj1 != obj2);
-                Assert.IsTrue(obj2 != obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsFalse(obj1.Equals(obj2));
-                Assert.IsFalse(obj2.Equals(obj1));
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
             }
 
             [TestCase]
@@ -71,14 +66,14 @@ namespace Catel.Tests.IoC
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag1");
                 var obj2 = new TypeRequestInfo(typeof(int), "mytag2");
 
-                Assert.IsFalse(obj1 == obj2);
-                Assert.IsFalse(obj2 == obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsTrue(obj1 != obj2);
-                Assert.IsTrue(obj2 != obj1);
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
 
-                Assert.IsFalse(obj1.Equals(obj2));
-                Assert.IsFalse(obj2.Equals(obj1));
+                Assert.That(obj1, Is.Not.EqualTo(obj2));
+                Assert.That(obj2, Is.Not.EqualTo(obj1));
             }
         }
     }

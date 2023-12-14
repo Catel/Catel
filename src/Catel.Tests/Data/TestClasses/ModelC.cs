@@ -8,31 +8,14 @@
     /// ModelC Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET || NETCORE
     [Serializable]
-#endif
     [KnownType(typeof(ModelA)), KnownType(typeof(ModelB))]
     public class ModelC : ComparableModelBase
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
         public ModelC() { }
-
-#if NET || NETCORE
-        /// <summary>
-        /// Initializes a new object based on <see cref="SerializationInfo"/>.
-        /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-        /// <param name="context"><see cref="StreamingContext"/>.</param>
-        protected ModelC(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
-#endif
-        #endregion
 
         /// <summary>
         /// Gets or sets the D property.
@@ -46,7 +29,7 @@
         /// <summary>
         /// Register the D property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData DProperty = RegisterProperty("D", typeof(string), string.Empty);
+        public static readonly IPropertyData DProperty = RegisterProperty("D", string.Empty);
 
         /// <summary>
         /// Gets or sets the E property.
@@ -60,6 +43,6 @@
         /// <summary>
         /// Register the E property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData EProperty = RegisterProperty("E", typeof(Model), null);
+        public static readonly IPropertyData EProperty = RegisterProperty<Model>("E");
     }
 }

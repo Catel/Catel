@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TestModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using Catel.Data;
@@ -33,7 +26,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the DateTimeProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData DateTimePropertyProperty = RegisterProperty("DateTimeProperty", typeof(DateTime), DateTime.Now);
+        public static readonly IPropertyData DateTimePropertyProperty = RegisterProperty("DateTimeProperty", DateTime.Now);
 
 
         /// <summary>
@@ -48,7 +41,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the IncludedCatelProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IncludedCatelPropertyProperty = RegisterProperty("IncludedCatelProperty", typeof(string), null);
+        public static readonly IPropertyData IncludedCatelPropertyProperty = RegisterProperty("IncludedCatelProperty", string.Empty);
 
 
         /// <summary>
@@ -64,7 +57,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the ExcludedCatelProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ExcludedCatelPropertyProperty = RegisterProperty("ExcludedCatelProperty", typeof(string), null);
+        public static readonly IPropertyData ExcludedCatelPropertyProperty = RegisterProperty("ExcludedCatelProperty", string.Empty);
 
 
         /// <summary>
@@ -80,7 +73,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the ExcludedProtectedCatelProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ExcludedProtectedCatelPropertyProperty = RegisterProperty("ExcludedProtectedCatelProperty", typeof(string), null);
+        public static readonly IPropertyData ExcludedProtectedCatelPropertyProperty = RegisterProperty("ExcludedProtectedCatelProperty", string.Empty);
 
 
         public string ExcludedRegularProperty { get; set; }

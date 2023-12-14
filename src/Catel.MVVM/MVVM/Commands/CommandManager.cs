@@ -1,31 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Windows;
     using System.Windows.Input;
     using Catel.Logging;
-
-#if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
-
-#if UWP
-    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-    using global::Windows.UI.Xaml;
-#else 
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-#endif
-
-#endif
 
     /// <summary>
     /// Manager that takes care of application-wide commands and can dynamically forward
@@ -37,13 +17,10 @@ namespace Catel.MVVM
 
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
-
-#if !XAMARIN && !XAMARIN_FORMS
-        private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
-        private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
+        private readonly Dictionary<string, InputGesture?> _originalCommandGestures = new Dictionary<string, InputGesture?>();
+        private readonly Dictionary<string, InputGesture?> _commandGestures = new Dictionary<string, InputGesture?>();
 
         private bool _suspendedKeyboardEvents;
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManager"/> class.
@@ -52,8 +29,6 @@ namespace Catel.MVVM
         {
         }
 
-        #region Properties
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets or sets a value indicating whether the keyboard events are suspended.
         /// </summary>
@@ -80,17 +55,12 @@ namespace Catel.MVVM
                 }
             }
         }
-#endif
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a command has been created.
         /// </summary>
-        public event EventHandler<CommandCreatedEventArgs> CommandCreated;
-        #endregion
+        public event EventHandler<CommandCreatedEventArgs>? CommandCreated;
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -103,7 +73,7 @@ namespace Catel.MVVM
         /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand" /> method.</exception>
-        public void CreateCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand compositeCommand = null,
+        public void CreateCommand(string commandName, InputGesture? inputGesture = null, ICompositeCommand? compositeCommand = null,
             bool throwExceptionWhenCommandIsAlreadyCreated = true)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -119,7 +89,9 @@ namespace Catel.MVVM
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
                     {
+#pragma warning disable CTL0011 // Provide log on throwing exception
                         throw new InvalidOperationException(error);
+#pragma warning restore CTL0011 // Provide log on throwing exception
                     }
 
                     _commandGestures[commandName] = inputGesture;
@@ -138,50 +110,6 @@ namespace Catel.MVVM
                 CommandCreated?.Invoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
-#else
-        /// <summary>
-        /// Creates the command inside the command manager.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="compositeCommand">The composite command. If <c>null</c>, this will default to a new instance of <see cref="CompositeCommand"/>.</param>
-        /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
-        /// <exception cref="ArgumentException">The <paramref name="commandName" /> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand" /> method.</exception>
-        public void CreateCommand(string commandName, ICompositeCommand compositeCommand = null,
-            bool throwExceptionWhenCommandIsAlreadyCreated = true)
-        {
-            Argument.IsNotNullOrWhitespace("commandName", commandName);
-
-            lock (_lockObject)
-            {
-                Log.Debug("Creating command '{0}'", commandName);
-
-                if (_commands.ContainsKey(commandName))
-                {
-                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
-                    Log.Error(error);
-
-                    if (throwExceptionWhenCommandIsAlreadyCreated)
-                    {
-                        throw new InvalidOperationException(error);
-                    }
-
-                    return;
-                }
-
-                if (compositeCommand is null)
-                {
-                    compositeCommand = new CompositeCommand();
-                }
-
-                _commands.Add(commandName, compositeCommand);
-
-                InvalidateCommands();
-
-                CommandCreated?.Invoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
-            }
-        }
-#endif
 
         /// <summary>
         /// Invalidates the all the currently registered commands.
@@ -193,7 +121,7 @@ namespace Catel.MVVM
                 foreach (var commandName in _commands.Keys)
                 {
                     var command = _commands[commandName];
-                    if (command != null)
+                    if (command is not null)
                     {
                         command.RaiseCanExecuteChanged();
                     }
@@ -219,7 +147,7 @@ namespace Catel.MVVM
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The <see cref="ICommand"/> or <c>null</c> if the command is not created.</returns>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        public ICommand GetCommand(string commandName)
+        public ICommand? GetCommand(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
@@ -282,10 +210,10 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void RegisterCommand(string commandName, ICommand command, IViewModel viewModel = null)
+        public void RegisterCommand(string commandName, ICommand command, IViewModel? viewModel = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -318,7 +246,7 @@ namespace Catel.MVVM
         public void RegisterAction(string commandName, Action action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -348,10 +276,10 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void RegisterAction(string commandName, Action<object> action)
+        public void RegisterAction(string commandName, Action<object?> action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -384,7 +312,7 @@ namespace Catel.MVVM
         public void UnregisterCommand(string commandName, ICommand command)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -417,7 +345,7 @@ namespace Catel.MVVM
         public void UnregisterAction(string commandName, Action action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -447,10 +375,10 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void UnregisterAction(string commandName, Action<object> action)
+        public void UnregisterAction(string commandName, Action<object?> action)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -472,14 +400,13 @@ namespace Catel.MVVM
             }
         }
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public InputGesture GetOriginalInputGesture(string commandName)
+        public InputGesture? GetOriginalInputGesture(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
@@ -500,7 +427,7 @@ namespace Catel.MVVM
         /// <param name="commandName">Name of the command.</param>
         /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public InputGesture GetInputGesture(string commandName)
+        public InputGesture? GetInputGesture(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
@@ -522,7 +449,7 @@ namespace Catel.MVVM
         /// <param name="inputGesture">The new input gesture.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void UpdateInputGesture(string commandName, InputGesture inputGesture = null)
+        public void UpdateInputGesture(string commandName, InputGesture? inputGesture = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
@@ -566,6 +493,5 @@ namespace Catel.MVVM
         }
 
         partial void SubscribeToKeyboardEventsInternal();
-#endif
     }
 }

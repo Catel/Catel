@@ -1,24 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
     using NUnit.Framework;
-
-#if !UWP
-    using Catel.MVVM;
-    using System.Windows.Data;
-#endif
 
     public partial class ModelBaseFacts
     {
@@ -29,14 +17,14 @@ namespace Catel.Tests.Data
             public void CanUnregisterRuntimeProperty()
             {
                 var model = new ModelWithRuntimeProperties();
-                var property = ModelBase.RegisterProperty("RuntimePropertyBeingUnregistered", typeof (string));
+                var property = ModelBase.RegisterProperty<string>("RuntimePropertyBeingUnregistered");
                 model.InitializePropertyAfterConstruction(property);
 
-                Assert.IsTrue(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
+                Assert.That(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"), Is.True);
 
-                ModelBase.UnregisterProperty(typeof (ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered");
+                ModelBase.UnregisterProperty(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered");
 
-                Assert.IsFalse(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
+                Assert.That(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"), Is.False);
             }
         }
 
@@ -49,16 +37,15 @@ namespace Catel.Tests.Data
                 var model = new PersonTestModel();
                 var weakReference = new WeakReference(model);
 
-                Assert.IsTrue(weakReference.IsAlive);
+                Assert.That(weakReference.IsAlive, Is.True);
 
                 model = null;
                 GC.Collect();
 
-                Assert.IsFalse(weakReference.IsAlive);
+                Assert.That(weakReference.IsAlive, Is.False);
             }
         }
 
-#if NET || NETCORE
         [TestFixture]
         public class TheCalculatedPropertiesChecks
         {
@@ -98,7 +85,7 @@ namespace Catel.Tests.Data
             {
                 protected override void InitializeCustomProperties()
                 {
-                    var propertyData = RegisterProperty(nameof(ComputedProperty), typeof(bool));
+                    var propertyData = RegisterProperty<bool>(nameof(ComputedProperty));
 
                     InitializePropertyAfterConstruction(propertyData);
                 }
@@ -116,7 +103,7 @@ namespace Catel.Tests.Data
             {
                 protected override void InitializeCustomProperties()
                 {
-                    var propertyData = RegisterProperty(nameof(CanSave), typeof(bool));
+                    var propertyData = RegisterProperty<bool>(nameof(CanSave));
 
                     InitializePropertyAfterConstruction(propertyData);
                 }
@@ -138,10 +125,10 @@ namespace Catel.Tests.Data
                 var validation = model as IValidatableModel;
 
                 validation.Validate(true);
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), nameof(LatePropertyRegistrationModel.CanSave));
-                Assert.IsTrue(propertyData.IsCalculatedProperty);
+                Assert.That(propertyData.IsCalculatedProperty, Is.True);
             }
 
             [TestCase]
@@ -150,13 +137,12 @@ namespace Catel.Tests.Data
                 var model = new ComputedPropertiesModel();
 
                 var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(ComputedPropertiesModel), nameof(ComputedPropertiesModel.ComputedProperty));
-                Assert.IsTrue(propertyData.IsCalculatedProperty);
+                Assert.That(propertyData.IsCalculatedProperty, Is.True);
 
                 var propertyValue = ((IModelEditor)model).GetValue<bool>(nameof(ComputedPropertiesModel.ComputedProperty));
-                Assert.IsTrue(propertyValue);
+                Assert.That(propertyValue, Is.True);
             }
         }
-#endif
 
         [TestFixture]
         public class TheEqualsChecks
@@ -208,9 +194,9 @@ namespace Catel.Tests.Data
                 AddToCollection(collection, a);
                 AddToCollection(collection, b);
 
-                Assert.AreEqual(2, collection.Count);
-                Assert.IsTrue(collection.Contains(a));
-                Assert.IsTrue(collection.Contains(b));
+                Assert.That(collection.Count, Is.EqualTo(2));
+                Assert.That(collection.Contains(a), Is.True);
+                Assert.That(collection.Contains(b), Is.True);
             }
 
             [TestCase]
@@ -223,9 +209,9 @@ namespace Catel.Tests.Data
                 AddToCollection_CompareByReference(collection, a);
                 AddToCollection_CompareByReference(collection, b);
 
-                Assert.AreEqual(2, collection.Count);
-                Assert.IsTrue(collection.Contains(a));
-                Assert.IsTrue(collection.Contains(b));
+                Assert.That(collection.Count, Is.EqualTo(2));
+                Assert.That(collection.Contains(a), Is.True);
+                Assert.That(collection.Contains(b), Is.True);
             }
 
             private static void AddToCollection(ObservableCollection<ITestModel> collection, ITestModel m)
@@ -269,7 +255,7 @@ namespace Catel.Tests.Data
                     set { SetValue(FirstNameProperty, value); }
                 }
 
-                private static readonly PropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
+                private static readonly IPropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
             }
 
             public class JohnDoe : Person
@@ -280,7 +266,7 @@ namespace Catel.Tests.Data
                     set { SetValue(LastNameProperty, value); }
                 }
 
-                private static readonly PropertyData LastNameProperty = RegisterProperty(nameof(LastName), typeof(string), null);
+                private static readonly IPropertyData LastNameProperty = RegisterProperty(nameof(LastName), typeof(string), null);
             }
 
             [Test]
@@ -288,8 +274,8 @@ namespace Catel.Tests.Data
             {
                 var catelTypeInfo = new CatelTypeInfo(typeof(JohnDoe));
 
-                Assert.IsNotNull(catelTypeInfo.GetPropertyData("FirstName"));
-                Assert.IsNotNull(catelTypeInfo.GetPropertyData("LastName"));
+                Assert.That(catelTypeInfo.GetPropertyData("FirstName"), Is.Not.Null);
+                Assert.That(catelTypeInfo.GetPropertyData("LastName"), Is.Not.Null);
             }
         }
     }

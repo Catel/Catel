@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyNotRegisteredExceptionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data.Exceptions
+﻿namespace Catel.Tests.Data.Exceptions
 {
     using Catel.Data;
 
@@ -18,9 +12,9 @@ namespace Catel.Tests.Data.Exceptions
             [TestCase]
             public void SetsValuesCorrectly()
             {
-                var exception = new PropertyNotRegisteredException("PropertyName", typeof (string));
-                Assert.AreEqual("PropertyName", exception.PropertyName);
-                Assert.AreEqual(typeof (string), exception.ObjectType);
+                var exception = new PropertyNotRegisteredException("PropertyName", typeof(string));
+                Assert.That(exception.PropertyName, Is.EqualTo("PropertyName"));
+                Assert.That(exception.ObjectType, Is.EqualTo(typeof(string)));
             }
         }
     }

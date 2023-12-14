@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelLocatorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
@@ -13,10 +7,8 @@ namespace Catel.Tests.MVVM
     using SpecialTest;
     using Tests.ViewModels;
     using Tests.Views;
-    using ViewModels;
 
     using NUnit.Framework;
-    using Views;
 
     public class ViewModelLocatorFacts
     {
@@ -27,14 +19,14 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var viewModelLocator = new ViewModelLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.Register(null, typeof(NoNamingConventionViewModel)));
+                Assert.Throws<ArgumentNullException>(() => viewModelLocator.Register(null, typeof(NoNamingConventionViewModel)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var viewModelLocator = new ViewModelLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.Register(typeof(FollowingNoNamingConventionView), null));
+                Assert.Throws<ArgumentNullException>(() => viewModelLocator.Register(typeof(FollowingNoNamingConventionView), null));
             }
 
             [TestCase]
@@ -42,12 +34,12 @@ namespace Catel.Tests.MVVM
             {
                 var viewModelLocator = new ViewModelLocator();
 
-                Assert.IsNull(viewModelLocator.ResolveViewModel(typeof(FollowingNoNamingConventionView)));
+                Assert.That(viewModelLocator.ResolveViewModel(typeof(FollowingNoNamingConventionView)), Is.Null);
 
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel));
 
-                var resolvedViewModel = viewModelLocator.ResolveViewModel(typeof (FollowingNoNamingConventionView));
-                Assert.AreEqual(typeof(NoNamingConventionViewModel), resolvedViewModel);
+                var resolvedViewModel = viewModelLocator.ResolveViewModel(typeof(FollowingNoNamingConventionView));
+                Assert.That(resolvedViewModel, Is.EqualTo(typeof(NoNamingConventionViewModel)));
             }
 
             [TestCase]
@@ -58,7 +50,7 @@ namespace Catel.Tests.MVVM
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel2));
 
                 var resolvedViewModel = viewModelLocator.ResolveViewModel(typeof(FollowingNoNamingConventionView));
-                Assert.AreEqual(typeof(NoNamingConventionViewModel2), resolvedViewModel);
+                Assert.That(resolvedViewModel, Is.EqualTo(typeof(NoNamingConventionViewModel2)));
             }
         }
 
@@ -69,14 +61,14 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var viewModelLocator = new ViewModelLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.IsCompatible(null, typeof(MyNameViewerViewModel)));
+                Assert.Throws<ArgumentNullException>(() => viewModelLocator.IsCompatible(null, typeof(MyNameViewerViewModel)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var viewModelLocator = new ViewModelLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.IsCompatible(typeof(MyNameViewer), null));
+                Assert.Throws<ArgumentNullException>(() => viewModelLocator.IsCompatible(typeof(MyNameViewer), null));
             }
 
             [TestCase(typeof(MyNameViewerViewModel), true)]
@@ -90,7 +82,7 @@ namespace Catel.Tests.MVVM
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(MyNameViewerViewModel2));
 
                 var isCompatible = viewModelLocator.IsCompatible(typeof(FollowingNoNamingConventionView), viewModelType);
-                Assert.AreEqual(expectedValue, isCompatible);
+                Assert.That(isCompatible, Is.EqualTo(expectedValue));
             }
         }
 
@@ -101,7 +93,7 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
                 var viewModelLocator = new ViewModelLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.ResolveViewModel(null));
+                Assert.Throws<ArgumentNullException>(() => viewModelLocator.ResolveViewModel(null));
             }
 
             [TestCase(typeof(PersonView), typeof(PersonViewModel))]
@@ -114,8 +106,8 @@ namespace Catel.Tests.MVVM
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(viewType);
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(viewModelType, resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(viewModelType));
             }
 
             [TestCase]
@@ -127,8 +119,8 @@ namespace Catel.Tests.MVVM
 
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(Pages.PersonPage));
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
             }
 
             [TestCase]
@@ -137,16 +129,16 @@ namespace Catel.Tests.MVVM
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 viewModelLocator.NamingConventions.Clear();
 
                 resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
             }
 
             [TestCase]
@@ -155,8 +147,8 @@ namespace Catel.Tests.MVVM
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(MyNameViewer));
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(MyNameViewerViewModel), resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(typeof(MyNameViewerViewModel)));
             }
         }
 
@@ -169,23 +161,23 @@ namespace Catel.Tests.MVVM
                 var viewModelLocator = new ViewModelLocator();
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 viewModelLocator.NamingConventions.Clear();
 
                 resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(typeof(PersonViewModel)));
 
                 // Clear the cache, now it should break
                 viewModelLocator.ClearCache();
 
                 resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
-                Assert.IsNull(resolvedType);
+                Assert.That(resolvedType, Is.Null);
             }
         }
     }

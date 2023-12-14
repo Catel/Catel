@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConfigurationExtensions.net.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System.Configuration;
 
@@ -22,17 +14,16 @@ namespace Catel.Configuration
         /// <returns>The section</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="this"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="sectionName"/> is <c>null</c> or empty.</exception>
-        public static TSection GetSection<TSection>(this Configuration @this, string sectionName, string sectionGroupName = null)
+        public static TSection? GetSection<TSection>(this Configuration @this, string sectionName, string? sectionGroupName = null)
             where TSection : ConfigurationSection
         {
-            Argument.IsNotNull("@this", @this);
             Argument.IsNotNullOrEmpty("sectionName", sectionName);
 
-            TSection section = null;
+            TSection? section = null;
             if (!string.IsNullOrEmpty(sectionGroupName))
             {
                 var configurationSectionGroup = @this.GetSectionGroup(sectionGroupName);
-                if (configurationSectionGroup != null)
+                if (configurationSectionGroup is not null)
                 {
                     section = (TSection) configurationSectionGroup.Sections[sectionName];
                 }
@@ -46,5 +37,3 @@ namespace Catel.Configuration
         }
     }
 }
-
-#endif

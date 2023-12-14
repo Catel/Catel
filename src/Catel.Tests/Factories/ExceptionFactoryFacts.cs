@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExceptionFactoryFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Factories
+﻿namespace Catel.Tests.Factories
 {
     using System;
     using NUnit.Framework;
@@ -33,7 +26,7 @@ namespace Catel.Tests.Factories
             {
                 var exception = ExceptionFactory.CreateException<TestExceptionWithInnerExceptionSupport>(null);
 
-                Assert.IsNull(exception);
+                Assert.That(exception, Is.Null);
             }
 
             [TestCase]
@@ -41,8 +34,8 @@ namespace Catel.Tests.Factories
             {
                 var exception = ExceptionFactory.CreateException<TestExceptionWithInnerExceptionSupport>("msg", null);
 
-                Assert.AreEqual("msg", exception.Message);
-                Assert.IsNull(exception.InnerException);
+                Assert.That(exception.Message, Is.EqualTo("msg"));
+                Assert.That(exception.InnerException, Is.Null);
             }
 
             [TestCase]
@@ -51,8 +44,8 @@ namespace Catel.Tests.Factories
                 var innerException = new Exception();
                 var exception = ExceptionFactory.CreateException<TestExceptionWithInnerExceptionSupport>("msg", innerException);
 
-                Assert.AreEqual("msg", exception.Message);
-                Assert.AreEqual(innerException, exception.InnerException);
+                Assert.That(exception.Message, Is.EqualTo("msg"));
+                Assert.That(exception.InnerException, Is.EqualTo(innerException));
             }
         }
     }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakActionTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using NUnit.Framework;
@@ -60,7 +54,7 @@ namespace Catel.Tests
 
             GCHelper.CollectAndFreeMemory();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -69,15 +63,15 @@ namespace Catel.Tests
             var target = CreateActionTarget();
             var weakAction = new WeakAction(target, target.PublicActionToExecute);
 
-            Assert.IsTrue(weakAction.Execute());
+            Assert.That(weakAction.Execute(), Is.True);
 
-            Assert.AreEqual(1, target.PublicActionExecutedCount);
+            Assert.That(target.PublicActionExecutedCount, Is.EqualTo(1));
 
             target = null;
 
             GCHelper.CollectAndFreeMemory();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -85,7 +79,7 @@ namespace Catel.Tests
         {
             int count = 0;
 
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakAction(null, () => count++));
+            Assert.Throws<NotSupportedException>(() => new WeakAction(null, () => count++));
 
             //weakAction.Execute();
 
@@ -98,15 +92,15 @@ namespace Catel.Tests
             var target = CreateActionTarget();
             var weakAction = new WeakAction<int>(target, target.PublicActionWithParameterToExecute);
 
-            Assert.IsTrue(weakAction.Execute(1));
+            Assert.That(weakAction.Execute(1), Is.True);
 
-            Assert.AreEqual(1, target.PublicActionWithParameterExecutedCount);
+            Assert.That(target.PublicActionWithParameterExecutedCount, Is.EqualTo(1));
 
             target = null;
 
             GCHelper.CollectAndFreeMemory();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -114,9 +108,9 @@ namespace Catel.Tests
         {
             int count = 0;
 
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakAction<int>(null, i => count = i));
+            Assert.Throws<NotSupportedException>(() => new WeakAction<int>(null, i => count = i));
 
-            Assert.AreEqual(0, count);
+            Assert.That(count, Is.EqualTo(0));
         }
 
         // Require separate method to allow GC.Collect to do its magic

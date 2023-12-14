@@ -1,15 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UrlLocatorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
     using SpecialTest;
-    using Views;
     using Tests.ViewModels;
 
     using NUnit.Framework;
@@ -23,15 +16,15 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var urlLocator = new UrlLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => urlLocator.Register(null, "/Views/PersonView.xaml"));
+                Assert.Throws<ArgumentNullException>(() => urlLocator.Register(null, "/Views/PersonView.xaml"));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var urlLocator = new UrlLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), string.Empty));
+                Assert.Throws<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), null));
+                Assert.Throws<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), string.Empty));
             }
 
             [TestCase]
@@ -39,12 +32,12 @@ namespace Catel.Tests.MVVM
             {
                 var urlLocator = new UrlLocator();
 
-                Assert.IsNull(urlLocator.ResolveUrl(typeof(FollowingNoNamingConventionView)));
+                Assert.That(urlLocator.ResolveUrl(typeof(FollowingNoNamingConventionView)), Is.Null);
 
                 urlLocator.Register(typeof(NoNamingConventionViewModel), "/App.xaml");
 
                 var resolvedUri = urlLocator.ResolveUrl(typeof(NoNamingConventionViewModel));
-                Assert.AreEqual("/App.xaml", resolvedUri);
+                Assert.That(resolvedUri, Is.EqualTo("/App.xaml"));
             }
 
             [TestCase]
@@ -55,7 +48,7 @@ namespace Catel.Tests.MVVM
                 urlLocator.Register(typeof(NoNamingConventionViewModel2), "/App.xaml");
 
                 var resolvedUri = urlLocator.ResolveUrl(typeof(NoNamingConventionViewModel2), false);
-                Assert.AreEqual("/App.xaml", resolvedUri);
+                Assert.That(resolvedUri, Is.EqualTo("/App.xaml"));
             }
         }
 
@@ -66,7 +59,7 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
                 var urlLocator = new UrlLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => urlLocator.ResolveUrl(null));
+                Assert.Throws<ArgumentNullException>(() => urlLocator.ResolveUrl(null));
             }
 
             [TestCase(typeof(PersonViewModel), "/Views/Person.xaml")]
@@ -75,8 +68,8 @@ namespace Catel.Tests.MVVM
                 var urlLocator = new UrlLocator();
                 var resolvedType = urlLocator.ResolveUrl(viewModelType, false);
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(expectedValue, resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo(expectedValue));
             }
 
             [TestCase]
@@ -85,16 +78,16 @@ namespace Catel.Tests.MVVM
                 var urlLocator = new UrlLocator();
                 var resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual("/Views/Person.xaml", resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 urlLocator.NamingConventions.Clear();
 
                 resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual("/Views/Person.xaml", resolvedType);
+                Assert.That(resolvedType, Is.Not.Null);
+                Assert.That(resolvedType, Is.EqualTo("/Views/Person.xaml"));
             }
         }
 
@@ -107,23 +100,23 @@ namespace Catel.Tests.MVVM
                 var urlLocator = new UrlLocator();
                 var resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedUrl);
-                Assert.AreEqual("/Views/Person.xaml", resolvedUrl);
+                Assert.That(resolvedUrl, Is.Not.Null);
+                Assert.That(resolvedUrl, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the naming conventions (so it *must* come from the cache)
                 urlLocator.NamingConventions.Clear();
 
                 resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNotNull(resolvedUrl);
-                Assert.AreEqual("/Views/Person.xaml", resolvedUrl);
+                Assert.That(resolvedUrl, Is.Not.Null);
+                Assert.That(resolvedUrl, Is.EqualTo("/Views/Person.xaml"));
 
                 // Clear the cache, now it should break
                 urlLocator.ClearCache();
 
                 resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
-                Assert.IsNull(resolvedUrl);
+                Assert.That(resolvedUrl, Is.Null);
             }
         }
     }

@@ -1,17 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using Catel.Data;
     using Logging;
-    using Reflection;
     using Threading;
 
     /// <summary>
@@ -20,7 +14,6 @@ namespace Catel.MVVM
     /// </summary>
     public class ViewModelManager : IViewModelManager
     {
-        #region Fields
         /// <summary>
         /// The <see cref="ILog">log</see> object.
         /// </summary>
@@ -29,12 +22,16 @@ namespace Catel.MVVM
         /// <summary>
         /// The lock for _instances
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         private static readonly ReaderWriterLockSlim _instancesLock;
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// List of all live instances of the view model managers.
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         private static readonly List<ViewModelManager> _instances;
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// The lock for the _managedViewModels dictionary.
@@ -55,9 +52,8 @@ namespace Catel.MVVM
         /// Dictionary containing the unique identifiers of a all view models and their registered models.
         /// </summary>
         private readonly Dictionary<int, List<object>> _viewModelModels = new Dictionary<int, List<object>>();
-        #endregion
 
-        #region Constructors
+        private bool _disposedValue;
 
         /// <summary>
         /// Initializes static members of <see cref="ViewModelManager"/> class
@@ -80,12 +76,8 @@ namespace Catel.MVVM
             _managedViewModels = new Dictionary<Type, ManagedViewModel>();
 
             _instancesLock.PerformWrite(() => _instances.Add(this));
-
-            Log.Debug("ViewModelManager instantiated");
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the view model count.
         /// </summary>
@@ -99,7 +91,7 @@ namespace Catel.MVVM
                     var count = 0;
                     foreach (var managedViewModel in _managedViewModels)
                     {
-                        if (managedViewModel.Value != null)
+                        if (managedViewModel.Value is not null)
                         {
                             count += managedViewModel.Value.ViewModelCount;
                         }
@@ -122,9 +114,7 @@ namespace Catel.MVVM
                 });
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers the model of a view model.
         /// </summary>
@@ -134,13 +124,13 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public void RegisterModel(IViewModel viewModel, object model)
         {
-            Argument.IsNotNull("viewModel", viewModel);
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(viewModel);
+            ArgumentNullException.ThrowIfNull(model);
 
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
 
-            Log.Debug("Registering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Registering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             lock (_viewModelModelsLock)
             {
@@ -153,7 +143,7 @@ namespace Catel.MVVM
                 models.Add(model);
             }
 
-            Log.Debug("Registered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Registered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
 
         /// <summary>
@@ -165,13 +155,13 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public void UnregisterModel(IViewModel viewModel, object model)
         {
-            Argument.IsNotNull("viewModel", viewModel);
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(viewModel);
+            ArgumentNullException.ThrowIfNull(model);
 
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
 
-            Log.Debug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             var modelWasRemoved = false;
 
@@ -186,11 +176,11 @@ namespace Catel.MVVM
 
             if (modelWasRemoved)
             {
-                Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+                Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
             }
             else
             {
-                Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+                Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
             }
         }
 
@@ -201,12 +191,12 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         public void UnregisterAllModels(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             int modelCount = 0;
 
-            Log.Debug("Unregistering all models of view model '{0}' (id = '{1}')", viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Unregistering all models of view model '{0}' (id = '{1}')", viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             lock (_viewModelModelsLock)
             {
@@ -217,7 +207,7 @@ namespace Catel.MVVM
                 }
             }
 
-            Log.Debug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", modelCount, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", BoxingCache.GetBoxedValue(modelCount), viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
 
         /// <summary>
@@ -228,7 +218,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public IViewModel[] GetViewModelsOfModel(object model)
         {
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(model);
 
             var modelType = ObjectToStringHelper.ToTypeString(model);
 
@@ -247,7 +237,7 @@ namespace Catel.MVVM
                     foreach (var viewModelIdentifier in viewModelIdentifiers)
                     {
                         var vm = GetViewModel(viewModelIdentifier);
-                        if (vm != null)
+                        if (vm is not null)
                         {
                             viewModels.Add(vm);
                         }
@@ -255,7 +245,7 @@ namespace Catel.MVVM
                 }
             }
 
-            Log.Debug("Found '{0}' view models that are linked to model '{1}'", viewModels.Count, modelType);
+            Log.Debug("Found '{0}' view models that are linked to model '{1}'", BoxingCache.GetBoxedValue(viewModels.Count), modelType);
 
             return viewModels.ToArray();
         }
@@ -265,9 +255,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="uniqueIdentifier">The unique identifier.</param>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
-        public IViewModel GetViewModel(int uniqueIdentifier)
+        public IViewModel? GetViewModel(int uniqueIdentifier)
         {
-            Log.Debug("Searching for the instance of view model with unique identifier '{0}'", uniqueIdentifier);
+            var boxedUniqueIdentifier = BoxingCache.GetBoxedValue(uniqueIdentifier);
+
+            Log.Debug("Searching for the instance of view model with unique identifier '{0}'", boxedUniqueIdentifier);
 
             return _managedViewModelsLock.PerformRead(() =>
             {
@@ -277,30 +269,15 @@ namespace Catel.MVVM
                     {
                         if (viewModel.UniqueIdentifier == uniqueIdentifier)
                         {
-                            Log.Debug("Found the instance of view model with unique identifier '{0}' as type '{1}'", uniqueIdentifier, ObjectToStringHelper.ToTypeString(viewModel));
+                            Log.Debug("Found the instance of view model with unique identifier '{0}' as type '{1}'", boxedUniqueIdentifier, ObjectToStringHelper.ToTypeString(viewModel));
 
                             return viewModel;
                         }
                     }
                 }
-                Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", uniqueIdentifier);
+                Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", boxedUniqueIdentifier);
                 return null;
             });
-        }
-
-        /// <summary>
-        /// Gets the first or default instance of the specified view model.
-        /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <returns>
-        /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
-        /// </returns>
-        public TViewModel GetFirstOrDefaultInstance<TViewModel>()
-            where TViewModel : IViewModel
-        {
-            var viewModelType = typeof(TViewModel);
-
-            return (TViewModel)GetFirstOrDefaultInstance(viewModelType);
         }
 
         /// <summary>
@@ -311,7 +288,7 @@ namespace Catel.MVVM
         /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
         /// </returns>
         /// <exception cref="System.ArgumentException">The <paramref name="viewModelType"/> is not of type <see cref="IViewModel"/>.</exception>
-        public IViewModel GetFirstOrDefaultInstance(Type viewModelType)
+        public IViewModel? GetFirstOrDefaultInstance(Type viewModelType)
         {
             Argument.IsOfType("viewModelType", viewModelType, typeof(IViewModel));
 
@@ -330,7 +307,7 @@ namespace Catel.MVVM
         /// <returns>The child view models.</returns>
         public IEnumerable<IRelationalViewModel> GetChildViewModels(IViewModel parentViewModel)
         {
-            Argument.IsNotNull("parentViewModel", parentViewModel);
+            ArgumentNullException.ThrowIfNull(parentViewModel);
 
             var childViewModels = GetChildViewModels(parentViewModel.UniqueIdentifier);
 
@@ -348,7 +325,7 @@ namespace Catel.MVVM
             {
                 var relationalViewModels = GetAllViewModels(_managedViewModels).OfType<IRelationalViewModel>();
 
-                var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel != null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
+                var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel is not null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
 
                 return childViewModels.ToList();
             });
@@ -407,7 +384,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         private void RegisterViewModelInstanceInternal(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var managedViewModel = GetManagedViewModel(viewModel.GetType());
             managedViewModel.AddViewModelInstance(viewModel);
@@ -430,7 +407,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         private void UnregisterViewModelInstanceInternal(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var managedViewModel = GetManagedViewModel(viewModel.GetType());
             managedViewModel.RemoveViewModelInstance(viewModel);
@@ -445,7 +422,7 @@ namespace Catel.MVVM
         {
             return managedViewModels.SelectMany(row => row.Value.ViewModels).ToList();
         }
-        
+
         /// <summary>
         /// Gets the managed view model for a specific view model type.
         /// </summary>
@@ -470,6 +447,25 @@ namespace Catel.MVVM
                 return result;
             });
         }
-        #endregion
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _managedViewModelsLock?.Dispose();
+                }
+
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

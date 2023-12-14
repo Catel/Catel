@@ -1,15 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputGestureExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Input
+﻿namespace Catel.Windows.Input
 {
     using System.Windows.Input;
-    using Catel;
 
     /// <summary>
     /// Extension methods for the <see cref="Catel.Windows.Input.InputGesture"/>.
@@ -28,7 +19,6 @@ namespace Catel.Windows.Input
                 return true;
             }
 
-#if NET || NETCORE
             if (inputGesture.Key != Key.None)
             {
                 return false;
@@ -38,11 +28,8 @@ namespace Catel.Windows.Input
             {
                 return false;
             }
-#endif
 
             return true;
         }
     }
 }
-
-#endif

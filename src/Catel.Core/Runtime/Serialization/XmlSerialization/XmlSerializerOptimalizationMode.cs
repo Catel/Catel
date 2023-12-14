@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSerializerOptimalizationMode.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     /// <summary>
     /// Possible xml serializer optimalization modes

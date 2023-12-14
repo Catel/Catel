@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyHelperFacts.expression.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection
 {
     using System;
     using Catel.Reflection;
@@ -55,13 +49,13 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.GetPropertyName<int>(null));
+                Assert.Throws<ArgumentNullException>(() => PropertyHelper.GetPropertyName<int>(null));
             }
 
             [TestCase]
             public void ThrowsNotSupportedExceptionForNoMemberAccessExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => PropertyHelper.GetPropertyName(() => SomeMethod()));
+                Assert.Throws<NotSupportedException>(() => PropertyHelper.GetPropertyName(() => SomeMethod()));
             }
 
             [TestCase]
@@ -69,7 +63,7 @@ namespace Catel.Tests.Reflection
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty, false);
 
-                Assert.AreEqual("TestProperty", propertyName);
+                Assert.That(propertyName, Is.EqualTo("TestProperty"));
             }
 
             [TestCase]
@@ -77,7 +71,7 @@ namespace Catel.Tests.Reflection
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty.SubClass.Id, false);
 
-                Assert.AreEqual("Id", propertyName);
+                Assert.That(propertyName, Is.EqualTo("Id"));
             }
 
             [TestCase]
@@ -85,7 +79,7 @@ namespace Catel.Tests.Reflection
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty, true);
 
-                Assert.AreEqual("TestProperty", propertyName);
+                Assert.That(propertyName, Is.EqualTo("TestProperty"));
             }
 
             [TestCase]
@@ -93,7 +87,7 @@ namespace Catel.Tests.Reflection
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty.SubClass.Id, true);
 
-                Assert.AreEqual("TestProperty.SubClass.Id", propertyName);
+                Assert.That(propertyName, Is.EqualTo("TestProperty.SubClass.Id"));
             }
         }
     }

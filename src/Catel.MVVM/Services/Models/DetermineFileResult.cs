@@ -14,14 +14,6 @@
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        public string FileName { get; set; }
-
-#if UWP
-        /// <summary>
-        /// Gets or sets the file.
-        /// </summary>
-        /// <value>The file.</value>
-		public StorageFile File { get; set; }
-#endif
+        public string? FileName { get; set; }
     }
 }

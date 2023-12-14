@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelErrorInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-
-#if !XAMARIN_FORMS
     using System.Linq;
     using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
-#endif
 
     /// <summary>
     /// Class containing all the errors and warnings retrieved via <see cref="INotifyDataErrorInfo"/> and
@@ -22,7 +13,6 @@ namespace Catel.MVVM
     /// </summary>
     internal class ModelErrorInfo
     {
-        #region Fields
         private readonly object _model;
 
         /// <summary>
@@ -49,9 +39,7 @@ namespace Catel.MVVM
         /// List of field that were initialized with an error.
         /// </summary>
         private readonly HashSet<string> _initialErrorFields = new HashSet<string>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelErrorInfo"/> class.
         /// </summary>
@@ -59,38 +47,34 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public ModelErrorInfo(object model)
         {
-            Argument.IsNotNull("model", model);
+            ArgumentNullException.ThrowIfNull(model);
 
             _model = model;
 
             var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged is null == false)
+            if (modelAsINotifyPropertyChanged is not null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged += OnModelPropertyChanged;
             }
 
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
-            if (modelAsINotifyDataErrorInfo is null == false)
+            if (modelAsINotifyDataErrorInfo is not null)
             {
                 modelAsINotifyDataErrorInfo.ErrorsChanged += OnModelErrorsChanged;
             }
 
             var modelAsINotifyDataWarningInfo = _model as INotifyDataWarningInfo;
-            if (modelAsINotifyDataWarningInfo is null == false)
+            if (modelAsINotifyDataWarningInfo is not null)
             {
                 modelAsINotifyDataWarningInfo.WarningsChanged += OnModelWarningsChanged;
             }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Raised when the errors or warnings are updated.
         /// </summary>
-        public event EventHandler Updated;
-        #endregion
+        public event EventHandler? Updated;
 
-        #region Methods
         /// <summary>
         /// Synchronizes the validation state of the specified properties.
         /// </summary>
@@ -102,13 +86,13 @@ namespace Catel.MVVM
 
             foreach (var propertyName in propertyNames)
             {
-                if (modelAsINotifyDataErrorInfo is null == false)
+                if (modelAsINotifyDataErrorInfo is not null)
                 {
                     var errors = modelAsINotifyDataErrorInfo.GetErrors(propertyName);
                     HandleFieldErrors(propertyName, errors);
                 }
 
-                if (modelAsINotifyDataWarningInfo is null == false)
+                if (modelAsINotifyDataWarningInfo is not null)
                 {
                     var warnings = modelAsINotifyDataWarningInfo.GetWarnings(propertyName);
                     HandleFieldWarnings(propertyName, warnings);
@@ -121,7 +105,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.PropertyName))
             {
@@ -129,13 +113,13 @@ namespace Catel.MVVM
             }
 
             var dataWarningInfo = _model as IDataWarningInfo;
-            if (dataWarningInfo is null == false)
+            if (dataWarningInfo is not null)
             {
                 HandleFieldWarnings(e.PropertyName, new[] { dataWarningInfo[e.PropertyName] });
             }
 
             var dataErrorInfo = _model as IDataErrorInfo;
-            if (dataErrorInfo is null == false)
+            if (dataErrorInfo is not null)
             {
                 HandleFieldErrors(e.PropertyName, new [] { dataErrorInfo[e.PropertyName] });
             }
@@ -146,7 +130,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.DataErrorsChangedEventArgs"/> instance containing the event data.</param>
-        private void OnModelErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        private void OnModelErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
         {
             var notifyDataErrorInfo = ((INotifyDataErrorInfo)_model);
             var errors = notifyDataErrorInfo.GetErrors(e.PropertyName);
@@ -219,7 +203,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.DataErrorsChangedEventArgs"/> instance containing the event data.</param>
-        private void OnModelWarningsChanged(object sender, DataErrorsChangedEventArgs e)
+        private void OnModelWarningsChanged(object? sender, DataErrorsChangedEventArgs e)
         {
             var notifyDataWarningInfo = ((INotifyDataWarningInfo)_model);
             var warnings = notifyDataWarningInfo.GetWarnings(e.PropertyName);
@@ -359,19 +343,19 @@ namespace Catel.MVVM
         public void CleanUp()
         {
             var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged is null == false)
+            if (modelAsINotifyPropertyChanged is not null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged -= OnModelPropertyChanged;
             }
 
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
-            if (modelAsINotifyDataErrorInfo is null == false)
+            if (modelAsINotifyDataErrorInfo is not null)
             {
                 modelAsINotifyDataErrorInfo.ErrorsChanged -= OnModelErrorsChanged;
             }
 
             var modelAsINotifyDataWarningInfo = _model as INotifyDataWarningInfo;
-            if (modelAsINotifyDataWarningInfo is null == false)
+            if (modelAsINotifyDataWarningInfo is not null)
             {
                 modelAsINotifyDataWarningInfo.WarningsChanged -= OnModelWarningsChanged;
             }
@@ -384,26 +368,23 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="obj">The object to convert to a string.</param>
         /// <returns>The string retrieved from the object or <c>null</c> if the object is not supported.</returns>
-        private string GetValidationString(object obj)
+        private string? GetValidationString(object? obj)
         {
             var objAsString = obj as string;
-            if (objAsString is null == false)
+            if (objAsString is not null)
             {
                 return objAsString;
             }
 
-#if !XAMARIN_FORMS
             var objAsValidationResult = obj as ValidationResult;
-            if (objAsValidationResult is null == false)
+            if (objAsValidationResult is not null)
             {
                 return objAsValidationResult.ErrorMessage;
             }
-#endif
 
             return null;
         }
 
-#if !XAMARIN_FORMS
         /// <summary>
         /// Initializes the default errors.
         /// </summary>
@@ -467,7 +448,5 @@ namespace Catel.MVVM
                 }
             }
         }
-#endif
-        #endregion
     }
 }

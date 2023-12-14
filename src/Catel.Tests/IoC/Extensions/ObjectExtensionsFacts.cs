@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System;
     using Catel.IoC;
@@ -21,21 +14,32 @@ namespace Catel.Tests.IoC
             {
                 var obj = new object();
                 var defaultTypeFactory = TypeFactory.Default;
-                var usedTypeFactory = obj.GetTypeFactory();
 
-                Assert.IsTrue(ReferenceEquals(defaultTypeFactory, usedTypeFactory));
+#pragma warning disable IDISP001 // Dispose created.
+                var usedTypeFactory = obj.GetTypeFactory();
+#pragma warning restore IDISP001 // Dispose created.
+
+                Assert.That(ReferenceEquals(defaultTypeFactory, usedTypeFactory), Is.True);
             }
 
             [TestCase]
             public void ReturnsTypeFactoryUsedToCreateObject()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
-                var obj = typeFactory.CreateInstance<object>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
+                    var obj = typeFactory.CreateInstance<object>();
+                    if (obj is null)
+                    {
+                        throw new Exception("Created object should not be null");
+                    }
 
-                var usedTypeFactory = obj.GetTypeFactory();
+#pragma warning disable IDISP001 // Dispose created.
+                    var usedTypeFactory = obj.GetTypeFactory();
+#pragma warning restore IDISP001 // Dispose created.
 
-                Assert.IsTrue(ReferenceEquals(typeFactory, usedTypeFactory));
+                    Assert.That(ReferenceEquals(typeFactory, usedTypeFactory), Is.True);
+                }
             }
         }
 
@@ -46,23 +50,29 @@ namespace Catel.Tests.IoC
             public void ReturnsDefaultDependencyResolverForObjectNotCreatedWithTypeFactory()
             {
                 var obj = new object();
-                var defaultDependencyResolver = ServiceLocator.Default.ResolveType<IDependencyResolver>();
+                var defaultDependencyResolver = ServiceLocator.Default.ResolveRequiredType<IDependencyResolver>();
                 var dependencyResolver = obj.GetDependencyResolver();
 
-                Assert.IsTrue(ReferenceEquals(defaultDependencyResolver, dependencyResolver));
+                Assert.That(ReferenceEquals(defaultDependencyResolver, dependencyResolver), Is.True);
             }
 
             [TestCase]
             public void ReturnsDependencyResolverUsedToCreateObject()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-                var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
-                var obj = typeFactory.CreateInstance<object>();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    var dependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
+                    var typeFactory = dependencyResolver.ResolveRequired<ITypeFactory>();
+                    var obj = typeFactory.CreateInstance<object>();
+                    if (obj is null)
+                    {
+                        throw new Exception("Created object should not be null");
+                    }
 
-                var usedDependencyResolver = obj.GetDependencyResolver();
+                    var usedDependencyResolver = obj.GetDependencyResolver();
 
-                Assert.IsTrue(ReferenceEquals(dependencyResolver, usedDependencyResolver));
+                    Assert.That(ReferenceEquals(dependencyResolver, usedDependencyResolver), Is.True);
+                }
             }
         }
     }

@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewModelWrapper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
-    using Catel.MVVM.Providers;
 
     /// <summary>
     /// View model wrapper class.
@@ -22,7 +14,7 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="contentToWrap" /> is <c>null</c>.</exception>
         public ViewModelWrapper(object contentToWrap)
         {
-            Argument.IsNotNull("contentToWrap", contentToWrap);
+            ArgumentNullException.ThrowIfNull(contentToWrap);
 
             CreateWrapper(contentToWrap);
         }

@@ -1,51 +1,31 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Page.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || UWP
-
-namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls
 {
     using System;
     using System.ComponentModel;
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
-    using Catel.Reflection;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
     using System.Windows;
     using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// <see cref="Page"/> class that supports MVVM with Catel.
     /// </summary>
-#if UWP
-    public class Page : global::Windows.UI.Xaml.Controls.Page, IPage
-#else
     public class Page : System.Windows.Controls.Page, IPage
-#endif
     {
-        #region Fields
         private readonly PageLogic _logic;
 
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
         private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Page"/> class.
         /// </summary>
         /// <remarks>It is not possible to inject view models.</remarks>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Page()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -55,12 +35,6 @@ namespace Catel.Windows.Controls
             _logic = new PageLogic(this);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET && !NETCORE
-                // WPF already calls this method automatically
-                OnPropertyChanged(e);
-
-                PropertyChanged?.Invoke(this, e);
-#else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
@@ -68,7 +42,6 @@ namespace Catel.Windows.Controls
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
-#endif
             };
 
             _logic.ViewModelChanged += (sender, e) =>
@@ -99,9 +72,7 @@ namespace Catel.Windows.Controls
 
             this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
@@ -111,26 +82,12 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the view model container should prevent the 
-        /// creation of a view model.
-        /// <para />
-        /// This property is very useful when using views in transitions where the view model is no longer required.
-        /// </summary>
-        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public bool PreventViewModelCreation
-        {
-            get { return _logic.GetValue<PageLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<PageLogic>(x => x.PreventViewModelCreation = value); }
-        }
-
-        /// <summary>
         /// Gets the view model that is contained by the container.
         /// </summary>
         /// <value>The view model.</value>
-        public IViewModel ViewModel
+        public IViewModel? ViewModel
         {
-            get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<PageLogic, IViewModel?>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -146,9 +103,7 @@ namespace Catel.Windows.Controls
             get { return _logic.GetValue<PageLogic, ViewModelLifetimeManagement>(x => x.ViewModelLifetimeManagement); }
             set { _logic.SetValue<PageLogic>(x => x.ViewModelLifetimeManagement = value); }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a property on the container has changed.
         /// </summary>
@@ -156,22 +111,22 @@ namespace Catel.Windows.Controls
         /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
         /// (mostly the container of a view model) because the .NET Framework does not allows us to.
         /// </remarks>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> property has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ViewModelChanged;
+        public event EventHandler<EventArgs>? ViewModelChanged;
 
         /// <summary>
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
 
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Loaded
+        event EventHandler<EventArgs>? IView.Loaded
         {
             add { _viewLoaded += value; }
             remove { _viewLoaded -= value; }
@@ -180,7 +135,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Unloaded
+        event EventHandler<EventArgs>? IView.Unloaded
         {
             add { _viewUnloaded += value; }
             remove { _viewUnloaded -= value; }
@@ -189,14 +144,12 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> IView.DataContextChanged
+        event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs>? IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
         }
-        #endregion
 
-        #region Methods
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
@@ -261,8 +214,5 @@ namespace Catel.Windows.Controls
         protected virtual void OnViewModelChanged()
         {
         }
-        #endregion
     }
 }
-
-#endif

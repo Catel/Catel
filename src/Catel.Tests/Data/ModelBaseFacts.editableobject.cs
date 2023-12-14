@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.editableobject.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -32,8 +26,8 @@ namespace Catel.Tests.Data
                 set { SetValue(FirstNameProperty, value); }
             }
 
-            public static readonly PropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
-            
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), string.Empty);
+
         }
 
         public class EditableObject : ModelBase
@@ -133,8 +127,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the IgnoredPropertyInBackup property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData IgnoredPropertyInBackupProperty = RegisterProperty("IgnoredPropertyInBackup", typeof(int), 42,
-                null, true, false);
+            public static readonly IPropertyData IgnoredPropertyInBackupProperty = RegisterProperty<int>("IgnoredPropertyInBackup", 42, null, true, false);
 
             private bool _onBeginEditCalled;
             private bool _beginEditingCalled;
@@ -152,7 +145,7 @@ namespace Catel.Tests.Data
                 set { SetValue(NameProperty, value); }
             }
 
-            public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), default(string));
+            public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name", default(string));
 
             public ClearIsDirtyModel()
             {
@@ -173,17 +166,17 @@ namespace Catel.Tests.Data
             {
                 var model = new PersonTestModel();
 
-                var isEnabled1 = model.GetValue(nameof(PersonTestModel.IsEnabled));
-                var isEnabled2 = model.GetValue(nameof(PersonTestModel.IsEnabled));
+                var isEnabled1 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
+                var isEnabled2 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
 
-                Assert.IsTrue(ReferenceEquals(isEnabled1, isEnabled2));
+                Assert.That(ReferenceEquals(isEnabled1, isEnabled2), Is.True);
 
                 model.SetValue(nameof(PersonTestModel.IsEnabled), true);
 
-                isEnabled1 = model.GetValue(nameof(PersonTestModel.IsEnabled));
-                isEnabled2 = model.GetValue(nameof(PersonTestModel.IsEnabled));
+                isEnabled1 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
+                isEnabled2 = ((IModel)model).GetValue<object>(nameof(PersonTestModel.IsEnabled));
 
-                Assert.IsTrue(ReferenceEquals(isEnabled1, isEnabled2));
+                Assert.That(ReferenceEquals(isEnabled1, isEnabled2), Is.True);
             }
         }
 
@@ -206,13 +199,13 @@ namespace Catel.Tests.Data
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.BeginEditingCalled);
-                Assert.IsFalse(editableObject.OnBeginEditCalled);
+                Assert.That(editableObject.BeginEditingCalled, Is.False);
+                Assert.That(editableObject.OnBeginEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
 
-                Assert.IsTrue(editableObject.BeginEditingCalled);
-                Assert.IsTrue(editableObject.OnBeginEditCalled);
+                Assert.That(editableObject.BeginEditingCalled, Is.True);
+                Assert.That(editableObject.OnBeginEditCalled, Is.True);
             }
         }
 
@@ -225,7 +218,7 @@ namespace Catel.Tests.Data
                 CancelEdit(() => ModelBaseTestHelper.CreateIniEntryObject(),
                     x => x.Value = "MyOldValue",
                     x => x.Value = "MyNewValue",
-                    x => Assert.AreEqual("MyOldValue", x.Value));
+                    x => Assert.That(x.Value, Is.EqualTo("MyOldValue")));
             }
 
             [TestCase]
@@ -242,7 +235,7 @@ namespace Catel.Tests.Data
 
                 objEntryAsIEditableObject.CancelEdit();
 
-                Assert.AreEqual(Gender.Female, obj.Gender);
+                Assert.That(obj.Gender, Is.EqualTo(Gender.Female));
             }
 
             [TestCase]
@@ -261,12 +254,12 @@ namespace Catel.Tests.Data
 
                 editableObject.FirstName = "John";
 
-                Assert.AreEqual("John", editableObject.FirstName);
+                Assert.That(editableObject.FirstName, Is.EqualTo("John"));
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.AreEqual(true, editableObject.CancelEditingCalled);
-                Assert.AreEqual("Geert", editableObject.FirstName);
+                Assert.That(editableObject.CancelEditingCalled, Is.EqualTo(true));
+                Assert.That(editableObject.FirstName, Is.EqualTo("Geert"));
             }
 
             [TestCase]
@@ -275,15 +268,15 @@ namespace Catel.Tests.Data
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.CancelEditingCompletedCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCompletedCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.CancelEditingCompletedCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCompletedCalled, Is.False);
             }
 
             [TestCase]
@@ -292,16 +285,16 @@ namespace Catel.Tests.Data
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.IsTrue(editableObject.CancelEditingCalled);
-                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.True);
+                Assert.That(editableObject.CancelEditingCompletedCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCompletedCalled, Is.True);
             }
 
             [TestCase]
@@ -312,16 +305,16 @@ namespace Catel.Tests.Data
 
                 editableObject.DoCancelCancel = true;
 
-                Assert.IsFalse(editableObject.CancelEditingCalled);
-                Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.False);
+                Assert.That(editableObject.OnCancelEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.IsTrue(editableObject.CancelEditingCalled);
-                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+                Assert.That(editableObject.CancelEditingCalled, Is.True);
+                Assert.That(editableObject.CancelEditingCompletedCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCalled, Is.True);
+                Assert.That(editableObject.OnCancelEditCompletedCalled, Is.True);
             }
 
             [TestCase]
@@ -338,7 +331,7 @@ namespace Catel.Tests.Data
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.AreEqual(2, editableObject.IgnoredPropertyInBackup);
+                Assert.That(editableObject.IgnoredPropertyInBackup, Is.EqualTo(2));
             }
 
             public void CancelEdit<TModel>(Func<TModel> createModel, Action<TModel> beforeBeginEdit, Action<TModel> afterBeginEdit, Action<TModel> assert)
@@ -387,7 +380,7 @@ namespace Catel.Tests.Data
 
                 iniEntryAsIEditableObject.EndEdit();
 
-                Assert.AreEqual("MyNewValue", iniEntry.Value);
+                Assert.That(iniEntry.Value, Is.EqualTo("MyNewValue"));
             }
 
             [TestCase]
@@ -404,7 +397,7 @@ namespace Catel.Tests.Data
 
                 ((IEditableObject)obj).EndEdit();
 
-                Assert.AreEqual(Gender.Male, obj.Gender);
+                Assert.That(obj.Gender, Is.EqualTo(Gender.Male));
             }
 
             [TestCase]
@@ -419,13 +412,13 @@ namespace Catel.Tests.Data
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.EndEditingCalled);
-                Assert.IsFalse(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.False);
+                Assert.That(editableObject.OnEndEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.EndEdit();
 
-                Assert.IsFalse(editableObject.EndEditingCalled);
-                Assert.IsFalse(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.False);
+                Assert.That(editableObject.OnEndEditCalled, Is.False);
             }
 
             [TestCase]
@@ -434,14 +427,14 @@ namespace Catel.Tests.Data
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-                Assert.IsFalse(editableObject.EndEditingCalled);
-                Assert.IsFalse(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.False);
+                Assert.That(editableObject.OnEndEditCalled, Is.False);
 
                 editableObjectAsIEditableObject.BeginEdit();
                 editableObjectAsIEditableObject.EndEdit();
 
-                Assert.IsTrue(editableObject.EndEditingCalled);
-                Assert.IsTrue(editableObject.OnEndEditCalled);
+                Assert.That(editableObject.EndEditingCalled, Is.True);
+                Assert.That(editableObject.OnEndEditCalled, Is.True);
             }
         }
 
@@ -473,7 +466,7 @@ namespace Catel.Tests.Data
                 // IsDirty change 3 + 4 (Name change back to null, and restoreof IsDirty)
                 ((IEditableObject)model).CancelEdit();
 
-                Assert.AreEqual(4, isDirtyChangedCalls);
+                Assert.That(isDirtyChangedCalls, Is.EqualTo(4));
             }
         }
     }

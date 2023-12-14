@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TestClasses.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.SpecialTest
+﻿namespace Catel.Tests.SpecialTest
 {
     public class NoNamingConventionViewModel
     {
@@ -38,7 +32,7 @@ namespace Catel.Tests.ViewModels
         /// <summary>
         /// Register the Name property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
     }
 }
 
@@ -61,7 +55,7 @@ namespace Catel.Tests
         /// <summary>
         /// Register the Name property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
     }
 
     public class SameNamespacePersonView

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WindowLogic.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
     using System.Threading.Tasks;
@@ -15,6 +7,7 @@ namespace Catel.MVVM.Providers
     using Logging;
     using MVVM;
     using Reflection;
+    using Catel.Data;
     using Catel.Windows;
 
     /// <summary>
@@ -22,7 +15,6 @@ namespace Catel.MVVM.Providers
     /// </summary>
     public class WindowLogic : LogicBase
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -32,10 +24,8 @@ namespace Catel.MVVM.Providers
         private bool? _closeInitiatedByViewModelResult;
 
         private readonly string _targetWindowClosedEventName;
-        private readonly Catel.IWeakEventListener _targetWindowClosedWeakEventListener;
-        #endregion
+        private readonly Catel.IWeakEventListener? _targetWindowClosedWeakEventListener;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowLogic"/> class.
         /// </summary>
@@ -43,13 +33,13 @@ namespace Catel.MVVM.Providers
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model to inject.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetWindow"/> is <c>null</c>.</exception>
-        public WindowLogic(IView targetWindow, Type viewModelType = null, IViewModel viewModel = null)
+        public WindowLogic(IView targetWindow, Type? viewModelType = null, IViewModel? viewModel = null)
             : base(targetWindow, viewModelType, viewModel)
         {
             var targetWindowType = targetWindow.GetType();
 
             var closedEvent = targetWindowType.GetEventEx("Closed");
-            var eventName = closedEvent != null ? "Closed" : "Unloaded";
+            var eventName = closedEvent is not null ? "Closed" : "Unloaded";
 
             _targetWindowClosedWeakEventListener = this.SubscribeToWeakGenericEvent<EventArgs>(targetWindow, eventName, OnTargetWindowClosed);
 
@@ -57,9 +47,7 @@ namespace Catel.MVVM.Providers
 
             Log.Debug("Using '{0}.{1}' event to determine window closing", targetWindowType.FullName, eventName);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether the logic should call <c>Close</c> immediately when
         /// the <c>DialogResult</c> is set.
@@ -78,13 +66,11 @@ namespace Catel.MVVM.Providers
         /// Gets the target control as window object.
         /// </summary>
         /// <value>The target window.</value>
-        private FrameworkElement TargetWindow
+        private FrameworkElement? TargetWindow
         {
-            get { return (FrameworkElement)TargetView; }
+            get { return (FrameworkElement?)TargetView; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Sets the data context of the target control.
         /// <para />
@@ -94,7 +80,11 @@ namespace Catel.MVVM.Providers
         /// <param name="newDataContext">The new data context.</param>
         protected override void SetDataContext(object newDataContext)
         {
-            TargetView.DataContext = newDataContext;
+            var targetView = TargetView;
+            if (targetView is not null)
+            {
+                targetView.DataContext = newDataContext;
+            }
         }
 
         /// <summary>
@@ -102,13 +92,13 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
+        public override async Task OnTargetViewUnloadedAsync(object? sender, EventArgs e)
         {
             await base.OnTargetViewUnloadedAsync(sender, e);
 
             // This should only happen when the window only exposes an Unloaded event
             var vm = ViewModel;
-            if (vm != null && !vm.IsClosed)
+            if (vm is not null && !vm.IsClosed)
             {
                 await CloseViewModelAsync(null, true);
             }
@@ -123,6 +113,12 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
         public override async Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
+            var targetWindow = TargetWindow;
+            if (targetWindow is null)
+            {
+                return;
+            }
+
             if (_closeInitiatedByViewModel is null)
             {
                 _closeInitiatedByViewModel = true;
@@ -131,19 +127,19 @@ namespace Catel.MVVM.Providers
 
             await base.OnViewModelClosedAsync(sender, e);
 
-            if (_closeInitiatedByViewModelResult != null)
+            if (_closeInitiatedByViewModelResult is not null)
             {
                 var result = false;
 
                 // If window is null, we are assuming it's a custom window based on FrameworkElement (similar to Silverlight). In that case,
                 // keep using the old logic
-                var window = TargetWindow as System.Windows.Window;
+                var window = targetWindow as System.Windows.Window;
                 var canSetDialogResult = window?.CanSetDialogResult() ?? true;
                 if (canSetDialogResult)
                 {
                     try
                     {
-                        result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult, true);
+                        result = PropertyHelper.TrySetPropertyValue(targetWindow, "DialogResult", BoxingCache.GetBoxedValue(_closeInitiatedByViewModelResult), true);
                     }
                     catch (Exception ex)
                     {
@@ -157,7 +153,7 @@ namespace Catel.MVVM.Providers
                 {
                     if (canSetDialogResult)
                     {
-                        Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", TargetWindow.GetType().Name);
+                        Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", targetWindow.GetType().Name);
                     }
 
                     InvokeCloseDynamically();
@@ -181,18 +177,24 @@ namespace Catel.MVVM.Providers
         /// </remarks>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
         // ReSharper disable UnusedMember.Local
-        public async void OnTargetWindowClosed(object sender, EventArgs e)
+        public async void OnTargetWindowClosed(object? sender, EventArgs e)
         // ReSharper restore UnusedMember.Local
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (_closeInitiatedByViewModel is null)
             {
+                var targetWindow = TargetWindow;
+                if (targetWindow is null)
+                {
+                    return;
+                }
+
                 _closeInitiatedByViewModel = false;
 
                 bool? dialogResult = null;
-                if (!PropertyHelper.TryGetPropertyValue(TargetWindow, "DialogResult", out dialogResult))
+                if (!PropertyHelper.TryGetPropertyValue(targetWindow, "DialogResult", out dialogResult))
                 {
-                    Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
+                    Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", targetWindow.GetType().Name);
                 }
 
                 if (dialogResult is null)
@@ -200,7 +202,7 @@ namespace Catel.MVVM.Providers
                     // See https://github.com/Catel/Catel/issues/1503, even though there is no real DialogResult,
                     // we will get the result from the VM instead
                     var vm = ViewModel;
-                    if (vm != null)
+                    if (vm is not null)
                     {
                         dialogResult = vm.GetResult();
                     }
@@ -209,7 +211,7 @@ namespace Catel.MVVM.Providers
                 await CloseViewModelAsync(dialogResult, true);
             }
 
-            _targetWindowClosedWeakEventListener.Detach();
+            _targetWindowClosedWeakEventListener?.Detach();
         }
 
         /// <summary>
@@ -217,16 +219,19 @@ namespace Catel.MVVM.Providers
         /// </summary>
         private void InvokeCloseDynamically()
         {
-            var closeMethod = TargetWindow.GetType().GetMethodEx("Close");
+            var targetWindow = TargetWindow;
+            if (targetWindow is null)
+            {
+                return;
+            }
+
+            var closeMethod = targetWindow.GetType().GetMethodEx("Close");
             if (closeMethod is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", TargetWindow.GetType().Name);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", targetWindow.GetType().Name);
             }
 
             closeMethod.Invoke(TargetWindow, null);
         }
-        #endregion
     }
 }
-
-#endif

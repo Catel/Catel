@@ -3,26 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ObjectWithValidation : ValidatableModelBase
     {
-        #region Constants
         public const string ValueThatHasNoWarningsOrErrors = "NoWarningsOrErrors";
         public const string ValueThatCausesFieldWarning = "FieldWarning";
         public const string ValueThatCausesBusinessWarning = "BusinessWarning";
         public const string ValueThatCausesFieldError = "FieldError";
         public const string ValueThatCausesBusinessError = "BusinessError";
-        #endregion
 
-        #region Fields
-        #endregion
-
-        #region Constructors
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -31,20 +22,6 @@
             NonCatelPropertyWithAnnotations = "default value";
         }
 
-#if NET || NETCORE
-        /// <summary>
-        ///   Initializes a new object based on <see cref = "SerializationInfo" />.
-        /// </summary>
-        /// <param name = "info"><see cref = "SerializationInfo" /> that contains the information.</param>
-        /// <param name = "context"><see cref = "StreamingContext" />.</param>
-        protected ObjectWithValidation(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
-        #endregion
-
-        #region Properties
         /// <summary>
         ///   Gets or sets the value to validate.
         /// </summary>
@@ -57,7 +34,7 @@
         /// <summary>
         ///   Register the ValueToValidate property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueToValidateProperty = RegisterProperty("ValueToValidate", typeof(string), ValueThatHasNoWarningsOrErrors);
+        public static readonly IPropertyData ValueToValidateProperty = RegisterProperty("ValueToValidate", ValueThatHasNoWarningsOrErrors);
 
         [Required(ErrorMessage = "Non-catel is required")]
         public string NonCatelPropertyWithAnnotations { get; set; }
@@ -78,10 +55,8 @@
         /// <summary>
         /// Register the ValueWithAnnotations property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", typeof(string), "value");
-        #endregion
+        public static readonly IPropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", "value");
 
-        #region Methods
         /// <summary>
         ///   Validates the fields.
         /// </summary>
@@ -113,6 +88,5 @@
                 validationResults.Add(BusinessRuleValidationResult.CreateError("Business rule error"));
             }
         }
-        #endregion
     }
 }

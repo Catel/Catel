@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationAdapter.page.wpf.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.MVVM.Navigation
+﻿namespace Catel.MVVM.Navigation
 {
     using System.Windows;
     using System.Windows.Controls;
@@ -17,15 +9,15 @@ namespace Catel.MVVM.Navigation
 
     public partial class NavigationAdapter
     {
-        private static Dictionary<string, object> _lastGlobalNavigationContext;
-        private Dictionary<string, object> _lastNavigationContext;
+        private static Dictionary<string, object>? _lastGlobalNavigationContext;
+        private Dictionary<string, object>? _lastNavigationContext;
 
         partial void Initialize()
         {
             HandleNavigatedOnLoaded = false;
 
             var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame != null)
+            if (navigationFrame is not null)
             {
                 Log.Debug("Initializing navigation adapter using frame");
 
@@ -46,7 +38,7 @@ namespace Catel.MVVM.Navigation
         partial void Uninitialize()
         {
             var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame != null)
+            if (navigationFrame is not null)
             {
                 Log.Debug("Uninitializing navigation adapter using frame");
 
@@ -70,7 +62,7 @@ namespace Catel.MVVM.Navigation
             {
                 _lastNavigationContext = new Dictionary<string, object>();
 
-                if (_lastGlobalNavigationContext != null)
+                if (_lastGlobalNavigationContext is not null)
                 {
                     foreach (var value in _lastGlobalNavigationContext)
                     {
@@ -91,10 +83,10 @@ namespace Catel.MVVM.Navigation
         /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigation()
         {
-            object content = null;
+            object? content = null;
 
             var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame != null)
+            if (navigationFrame is not null)
             {
                 content = navigationFrame.Content;
             }
@@ -111,15 +103,15 @@ namespace Catel.MVVM.Navigation
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns>System.String.</returns>
-        protected override string GetNavigationUri(object target)
+        protected override string? GetNavigationUri(object target)
         {
             var dependencyResolver = this.GetDependencyResolver();
-            var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
+            var urlLocator = dependencyResolver.ResolveRequired<IUrlLocator>();
 
             return urlLocator.ResolveUrl(NavigationTargetType);
         }
 
-        private void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)
+        private void OnNavigatingEvent(object? sender, NavigatingCancelEventArgs e)
         {
             // We are navigating away
             var eventArgs = new NavigatingEventArgs(e.Uri.ToString(), e.NavigationMode.Convert());
@@ -128,7 +120,7 @@ namespace Catel.MVVM.Navigation
             e.Cancel = eventArgs.Cancel;
         }
 
-        private void OnNavigatedEvent(object sender, NavigationEventArgs e)
+        private void OnNavigatedEvent(object? sender, NavigationEventArgs e)
         {
             // CTL-906: clear current navication context if (re) navigating to the same view
             if (e.IsNavigationForView(NavigationTargetType))
@@ -150,4 +142,3 @@ namespace Catel.MVVM.Navigation
         }
     }
 }
-#endif

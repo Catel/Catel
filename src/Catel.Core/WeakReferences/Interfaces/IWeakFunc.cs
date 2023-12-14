@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWeakFunc.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -27,13 +21,14 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        Delegate Action { get; }
+        Delegate? Action { get; }
     }
+
     /// <summary>
     /// A weak func which allows the invocation of a command in a weak manner. This way, actions will not cause
     /// memory leaks.
     /// </summary>
-    public interface IWeakFunc<TParameter, TResult> : IWeakReference, IExecuteWithObject<TResult>
+    public interface IWeakFunc<TParameter, TResult> : IWeakReference, IExecuteWithObject<TParameter, TResult>
     {
         /// <summary>
         /// Gets the name of the method that should be executed.
@@ -48,6 +43,6 @@ namespace Catel
         /// <remarks>
         /// This property is only introduced to allow action comparison on WinRT. Do not try to use this method by yourself.
         /// </remarks>
-        Delegate Action { get; }
+        Delegate? Action { get; }
     }
 }

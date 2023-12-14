@@ -1,18 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WindowExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
@@ -20,96 +10,18 @@ namespace Catel.Windows
     using Threading;
     using Logging;
     using SystemWindow = System.Windows.Window;
-    using Catel.MVVM.Views;
+    using Catel.Win32;
 
     /// <summary>
     /// Extensions for <see cref="System.Windows.Window"/>.
     /// </summary>
     public static class WindowExtensions
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Win32
-        /// <summary>
-        /// Extended windows styles.
-        /// </summary>
-        private const int GWL_EXSTYLE = -20;
-
-        /// <summary>
-        /// Window styles.
-        /// </summary>
-        private const int GWL_STYLE = -16;
-
-        /// <summary>
-        /// Shows or hides a system menu.
-        /// </summary>
-        private const int WS_SYSMENU = 0x80000;
-
-        private const int WS_EX_DLGMODALFRAME = 0x0001;
-
-        private const int SWP_NOSIZE = 0x0001;
-
-        private const int SWP_NOMOVE = 0x0002;
-
-        private const int SWP_NOZORDER = 0x0004;
-
-        private const int SWP_FRAMECHANGED = 0x0020;
-
-        private const uint WM_SETICON = 0x0080;
-
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        [DllImport("user32.dll")]
-        internal static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        [DllImport("user32.dll")]
-        internal static extern bool SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter, int x, int y, int width, int height, uint flags);
-
-        [DllImport("user32.dll")]
-        internal static extern IntPtr SendMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool BringWindowToTop(IntPtr hWnd);
-
-        /// <summary>
-        /// RECT struct for platform invokation.
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct RECT
-        {
-            /// <summary>
-            /// Left.
-            /// </summary>
-            public int Left;
-
-            /// <summary>
-            /// Top.
-            /// </summary>
-            public int Top;
-
-            /// <summary>
-            /// Right.
-            /// </summary>
-            public int Right;
-
-            /// <summary>
-            /// Bottom.
-            /// </summary>
-            public int Bottom;
-        }
-        #endregion
-
-        #region Current process main window
         /// <summary>
         /// Sets the owner window to the main window of the current process.
         /// </summary>
@@ -121,14 +33,14 @@ namespace Catel.Windows
         {
             // Check active window first
             var activeWindow = Application.Current.GetActiveWindow();
-            if (activeWindow != null)
+            if (activeWindow is not null)
             {
                 SetOwnerWindowByWindow(window, activeWindow, forceNewOwner, focusFirstControl);
                 return;
             }
 
             var mainWindow = CatelEnvironment.MainWindow;
-            if (mainWindow != null)
+            if (mainWindow is not null)
             {
                 SetOwnerWindowByWindow(window, mainWindow, forceNewOwner, focusFirstControl);
                 return;
@@ -150,9 +62,7 @@ namespace Catel.Windows
         {
             SetOwnerWindow(window, forceNewOwner, focusFirstControl);
         }
-        #endregion
 
-        #region Specific window - Window
         /// <summary>
         /// Sets the owner window of a specific window via the Window class.
         /// </summary>
@@ -190,9 +100,7 @@ namespace Catel.Windows
         {
             SetOwnerWindow(window, owner, IntPtr.Zero, forceNewOwner, focusFirstControl);
         }
-        #endregion
 
-        #region Specific window - IntPtr
         /// <summary>
         /// Sets the owner window of a specific window via the window handle.
         /// </summary>
@@ -230,7 +138,6 @@ namespace Catel.Windows
         {
             SetOwnerWindow(window, null, owner, forceNewOwner, focusFirstControl);
         }
-        #endregion
 
         /// <summary>
         /// Determines whether the <see cref="SystemWindow.DialogResult"/> property can be set.
@@ -239,7 +146,7 @@ namespace Catel.Windows
         /// <returns><c>true</c> if the dialog result can be set; otherwise, <c>false</c>.</returns>
         public static bool CanSetDialogResult(this SystemWindow window)
         {
-            Argument.IsNotNull("window", window);
+            ArgumentNullException.ThrowIfNull(window);
 
             // See #1616, not fully reliable, so we can only exit if this returns *false*
             if (!ComponentDispatcher.IsThreadModal)
@@ -251,9 +158,10 @@ namespace Catel.Windows
             if (window is SystemWindow)
             {
                 var dialogFieldInfo = typeof(SystemWindow).GetFieldEx("_showingAsDialog");
-                if (dialogFieldInfo is null == false)
+                if (dialogFieldInfo is not null)
                 {
-                    if (!(bool)dialogFieldInfo.GetValue(window))
+                    var dialogFieldValue = dialogFieldInfo.GetValue(window) as bool?;
+                    if (dialogFieldValue is null || !dialogFieldValue.Value)
                     {
                         return false;
                     }
@@ -266,7 +174,7 @@ namespace Catel.Windows
 
         public static bool IsValidAsOwnerWindow(this SystemWindow window)
         {
-            if (window == null)
+            if (window is null)
             {
                 return false;
             }
@@ -291,7 +199,7 @@ namespace Catel.Windows
         /// <returns>IntPtr.</returns>
         public static IntPtr GetWindowHandle(this SystemWindow window)
         {
-            Argument.IsNotNull("window", window);
+            ArgumentNullException.ThrowIfNull(window);
 
             var interopHelper = new WindowInteropHelper(window);
             return interopHelper.Handle;
@@ -304,10 +212,11 @@ namespace Catel.Windows
         /// <exception cref="ArgumentNullException">The <paramref name="window"/> is <c>null</c>.</exception>
         public static void BringWindowToTop(this SystemWindow window)
         {
-            Argument.IsNotNull("window", window);
+            ArgumentNullException.ThrowIfNull(window);
 
             var windowHandle = window.GetWindowHandle();
-            BringWindowToTop(windowHandle);
+
+            User32.BringWindowToTop(windowHandle);
         }
 
         /// <summary>
@@ -321,8 +230,10 @@ namespace Catel.Windows
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
         /// <param name="focusFirstControl">If true, the first control will automatically be focused.</param>
-        private static void SetOwnerWindow(SystemWindow window, SystemWindow ownerWindow, IntPtr ownerHandle, bool forceNewOwner, bool focusFirstControl)
+        private static void SetOwnerWindow(SystemWindow window, SystemWindow? ownerWindow, IntPtr ownerHandle, bool forceNewOwner, bool focusFirstControl)
         {
+            ArgumentNullException.ThrowIfNull(window);
+
             if (focusFirstControl)
             {
                 window.FocusFirstControl();
@@ -335,7 +246,7 @@ namespace Catel.Windows
 
             try
             {
-                if (ownerWindow != null)
+                if (ownerWindow is not null)
                 {
                     if (ReferenceEquals(ownerWindow, window))
                     {
@@ -359,7 +270,7 @@ namespace Catel.Windows
                     interopHelper.Owner = ownerHandle;
 
                     // Get handler (so we can nicely unsubscribe)
-                    RoutedEventHandler onWindowLoaded = null;
+                    RoutedEventHandler? onWindowLoaded = null;
                     onWindowLoaded = delegate(object sender, RoutedEventArgs e)
                     {
                         // Since this owner type doesn't support WindowStartupLocation.CenterOwner, do
@@ -367,8 +278,7 @@ namespace Catel.Windows
                         if (window.WindowStartupLocation == WindowStartupLocation.CenterOwner)
                         {
                             // Get the parent window rect
-                            RECT ownerRect;
-                            if (GetWindowRect(ownerHandle, out ownerRect))
+                            if (User32.GetWindowRect(ownerHandle, out var ownerRect))
                             {
                                 // Get some additional information
                                 int ownerWidth = ownerRect.Right - ownerRect.Left;
@@ -419,29 +329,7 @@ namespace Catel.Windows
         /// </returns>
         private static bool HasOwner(SystemWindow window)
         {
-            return ((window.Owner != null) || (new WindowInteropHelper(window).Owner != IntPtr.Zero));
-        }
-
-        /// <summary>
-        /// Removes the icon from the window.
-        /// </summary>
-        /// <param name="window">The window.</param>
-        public static void RemoveIcon(this SystemWindow window)
-        {
-            // Get the handle of the window
-            var windowHandle = new WindowInteropHelper(window).Handle;
-
-            // Send message to hide icon
-            SendMessage(windowHandle, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
-
-            // Change the extended window style to not show a window icon
-            int extendedStyle = GetWindowLong(windowHandle, GWL_EXSTYLE);
-
-            // Update the window style
-            SetWindowLong(windowHandle, GWL_EXSTYLE, extendedStyle | WS_EX_DLGMODALFRAME);
-
-            // Update the window's non-client area to reflect the changes
-            SetWindowPos(windowHandle, IntPtr.Zero, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+            return ((window.Owner is not null) || (new WindowInteropHelper(window).Owner != IntPtr.Zero));
         }
 
         /// <summary>
@@ -450,23 +338,23 @@ namespace Catel.Windows
         /// <param name="window">The window.</param>
         public static void ApplyIconFromApplication(this SystemWindow window)
         {
-            Argument.IsNotNull("window", window);
+            ArgumentNullException.ThrowIfNull(window);
 
             try
             {
-                if (window.Icon != null)
+                if (window.Icon is not null)
                 {
                     return;
                 }
 
                 var currentApplication = Application.Current;
-                if (currentApplication != null)
+                if (currentApplication is not null)
                 {
                     var entryAssembly = AssemblyHelper.GetEntryAssembly();
-                    if (entryAssembly != null)
+                    if (entryAssembly is not null)
                     {
                         var icon = Icon.ExtractAssociatedIcon(entryAssembly.Location);
-                        if (icon != null)
+                        if (icon is not null)
                         {
                             window.Icon = Imaging.CreateBitmapSourceFromHIcon(icon.Handle,
                                 new Int32Rect(0, 0, icon.Width, icon.Height), BitmapSizeOptions.FromEmptyOptions());
@@ -481,5 +369,3 @@ namespace Catel.Windows
         }
     }
 }
-
-#endif

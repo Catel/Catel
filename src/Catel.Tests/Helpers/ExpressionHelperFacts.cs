@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpressionHelperTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
     using Data;
@@ -19,7 +13,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
+                Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
             }
 
             [TestCase]
@@ -27,9 +21,9 @@ namespace Catel.Tests
             {
                 var iniEntry = new IniEntry();
 
-                Assert.AreEqual("Group", ExpressionHelper.GetPropertyName(() => iniEntry.Group));
-                Assert.AreEqual("Key", ExpressionHelper.GetPropertyName(() => iniEntry.Key));
-                Assert.AreEqual("Value", ExpressionHelper.GetPropertyName(() => iniEntry.Value));
+                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Group), Is.EqualTo("Group"));
+                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Key), Is.EqualTo("Key"));
+                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Value), Is.EqualTo("Value"));
             }
         }
 
@@ -60,7 +54,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
+                Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
             }
 
             [TestCase]
@@ -68,7 +62,7 @@ namespace Catel.Tests
             {
                 var owner = ExpressionHelper.GetOwner(() => MyProperty);
 
-                Assert.IsTrue(ReferenceEquals(this, owner));
+                Assert.That(ReferenceEquals(this, owner), Is.True);
             }
 
             [TestCase]
@@ -77,7 +71,7 @@ namespace Catel.Tests
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.StringProperty);
 
-                Assert.IsTrue(ReferenceEquals(testModel, owner));
+                Assert.That(ReferenceEquals(testModel, owner), Is.True);
             }
 
             [TestCase]
@@ -86,7 +80,7 @@ namespace Catel.Tests
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.IntProperty);
 
-                Assert.IsTrue(ReferenceEquals(testModel, owner));
+                Assert.That(ReferenceEquals(testModel, owner), Is.True);
             }
 
             [TestCase]
@@ -95,7 +89,7 @@ namespace Catel.Tests
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.InnerModel.InnerProperty);
 
-                Assert.IsTrue(ReferenceEquals(testModel.InnerModel, owner));
+                Assert.That(ReferenceEquals(testModel.InnerModel, owner), Is.True);
             }
         }
     }

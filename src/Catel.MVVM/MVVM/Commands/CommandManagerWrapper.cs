@@ -1,28 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManagerWrapper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using Catel.IoC;
     using Logging;
-
-#if !XAMARIN && !XAMARIN_FORMS
-    using InputGesture = Catel.Windows.Input.InputGesture;
-#if UWP
-    using global::Windows.UI.Xaml;
-    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
+    using System;
     using System.Windows;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using System;
-#endif
-
-#endif
 
     /// <summary>
     /// Wrapper class to support key down events and automatically invoke commands on the <see cref="ICommandManager" />.
@@ -40,11 +22,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="commandManager">The command manager.</param>
-        public CommandManagerWrapper(FrameworkElement view, ICommandManager commandManager = null)
+        public CommandManagerWrapper(FrameworkElement view, ICommandManager? commandManager = null)
         {
-            Argument.IsNotNull("view", view);
+            ArgumentNullException.ThrowIfNull(view);
 
-            _commandManager = commandManager ?? ServiceLocator.Default.ResolveType<ICommandManager>();
+            _commandManager = commandManager ?? ServiceLocator.Default.ResolveRequiredType<ICommandManager>();
 
             View = view;
 
@@ -78,11 +60,7 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET || NETCORE
             View.PreviewKeyDown += OnKeyDown;
-#else
-            View.KeyDown += OnKeyDown;
-#endif
 
             _subscribed = true;
         }
@@ -94,21 +72,17 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET || NETCORE
             View.PreviewKeyDown -= OnKeyDown;
-#else
-            View.KeyDown -= OnKeyDown;
-#endif
 
             _subscribed = false;
         }
 
-        private void OnViewLoaded(object sender, RoutedEventArgs e)
+        private void OnViewLoaded(object? sender, RoutedEventArgs e)
         {
             Subscribe();
         }
 
-        private void OnViewUnloaded(object sender, RoutedEventArgs e)
+        private void OnViewUnloaded(object? sender, RoutedEventArgs e)
         {
             Unsubscribe();
         }
@@ -132,7 +106,7 @@ namespace Catel.MVVM
             foreach (var commandName in commandNames)
             {
                 var inputGesture = _commandManager.GetInputGesture(commandName);
-                if (inputGesture != null)
+                if (inputGesture is not null)
                 {
                     if (inputGesture.Matches(e))
                     {
@@ -145,5 +119,3 @@ namespace Catel.MVVM
         }
     }
 }
-
-#endif

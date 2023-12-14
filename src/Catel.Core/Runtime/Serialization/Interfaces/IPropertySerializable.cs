@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IFastSerializable.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     /// <summary>
     /// Fast serialization interaction. By default the serialization engine uses reflection to get and set values. To improve
@@ -19,7 +12,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the value is retrieved successfully; otherwise, <c>false</c>.</returns>
-        bool GetPropertyValue(string propertyName, ref object value);
+        bool GetPropertyValue<T>(string propertyName, ref T value);
 
         /// <summary>
         /// Sets the property value.
@@ -27,6 +20,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the value is set successfully; otherwise, <c>false</c>.</returns>
-        bool SetPropertyValue(string propertyName, object value);
+        bool SetPropertyValue<T>(string propertyName, T value);
     }
 }

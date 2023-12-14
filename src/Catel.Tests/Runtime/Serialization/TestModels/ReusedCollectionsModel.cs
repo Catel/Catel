@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReusedCollectionsModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization.TestModels
+﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System.Collections.Generic;
     using Catel.Data;
@@ -36,7 +29,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Collection1 property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData Collection1Property = RegisterProperty("Collection1", typeof(List<int>), null);
+        public static readonly IPropertyData Collection1Property = RegisterProperty("Collection1", () => new List<int>());
 
         /// <summary>
         /// Gets or sets the property value.
@@ -50,6 +43,6 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Collection1 property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData Collection2Property = RegisterProperty("Collection2", typeof(List<int>), null);
+        public static readonly IPropertyData Collection2Property = RegisterProperty("Collection2", () => new List<int>());
     }
 }

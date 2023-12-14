@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IXmlNamespaceManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization.Xml
+﻿namespace Catel.Runtime.Serialization.Xml
 {
     using System;
 
@@ -22,6 +15,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>The xml namespace.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="preferredPrefix"/> is <c>null</c> or whitespace.</exception>
-        XmlNamespace GetNamespace(Type type, string preferredPrefix);
+        XmlNamespace? GetNamespace(Type type, string preferredPrefix);
     }
 }

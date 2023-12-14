@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +11,6 @@ namespace Catel.Reflection
     /// </summary>
     public static class TypeHelper
     {
-        #region Fields
         /// <summary>
         ///   The <see cref = "ILog">log</see> object.
         /// </summary>
@@ -35,22 +28,20 @@ namespace Catel.Reflection
         private const char SingleTypeStart = '[';
         private const char SingleTypeEnd = ']';
         private static readonly char[] InnerTypeCountEnd = new[] { '[', '+' };
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
         static TypeHelper()
         {
-            _microsoftPublicKeyTokens = new HashSet<string>();
-            _microsoftPublicKeyTokens.Add("b77a5c561934e089");
-            _microsoftPublicKeyTokens.Add("b03f5f7f11d50a3a");
-            _microsoftPublicKeyTokens.Add("31bf3856ad364e35");
+            _microsoftPublicKeyTokens = new HashSet<string>
+            {
+                "b77a5c561934e089",
+                "b03f5f7f11d50a3a",
+                "31bf3856ad364e35"
+            };
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the Microsoft public key tokens.
         /// </summary>
@@ -59,22 +50,25 @@ namespace Catel.Reflection
         {
             get { return _microsoftPublicKeyTokens; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets the typed instance based on the specified instance.
         /// </summary>
         /// <param name="instance">The instance to retrieve in the typed form.</param>
         /// <returns>The typed instance.</returns>
         /// <exception cref="NotSupportedException">The <paramref name="instance"/> cannot be casted to <typeparamref name="TTargetType"/>.</exception>
-        public static TTargetType GetTypedInstance<TTargetType>(object instance)
+        public static TTargetType? GetTypedInstance<TTargetType>(object instance)
             where TTargetType : class
         {
-            var typedInstance = instance as TTargetType;
-            if ((typedInstance is null) && (instance != null))
+            if (instance is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof (TTargetType).Name, instance.GetType().Name);
+                return null;
+            }
+
+            var typedInstance = instance as TTargetType;
+            if (typedInstance is null)
+            {
+                throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
             }
 
             return typedInstance;
@@ -98,18 +92,20 @@ namespace Catel.Reflection
         /// <exception cref = "ArgumentNullException">The <paramref name = "toCheck" /> is <c>null</c>.</exception>
         public static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
         {
-            Argument.IsNotNull("generic", generic);
-            Argument.IsNotNull("toCheck", toCheck);
+            ArgumentNullException.ThrowIfNull(generic);
+            ArgumentNullException.ThrowIfNull(toCheck);
 
-            while ((toCheck != null) && (toCheck != typeof(object)))
+            var processedType = toCheck;
+
+            while ((processedType is not null) && (processedType != typeof(object)))
             {
-                var cur = toCheck.IsGenericTypeEx() ? toCheck.GetGenericTypeDefinition() : toCheck;
+                var cur = processedType.IsGenericTypeEx() ? processedType.GetGenericTypeDefinition() : processedType;
                 if (generic == cur)
                 {
                     return true;
                 }
 
-                toCheck = toCheck.GetBaseTypeEx();
+                processedType = processedType.GetBaseTypeEx();
             }
 
             return false;
@@ -140,7 +136,7 @@ namespace Catel.Reflection
         /// <param name="fullTypeName">Full name of the type, for example <c>Catel.TypeHelper, Catel.Core</c>.</param>
         /// <returns>The assembly name retrieved from the type, for example <c>Catel.Core</c> or <c>null</c> if the assembly is not contained by the type.</returns>
         /// <exception cref="ArgumentException">The <paramref name="fullTypeName"/> is <c>null</c> or whitespace.</exception>
-        public static string GetAssemblyName(string fullTypeName)
+        public static string? GetAssemblyName(string fullTypeName)
         {
             Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
 
@@ -173,6 +169,11 @@ namespace Catel.Reflection
             Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
 
             var assemblyNameWithoutOverhead = GetAssemblyName(fullTypeName);
+            if (assemblyNameWithoutOverhead is null)
+            {
+                return fullTypeName;
+            }
+
             var assemblyName = GetAssemblyNameWithoutOverhead(assemblyNameWithoutOverhead);
             var typeName = GetTypeName(fullTypeName);
 
@@ -242,18 +243,6 @@ namespace Catel.Reflection
             Argument.IsNotNullOrWhitespace("type", type);
 
             return $"{type}, {assembly}";
-        }
-
-        /// <summary>
-        /// Formats multiple inner types into one string.
-        /// </summary>
-        /// <param name="innerTypes">The inner types.</param>
-        /// <param name="stripAssemblies">if set to <c>true</c>, the assembly names will be stripped as well.</param>
-        /// <returns>string representing a combination of all inner types.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "FormatInnerTypes(IEnumerable<string>, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public static string FormatInnerTypes(string[] innerTypes, bool stripAssemblies = false)
-        {
-            return FormatInnerTypes((IEnumerable<string>)innerTypes, stripAssemblies);
         }
 
         /// <summary>
@@ -420,9 +409,7 @@ namespace Catel.Reflection
 
             return innerTypes.ToArray();
         }
-        #endregion
 
-        #region Powercast
         /// <summary>
         ///   Tries to Generic cast of a value.
         /// </summary>
@@ -431,7 +418,7 @@ namespace Catel.Reflection
         /// <param name = "value">The value to cast.</param>
         /// <param name = "output">The casted value.</param>
         /// <returns>When a cast is succeded true else false.</returns>
-        public static bool TryCast<TOutput, TInput>(TInput value, out TOutput output)
+        public static bool TryCast<TOutput, TInput>(TInput? value, out TOutput output)
         {
             var success = true;
 
@@ -441,9 +428,9 @@ namespace Catel.Reflection
                 var innerType = Nullable.GetUnderlyingType(outputType);
 
                 // Database support...
-                if (value == null)
+                if (value is null)
                 {
-                    output = default;
+                    output = default!;
 
                     if (outputType.IsValueTypeEx() && innerType is null)
                     {
@@ -465,13 +452,15 @@ namespace Catel.Reflection
                     }
                     else
                     {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                         output = (TOutput)Convert.ChangeType(value, innerType ?? outputType, CultureInfo.InvariantCulture);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                     }
                 }
             }
             catch (Exception)
             {
-                output = default;
+                output = default!;
                 success = false;
             }
 
@@ -485,9 +474,11 @@ namespace Catel.Reflection
         /// <typeparam name = "TInput">The input type.</typeparam>
         /// <param name = "value">The value to cast.</param>
         /// <returns>The casted value.</returns>
-        public static TOutput Cast<TOutput, TInput>(TInput value)
+        public static TOutput Cast<TOutput, TInput>(TInput? value)
         {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return Cast<TOutput>(value);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
 
         /// <summary>
@@ -496,14 +487,14 @@ namespace Catel.Reflection
         /// <typeparam name = "TOutput">Requested return type.</typeparam>
         /// <param name = "value">The value to cast.</param>
         /// <returns>The casted value.</returns>
-        public static TOutput Cast<TOutput>(object value)
+        public static TOutput Cast<TOutput>(object? value)
         {
             if (!TryCast(value, out TOutput output))
             {
-                var tI = value.GetType().GetSafeFullName(false);
-                var tO = typeof(TOutput).FullName;
+                var tI = (value ?? typeof(object)).GetType().GetSafeFullName(false);
+                var tO = typeof(TOutput).FullName ?? typeof(TOutput).Name;
                 var vl = string.Concat(value);
-                var msg = $"Failed to cast from '{0}' to '{1}'";
+                var msg = "Failed to cast from '{0}' to '{1}'";
 
                 if (!tI.Equals(vl))
                 {
@@ -524,15 +515,14 @@ namespace Catel.Reflection
         /// <param name = "value">The value to cast.</param>
         /// <param name = "whenNullValue">When unable to cast the incoming value, this value is returned instead.</param>
         /// <returns>The casted value or when uncastable the <paramref name = "whenNullValue" /> is returned.</returns>
-        public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue)
+        public static TOutput Cast<TOutput, TInput>(TInput? value, TOutput whenNullValue)
         {
-            if (!TryCast(value, out TOutput output) || output == null)
+            if (!TryCast(value, out TOutput output) || output is null)
             {
                 output = whenNullValue;
             }
 
             return output;
         }
-        #endregion
     }
 }

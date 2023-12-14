@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringToTypeConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.ComponentModel;
@@ -25,7 +17,7 @@ namespace Catel.MVVM.Converters
         /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext" /> that provides a format context.</param>
         /// <param name="sourceType">A <see cref="T:System.Type" /> that represents the type you want to convert from.</param>
         /// <returns>true if this converter can perform the conversion; otherwise, false.</returns>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             return sourceType.IsAssignableFrom(typeof(string));
         }
@@ -37,7 +29,7 @@ namespace Catel.MVVM.Converters
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo" /> to use as the current culture.</param>
         /// <param name="value">The <see cref="T:System.Object" /> to convert.</param>
         /// <returns>An <see cref="T:System.Object" /> that represents the converted value.</returns>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             var typeName = value as string;
 
@@ -50,5 +42,3 @@ namespace Catel.MVVM.Converters
         }
     }
 }
-
-#endif

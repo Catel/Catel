@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ComparableModelBaseFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using NUnit.Framework;
 
@@ -19,8 +12,8 @@ namespace Catel.Tests.Data
             var obj2 = ModelBaseTestHelper.CreateIniEntryObject();
 
             // Equals
-            Assert.IsTrue(obj1.Equals(obj2));
-            Assert.IsTrue(obj2.Equals(obj1));
+            Assert.That(obj1, Is.EqualTo(obj2));
+            Assert.That(obj2, Is.EqualTo(obj1));
         }
 
         [TestCase]
@@ -31,17 +24,19 @@ namespace Catel.Tests.Data
             IniEntry obj2 = null;
 
             // Equals
-            Assert.IsFalse(obj1.Equals(obj2));
+            Assert.That(obj1, Is.Not.EqualTo(obj2));
         }
 
         [TestCase]
         public void Equals_DifferentClassesEqualProperties()
         {
-            ClassWithoutPropertiesA a = new ClassWithoutPropertiesA();
-            ClassWithoutPropertiesB b = new ClassWithoutPropertiesB();
+            var a = new ClassWithoutPropertiesA();
+            var b = new ClassWithoutPropertiesB();
 
-            Assert.AreNotEqual(a, b);
-            Assert.IsFalse(a == b);
+#pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
+            Assert.That(b.Equals(a), Is.False);
+            Assert.That(a.Equals(b), Is.False);
+#pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
         }
 
         /// <summary>
@@ -55,7 +50,7 @@ namespace Catel.Tests.Data
             var obj2 = ModelBaseTestHelper.CreateIniEntryObject();
 
             // Equals
-            Assert.AreEqual(obj1, obj2);
+            Assert.That(obj2, Is.EqualTo(obj1));
         }
 
         /// <summary>
@@ -69,7 +64,7 @@ namespace Catel.Tests.Data
             var obj2 = ModelBaseTestHelper.CreateIniFileObject();
 
             // Equals
-            Assert.AreEqual(obj1, obj2);
+            Assert.That(obj2, Is.EqualTo(obj1));
         }
 
         /// <summary>
@@ -83,7 +78,7 @@ namespace Catel.Tests.Data
             var obj2 = ModelBaseTestHelper.CreateComputerSettingsObject();
 
             // Equals
-            Assert.AreEqual(obj1, obj2);
+            Assert.That(obj2, Is.EqualTo(obj1));
         }
 
         [TestCase]
@@ -94,8 +89,9 @@ namespace Catel.Tests.Data
             var obj2 = ModelBaseTestHelper.CreateIniFileObject();
 
             // Equals
-            Assert.AreNotEqual(obj1, obj2);
+#pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
+            Assert.That(obj2.Equals(obj1), Is.False);
+#pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
         }
-
     }
 }

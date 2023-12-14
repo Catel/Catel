@@ -1,29 +1,16 @@
-﻿// ------------------------------------------------------------------------------------------------- -------------------
-// <copyright file="AssemblyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using Collections;
+    using Data;
     using IoC;
     using Logging;
     using MethodTimer;
-
-#if NET || NETCORE
     using System.Runtime.InteropServices;
-#endif
-
-#if UWP
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// Assembly helper class.
@@ -40,67 +27,43 @@ namespace Catel.Reflection
         private static readonly HashSet<Assembly> _registeredAssemblies = new HashSet<Assembly>();
         private static readonly Dictionary<string, string> _assemblyMappings = new Dictionary<string, string>();
 
+        public static Assembly GetRequiredEntryAssembly()
+        {
+            var assembly = GetEntryAssembly();
+            if (assembly is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>("Could not automatically determine the entry assembly");
+            }
+
+            return assembly;
+        }
+
         /// <summary>
         /// Gets the entry assembly.
         /// </summary>
         /// <returns>Assembly.</returns>
-        public static Assembly GetEntryAssembly()
+        public static Assembly? GetEntryAssembly()
         {
-            Assembly assembly = null;
+            Assembly? assembly = null;
 
             try
             {
                 var serviceLocator = ServiceLocator.Default;
                 if (serviceLocator.IsTypeRegistered<IEntryAssemblyResolver>())
                 {
-                    var entryAssemblyResolver = serviceLocator.ResolveType<IEntryAssemblyResolver>();
+                    var entryAssemblyResolver = serviceLocator.ResolveRequiredType<IEntryAssemblyResolver>();
                     assembly = entryAssemblyResolver.Resolve();
-                    if (assembly != null)
+
+                    if (assembly is not null)
                     {
                         return assembly;
                     }
                 }
 
-                // Note: web should only be checked in .NET
-#if NET
-                var httpApplication = HttpContextHelper.GetHttpApplicationInstance();
-                if (httpApplication != null)
-                {
-                    // Special treatment for ASP.NET
-                    var type = httpApplication.GetType();
-                    while ((type != null) && (type != typeof(object)) && (string.Equals(type.Namespace, "ASP", StringComparison.Ordinal)))
-                    {
-                        type = type.BaseType;
-                    }
-
-                    if (type != null)
-                    {
-                        assembly = type.Assembly;
-                    }
-                }
-#endif
-
-#if NET || NETCORE
                 if (assembly is null)
                 {
                     assembly = Assembly.GetEntryAssembly();
                 }
-#elif UWP
-                assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
-#endif
-
-#if NET
-                if (assembly is null)
-                {
-                    var appDomain = AppDomain.CurrentDomain;
-                    var setupInfo = appDomain.SetupInformation;
-                    var assemblyPath = Path.Combine(setupInfo.ApplicationBase, setupInfo.ApplicationName);
-
-                    assembly = (from x in appDomain.GetLoadedAssemblies(true)
-                                where !x.IsDynamicAssembly() && string.Equals(x.Location, assemblyPath)
-                                select x).FirstOrDefault();
-                }
-#endif
             }
             catch (Exception ex)
             {
@@ -123,7 +86,7 @@ namespace Catel.Reflection
         /// <param name="assemblyNameWithoutVersion">The assembly name without version.</param>
         /// <returns>The assembly name with version or <c>null</c> if the assembly is not found in the <see cref="AppDomain"/>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="assemblyNameWithoutVersion" /> is <c>null</c> or whitespace.</exception>
-        public static string GetAssemblyNameWithVersion(string assemblyNameWithoutVersion)
+        public static string? GetAssemblyNameWithVersion(string assemblyNameWithoutVersion)
         {
             Argument.IsNotNullOrWhitespace("assemblyNameWithoutVersion", assemblyNameWithoutVersion);
 
@@ -155,8 +118,6 @@ namespace Catel.Reflection
 #endif
         public static Type[] GetAllTypesSafely(this Assembly assembly, bool logLoaderExceptions = true)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             Type[] foundAssemblyTypes;
 
             RegisterAssemblyWithVersionInfo(assembly);
@@ -168,10 +129,10 @@ namespace Catel.Reflection
             catch (ReflectionTypeLoadException typeLoadException)
             {
                 foundAssemblyTypes = (from type in typeLoadException.Types
-                                      where type != null
+                                      where type is not null
                                       select type).ToArray();
 
-                Log.Warning("A ReflectionTypeLoadException occured, adding all {0} types that were loaded correctly", foundAssemblyTypes.Length);
+                Log.Warning($"A ReflectionTypeLoadException occured, adding all {BoxingCache.GetBoxedValue(foundAssemblyTypes.Length)} types that were loaded correctly");
 
                 if (logLoaderExceptions)
                 {
@@ -180,7 +141,7 @@ namespace Catel.Reflection
                     foreach (var error in typeLoadException.LoaderExceptions)
                     {
                         // Fix mono issue https://github.com/Catel/Catel/issues/1071 
-                        if (error != null)
+                        if (error is not null)
                         {
                             Log.Warning("  " + error.Message);
                         }
@@ -191,7 +152,7 @@ namespace Catel.Reflection
             {
                 Log.Error(ex, "Failed to get types from assembly '{0}'", assembly.FullName);
 
-                foundAssemblyTypes = ArrayShim.Empty<Type>();
+                foundAssemblyTypes = Array.Empty<Type>();
             }
 
             return foundAssemblyTypes;
@@ -263,17 +224,10 @@ namespace Catel.Reflection
             }
 
             var isDynamicAssembly =
-#if NET || NETCORE
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&
-#endif
                 string.Equals(assembly.GetType().FullName, "System.Reflection.Emit.InternalAssemblyBuilder", StringComparison.Ordinal)
-#if NET
-                && !assembly.GlobalAssemblyCache
-#endif
-#if NET || NETCORE
-                && ((Assembly.GetExecutingAssembly() != null)
+                && ((Assembly.GetExecutingAssembly() is not null)
                 && !string.Equals(assembly.Location, Assembly.GetExecutingAssembly().Location, StringComparison.OrdinalIgnoreCase))
-#endif
                 // Note: to make it the same for all platforms
                 && true;
 
@@ -297,8 +251,11 @@ namespace Catel.Reflection
                     _registeredAssemblies.Add(assembly);
 
                     var assemblyNameWithVersion = assembly.FullName;
-                    var assemblyNameWithoutVersion = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyNameWithVersion);
-                    _assemblyMappings[assemblyNameWithoutVersion] = assemblyNameWithVersion;
+                    if (!string.IsNullOrEmpty(assemblyNameWithVersion))
+                    {
+                        var assemblyNameWithoutVersion = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyNameWithVersion);
+                        _assemblyMappings[assemblyNameWithoutVersion] = assemblyNameWithVersion;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -309,11 +266,6 @@ namespace Catel.Reflection
 
         private static bool ShouldIgnoreAssembly(Assembly assembly, bool ignoreDynamicAssemblies)
         {
-            if (assembly is null)
-            {
-                return true;
-            }
-
             if (ignoreDynamicAssemblies)
             {
                 if (assembly.IsDynamicAssembly())
@@ -331,7 +283,6 @@ namespace Catel.Reflection
             public string NameWithoutVersion { get; set; }
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Gets the linker timestamp.
         /// </summary>
@@ -359,7 +310,9 @@ namespace Catel.Reflection
 
             try
             {
+#pragma warning disable CS8605 // Unboxing a possibly null value.
                 var coffHeader = (_IMAGE_FILE_HEADER)Marshal.PtrToStructure(pinnedBuffer.AddrOfPinnedObject(), typeof(_IMAGE_FILE_HEADER));
+#pragma warning restore CS8605 // Unboxing a possibly null value.
 
                 var utcStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 var offset = TimeSpan.FromSeconds(coffHeader.TimeDateStamp);
@@ -371,7 +324,9 @@ namespace Catel.Reflection
                 if (localTime > DateTime.Now.AddDays(1))
                 {
                     // Something is off here, are we running a .NET core "deterministic" app?
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     Log.Warning($"Determined '{localTime}' as linker timestamp which is in the future. This app is probably compiled by Roslyn (.NET Core) in deterministic mode. If the linker timestamp is required, set <Deterministic>False</Deterministic> in the project file. For now falling back to DateTime.Now");
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
                     localTime = DateTime.Now;
                 }
@@ -398,6 +353,5 @@ namespace Catel.Reflection
         };
 #pragma warning restore 169
 #pragma warning restore 649
-#endif
     }
 }

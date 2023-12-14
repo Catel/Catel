@@ -1,20 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Focus.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
     using Microsoft.Xaml.Behaviors;
-#endif
-
     using System;
     using System.ComponentModel;
     using Logging;
@@ -46,14 +33,12 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class Focus : FocusBehaviorBase
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private Catel.IWeakEventListener _weakEventListener;
-        #endregion
+        private Catel.IWeakEventListener? _weakEventListener;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Focus"/> class.
@@ -62,7 +47,6 @@ namespace Catel.Windows.Interactivity
         {
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the focus moment.
         /// <para />
@@ -85,23 +69,23 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for FocusMoment.  This enables animation, styling, binding, etc... 
         /// </summary>
         public static readonly DependencyProperty FocusMomentProperty =
-            DependencyProperty.Register("FocusMoment", typeof(FocusMoment), typeof(Focus), new PropertyMetadata(FocusMoment.Loaded));
+            DependencyProperty.Register(nameof(FocusMoment), typeof(FocusMoment), typeof(Focus), new PropertyMetadata(FocusMoment.Loaded));
 
         /// <summary>
         /// Gets or sets the source. This value is required when the <see cref="FocusMoment" /> property is either 
         /// <see cref="Interactivity.FocusMoment.PropertyChanged" /> or <see cref="Interactivity.FocusMoment.Event" />.
         /// </summary>
         /// <value>The source.</value>
-        public object Source
+        public object? Source
         {
-            get { return (object)GetValue(SourceProperty); }
+            get { return (object?)GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
         }
 
         /// <summary>
         /// Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(object), typeof(Focus), 
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(object), typeof(Focus), 
             new PropertyMetadata(null, (sender, e) => ((Focus)sender).OnSourceChanged(e)));
 
         /// <summary>
@@ -109,9 +93,9 @@ namespace Catel.Windows.Interactivity
         /// <see cref="Interactivity.FocusMoment.PropertyChanged" />.
         /// </summary>
         /// <value>The name of the property.</value>
-        public string PropertyName
+        public string? PropertyName
         {
-            get { return (string)GetValue(PropertyNameProperty); }
+            get { return (string?)GetValue(PropertyNameProperty); }
             set { SetValue(PropertyNameProperty, value); }
         }
 
@@ -119,16 +103,16 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for PropertyName.  This enables animation, styling, binding, etc... 
         /// </summary>
         public static readonly DependencyProperty PropertyNameProperty =
-            DependencyProperty.Register("PropertyName", typeof(string), typeof(Focus), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(PropertyName), typeof(string), typeof(Focus), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets the name of the event. This value is required when the <see cref="FocusMoment" /> property is 
         /// <see cref="Interactivity.FocusMoment.Event" />.
         /// </summary>
         /// <value>The name of the event.</value>
-        public string EventName
+        public string? EventName
         {
-            get { return (string)GetValue(EventNameProperty); }
+            get { return (string?)GetValue(EventNameProperty); }
             set { SetValue(EventNameProperty, value); }
         }
 
@@ -136,10 +120,8 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for EventName.  This enables animation, styling, binding, etc...
         /// </summary>
         public static readonly DependencyProperty EventNameProperty =
-            DependencyProperty.Register("EventName", typeof(string), typeof(Focus), new PropertyMetadata(null));
-        #endregion
+            DependencyProperty.Register(nameof(EventName), typeof(string), typeof(Focus), new PropertyMetadata(null));
 
-        #region Methods
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
@@ -164,7 +146,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSourcePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == PropertyName)
             {
@@ -178,7 +160,8 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnSourceChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue != null)
+            var oldSource = e.OldValue;
+            if (oldSource is not null)
             {
                 switch (FocusMoment)
                 {
@@ -188,8 +171,8 @@ namespace Catel.Windows.Interactivity
                         break;
 
                     case FocusMoment.PropertyChanged:
-                        var sourceAsPropertyChanged = e.OldValue as INotifyPropertyChanged;
-                        if (sourceAsPropertyChanged != null)
+                        var sourceAsPropertyChanged = oldSource as INotifyPropertyChanged;
+                        if (sourceAsPropertyChanged is not null)
                         {
                             sourceAsPropertyChanged.PropertyChanged -= OnSourcePropertyChanged;
                         }
@@ -201,29 +184,30 @@ namespace Catel.Windows.Interactivity
                 }
             }
 
-            if (e.NewValue != null)
+            var newSource = e.NewValue;
+            if (newSource is not null)
             {
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
                         if (string.IsNullOrEmpty(EventName))
                         {
-                            throw new InvalidOperationException("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
                         }
 
-                        _weakEventListener = this.SubscribeToWeakEvent(Source, EventName, OnSourceEventOccurred);
+                        _weakEventListener = this.SubscribeToWeakEvent(newSource, EventName, OnSourceEventOccurred);
                         break;
 
                     case FocusMoment.PropertyChanged:
                         if (string.IsNullOrEmpty(PropertyName))
                         {
-                            throw new InvalidOperationException("Property 'PropertyName' is required when FocusMode is 'FocusMode.PropertyChanged'");
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("Property 'PropertyName' is required when FocusMode is 'FocusMode.PropertyChanged'");
                         }
 
-                        var sourceAsPropertyChanged = e.NewValue as INotifyPropertyChanged;
+                        var sourceAsPropertyChanged = newSource as INotifyPropertyChanged;
                         if (sourceAsPropertyChanged is null)
                         {
-                            throw new InvalidOperationException("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");
                         }
 
                         sourceAsPropertyChanged.PropertyChanged += OnSourcePropertyChanged;
@@ -231,8 +215,5 @@ namespace Catel.Windows.Interactivity
                 }
             }
         }
-        #endregion
     }
 }
-
-#endif

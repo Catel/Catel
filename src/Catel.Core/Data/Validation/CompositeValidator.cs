@@ -1,10 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeValidator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
@@ -18,8 +12,6 @@ namespace Catel.Data
     /// </summary>
     public sealed class CompositeValidator : IValidator
     {
-        #region Constants and Fields
-
         /// <summary>
         /// The validator list.
         /// </summary>
@@ -30,10 +22,6 @@ namespace Catel.Data
         /// </summary>
         private readonly SynchronizationContext _synchronizationContext = new SynchronizationContext();
 
-        #endregion
-
-        #region Public Methods and Operators
-
         /// <summary>
         /// Adds the validator to this composite validator.
         /// </summary>
@@ -41,7 +29,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
         public void Add(IValidator validator)
         {
-            Argument.IsNotNull("validator", validator);
+            ArgumentNullException.ThrowIfNull(validator);
 
             _synchronizationContext.Execute(
                 () =>
@@ -60,7 +48,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
         public void Remove(IValidator validator)
         {
-            Argument.IsNotNull("validator", validator);
+            ArgumentNullException.ThrowIfNull(validator);
 
             _synchronizationContext.Execute(() => _validators.Remove(validator));
         }
@@ -73,7 +61,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
         public bool Contains(IValidator validator)
         {
-            Argument.IsNotNull("validator", validator);
+            ArgumentNullException.ThrowIfNull(validator);
 
             return _synchronizationContext.Execute(() => _validators.Contains(validator));
         }
@@ -89,6 +77,9 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
         public void Validate(object instance, ValidationContext validationContext)
         {
+            ArgumentNullException.ThrowIfNull(instance);
+            ArgumentNullException.ThrowIfNull(validationContext);
+
             try
             {
                 foreach (var validator in _validators)
@@ -223,8 +214,6 @@ namespace Catel.Data
                 throw;
             }
         }
-
-        #endregion
 
         /// <summary>
         /// Called just after the specified instance has validated its business rules.

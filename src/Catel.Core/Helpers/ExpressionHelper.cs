@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpressionHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.Linq.Expressions;
@@ -32,6 +26,8 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
         public static string GetPropertyName<TSource, TProperty>(Expression<Func<TSource, TProperty>> propertyExpression)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             return PropertyHelper.GetPropertyName(propertyExpression);
         }
 
@@ -46,6 +42,8 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         public static string GetPropertyName<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
+            ArgumentNullException.ThrowIfNull(propertyExpression);
+
             return PropertyHelper.GetPropertyName(propertyExpression);
         }
 
@@ -56,9 +54,9 @@ namespace Catel
         /// <param name="propertyExpression">The property expression.</param>
         /// <returns>The owner of the expression or <c>null</c> if the owner cannot be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        public static object GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
+        public static object? GetOwner<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
+            ArgumentNullException.ThrowIfNull(propertyExpression);
 
             var expressionToHandle = GetExpressionToHandle(propertyExpression);
 
@@ -70,13 +68,13 @@ namespace Catel
             }
 
             var constantExpression = body.Expression as ConstantExpression;
-            if (constantExpression != null)
+            if (constantExpression is not null)
             {
                 return constantExpression.Value;
             }
 
             var memberExpression = body.Expression as MemberExpression;
-            if (memberExpression != null)
+            if (memberExpression is not null)
             {
                 var resolvedMemberExpression = ResolveMemberExpression(memberExpression);
                 return resolvedMemberExpression;
@@ -85,30 +83,30 @@ namespace Catel
             return null;
         }
 
-        private static object ResolveMemberExpression(MemberExpression memberExpression)
+        private static object? ResolveMemberExpression(MemberExpression memberExpression)
         {
             var fieldInfo = memberExpression.Member as FieldInfo;
-            if (fieldInfo != null)
+            if (fieldInfo is not null)
             {
                 var ownerConstantExpression = memberExpression.Expression as ConstantExpression;
-                if (ownerConstantExpression != null)
+                if (ownerConstantExpression is not null)
                 {
                     return fieldInfo.GetValue(ownerConstantExpression.Value);
                 }
             }
 
             var propertyInfo = memberExpression.Member as PropertyInfo;
-            if (propertyInfo != null)
+            if (propertyInfo is not null)
             {
                 var ownerConstantExpression = memberExpression.Expression as ConstantExpression;
-                if (ownerConstantExpression != null)
+                if (ownerConstantExpression is not null)
                 {
                     return propertyInfo.GetValue(ownerConstantExpression.Value, null);
                 }
 
                 // Note: this is support for .NET native
                 var subMemberExpression = memberExpression.Expression as MemberExpression;
-                if (subMemberExpression != null)
+                if (subMemberExpression is not null)
                 {
                     var resolvedMemberExpression = ResolveMemberExpression(subMemberExpression);
                     return propertyInfo.GetValue(resolvedMemberExpression, null);
@@ -126,7 +124,7 @@ namespace Catel
 
             // Might occur in Android, maybe on other platforms as well
             var unaryExpression = expressionToHandle as UnaryExpression;
-            if (unaryExpression != null)
+            if (unaryExpression is not null)
             {
                 expressionToHandle = unaryExpression.Operand;
             }

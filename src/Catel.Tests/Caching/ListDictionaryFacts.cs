@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ListDictionaryFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Caching
+﻿namespace Catel.Tests.Caching
 {
     using System;
     using System.Linq;
@@ -27,7 +20,7 @@ namespace Catel.Tests.Caching
 
                 list.Add(key, "value");
 
-                Assert.AreEqual(expected, list.ContainsKey(retrievalKey));
+                Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
             }
 
             [TestCase("key", "key", true)]
@@ -40,7 +33,7 @@ namespace Catel.Tests.Caching
 
                 list.Add(key, "value");
 
-                Assert.AreEqual(expected, list.ContainsKey(retrievalKey));
+                Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
             }
         }
 
@@ -61,7 +54,7 @@ namespace Catel.Tests.Caching
                 var keyValuePairs = listDictionary.ToList();
                 for (var i = 0; i < itemsCount; i++)
                 {
-                    Assert.AreEqual(i.ToString(), keyValuePairs[i].Key);
+                    Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
                 }
             }
 
@@ -92,11 +85,11 @@ namespace Catel.Tests.Caching
                 var keyValuePairs = dict.ToList();
                 for (var i = 0; i < itemsToAddCount; i++)
                 {
-                    Assert.AreEqual(i.ToString(), keyValuePairs[i].Key);
+                    Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
                 }
             }
 
-           #endregion
+            #endregion
         }
 
         [TestFixture]
@@ -119,7 +112,7 @@ namespace Catel.Tests.Caching
                     listDictionary.Remove(i.ToString());
                 }
 
-                Assert.AreEqual(0, listDictionary.Count);
+                Assert.That(listDictionary.Count, Is.EqualTo(0));
             }
         }
     }

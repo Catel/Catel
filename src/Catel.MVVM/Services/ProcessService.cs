@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProcessService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || UWP
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Threading.Tasks;
     using Catel.Logging;
-
-#if UWP
-    using global::Windows.System;
-#endif
 
     /// <summary>
     /// Process service to run files or start processes from a view model.
@@ -33,7 +21,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
         public virtual async Task<ProcessResult> RunAsync(ProcessContext processContext)
         {
-            Argument.IsNotNull(nameof(processContext), processContext);
+            ArgumentNullException.ThrowIfNull(processContext);
             Argument.IsNotNullOrWhitespace(nameof(processContext.FileName), processContext.FileName);
 
             var fileName = processContext.FileName;
@@ -50,9 +38,6 @@ namespace Catel.Services
 
             try
             {
-#if UWP
-                await Launcher.LaunchUriAsync(new Uri(fileName));
-#else
                 var processStartInfo = new ProcessStartInfo(fileName, arguments)
                 {
                     Verb = processContext.Verb,
@@ -77,7 +62,9 @@ namespace Catel.Services
                     processStartInfo.WorkingDirectory = processContext.WorkingDirectory;
                 }
 
+#pragma warning disable IDISP001 // Dispose created
                 var process = Process.Start(processStartInfo);
+#pragma warning restore IDISP001 // Dispose created
                 if (process is null)
                 {
                     Log.Debug($"Process is already completed, cannot wait for it to complete");
@@ -89,7 +76,6 @@ namespace Catel.Services
                     process.EnableRaisingEvents = true;
                     process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
                 }
-#endif
             }
             catch (Exception ex)
             {
@@ -113,13 +99,13 @@ namespace Catel.Services
         /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
         /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
-        public virtual void StartProcess(ProcessContext processContext, ProcessCompletedDelegate processCompletedCallback = null)
+        public virtual void StartProcess(ProcessContext processContext, ProcessCompletedDelegate? processCompletedCallback = null)
         {
             var task = RunAsync(processContext);
 
-            if (processCompletedCallback != null)
+            if (processCompletedCallback is not null)
             {
-                task.ContinueWith(x => processCompletedCallback(task.Result.ExitCode));
+                task.ContinueWith(x => processCompletedCallback(processContext, task.Result.ExitCode));
             }
         }
 
@@ -131,7 +117,7 @@ namespace Catel.Services
         /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
         /// <exception cref="ArgumentException">The <paramref name="fileName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
-        public virtual void StartProcess(string fileName, string arguments = "", ProcessCompletedDelegate processCompletedCallback = null)
+        public virtual void StartProcess(string fileName, string arguments = "", ProcessCompletedDelegate? processCompletedCallback = null)
         {
             StartProcess(new ProcessContext
             {
@@ -141,5 +127,3 @@ namespace Catel.Services
         }
     }
 }
-
-#endif

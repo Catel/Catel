@@ -1,11 +1,5 @@
 ﻿namespace Catel.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// The context to use for a determine file call.
     /// </summary>
@@ -15,13 +9,13 @@
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
 
         /// <summary>
         /// Gets or sets the filter to use when opening or saving the file.
         /// </summary>
         /// <value>The filter.</value>
-        public string Filter { get; set; }
+        public string? Filter { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether a file dialog automatically adds an extension to a file name if the user omits an extension.
@@ -51,13 +45,13 @@
         /// Gets or sets the initial directory.
         /// </summary>
         /// <value>The initial directory.</value>
-        public string InitialDirectory { get; set; }
+        public string? InitialDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the title which will be used for display.
         /// </summary>
         /// <value>The title.</value>
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the dialog accepts only valid Win32 file names.

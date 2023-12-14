@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TestModelWithParsableMembers.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization.TestModels
+﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System;
     using System.Runtime.InteropServices;
@@ -26,7 +19,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Vector property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData VectorProperty = RegisterProperty("Vector", typeof(Vector), null);
+        public static readonly IPropertyData VectorProperty = RegisterProperty<Vector>("Vector");
     }
 
     public class TestModelWithParsableMembersWithAttributes : ModelBase
@@ -44,7 +37,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Vector property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData VectorProperty = RegisterProperty("Vector", typeof(Vector), null);
+        public static readonly IPropertyData VectorProperty = RegisterProperty<Vector>("Vector");
     }
 
     [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -110,7 +103,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             {
                 if (memberValue.Name == "Vector")
                 {
-                    var vector = (Vector) memberValue.Value;
+                    var vector = (Vector)memberValue.Value;
                     memberValue.Value = $"{vector.X}|{vector.Y}|{vector.Z}";
                 }
             }
@@ -124,8 +117,8 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             {
                 if (memberValue.Name == "Vector")
                 {
-                    var vectorString = (string) memberValue.Value;
-                    var parsedValues = vectorString.Split(new[] {"|"}, StringSplitOptions.RemoveEmptyEntries);
+                    var vectorString = (string)memberValue.Value;
+                    var parsedValues = vectorString.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
 
                     memberValue.Value = new Vector(StringToObjectHelper.ToDouble(parsedValues[0]), StringToObjectHelper.ToDouble(parsedValues[1]),
                         StringToObjectHelper.ToDouble(parsedValues[2]));
@@ -136,7 +129,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
 
     public class TestModelWithParsableMembersUsingParseSerializerModifier : TestModelWithParsableMembersSerializerModifierBase
     {
-        public TestModelWithParsableMembersUsingParseSerializerModifier() 
+        public TestModelWithParsableMembersUsingParseSerializerModifier()
             : base(true)
         {
         }

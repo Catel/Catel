@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CustomSerializationModels.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization.TestModels
+﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using Catel.Data;
 
@@ -17,7 +10,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(FirstNameProperty, value); }
         }
 
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
 
         public bool IsCustomSerialized { get; protected set; }
 

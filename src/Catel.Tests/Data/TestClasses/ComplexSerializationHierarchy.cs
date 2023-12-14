@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ComplexSerializationHierarchy.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Runtime.Serialization;
-    using System.Xml.Serialization;
     using Catel.Data;
 
     public enum SortDirection
@@ -116,18 +108,14 @@ namespace Catel.Tests.Data
             {
                 LastName = "Family last name"
             };
-            
+
             family.Persons.Add(new Person { FirstName = "Mrs.", LastName = "Doe", Gender = Gender.Female });
-            family.Persons.Add(new Person { FirstName = "Mr.", LastName = "Bla", Gender = Gender.Male});
+            family.Persons.Add(new Person { FirstName = "Mr.", LastName = "Bla", Gender = Gender.Male });
 
             return family;
         }
     }
 
-#if NET || NETCORE
-    // Required for binary serialization
-    [Serializable]
-#endif
     [DataContract]
     public class Family
     {
@@ -143,10 +131,6 @@ namespace Catel.Tests.Data
         public List<Person> Persons { get; private set; }
     }
 
-#if NET || NETCORE
-    // Required for binary serialization
-    [Serializable]
-#endif
     [DataContract]
     public class Person
     {
@@ -160,21 +144,12 @@ namespace Catel.Tests.Data
         public string LastName { get; set; }
     }
 
-#if NET || NETCORE
-    [Serializable]
-#endif
     public class ScheduleAssistantSettings : ComparableModelBase
     {
         public ScheduleAssistantSettings()
         {
 
         }
-
-#if NET || NETCORE
-        protected ScheduleAssistantSettings(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
-#endif
 
         #region SelectedResource property
 
@@ -190,7 +165,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// SelectedResource property data.
         /// </summary>
-        public static readonly PropertyData SelectedResourceProperty = RegisterProperty("SelectedResource", typeof(string));
+        public static readonly IPropertyData SelectedResourceProperty = RegisterProperty<string>("SelectedResource");
 
         #endregion
 
@@ -208,7 +183,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// GridSettings property data.
         /// </summary>
-        public static readonly PropertyData GridSettingsProperty = RegisterProperty("GridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData GridSettingsProperty = RegisterProperty<GridSettings>("GridSettings", new GridSettings());
 
         #endregion
 
@@ -226,7 +201,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// PendingGridSettings property data.
         /// </summary>
-        public static readonly PropertyData PendingGridSettingsProperty = RegisterProperty("PendingGridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData PendingGridSettingsProperty = RegisterProperty<GridSettings>("PendingGridSettings", new GridSettings());
 
         #endregion
 
@@ -244,26 +219,18 @@ namespace Catel.Tests.Data
         /// <summary>
         /// ScheduledGridSettings property data.
         /// </summary>
-        public static readonly PropertyData ScheduledGridSettingsProperty = RegisterProperty("ScheduledGridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData ScheduledGridSettingsProperty = RegisterProperty<GridSettings>("ScheduledGridSettings", new GridSettings());
 
         #endregion
     }
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class GridSettings : ComparableModelBase
     {
         public GridSettings()
         {
 
         }
-
-#if NET || NETCORE
-        protected GridSettings(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
-#endif
 
         #region SortSettings property
 
@@ -279,7 +246,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// SortSettings property data.
         /// </summary>
-        public static readonly PropertyData SortSettingsProperty = RegisterProperty("SortSettings", typeof(List<SortSetting>), new List<SortSetting>());
+        public static readonly IPropertyData SortSettingsProperty = RegisterProperty<List<SortSetting>>("SortSettings", () => new List<SortSetting>());
 
         #endregion
 
@@ -297,7 +264,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// GroupingOrder property data.
         /// </summary>
-        public static readonly PropertyData GroupingOrderProperty = RegisterProperty("GroupingOrder", typeof(List<string>), new List<string>());
+        public static readonly IPropertyData GroupingOrderProperty = RegisterProperty<List<string>>("GroupingOrder", () => new List<string>());
 
         #endregion
 
@@ -315,14 +282,12 @@ namespace Catel.Tests.Data
         /// <summary>
         /// ColumnPositions property data.
         /// </summary>
-        public static readonly PropertyData ColumnSettingsProperty = RegisterProperty("ColumnSettings", typeof(List<ColumnSettings>), new List<ColumnSettings>());
+        public static readonly IPropertyData ColumnSettingsProperty = RegisterProperty<List<ColumnSettings>>("ColumnSettings", () => new List<ColumnSettings>());
 
         #endregion
     }
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class SortSetting
     {
         protected bool Equals(SortSetting other)
@@ -334,7 +299,7 @@ namespace Catel.Tests.Data
         {
             unchecked
             {
-                return ((ColumnName != null ? ColumnName.GetHashCode() : 0) * 397) ^ (int)SortDirection;
+                return ((ColumnName is not null ? ColumnName.GetHashCode() : 0) * 397) ^ (int)SortDirection;
             }
         }
 
@@ -359,9 +324,7 @@ namespace Catel.Tests.Data
         }
     }
 
-#if NET || NETCORE
     [Serializable]
-#endif
     public class ColumnSettings
     {
         protected bool Equals(ColumnSettings other)
@@ -373,7 +336,7 @@ namespace Catel.Tests.Data
         {
             unchecked
             {
-                int hashCode = (ColumnName != null ? ColumnName.GetHashCode() : 0);
+                int hashCode = (ColumnName is not null ? ColumnName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Width.GetHashCode();
                 hashCode = (hashCode * 397) ^ IsHidden.GetHashCode();
                 return hashCode;
@@ -401,5 +364,4 @@ namespace Catel.Tests.Data
             return Equals((ColumnSettings)obj);
         }
     }
-
 }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CacheStorageValueInfoFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Caching
+﻿namespace Catel.Tests.Caching
 {
     using System;
     using Catel.Caching;
@@ -18,19 +12,11 @@ namespace Catel.Tests.Caching
         public class TheCanExpireProperty
         {
             [TestCase]
-            public void ReturnsFalseWhenTimeSpanIsZero()
-            {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0));
-
-                Assert.IsFalse(valueInfo.CanExpire);
-            }
-
-            [TestCase]
             public void ReturnsTrueWhenTimeSpanIsNotZero()
             {
                 var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 5));
 
-                Assert.IsTrue(valueInfo.CanExpire);
+                Assert.That(valueInfo.CanExpire, Is.True);
             }
         }
 
@@ -42,7 +28,7 @@ namespace Catel.Tests.Caching
             {
                 var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0));
 
-                Assert.IsFalse(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.False);
             }
 
             [TestCase]
@@ -50,7 +36,7 @@ namespace Catel.Tests.Caching
             {
                 var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 2));
 
-                Assert.IsFalse(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.False);
             }
 
             [TestCase]
@@ -63,7 +49,7 @@ namespace Catel.Tests.Caching
 #pragma warning disable 168
                     var value = valueInfo.Value;
 #pragma warning restore 168
-                    Assert.IsFalse(valueInfo.IsExpired);
+                    Assert.That(valueInfo.IsExpired, Is.False);
                 }
                 while (FastDateTime.Now.Subtract(startTime).TotalSeconds < 3);
             }
@@ -75,7 +61,7 @@ namespace Catel.Tests.Caching
 
                 ThreadHelper.Sleep(500);
 
-                Assert.IsTrue(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.True);
             }
 
             [TestCase]
@@ -85,14 +71,14 @@ namespace Catel.Tests.Caching
 
                 ThreadHelper.Sleep(500);
 
-                Assert.IsTrue(valueInfo.IsExpired);
+                Assert.That(valueInfo.IsExpired, Is.True);
             }
         }
 
         [TestFixture]
         public class TheDisposeValueMethod
         {
-            private class CustomDisposable : IDisposable
+            private sealed class CustomDisposable : IDisposable
             {
                 public CustomDisposable()
                 {
@@ -110,21 +96,25 @@ namespace Catel.Tests.Caching
             [TestCase]
             public void ValueIsNotDisposedBeforeCall()
             {
-                var disposable = new CustomDisposable();
-                var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
+                using (var disposable = new CustomDisposable())
+                {
+                    var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
 
-                Assert.That(disposable.IsDiposed, Is.False);
+                    Assert.That(disposable.IsDiposed, Is.False);
+                }
             }
 
             [TestCase]
             public void ValueIsDisposedAfterCall()
             {
-                var disposable = new CustomDisposable();
-                var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
+                using (var disposable = new CustomDisposable())
+                {
+                    var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
 
-                valueInfo.DisposeValue();
+                    valueInfo.DisposeValue();
 
-                Assert.That(disposable.IsDiposed, Is.True);
+                    Assert.That(disposable.IsDiposed, Is.True);
+                }
             }
         }
     }

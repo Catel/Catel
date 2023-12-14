@@ -1,15 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CacheStorageFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Caching
+﻿namespace Catel.Tests.Caching
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
-    using System.Threading.Tasks;
     using Catel.Caching;
     using Catel.Caching.Policies;
     using Catel.Logging;
@@ -18,7 +11,6 @@ namespace Catel.Tests.Caching
 
     public class CacheStorageFacts
     {
-#if NET || NETCORE
         [TestFixture]
         public class TheThreadSafeFunctionality
         {
@@ -109,7 +101,6 @@ namespace Catel.Tests.Caching
                 }
             }
         }
-#endif
 
         [TestFixture]
         public class TheIndexerProperty
@@ -117,23 +108,23 @@ namespace Catel.Tests.Caching
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     var value = cache[null];
-                    Assert.IsNull(value);
+                    Assert.That(value, Is.Null);
                 });
             }
 
             [TestCase]
             public void ReturnsRightValueForExistingKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.AreEqual(2, cache["2"]);
+                Assert.That(cache["2"], Is.EqualTo(2));
             }
         }
 
@@ -143,23 +134,23 @@ namespace Catel.Tests.Caching
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     var value = cache.Get(null);
-                    Assert.IsNull(value);
+                    Assert.That(value, Is.Null);
                 });
             }
 
             [TestCase]
             public void ReturnsRightValueForExistingKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.AreEqual(2, cache.Get("2"));
+                Assert.That(cache.Get("2"), Is.EqualTo(2));
             }
         }
 
@@ -169,9 +160,9 @@ namespace Catel.Tests.Caching
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var cache = new CacheStorage<string, int>();
+                var cache = new CacheStorage<string, object>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Contains(null));
+                Assert.Throws<ArgumentNullException>(() => cache.Contains(null));
             }
 
             [TestCase]
@@ -181,7 +172,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.IsFalse(cache.Contains("3"));
+                Assert.That(cache.Contains("3"), Is.False);
             }
 
             [TestCase]
@@ -191,7 +182,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Add("2", 2);
 
-                Assert.IsTrue(cache.Contains("2"));
+                Assert.That(cache.Contains("2"), Is.True);
             }
         }
 
@@ -203,7 +194,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.GetFromCacheOrFetch(null, () => 1));
+                Assert.Throws<ArgumentNullException>(() => cache.GetFromCacheOrFetch(null, () => 1));
             }
 
             [TestCase]
@@ -211,7 +202,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.GetFromCacheOrFetch("1", null));
+                Assert.Throws<ArgumentNullException>(() => cache.GetFromCacheOrFetch("1", null));
             }
 
             [TestCase]
@@ -221,9 +212,9 @@ namespace Catel.Tests.Caching
 
                 var value = cache.GetFromCacheOrFetch("1", () => 1);
 
-                Assert.IsTrue(cache.Contains("1"));
-                Assert.AreEqual(1, cache["1"]);
-                Assert.AreEqual(1, value);
+                Assert.That(cache.Contains("1"), Is.True);
+                Assert.That(cache["1"], Is.EqualTo(1));
+                Assert.That(value, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -234,9 +225,9 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 var value = cache.GetFromCacheOrFetch("1", () => 2);
 
-                Assert.IsTrue(cache.Contains("1"));
-                Assert.AreEqual(1, cache["1"]);
-                Assert.AreEqual(1, value);
+                Assert.That(cache.Contains("1"), Is.True);
+                Assert.That(cache["1"], Is.EqualTo(1));
+                Assert.That(value, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -247,9 +238,9 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 var value = cache.GetFromCacheOrFetch("1", () => 2, true);
 
-                Assert.IsTrue(cache.Contains("1"));
-                Assert.AreEqual(2, cache["1"]);
-                Assert.AreEqual(2, value);
+                Assert.That(cache.Contains("1"), Is.True);
+                Assert.That(cache["1"], Is.EqualTo(2));
+                Assert.That(value, Is.EqualTo(2));
             }
         }
 
@@ -261,7 +252,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Add(null, 1));
+                Assert.Throws<ArgumentNullException>(() => cache.Add(null, 1));
             }
 
             [TestCase]
@@ -269,7 +260,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, object>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Add(null, null));
+                Assert.Throws<ArgumentNullException>(() => cache.Add(null, null));
             }
 
             [TestCase]
@@ -278,7 +269,7 @@ namespace Catel.Tests.Caching
                 var cache = new CacheStorage<string, int>();
                 cache.Add("1", 1);
 
-                Assert.AreEqual(1, cache["1"]);
+                Assert.That(cache["1"], Is.EqualTo(1));
             }
 
             [TestCase]
@@ -288,7 +279,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Add("1", 2, true);
 
-                Assert.AreEqual(2, cache["1"]);
+                Assert.That(cache["1"], Is.EqualTo(2));
             }
 
             [TestCase]
@@ -298,7 +289,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Add("1", 2, false);
 
-                Assert.AreEqual(1, cache["1"]);
+                Assert.That(cache["1"], Is.EqualTo(1));
             }
         }
 
@@ -310,7 +301,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Remove(null));
+                Assert.Throws<ArgumentNullException>(() => cache.Remove(null));
             }
 
             [TestCase]
@@ -319,11 +310,11 @@ namespace Catel.Tests.Caching
                 var cache = new CacheStorage<string, int>();
                 cache.Add("1", 1);
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 cache.Remove("1");
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -341,7 +332,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Expiring += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -352,7 +343,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Expired += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
         }
 
@@ -367,7 +358,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Expiring += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -378,7 +369,7 @@ namespace Catel.Tests.Caching
                 cache.Add("1", 1);
                 cache.Expired += (sender, e) => counter++;
 
-                Assert.AreEqual(0, counter);
+                Assert.That(counter, Is.EqualTo(0));
             }
         }
 
@@ -393,11 +384,11 @@ namespace Catel.Tests.Caching
 
                 cache.Add("1", 1, expiration: new TimeSpan(0, 0, 0, 0, 250));
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -408,11 +399,11 @@ namespace Catel.Tests.Caching
 
                 cache.Add("1", 1, expiration: new TimeSpan(0, 0, 0, 0, 250));
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -423,11 +414,11 @@ namespace Catel.Tests.Caching
 
                 cache.Add("1", 1);
 
-                Assert.IsTrue(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.True);
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(cache.Contains("1"));
+                Assert.That(cache.Contains("1"), Is.False);
             }
 
             [TestCase]
@@ -443,7 +434,7 @@ namespace Catel.Tests.Caching
                     int innerI = i;
                     var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: TimeSpan.FromMilliseconds(250));
 
-                    Assert.AreEqual(i, value);
+                    Assert.That(value, Is.EqualTo(i));
                 }
             }
 
@@ -470,9 +461,9 @@ namespace Catel.Tests.Caching
 
                 ThreadHelper.Sleep(750);
 
-                Assert.AreEqual(key, evKey);
-                Assert.AreEqual(expirationPolicy, evExpirationPolicy);
-                Assert.AreEqual(value, evValue);
+                Assert.That(evKey, Is.EqualTo(key));
+                Assert.That(evExpirationPolicy, Is.EqualTo(expirationPolicy));
+                Assert.That(evValue, Is.EqualTo(value));
             }
 
             [TestCase]
@@ -492,7 +483,7 @@ namespace Catel.Tests.Caching
 
                 ThreadHelper.Sleep(750);
 
-                Assert.IsTrue(cache.Contains(key));
+                Assert.That(cache.Contains(key), Is.True);
             }
 
             [TestCase]
@@ -519,16 +510,16 @@ namespace Catel.Tests.Caching
 
                 ThreadHelper.Sleep(750);
 
-                Assert.AreEqual(dispose, evDispose);
-                Assert.AreEqual(key, evKey);
-                Assert.AreEqual(value, evValue);
+                Assert.That(evDispose, Is.EqualTo(dispose));
+                Assert.That(evKey, Is.EqualTo(key));
+                Assert.That(evValue, Is.EqualTo(value));
             }
         }
 
         [TestFixture]
         public class TheDisposeItemsOnRemovalFunctionality
         {
-            private class CustomDisposable : IDisposable
+            private sealed class CustomDisposable : IDisposable
             {
                 public CustomDisposable()
                 {
@@ -546,137 +537,153 @@ namespace Catel.Tests.Caching
             [TestCase]
             public void DisposesExpiredItemsWhenDisposingEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
+                }
             }
 
             [TestCase]
             public void DisposesItemOnRemoveWhenDisposingEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
-                cache.Remove("disposable");
+                    cache.Remove("disposable");
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
+                }
             }
 
             [TestCase]
             public void DisposesItemsOnClearWhenDisposingEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
-                cache.Clear();
+                    cache.Clear();
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeExpiredItemWhenDisposingEnabledButCanceledByEventArgs()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.DisposeValuesOnRemoval = true;
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
-                cache.Expired += (sender, e) =>
+                using (var disposable = new CustomDisposable())
                 {
-                    e.Dispose = false;
-                };
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.DisposeValuesOnRemoval = true;
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                    cache.Expired += (sender, e) =>
+                    {
+                        e.Dispose = false;
+                    };
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeExpiredItemWhenDisposingNotEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeItemOnRemoveWhenDisposingNotEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
-                cache.Remove("disposable");
+                    cache.Remove("disposable");
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
+                }
             }
 
             [TestCase]
             public void DoesNotDisposeItemsOnClearWhenDisposingNotEnabled()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                using (var disposable = new CustomDisposable())
+                {
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
 
-                cache.Clear();
+                    cache.Clear();
 
-                Assert.IsFalse(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.False);
+                }
             }
 
             [TestCase]
             public void DisposesExpiredItemWhenDisposingNotEnabledButForcedByEventArgs()
             {
-                var disposable = new CustomDisposable();
-                var cache = new CacheStorage<string, CustomDisposable>();
-                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
-                cache.Expired += (sender, e) =>
+                using (var disposable = new CustomDisposable())
                 {
-                    e.Dispose = true;
-                };
+                    var cache = new CacheStorage<string, CustomDisposable>();
+                    cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+                    cache.Expired += (sender, e) =>
+                    {
+                        e.Dispose = true;
+                    };
 
-                cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
+                    cache.Add("disposable", disposable, expiration: TimeSpan.FromMilliseconds(250));
 
-                ThreadHelper.Sleep(750);
+                    ThreadHelper.Sleep(750);
 
-                Assert.IsTrue(disposable.IsDiposed);
+                    Assert.That(disposable.IsDiposed, Is.True);
+                }
             }
         }
     }

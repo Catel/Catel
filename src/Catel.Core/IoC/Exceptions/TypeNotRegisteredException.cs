@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeNotRegisteredException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using Reflection;
@@ -15,7 +8,6 @@ namespace Catel.IoC
     /// </summary>
     public class TypeNotRegisteredException : Exception
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeNotRegisteredException" /> class.
         /// </summary>
@@ -27,14 +19,11 @@ namespace Catel.IoC
         {
             RequestedType = requestedType;
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         /// Gets the requested type.
         /// </summary>
         /// <value>The type.</value>
         public Type RequestedType { get; private set; }
-        #endregion
     }
 }

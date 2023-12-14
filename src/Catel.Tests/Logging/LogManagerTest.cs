@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogManagerTest.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Logging
+﻿namespace Catel.Tests.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -82,10 +76,10 @@ namespace Catel.Tests.Logging
             var log = LogManager.GetLogger(typeof(LogManager));
             log.Info("hello there");
 
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-            Assert.AreEqual("hello there", eventArgs.Message);
+            Assert.That(eventArgs, Is.Not.Null);
+            Assert.That(eventArgs.Log, Is.EqualTo(log));
+            Assert.That(eventArgs.LogEvent, Is.EqualTo(LogEvent.Info));
+            Assert.That(eventArgs.Message, Is.EqualTo("hello there"));
         }
 
         [TestCase]
@@ -101,14 +95,14 @@ namespace Catel.Tests.Logging
 
             var listeners = LogManager.GetListeners();
 
-            Assert.AreEqual(listener1, ((List<ILogListener>)listeners)[0]);
-            Assert.AreEqual(listener2, ((List<ILogListener>)listeners)[1]);
+            Assert.That(((List<ILogListener>)listeners)[0], Is.EqualTo(listener1));
+            Assert.That(((List<ILogListener>)listeners)[1], Is.EqualTo(listener2));
         }
 
         [TestCase]
         public void IsListenerRegistered_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.IsListenerRegistered(null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.IsListenerRegistered(null));
         }
 
         [TestCase]
@@ -117,7 +111,7 @@ namespace Catel.Tests.Logging
             LogManager.ClearListeners();
 
             var listener = new DebugLogListener();
-            Assert.IsFalse(LogManager.IsListenerRegistered(listener));
+            Assert.That(LogManager.IsListenerRegistered(listener), Is.False);
         }
 
         [TestCase]
@@ -127,13 +121,13 @@ namespace Catel.Tests.Logging
 
             var listener = new DebugLogListener();
             LogManager.AddListener(listener);
-            Assert.IsTrue(LogManager.IsListenerRegistered(listener));
+            Assert.That(LogManager.IsListenerRegistered(listener), Is.True);
         }
 
         [TestCase]
         public void AddListener_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.AddListener(null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.AddListener(null));
         }
 
         [TestCase]
@@ -143,8 +137,8 @@ namespace Catel.Tests.Logging
 
             var listener = new DebugLogListener();
             LogManager.AddListener(listener);
-            Assert.IsTrue(LogManager.IsListenerRegistered(listener));
-            Assert.AreEqual(1, LogManager.GetListeners().Count());
+            Assert.That(LogManager.IsListenerRegistered(listener), Is.True);
+            Assert.That(LogManager.GetListeners().Count(), Is.EqualTo(1));
         }
 
         [TestCase]
@@ -154,18 +148,18 @@ namespace Catel.Tests.Logging
 
             var listener = new DebugLogListener();
             LogManager.AddListener(listener);
-            Assert.IsTrue(LogManager.IsListenerRegistered(listener));
-            Assert.AreEqual(1, LogManager.GetListeners().Count());
+            Assert.That(LogManager.IsListenerRegistered(listener), Is.True);
+            Assert.That(LogManager.GetListeners().Count(), Is.EqualTo(1));
 
             LogManager.AddListener(listener);
-            Assert.IsTrue(LogManager.IsListenerRegistered(listener));
-            Assert.AreEqual(2, LogManager.GetListeners().Count());
+            Assert.That(LogManager.IsListenerRegistered(listener), Is.True);
+            Assert.That(LogManager.GetListeners().Count(), Is.EqualTo(2));
         }
 
         [TestCase]
         public void RemoveListener_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.RemoveListener(null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.RemoveListener(null));
         }
 
         [TestCase]
@@ -184,10 +178,10 @@ namespace Catel.Tests.Logging
 
             var listener = new DebugLogListener();
             LogManager.AddListener(listener);
-            Assert.IsTrue(LogManager.IsListenerRegistered(listener));
+            Assert.That(LogManager.IsListenerRegistered(listener), Is.True);
 
             LogManager.RemoveListener(listener);
-            Assert.IsFalse(LogManager.IsListenerRegistered(listener));
+            Assert.That(LogManager.IsListenerRegistered(listener), Is.False);
         }
 
         [TestCase]
@@ -196,11 +190,11 @@ namespace Catel.Tests.Logging
             var listener = new DebugLogListener();
             LogManager.AddListener(listener);
 
-            Assert.AreNotEqual(0, LogManager.GetListeners().Count());
+            Assert.That(LogManager.GetListeners().Count(), Is.Not.EqualTo(0));
 
             LogManager.ClearListeners();
 
-            Assert.AreEqual(0, LogManager.GetListeners().Count());
+            Assert.That(LogManager.GetListeners().Count(), Is.EqualTo(0));
         }
 
         [TestCase]
@@ -208,25 +202,25 @@ namespace Catel.Tests.Logging
         {
             var logger = LogManager.GetCurrentClassLogger();
 
-            Assert.AreEqual(GetType(), logger.TargetType);
+            Assert.That(logger.TargetType, Is.EqualTo(GetType()));
         }
 
         [TestCase]
         public void GetLogger_NullType()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.GetLogger((Type) null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.GetLogger((Type)null));
         }
 
         [TestCase]
         public void GetLogger_NullString()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => LogManager.GetLogger((string) null));
+            Assert.Throws<ArgumentException>(() => LogManager.GetLogger((string)null));
         }
 
         [TestCase]
         public void GetLogger_EmptyString()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => LogManager.GetLogger(String.Empty));
+            Assert.Throws<ArgumentException>(() => LogManager.GetLogger(String.Empty));
         }
 
         [TestCase]
@@ -235,7 +229,7 @@ namespace Catel.Tests.Logging
             var log1 = LogManager.GetLogger(typeof(int));
             var log2 = LogManager.GetLogger(typeof(int));
 
-            Assert.IsTrue(ReferenceEquals(log1, log2));
+            Assert.That(ReferenceEquals(log1, log2), Is.True);
         }
 
         [TestCase]
@@ -244,7 +238,7 @@ namespace Catel.Tests.Logging
             var log1 = LogManager.GetLogger("log");
             var log2 = LogManager.GetLogger("log");
 
-            Assert.IsTrue(ReferenceEquals(log1, log2));
+            Assert.That(ReferenceEquals(log1, log2), Is.True);
         }
 
         [TestCase]
@@ -252,28 +246,28 @@ namespace Catel.Tests.Logging
         {
             var listener = new TestLogListener();
 
-            Assert.IsTrue(listener.IsDebugEnabled);
-            Assert.IsTrue(listener.IsInfoEnabled);
-            Assert.IsTrue(listener.IsWarningEnabled);
-            Assert.IsTrue(listener.IsErrorEnabled);
-            Assert.IsTrue(listener.IsStatusEnabled);
+            Assert.That(listener.IsDebugEnabled, Is.True);
+            Assert.That(listener.IsInfoEnabled, Is.True);
+            Assert.That(listener.IsWarningEnabled, Is.True);
+            Assert.That(listener.IsErrorEnabled, Is.True);
+            Assert.That(listener.IsStatusEnabled, Is.True);
 
             LogManager.AddListener(listener);
 
             TestLogListener.Log.Debug("debug");
-            Assert.AreEqual(1, listener.DebugCount);
+            Assert.That(listener.DebugCount, Is.EqualTo(1));
 
             TestLogListener.Log.Info("info");
-            Assert.AreEqual(1, listener.InfoCount);
+            Assert.That(listener.InfoCount, Is.EqualTo(1));
 
             TestLogListener.Log.Warning("warning");
-            Assert.AreEqual(1, listener.WarningCount);
+            Assert.That(listener.WarningCount, Is.EqualTo(1));
 
             TestLogListener.Log.Error("error");
-            Assert.AreEqual(1, listener.ErrorCount);
+            Assert.That(listener.ErrorCount, Is.EqualTo(1));
 
             TestLogListener.Log.Status("status");
-            Assert.AreEqual(1, listener.StatusCount);
+            Assert.That(listener.StatusCount, Is.EqualTo(1));
 
             LogManager.RemoveListener(listener);
         }
@@ -288,19 +282,19 @@ namespace Catel.Tests.Logging
             LogManager.AddListener(listener);
 
             TestLogListener.Log.Debug("debug");
-            Assert.AreEqual(0, listener.DebugCount);
+            Assert.That(listener.DebugCount, Is.EqualTo(0));
 
             TestLogListener.Log.Info("info");
-            Assert.AreEqual(1, listener.InfoCount);
+            Assert.That(listener.InfoCount, Is.EqualTo(1));
 
             TestLogListener.Log.Warning("warning");
-            Assert.AreEqual(1, listener.WarningCount);
+            Assert.That(listener.WarningCount, Is.EqualTo(1));
 
             TestLogListener.Log.Error("error");
-            Assert.AreEqual(1, listener.ErrorCount);
+            Assert.That(listener.ErrorCount, Is.EqualTo(1));
 
             TestLogListener.Log.Status("status");
-            Assert.AreEqual(1, listener.StatusCount);
+            Assert.That(listener.StatusCount, Is.EqualTo(1));
 
             LogManager.RemoveListener(listener);
         }
@@ -315,19 +309,19 @@ namespace Catel.Tests.Logging
             LogManager.AddListener(listener);
 
             TestLogListener.Log.Debug("debug");
-            Assert.AreEqual(1, listener.DebugCount);
+            Assert.That(listener.DebugCount, Is.EqualTo(1));
 
             TestLogListener.Log.Info("info");
-            Assert.AreEqual(0, listener.InfoCount);
+            Assert.That(listener.InfoCount, Is.EqualTo(0));
 
             TestLogListener.Log.Warning("warning");
-            Assert.AreEqual(1, listener.WarningCount);
+            Assert.That(listener.WarningCount, Is.EqualTo(1));
 
             TestLogListener.Log.Error("error");
-            Assert.AreEqual(1, listener.ErrorCount);
+            Assert.That(listener.ErrorCount, Is.EqualTo(1));
 
             TestLogListener.Log.Status("status");
-            Assert.AreEqual(1, listener.StatusCount);
+            Assert.That(listener.StatusCount, Is.EqualTo(1));
 
             LogManager.RemoveListener(listener);
         }
@@ -342,19 +336,19 @@ namespace Catel.Tests.Logging
             LogManager.AddListener(listener);
 
             TestLogListener.Log.Debug("debug");
-            Assert.AreEqual(1, listener.DebugCount);
+            Assert.That(listener.DebugCount, Is.EqualTo(1));
 
             TestLogListener.Log.Info("info");
-            Assert.AreEqual(1, listener.InfoCount);
+            Assert.That(listener.InfoCount, Is.EqualTo(1));
 
             TestLogListener.Log.Warning("warning");
-            Assert.AreEqual(0, listener.WarningCount);
+            Assert.That(listener.WarningCount, Is.EqualTo(0));
 
             TestLogListener.Log.Error("error");
-            Assert.AreEqual(1, listener.ErrorCount);
+            Assert.That(listener.ErrorCount, Is.EqualTo(1));
 
             TestLogListener.Log.Status("status");
-            Assert.AreEqual(1, listener.StatusCount);
+            Assert.That(listener.StatusCount, Is.EqualTo(1));
 
             LogManager.RemoveListener(listener);
         }
@@ -369,19 +363,19 @@ namespace Catel.Tests.Logging
             LogManager.AddListener(listener);
 
             TestLogListener.Log.Debug("debug");
-            Assert.AreEqual(1, listener.DebugCount);
+            Assert.That(listener.DebugCount, Is.EqualTo(1));
 
             TestLogListener.Log.Info("info");
-            Assert.AreEqual(1, listener.InfoCount);
+            Assert.That(listener.InfoCount, Is.EqualTo(1));
 
             TestLogListener.Log.Warning("warning");
-            Assert.AreEqual(1, listener.WarningCount);
+            Assert.That(listener.WarningCount, Is.EqualTo(1));
 
             TestLogListener.Log.Error("error");
-            Assert.AreEqual(0, listener.ErrorCount);
+            Assert.That(listener.ErrorCount, Is.EqualTo(0));
 
             TestLogListener.Log.Status("status");
-            Assert.AreEqual(1, listener.StatusCount);
+            Assert.That(listener.StatusCount, Is.EqualTo(1));
 
             LogManager.RemoveListener(listener);
         }
@@ -396,19 +390,19 @@ namespace Catel.Tests.Logging
             LogManager.AddListener(listener);
 
             TestLogListener.Log.Debug("debug");
-            Assert.AreEqual(1, listener.DebugCount);
+            Assert.That(listener.DebugCount, Is.EqualTo(1));
 
             TestLogListener.Log.Info("info");
-            Assert.AreEqual(1, listener.InfoCount);
+            Assert.That(listener.InfoCount, Is.EqualTo(1));
 
             TestLogListener.Log.Warning("warning");
-            Assert.AreEqual(1, listener.WarningCount);
+            Assert.That(listener.WarningCount, Is.EqualTo(1));
 
             TestLogListener.Log.Error("error");
-            Assert.AreEqual(1, listener.ErrorCount);
+            Assert.That(listener.ErrorCount, Is.EqualTo(1));
 
             TestLogListener.Log.Status("status");
-            Assert.AreEqual(0, listener.StatusCount);
+            Assert.That(listener.StatusCount, Is.EqualTo(0));
 
             LogManager.RemoveListener(listener);
         }

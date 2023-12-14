@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AuditingHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing
 {
     using System;
     using System.Collections.Generic;
@@ -12,8 +6,6 @@ namespace Catel.MVVM.Auditing
     using System.Threading.Tasks;
     using Catel.Data;
     using Catel.IoC;
-    using Reflection;
-    using Threading;
 
     /// <summary>
     /// Helper for auditing which handles the complete subscription of an <see cref="IViewModel"/> instance
@@ -22,7 +14,7 @@ namespace Catel.MVVM.Auditing
     public static class AuditingHelper
     {
         private static readonly HashSet<string> KnownIgnoredPropertyNames = new HashSet<string>();
-        private static readonly IObjectAdapter ObjectAdapter = ServiceLocator.Default.ResolveType<IObjectAdapter>();
+        private static readonly IObjectAdapter ObjectAdapter = ServiceLocator.Default.ResolveRequiredType<IObjectAdapter>();
 
         /// <summary>
         /// Initializes static members of the <see cref="AuditingHelper"/> class.
@@ -48,7 +40,7 @@ namespace Catel.MVVM.Auditing
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         public static void RegisterViewModel(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             var isAuditingEnabled = AuditingManager.IsAuditingEnabled;
             if (isAuditingEnabled)
@@ -71,7 +63,7 @@ namespace Catel.MVVM.Auditing
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         private static void SubscribeEvents(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             viewModel.PropertyChanged += OnViewModelPropertyChanged;
             viewModel.CommandExecutedAsync += OnViewModelCommandExecutedAsync;
@@ -91,7 +83,7 @@ namespace Catel.MVVM.Auditing
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         private static void UnsubscribeEvents(IViewModel viewModel)
         {
-            Argument.IsNotNull("viewModel", viewModel);
+            ArgumentNullException.ThrowIfNull(viewModel);
 
             viewModel.PropertyChanged -= OnViewModelPropertyChanged;
             viewModel.CommandExecutedAsync -= OnViewModelCommandExecutedAsync;
@@ -104,121 +96,172 @@ namespace Catel.MVVM.Auditing
             viewModel.ClosedAsync -= OnViewModelClosedAsync;
         }
 
-        private static void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private static void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
                 return;
             }
 
-            var viewModel = (IViewModel)sender;
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return;
+            }
 
-            object propertyValue = null;
+            object? propertyValue = null;
             if (!string.IsNullOrEmpty(e.PropertyName) && !KnownIgnoredPropertyNames.Contains(e.PropertyName))
             {
-                ObjectAdapter.GetMemberValue(viewModel, e.PropertyName, out propertyValue);
+                ObjectAdapter.TryGetMemberValue(viewModel, e.PropertyName, out propertyValue);
             }
 
             AuditingManager.OnPropertyChanged(viewModel, e.PropertyName, propertyValue);
         }
 
-        private static Task OnViewModelCommandExecutedAsync(object sender, CommandExecutedEventArgs e)
+        private static Task OnViewModelCommandExecutedAsync(object? sender, CommandExecutedEventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            AuditingManager.OnCommandExecuted((IViewModel)sender, e.CommandPropertyName, e.Command, e.CommandParameter);
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
 
-            return TaskHelper.Completed;
+            AuditingManager.OnCommandExecuted(viewModel, e.CommandPropertyName, e.Command, e.CommandParameter);
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnViewModelInitializedAsync(object sender, EventArgs e)
+        private static Task OnViewModelInitializedAsync(object? sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            AuditingManager.OnViewModelInitialized((IViewModel)sender);
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
 
-            return TaskHelper.Completed;
+            AuditingManager.OnViewModelInitialized(viewModel);
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnViewModelSavingAsync(object sender, SavingEventArgs e)
+        private static Task OnViewModelSavingAsync(object? sender, SavingEventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            AuditingManager.OnViewModelSaving((IViewModel)sender);
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
 
-            return TaskHelper.Completed;
+            AuditingManager.OnViewModelSaving(viewModel);
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnViewModelSavedAsync(object sender, EventArgs e)
+        private static Task OnViewModelSavedAsync(object? sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            AuditingManager.OnViewModelSaved((IViewModel)sender);
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
 
-            return TaskHelper.Completed;
+            AuditingManager.OnViewModelSaved(viewModel);
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnViewModelCancelingAsync(object sender, CancelingEventArgs e)
+        private static Task OnViewModelCancelingAsync(object? sender, CancelingEventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            AuditingManager.OnViewModelCanceling((IViewModel)sender);
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
 
-            return TaskHelper.Completed;
+            AuditingManager.OnViewModelCanceling(viewModel);
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnViewModelCanceledAsync(object sender, EventArgs e)
+        private static Task OnViewModelCanceledAsync(object? sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            AuditingManager.OnViewModelCanceled((IViewModel)sender);
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
 
-            return TaskHelper.Completed;
+            AuditingManager.OnViewModelCanceled(viewModel);
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnViewModelClosingAsync(object sender, EventArgs e)
+        private static Task OnViewModelClosingAsync(object? sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            AuditingManager.OnViewModelClosing((IViewModel)sender);
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
 
-            return TaskHelper.Completed;
+            AuditingManager.OnViewModelClosing(viewModel);
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnViewModelClosedAsync(object sender, EventArgs e)
+        private static Task OnViewModelClosedAsync(object? sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
-            var viewModel = (IViewModel)sender;
+            var viewModel = sender as IViewModel;
+            if (viewModel is null)
+            {
+                return Task.CompletedTask;
+            }
+
             AuditingManager.OnViewModelClosed(viewModel);
 
             UnsubscribeEvents(viewModel);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
     }
 }

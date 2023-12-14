@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogBatchEntry.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
 
@@ -23,7 +16,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        public LogBatchEntry(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        public LogBatchEntry(ILog log, string message, LogEvent logEvent, object? extraData, LogData? logData, DateTime time)
             : base(log, message, logEvent, extraData, logData, time)
         {
         }

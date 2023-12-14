@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyDataFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using NUnit.Framework;
 
@@ -18,8 +12,8 @@ namespace Catel.Tests.Data
             {
                 var propertiesObject = new ObjectWithoutDefaultValues();
 
-                Assert.AreNotEqual(null, propertiesObject.ReferenceType);
-                Assert.AreEqual(null, propertiesObject.ReferenceTypeWithoutDefaultValue);
+                Assert.That(propertiesObject.ReferenceType, Is.Not.EqualTo(null));
+                Assert.That(propertiesObject.ReferenceTypeWithoutDefaultValue, Is.EqualTo(null));
             }
 
             [TestCase]
@@ -27,8 +21,8 @@ namespace Catel.Tests.Data
             {
                 var propertiesObject = new ObjectWithoutDefaultValues();
 
-                Assert.AreEqual(1, propertiesObject.ValueType);
-                Assert.AreEqual(0, propertiesObject.ValueTypeWithoutDefaultValue);
+                Assert.That(propertiesObject.ValueType, Is.EqualTo(1));
+                Assert.That(propertiesObject.ValueTypeWithoutDefaultValue, Is.EqualTo(0));
             }
         }
 
@@ -40,7 +34,7 @@ namespace Catel.Tests.Data
             {
                 var property = ObjectWithoutDefaultValues.ReferenceTypeProperty;
 
-                Assert.AreEqual(property.GetDefaultValue(), property.GetDefaultValue<object>());
+                Assert.That(property.GetDefaultValue<object>(), Is.EqualTo(property.GetDefaultValue()));
             }
 
             [TestCase]
@@ -48,7 +42,7 @@ namespace Catel.Tests.Data
             {
                 var property = ObjectWithoutDefaultValues.ValueTypeProperty;
 
-                Assert.AreEqual(property.GetDefaultValue(), property.GetDefaultValue<int>());
+                Assert.That(property.GetDefaultValue<int>(), Is.EqualTo(property.GetDefaultValue()));
             }
         }
     }

@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenericSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
     using Catel.Runtime.Serialization.Xml;
 
@@ -26,16 +18,6 @@ namespace Catel.Tests.Runtime.Serialization
             var serializers = new List<ISerializer>();
 
             serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
-
-            TestSerializationOnSerializers(serializers, action, serializationManager);
-        }
-
-        private static void TestSerializationOnBinarySerializer(Action<ISerializer, ISerializationConfiguration, string> action,
-            bool testWithoutGraphIdsAsWell = true, ISerializationManager serializationManager = null)
-        {
-            var serializers = new List<ISerializer>();
-
-            serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
 
             TestSerializationOnSerializers(serializers, action, serializationManager);
         }
@@ -64,7 +46,6 @@ namespace Catel.Tests.Runtime.Serialization
             var serializers = new List<ISerializer>();
 
             serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
-            serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
             serializers.Add(SerializationTestHelper.GetJsonSerializer(serializationManager));
 
             if (testWithoutGraphIdsAsWell)
@@ -78,7 +59,7 @@ namespace Catel.Tests.Runtime.Serialization
             TestSerializationOnSerializers(serializers, action, serializationManager);
         }
 
-        private static void TestSerializationOnSerializers(List<ISerializer> serializers, Action<ISerializer, ISerializationConfiguration, string> action, 
+        private static void TestSerializationOnSerializers(List<ISerializer> serializers, Action<ISerializer, ISerializationConfiguration, string> action,
             ISerializationManager serializationManager = null)
         {
             var serializerConfigurations = new Dictionary<Type, List<ISerializationConfiguration>>();
@@ -90,13 +71,6 @@ namespace Catel.Tests.Runtime.Serialization
                     // Default config
                 },
             });
-
-#pragma warning disable CS0618
-            serializerConfigurations[typeof(BinarySerializer)] = new List<ISerializationConfiguration>(new[]
-            {
-                new SerializationConfiguration()
-            });
-#pragma warning restore CS0618
 
             serializerConfigurations[typeof(JsonSerializer)] = new List<ISerializationConfiguration>(new[]
             {

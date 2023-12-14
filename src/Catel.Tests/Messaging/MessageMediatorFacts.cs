@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageMediatorFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging
 {
     using System;
     using Catel.Messaging;
@@ -102,7 +96,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.CleanUp();
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
             }
 
             [TestCase, Explicit]
@@ -118,7 +112,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.CleanUp();
 
-                Assert.AreEqual(0, mediator.GetRegisteredHandlers<string>().Count);
+                Assert.That(mediator.GetRegisteredHandlers<string>().Count, Is.EqualTo(0));
             }
             #endregion
         }
@@ -134,7 +128,7 @@ namespace Catel.Tests.Messaging
             {
                 var mediator = new MessageMediator();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => mediator.IsMessageRegistered(null));
+                Assert.Throws<ArgumentNullException>(() => mediator.IsMessageRegistered(null));
             }
 
 
@@ -143,7 +137,7 @@ namespace Catel.Tests.Messaging
             {
                 var mediator = new MessageMediator();
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof (string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.False);
             }
 
             [TestCase]
@@ -154,7 +148,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof (string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.True);
             }
 
             [TestCase]
@@ -165,7 +159,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof (string), "myTag"));
+                Assert.That(mediator.IsMessageRegistered(typeof(string), "myTag"), Is.False);
             }
 
             [TestCase]
@@ -176,7 +170,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof (string), "myTag"));
+                Assert.That(mediator.IsMessageRegistered(typeof(string), "myTag"), Is.True);
             }
 
             [TestCase]
@@ -187,7 +181,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsFalse(mediator.IsMessageRegistered(typeof(string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.False);
             }
 
             [TestCase]
@@ -199,7 +193,7 @@ namespace Catel.Tests.Messaging
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
                 mediator.Register<string>(recipient, recipient.AnotherOnMessage);
 
-                Assert.IsTrue(mediator.IsMessageRegistered(typeof(string)));
+                Assert.That(mediator.IsMessageRegistered(typeof(string)), Is.True);
             }
             #endregion
         }
@@ -216,11 +210,11 @@ namespace Catel.Tests.Messaging
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
             }
 
             [TestCase]
@@ -229,12 +223,12 @@ namespace Catel.Tests.Messaging
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.False);
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "anotherTag"));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "anotherTag"), Is.False);
             }
 
             [TestCase]
@@ -243,8 +237,8 @@ namespace Catel.Tests.Messaging
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsTrue(mediator.Register<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.Register<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.False);
             }
             #endregion
         }
@@ -261,7 +255,7 @@ namespace Catel.Tests.Messaging
                 var mediator = new MessageMediator();
                 var sender = new MessageSender();
 
-                Assert.IsFalse(sender.SendMessage(mediator, "test"));
+                Assert.That(sender.SendMessage(mediator, "test"), Is.False);
             }
 
             [TestCase]
@@ -273,7 +267,7 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsFalse(sender.SendMessage(mediator, "test", "myTag"));
+                Assert.That(sender.SendMessage(mediator, "test", "myTag"), Is.False);
             }
 
             [TestCase]
@@ -285,8 +279,8 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(sender.SendMessage(mediator, "test"));
-                Assert.AreEqual(1, recipient.MessagesReceived);
+                Assert.That(sender.SendMessage(mediator, "test"), Is.True);
+                Assert.That(recipient.MessagesReceived, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -300,8 +294,8 @@ namespace Catel.Tests.Messaging
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
                 mediator.Register<string>(recipient, recipient.OnMessage, "anotherTag");
 
-                Assert.IsTrue(sender.SendMessage(mediator, "test", "myTag"));
-                Assert.AreEqual(1, recipient.MessagesReceived);
+                Assert.That(sender.SendMessage(mediator, "test", "myTag"), Is.True);
+                Assert.That(recipient.MessagesReceived, Is.EqualTo(1));
             }
 
             [TestCase, Explicit]
@@ -317,8 +311,8 @@ namespace Catel.Tests.Messaging
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-                Assert.IsFalse(sender.SendMessage(mediator, "test"));
-                Assert.AreEqual(0, mediator.GetRegisteredHandlers<string>().Count, "SendMessage should auto cleanup");
+                Assert.That(sender.SendMessage(mediator, "test"), Is.False);
+                Assert.That(mediator.GetRegisteredHandlers<string>().Count, Is.EqualTo(0), "SendMessage should auto cleanup");
             }
             #endregion
         }
@@ -337,9 +331,9 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsTrue(mediator.Unregister<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.Unregister<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
             }
 
             [TestCase]
@@ -350,9 +344,9 @@ namespace Catel.Tests.Messaging
 
                 mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
-                Assert.IsTrue(mediator.Unregister<string>(recipient, recipient.OnMessage, "myTag"));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
+                Assert.That(mediator.Unregister<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.False);
             }
 
             [TestCase]
@@ -361,8 +355,8 @@ namespace Catel.Tests.Messaging
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.Unregister<string>(recipient, recipient.OnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
+                Assert.That(mediator.Unregister<string>(recipient, recipient.OnMessage), Is.False);
             }
 
             [TestCase]
@@ -375,32 +369,32 @@ namespace Catel.Tests.Messaging
                 mediator.Register<string>(recipient, recipient.AnotherOnMessage);
                 mediator.Register<string>(recipient, recipient.YetAnotherOnMessage);
 
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage));
-                Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage), Is.True);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage), Is.True);
 
                 mediator.UnregisterRecipient(recipient);
 
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage));
-                Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage));
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.AnotherOnMessage), Is.False);
+                Assert.That(mediator.IsRegistered<string>(recipient, recipient.YetAnotherOnMessage), Is.False);
             }
             #endregion
         }
         #endregion
 
-    
+
         [TestFixture]
         public class TheIsRegisteredMethod
         {
- 
+
             [Test]
             public void ReturnsTrueAfterRegistration()
             {
                 var recipient = new MessageRecipient();
                 var messageMediator = new MessageMediator();
                 messageMediator.Register<string>(recipient, recipient.OnMessage);
-                Assert.IsTrue(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
             }
 
             [Test]
@@ -415,7 +409,7 @@ namespace Catel.Tests.Messaging
                 GC.Collect();
 
                 recipient = new MessageRecipient();
-                Assert.IsFalse(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage));
+                Assert.That(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
             }
         }
     }
@@ -458,7 +452,7 @@ namespace Catel.Tests.Messaging
             m.Register<Message>(b, b.OnMessageReceived);
             m.Unregister<Message>(b, b.OnMessageReceived); // this actually unregisters a's handler, not b's handler.
 
-            m.SendMessage(new Message {Text = "hello"});
+            m.SendMessage(new Message { Text = "hello" });
             Assert.That(a.Received, Is.EqualTo("hello"));
         }
     }

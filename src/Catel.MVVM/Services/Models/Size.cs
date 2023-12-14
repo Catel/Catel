@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Size.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
 
@@ -16,7 +9,7 @@ namespace Catel.Services
     {
         private double _width;
         private double _height;
-        private string _string;
+        private string? _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Size"/> class.
@@ -69,9 +62,9 @@ namespace Catel.Services
         /// </summary>
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            if (ReferenceEquals(obj, null))
+            if (obj is null)
             {
                 return false;
             }
@@ -92,7 +85,9 @@ namespace Catel.Services
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
         public override int GetHashCode()
         {
+#pragma warning disable HAA0102 // Non-overridden virtual method call on value type
             return base.GetHashCode();
+#pragma warning restore HAA0102 // Non-overridden virtual method call on value type
         }
 
         /// <summary>
@@ -143,7 +138,7 @@ namespace Catel.Services
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return _string ?? (_string =  string.Format("{0}x{1}", Width, Height));
+            return _string ?? (_string =  $"{Width}x{Height}");
         }
     }
 }

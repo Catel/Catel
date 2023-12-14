@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LogListenerConfiguration.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -20,7 +12,6 @@ namespace Catel.Logging
     /// </summary>
     public sealed class LogListenerConfiguration : ConfigurationElement
     {
-        #region Constants
         /// <summary>
         /// The type property name.
         /// </summary>
@@ -30,16 +21,12 @@ namespace Catel.Logging
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
         /// <summary>
         /// The dynamic properties.
         /// </summary>
         private readonly Dictionary<string, string> _dynamicProperties = new Dictionary<string, string>(); 
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LogListenerConfiguration"/> class.
         /// </summary>
@@ -47,9 +34,7 @@ namespace Catel.Logging
         {
             
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
@@ -60,9 +45,7 @@ namespace Catel.Logging
             get { return (string) this[TypePropertyName]; }
             set { this[TypePropertyName] = value; }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Gets a value indicating whether an unknown attribute is encountered during deserialization.
         /// </summary>
@@ -81,21 +64,24 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns>The <see cref="ILogListener"/>.</returns>
-        public ILogListener GetLogListener(Assembly assembly = null)
+        public ILogListener GetLogListener(Assembly? assembly = null)
         {
-            string typeAsString = ObjectToStringHelper.ToString(Type);
+            var typeAsString = ObjectToStringHelper.ToString(Type);
+
             Log.Debug("Creating ILogListener based on configuration for type '{0}'", typeAsString);
 
-            ILogListener logListener = null;
+            ILogListener? logListener = null;
 
             var type = TypeCache.GetType(Type, allowInitialization: false);
             if (type is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to retrieve type '{0}'", typeAsString);
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to retrieve type '{typeAsString}'");
             }
 
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
+#pragma warning disable HAA0101 // Array allocation for params parameter
             logListener = typeFactory.CreateInstanceWithParametersAndAutoCompletion(type, assembly) as ILogListener;
+#pragma warning restore HAA0101 // Array allocation for params parameter
             if (logListener is null)
             {
                 logListener = typeFactory.CreateInstance(type) as ILogListener;
@@ -103,7 +89,7 @@ namespace Catel.Logging
 
             if (logListener is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to instantiate type '{0}' or it does not implement ILogListener and thus cannot be used as such", typeAsString);
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to instantiate type '{typeAsString}' or it does not implement ILogListener and thus cannot be used as such");
             }
 
             foreach (var dynamicProperty in _dynamicProperties)
@@ -130,8 +116,5 @@ namespace Catel.Logging
 
             return logListener;
         }
-        #endregion
     }
 }
-
-#endif

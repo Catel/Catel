@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringBuilderExtensionFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Text
+﻿namespace Catel.Tests.Text
 {
     using Catel.Text;
     using System.Text;
@@ -22,7 +16,7 @@ namespace Catel.Tests.Text
 
                 stringBuilder.AppendLine("test with {0} {1}", "formatting", 1);
 
-                Assert.AreEqual("test with formatting 1\r\n", stringBuilder.ToString());
+                Assert.That(stringBuilder.ToString(), Is.EqualTo("test with formatting 1\r\n"));
             }
         }
     }

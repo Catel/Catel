@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IViewManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
@@ -15,14 +8,11 @@ namespace Catel.MVVM.Views
     /// </summary>
     public interface IViewManager
     {
-        #region Properties
         /// <summary>
         /// Gets the active views presently registered.
         /// </summary>
         IEnumerable<IView> ActiveViews { get; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Registers a view so it can be linked to a view model instance.
         /// </summary>
@@ -51,7 +41,6 @@ namespace Catel.MVVM.Views
         /// <param name="viewType">Type of the view.</param>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
         /// <exception cref="System.ArgumentException">The <paramref name="viewType"/> is not of type <see cref="IView"/>.</exception>
-        IView GetFirstOrDefaultInstance(Type viewType);
-        #endregion
+        IView? GetFirstOrDefaultInstance(Type viewType);
     }
 }

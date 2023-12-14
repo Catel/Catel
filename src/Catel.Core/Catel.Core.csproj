@@ -1,6 +1,6 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net47;net48;netcoreapp3.1;net5.0;net6.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <AssemblyName>Catel.Core</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -16,60 +16,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="6.6.0" PrivateAssets="all">
+    <PackageReference Include="Catel.Fody" Version="4.9.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MethodTimer.Fody" Version="3.2.0" PrivateAssets="all" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
+    <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.*" />
+  </ItemGroup>  
+    
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.*" />
   </ItemGroup>
 
-  <!-- .NET 4.7 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-  </ItemGroup>
-
-  <!-- .NET 4.8 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-  </ItemGroup>
-
-  <!-- .NET Core 3.1 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-  </ItemGroup>
-
-  <!-- .NET 5.0 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0' Or '$(TargetFramework)' == 'net5.0-windows'">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-  </ItemGroup>
-
-  <!-- .NET 6.0 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net6.0-windows'">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-  </ItemGroup>
-
-  <!-- .NET Standard 2.0 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -83,6 +48,16 @@
       <DependentUpon>BoxingCache.boxedvalues.tt</DependentUpon>
     </Compile>
     
+    <None Update="Data\ModelBase.non-generic-to-generic.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ModelBase.non-generic-to-generic.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\ModelBase.non-generic-to-generic.cs">
+      <DependentUpon>ModelBase.non-generic-to-generic.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+      
     <None Update="Data\PropertyBags\PropertyBag.boxing.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PropertyBag.boxing.cs</LastGenOutput>
@@ -103,6 +78,26 @@
       <DependentUpon>TypedPropertyBag.storage.tt</DependentUpon>
     </Compile>
     
+    <None Update="Logging\Extensions\LogExtensions.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LogExtensions.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Logging\Extensions\LogExtensions.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LogExtensions.g.tt</DependentUpon>
+    </Compile>
+    
+    <None Update="Reflection\Extensions\CastExtensions.generics.g.tt">
+      <LastGenOutput>CastExtensions.generics.g.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <Compile Update="Reflection\Extensions\CastExtensions.generics.g.cs">
+      <DependentUpon>CastExtensions.generics.g.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+
     <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.caches.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FastMemberInvoker.caches.g.cs</LastGenOutput>
@@ -179,6 +174,7 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
-  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.shared.explicit.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.shared.mat.props')" />
 </Project>

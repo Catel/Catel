@@ -1,12 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IsSelectedValueConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Converts a selected value to either true of false.
@@ -15,9 +10,7 @@ namespace Catel.MVVM.Converters
     /// This converter is very usefull when a mutual exclusive selection must be made
     /// Original code found at http://geekswithblogs.net/claraoscura/archive/2008/10/17/125901.aspx
     /// </remarks>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(int?), typeof(bool))]
-#endif
     public class IsSelectedValueConverter : ValueConverterBase
     {
         /// <summary>
@@ -27,7 +20,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             int param;
             if (parameter is int)
@@ -40,10 +33,10 @@ namespace Catel.MVVM.Converters
             }
             else
             {
-                return false;
+                return BoxingCache.GetBoxedValue(false);
             }
 
-            return (value is null) ? false : (int)value == param;
+            return BoxingCache.GetBoxedValue((value is null) ? false : (int)value == param);
         }
 
         /// <summary>
@@ -57,7 +50,7 @@ namespace Catel.MVVM.Converters
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected override object ConvertBack(object value, Type targetType, object parameter)
+        protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
             if (!(value is bool))
             {
@@ -80,7 +73,7 @@ namespace Catel.MVVM.Converters
 
             if ((bool)value)
             {
-                return param;
+                return BoxingCache.GetBoxedValue(param);
             }
 
             return ConverterHelper.UnsetValue;

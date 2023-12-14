@@ -1,14 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionToCountConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Collections;
+    using Catel.Data;
 
     /// <summary>
     /// Converts the items inside a collection to the number of elements contained by the collection.
@@ -22,15 +16,15 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             var collection = value as ICollection;
-            if (collection != null)
+            if (collection is not null)
             {
-                return collection.Count;
+                return BoxingCache.GetBoxedValue(collection.Count);
             }
 
-            return 0;
+            return BoxingCache.GetBoxedValue(0);
         }
     }
 }

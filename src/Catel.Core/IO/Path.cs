@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Path.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IO
+﻿namespace Catel.IO
 {
     using System;
     using System.IO;
     using System.Reflection;
     using Reflection;
-
-#if UWP
-    using Windows.Storage;
-#endif
 
     /// <summary>
     /// Gets the application data target.
@@ -130,15 +120,24 @@ namespace Catel.IO
         public static string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget)
         {
             var assembly = AssemblyHelper.GetEntryAssembly();
-
-#if !NETFX_CORE
             if (assembly is null)
             {
                 assembly = Assembly.GetCallingAssembly();
             }
-#endif
 
-            return GetApplicationDataDirectory(applicationDataTarget, assembly.Company(), assembly.Product());
+            var company = assembly.Company() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(company))
+            {
+                throw new CatelException("Assembly does not contain a company attribute");
+            }
+
+            var product = assembly.Product() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(product))
+            {
+                throw new CatelException("Assembly does not contain a product attribute");
+            }
+
+            return GetApplicationDataDirectory(applicationDataTarget, company, product);
         }
 
         /// <summary>
@@ -168,25 +167,6 @@ namespace Catel.IO
         {
             var rootDirectory = string.Empty;
 
-#if NETFX_CORE
-            switch (applicationDataTarget)
-            {
-                case ApplicationDataTarget.UserLocal:
-                    rootDirectory = ApplicationData.Current.LocalFolder.Path;
-                    break;
-
-                case ApplicationDataTarget.UserRoaming:
-                    rootDirectory = ApplicationData.Current.RoamingFolder.Path;
-                    break;
-
-                case ApplicationDataTarget.Machine:
-                    rootDirectory = ApplicationData.Current.SharedLocalFolder.Path;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException("applicationDataTarget");
-            }
-#else
             switch (applicationDataTarget)
             {
                 case ApplicationDataTarget.UserLocal:
@@ -204,9 +184,8 @@ namespace Catel.IO
                 default:
                     throw new ArgumentOutOfRangeException("applicationDataTarget");
             }
-#endif
 
-            string path = Combine(rootDirectory, companyName, productName);
+            var path = System.IO.Path.Combine(rootDirectory, companyName, productName);
 
             if (!Directory.Exists(path))
             {
@@ -295,16 +274,14 @@ namespace Catel.IO
         /// <param name="basePath">The base path (a.k.a. working directory). If this parameter is <c>null</c> or empty, the current working directory will be used.</param>
         /// <returns>Relative path.</returns>
         /// <exception cref="ArgumentException">The <paramref name="fullPath"/> is <c>null</c> or whitespace.</exception>
-        public static string GetRelativePath(string fullPath, string basePath = null)
+        public static string GetRelativePath(string fullPath, string? basePath = null)
         {
             Argument.IsNotNullOrWhitespace("fullPath", fullPath);
 
-#if !NETFX_CORE
             if (string.IsNullOrEmpty(basePath))
             {
                 basePath = Environment.CurrentDirectory;
             }
-#endif
 
             fullPath = RemoveTrailingSlashes(fullPath);
             basePath = RemoveTrailingSlashes(basePath);
@@ -356,7 +333,6 @@ namespace Catel.IO
             return fullPath;
         }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Returns the full path for a relative path.
         /// </summary>
@@ -383,7 +359,6 @@ namespace Catel.IO
 
             return path;
         }
-#endif
 
         /// <summary>
         /// Appends a trailing backslash (\) to the path.
@@ -416,37 +391,6 @@ namespace Catel.IO
         }
 
         /// <summary>
-        /// Returns a combination of multiple paths.
-        /// </summary>
-        /// <param name="paths">Paths to combine.</param>
-        /// <returns>Combination of all the paths passed.</returns>
-        public static string Combine(params string[] paths)
-        {
-            var result = string.Empty;
-
-            // Make sure we have any values
-            if (paths.Length == 0)
-            {
-                return string.Empty;
-            }
-
-            if (paths.Length == 1)
-            {
-                return paths[0];
-            }
-
-            for (int i = 0; i < paths.Length; i++)
-            {
-                if (!string.IsNullOrEmpty(paths[i]))
-                {
-                    result = System.IO.Path.Combine(result, paths[i]);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Returns a combination of multiple urls.
         /// </summary>
         /// <param name="urls">Urls to combine.</param>
@@ -474,9 +418,9 @@ namespace Catel.IO
                 {
                     result = RemoveTrailingSlashes(result);
 
-                    string tempPath = RemoveStartAndTrailingSlashes(urls[i]);
+                    var tempPath = RemoveStartAndTrailingSlashes(urls[i]);
 
-                    result = Combine(result, tempPath);
+                    result = System.IO.Path.Combine(result, tempPath);
                 }
             }
 

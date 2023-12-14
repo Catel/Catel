@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DynamicConfiguration.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Configuration
+﻿namespace Catel.Configuration
 {
     using System;
     using System.Collections.Generic;
@@ -21,12 +15,13 @@ namespace Catel.Configuration
     [SerializerModifier(typeof(DynamicConfigurationSerializerModifier))]
     public class DynamicConfiguration : ModelBase, ICustomXmlSerializable
     {
+#pragma warning disable IDE1006 // Naming Styles
         protected static readonly HashSet<string> DynamicProperties = new HashSet<string>();
+#pragma warning restore IDE1006 // Naming Styles
 
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
-        private IXmlSerializer _xmlSerializer;
+        private IXmlSerializer? _xmlSerializer;
 
-        #region Methods
         protected override IPropertyBag CreatePropertyBag()
         {
             // Fix for https://github.com/Catel/Catel/issues/1517 since values
@@ -48,7 +43,7 @@ namespace Catel.Configuration
                 return;
             }
 
-            var propertyData = RegisterProperty(name, typeof(object));
+            var propertyData = RegisterProperty<object>(name);
 
             InitializePropertyAfterConstruction(propertyData);
         }
@@ -58,7 +53,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>System.String.</returns>
-        public virtual object GetConfigurationValue(string name)
+        public virtual object? GetConfigurationValue(string name)
         {
             RegisterConfigurationKey(name);
 
@@ -70,7 +65,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        public virtual void SetConfigurationValue(string name, object value)
+        public virtual void SetConfigurationValue(string name, object? value)
         {
             RegisterConfigurationKey(name);
 
@@ -86,8 +81,6 @@ namespace Catel.Configuration
         /// <returns><c>true</c> if the property is set; otherwise, <c>false</c>.</returns>
         public virtual bool IsConfigurationValueSet(string name)
         {
-            Argument.IsNotNull("name", name);
-
             if (!IsPropertyRegistered(GetType(), name))
             {
                 return false;
@@ -105,20 +98,17 @@ namespace Catel.Configuration
         /// <param name="name">The name.</param>
         public virtual void MarkConfigurationValueAsSet(string name)
         {
-            Argument.IsNotNull("name", name);
-
             lock (_propertiesSetAtLeastOnce)
             {
                 _propertiesSetAtLeastOnce.Add(name);
             }
         }
-        #endregion
 
         protected virtual IXmlSerializer GetXmlSerializer()
         {
             if (_xmlSerializer is null)
             {
-                _xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+                _xmlSerializer = ServiceLocator.Default.ResolveRequiredType<IXmlSerializer>();
             }
 
             return _xmlSerializer;
@@ -126,7 +116,7 @@ namespace Catel.Configuration
 
         public virtual void Serialize(XmlWriter xmlWriter)
         {
-            if (xmlWriter != null)
+            if (xmlWriter is not null)
             {
                 var xmlSerializer = GetXmlSerializer();
                 xmlSerializer.Serialize(this, new XmlSerializationContextInfo(xmlWriter, this)
@@ -141,7 +131,7 @@ namespace Catel.Configuration
             var propertyDataManager = PropertyDataManager.Default;
             var type = GetType();
 
-            if (xmlReader != null)
+            if (xmlReader is not null)
             {
                 if (xmlReader.ReadState == ReadState.Initial)
                 {
@@ -157,7 +147,7 @@ namespace Catel.Configuration
                 while (xmlReader.MoveToNextContentElement(parentNode))
                 {
                     var valueRead = false;
-                    object value = null;
+                    object? value = null;
 
                     var elementName = xmlReader.LocalName;
 
@@ -169,19 +159,21 @@ namespace Catel.Configuration
                         typeAttribute = xmlReader.GetAttribute("type");
                     }
 
-                    if (typeAttribute != null)
+                    if (typeAttribute is not null)
                     {
                         var elementType = TypeCache.GetTypeWithoutAssembly(typeAttribute);
-                        if (elementType != null)
+                        if (elementType is not null)
                         {
                             if (elementType != typeof(string) && !elementType.IsValueTypeEx())
                             {
                                 var instance = Activator.CreateInstance(elementType);
-
-                                // Complex object, use xml serializer
-                                var xmlSerializer = GetXmlSerializer();
-                                value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
-                                valueRead = true;
+                                if (instance is not null)
+                                {
+                                    // Complex object, use xml serializer
+                                    var xmlSerializer = GetXmlSerializer();
+                                    value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
+                                    valueRead = true;
+                                }
                             }
                         }
                     }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeakFuncFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests
+﻿namespace Catel.Tests
 {
     using System;
 
@@ -64,7 +58,7 @@ namespace Catel.Tests
             target = null;
             GC.Collect();
 
-            Assert.IsFalse(weakAction.IsTargetAlive);
+            Assert.That(weakAction.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -74,20 +68,20 @@ namespace Catel.Tests
             var weakFunc = new WeakFunc<bool>(target, target.PublicFuncToExecute);
 
             bool result;
-            Assert.IsTrue(weakFunc.Execute(out result));
+            Assert.That(weakFunc.Execute(out result), Is.True);
 
-            Assert.AreEqual(1, target.PublicFuncExecutedCount);
+            Assert.That(target.PublicFuncExecutedCount, Is.EqualTo(1));
 
             target = null;
             GC.Collect();
 
-            Assert.IsFalse(weakFunc.IsTargetAlive);
+            Assert.That(weakFunc.IsTargetAlive, Is.False);
         }
 
         [TestCase]
         public void NonGeneric_AnonymousDelegate()
         {
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakFunc<bool>(null, () => true));
+            Assert.Throws<NotSupportedException>(() => new WeakFunc<bool>(null, () => true));
         }
 
         [TestCase]
@@ -97,14 +91,14 @@ namespace Catel.Tests
             var weakFunc = new WeakFunc<int, bool>(target, target.PublicFuncWithParameterToExecute);
 
             bool result;
-            Assert.IsTrue(weakFunc.Execute(1, out result));
+            Assert.That(weakFunc.Execute(1, out result), Is.True);
 
-            Assert.AreEqual(1, target.PublicFuncWithParameterExecutedCount);
+            Assert.That(target.PublicFuncWithParameterExecutedCount, Is.EqualTo(1));
 
             target = null;
             GC.Collect();
 
-            Assert.IsFalse(weakFunc.IsTargetAlive);
+            Assert.That(weakFunc.IsTargetAlive, Is.False);
         }
 
         [TestCase]
@@ -112,7 +106,7 @@ namespace Catel.Tests
         {
             var count = 0;
 
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(
+            Assert.Throws<NotSupportedException>(
                 () => new WeakFunc<int, bool>(
                     null,
                     i =>
@@ -121,7 +115,7 @@ namespace Catel.Tests
                             return true;
                         }));
 
-            Assert.AreEqual(0, count);
+            Assert.That(count, Is.EqualTo(0));
         }
         #endregion
     }

@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
     [Serializable]
@@ -14,21 +13,21 @@
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes",
             Justification = "This is declared by the Catel MVVM framework.")]
-        public static readonly PropertyData MyIntegerProperty = RegisterProperty("MyInteger", typeof(int));
+        public static readonly IPropertyData MyIntegerProperty = RegisterProperty<int>("MyInteger");
 
         /// <summary>
         /// Register the MyDecimal property so it is known in the class.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes",
             Justification = "This is declared by the Catel MVVM framework.")]
-        public static readonly PropertyData MyDecimalProperty = RegisterProperty("MyDecimal", typeof(decimal));
+        public static readonly IPropertyData MyDecimalProperty = RegisterProperty<decimal>("MyDecimal");
 
         /// <summary>
         /// Register the MyString property so it is known in the class.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes",
             Justification = "This is declared by the Catel MVVM framework.")]
-        public static readonly PropertyData MyStringProperty = RegisterProperty("MyString", typeof(string));
+        public static readonly IPropertyData MyStringProperty = RegisterProperty<string>("MyString");
 
         #endregion
 
@@ -37,12 +36,6 @@
         public IsDirtyModelTestModel()
         {
             // Create a new object from scratch
-        }
-
-        protected IsDirtyModelTestModel(SerializationInfo info, StreamingContext context) 
-            : base(info, context)
-        {
-            // TBD
         }
 
         #endregion

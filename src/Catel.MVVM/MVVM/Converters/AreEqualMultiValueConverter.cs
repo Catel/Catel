@@ -1,16 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AreEqualMultiValueConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
     using System.Windows.Data;
     using System.Windows.Markup;
+    using Catel.Data;
 
     /// <summary>
     /// Converts a comparison of 2 bindings to a boolean whether the 
@@ -27,14 +20,14 @@ namespace Catel.MVVM.Converters
         /// <param name="parameter">Not supported.</param>
         /// <param name="culture">Not supported.</param>
         /// <returns>True if the values are equal, otherwise false.</returns>
-        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object? Convert(object?[] values, Type targetType, object? parameter, System.Globalization.CultureInfo? culture)
         {
             if (values.Length != 2)
             {
-                return false;
+                return BoxingCache.GetBoxedValue(false);
             }
 
-            return object.Equals(values[0], values[1]);
+            return BoxingCache.GetBoxedValue(object.Equals(values[0], values[1]));
         }
 
         /// <summary>
@@ -45,7 +38,7 @@ namespace Catel.MVVM.Converters
         /// <param name="parameter">Not supported.</param>
         /// <param name="culture">Not supported.</param>
         /// <returns>Not supported.</returns>
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        public object[]? ConvertBack(object? value, Type[] targetTypes, object? parameter, System.Globalization.CultureInfo? culture)
         {
             // Not supported (and IMultiValueConverter must return null if no conversion is supported)
             return null;
@@ -62,5 +55,3 @@ namespace Catel.MVVM.Converters
         }
     }
 }
-
-#endif

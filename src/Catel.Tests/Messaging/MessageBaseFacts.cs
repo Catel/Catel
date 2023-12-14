@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageBaseFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging
 {
     using Catel.Messaging;
     using NUnit.Framework;
@@ -29,7 +23,7 @@ namespace Catel.Tests.Messaging
             {
                 var message = new TestMessage("my content");
 
-                Assert.AreEqual("my content", message.Data);
+                Assert.That(message.Data, Is.EqualTo("my content"));
             }
         }
 
@@ -57,9 +51,9 @@ namespace Catel.Tests.Messaging
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage);
 
-                Assert.IsTrue(ranInitializer);
-                Assert.IsTrue(_messageSent);
-                Assert.AreEqual("test", _messageData);
+                Assert.That(ranInitializer, Is.True);
+                Assert.That(_messageSent, Is.True);
+                Assert.That(_messageData, Is.EqualTo("test"));
             }
 
             [TestCase]
@@ -75,8 +69,8 @@ namespace Catel.Tests.Messaging
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage);
 
-                Assert.IsTrue(_messageSent);
-                Assert.AreEqual("test", _messageData);
+                Assert.That(_messageSent, Is.True);
+                Assert.That(_messageData, Is.EqualTo("test"));
             }
 
             [TestCase]
@@ -92,8 +86,8 @@ namespace Catel.Tests.Messaging
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage, "mytag");
 
-                Assert.IsTrue(_messageSent);
-                Assert.AreEqual("test", _messageData);
+                Assert.That(_messageSent, Is.True);
+                Assert.That(_messageData, Is.EqualTo("test"));
             }
 
             public void OnTestMessage(TestMessage message)
@@ -119,7 +113,7 @@ namespace Catel.Tests.Messaging
 
                 TestMessage.Unregister(this, OnTestMessage);
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
             }
 
             [TestCase]
@@ -133,7 +127,7 @@ namespace Catel.Tests.Messaging
 
                 TestMessage.Unregister(this, OnTestMessage, "mytag");
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
             }
 
             public void OnTestMessage(TestMessage message)
@@ -158,13 +152,13 @@ namespace Catel.Tests.Messaging
 
                 TestMessage.Unregister(this, OnTestMessage);
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
 
                 _messageSent = false;
 
                 TestMessage.SendWith("test");
 
-                Assert.IsFalse(_messageSent);
+                Assert.That(_messageSent, Is.False);
             }
 
             [TestCase]
@@ -178,13 +172,13 @@ namespace Catel.Tests.Messaging
 
                 TestMessage.Unregister(this, OnTestMessage, "mytag");
 
-                Assert.IsTrue(_messageSent);
+                Assert.That(_messageSent, Is.True);
 
                 _messageSent = false;
 
                 TestMessage.SendWith("test", "mytag");
 
-                Assert.IsFalse(_messageSent);
+                Assert.That(_messageSent, Is.False);
             }
 
             public void OnTestMessage(TestMessage message)
@@ -201,7 +195,7 @@ namespace Catel.Tests.Messaging
             {
                 var message = TestMessage.With("test");
 
-                Assert.AreEqual("test", message.Data);
+                Assert.That(message.Data, Is.EqualTo("test"));
             }
         }
     }

@@ -6,21 +6,20 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Reflection;
 
     public static partial class ExpressionBuilder
     {
-        public static Expression<Func<object, TProperty>> CreatePropertyGetter<TProperty>(Type modelType, string propertyName)
+        public static Expression<Func<object, TProperty>>? CreatePropertyGetter<TProperty>(Type modelType, string propertyName)
         {
+            ArgumentNullException.ThrowIfNull(modelType);
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
             var property = modelType.GetPropertyEx(propertyName);
             return property?.GetMethod is null ? null : CreatePropertyGetter<object, TProperty>(property);
         }
 
-        public static Expression<Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(string propertyName)
+        public static Expression<Func<T, TProperty>>? CreatePropertyGetter<T, TProperty>(string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -28,14 +27,12 @@
             return property?.GetMethod is null ? null : CreatePropertyGetter<T, TProperty>(property);
         }
 
-        public static Expression<Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(PropertyInfo propertyInfo)
+        public static Expression<Func<T, TProperty>>? CreatePropertyGetter<T, TProperty>(PropertyInfo propertyInfo)
         {
-            Argument.IsNotNull(nameof(propertyInfo), propertyInfo);
-
             return propertyInfo.GetMethod is null ? null : CreatePropertyGetterExpression<T, TProperty>(propertyInfo);
         }
 
-        public static Expression<Func<T, object>> CreatePropertyGetter<T>(string propertyName)
+        public static Expression<Func<T, object>>? CreatePropertyGetter<T>(string propertyName)
         {
             Argument.IsNotNullOrWhitespace(nameof(propertyName), propertyName);
 
@@ -43,9 +40,9 @@
             return property?.GetMethod is null ? null : CreatePropertyGetter<T>(property);
         }
 
-        public static Expression<Func<T, object>> CreatePropertyGetter<T>(PropertyInfo propertyInfo)
+        public static Expression<Func<T, object>>? CreatePropertyGetter<T>(PropertyInfo propertyInfo)
         {
-            Argument.IsNotNull(nameof(propertyInfo), propertyInfo);
+            ArgumentNullException.ThrowIfNull(propertyInfo);
 
             return propertyInfo.GetMethod is null ? null : CreatePropertyGetterExpression<T, object>(propertyInfo);
         }
@@ -53,7 +50,7 @@
         public static IReadOnlyDictionary<string, Expression<Func<T, TProperty>>> CreatePropertyGetters<T, TProperty>()
         {
             var propertyGetters = new Dictionary<string, Expression<Func<T, TProperty>>>(StringComparer.OrdinalIgnoreCase);
-            var properties = typeof(T).GetPropertiesEx().Where(w => w.GetMethod != null && w.PropertyType == typeof(TProperty));
+            var properties = typeof(T).GetPropertiesEx().Where(w => w.GetMethod is not null && w.PropertyType == typeof(TProperty));
 
             foreach (var property in properties)
             {
@@ -72,7 +69,7 @@
         public static IReadOnlyDictionary<string, Expression<Func<T, object>>> CreatePropertyGetters<T>()
         {
             var propertyGetters = new Dictionary<string, Expression<Func<T, object>>>(StringComparer.OrdinalIgnoreCase);
-            var properties = typeof(T).GetPropertiesEx().Where(w => w.GetMethod != null);
+            var properties = typeof(T).GetPropertiesEx().Where(w => w.GetMethod is not null);
 
             foreach (var property in properties)
             {
@@ -88,7 +85,7 @@
             return new ReadOnlyDictionary<string, Expression<Func<T, object>>>(propertyGetters);
         }
 
-        private static Expression<Func<T, TProperty>> CreatePropertyGetterExpression<T, TProperty>(PropertyInfo propertyInfo)
+        private static Expression<Func<T, TProperty>>? CreatePropertyGetterExpression<T, TProperty>(PropertyInfo propertyInfo)
         {
             var targetType = propertyInfo.DeclaringType;
             var methodInfo = propertyInfo.GetMethod;
@@ -104,7 +101,9 @@
             var body = Expression.Call(targetExpression, methodInfo);
 
             var finalExpression = GetCastOrConvertExpression(body, typeof(TProperty));
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var lambda = Expression.Lambda<Func<T, TProperty>>(finalExpression, target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return lambda;
         }
     }

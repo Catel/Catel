@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageResourceSource.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System.Diagnostics;
 
@@ -56,11 +49,7 @@ namespace Catel.Services
         /// <returns>The source string.</returns>
         public string GetSource()
         {
-#if UWP
-            return string.Format("{0}|{1}", AssemblyName, ResourceFileName);
-#else
             return string.Format("{0}.{1}, {2}", NamespaceName, ResourceFileName, AssemblyName);
-#endif
         }
     }
 }

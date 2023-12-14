@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPropertyChangedExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
     using System.ComponentModel;
@@ -26,9 +19,9 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void SubscribeToPropertyChanged(this INotifyPropertyChanged notifyPropertyChanged, string propertyName, EventHandler<PropertyChangedEventArgs> handler)
         {
-            Argument.IsNotNull("notifyPropertyChanged", notifyPropertyChanged);
+            ArgumentNullException.ThrowIfNull(notifyPropertyChanged);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            Argument.IsNotNull("handler", handler);
+            ArgumentNullException.ThrowIfNull(handler);
 
             // TODO: Check for a way to prevent memory leaks
 

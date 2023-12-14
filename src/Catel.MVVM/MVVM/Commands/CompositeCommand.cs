@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -13,13 +6,12 @@ namespace Catel.MVVM
     using System.Threading.Tasks;
     using Logging;
     using System.Windows.Input;
-    using Threading;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
     /// </summary>
 #pragma warning disable CS1956 // Member implements interface member with multiple matches at run-time
-    public class CompositeCommand : Command, ICompositeCommand
+    public class CompositeCommand : TaskCommand<object?, object?, ITaskProgressReport>, ICompositeCommand
 #pragma warning restore CS1956 // Member implements interface member with multiple matches at run-time
     {
         /// <summary>
@@ -30,23 +22,22 @@ namespace Catel.MVVM
         private readonly object _lock = new object();
         private readonly List<CommandInfo> _commandInfo = new List<CommandInfo>();
         private readonly List<Action> _actions = new List<Action>();
-        private readonly List<Action<object>> _actionsWithParameter = new List<Action<object>>();
+        private readonly List<Action<object?>> _actionsWithParameter = new List<Action<object?>>();
+        private readonly List<Func<Task>> _asyncActions = new List<Func<Task>>();
+        private readonly List<Func<object?, Task>> _asyncActionsWithParameter = new List<Func<object?, Task>>();
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}" /> class.
         /// </summary>
         public CompositeCommand()
-            : base(null)
+            : base() // dummy action
         {
             AllowPartialExecution = false;
             AtLeastOneMustBeExecutable = true;
 
-            InitializeActions(ExecuteCompositeCommand, null, CanExecuteCompositeCommand, null);
+            InitializeAsyncActions(ExecuteCompositeCommandAsync, null, CanExecuteCompositeCommand, null);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets whether this command should check the can execute of all commands to determine can execute for composite command.
         /// <para />
@@ -77,69 +68,116 @@ namespace Catel.MVVM
         /// </summary>
         /// <value><c>true</c> if at least one command must be executed; otherwise, <c>false</c>.</value>
         public bool AtLeastOneMustBeExecutable { get; set; }
-        #endregion
 
-        #region Methods
-        private void ExecuteCompositeCommand(object parameter)
+        private async Task ExecuteCompositeCommandAsync(object? parameter)
         {
+            var commandsToExecute = new List<ICommand>();
+            var actionsToExecute = new List<Action>();
+            var actionsWithParameterToExecute = new List<Action<object?>>();
+            var asyncActionsToExecute = new List<Func<Task>>();
+            var asyncActionsWithParameterToExecute = new List<Func<object?, Task>>();
+
             lock (_lock)
             {
-                var commands = (from commandInfo in _commandInfo
-                                select commandInfo.Command).ToList();
+                commandsToExecute.AddRange(from commandInfo in _commandInfo
+                                           select commandInfo.Command);
 
-                foreach (var command in commands)
+                actionsToExecute.AddRange(_actions);
+                actionsWithParameterToExecute.AddRange(_actionsWithParameter);
+                asyncActionsToExecute.AddRange(_asyncActions);
+                asyncActionsWithParameterToExecute.AddRange(_asyncActionsWithParameter);
+            }
+
+            Log.Debug($"Executing '{commandsToExecute.Count}' command(s)");
+
+            foreach (var command in commandsToExecute)
+            {
+                try
                 {
-                    try
+                    if (command is not null)
                     {
-                        if (command != null)
+                        if (command.CanExecute(parameter))
                         {
-                            if (command.CanExecute(parameter))
-                            {
-                                command.Execute(parameter);
-                            }
+                            command.Execute(parameter);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to execute one of the commands in the composite commands, execution will continue");
                     }
                 }
-
-                var actions = _actions.ToList();
-                foreach (var action in actions)
+                catch (Exception ex)
                 {
-                    try
+                    Log.Error(ex, "Failed to execute one of the commands in the composite commands, execution will continue");
+                }
+            }
+
+            Log.Debug($"Executing '{actionsToExecute.Count}' action(s)");
+
+            foreach (var action in actionsToExecute)
+            {
+                try
+                {
+                    if (action is not null)
                     {
-                        if (action != null)
-                        {
-                            action();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
+                        action();
                     }
                 }
-
-                var actionsWithParameter = _actionsWithParameter.ToList();
-                foreach (var actionWithParameter in actionsWithParameter)
+                catch (Exception ex)
                 {
-                    try
+                    Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
+                }
+            }
+
+            Log.Debug($"Executing '{actionsWithParameterToExecute.Count}' action(s) with parameter");
+
+            foreach (var actionWithParameter in actionsWithParameterToExecute)
+            {
+                try
+                {
+                    if (actionWithParameter is not null)
                     {
-                        if (actionWithParameter != null)
-                        {
-                            actionWithParameter(parameter);
-                        }
+                        actionWithParameter(parameter);
                     }
-                    catch (Exception ex)
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
+                }
+            }
+
+            Log.Debug($"Executing '{asyncActionsToExecute.Count}' async action(s)");
+
+            foreach (var action in asyncActionsToExecute)
+            {
+                try
+                {
+                    if (action is not null)
                     {
-                        Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
+                        await action();
                     }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to execute one of the async actions in the composite commands, execution will continue");
+                }
+            }
+
+            Log.Debug($"Executing '{asyncActionsWithParameterToExecute.Count}' async action(s) with parameter");
+
+            foreach (var action in asyncActionsWithParameterToExecute)
+            {
+                try
+                {
+                    if (action is not null)
+                    {
+                        await action(parameter);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to execute one of the async actions in the composite commands, execution will continue");
                 }
             }
         }
 
-        private bool CanExecuteCompositeCommand(object parameter)
+        private bool CanExecuteCompositeCommand(object? parameter)
         {
             lock (_lock)
             {
@@ -150,7 +188,7 @@ namespace Catel.MVVM
 
                     foreach (var command in commands)
                     {
-                        if (command != null)
+                        if (command is not null)
                         {
                             if (!command.CanExecute(parameter))
                             {
@@ -172,7 +210,7 @@ namespace Catel.MVVM
 
                     foreach (var command in commands)
                     {
-                        if (command != null)
+                        if (command is not null)
                         {
                             if (command.CanExecute(parameter))
                             {
@@ -218,11 +256,37 @@ namespace Catel.MVVM
         /// Gets the actions with parameters currently registered to this composite command.
         /// </summary>
         /// <returns>IEnumerable.</returns>
-        public IEnumerable<Action<object>> GetActionsWithParameter()
+        public IEnumerable<Action<object?>> GetActionsWithParameter()
         {
             lock (_lock)
             {
                 return (from action in _actionsWithParameter
+                        select action).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the actions currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<Func<Task>> GetAsyncActions()
+        {
+            lock (_lock)
+            {
+                return (from action in _asyncActions
+                        select action).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the actions with parameters currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<Func<object?, Task>> GetAsyncActionsWithParameter()
+        {
+            lock (_lock)
+            {
+                return (from action in _asyncActionsWithParameter
                         select action).ToList();
             }
         }
@@ -236,9 +300,9 @@ namespace Catel.MVVM
         /// <remarks>
         /// Note that if the view model is not specified, the command must be unregistered manually in order to prevent memory leaks.
         /// </remarks>
-        public void RegisterCommand(ICommand command, IViewModel viewModel = null)
+        public void RegisterCommand(ICommand command, IViewModel? viewModel = null)
         {
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             lock (_lock)
             {
@@ -252,47 +316,13 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Registers the specified action.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public void RegisterAction(Action action)
-        {
-            Argument.IsNotNull("action", action);
-
-            lock (_lock)
-            {
-                _actions.Add(action);
-
-                Log.Debug("Registered action in CompositeCommand");
-            }
-        }
-
-        /// <summary>
-        /// Registers the specified action.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public void RegisterAction(Action<object> action)
-        {
-            Argument.IsNotNull("action", action);
-
-            lock (_lock)
-            {
-                _actionsWithParameter.Add(action);
-
-                Log.Debug("Registered action<object> in CompositeCommand");
-            }
-        }
-
-        /// <summary>
         /// Unregisters the specified command.
         /// </summary>
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         public void UnregisterCommand(ICommand command)
         {
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             lock (_lock)
             {
@@ -312,13 +342,30 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void RegisterAction(Action action)
+        {
+            ArgumentNullException.ThrowIfNull(action);
+
+            lock (_lock)
+            {
+                _actions.Add(action);
+
+                Log.Debug("Registered action in CompositeCommand");
+            }
+        }
+
+        /// <summary>
         /// Unregisters the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         public void UnregisterAction(Action action)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             lock (_lock)
             {
@@ -336,13 +383,30 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void RegisterAction(Action<object?> action)
+        {
+            ArgumentNullException.ThrowIfNull(action);
+
+            lock (_lock)
+            {
+                _actionsWithParameter.Add(action);
+
+                Log.Debug("Registered action<object> in CompositeCommand");
+            }
+        }
+
+        /// <summary>
         /// Unregisters the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public void UnregisterAction(Action<object> action)
+        public void UnregisterAction(Action<object?> action)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             lock (_lock)
             {
@@ -358,49 +422,126 @@ namespace Catel.MVVM
             }
         }
 
-        private void OnCommandCanExecuteChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void RegisterAction(Func<Task> action)
+        {
+            ArgumentNullException.ThrowIfNull(action);
+
+            lock (_lock)
+            {
+                _asyncActions.Add(action);
+
+                Log.Debug("Registered async action in CompositeCommand");
+            }
+        }
+
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void UnregisterAction(Func<Task> action)
+        {
+            ArgumentNullException.ThrowIfNull(action);
+
+            lock (_lock)
+            {
+                for (var i = _asyncActions.Count - 1; i >= 0; i--)
+                {
+                    if (ReferenceEquals(_asyncActions[i], action))
+                    {
+                        _asyncActions.RemoveAt(i);
+
+                        Log.Debug("Unregistered async action from CompositeCommand");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void RegisterAction(Func<object?, Task> action)
+        {
+            ArgumentNullException.ThrowIfNull(action);
+
+            lock (_lock)
+            {
+                _asyncActionsWithParameter.Add(action);
+
+                Log.Debug("Registered async action<object> in CompositeCommand");
+            }
+        }
+
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void UnregisterAction(Func<object?, Task> action)
+        {
+            ArgumentNullException.ThrowIfNull(action);
+
+            lock (_lock)
+            {
+                for (var i = _asyncActionsWithParameter.Count - 1; i >= 0; i--)
+                {
+                    if (ReferenceEquals(_asyncActionsWithParameter[i], action))
+                    {
+                        _asyncActionsWithParameter.RemoveAt(i);
+
+                        Log.Debug("Unregistered async action<object> from CompositeCommand");
+                    }
+                }
+            }
+        }
+
+        private void OnCommandCanExecuteChanged(object? sender, EventArgs e)
         {
             RaiseCanExecuteChanged();
         }
-        #endregion
 
-        #region Nested type: CommandInfo
         private class CommandInfo
         {
             private readonly CompositeCommand _compositeCommand;
 
-            #region Constructors
-            public CommandInfo(CompositeCommand compositeCommand, ICommand command, IViewModel viewModel)
+            public CommandInfo(CompositeCommand compositeCommand, ICommand command, IViewModel? viewModel)
             {
                 _compositeCommand = compositeCommand;
 
                 Command = command;
                 ViewModel = viewModel;
 
-                if (viewModel != null)
+                if (viewModel is not null)
                 {
                     viewModel.ClosedAsync += OnViewModelClosedAsync;
                 }
             }
-            #endregion
 
-            #region Properties
             public ICommand Command { get; private set; }
-            public IViewModel ViewModel { get; private set; }
-            #endregion
+            public IViewModel? ViewModel { get; private set; }
 
-            private Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
+            private Task OnViewModelClosedAsync(object? sender, ViewModelClosedEventArgs e)
             {
                 Log.Debug("ViewModel '{0}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
 
                 _compositeCommand.UnregisterCommand(Command);
 
-                ViewModel.ClosedAsync -= OnViewModelClosedAsync;
-                ViewModel = null;
+                var viewModel = ViewModel;
+                if (viewModel is not null)
+                {
+                    viewModel.ClosedAsync -= OnViewModelClosedAsync;
+                    ViewModel = null;
+                }
 
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
         }
-        #endregion
     }
 }

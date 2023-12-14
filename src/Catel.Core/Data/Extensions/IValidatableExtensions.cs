@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IValidatableExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
     using System;
     using System.Linq;
     using System.Text;
-    using Text;
 
     /// <summary>
     /// Extensions for IValidatable.
@@ -24,8 +16,6 @@ namespace Catel.Data
         /// <returns>The validation context.</returns>
         public static IValidationContext GetValidationContext(this IValidatable validatable)
         {
-            Argument.IsNotNull("model", validatable);
-
             return validatable.ValidationContext;
         }
 
@@ -35,16 +25,13 @@ namespace Catel.Data
         /// <param name="validatable">The validatable model.</param>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <param name="validate">if set to <c>true</c> [validate].</param>
-        public static void AddBusinessRuleValidationResult(this IValidatable validatable, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = false)
+        public static void Add(this IValidatable validatable, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = false)
         {
-            Argument.IsNotNull("modelValidation", validatable);
-            Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
-
-            EventHandler<ValidationEventArgs> validating = null;
+            EventHandler<ValidationEventArgs>? validating = null;
             validating = (sender, e) =>
             {
                 validatable.Validating -= validating;
-                e.ValidationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
+                e.ValidationContext.Add(businessRuleValidationResult);
             };
 
             validatable.Validating += validating;
@@ -61,16 +48,13 @@ namespace Catel.Data
         /// <param name="validatable">The validatable model.</param>
         /// <param name="fieldValidationResult">The field validation result.</param>
         /// <param name="validate">if set to <c>true</c> [validate].</param>
-        public static void AddFieldValidationResult(this IValidatable validatable, IFieldValidationResult fieldValidationResult, bool validate = false)
+        public static void Add(this IValidatable validatable, IFieldValidationResult fieldValidationResult, bool validate = false)
         {
-            Argument.IsNotNull("modelValidation", validatable);
-            Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
-
-            EventHandler<ValidationEventArgs> validating = null;
+            EventHandler<ValidationEventArgs>? validating = null;
             validating = (sender, e) =>
             {
                 validatable.Validating -= validating;
-                e.ValidationContext.AddFieldValidationResult(fieldValidationResult);
+                e.ValidationContext.Add(fieldValidationResult);
             };
 
             validatable.Validating += validating;
@@ -87,8 +71,6 @@ namespace Catel.Data
         /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
         public static string GetBusinessRuleWarnings(this IValidatable validatable)
         {
-            Argument.IsNotNull("model", validatable);
-
             var warning = (from businessRuleWarning in validatable.ValidationContext.GetBusinessRuleWarnings()
                            select businessRuleWarning.Message).FirstOrDefault();
 
@@ -105,8 +87,6 @@ namespace Catel.Data
         /// </returns>
         public static string GetFieldWarnings(this IValidatable validatable, string columnName)
         {
-            Argument.IsNotNull("model", validatable);
-
             if (string.IsNullOrEmpty(columnName))
             {
                 return string.Empty;
@@ -124,8 +104,6 @@ namespace Catel.Data
         /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
         public static string GetBusinessRuleErrors(this IValidatable validatable)
         {
-            Argument.IsNotNull("model", validatable);
-
             var error = (from businessRuleError in validatable.ValidationContext.GetBusinessRuleErrors()
                          select businessRuleError.Message).FirstOrDefault();
 
@@ -142,8 +120,6 @@ namespace Catel.Data
         /// </returns>
         public static string GetFieldErrors(this IValidatable validatable, string columnName)
         {
-            Argument.IsNotNull("model", validatable);
-
             if (string.IsNullOrEmpty(columnName))
             {
                 return string.Empty;
@@ -164,10 +140,8 @@ namespace Catel.Data
         /// Warning string or empty in case of no warnings.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="validatable"/> is <c>null</c>.</exception>
-        public static string GetWarningMessage(this IValidatable validatable, string userFriendlyObjectName = null)
+        public static string GetWarningMessage(this IValidatable validatable, string? userFriendlyObjectName = null)
         {
-            Argument.IsNotNull("model", validatable);
-
             var validationContext = validatable.ValidationContext;
 
             if (!validationContext.HasWarnings)
@@ -197,10 +171,8 @@ namespace Catel.Data
         /// Error string or empty in case of no errors.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="validatable"/> is <c>null</c>.</exception>
-        public static string GetErrorMessage(this IValidatable validatable, string userFriendlyObjectName = null)
+        public static string GetErrorMessage(this IValidatable validatable, string? userFriendlyObjectName = null)
         {
-            Argument.IsNotNull("model", validatable);
-
             var validationContext = validatable.ValidationContext;
 
             if (!validationContext.HasErrors)

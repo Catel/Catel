@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TaskCommandTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.MVVM.Commands
+﻿namespace Catel.Tests.MVVM.Commands
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Catel.MVVM;
-    using Catel.Threading;
 
     using NUnit.Framework;
 
@@ -30,12 +21,12 @@ namespace Catel.Tests.MVVM.Commands
         {
             var taskCommand = new TaskCommand(TestExecuteAsync);
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
 
             taskCommand.Execute();
 
-            Assert.IsTrue(taskCommand.IsExecuting);
+            Assert.That(taskCommand.IsExecuting, Is.True);
 
             ThreadHelper.Sleep(1000);
 
@@ -43,8 +34,8 @@ namespace Catel.Tests.MVVM.Commands
 
             ThreadHelper.Sleep(1000);
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
         }
 
         [TestCase]
@@ -55,14 +46,14 @@ namespace Catel.Tests.MVVM.Commands
                 SwallowExceptions = true
             };
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
 
             try
             {
                 taskCommand.Execute();
 
-                Assert.IsTrue(taskCommand.IsExecuting);
+                Assert.That(taskCommand.IsExecuting, Is.True);
 
                 await taskCommand.Task;
             }
@@ -71,7 +62,7 @@ namespace Catel.Tests.MVVM.Commands
                 Assert.Fail($"No exception expected, should be swallowed, but got '{ex}'");
             }
 
-            Assert.IsFalse(taskCommand.IsExecuting);
+            Assert.That(taskCommand.IsExecuting, Is.False);
         }
 
         [TestCase, Explicit]
@@ -82,8 +73,8 @@ namespace Catel.Tests.MVVM.Commands
                 SwallowExceptions = false
             };
 
-            Assert.IsFalse(taskCommand.IsExecuting);
-            Assert.IsFalse(taskCommand.IsCancellationRequested);
+            Assert.That(taskCommand.IsExecuting, Is.False);
+            Assert.That(taskCommand.IsCancellationRequested, Is.False);
 
             try
             {
@@ -97,7 +88,7 @@ namespace Catel.Tests.MVVM.Commands
             {
             }
 
-            Assert.IsFalse(taskCommand.IsExecuting, "Command should not be executing");
+            Assert.That(taskCommand.IsExecuting, Is.False, "Command should not be executing");
         }
 
         //[TestCase]
@@ -130,7 +121,7 @@ namespace Catel.Tests.MVVM.Commands
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await TaskShim.Delay(TaskDelay, cancellationToken);
+            await Task.Delay(TaskDelay, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
         }
@@ -139,7 +130,7 @@ namespace Catel.Tests.MVVM.Commands
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await TaskShim.Delay(500, cancellationToken);
+            await Task.Delay(500, cancellationToken);
 
             throw new Exception("This is an expected exception");
         }
@@ -148,22 +139,14 @@ namespace Catel.Tests.MVVM.Commands
 
     public class PercentProgress : ITaskProgressReport
     {
-        #region Constructors
-        public PercentProgress(int percents, string status = null)
+        public PercentProgress(int percents, string status = "")
         {
             Percents = percents;
             Status = status;
         }
-        #endregion
 
-        #region Properties
         public int Percents { get; private set; }
-        #endregion
 
-        #region ITaskProgressReport Members
         public string Status { get; private set; }
-        #endregion
     }
 }
-
-#endif

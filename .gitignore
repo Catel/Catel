@@ -135,12 +135,27 @@ TestResults
 .github/
 BundleArtifacts/
 
+# docker / tye
+.tye
+
 # editors
 .idea
 .vscode
+
+# Binaries
+*.dll
+*.exe
 
 # fody
 FodyWeavers.xsd
 
 # Approval tests
-*.received.cs
+*.received.*
+
+# ANTLR
+data/dsl/*.class
+data/dsl/*.java
+
+# Nodejs / NPM
+node_modules
+package-lock.json

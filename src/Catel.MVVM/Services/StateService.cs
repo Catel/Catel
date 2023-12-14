@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StateService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
+    using System;
     using System.Collections.Generic;
     using Logging;
 
@@ -17,17 +11,16 @@ namespace Catel.Services
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly Dictionary<string, IState> _states = new Dictionary<string, IState>();
+        private readonly Dictionary<string, IState?> _states = new Dictionary<string, IState?>();
 
         /// <summary>
         /// Stores the state.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="state">The state.</param>
-        public void StoreState(string key, IState state)
+        public void StoreState(string key, IState? state)
         {
-            Argument.IsNotNull(nameof(key), key);
-            Argument.IsNotNull(nameof(state), state);
+            ArgumentNullException.ThrowIfNull(key);
 
             lock (_states)
             {
@@ -42,9 +35,9 @@ namespace Catel.Services
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public IState LoadState(string key)
+        public IState? LoadState(string key)
         {
-            Argument.IsNotNull(nameof(key), key);
+            ArgumentNullException.ThrowIfNull(key);
 
             lock (_states)
             {

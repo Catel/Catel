@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SynchronizationContextExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     /// <summary>
     /// Extension methods for the SynchronizationContext.
@@ -19,8 +12,6 @@ namespace Catel.Threading
         /// <returns>IDisposableToken&lt;SynchronizationContext&gt;.</returns>
         public static IDisposableToken<SynchronizationContext> AcquireScope(this SynchronizationContext synchronizationContext)
         {
-            Argument.IsNotNull("synchronizationContext", synchronizationContext);
-
             return new DisposableToken<SynchronizationContext>(synchronizationContext, x => x.Instance.Acquire(), x => x.Instance.Release());
         }
     }

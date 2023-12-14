@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeCache.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Reflection
+﻿namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +9,6 @@ namespace Catel.Reflection
     using Collections;
     using Logging;
     using MethodTimer;
-    using Threading;
 
     /// <summary>
     /// Cache containing the types of an appdomain.
@@ -30,7 +23,6 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETCORE || NETSTANDARD
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
 
         /// <summary>
@@ -42,7 +34,6 @@ namespace Catel.Reflection
         /// The boolean specifying whether the type cache is already loading assemblies via the loaded event.
         /// </summary>
         private static bool _isAlreadyInLoadingEvent = false;
-#endif
 
         /// <summary>
         /// Cache containing all the types implementing a specific interface.
@@ -99,12 +90,9 @@ namespace Catel.Reflection
 
         static TypeCache()
         {
-#if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
-#endif
         }
 
-        #region Properties
         /// <summary>
         /// Gets the names of the assemblies initialized by the TypeCache.
         /// </summary>
@@ -121,9 +109,7 @@ namespace Catel.Reflection
                 }
             }
         }
-        #endregion
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.
         /// </summary>
@@ -132,7 +118,7 @@ namespace Catel.Reflection
 #if DEBUG
         [Time("{args}")]
 #endif
-        private static void OnAssemblyLoaded(object sender, AssemblyLoadEventArgs args)
+        private static void OnAssemblyLoaded(object? sender, AssemblyLoadEventArgs args)
         {
             var assembly = args.LoadedAssembly;
             if (ShouldIgnoreAssembly(assembly))
@@ -146,7 +132,7 @@ namespace Catel.Reflection
             if (Monitor.TryEnter(_lockObject))
             {
                 var assemblyName = assembly.FullName;
-                if (!_loadedAssemblies.Contains(assemblyName))
+                if (string.IsNullOrEmpty(assemblyName) || !_loadedAssemblies.Contains(assemblyName))
                 {
                     // Fix for CTL-543
                     // General idea of fix - prevent to call GetTypes() method recursively.
@@ -191,7 +177,7 @@ namespace Catel.Reflection
 
                 // Important to do outside of the lock
                 var handler = AssemblyLoaded;
-                if (handler != null)
+                if (handler is not null)
                 {
                     var eventArgs = new AssemblyLoadedEventArgs(assembly, new Lazy<IEnumerable<Type>>(() => GetTypesOfAssembly(assembly)));
 
@@ -209,7 +195,6 @@ namespace Catel.Reflection
                 // is actually loaded, fixed for https://github.com/Catel/Catel/issues/1120
             }
         }
-#endif
 
         /// <summary>
         /// Gets the evaluators used to determine whether a specific assembly should be ignored.
@@ -235,14 +220,12 @@ namespace Catel.Reflection
             }
         }
 
-        #region Events
         /// <summary>
         /// Occurs when an assembly is loaded into the currently <see cref="AppDomain"/>.
         /// </summary>
 #pragma warning disable 67
-        public static event EventHandler<AssemblyLoadedEventArgs> AssemblyLoaded;
+        public static event EventHandler<AssemblyLoadedEventArgs>? AssemblyLoaded;
 #pragma warning restore 67
-        #endregion
 
         /// <summary>
         /// Clears the cache causing automatic re-initialization.
@@ -266,7 +249,7 @@ namespace Catel.Reflection
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true)
+        public static Type? GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
@@ -287,7 +270,7 @@ namespace Catel.Reflection
         /// multiple assemblies, it will always use the latest known type for resolving the type.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithoutAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true)
+        public static Type? GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithoutAssembly", typeNameWithoutAssembly);
 
@@ -302,7 +285,7 @@ namespace Catel.Reflection
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true)
+        public static Type? GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithAssembly", typeNameWithAssembly);
 
@@ -321,7 +304,7 @@ namespace Catel.Reflection
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
-        private static Type GetType(string typeName, string assemblyName, bool ignoreCase, bool allowInitialization = true)
+        private static Type? GetType(string typeName, string? assemblyName, bool ignoreCase, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
 
@@ -352,7 +335,7 @@ namespace Catel.Reflection
                     }
 
                     var fallbackType = GetTypeBySplittingInternals(typeName);
-                    if (fallbackType != null)
+                    if (fallbackType is not null)
                     {
                         // Though it was not initially found, we still have found a new type, register it
                         typesWithAssembly[typeName] = fallbackType;
@@ -367,7 +350,7 @@ namespace Catel.Reflection
                 }
 
                 // Try to remove version info from assembly info
-                var assemblyNameWithoutOverhead = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyName);
+                var assemblyNameWithoutOverhead = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyName!);
                 var typeNameWithoutAssemblyOverhead = TypeHelper.FormatType(assemblyNameWithoutOverhead, typeName);
 
                 if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out var typeWithoutAssembly))
@@ -378,30 +361,24 @@ namespace Catel.Reflection
                 // Fallback to GetType
                 try
                 {
-#if NETFX_CORE
-                    var type = Type.GetType(typeNameWithAssembly, false);
-#else
                     var type = Type.GetType(typeNameWithAssembly, false, ignoreCase);
-#endif
-                    if (type != null)
+                    if (type is not null)
                     {
                         typesWithAssembly[typeNameWithAssembly] = type;
                         return type;
                     }
                 }
-#if !NETFX_CORE
                 catch (System.IO.FileLoadException fle)
                 {
                     Log.Debug(fle, "Failed to load type '{0}' using Type.GetType(), failed to load file", typeNameWithAssembly);
                 }
-#endif
                 catch (Exception ex)
                 {
                     Log.Debug(ex, "Failed to load type '{0}' using Type.GetType()", typeNameWithAssembly);
                 }
 
                 // Fallback for this assembly only
-                InitializeTypes(assemblyName, false);
+                InitializeTypes(assemblyName!, false);
 
                 if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out var exisingTypeWithAssembly))
                 {
@@ -423,11 +400,11 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="typeWithInnerTypes">The type with inner types.</param>
         /// <returns></returns>
-        private static Type GetTypeBySplittingInternals(string typeWithInnerTypes)
+        private static Type? GetTypeBySplittingInternals(string typeWithInnerTypes)
         {
             // Try fast method first
             var fastType = Type.GetType(typeWithInnerTypes);
-            if (fastType != null)
+            if (fastType is not null)
             {
                 return fastType;
             }
@@ -437,7 +414,7 @@ namespace Catel.Reflection
                 // Array type
                 var arrayTypeElementString = typeWithInnerTypes.Replace("[]", string.Empty);
                 var arrayTypeElement = GetType(arrayTypeElementString, allowInitialization: false);
-                if (arrayTypeElement != null)
+                if (arrayTypeElement is not null)
                 {
                     return arrayTypeElement.MakeArrayType();
                 }
@@ -492,8 +469,6 @@ namespace Catel.Reflection
         /// <returns>Type[].</returns>
         public static Type[] GetTypesImplementingInterface(Type interfaceType)
         {
-            Argument.IsNotNull("interfaceType", interfaceType);
-
             lock (_lockObject)
             {
                 if (!_typesByInterface.TryGetValue(interfaceType, out var typesByInterface))
@@ -524,10 +499,8 @@ namespace Catel.Reflection
 #if DEBUG
         [Time]
 #endif
-        public static Type[] GetTypesOfAssembly(Assembly assembly, Func<Type, bool> predicate = null)
+        public static Type[] GetTypesOfAssembly(Assembly assembly, Func<Type, bool>? predicate = null)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             return GetTypesPrefilteredByAssembly(assembly, predicate, true);
         }
 
@@ -538,7 +511,7 @@ namespace Catel.Reflection
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>An array containing all the <see cref="Type"/> that match the predicate.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate"/> is <c>null</c>.</exception>
-        public static Type[] GetTypes(Func<Type, bool> predicate = null, bool allowInitialization = true)
+        public static Type[] GetTypes(Func<Type, bool>? predicate = null, bool allowInitialization = true)
         {
             return GetTypesPrefilteredByAssembly(null, predicate, allowInitialization);
         }
@@ -550,20 +523,20 @@ namespace Catel.Reflection
         /// <param name="predicate">The predicate.</param>
         /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>System.Type[].</returns>
-        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate, bool allowInitialization)
+        private static Type[] GetTypesPrefilteredByAssembly(Assembly? assembly, Func<Type, bool>? predicate, bool allowInitialization)
         {
-            if (allowInitialization)
+            if (allowInitialization && assembly is not null)
             {
                 InitializeTypes(assembly);
             }
 
-            var assemblyName = (assembly != null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
+            var assemblyName = (assembly is not null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName ?? string.Empty) : string.Empty;
 
             // IMPORTANT NOTE!!!! DON'T USE LOGGING IN THE CODE BELOW BECAUSE IT MIGHT CAUSE DEADLOCK (BatchLogListener will load
             // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
             // the lock and make sure not to make calls to other methods
 
-            Dictionary<string, Type> typeSource = null;
+            Dictionary<string, Type>? typeSource = null;
 
             lock (_lockObject)
             {
@@ -579,7 +552,7 @@ namespace Catel.Reflection
 
             if (typeSource is null)
             {
-                return ArrayShim.Empty<Type>();
+                return Array.Empty<Type>();
             }
 
             var retryCount = 3;
@@ -594,7 +567,7 @@ namespace Catel.Reflection
                     // against the latest possible state
                     lock (_lockObject)
                     {
-                        if (predicate != null)
+                        if (predicate is not null)
                         {
                             return typeSource.Values.Where(predicate).ToArray();
                         }
@@ -608,7 +581,7 @@ namespace Catel.Reflection
                 }
             }
 
-            return ArrayShim.Empty<Type>();
+            return Array.Empty<Type>();
 
             // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }
@@ -652,7 +625,7 @@ namespace Catel.Reflection
                 {
                     try
                     {
-                        if (assembly.FullName.Contains(assemblyName))
+                        if (assembly.FullName?.Contains(assemblyName) ?? false)
                         {
                             InitializeTypes(assembly, forceFullInitialization, allowMultithreadedInitialization);
                         }
@@ -677,11 +650,11 @@ namespace Catel.Reflection
 #if DEBUG
         [Time("{assembly}")]
 #endif
-        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false)
+        public static void InitializeTypes(Assembly? assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false)
         {
             // Important note: only allow explicit multithreaded initialization
 
-            var checkSingleAssemblyOnly = assembly != null;
+            var checkSingleAssemblyOnly = assembly is not null;
 
             lock (_lockObject)
             {
@@ -695,7 +668,7 @@ namespace Catel.Reflection
                     _hasInitializedOnce = true;
                 }
 
-                // CTL-877 Only clear when assembly != null
+                // CTL-877 Only clear when assembly is not null
                 if (forceFullInitialization && assembly is null)
                 {
                     Clear();
@@ -708,7 +681,7 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyIgnoreCase?.Clear();
                 }
 
-                var assembliesToInitialize = checkSingleAssemblyOnly ? (IEnumerable<Assembly>)new [] { assembly } : AssemblyHelper.GetLoadedAssemblies();
+                var assembliesToInitialize = checkSingleAssemblyOnly ? (IEnumerable<Assembly>)new[] { assembly! } : AssemblyHelper.GetLoadedAssemblies();
                 InitializeAssemblies(assembliesToInitialize, forceFullInitialization, allowMultithreadedInitialization);
             }
         }
@@ -729,15 +702,18 @@ namespace Catel.Reflection
                 foreach (var assembly in assemblies)
                 {
                     var loadedAssemblyFullName = assembly.FullName;
-                    var containsLoadedAssembly = _loadedAssemblies.Contains(loadedAssemblyFullName);
-                    if (!force && containsLoadedAssembly)
+                    if (!string.IsNullOrEmpty(loadedAssemblyFullName))
                     {
-                        continue;
-                    }
+                        var containsLoadedAssembly = _loadedAssemblies.Contains(loadedAssemblyFullName);
+                        if (!force && containsLoadedAssembly)
+                        {
+                            continue;
+                        }
 
-                    if (!containsLoadedAssembly)
-                    {
-                        _loadedAssemblies.Add(loadedAssemblyFullName);
+                        if (!containsLoadedAssembly)
+                        {
+                            _loadedAssemblies.Add(loadedAssemblyFullName);
+                        }
                     }
 
                     if (ShouldIgnoreAssembly(assembly))
@@ -757,7 +733,6 @@ namespace Catel.Reflection
                     }
                 }
 
-#if NET || NETCORE || NETSTANDARD
                 var lateLoadedAssemblies = new List<Assembly>();
 
                 lock (_threadSafeAssemblyQueue)
@@ -775,12 +750,11 @@ namespace Catel.Reflection
                     var tuple = Tuple.Create(lateLoadedAssembly, GetTypesOfAssembly(lateLoadedAssembly));
                     listForLoadedEvent.Add(tuple);
                 }
-#endif
             }
 
             // Calling out of lock statement, but still may happens that would be called inside of it 
             var handler = AssemblyLoaded;
-            if (handler != null)
+            if (handler is not null)
             {
                 foreach (var tuple in listForLoadedEvent)
                 {
@@ -849,7 +823,7 @@ namespace Catel.Reflection
                 {
                     var taskList = taskLists[i];
 
-                    var task = TaskHelper.Run(() =>
+                    var task = Task.Run(() =>
                     {
                         var taskResults = new List<KeyValuePair<Assembly, HashSet<Type>>>();
 
@@ -865,7 +839,7 @@ namespace Catel.Reflection
                     tasks.Add(task);
                 }
 
-                var waitTask = TaskShim.WhenAll(tasks);
+                var waitTask = Task.WhenAll(tasks);
                 waitTask.Wait();
 
                 var dictionary = new Dictionary<Assembly, IEnumerable<Type>>();
@@ -900,8 +874,8 @@ namespace Catel.Reflection
                 return;
             }
 
-            var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
-            var newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
+            var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName ?? string.Empty);
+            var newFullType = TypeHelper.FormatType(newAssemblyName, type.GetSafeFullName());
 
             if (!_typesByAssembly.TryGetValue(newAssemblyName, out var typesByAssembly))
             {
@@ -935,14 +909,12 @@ namespace Catel.Reflection
             }
 
             // Note: don't check with .NET Standard / .NET Core, it's "not implemented by design"
-#if NET
             if (assembly.ReflectionOnly)
             {
                 return true;
             }
-#endif
 
-            var assemblyFullName = assembly.FullName;
+            var assemblyFullName = assembly.FullName ?? string.Empty;
             if (assemblyFullName.Contains("Anonymously Hosted DynamicMethods Assembly"))
             {
                 return true;

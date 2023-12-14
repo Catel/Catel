@@ -1,18 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializerModifierFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Runtime.Serialization
+﻿namespace Catel.Tests.Runtime.Serialization
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using Catel.Data;
     using Catel.Runtime.Serialization;
-    using Catel.Tests.Data;
     using Catel.Tests.Runtime.Serialization.TestModels;
     using NUnit.Framework;
 
@@ -26,34 +14,16 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var modelC = new TestModels.ModelC();
 
-                Assert.IsNull(modelC.ModelAProperty);
-                Assert.IsNull(modelC.ModelBProperty);
-                Assert.IsNull(modelC.ModelCProperty);
+                Assert.That(modelC.ModelAProperty, Is.EqualTo(string.Empty));
+                Assert.That(modelC.ModelBProperty, Is.EqualTo(string.Empty));
+                Assert.That(modelC.ModelCProperty, Is.EqualTo(string.Empty));
 
                 var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetXmlSerializer());
 
-                Assert.AreEqual("ModifiedA", clonedModelC.ModelAProperty);
-                Assert.AreEqual("ModifiedB", clonedModelC.ModelBProperty);
-                Assert.AreEqual("ModifiedC", clonedModelC.ModelCProperty);
+                Assert.That(clonedModelC.ModelAProperty, Is.EqualTo("ModifiedA"));
+                Assert.That(clonedModelC.ModelBProperty, Is.EqualTo("ModifiedB"));
+                Assert.That(clonedModelC.ModelCProperty, Is.EqualTo("ModifiedC"));
             }
-
-#if NET || NETCORE
-            [TestCase]
-            public void ComplexInheritanceWorksWithBinary()
-            {
-                var modelC = new TestModels.ModelC();
-
-                Assert.IsNull(modelC.ModelAProperty);
-                Assert.IsNull(modelC.ModelBProperty);
-                Assert.IsNull(modelC.ModelCProperty);
-
-                var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetBinarySerializer());
-
-                Assert.AreEqual("ModifiedA", clonedModelC.ModelAProperty);
-                Assert.AreEqual("ModifiedB", clonedModelC.ModelBProperty);
-                Assert.AreEqual("ModifiedC", clonedModelC.ModelCProperty);
-            }
-#endif
 
             [TestCase]
             public void MembersIgnoredViaModifier()
@@ -63,7 +33,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetXmlSerializer());
 
-                Assert.AreEqual(null, clonedModelC.IgnoredMember);
+                Assert.That(clonedModelC.IgnoredMember, Is.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -78,10 +48,10 @@ namespace Catel.Tests.Runtime.Serialization
 
                 var clone = SerializationTestHelper.SerializeAndDeserialize(changingType, SerializationFactory.GetXmlSerializer());
 
-                Assert.AreEqual(10, clone.CustomizedCollection.Count);
+                Assert.That(clone.CustomizedCollection.Count, Is.EqualTo(10));
                 for (int i = 0; i < 10; i++)
                 {
-                    Assert.AreEqual(i, clone.CustomizedCollection[i]);
+                    Assert.That(clone.CustomizedCollection[i], Is.EqualTo(i));
                 }
             }
         }

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PossibleStackOverflowException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
 
@@ -26,9 +20,6 @@ namespace Catel.IoC
         internal CircularDependencyException(TypeRequestInfo duplicateRequestInfo, ITypeRequestPath typePath, string message)
             : base(message)
         {
-            Argument.IsNotNull("duplicateRequestInfo", duplicateRequestInfo);
-            Argument.IsNotNull("typePath", typePath);
-
             DuplicateRequestInfo = duplicateRequestInfo;
             TypePath = typePath;
         }

@@ -1,18 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindingEvaluator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-#else
     using System.Windows;
-#endif
 
     /// <summary>
     /// Class to help evaluate bindings at runtime.
@@ -23,7 +11,7 @@ namespace Catel.Windows.Data
         /// Initializes a new instance of the <see cref="BindingEvaluator"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        public BindingEvaluator(object dataContext = null)
+        public BindingEvaluator(object? dataContext = null)
         {
             DataContext = dataContext;
         }
@@ -32,16 +20,14 @@ namespace Catel.Windows.Data
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public object Value
+        public object? Value
         {
-            get { return (object)GetValue(ValueProperty); }
+            get { return (object?)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(BindingEvaluator), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Value), typeof(object), typeof(BindingEvaluator), new PropertyMetadata(null));
     }
 }
-
-#endif

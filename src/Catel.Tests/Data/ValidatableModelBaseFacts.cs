@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseFacts.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -31,12 +25,12 @@ namespace Catel.Tests.Data
 
                 validationObject.Validate();
 
-                Assert.IsTrue(validationObject.IsValidated);
+                Assert.That(validationObject.IsValidated, Is.True);
 
-                var modelEditor = (IModelEditor) validationObject;
+                var modelEditor = (IModelEditor)validationObject;
                 modelEditor.SetValue(propertyName, propertyValue);
 
-                Assert.IsTrue(validationObject.IsValidated);
+                Assert.That(validationObject.IsValidated, Is.True);
             }
 
             #region Validation
@@ -47,23 +41,23 @@ namespace Catel.Tests.Data
                 var validation = (IValidatableModel)validationObject;
 
                 // Check if the object now has warnings
-                Assert.AreEqual(false, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                 // Now set a field warning and check it
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesFieldWarning;
-                Assert.AreEqual(true, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                 // Now set a business warning and check it
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesBusinessWarning;
-                Assert.AreEqual(true, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                 // Clear warning
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatHasNoWarningsOrErrors;
-                Assert.AreEqual(false, validation.HasWarnings);
-                Assert.AreEqual(false, validation.HasErrors);
+                Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
             }
 
             [TestCase]
@@ -72,15 +66,15 @@ namespace Catel.Tests.Data
                 var validationObject = new ObjectWithValidation();
                 var validation = (IValidatableModel)validationObject;
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 validationObject.ValueWithAnnotations = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.True);
 
                 validationObject.ValueWithAnnotations = "value";
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
             }
 
             //[TestCase]
@@ -106,7 +100,7 @@ namespace Catel.Tests.Data
             {
                 var validationObject = new ObjectWithValidation();
 
-                Assert.IsFalse(validationObject.HasErrors);
+                Assert.That(validationObject.HasErrors, Is.False);
             }
             #endregion
 
@@ -115,17 +109,17 @@ namespace Catel.Tests.Data
             public void IDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTestModel();
-                var validation = (IValidatableModel) obj;
+                var validation = (IValidatableModel)obj;
 
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsFalse(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]));
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]), Is.False);
 
                 obj.ErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]));
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]), Is.True);
             }
             #endregion
 
@@ -134,41 +128,41 @@ namespace Catel.Tests.Data
             public void INotifyDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTestModel();
-                var validation = (IValidatableModel) obj;
+                var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
 
                 ((INotifyDataErrorInfo)obj).ErrorsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual("ErrorWhenEmpty", e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo("ErrorWhenEmpty"));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataErrorInfo)obj).GetErrors("ErrorWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.ErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataErrorInfo)obj).GetErrors("ErrorWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -181,35 +175,35 @@ namespace Catel.Tests.Data
 
                 ((INotifyDataErrorInfo)obj).ErrorsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -222,35 +216,35 @@ namespace Catel.Tests.Data
 
                 ((INotifyDataErrorInfo)obj).ErrorsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleErrorWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string error in ((INotifyDataErrorInfo)obj).GetErrors(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(error));
+                    Assert.That(string.IsNullOrEmpty(error), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
             #endregion
 
@@ -263,13 +257,13 @@ namespace Catel.Tests.Data
 
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsFalse(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]));
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]), Is.False);
 
                 obj.WarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]));
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]), Is.True);
             }
             #endregion
 
@@ -284,35 +278,35 @@ namespace Catel.Tests.Data
 
                 ((INotifyDataWarningInfo)obj).WarningsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual("WarningWhenEmpty", e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo("WarningWhenEmpty"));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataWarningInfo)obj).GetWarnings("WarningWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.WarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string fieldInfo in ((INotifyDataWarningInfo)obj).GetWarnings("WarningWhenEmpty"))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(fieldInfo));
+                    Assert.That(string.IsNullOrEmpty(fieldInfo), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -325,35 +319,35 @@ namespace Catel.Tests.Data
 
                 ((INotifyDataWarningInfo)obj).WarningsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(null))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -366,35 +360,35 @@ namespace Catel.Tests.Data
 
                 ((INotifyDataWarningInfo)obj).WarningsChanged += (sender, e) =>
                 {
-                    Assert.AreEqual(string.Empty, e.PropertyName);
+                    Assert.That(e.PropertyName, Is.EqualTo(string.Empty));
                     isInvoked = true;
                 };
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.True);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 isInvoked = false;
                 obj.BusinessRuleWarningWhenEmpty = "undo";
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.IsTrue(isInvoked);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(isInvoked, Is.True);
                 count = 0;
                 foreach (string warning in ((INotifyDataWarningInfo)obj).GetWarnings(string.Empty))
                 {
                     count++;
-                    Assert.IsFalse(string.IsNullOrEmpty(warning));
+                    Assert.That(string.IsNullOrEmpty(warning), Is.False);
                 }
-                Assert.AreEqual(0, count);
+                Assert.That(count, Is.EqualTo(0));
             }
             #endregion
 
@@ -409,19 +403,19 @@ namespace Catel.Tests.Data
 
                 classWithValidator.Validate(true);
 
-                Assert.AreEqual(1, validator.ValidateCount);
+                Assert.That(validator.ValidateCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.BeforeValidationCount);
+                Assert.That(validator.BeforeValidationCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.BeforeValidateFieldsCount);
-                Assert.AreEqual(1, validator.ValidateFieldsCount);
-                Assert.AreEqual(1, validator.AfterValidateFieldsCount);
+                Assert.That(validator.BeforeValidateFieldsCount, Is.EqualTo(1));
+                Assert.That(validator.ValidateFieldsCount, Is.EqualTo(1));
+                Assert.That(validator.AfterValidateFieldsCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.BeforeValidateBusinessRulesCount);
-                Assert.AreEqual(1, validator.ValidateBusinessRulesCount);
-                Assert.AreEqual(1, validator.AfterValidateBusinessRulesCount);
+                Assert.That(validator.BeforeValidateBusinessRulesCount, Is.EqualTo(1));
+                Assert.That(validator.ValidateBusinessRulesCount, Is.EqualTo(1));
+                Assert.That(validator.AfterValidateBusinessRulesCount, Is.EqualTo(1));
 
-                Assert.AreEqual(1, validator.AfterValidationCount);
+                Assert.That(validator.AfterValidationCount, Is.EqualTo(1));
             }
 
             [TestCase]
@@ -437,8 +431,8 @@ namespace Catel.Tests.Data
                 var dataWarningInfo = (IDataWarningInfo)classWithValidator;
                 var dataErrorInfo = (IDataErrorInfo)classWithValidator;
 
-                Assert.AreEqual("Warning", dataWarningInfo[ClassWithValidator.WarningPropertyProperty.Name]);
-                Assert.AreEqual("Error", dataErrorInfo[ClassWithValidator.ErrorPropertyProperty.Name]);
+                Assert.That(dataWarningInfo[ClassWithValidator.WarningPropertyProperty.Name], Is.EqualTo("Warning"));
+                Assert.That(dataErrorInfo[ClassWithValidator.ErrorPropertyProperty.Name], Is.EqualTo("Error"));
             }
 
             [TestCase]
@@ -453,7 +447,7 @@ namespace Catel.Tests.Data
 
                 var dataErrorInfo = (IDataErrorInfo)classWithValidator;
 
-                Assert.AreEqual("Error", dataErrorInfo.Error);
+                Assert.That(dataErrorInfo.Error, Is.EqualTo("Error"));
             }
             #endregion
         }
@@ -476,7 +470,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the FirstName property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
 
                 /// <summary>
                 /// Gets or sets the property value.
@@ -490,7 +484,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the LastName property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+                public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", string.Empty);
             }
 
             public class TestValidator : ValidatorBase<TestValidatorModel>
@@ -515,11 +509,11 @@ namespace Catel.Tests.Data
                 ServiceLocator.Default.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
                 var testValidatorModel = (IValidatable)new TestValidatorModel();
 
-                Assert.IsNotNull(testValidatorModel.Validator);
+                Assert.That(testValidatorModel.Validator, Is.Not.Null);
 
                 testValidatorModel.Validate(true);
 
-                Assert.IsTrue(testValidatorModel.HasErrors);
+                Assert.That(testValidatorModel.HasErrors, Is.True);
             }
         }
 
@@ -535,12 +529,12 @@ namespace Catel.Tests.Data
 
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(((IDataErrorInfo)obj)["ErrorWhenEmpty"], Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
+                Assert.That(((IDataErrorInfo)obj)["ErrorWhenEmpty"], Is.Not.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -552,12 +546,12 @@ namespace Catel.Tests.Data
 
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasErrors);
-                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj).Error);
+                Assert.That(validation.HasErrors, Is.False);
+                Assert.That(((IDataErrorInfo)obj).Error, Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj).Error);
+                Assert.That(((IDataErrorInfo)obj).Error, Is.Not.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -569,12 +563,12 @@ namespace Catel.Tests.Data
 
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(((IDataWarningInfo)obj)["WarningWhenEmpty"], Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
+                Assert.That(((IDataWarningInfo)obj)["WarningWhenEmpty"], Is.Not.EqualTo(string.Empty));
             }
 
             [TestCase]
@@ -586,12 +580,12 @@ namespace Catel.Tests.Data
 
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
+                Assert.That(validation.HasWarnings, Is.False);
+                Assert.That(((IDataWarningInfo)obj).Warning, Is.EqualTo(string.Empty));
 
                 obj.HideValidationResults = false;
 
-                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
+                Assert.That(((IDataWarningInfo)obj).Warning, Is.Not.EqualTo(string.Empty));
             }
         }
 
@@ -607,7 +601,7 @@ namespace Catel.Tests.Data
                     set { SetValue(FirstNameProperty, value); }
                 }
 
-                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
             }
 
             [TestCase]
@@ -616,13 +610,13 @@ namespace Catel.Tests.Data
                 var model = new SuspendValidationModel();
                 var validation = model as IValidatable;
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 using (model.SuspendValidations())
                 {
                     model.FirstName = null;
 
-                    Assert.IsFalse(validation.HasErrors);
+                    Assert.That(validation.HasErrors, Is.False);
                 }
             }
 
@@ -632,16 +626,16 @@ namespace Catel.Tests.Data
                 var model = new SuspendValidationModel();
                 var validation = model;
 
-                Assert.IsFalse(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.False);
 
                 using (model.SuspendValidations())
                 {
                     model.FirstName = null;
 
-                    Assert.IsFalse(validation.HasErrors);
+                    Assert.That(validation.HasErrors, Is.False);
                 }
 
-                Assert.IsTrue(validation.HasErrors);
+                Assert.That(validation.HasErrors, Is.True);
             }
         }
 
@@ -658,9 +652,9 @@ namespace Catel.Tests.Data
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.IsTrue(validationContext.HasErrors);
-                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
-                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+                Assert.That(validationContext.HasErrors, Is.True);
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("FirstName"));
+                Assert.That(((FieldValidationResult)errors[1]).PropertyName, Is.EqualTo("LastName"));
             }
 
             [TestCase]
@@ -674,15 +668,15 @@ namespace Catel.Tests.Data
 
                     var innerValidationContext = model.GetValidationContext();
 
-                    Assert.IsFalse(innerValidationContext.HasErrors);
+                    Assert.That(innerValidationContext.HasErrors, Is.False);
                 }
 
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.IsTrue(validationContext.HasErrors);
-                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
-                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+                Assert.That(validationContext.HasErrors, Is.True);
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("FirstName"));
+                Assert.That(((FieldValidationResult)errors[1]).PropertyName, Is.EqualTo("LastName"));
             }
 
             [TestCase]
@@ -698,24 +692,23 @@ namespace Catel.Tests.Data
 
                         var innerValidationContext1 = model.GetValidationContext();
 
-                        Assert.IsFalse(innerValidationContext1.HasErrors);
+                        Assert.That(innerValidationContext1.HasErrors, Is.False);
                     }
 
                     var innerValidationContext2 = model.GetValidationContext();
 
-                    Assert.IsFalse(innerValidationContext2.HasErrors);
+                    Assert.That(innerValidationContext2.HasErrors, Is.False);
                 }
 
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.IsTrue(validationContext.HasErrors);
-                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
-                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+                Assert.That(validationContext.HasErrors, Is.True);
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("FirstName"));
+                Assert.That(((FieldValidationResult)errors[1]).PropertyName, Is.EqualTo("LastName"));
             }
         }
 
-#if NET || NETCORE
         // Test case for https://catelproject.atlassian.net/browse/CTL-246
         [TestFixture]
         public class ValidationOfNonCatelProperties
@@ -735,13 +728,13 @@ namespace Catel.Tests.Data
                 var model = new ModelWithCalculatedPropertiesValidation();
                 model.Validate(true);
 
-                Assert.IsTrue(model.HasErrors);
+                Assert.That(model.HasErrors, Is.True);
 
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
-                Assert.AreEqual(1, errors.Count);
-                Assert.AreEqual("Weight", ((FieldValidationResult)errors[0]).PropertyName);
+                Assert.That(errors.Count, Is.EqualTo(1));
+                Assert.That(((FieldValidationResult)errors[0]).PropertyName, Is.EqualTo("Weight"));
             }
         }
 
@@ -755,7 +748,7 @@ namespace Catel.Tests.Data
             /// </summary>
             public class ModelWithoutAnnotation : ValidatableModelBase
             {
-                int _counter;
+                private int _counter;
 
                 public int Counter { get { return _counter++; } }
 
@@ -783,7 +776,7 @@ namespace Catel.Tests.Data
                 // validate model without data annotations
                 model.Validate(true, false);
 
-                Assert.AreEqual(0, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -795,7 +788,7 @@ namespace Catel.Tests.Data
 
                 model.Validate(true);
 
-                Assert.AreEqual(0, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -812,7 +805,7 @@ namespace Catel.Tests.Data
                 // store original value
                 ValidatableModelBase.DefaultValidateUsingDataAnnotationsValue = oldValue;
 
-                Assert.AreEqual(0, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(0));
             }
 
             [TestCase]
@@ -823,7 +816,7 @@ namespace Catel.Tests.Data
 
                 model.Validate(true);
 
-                Assert.AreEqual(1, model.Counter);
+                Assert.That(model.Counter, Is.EqualTo(1));
             }
         }
 
@@ -832,7 +825,7 @@ namespace Catel.Tests.Data
         {
             public class ModelWithoutAnnotation : ValidatableModelBase
             {
-                public static readonly PropertyData CounterProperty = RegisterProperty<ModelWithoutAnnotation, int>(model => model.Counter);
+                public static readonly IPropertyData CounterProperty = RegisterProperty<ModelWithoutAnnotation, int>(model => model.Counter);
 
                 public int Counter
                 {
@@ -868,7 +861,7 @@ namespace Catel.Tests.Data
 
                     model.Counter = 1;
 
-                    Assert.AreEqual(false, model.HasNotValidatedProperties());
+                    Assert.That(model.HasNotValidatedProperties(), Is.EqualTo(false));
                 }
             }
 
@@ -882,10 +875,9 @@ namespace Catel.Tests.Data
                 {
                     model.Counter = 1;
 
-                    Assert.AreEqual(true, model.HasNotValidatedProperties());
+                    Assert.That(model.HasNotValidatedProperties(), Is.EqualTo(true));
                 }
             }
         }
-#endif
     }
 }

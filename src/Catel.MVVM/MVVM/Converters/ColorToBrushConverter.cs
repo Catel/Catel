@@ -1,28 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ColorToBrushConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
-
-#if UWP
-    using global::Windows.UI;
-    using global::Windows.UI.Xaml.Media;
-#else
     using System.Windows.Media;
-#endif
 
     /// <summary>
     /// ColorToBrushConverter
     /// </summary>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(Color), typeof(Brush))]
-#endif
     public class ColorToBrushConverter : ValueConverterBase<Color, Brush>
     {
         /// <summary>
@@ -32,7 +16,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(Color value, Type targetType, object parameter)
+        protected override object? Convert(Color value, Type targetType, object? parameter)
         {
             return new SolidColorBrush(value);
         }
@@ -48,18 +32,18 @@ namespace Catel.MVVM.Converters
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected override object ConvertBack(Brush value, Type targetType, object parameter)
+        protected override object? ConvertBack(Brush? value, Type targetType, object? parameter)
         {
             var color = Colors.Black;
             var brush = value as SolidColorBrush;
-            if (brush != null)
+            if (brush is not null)
             {
                 color = brush.Color;
             }
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return color;
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
     }
 }
-
-#endif

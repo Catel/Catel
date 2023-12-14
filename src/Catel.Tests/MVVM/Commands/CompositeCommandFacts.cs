@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeCommandFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
@@ -24,7 +17,7 @@ namespace Catel.Tests.MVVM
                 var compositeCommand = new CompositeCommand();
                 compositeCommand.AtLeastOneMustBeExecutable = atLeastOneMustBeExecutable;
 
-                Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
+                Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
             }
 
             [TestCase(false, true)]
@@ -38,7 +31,7 @@ namespace Catel.Tests.MVVM
 
                 compositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand = checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand;
 
-                Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
+                Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
             }
         }
 
@@ -50,7 +43,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
             }
 
             [TestCase]
@@ -63,7 +56,7 @@ namespace Catel.Tests.MVVM
 
                 compositeCommand.Execute();
 
-                Assert.IsTrue(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.True);
             }
         }
 
@@ -75,7 +68,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
             }
 
             [TestCase]
@@ -91,8 +84,8 @@ namespace Catel.Tests.MVVM
 
                 compositeCommand.Execute();
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
-                Assert.IsTrue(vm.IsTestCommand2Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
+                Assert.That(vm.IsTestCommand2Executed, Is.True);
             }
         }
 
@@ -104,7 +97,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
             }
 
             [TestCase]
@@ -118,7 +111,7 @@ namespace Catel.Tests.MVVM
                 compositeCommand.RegisterAction(action);
                 compositeCommand.Execute();
 
-                Assert.IsTrue(executed);
+                Assert.That(executed, Is.True);
             }
         }
 
@@ -130,7 +123,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
             }
 
             [TestCase]
@@ -146,7 +139,7 @@ namespace Catel.Tests.MVVM
 
                 compositeCommand.Execute();
 
-                Assert.IsFalse(executed);
+                Assert.That(executed, Is.False);
             }
         }
 
@@ -165,7 +158,7 @@ namespace Catel.Tests.MVVM
 
                 compositeCommand.Execute(null);
 
-                Assert.IsTrue(invoked);
+                Assert.That(invoked, Is.True);
             }
 
             [TestCase]
@@ -181,7 +174,7 @@ namespace Catel.Tests.MVVM
 
                 compositeCommand.Execute(null);
 
-                Assert.IsFalse(invoked);
+                Assert.That(invoked, Is.False);
             }
 
             [TestCase]
@@ -194,7 +187,7 @@ namespace Catel.Tests.MVVM
 
                 compositeCommand.Execute(null);
 
-                Assert.IsFalse(_registeredActionsCanBeUnregistered_TestValue);
+                Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
             }
 
             private bool _registeredActionsCanBeUnregistered_TestValue = false;
@@ -209,20 +202,20 @@ namespace Catel.Tests.MVVM
         public class TheAutoUnsubscribeFunctionality
         {
             [TestCase]
-            public async Task AutomaticallyUnsubscribesCommandOnViewModelClosed()
+            public async Task AutomaticallyUnsubscribesCommandOnViewModelClosedAsync()
             {
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
 
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
 
                 await vm.CloseViewModelAsync(false);
 
                 compositeCommand.Execute();
 
-                Assert.IsFalse(vm.IsTestCommand1Executed);
+                Assert.That(vm.IsTestCommand1Executed, Is.False);
             }
         }
     }

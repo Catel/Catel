@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+﻿namespace Catel
 {
     using System;
 
@@ -14,7 +7,6 @@ namespace Catel
     /// </summary>
     public static partial class StringExtensions
     {
-        #region Methods
         /// <summary>
         /// Splits the string by camel case, e.g. 'HiThere' will result in 'Hi there'.
         /// </summary>
@@ -52,13 +44,8 @@ namespace Catel
         /// <param name="str">The string.</param>
         /// <param name="valueToCheck">The value to check.</param>
         /// <returns><c>true</c> if the strings are equal, <c>false</c> otherwise.</returns>
-        public static bool EqualsIgnoreCase(this string str, string valueToCheck)
+        public static bool EqualsIgnoreCase(this string? str, string? valueToCheck)
         {
-            if (str is null)
-            {
-                return false;
-            }
-
             return string.Equals(str, valueToCheck, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -145,7 +132,7 @@ namespace Catel
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>The search filter.</returns>
-        public static string PrepareAsSearchFilter(this string filter)
+        public static string PrepareAsSearchFilter(this string? filter)
         {
             var filterText = filter;
             if (string.IsNullOrWhiteSpace(filterText))
@@ -163,16 +150,11 @@ namespace Catel
         /// <param name="str">The string.</param>
         /// <param name="values">The values to check for.</param>
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
-        public static bool EqualsAny(this string str, params string[] values)
+        public static bool EqualsAny(this string? str, params string?[] values)
         {
-            if (str is null)
-            {
-                return false;
-            }
-
             foreach (var value in values)
             {
-                if (str.Equals(value))
+                if (string.Equals(str, value))
                 {
                     return true;
                 }
@@ -187,13 +169,8 @@ namespace Catel
         /// <param name="str">The string.</param>
         /// <param name="values">The values to check for.</param>
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
-        public static bool EqualsAnyIgnoreCase(this string str, params string[] values)
+        public static bool EqualsAnyIgnoreCase(this string? str, params string?[] values)
         {
-            if (str is null)
-            {
-                return false;
-            }
-
             foreach (var value in values)
             {
                 if (str.EqualsIgnoreCase(value))
@@ -300,6 +277,5 @@ namespace Catel
 
             return false;
         }
-        #endregion
     }
 }

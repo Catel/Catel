@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DetermineViewModelTypeEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers
 {
     using System;
 
@@ -17,7 +11,7 @@ namespace Catel.MVVM.Providers
         /// Initializes a new instance of the <see cref="DetermineViewModelTypeEventArgs"/> class.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
-        public DetermineViewModelTypeEventArgs(object dataContext)
+        public DetermineViewModelTypeEventArgs(object? dataContext)
         {
             DataContext = dataContext;
         }
@@ -25,12 +19,12 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Gets the data context.
         /// </summary>
-        public object DataContext { get; private set; }
+        public object? DataContext { get; private set; }
 
         /// <summary>
         /// Gets or sets the type of the view model.
         /// </summary>
         /// <value>The type of the view model.</value>
-        public Type ViewModelType { get; set; }
+        public Type? ViewModelType { get; set; }
     }
 }

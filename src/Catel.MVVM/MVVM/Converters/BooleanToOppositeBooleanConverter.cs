@@ -1,20 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanToOppositeBooleanConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Convert a value to it's inverted value.
     /// </summary>
     /// <remarks>Currently only values of type bool are accepted.</remarks>
-#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(bool))]
-#endif
     public class BooleanToOppositeBooleanConverter : ValueConverterBase
     {
         /// <summary>
@@ -24,7 +17,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected override object Convert(object value, Type targetType, object parameter)
+        protected override object? Convert(object? value, Type targetType, object? parameter)
         {
             bool? result = value as bool?;
             if (result.HasValue)
@@ -32,7 +25,7 @@ namespace Catel.MVVM.Converters
                 result = !result.Value;
             }
 
-            return result;
+            return BoxingCache.GetBoxedValue(result);
         }
 
         /// <summary>
@@ -46,7 +39,7 @@ namespace Catel.MVVM.Converters
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected override object ConvertBack(object value, Type targetType, object parameter)
+        protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
             bool? result = value as bool?;
             if (result.HasValue)
@@ -54,7 +47,7 @@ namespace Catel.MVVM.Converters
                 result = !result.Value;
             }
 
-            return result;
+            return BoxingCache.GetBoxedValue(result);
         }
     }
 }

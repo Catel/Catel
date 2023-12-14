@@ -1,10 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ILog.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Logging
+﻿namespace Catel.Logging
 {
     using System;
 
@@ -13,7 +7,6 @@ namespace Catel.Logging
     /// </summary>
     public interface ILog
     {
-        #region Properties
         /// <summary>
         /// Gets the name of the logger.
         /// </summary>
@@ -29,7 +22,7 @@ namespace Catel.Logging
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; set; }
+        object? Tag { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this logger is a Catel logger.
@@ -60,16 +53,12 @@ namespace Catel.Logging
         /// </value>
         /// <exception cref="ArgumentOutOfRangeException">The <c>value</c> is negative.</exception>
         int IndentLevel { get; set; }
-        #endregion
 
-        #region Events
         /// <summary>
         ///   Occurs when a message is written to the log.
         /// </summary>
-        event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
+        event EventHandler<LogMessageEventArgs>? LogMessage;
 
-        #region Methods
         /// <summary>
         /// Writes the specified message as specified log event with extra data.
         /// </summary>
@@ -77,7 +66,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
-        void WriteWithData(string message, object extraData, LogEvent logEvent);
+        void WriteWithData(string message, object? extraData, LogEvent logEvent);
 
         /// <summary>
         /// Writes the specified message as specified log event with extra data.
@@ -86,7 +75,7 @@ namespace Catel.Logging
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
-        void WriteWithData(string message, LogData logData, LogEvent logEvent);
+        void WriteWithData(string message, LogData? logData, LogEvent logEvent);
 
         /// <summary>
         /// Increases the <see cref="IndentLevel"/> by <c>1</c>.
@@ -97,6 +86,5 @@ namespace Catel.Logging
         /// Decreases the <see cref="IndentLevel"/> by <c>1</c>.
         /// </summary>
         void Unindent();
-        #endregion
     }
 }

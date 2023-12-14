@@ -1,15 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChildAwareModelBaseFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Windows.Data;
+    using Catel.Data;
+    using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
 
@@ -17,61 +13,59 @@ namespace Catel.Tests.Data
     public class ChildAwareModelBaseFacts
     {
         [TestCase]
-        public void AllowsRegistrationOfObservableCollection()
+        public void Allows_Registration_Of_ObservableCollection()
         {
             var model = new ModelWithObservableCollection();
             model.Collection = new ObservableCollection<int>(new List<int>() { 1, 2, 3 });
 
             model.Collection.Add(4);
 
-            Assert.IsTrue(model.HasCollectionChanged);
+            Assert.That(model.HasCollectionChanged, Is.True);
         }
 
-#if NET || NETCORE
         [TestCase]
-        public void AllowsRegistrationOfCollectionViewSource()
+        public void Allows_Registration_Of_CollectionViewSource()
         {
             var model = new ModelWithCollectionViewSource();
             model.Collection = new CollectionView(new List<int>() { 1, 2, 3 });
         }
-#endif
 
         [TestCase]
-        public void RegistersChangeNotificationsOfDefaultValues()
+        public void Registers_Change_Notifications_Of_Default_Values()
         {
             var model = new ModelWithObservableCollection();
 
             model.Collection.Add(4);
 
-            Assert.IsTrue(model.HasCollectionChanged);
+            Assert.That(model.HasCollectionChanged, Is.True);
         }
 
         [Test]
-        public void ValidatesParentOnCollectionChanged()
+        public void Validates_Parent_On_CollectionChanged()
         {
             var c = new ValidatableChild();
             var p = new ValidatableParent();
 
             p.Collection = new ObservableCollection<ValidatableChild>();
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
 
             c.Name = string.Empty;
             p.Collection.Add(c);
 
-            Assert.IsTrue(p.HasErrors);
-            Assert.IsTrue(c.HasErrors);
+            Assert.That(p.HasErrors, Is.True);
+            Assert.That(c.HasErrors, Is.True);
 
             c.Name = "Funny";
             p.Collection.Clear();
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
         }
 
         [Test]
-        public void ValidatesParentOnCollectionItemPropertyChanged()
+        public void Validates_Parent_On_CollectionItemPropertyChanged()
         {
             var c = new ValidatableChild();
             var p = new ValidatableParent();
@@ -79,43 +73,41 @@ namespace Catel.Tests.Data
             p.Collection = new ObservableCollection<ValidatableChild>();
             p.Collection.Add(c);
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
 
             c.Name = string.Empty;
 
-            Assert.IsTrue(p.HasErrors);
-            Assert.IsTrue(c.HasErrors);
+            Assert.That(p.HasErrors, Is.True);
+            Assert.That(c.HasErrors, Is.True);
 
             c.Name = "Bunny";
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
         }
 
         [Test]
-        public void ValidatesParentOnPropertyChanged()
+        public void Validates_Parent_On_PropertyChanged()
         {
             var c = new ValidatableChild();
             var p = new ValidatableParent();
 
             p.Child = c;
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
 
             c.Name = string.Empty;
 
-            Assert.IsTrue(p.HasErrors);
-            Assert.IsTrue(c.HasErrors);
+            Assert.That(p.HasErrors, Is.True);
+            Assert.That(c.HasErrors, Is.True);
 
             c.Name = "Funny";
 
-            Assert.IsFalse(p.HasErrors);
-            Assert.IsFalse(c.HasErrors);
+            Assert.That(p.HasErrors, Is.False);
+            Assert.That(c.HasErrors, Is.False);
         }
-
-
 
         //[TestCase]
         //public void IsDirtyWithChildrenWhenSavingChild()
@@ -155,13 +147,12 @@ namespace Catel.Tests.Data
         //    Assert.IsFalse(computerSettings.IsDirty);
         //}
 
-
         [Test]
-        public void ChildChangesPropagateToGrandParent()
+        public void Child_Changes_Propagate_To_GrandParent()
         {
-            TestClasses.Child c = new TestClasses.Child();
-            TestClasses.Parent p = new TestClasses.Parent();
-            GrandParent g = new GrandParent();
+            var c = new TestClasses.Child();
+            var p = new TestClasses.Parent();
+            var g = new GrandParent();
             g.Parents.Add(p);
             p.Children.Add(c);
 
@@ -169,15 +160,39 @@ namespace Catel.Tests.Data
             p.ResetDirtyFlag();
             g.ResetDirtyFlag();
 
-            Assert.IsFalse(c.IsDirty);
-            Assert.IsFalse(p.IsDirty);
-            Assert.IsFalse(g.IsDirty);
+            Assert.That(c.IsDirty, Is.False);
+            Assert.That(p.IsDirty, Is.False);
+            Assert.That(g.IsDirty, Is.False);
 
             c.Name = "Pietje";
 
-            Assert.IsTrue(c.IsDirty);
-            Assert.IsTrue(p.IsDirty);
-            Assert.IsTrue(g.IsDirty);
+            Assert.That(c.IsDirty, Is.True);
+            Assert.That(p.IsDirty, Is.True);
+            Assert.That(g.IsDirty, Is.True);
+        }
+
+        [Test]
+        public void Serializing_Delegates_Exception_Test()
+        {
+            var model = new TestModel();
+
+            Assert.DoesNotThrow(() => (model as IEditableObject).BeginEdit());
+        }
+
+        private class TestModel : ChildAwareModelBase
+        {
+            public TestModel()
+            {
+                ChildProp = new ObservableObject();
+            }
+
+            public ObservableObject? ChildProp
+            {
+                get { return GetValue<ObservableObject?>(ChildPropProperty); }
+                set { SetValue(ChildPropProperty, value); }
+            }
+
+            public static readonly IPropertyData ChildPropProperty = RegisterProperty<ObservableObject?>(nameof(ChildProp), (ObservableObject?)null);
         }
     }
 }

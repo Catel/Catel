@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SerializationModelCache.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Runtime.Serialization
+﻿namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
@@ -28,21 +21,16 @@ namespace Catel.Runtime.Serialization
         public SerializationModelInfo(Type modelType, Dictionary<string, MemberMetadata> catelProperties, Dictionary<string, MemberMetadata> fields,
             Dictionary<string, MemberMetadata> regularProperties)
         {
-            Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("catelProperties", catelProperties);
-            Argument.IsNotNull("fields", fields);
-            Argument.IsNotNull("properties", regularProperties);
-
             ModelType = modelType;
 
-            CatelTypeInfo catelTypeInfo = null;
+            CatelTypeInfo? catelTypeInfo = null;
 
             CatelPropertyNames = new HashSet<string>(catelProperties.Keys);
-            CatelProperties = new List<PropertyData>();
+            CatelProperties = new List<IPropertyData>();
             CatelPropertiesByName = catelProperties;
             foreach (var catelProperty in catelProperties)
             {
-                var propertyData = catelProperty.Value.Tag as PropertyData;
+                var propertyData = catelProperty.Value.Tag as IPropertyData;
                 if (propertyData is null)
                 {
                     if (catelTypeInfo is null)
@@ -59,6 +47,7 @@ namespace Catel.Runtime.Serialization
             FieldNames = new HashSet<string>(fields.Keys);
             Fields = new List<FieldInfo>();
             FieldsByName = fields;
+
             foreach (var field in fields)
             {
                 var fieldInfo = field.Value.Tag as FieldInfo;
@@ -67,12 +56,16 @@ namespace Catel.Runtime.Serialization
                     fieldInfo = modelType.GetFieldEx(field.Key);
                 }
 
-                Fields.Add(fieldInfo);
+                if (fieldInfo is not null)
+                {
+                    Fields.Add(fieldInfo);
+                }
             }
 
             PropertyNames = new HashSet<string>(regularProperties.Keys);
             Properties = new List<PropertyInfo>();
             PropertiesByName = regularProperties;
+
             foreach (var regularProperty in regularProperties)
             {
                 var propertyInfo = regularProperty.Value.Tag as PropertyInfo;
@@ -81,7 +74,10 @@ namespace Catel.Runtime.Serialization
                     propertyInfo = modelType.GetPropertyEx(regularProperty.Key);
                 }
 
-                Properties.Add(propertyInfo);
+                if (propertyInfo is not null)
+                {
+                    Properties.Add(propertyInfo);
+                }
             }
         }
 
@@ -101,7 +97,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the catel properties.
         /// </summary>
         /// <value>The catel properties.</value>
-        public List<PropertyData> CatelProperties { get; private set; }
+        public List<IPropertyData> CatelProperties { get; private set; }
 
         /// <summary>
         /// Gets the Catel properties by name.

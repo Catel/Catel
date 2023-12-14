@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataWindow.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -23,86 +15,10 @@ namespace Catel.Windows
     using Controls;
     using Logging;
     using MVVM;
-    using Exceptions = MVVM.Properties.Exceptions;
+    using Exceptions = Properties.Exceptions;
     using MVVM.Providers;
     using Catel.Services;
-    using Catel.Threading;
-    using Threading;
     using IoC;
-    using Catel.Reflection;
-
-    /// <summary>
-    /// Mode of the <see cref="DataWindow"/>.
-    /// </summary>
-    public enum DataWindowMode
-    {
-        /// <summary>
-        /// Window contains OK and Cancel buttons.
-        /// </summary>
-        OkCancel,
-
-        /// <summary>
-        /// Window contains OK, Cancel and Apply buttons.
-        /// </summary>
-        OkCancelApply,
-
-        /// <summary>
-        /// Window contains Close button.
-        /// </summary>
-        Close,
-
-        /// <summary>
-        /// Window contains custom buttons.
-        /// </summary>
-        Custom
-    }
-
-    /// <summary>
-    /// Available default buttons on the data window mode.
-    /// </summary>
-    public enum DataWindowDefaultButton
-    {
-        /// <summary>
-        /// OK button.
-        /// </summary>
-        OK,
-
-        /// <summary>
-        /// Apply button.
-        /// </summary>
-        Apply,
-
-        /// <summary>
-        /// Close button.
-        /// </summary>
-        Close,
-
-        /// <summary>
-        /// No button.
-        /// </summary>
-        None
-    }
-
-    /// <summary>
-    /// Defines the way the <see cref="InfoBarMessageControl"/> is included in the <see cref="DataWindow"/>.
-    /// </summary>
-    public enum InfoBarMessageControlGenerationMode
-    {
-        /// <summary>
-        /// No <see cref="InfoBarMessageControl"/> is generated.
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// Generate the <see cref="InfoBarMessageControl"/> as inline.
-        /// </summary>
-        Inline,
-
-        /// <summary>
-        /// Generate the <see cref="InfoBarMessageControl"/> as overlay.
-        /// </summary>
-        Overlay
-    }
 
     /// <summary>
     /// <see cref="Window"/> class that implements the <see cref="InfoBarMessageControl"/> and
@@ -110,17 +26,16 @@ namespace Catel.Windows
     /// </summary>
     public class DataWindow : System.Windows.Window, IDataWindow
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
+        private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveRequiredType<IWrapControlService>();
 
         private readonly bool _focusFirstControl;
         private bool _isWrapped;
         private bool _forceClose;
 
-        private ICommand _defaultOkCommand;
-        private ButtonBase _defaultOkElement;
-        private ICommand _defaultCancelCommand;
+        private ICommand? _defaultOkCommand;
+        private ButtonBase? _defaultOkElement;
+        private ICommand? _defaultCancelCommand;
 
         private readonly Collection<DataWindowButton> _buttons = new Collection<DataWindowButton>();
         private readonly Collection<ICommand> _commands = new Collection<ICommand>();
@@ -128,12 +43,10 @@ namespace Catel.Windows
 
         private readonly WindowLogic _logic;
 
-        private event EventHandler<EventArgs> _viewLoaded;
-        private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<DataContextChangedEventArgs> _viewDataContextChanged;
-        #endregion
+        private event EventHandler<EventArgs>? _viewLoaded;
+        private event EventHandler<EventArgs>? _viewUnloaded;
+        private event EventHandler<DataContextChangedEventArgs>? _viewDataContextChanged;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Windows.FrameworkElement"/> class.
         /// </summary>
@@ -153,7 +66,7 @@ namespace Catel.Windows
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
         /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
-        public DataWindow(DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
+        public DataWindow(DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
             : this(null, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode, focusFirstControl)
@@ -167,7 +80,7 @@ namespace Catel.Windows
         /// Explicit constructor with view model injection, required for <see cref="Activator.CreateInstance(System.Type)"/> which
         /// does not seem to support default parameter values.
         /// </remarks>
-        public DataWindow(IViewModel viewModel)
+        public DataWindow(IViewModel? viewModel)
             : this(viewModel, DataWindowMode.OkCancel)
         {
             // Do not remove this constructor, see remarks
@@ -183,12 +96,14 @@ namespace Catel.Windows
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
         /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
-        public DataWindow(IViewModel viewModel, DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public DataWindow(IViewModel? viewModel, DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
         {
             if (CatelEnvironment.IsInDesignMode)
-            {
+            { 
                 return;
             }
 
@@ -249,7 +164,7 @@ namespace Catel.Windows
 
             SetBinding(TitleProperty, new Binding("Title"));
 
-            if (additionalButtons != null)
+            if (additionalButtons is not null)
             {
                 foreach (var button in additionalButtons)
                 {
@@ -280,29 +195,13 @@ namespace Catel.Windows
                 this.FocusFirstControl();
             }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
-        public Type ViewModelType
+        public Type? ViewModelType
         {
-            get { return _logic.GetValue<WindowLogic, Type>(x => x.ViewModelType); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the view model container should prevent the 
-        /// creation of a view model.
-        /// <para />
-        /// This property is very useful when using views in transitions where the view model is no longer required.
-        /// </summary>
-        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public bool PreventViewModelCreation
-        {
-            get { return _logic.GetValue<WindowLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<WindowLogic>(x => x.PreventViewModelCreation = value); }
+            get { return _logic.GetValue<WindowLogic, Type?>(x => x.ViewModelType); }
         }
 
         /// <summary>
@@ -323,9 +222,9 @@ namespace Catel.Windows
         /// Gets the view model that is contained by the container.
         /// </summary>
         /// <value>The view model.</value>
-        public IViewModel ViewModel
+        public IViewModel? ViewModel
         {
-            get { return _logic.GetValue<WindowLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<WindowLogic, IViewModel?>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -445,9 +344,7 @@ namespace Catel.Windows
         /// </summary>
         /// <value>The internal grid.</value>
         internal Grid InternalGrid { get; private set; }
-        #endregion
-
-        #region Commands
+        
         /// <summary>
         /// Executes the OK command.
         /// </summary>
@@ -458,7 +355,7 @@ namespace Catel.Windows
                 return OnOkExecuteAsync();
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -494,7 +391,7 @@ namespace Catel.Windows
                 return OnCancelExecuteAsync();
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -533,7 +430,7 @@ namespace Catel.Windows
                 return OnApplyExecuteAsync();
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -580,9 +477,7 @@ namespace Catel.Windows
         {
             Close();
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a property on the container has changed.
         /// </summary>
@@ -590,22 +485,22 @@ namespace Catel.Windows
         /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
         /// (mostly the container of a view model) because the .NET Framework does not allows us to.
         /// </remarks>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> property has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ViewModelChanged;
+        public event EventHandler<EventArgs>? ViewModelChanged;
 
         /// <summary>
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
 
         /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Loaded
+        event EventHandler<EventArgs>? IView.Loaded
         {
             add { _viewLoaded += value; }
             remove { _viewLoaded -= value; }
@@ -614,7 +509,7 @@ namespace Catel.Windows
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Unloaded
+        event EventHandler<EventArgs>? IView.Unloaded
         {
             add { _viewUnloaded += value; }
             remove { _viewUnloaded -= value; }
@@ -623,14 +518,12 @@ namespace Catel.Windows
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<DataContextChangedEventArgs> IView.DataContextChanged
+        event EventHandler<DataContextChangedEventArgs>? IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
         }
-        #endregion
 
-        #region Methods
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
@@ -673,7 +566,7 @@ namespace Catel.Windows
 
             if (e.Key == Key.Enter)
             {
-                if (_defaultOkElement != null)
+                if (_defaultOkElement is not null)
                 {
                     _defaultOkElement.GotFocus += OnButtonReceivedFocus;
                     if (!_defaultOkElement.Focus())
@@ -683,7 +576,7 @@ namespace Catel.Windows
 
                     e.Handled = true;
                 }
-                else if (_defaultOkCommand != null)
+                else if (_defaultOkCommand is not null)
                 {
                     HandleDefaultButton();
                     e.Handled = true;
@@ -694,7 +587,7 @@ namespace Catel.Windows
 
             if (e.Key == Key.Escape && CanCloseUsingEscape)
             {
-                if (_defaultCancelCommand != null)
+                if (_defaultCancelCommand is not null)
                 {
                     Log.Info("User pressed 'Escape', executing cancel command");
 
@@ -770,7 +663,7 @@ namespace Catel.Windows
         /// </summary>
         private void HandleDefaultButton()
         {
-            if (_defaultOkCommand != null)
+            if (_defaultOkCommand is not null)
             {
                 Log.Info("User pressed 'Enter', executing default command");
 
@@ -789,9 +682,9 @@ namespace Catel.Windows
         /// <exception cref="InvalidOperationException">The <paramref name="dataWindowButton"/> is added when the window is already loaded.</exception>
         protected void AddCustomButton(DataWindowButton dataWindowButton)
         {
-            if (InternalGrid != null)
+            if (InternalGrid is not null)
             {
-                throw new InvalidOperationException(Exceptions.DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded);
+                throw Log.ErrorAndCreateException<InvalidOperationException>(Exceptions.DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded);
             }
 
             _buttons.Add(dataWindowButton);
@@ -811,41 +704,47 @@ namespace Catel.Windows
             }
 
             var newContentAsFrameworkElement = Content as FrameworkElement;
-            if (_isWrapped || !WrapControlService.CanBeWrapped(newContentAsFrameworkElement))
+            if (newContentAsFrameworkElement is not null)
             {
-                return;
+                if (_isWrapped || !WrapControlService.CanBeWrapped(newContentAsFrameworkElement))
+                {
+                    return;
+                }
             }
 
-            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
 
             if (IsOKButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("OK"), OnOkExecuteAsync, OnOkCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.OK;
                 _buttons.Add(button);
             }
             if (IsCancelButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("Cancel"), OnCancelExecuteAsync, OnCancelCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
             if (IsApplyButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("Apply"), OnApplyExecuteAsync, OnApplyCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Apply;
                 _buttons.Add(button);
             }
             if (IsCloseButtonAvailable)
             {
-                var button = DataWindowButton.FromSync(languageService.GetString("Close"), OnCloseExecute, OnCloseCanExecute);
+                var button = DataWindowButton.FromSync(languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Close;
                 _buttons.Add(button);
             }
 
             foreach (var button in _buttons)
             {
-                _commands.Add(button.Command);
+                if (button.Command is not null)
+                {
+                    _commands.Add(button.Command);
+                }
             }
 
             var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext | WrapControlServiceWrapOptions.GenerateAdornerDecorator | WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary;
@@ -866,30 +765,33 @@ namespace Catel.Windows
 
             _isWrapped = true;
 
-            var contentGrid = WrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
-
-            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlServiceControlNames.InternalGridName)) as Grid;
-            if (internalGrid != null)
+            if (newContentAsFrameworkElement is not null)
             {
-                internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
+                var contentGrid = WrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
 
-                if (_focusFirstControl)
+                var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlServiceControlNames.InternalGridName)) as Grid;
+                if (internalGrid is not null)
                 {
-                    newContentAsFrameworkElement.FocusFirstControl();
-                }
+                    internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
-                _defaultOkCommand = (from button in _buttons
-                                     where button.IsDefault
-                                     select button.Command).FirstOrDefault();
-                _defaultOkElement = WrapControlService.GetWrappedElement<ButtonBase>(contentGrid, WrapControlServiceControlNames.DefaultOkButtonName);
+                    if (_focusFirstControl)
+                    {
+                        newContentAsFrameworkElement.FocusFirstControl();
+                    }
 
-                _defaultCancelCommand = (from button in _buttons
-                                         where button.IsCancel
+                    _defaultOkCommand = (from button in _buttons
+                                         where button.IsDefault
                                          select button.Command).FirstOrDefault();
+                    _defaultOkElement = WrapControlService.GetWrappedElement<ButtonBase>(contentGrid, WrapControlServiceControlNames.DefaultOkButtonName);
 
-                InternalGrid = internalGrid;
+                    _defaultCancelCommand = (from button in _buttons
+                                             where button.IsCancel
+                                             select button.Command).FirstOrDefault();
 
-                OnInternalGridChanged();
+                    InternalGrid = internalGrid;
+
+                    OnInternalGridChanged();
+                }
             }
         }
 
@@ -907,7 +809,7 @@ namespace Catel.Windows
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnDataWindowClosing(object sender, CancelEventArgs args)
+        private async void OnDataWindowClosing(object? sender, CancelEventArgs args)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (args.Cancel)
@@ -918,7 +820,7 @@ namespace Catel.Windows
             if (!_forceClose && !ClosedByButton)
             {
                 var vm = ViewModel;
-                if (vm != null && vm.IsClosed)
+                if (vm is not null && vm.IsClosed)
                 {
                     // Being closed from the vm
                     return;
@@ -990,7 +892,7 @@ namespace Catel.Windows
         {
             // CTL-735 We might be handling the ViewModel.Closed event
             var vm = _logic.ViewModel;
-            if (vm != null)
+            if (vm is not null)
             {
                 if (vm.IsClosed)
                 {
@@ -1010,7 +912,7 @@ namespace Catel.Windows
             foreach (var command in Commands)
             {
                 var commandAsICatelCommand = command as ICatelCommand;
-                if (commandAsICatelCommand != null)
+                if (commandAsICatelCommand is not null)
                 {
                     commandAsICatelCommand.RaiseCanExecuteChanged();
                 }
@@ -1022,7 +924,7 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             RaiseCanExecuteChangedForAllCommands();
 
@@ -1043,9 +945,9 @@ namespace Catel.Windows
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 
-        protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
+        protected virtual Task OnViewModelClosedAsync(object? sender, ViewModelClosedEventArgs e)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -1078,8 +980,5 @@ namespace Catel.Windows
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
         }
-        #endregion
     }
 }
-
-#endif

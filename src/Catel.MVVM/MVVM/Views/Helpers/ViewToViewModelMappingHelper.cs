@@ -1,24 +1,16 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewToViewModelMappingHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using Catel.Data;
     using Logging;
-    using Reflection;
 
     /// <summary>
     /// Helper class to fix <see cref="ViewToViewModelMapping"/> for <see cref="IView"/>.
     /// </summary>
     internal class ViewToViewModelMappingHelper
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -48,10 +40,8 @@ namespace Catel.MVVM.Views
         /// Gets or sets the previous view model.
         /// </summary>
         /// <value>The previous view model.</value>
-        private IViewModel _previousViewModel;
-        #endregion
+        private IViewModel? _previousViewModel;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewToViewModelMappingHelper"/> class.
         /// </summary>
@@ -60,8 +50,8 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer"/> is <c>null</c>.</exception>
         public ViewToViewModelMappingHelper(IViewModelContainer viewModelContainer, IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull("viewModelContainer", viewModelContainer);
-            Argument.IsNotNull("objectAdapter", objectAdapter);
+            ArgumentNullException.ThrowIfNull(viewModelContainer);
+            ArgumentNullException.ThrowIfNull(objectAdapter);
 
             Log.Debug("Initializing view model container to manage ViewToViewModel mappings");
 
@@ -82,9 +72,7 @@ namespace Catel.MVVM.Views
 
             Log.Debug("Initialized view model container to manage ViewToViewModel mappings");
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the view model container.
         /// </summary>
@@ -110,13 +98,11 @@ namespace Catel.MVVM.Views
         /// Gets the current view model.
         /// </summary>
         /// <value>The current view model.</value>
-        private IViewModel CurrentViewModel
+        private IViewModel? CurrentViewModel
         {
             get { return ViewModelContainer.ViewModel; }
         }
-        #endregion
-
-        #region Methods
+ 
         /// <summary>
         /// Initializes the <see cref="ViewToViewModelMapping"/> for the specified <see cref="IViewModelContainer"/>.
         /// </summary>
@@ -125,7 +111,7 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer"/> is <c>null</c>.</exception>
         public static void InitializeViewToViewModelMappings(IViewModelContainer viewModelContainer, IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull("viewModelContainer", viewModelContainer);
+            ArgumentNullException.ThrowIfNull(viewModelContainer);
 
             if (_viewModelContainers.ContainsKey(viewModelContainer))
             {
@@ -142,7 +128,7 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer"/> is <c>null</c>.</exception>
         public static void UninitializeViewToViewModelMappings(IViewModelContainer viewModelContainer)
         {
-            Argument.IsNotNull("viewModelContainer", viewModelContainer);
+            ArgumentNullException.ThrowIfNull(viewModelContainer);
 
             if (_viewModelContainers.TryGetValue(viewModelContainer, out var viewToViewModelMappingHelper))
             {
@@ -170,7 +156,7 @@ namespace Catel.MVVM.Views
         /// Initializes the specified view model.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        private void InitializeViewModel(IViewModel viewModel)
+        private void InitializeViewModel(IViewModel? viewModel)
         {
             var viewModelType = ObjectToStringHelper.ToTypeString(viewModel);
 
@@ -180,7 +166,7 @@ namespace Catel.MVVM.Views
 
             _previousViewModel = viewModel;
 
-            if (viewModel != null)
+            if (viewModel is not null)
             {
                 // If there are mappings, sync them in the right way
                 var viewModelContainerType = ViewModelContainerType;
@@ -216,7 +202,7 @@ namespace Catel.MVVM.Views
         /// Uninitializes the specified view model.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        private void UninitializeViewModel(IViewModel viewModel)
+        private void UninitializeViewModel(IViewModel? viewModel)
         {
             if (viewModel is null)
             {
@@ -237,7 +223,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The view model container.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnViewModelChanged(object sender, EventArgs e)
+        private void OnViewModelChanged(object? sender, EventArgs e)
         {
             InitializeViewModel(CurrentViewModel);
         }
@@ -247,13 +233,25 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The view model.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(e.PropertyName))
+            {
+                return;
+                //throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
+            }
+
+            var viewModel = CurrentViewModel;
+            if (viewModel is null)
+            {
+                return;
+            }
+
             var viewModelContainerType = ViewModelContainerType;
             var viewToViewModelMappingContainer = _viewToViewModelMappingContainers[viewModelContainerType];
             if (viewToViewModelMappingContainer.ContainsViewModelToViewMapping(e.PropertyName))
             {
-                ViewToViewModelMapping mapping = viewToViewModelMappingContainer.GetViewModelToViewMapping(e.PropertyName);
+                var mapping = viewToViewModelMappingContainer.GetViewModelToViewMapping(e.PropertyName);
                 if (_ignoredViewModelChanges.Contains(mapping.ViewPropertyName))
                 {
                     Log.Debug("Ignored property changed event for ViewModel.'{0}'", mapping.ViewPropertyName);
@@ -265,7 +263,7 @@ namespace Catel.MVVM.Views
                         (mapping.MappingType == ViewToViewModelMappingType.TwoWayViewModelWins) ||
                         (mapping.MappingType == ViewToViewModelMappingType.ViewModelToView))
                     {
-                        TransferValueFromViewModelToView(CurrentViewModel, mapping.ViewPropertyName, mapping.ViewModelPropertyName);
+                        TransferValueFromViewModelToView(viewModel, mapping.ViewPropertyName, mapping.ViewModelPropertyName);
                     }
                 }
             }
@@ -276,13 +274,25 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The view model container.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnViewModelContainerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnViewModelContainerPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(e.PropertyName))
+            {
+                return;
+                //throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
+            }
+
+            var viewModel = CurrentViewModel;
+            if (viewModel is null)
+            {
+                return;
+            }
+
             var viewModelContainerType = ViewModelContainerType;
             var viewToViewModelMappingContainer = _viewToViewModelMappingContainers[viewModelContainerType];
             if (viewToViewModelMappingContainer.ContainsViewToViewModelMapping(e.PropertyName))
             {
-                ViewToViewModelMapping mapping = viewToViewModelMappingContainer.GetViewToViewModelMapping(e.PropertyName);
+                var mapping = viewToViewModelMappingContainer.GetViewToViewModelMapping(e.PropertyName);
                 if (_ignoredViewChanges.Contains(mapping.ViewPropertyName))
                 {
                     Log.Debug("Ignored property changed event for view.'{0}'", mapping.ViewPropertyName);
@@ -294,7 +304,7 @@ namespace Catel.MVVM.Views
                         (mapping.MappingType == ViewToViewModelMappingType.TwoWayViewModelWins) ||
                         (mapping.MappingType == ViewToViewModelMappingType.ViewToViewModel))
                     {
-                        TransferValueFromViewToViewModel(CurrentViewModel, mapping.ViewPropertyName, mapping.ViewModelPropertyName);
+                        TransferValueFromViewToViewModel(viewModel, mapping.ViewPropertyName, mapping.ViewModelPropertyName);
                     }
                 }
             }
@@ -396,24 +406,23 @@ namespace Catel.MVVM.Views
         /// </remarks>
         private void TransferValue(object source, string sourcePropertyName, object target, string targetPropertyName)
         {
-            Argument.IsNotNull("source", source);
-            Argument.IsNotNull("target", target);
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(target);
             Argument.IsNotNullOrWhitespace("sourcePropertyName", sourcePropertyName);
             Argument.IsNotNullOrWhitespace("targetPropertyName", targetPropertyName);
 
-            if (!ObjectAdapter.GetMemberValue(source, sourcePropertyName, out object valueToTransfer))
+            if (!ObjectAdapter.TryGetMemberValue(source, sourcePropertyName, out object? valueToTransfer))
             {
                 return;
             }
 
             Log.Debug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
 
-            if (!ObjectAdapter.SetMemberValue(target, targetPropertyName, valueToTransfer))
+            if (!ObjectAdapter.TrySetMemberValue(target, targetPropertyName, valueToTransfer))
             {
                 Log.Warning($"Failed to transfer value, is the property not writeable?");
                 return;
             }
         }
-        #endregion
     }
 }

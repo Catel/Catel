@@ -1,32 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DispatcherService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Logging;
-
-#if ANDROID
-    using global::Android.App;
-    using global::Android.OS;
-#elif IOS
-    using global::CoreFoundation;
-#elif UWP
-    using Windows.Threading;
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#elif !XAMARIN_FORMS
-    using Catel.Windows.Threading;
     using System.Windows.Threading;
     using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
-#else
-    using Xamarin.Forms;
-#endif
 
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
@@ -35,23 +14,18 @@ namespace Catel.Services
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !XAMARIN && !XAMARIN_FORMS
         private readonly IDispatcherProviderService _dispatcherProviderService;
-#endif
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Initializes a new instance of the <see cref="DispatcherService"/> class.
         /// </summary>
         public DispatcherService(IDispatcherProviderService dispatcherProviderService)
         {
-            Argument.IsNotNull(nameof(dispatcherProviderService), dispatcherProviderService);
+            ArgumentNullException.ThrowIfNull(dispatcherProviderService);
 
             _dispatcherProviderService = dispatcherProviderService;
         }
-#endif
 
-#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the current dispatcher.
         /// </summary>
@@ -59,12 +33,16 @@ namespace Catel.Services
         {
             get
             {
-                return _dispatcherProviderService.GetApplicationDispatcher() as Dispatcher;
+                var dispatcher = _dispatcherProviderService.GetApplicationDispatcher() as Dispatcher;
+                if (dispatcher is null)
+                {
+                    throw Log.ErrorAndCreateException<CatelException>($"Cannot find application dispatcher");
+                }
+
+                return dispatcher;
             }
         }
-#endif
 
-#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -72,11 +50,9 @@ namespace Catel.Services
         /// <returns>The task representing the action.</returns>
         public virtual Task InvokeAsync(Action action)
         {
-#if NET || NETCORE
+            ArgumentNullException.ThrowIfNull(action);
+
             return CurrentDispatcher.InvokeAsync(action).Task;
-#else
-            return dispatcher.InvokeAsync(action);
-#endif
         }
 
         /// <summary>
@@ -87,6 +63,8 @@ namespace Catel.Services
         /// <returns>The task representing the action.</returns>
         public virtual Task InvokeAsync(Delegate method, params object[] args)
         {
+            ArgumentNullException.ThrowIfNull(method);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
@@ -100,6 +78,8 @@ namespace Catel.Services
         /// <returns>The task representing the action.</returns>
         public virtual Task<T> InvokeAsync<T>(Func<T> func)
         {
+            ArgumentNullException.ThrowIfNull(func);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, func);
@@ -112,6 +92,8 @@ namespace Catel.Services
         /// <returns>The task representing the asynchronous operation</returns>
         public virtual Task InvokeTaskAsync(Func<Task> actionAsync)
         {
+            ArgumentNullException.ThrowIfNull(actionAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
@@ -125,6 +107,8 @@ namespace Catel.Services
         /// <returns>The task representing the asynchronous operation</returns>
         public virtual Task InvokeTaskAsync(Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(actionAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
@@ -137,6 +121,8 @@ namespace Catel.Services
         /// <returns>The task representing the asynchronous operation with the returning value</returns>
         public virtual Task<T> InvokeTaskAsync<T>(Func<Task<T>> funcAsync)
         {
+            ArgumentNullException.ThrowIfNull(funcAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
@@ -151,11 +137,12 @@ namespace Catel.Services
         /// <returns>The task representing the asynchronous operation with the returning value</returns>
         public virtual Task<T> InvokeTaskAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(funcAsync);
+
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
         }
-#endif
 
         /// <summary>
         /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.
@@ -166,25 +153,10 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
         public virtual void Invoke(Action action, bool onlyInvokeWhenNoAccess = true)
         {
-            Argument.IsNotNull("action", action);
-#if XAMARIN_FORMS
-            var synchronizationContext = SynchronizationContext.Current;
-            if (synchronizationContext != null)
-            {
-                synchronizationContext.Post(state => action(), null);
-            }
-            else
-            {
-                action();
-            }
-#elif ANDROID
-            _handler.Post(action);
-#elif IOS
-            DispatchQueue.MainQueue.DispatchSync(() => action());
-#else
+            ArgumentNullException.ThrowIfNull(action);
+
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.Invoke(dispatcher, action, onlyInvokeWhenNoAccess);
-#endif
         }
 
         /// <summary>
@@ -195,25 +167,10 @@ namespace Catel.Services
         /// <c>Dispatcher.BeginInvoke</c> will be used.</param>
         public virtual void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess = true)
         {
-            Argument.IsNotNull("action", action);
-#if XAMARIN_FORMS
-            var synchronizationContext = SynchronizationContext.Current;
-            if (synchronizationContext != null)
-            {
-                synchronizationContext.Post(state => action(), null);
-            }
-            else
-            {
-                action();
-            }
-#elif ANDROID
-            _handler.Post(action);
-#elif IOS
-            DispatchQueue.MainQueue.DispatchAsync(() => action());
-#else
+            ArgumentNullException.ThrowIfNull(action);
+
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.BeginInvoke(dispatcher, action, onlyBeginInvokeWhenNoAccess);
-#endif
         }
     }
 }

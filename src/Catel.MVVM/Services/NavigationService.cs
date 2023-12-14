@@ -1,14 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Catel.MVVM;
+    using Catel.Reflection;
     using Logging;
 
     /// <summary>
@@ -16,7 +12,6 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationService : NavigationServiceBase, INavigationService
     {
-    #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -25,61 +20,43 @@ namespace Catel.Services
         /// <summary>
         /// The registered uris.
         /// </summary>
-        private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> RegisteredUris = new Dictionary<string, string>();
 
-#if !XAMARIN_FORMS
         /// <summary>
         /// The navigation root service.
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         protected readonly INavigationRootService NavigationRootService;
-#endif
-        #endregion
-
-#if !XAMARIN_FORMS
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationService" /> class.
-        /// </summary>
-        /// <param name="navigationRootService">The navigation root service.</param>
-
-        public NavigationService(INavigationRootService navigationRootService)
+        protected readonly IUrlLocator UrlLocator;
+#pragma warning restore IDE1006 // Naming Styles
+        public NavigationService(INavigationRootService navigationRootService, IUrlLocator urlLocator)
         {
-            Argument.IsNotNull(nameof(navigationRootService), navigationRootService);
+            ArgumentNullException.ThrowIfNull(navigationRootService);
+            ArgumentNullException.ThrowIfNull(urlLocator);
 
             NavigationRootService = navigationRootService;
+            UrlLocator = urlLocator;
 
             Initialize();
         }
 
-        #endregion
-#endif
-
-        #region Events
         /// <summary>
         /// Occurs when the application is about to be closed.
         /// </summary>
-        public event EventHandler<ApplicationClosingEventArgs> ApplicationClosing;
+        public event EventHandler<ApplicationClosingEventArgs>? ApplicationClosing;
 
         /// <summary>
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed.
         /// </summary>
-        public event EventHandler<EventArgs> ApplicationClosed;
-#endregion
+        public event EventHandler<EventArgs>? ApplicationClosed;
 
-#region Methods
         partial void Initialize();
-        partial void CloseMainWindow();
-        partial void NavigateBack();
-        partial void NavigateForward();
-        partial void NavigateToUri(Uri uri);
-        partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters);
 
         /// <summary>
         /// Closes the current application. The actual implementation depends on the final target framework.
         /// </summary>
         /// <returns><c>true</c> if the application is closed; otherwise <c>false</c>.</returns>
-        public bool CloseApplication()
+        public async Task<bool> CloseApplicationAsync()
         {
             var eventArgs = new ApplicationClosingEventArgs();
             ApplicationClosing?.Invoke(this, eventArgs);
@@ -89,7 +66,7 @@ namespace Catel.Services
                 return false;
             }
 
-            CloseMainWindow();
+            await CloseMainWindowAsync();
 
 #pragma warning disable 162
             ApplicationClosed?.Invoke(this, EventArgs.Empty);
@@ -100,22 +77,22 @@ namespace Catel.Services
         /// <summary>
         /// Navigates back to the previous page.
         /// </summary>
-        public virtual void GoBack()
+        public virtual async Task GoBackAsync()
         {
             if (CanGoBack)
             {
-                NavigateBack();
+                await NavigateBackAsync();
             }
         }
 
         /// <summary>
         /// Navigates forward to the next page.
         /// </summary>
-        public virtual void GoForward()
+        public virtual async Task GoForwardAsync()
         {
             if (CanGoForward)
             {
-                NavigateForward();
+                await NavigateForwardAsync();
             }
         }
 
@@ -123,11 +100,11 @@ namespace Catel.Services
         /// Navigates to a specific location.
         /// </summary>
         /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
-        public virtual void Navigate(Uri uri)
+        public virtual Task NavigateAsync(Uri uri)
         {
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
-            NavigateToUri(uri);
+            return NavigateToUriAsync(uri);
         }
 
         /// <summary>
@@ -137,7 +114,7 @@ namespace Catel.Services
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
         /// <exception cref="ArgumentException">The <paramref name="uri"/> is <c>null</c> or whitespace.</exception>
-        public virtual void Navigate(string uri, Dictionary<string, object> parameters = null)
+        public virtual Task NavigateAsync(string uri, Dictionary<string, object>? parameters = null)
         {
             Argument.IsNotNullOrWhitespace("uri", uri);
 
@@ -146,18 +123,7 @@ namespace Catel.Services
                 parameters = new Dictionary<string, object>();
             }
 
-            NavigateWithParameters(uri, parameters);
-        }
-
-        /// <summary>
-        /// Navigates the specified location registered using the view model type.
-        /// </summary>
-        /// <typeparam name="TViewModelType">The view model type.</typeparam>
-        /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
-        /// and the value is the value of the parameter.</param>
-        public virtual void Navigate<TViewModelType>(Dictionary<string, object> parameters = null)
-        {
-            Navigate(typeof(TViewModelType), parameters);
+            return NavigateWithParametersAsync(uri, parameters);
         }
 
         /// <summary>
@@ -167,22 +133,32 @@ namespace Catel.Services
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        public virtual void Navigate(Type viewModelType, Dictionary<string, object> parameters = null)
+        public virtual async Task NavigateAsync(Type viewModelType, Dictionary<string, object>? parameters = null)
         {
-            Argument.IsNotNull("viewModelType", viewModelType);
+            ArgumentNullException.ThrowIfNull(viewModelType);
 
-            string viewModelTypeName = viewModelType.FullName;
+            var viewModelTypeName = viewModelType.GetSafeFullName();
+            string? uri = null;
 
-            lock (_registeredUris)
+            lock (RegisteredUris)
             {
-                if (!_registeredUris.TryGetValue(viewModelTypeName, out var uri))
+                if (!RegisteredUris.TryGetValue(viewModelTypeName, out uri))
                 {
                     uri = ResolveNavigationTarget(viewModelType);
-                    _registeredUris.Add(viewModelTypeName, uri);
-                }
 
-                Navigate(uri, parameters);
+                    if (uri is not null)
+                    {
+                        RegisteredUris.Add(viewModelTypeName, uri);
+                    }
+                }
             }
+
+            if (uri is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Cannot navigate to '{viewModelType.GetSafeFullName()}', could not resolve the uri");
+            }
+
+            await NavigateAsync(uri, parameters);
         }
 
         /// <summary>
@@ -196,9 +172,9 @@ namespace Catel.Services
         public virtual void Register(Type viewModelType, Uri uri)
         {
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
-            Register(viewModelType.FullName, uri);
+            Register(viewModelType.GetSafeFullName(), uri);
         }
 
         /// <summary>
@@ -213,16 +189,16 @@ namespace Catel.Services
         public virtual void Register(string name, Uri uri)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("uri", uri);
+            ArgumentNullException.ThrowIfNull(uri);
 
-            lock (_registeredUris)
+            lock (RegisteredUris)
             {
-                if (_registeredUris.ContainsKey(name))
+                if (RegisteredUris.ContainsKey(name))
                 {
-                    throw new Exception(Catel.ResourceHelper.GetString("ViewModelAlreadyRegistered"));
+                    throw Log.ErrorAndCreateException<Exception>(LanguageHelper.GetRequiredString("ViewModelAlreadyRegistered"));
                 }
 
-                _registeredUris.Add(name, uri.ToString());
+                RegisteredUris.Add(name, uri.ToString());
 
                 Log.Debug("Registered view model '{0}' in combination with '{1}' in the NavigationService", name, uri);
             }
@@ -237,7 +213,9 @@ namespace Catel.Services
         /// </returns>
         public virtual bool Unregister(Type viewModelType)
         {
-            return Unregister(viewModelType.FullName);
+            ArgumentNullException.ThrowIfNull(viewModelType);
+
+            return Unregister(viewModelType.GetSafeFullName());
         }
 
         /// <summary>
@@ -249,9 +227,9 @@ namespace Catel.Services
         /// </returns>
         public virtual bool Unregister(string name)
         {
-            lock (_registeredUris)
+            lock (RegisteredUris)
             {
-                bool result = _registeredUris.Remove(name);
+                var result = RegisteredUris.Remove(name);
                 if (result)
                 {
                     Log.Debug("Unregistered view model '{0}' in NavigationService", name);
@@ -260,6 +238,5 @@ namespace Catel.Services
                 return result;
             }
         }
-#endregion
     }
 }

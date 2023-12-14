@@ -1,30 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.serialization.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Data
+﻿namespace Catel.Data
 {
-    using Logging;
-
     using ISerializable = Catel.Runtime.Serialization.ISerializable;
-
-#if !NET && !NETCORE && !NETSTANDARD
-    using System.Reflection;
-#endif
-
-#if NET || NETCORE
-    using System.Runtime.Serialization.Formatters.Binary;
-#elif UWP
-    using Windows.Storage.Streams;
-#else
-    using System.IO.IsolatedStorage;
-#endif
 
     public partial class ModelBase
     {
-        #region Methods
         /// <summary>
         /// Called when the object is being serialized.
         /// </summary>
@@ -90,6 +69,5 @@ namespace Catel.Data
 
             OnDeserialized();
         }
-        #endregion
     }
 }

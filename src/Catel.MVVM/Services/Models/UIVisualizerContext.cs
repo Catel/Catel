@@ -2,12 +2,12 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Catel.MVVM;
 
     public class UIVisualizerContext
     {
         public UIVisualizerContext()
         {
+            Name = string.Empty;
             IsModal = true;
             SetParentWindow = true;
         }
@@ -27,12 +27,12 @@
         /// <para />
         /// The inject a view model, set this property to a view model instance.
         /// </summary>
-        public object Data { get; set; }
+        public object? Data { get; set; }
 
         /// <summary>
         /// Gets the callback that will be called when the ui is closed.
         /// </summary>
-        public EventHandler<UICompletedEventArgs> CompletedCallback { get; set; }
+        public EventHandler<UICompletedEventArgs>? CompletedCallback { get; set; }
 
         /// <summary>
         /// If set to <c>true</c>, the visualizer service should set the parent window.
@@ -44,6 +44,6 @@
         /// <summary>
         /// Customized callback to allow setting a custom parent window to override default behavior.
         /// </summary>
-        public Func<UIVisualizerContext, object, Task> SetParentWindowCallback { get; set; }
+        public Func<UIVisualizerContext, object, Task>? SetParentWindowCallback { get; set; }
     }
 }

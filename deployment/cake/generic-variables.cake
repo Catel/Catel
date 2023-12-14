@@ -1,6 +1,6 @@
 #l "buildserver.cake"
 
-#tool "nuget:?package=GitVersion.CommandLine&version=5.8.0"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.12.0"
 
 //-------------------------------------------------------------
 
@@ -10,6 +10,9 @@ public class GeneralContext : BuildContextWithItemsBase
         : base(parentBuildContext)
     {
         SkipComponentsThatAreNotDeployable = true;
+        EnableMsBuildBinaryLog = true;
+        EnableMsBuildFileLog = true;
+        EnableMsBuildXmlLog = true;
     }
 
     public string Target { get; set; }
@@ -25,6 +28,10 @@ public class GeneralContext : BuildContextWithItemsBase
     public bool UseVisualStudioPrerelease { get; set; }
     public bool VerifyDependencies { get; set; }
     public bool SkipComponentsThatAreNotDeployable { get; set; }
+
+    public bool EnableMsBuildBinaryLog { get; set; }
+    public bool EnableMsBuildFileLog { get; set; }
+    public bool EnableMsBuildXmlLog { get; set; }
 
     public VersionContext Version { get; set; }
     public CopyrightContext Copyright { get; set; }
@@ -67,7 +74,7 @@ public class VersionContext : BuildContextBase
             var gitVersionSettings = new GitVersionSettings
             {
                 UpdateAssemblyInfo = false,
-                Verbosity = GitVersionVerbosity.Debug
+                Verbosity = GitVersionVerbosity.Verbose
             };
 
             var gitDirectory = ".git";
@@ -115,7 +122,7 @@ public class VersionContext : BuildContextBase
                 gitVersionSettings.NoFetch = false;
                 gitVersionSettings.WorkingDirectory = generalContext.RootDirectory;
                 gitVersionSettings.DynamicRepositoryPath = dynamicRepositoryPath;
-                gitVersionSettings.Verbosity = GitVersionVerbosity.Debug;
+                gitVersionSettings.Verbosity = GitVersionVerbosity.Verbose;
             }
 
             _gitVersionContext = CakeContext.GitVersion(gitVersionSettings);
@@ -134,21 +141,25 @@ public class VersionContext : BuildContextBase
         {
             if (string.IsNullOrWhiteSpace(_major))
             {
-                _major = string.Empty;
-
-                for (int i = 0; i < MajorMinorPatch.Length; i++)
-                {
-                    var character = MajorMinorPatch[i];
-                    if (!char.IsDigit(character))
-                    {
-                        break;
-                    }
-
-                    _major += character.ToString();
-                }
+                _major = GetVersion(MajorMinorPatch, 1);
             }
 
             return _major;
+        }
+    }
+
+    private string _majorMinor;
+
+    public string MajorMinor
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(_majorMinor))
+            {
+                _majorMinor = GetVersion(MajorMinorPatch, 2);
+            }
+
+            return _majorMinor;
         }
     }
 
@@ -156,6 +167,28 @@ public class VersionContext : BuildContextBase
     public string FullSemVer { get; set; }
     public string NuGet { get; set; }
     public string CommitsSinceVersionSource { get; set; }
+
+    private string GetVersion(string version, int breakCount)
+    {
+        var finalVersion = string.Empty;
+
+        for (int i = 0; i < version.Length; i++)
+        {
+            var character = version[i];
+            if (!char.IsDigit(character))
+            {
+                breakCount--;
+                if (breakCount <= 0)
+                {
+                    break;
+                }
+            }
+
+            finalVersion += character.ToString();
+        }
+
+        return finalVersion;
+    }
 
     protected override void ValidateContext()
     {
@@ -303,6 +336,7 @@ public class CodeSignContext : BuildContextBase
     public string WildCard { get; set; }
     public string CertificateSubjectName { get; set; }
     public string TimeStampUri { get; set; }
+    public string HashAlgorithm { get; set; }
 
     protected override void ValidateContext()
     {
@@ -311,7 +345,15 @@ public class CodeSignContext : BuildContextBase
     
     protected override void LogStateInfoForContext()
     {
-    
+        if (string.IsNullOrWhiteSpace(CertificateSubjectName))
+        {
+            CakeContext.Information($"Code signing is not configured");
+            return;
+        }
+
+        CakeContext.Information($"Code signing subject name: '{CertificateSubjectName}'");
+        CakeContext.Information($"Code signing timestamp uri: '{TimeStampUri}'");
+        CakeContext.Information($"Code signing hash algorithm: '{HashAlgorithm}'");
     }
 }
 
@@ -428,6 +470,10 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
     data.VerifyDependencies = !buildContext.BuildServer.GetVariableAsBool("DependencyCheckDisabled", false, showValue: true);
     data.SkipComponentsThatAreNotDeployable = buildContext.BuildServer.GetVariableAsBool("SkipComponentsThatAreNotDeployable", true, showValue: true);
 
+    data.EnableMsBuildBinaryLog = buildContext.BuildServer.GetVariableAsBool("EnableMsBuildBinaryLog", true, showValue: true);
+    data.EnableMsBuildFileLog = buildContext.BuildServer.GetVariableAsBool("EnableMsBuildFileLog", true, showValue: true);
+    data.EnableMsBuildXmlLog = buildContext.BuildServer.GetVariableAsBool("EnableMsBuildXmlLog", true, showValue: true);
+
     // If local, we want full pdb, so do a debug instead
     if (data.IsLocalBuild)
     {
@@ -448,7 +494,8 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
     {
         WildCard = buildContext.BuildServer.GetVariable("CodeSignWildcard", showValue: true),
         CertificateSubjectName = buildContext.BuildServer.GetVariable("CodeSignCertificateSubjectName", showValue: true),
-        TimeStampUri = buildContext.BuildServer.GetVariable("CodeSignTimeStampUri", "http://timestamp.digicert.com", showValue: true)
+        TimeStampUri = buildContext.BuildServer.GetVariable("CodeSignTimeStampUri", "http://timestamp.digicert.com", showValue: true),
+        HashAlgorithm = buildContext.BuildServer.GetVariable("CodeSignHashAlgorithm", "SHA256", showValue: true)
     };
 
     data.Repository = new RepositoryContext(data)

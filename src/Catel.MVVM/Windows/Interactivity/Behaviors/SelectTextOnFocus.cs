@@ -1,24 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SelectTextOnFocus.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
-
-namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity
 {
-#if UWP
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#else
-    using System;
     using System.Windows;
     using System.Windows.Controls;
     using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
-#endif
 
     /// <summary>
     /// Selects all the text when the <see cref="TextBox"/> or <see cref="PasswordBox"/> is focused.
@@ -31,12 +15,9 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectLoaded()
         {
             AssociatedObject.GotFocus += OnGotFocus;
-
-#if NET || NETCORE
             AssociatedObject.PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
             AssociatedObject.GotMouseCapture += OnGotMouseCapture;
             AssociatedObject.GotKeyboardFocus += OnGotKeyboardFocus;
-#endif
         }
 
         /// <summary>
@@ -45,12 +26,9 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectUnloaded()
         {
             AssociatedObject.GotFocus -= OnGotFocus;
-
-#if NET || NETCORE
             AssociatedObject.PreviewMouseLeftButtonDown -= OnPreviewMouseLeftButtonDown;
             AssociatedObject.GotMouseCapture -= OnGotMouseCapture;
             AssociatedObject.GotKeyboardFocus -= OnGotKeyboardFocus;
-#endif
         }
 
         /// <summary>
@@ -58,18 +36,17 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnGotFocus(object sender, RoutedEventArgs e)
+        private void OnGotFocus(object? sender, RoutedEventArgs e)
         {
             SelectAllText();
         }
 
-#if NET || NETCORE
         /// <summary>
         /// Called when the <see cref="UIElement.PreviewMouseLeftButtonDown"/> event occurs.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnPreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        private void OnPreviewMouseLeftButtonDown(object? sender, RoutedEventArgs e)
         {
             if (!AssociatedObject.IsKeyboardFocusWithin)
             {
@@ -84,7 +61,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnGotMouseCapture(object sender, RoutedEventArgs e)
+        private void OnGotMouseCapture(object? sender, RoutedEventArgs e)
         {
             SelectAllText();
         }
@@ -94,11 +71,10 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void OnGotKeyboardFocus(object sender, RoutedEventArgs e)
+        private void OnGotKeyboardFocus(object? sender, RoutedEventArgs e)
         {
             SelectAllText();
         }
-#endif
 
         /// <summary>
         /// Selects all the text in the associated object.
@@ -111,18 +87,16 @@ namespace Catel.Windows.Interactivity
             }
 
             var textBox = AssociatedObject as TextBox;
-            if (textBox != null)
+            if (textBox is not null)
             {
                 textBox.SelectAll();
             }
 
             var passwordBox = AssociatedObject as PasswordBox;
-            if (passwordBox != null)
+            if (passwordBox is not null)
             {
                 passwordBox.SelectAll();
             }
         } 
     }
 }
-
-#endif

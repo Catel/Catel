@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceLocatorFacts.features.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Tests.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System.Collections.Generic;
     using System.Linq;
     using Catel.IoC;
-    using Catel.Reflection;
     using NUnit.Framework;
 
     /// <summary>
@@ -21,62 +13,68 @@ namespace Catel.Tests.IoC
         [TestFixture]
         public class ListTests
         {
-             [TestCase]
-             public void Array()
-             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
+            [TestCase]
+            public void Array()
+            {
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    PrepareContainer(serviceLocator);
 
-                PrepareContainer(serviceLocator);
-
-                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IService[]>>(serviceLocator);
+                    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IService[]>>(serviceLocator);
+                }
             }
 
             [TestCase]
             public void List()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    PrepareContainer(serviceLocator);
 
-                PrepareContainer(serviceLocator);
-
-                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IList<IService>>>(serviceLocator);
+                    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IList<IService>>>(serviceLocator);
+                }
             }
 
             [TestCase]
             public void Collection()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    PrepareContainer(serviceLocator);
 
-                PrepareContainer(serviceLocator);
-
-                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<ICollection<IService>>>(serviceLocator);
+                    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<ICollection<IService>>>(serviceLocator);
+                }
             }
 
             [TestCase]
             public void Enumerable()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    PrepareContainer(serviceLocator);
 
-                PrepareContainer(serviceLocator);
-
-                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IEnumerable<IService>>>(serviceLocator);
+                    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IEnumerable<IService>>>(serviceLocator);
+                }
             }
 
             [TestCase]
             public void IReadOnlyCollection()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    PrepareContainer(serviceLocator);
 
-                PrepareContainer(serviceLocator);
-
-                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyCollection<IService>>>(serviceLocator);
+                    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyCollection<IService>>>(serviceLocator);
+                }
             }
 
             [TestCase]
             public void IReadOnlyList()
             {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-            
-                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyList<IService>>>(serviceLocator);
+                using (var serviceLocator = IoCFactory.CreateServiceLocator())
+                {
+                    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyList<IService>>>(serviceLocator);
+                }
             }
 
             private void PrepareContainer(IServiceLocator serviceLocator)
@@ -94,12 +92,12 @@ namespace Catel.Tests.IoC
 
                 var resolved = serviceLocator.ResolveType<TTestComponent>();
 
-                Assert.IsNotNull(resolved);
-                Assert.IsNotNull(resolved.Services);
-                Assert.AreEqual(2, resolved.Services.Count());
+                Assert.That(resolved, Is.Not.Null);
+                Assert.That(resolved.Services, Is.Not.Null);
+                Assert.That(resolved.Services.Count(), Is.EqualTo(2));
 
-                Assert.IsTrue(resolved.Services.Any(service => service is IndependentService));
-                Assert.IsTrue(resolved.Services.Any(service => service is IndependentService2));
+                Assert.That(resolved.Services.Any(service => service is IndependentService), Is.True);
+                Assert.That(resolved.Services.Any(service => service is IndependentService2), Is.True);
             }
         }
 
@@ -109,16 +107,17 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void CatelInjection()
             {
-                var serviceLocator = new ServiceLocator();
+                using (var serviceLocator = new ServiceLocator())
+                {
+                    serviceLocator.RegisterType<Consumer, Consumer>();
+                    serviceLocator.RegisterType<Item, Item>();
+                    serviceLocator.RegisterType(typeof(IInjectable<>), typeof(Injectable<>));
 
-                serviceLocator.RegisterType<Consumer, Consumer>();
-                serviceLocator.RegisterType<Item, Item>();
-                serviceLocator.RegisterType(typeof(IInjectable<>), typeof(Injectable<>));
+                    var model = serviceLocator.ResolveType<Consumer>();
 
-                var model = serviceLocator.ResolveType<Consumer>();
-
-                Assert.IsNotNull(model);
-                Assert.IsNotNull(model.Item);
+                    Assert.That(model, Is.Not.Null);
+                    Assert.That(model.Item, Is.Not.Null);
+                }
             }
         }
 

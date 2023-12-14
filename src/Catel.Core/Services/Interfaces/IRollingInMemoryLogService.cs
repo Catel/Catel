@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IRollingInMemoryLogService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +9,6 @@ namespace Catel.Services
     /// </summary>
     public interface IRollingInMemoryLogService
     {
-        #region Properties
         /// <summary>
         /// Gets or sets the maximum number of log entries to keep.
         /// <para />
@@ -46,16 +38,12 @@ namespace Catel.Services
         /// </summary>
         /// <value>The log listener.</value>
         RollingInMemoryLogListener LogListener { get; }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when a log message is written.
         /// </summary>
-        event EventHandler<LogMessageEventArgs> LogMessage;
-        #endregion
+        event EventHandler<LogMessageEventArgs>? LogMessage;
 
-        #region Methods
         /// <summary>
         /// Gets the log entries.
         /// </summary>
@@ -73,6 +61,5 @@ namespace Catel.Services
         /// </summary>
         /// <returns>IEnumerable&lt;LogEntry&gt;.</returns>
         IEnumerable<LogEntry> GetErrorLogEntries();
-        #endregion
     }
 }

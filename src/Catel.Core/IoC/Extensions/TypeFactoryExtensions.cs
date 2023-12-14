@@ -1,18 +1,33 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeFactoryExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
+    using Catel.Reflection;
 
     /// <summary>
     /// Extension methods for the <see cref="ITypeFactory"/>.
     /// </summary>
     public static class TypeFactoryExtensions
     {
+
+        public static T CreateRequiredInstance<T>(this ITypeFactory typeFactory)
+        {
+            return (T)CreateRequiredInstance(typeFactory, typeof(T));
+        }
+
+        public static object CreateRequiredInstance(this ITypeFactory typeFactory, Type typeToConstruct)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(typeToConstruct);
+
+            var model = typeFactory.CreateInstance(typeToConstruct);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, null);
+            }
+
+            return model;
+        }
+
         /// <summary>
         /// Creates an instance of the specified type using dependency injection.
         /// </summary>
@@ -20,11 +35,11 @@ namespace Catel.IoC
         /// <param name="typeFactory">The type factory.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public static T CreateInstance<T>(this ITypeFactory typeFactory)
+        public static T? CreateInstance<T>(this ITypeFactory typeFactory)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
+            ArgumentNullException.ThrowIfNull(typeFactory);
 
-            return (T)typeFactory.CreateInstance(typeof(T));
+            return (T?)typeFactory.CreateInstance(typeof(T));
         }
 
         /// <summary>
@@ -35,11 +50,48 @@ namespace Catel.IoC
         /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public static T CreateInstanceWithTag<T>(this ITypeFactory typeFactory, object tag)
+        public static T? CreateInstanceWithTag<T>(this ITypeFactory typeFactory, object? tag)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
+            ArgumentNullException.ThrowIfNull(typeFactory);
 
-            return (T)typeFactory.CreateInstanceWithTag(typeof(T), tag);
+            return (T?)typeFactory.CreateInstanceWithTag(typeof(T), tag);
+        }
+
+        public static object CreateRequiredInstanceWithTag(this ITypeFactory typeFactory, Type typeToConstruct, object? tag)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+
+            var model = typeFactory.CreateInstanceWithTag(typeToConstruct, tag);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, tag);
+            }
+
+            return model;
+        }
+
+        public static T CreateRequiredInstanceWithTag<T>(this ITypeFactory typeFactory, object? tag)
+        {
+            return (T)CreateRequiredInstanceWithTag(typeFactory, typeof(T), tag);
+        }
+
+        public static T CreateRequiredInstanceWithParameters<T>(this ITypeFactory typeFactory, params object?[] parameters)
+        {
+            return (T)CreateRequiredInstanceWithParameters(typeFactory, typeof(T), parameters);
+        }
+
+        public static object CreateRequiredInstanceWithParameters(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(typeToConstruct);
+
+            var model = typeFactory.CreateInstanceWithParameters(typeToConstruct, parameters);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, null);
+            }
+
+            return model;
         }
 
         /// <summary>
@@ -50,11 +102,11 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
-        public static T CreateInstanceWithParameters<T>(this ITypeFactory typeFactory, params object[] parameters)
+        public static T? CreateInstanceWithParameters<T>(this ITypeFactory typeFactory, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
+            ArgumentNullException.ThrowIfNull(typeFactory);
 
-            return (T)typeFactory.CreateInstanceWithParameters(typeof(T), parameters);
+            return (T?)typeFactory.CreateInstanceWithParameters(typeof(T), parameters);
         }
 
         /// <summary>
@@ -66,11 +118,30 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public static T CreateInstanceWithParametersWithTag<T>(this ITypeFactory typeFactory, object tag, params object[] parameters)
+        public static T? CreateInstanceWithParametersWithTag<T>(this ITypeFactory typeFactory, object? tag, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
+            ArgumentNullException.ThrowIfNull(typeFactory);
 
-            return (T)typeFactory.CreateInstanceWithParametersWithTag(typeof(T), tag, parameters);
+            return (T?)typeFactory.CreateInstanceWithParametersWithTag(typeof(T), tag, parameters);
+        }
+
+        public static T CreateRequiredInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object?[] parameters)
+        {
+            return (T)CreateRequiredInstanceWithParametersAndAutoCompletion(typeFactory, typeof(T), parameters);
+        }
+
+        public static object CreateRequiredInstanceWithParametersAndAutoCompletion(this ITypeFactory typeFactory, Type typeToConstruct, params object?[] parameters)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(typeToConstruct);
+
+            var model = typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeToConstruct, parameters);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeToConstruct, null);
+            }
+
+            return model;
         }
 
         /// <summary>
@@ -83,11 +154,24 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
-        public static T CreateInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object[] parameters)
+        public static T? CreateInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
+            ArgumentNullException.ThrowIfNull(typeFactory);
 
-            return (T)typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(T), parameters);
+            return (T?)typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(T), parameters);
+        }
+
+        public static T CreateRequiredInstanceWithParametersAndAutoCompletionWithTag<T>(this ITypeFactory typeFactory, object? tag, params object[] parameters)
+        {
+            ArgumentNullException.ThrowIfNull(typeFactory);
+
+            var model = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<T>(tag, parameters);
+            if (model is null)
+            {
+                throw CreateFailedToCreateRequiredTypeException(typeof(T), tag);
+            }
+
+            return model;
         }
 
         /// <summary>
@@ -101,11 +185,16 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public static T CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this ITypeFactory typeFactory, object tag, params object[] parameters)
+        public static T? CreateInstanceWithParametersAndAutoCompletionWithTag<T>(this ITypeFactory typeFactory, object? tag, params object[] parameters)
         {
-            Argument.IsNotNull("typeFactory", typeFactory);
+            ArgumentNullException.ThrowIfNull(typeFactory);
 
-            return (T)typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(typeof(T), tag, parameters);
+            return (T?)typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(typeof(T), tag, parameters);
+        }
+
+        private static Exception CreateFailedToCreateRequiredTypeException(Type type, object? tag)
+        {
+            return new CatelException($"Cannot create instance of type '{type.GetSafeFullName()}' (tag = '{tag}')");
         }
     }
 }

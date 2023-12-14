@@ -9,7 +9,7 @@
         /// Gets the directory name.
         /// </summary>
         /// <value>The name of the directory.</value>
-        public string DirectoryName { get; protected set; }
+        public string? DirectoryName { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the new folder button to be able to create new folders while browsing.
@@ -23,7 +23,7 @@
         /// <value>
         /// The initial directory.
         /// </value>
-        public string InitialDirectory { get; set; }
+        public string? InitialDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the title which will be used for display.
@@ -31,7 +31,7 @@
         /// <value>
         /// The title.
         /// </value>
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         /// <summary>
         /// Gets or sets the filter to use when opening or saving the file.
@@ -39,6 +39,6 @@
         /// <value>
         /// The filter.
         /// </value>
-        public string Filter { get; set; }
+        public string? Filter { get; set; }
     }
 }

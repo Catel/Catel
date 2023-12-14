@@ -1,15 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DynamicConfigurationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Tests.Configuration
+﻿namespace Catel.Tests.Configuration
 {
     using System.IO;
-    using System.Runtime.Serialization;
     using System.Text;
     using Catel.Configuration;
     using Catel.Data;
@@ -17,27 +8,25 @@ namespace Catel.Tests.Configuration
     using Catel.IO;
     using NUnit.Framework;
 
+    using static VerifyNUnit.Verifier;
+    using System.Threading.Tasks;
+
     [TestFixture, Explicit]
     public class DynamicConfigurationFacts
     {
-        private const string ExpectedXml = "﻿﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-"<DynamicConfiguration xmlns:ctl=\"http://schemas.catelproject.com\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n" +
-"  <KeyX ctl:type=\"System.String\">Value X</KeyX>\r\n" +
-"  <KeyY ctl:type=\"System.String\">Value Y</KeyY>\r\n" +
-"  <KeyZ.SomeAddition ctl:type=\"System.String\">Value Z</KeyZ.SomeAddition>\r\n" +
-"</DynamicConfiguration>";
+        private const string ExpectedXml = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<DynamicConfiguration xmlns:ctl=""http://schemas.catelproject.com"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
+  <KeyX ctl:type=""System.String"">Value X</KeyX>
+  <KeyY ctl:type=""System.String"">Value Y</KeyY>
+  <KeyZ.SomeAddition ctl:type=""System.String"">Value Z</KeyZ.SomeAddition>
+</DynamicConfiguration>";
 
         public class ComplexSetting : ModelBase
         {
             public ComplexSetting()
                 : base()
             {
-                
-            }
 
-            public ComplexSetting(SerializationInfo info, StreamingContext context) 
-                : base(info, context)
-            {
             }
 
             /// <summary>
@@ -52,7 +41,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the FirstName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName", string.Empty);
 
             /// <summary>
             /// Gets or sets the property value.
@@ -66,7 +55,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the MiddleName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string), string.Empty);
+            public static readonly IPropertyData MiddleNameProperty = RegisterProperty<string>("MiddleName", string.Empty);
 
             /// <summary>
             /// Gets or sets the property value.
@@ -80,7 +69,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the LastName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+            public static readonly IPropertyData LastNameProperty = RegisterProperty<string>("LastName", string.Empty);
         }
 
         [TestCase]
@@ -91,9 +80,9 @@ namespace Catel.Tests.Configuration
             configuration.SetConfigurationValue("A", "1");
             configuration.SetConfigurationValue("B", "2");
 
-            Assert.IsTrue(configuration.IsConfigurationValueSet("A"));
-            Assert.IsTrue(configuration.IsConfigurationValueSet("B"));
-            Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
+            Assert.That(configuration.IsConfigurationValueSet("A"), Is.True);
+            Assert.That(configuration.IsConfigurationValueSet("B"), Is.True);
+            Assert.That(configuration.IsConfigurationValueSet("C"), Is.False);
         }
 
         [TestCase]
@@ -110,9 +99,9 @@ namespace Catel.Tests.Configuration
 
                     var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
-                    Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
+                    Assert.That(configuration.IsConfigurationValueSet("KeyX"), Is.True);
+                    Assert.That(configuration.IsConfigurationValueSet("KeyY"), Is.True);
+                    Assert.That(configuration.IsConfigurationValueSet("C"), Is.False);
                 }
             }
         }
@@ -122,7 +111,7 @@ namespace Catel.Tests.Configuration
         {
             using (var memoryStream = new MemoryStream())
             {
-                using (var streamWriter = new StreamWriter(memoryStream))
+                using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
                 {
                     streamWriter.Write(ExpectedXml);
                     streamWriter.Flush();
@@ -131,17 +120,17 @@ namespace Catel.Tests.Configuration
 
                     var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
-                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
+                    Assert.That(configuration.IsConfigurationValueSet("KeyX"), Is.True);
+                    Assert.That(configuration.IsConfigurationValueSet("KeyY"), Is.True);
 
-                    Assert.AreEqual("Value X", configuration.GetConfigurationValue("KeyX"));
-                    Assert.AreEqual("Value Y", configuration.GetConfigurationValue("KeyY"));
+                    Assert.That(configuration.GetConfigurationValue("KeyX"), Is.EqualTo("Value X"));
+                    Assert.That(configuration.GetConfigurationValue("KeyY"), Is.EqualTo("Value Y"));
                 }
             }
         }
 
-        [TestCase, Explicit]
-        public void CorrectlySerializesConfiguration()
+        [Test, Explicit]
+        public async Task CorrectlySerializesConfigurationAsync()
         {
             var dynamicConfiguration = new DynamicConfiguration();
             dynamicConfiguration.SetConfigurationValue("KeyX", "Value X");
@@ -154,7 +143,7 @@ namespace Catel.Tests.Configuration
 
                 var outputXml = memoryStream.GetUtf8String();
 
-                Assert.AreEqual(ExpectedXml, outputXml);
+                await Verify(outputXml);
             }
         }
 
@@ -165,9 +154,9 @@ namespace Catel.Tests.Configuration
 
             var complexSetting = new ComplexSetting
             {
-                FirstName = "Geert",
-                MiddleName = "van",
-                LastName = "Horrik"
+                FirstName = "John",
+                MiddleName = string.Empty,
+                LastName = "Doe"
             };
 
             dynamicConfiguration.SetConfigurationValue("ComplexSetting", complexSetting);
@@ -181,12 +170,11 @@ namespace Catel.Tests.Configuration
                 var newDynamicConfiguration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
                 var newComplexSetting = newDynamicConfiguration.GetConfigurationValue<ComplexSetting>("ComplexSetting", null);
 
-                Assert.AreEqual(newComplexSetting.FirstName, complexSetting.FirstName);
-                Assert.AreEqual(newComplexSetting.MiddleName, complexSetting.MiddleName);
-                Assert.AreEqual(newComplexSetting.LastName, complexSetting.LastName);
+                Assert.That(complexSetting.FirstName, Is.EqualTo(newComplexSetting.FirstName));
+                Assert.That(complexSetting.MiddleName, Is.EqualTo(newComplexSetting.MiddleName));
+                Assert.That(complexSetting.LastName, Is.EqualTo(newComplexSetting.LastName));
             }
         }
     }
 }
 
-#endif

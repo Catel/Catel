@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataWindowButton.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
-
-namespace Catel.Windows
+﻿namespace Catel.Windows
 {
     using System;
     using System.Threading.Tasks;
@@ -19,14 +11,13 @@ namespace Catel.Windows
     /// </summary>
     public class DataWindowButton
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="execute">The execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
-        public static DataWindowButton FromSync(string text, Action execute, Func<bool> canExecute = null)
+        public static DataWindowButton FromSync(string text, Action execute, Func<bool>? canExecute = null)
         {
             return new DataWindowButton(text, new Command(execute, canExecute));
         }
@@ -42,7 +33,8 @@ namespace Catel.Windows
         /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
-        public static DataWindowButton FromSync(string text, Action execute, Func<bool> canExecute = null, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
+        public static DataWindowButton FromSync(string text, Action execute, Func<bool>? canExecute = null, string? contentBindingPath = null, 
+            IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
         {
             return new DataWindowButton(text, new Command(execute, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
@@ -54,7 +46,7 @@ namespace Catel.Windows
         /// <param name="executeAsync">The async execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
 #pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
-        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool> canExecute = null)
+        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool>? canExecute = null)
 #pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute));
@@ -72,7 +64,8 @@ namespace Catel.Windows
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
 #pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
-        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool> canExecute = null, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
+        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool>? canExecute = null, string? contentBindingPath = null, 
+            IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
 #pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
@@ -99,9 +92,9 @@ namespace Catel.Windows
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
-        public DataWindowButton(string text, ICommand command, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
+        public DataWindowButton(string text, ICommand command, string? contentBindingPath = null, IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
         {
-            Argument.IsNotNull("command", command);
+            ArgumentNullException.ThrowIfNull(command);
 
             Text = text;
             Command = command;
@@ -134,9 +127,10 @@ namespace Catel.Windows
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="commandBindingPath"/> is <c>null</c>.</exception>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
-        public DataWindowButton(string text, string commandBindingPath, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
+        public DataWindowButton(string text, string commandBindingPath, string? contentBindingPath = null, IValueConverter? contentValueConverter = null, 
+            string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
         {
-            Argument.IsNotNull("bindingPath", commandBindingPath);
+            ArgumentNullException.ThrowIfNull(commandBindingPath);
 
             Text = text;
             CommandBindingPath = commandBindingPath;
@@ -145,9 +139,7 @@ namespace Catel.Windows
             VisibilityBindingPath = visibilityBindingPath;
             VisibilityValueConverter = visibilityValueConverter;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the text as it is displayed on the button.
         /// </summary>
@@ -158,37 +150,37 @@ namespace Catel.Windows
         /// Gets the command associated with this button.
         /// </summary>
         /// <value>The command.</value>
-        public ICommand Command { get; private set; }
+        public ICommand? Command { get; private set; }
 
         /// <summary>
         /// Gets the command binding path.
         /// </summary>
         /// <value>The command binding path.</value>
-        public string CommandBindingPath { get; private set; }
+        public string? CommandBindingPath { get; private set; }
 
         /// <summary>
         /// Gets the content binding path.
         /// </summary>
         /// <value>The content binding path.</value>
-        public string ContentBindingPath { get; private set; }
+        public string? ContentBindingPath { get; private set; }
 
         /// <summary>
         /// Gets the visibility binding path.
         /// </summary>
         /// <value>The visibility binding path.</value>
-        public string VisibilityBindingPath { get; private set; }
+        public string? VisibilityBindingPath { get; private set; }
 
         /// <summary>
         /// Gets the content value converter used with content binding.
         /// </summary>
         /// <value>The content value converter.</value>
-        public IValueConverter ContentValueConverter { get; private set; }
+        public IValueConverter? ContentValueConverter { get; private set; }
 
         /// <summary>
         /// Gets the visibility value converter used with visibility binding.
         /// </summary>
         /// <value>The visibility value converter.</value>
-        public IValueConverter VisibilityValueConverter { get; private set; }
+        public IValueConverter? VisibilityValueConverter { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this button is the default button.
@@ -205,8 +197,5 @@ namespace Catel.Windows
         /// <c>true</c> if this button is the cancel button; otherwise, <c>false</c>.
         /// </value>
         public bool IsCancel { get; set; }
-        #endregion
     }
 }
-
-#endif

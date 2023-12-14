@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Catel.Logging;
     using Catel.Reflection;
 
@@ -35,7 +33,7 @@
             }
         }
 
-        private Type GetRegisteredPropertyType(string name)
+        private Type? GetRegisteredPropertyType(string name)
         {
             lock (_propertyTypes)
             {
