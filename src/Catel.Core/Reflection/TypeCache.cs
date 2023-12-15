@@ -94,18 +94,25 @@
         }
 
         /// <summary>
+        /// Gets or sets whether the TypeCache initialization is enabled.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        public static bool IsInitializationEnabled { get; set; } = true;
+
+        /// <summary>
         /// Gets the names of the assemblies initialized by the TypeCache.
         /// </summary>
         /// <value>
         /// The initialized assemblies.
         /// </value>
-        public static List<string> InitializedAssemblies
+        public static IReadOnlyList<string> InitializedAssemblies
         {
             get
             {
                 lock (_loadedAssemblies)
                 {
-                    return _loadedAssemblies.ToList();
+                    return _loadedAssemblies.ToArray();
                 }
             }
         }
@@ -120,6 +127,11 @@
 #endif
         private static void OnAssemblyLoaded(object? sender, AssemblyLoadEventArgs args)
         {
+            if (!IsInitializationEnabled)
+            {
+                return;
+            }
+
             var assembly = args.LoadedAssembly;
             if (ShouldIgnoreAssembly(assembly))
             {
@@ -904,12 +916,6 @@
         private static bool ShouldIgnoreAssembly(Assembly assembly)
         {
             if (assembly is null)
-            {
-                return true;
-            }
-
-            // Note: don't check with .NET Standard / .NET Core, it's "not implemented by design"
-            if (assembly.ReflectionOnly)
             {
                 return true;
             }
