@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
     using Collections;
@@ -87,10 +88,39 @@
         private static readonly object _lockObject = new object();
 
         private static bool _hasInitializedOnce;
+        private static bool? _isAutomaticInitializationEnabled;
 
         static TypeCache()
         {
-            AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
+            IsAutomaticInitializationEnabled = (RuntimeInformation.ProcessArchitecture != Architecture.Wasm);
+        }
+
+        /// <summary>
+        /// Gets or sets whether the TypeCache initialization is enabled.
+        /// <para />
+        /// The default value is <c>true</c> unless the architecture is WASM.
+        /// </summary>
+        public static bool IsAutomaticInitializationEnabled
+        {
+            get => _isAutomaticInitializationEnabled ?? false;
+            set
+            {
+                if (value == _isAutomaticInitializationEnabled)
+                {
+                    return;
+                }
+
+                _isAutomaticInitializationEnabled = value;
+
+                if (value)
+                {
+                    AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
+                }
+                else
+                {
+                    AppDomain.CurrentDomain.AssemblyLoad -= OnAssemblyLoaded;
+                }
+            }
         }
 
         /// <summary>
@@ -99,13 +129,13 @@
         /// <value>
         /// The initialized assemblies.
         /// </value>
-        public static List<string> InitializedAssemblies
+        public static IReadOnlyList<string> InitializedAssemblies
         {
             get
             {
                 lock (_loadedAssemblies)
                 {
-                    return _loadedAssemblies.ToList();
+                    return _loadedAssemblies.ToArray();
                 }
             }
         }
@@ -120,6 +150,11 @@
 #endif
         private static void OnAssemblyLoaded(object? sender, AssemblyLoadEventArgs args)
         {
+            if (!IsAutomaticInitializationEnabled)
+            {
+                return;
+            }
+
             var assembly = args.LoadedAssembly;
             if (ShouldIgnoreAssembly(assembly))
             {
@@ -904,12 +939,6 @@
         private static bool ShouldIgnoreAssembly(Assembly assembly)
         {
             if (assembly is null)
-            {
-                return true;
-            }
-
-            // Note: don't check with .NET Standard / .NET Core, it's "not implemented by design"
-            if (assembly.ReflectionOnly)
             {
                 return true;
             }
