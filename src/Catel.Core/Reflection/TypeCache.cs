@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
     using Collections;
@@ -87,18 +88,40 @@
         private static readonly object _lockObject = new object();
 
         private static bool _hasInitializedOnce;
+        private static bool? _isAutomaticInitializationEnabled;
 
         static TypeCache()
         {
-            AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
+            IsAutomaticInitializationEnabled = (RuntimeInformation.ProcessArchitecture != Architecture.Wasm);
         }
 
         /// <summary>
         /// Gets or sets whether the TypeCache initialization is enabled.
         /// <para />
-        /// The default value is <c>true</c>.
+        /// The default value is <c>true</c> unless the architecture is WASM.
         /// </summary>
-        public static bool IsInitializationEnabled { get; set; } = true;
+        public static bool IsAutomaticInitializationEnabled
+        {
+            get => _isAutomaticInitializationEnabled ?? false;
+            set
+            {
+                if (value == _isAutomaticInitializationEnabled)
+                {
+                    return;
+                }
+
+                _isAutomaticInitializationEnabled = value;
+
+                if (value)
+                {
+                    AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
+                }
+                else
+                {
+                    AppDomain.CurrentDomain.AssemblyLoad -= OnAssemblyLoaded;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the names of the assemblies initialized by the TypeCache.
@@ -127,7 +150,7 @@
 #endif
         private static void OnAssemblyLoaded(object? sender, AssemblyLoadEventArgs args)
         {
-            if (!IsInitializationEnabled)
+            if (!IsAutomaticInitializationEnabled)
             {
                 return;
             }
