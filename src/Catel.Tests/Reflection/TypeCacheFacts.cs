@@ -10,6 +10,16 @@
     public class TypeCacheFacts
     {
         [TestFixture]
+        public class The_IsAutomaticInitializationEnabled_Property
+        {
+            [TestCase]
+            public void Is_Enabled_By_Default()
+            {
+                Assert.That(TypeCache.IsAutomaticInitializationEnabled, Is.True);
+            }
+        }
+
+        [TestFixture]
         public class AssemblyLoading
         {
             [TestCase]
