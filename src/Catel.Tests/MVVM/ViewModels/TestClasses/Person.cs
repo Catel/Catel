@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
@@ -30,12 +31,16 @@
     [Serializable]
     public class Person : ValidatableModelBase, IPerson
     {
+        private int _firstNameChangedCounter;
+
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
         public Person()
         {
         }
+
+        public int FirstNameChangedCounter { get => _firstNameChangedCounter; }
 
         /// <summary>
         /// Gets or sets the FirstName.
@@ -49,7 +54,12 @@
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty, (sender, e) => ((Person)sender).OnFirstNamePropertyChanged(sender, e));
+
+        private void OnFirstNamePropertyChanged(object? model, PropertyChangedEventArgs args)
+        {
+            _firstNameChangedCounter++;
+        }
 
         /// <summary>
         /// Gets or sets the middle name.

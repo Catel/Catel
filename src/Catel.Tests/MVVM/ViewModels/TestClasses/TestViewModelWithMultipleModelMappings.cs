@@ -5,14 +5,11 @@
 
     public class TestViewModelWithMultipleModelMappings : ViewModelBase
     {
-        #region Constructors
         public TestViewModelWithMultipleModelMappings(IPerson person)
         {
             Person = person;
         }
-        #endregion
 
-        #region Constants
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
@@ -27,9 +24,7 @@
         /// Register the Email property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData EmailProperty = RegisterProperty<string>("Email");
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the person.
         /// </summary>
@@ -60,6 +55,5 @@
             get { return GetValue<string>(EmailProperty); }
             set { SetValue(EmailProperty, value); }
         }
-        #endregion
     }
 }
