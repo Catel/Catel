@@ -103,6 +103,5 @@
 
             Assert.That(viewModel.IsModelRegisteredForTest("SecondPerson"), Is.False);
         }
-
     }
 }

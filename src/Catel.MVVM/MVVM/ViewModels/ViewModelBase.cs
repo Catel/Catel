@@ -856,7 +856,7 @@
                         UninitializeModelInternal(e.PropertyName, oldModelValue, ModelCleanUpMode.CancelEdit);
                     }
 
-                    var newModelValue = GetValue<object>(e.PropertyName);
+                    var newModelValue = GetValue<object?>(e.PropertyName);
                     _modelObjects[e.PropertyName] = newModelValue;
 
                     if (newModelValue is not null)
@@ -945,9 +945,22 @@
                                         {
                                             mapping.IgnoredProperties.AddRange(propertiesToSet);
 
-                                            if (_objectAdapter.TrySetMemberValue(model, propertiesToSet[index], valuesToSet[index]))
+                                            var propertyToUpdate = propertiesToSet[index];
+                                            var valueToSet = valuesToSet[index];
+
+                                            // Check equality first, see https://github.com/Catel/Catel/issues/2164
+                                            // If we fail, just set it anyways (keep old behavior)
+                                            if (_objectAdapter.TryGetMemberValue<object?>(model, propertyToUpdate, out var currentValue))
                                             {
-                                                Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                                if (ObjectHelper.AreEqual(currentValue, valueToSet))
+                                                {
+                                                    continue;
+                                                }
+                                            }
+
+                                            if (_objectAdapter.TrySetMemberValue(model, propertyToUpdate, valueToSet))
+                                            {
+                                                Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valueToSet));
 
                                                 // Force validation, see https://github.com/Catel/Catel/issues/1108
                                                 validate = true;
