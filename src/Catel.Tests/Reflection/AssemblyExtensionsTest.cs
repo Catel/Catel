@@ -12,11 +12,11 @@
     [TestFixture]
     public class AssemblyExtensionsTest
     {
+        private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
+
         // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
         private static readonly string CurrentYear = DateTime.Today.Year.ToString();
-        private static readonly string VersionPrefix = typeof(AssemblyExtensionsTest).Assembly.Version(2);
-
-        private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
+        private static readonly string VersionPrefix = Assembly.Version(2);
 
         [TestCase]
         public void TitleAutomatic()

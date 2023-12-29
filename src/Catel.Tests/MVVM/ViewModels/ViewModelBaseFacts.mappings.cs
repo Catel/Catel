@@ -56,6 +56,26 @@
         }
 
         [TestCase]
+        public void ViewModelWithViewModelToModelMappings_Prevents_Duplicate_ObservableObject_Update()
+        {
+            // Written for https://github.com/Catel/Catel/issues/2164
+
+            var person = new PersonObservableObject();
+            person.FirstName = "John";
+
+            Assert.That(person.FirstNameChangedCounter, Is.EqualTo(1));
+
+            var viewModel = new TestViewModelWithImplicitModelMappings(person);
+
+            Assert.That(person.FirstNameChangedCounter, Is.EqualTo(1));
+
+            person.FirstName = "test";
+
+            Assert.That(viewModel.FirstName, Is.EqualTo("test"));
+            Assert.That(person.FirstNameChangedCounter, Is.EqualTo(2));
+        }
+
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_MissingModelName_ThrowsExceptionWithMultipleModels()
         {
             var person = new Person();

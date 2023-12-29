@@ -5,14 +5,11 @@
 
     public class TestViewModelWithMappings : ViewModelBase
     {
-        #region Constructors
         public TestViewModelWithMappings(IPerson person)
         {
             Person = person;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Updates the explicit mappings.
         /// </summary>
@@ -20,9 +17,7 @@
         {
             UpdateExplicitViewModelToModelMappings();
         }
-        #endregion
 
-        #region Constants
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
@@ -47,9 +42,7 @@
         /// Register the FirstNameAsExplicit property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData FirstNameAsExplicitProperty = RegisterProperty("FirstNameAsExplicit", string.Empty);
-        #endregion
 
-        #region Properties
         public bool DeferValidationUntilFirstSaveCallWrapper
         {
             get { return DeferValidationUntilFirstSaveCall; }
@@ -114,6 +107,5 @@
         }
 
         public static readonly IPropertyData LastNameProperty = RegisterProperty(nameof(LastName), string.Empty);
-        #endregion
     }
 }
