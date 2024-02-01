@@ -29,5 +29,5 @@ jobs:
         id: cake-action
         uses: cake-build/cake-action@a6eb054329257c9e70a6c6bf01747ad6e1d9d52b #v1.4.1
         with:
-          script-path: /build.cake
+          #script-path: /build.cake
           target: BuildAndTest
