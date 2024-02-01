@@ -12,7 +12,7 @@ on:
   #contents: write
 
 jobs:
-  dependabot:
+  build-and-test:
     runs-on: windows-latest # Required for some (WPF) projects
   
     steps:
