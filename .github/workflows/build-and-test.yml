@@ -7,7 +7,7 @@ on:
       - master
   pull_request:
   
-permissions:
+#permissions:
   #pull-requests: write
   #contents: write
 
