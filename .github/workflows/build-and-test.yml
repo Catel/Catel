@@ -33,3 +33,5 @@ jobs:
         with:
           #script-path: /build.cake
           target: BuildAndTest
+          arguments: |
+            IsCiBuild: true
