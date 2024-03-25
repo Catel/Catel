@@ -54,12 +54,12 @@
   </PropertyGroup>
 
   <!-- NuGet auditing -->
-  <ItemGroup>
+  <PropertyGroup>
     <!-- All means even indirect packages -->
     <NuGetAuditMode>all</NuGetAuditMode>
     <!-- Low means even low vulnerabilities will be reported -->
     <NuGetAuditLevel>low</NuGetAuditLevel>
-  </ItemGroup>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\*.cs">
