@@ -24,8 +24,8 @@
 #l "tests.cake"
 #l "templates-tasks.cake"
 
-#addin "nuget:?package=Cake.FileHelpers&version=6.1.3"
-#addin "nuget:?package=Cake.Sonar&version=1.1.32"
+#addin "nuget:?package=Cake.FileHelpers&version=7.0.0"
+#addin "nuget:?package=Cake.Sonar&version=1.1.33"
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 #addin "nuget:?package=Newtonsoft.Json&version=13.0.3"
 
@@ -36,7 +36,7 @@
 // It probably means the tool is not correctly installed.
 // `dotnet tool install --global dotnet-sonarscanner --ignore-failed-sources`
 //#tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.8.0"
-#tool "nuget:?package=dotnet-sonarscanner&version=6.0.0"
+#tool "nuget:?package=dotnet-sonarscanner&version=6.2.0"
 
 //-------------------------------------------------------------
 // BACKWARDS COMPATIBILITY CODE - START
@@ -397,9 +397,9 @@ Task("Build")
             sonarSettings.Login = buildContext.General.SonarQube.Username;
         }
 
-        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
+        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Token))
         {
-            sonarSettings.Password = buildContext.General.SonarQube.Password;
+            sonarSettings.Token = buildContext.General.SonarQube.Token;
         }
 
         // see https://cakebuild.net/api/Cake.Sonar/SonarBeginSettings/ for more information on
@@ -450,7 +450,7 @@ Task("Build")
             {
                 await buildContext.SourceControl.MarkBuildAsPendingAsync("SonarQube");
 
-                var sonarEndSettings = new SonarEndSettings
+                var sonarSettings = new SonarEndSettings
                 {
                     // Use core clr version of SonarQube
                     UseCoreClr = true
@@ -458,17 +458,17 @@ Task("Build")
 
                 if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Username))
                 {
-                    sonarEndSettings.Login = buildContext.General.SonarQube.Username;
+                    sonarSettings.Login = buildContext.General.SonarQube.Username;
                 }
 
-                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
+                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Token))
                 {
-                    sonarEndSettings.Password = buildContext.General.SonarQube.Password;
+                    sonarSettings.Token = buildContext.General.SonarQube.Token;
                 }
 
                 Information("Ending SonarQube");
 
-                SonarEnd(sonarEndSettings);
+                SonarEnd(sonarSettings);
 
                 await buildContext.SourceControl.MarkBuildAsSucceededAsync("SonarQube");
             }
