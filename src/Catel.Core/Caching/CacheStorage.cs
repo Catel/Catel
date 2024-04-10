@@ -245,7 +245,7 @@
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan? expiration = default)
+        public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default)
         {
             ArgumentNullException.ThrowIfNull(code);
 
@@ -308,7 +308,7 @@
         /// <summary>
         /// Adds a value to the cache associated with to a key asynchronously.
         /// <para />
-        /// Note that this is a wrapper around <see cref="GetFromCacheOrFetch(TKey,System.Func{TValue},bool,TimeSpan?)"/>.
+        /// Note that this is a wrapper around <see cref="GetFromCacheOrFetch(TKey,System.Func{TValue},bool,TimeSpan)"/>.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="code">The deferred initialization code of the value.</param>
@@ -317,7 +317,7 @@
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan? expiration = default)
+        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default)
         {
             return GetFromCacheOrFetchAsync(key, code, CreateDefaultExpirationPolicy(expiration), @override);
         }
@@ -330,7 +330,7 @@
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <param name="expiration">The timespan in which the cache item should expire when added.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public void Add(TKey key, TValue @value, bool @override = false, TimeSpan? expiration = default)
+        public void Add(TKey key, TValue @value, bool @override = false, TimeSpan expiration = default)
         {
             Add(key, value, CreateDefaultExpirationPolicy(expiration), @override);
         }
