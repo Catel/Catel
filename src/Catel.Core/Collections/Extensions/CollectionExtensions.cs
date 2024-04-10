@@ -351,7 +351,7 @@
         {
             ArgumentNullException.ThrowIfNull(collection);
 
-            var internalList = new List<object>(collection is not null ? collection.Cast<object>() : Array.Empty<object>());
+            var internalList = new List<object>(collection.Cast<object>());
             var array = Array.CreateInstance(elementType, internalList.Count);
 
             var index = 0;

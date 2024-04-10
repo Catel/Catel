@@ -249,7 +249,7 @@
         {
             ArgumentNullException.ThrowIfNull(code);
 
-            return GetFromCacheOrFetch(key, code, ExpirationPolicy.Duration(expiration), @override);
+            return GetFromCacheOrFetch(key, code, CreateDefaultExpirationPolicy(expiration), @override);
         }
 
         /// <summary>
@@ -319,7 +319,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
         public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default)
         {
-            return GetFromCacheOrFetchAsync(key, code, ExpirationPolicy.Duration(expiration), @override);
+            return GetFromCacheOrFetchAsync(key, code, CreateDefaultExpirationPolicy(expiration), @override);
         }
 
         /// <summary>
@@ -330,9 +330,9 @@
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <param name="expiration">The timespan in which the cache item should expire when added.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        public void Add(TKey key, TValue @value, bool @override = false, TimeSpan expiration = default(TimeSpan))
+        public void Add(TKey key, TValue @value, bool @override = false, TimeSpan expiration = default)
         {
-            Add(key, value, ExpirationPolicy.Duration(expiration), @override);
+            Add(key, value, CreateDefaultExpirationPolicy(expiration), @override);
         }
 
         /// <summary>
@@ -390,6 +390,22 @@
 
                 UpdateTimer();
             }
+        }
+
+        /// <summary>
+        /// Creates the default expiration policy.
+        /// </summary>
+        /// <param name="expiration"></param>
+        /// <returns></returns>
+        protected virtual ExpirationPolicy? CreateDefaultExpirationPolicy(TimeSpan? expiration)
+        {
+            if (expiration is null ||
+                expiration == default(TimeSpan))
+            {
+                return null;
+            }
+
+            return ExpirationPolicy.Duration(expiration.Value);
         }
 
         /// <summary>
