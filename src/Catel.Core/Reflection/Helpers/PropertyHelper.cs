@@ -357,9 +357,11 @@
             {
                 var objectType = obj.GetType();
 
+                var stringComparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
                 if (!ignoreCase)
                 {
-                    // Use old mechanism to ensure no breaking changes / performance hite
+                    // Use old mechanism to ensure no breaking changes / performance hits
                     return objectType.GetPropertyEx(property);
                 }
 
@@ -367,7 +369,7 @@
 
                 foreach (var propertyInfo in allProperties)
                 {
-                    if (string.Equals(propertyInfo.Name, property, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
+                    if (string.Equals(propertyInfo.Name, property, stringComparison))
                     {
                         return propertyInfo;
                     }

@@ -549,6 +549,7 @@ namespace Catel.Caching
         public void Add(TKey key, TValue value, bool override = false, System.TimeSpan expiration = default) { }
         public void Clear() { }
         public bool Contains(TKey key) { }
+        protected virtual Catel.Caching.Policies.ExpirationPolicy? CreateDefaultExpirationPolicy(System.TimeSpan? expiration) { }
         public TValue? Get(TKey key) { }
         public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false) { }
         public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, bool override = false, System.TimeSpan expiration = default) { }

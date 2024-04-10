@@ -46,7 +46,7 @@
             Name = name;
             TargetType = targetType;
 
-            IsCatelLogging = targetType?.IsCatelType() ?? false;
+            IsCatelLogging = targetType.IsCatelType();
             _shouldIgnoreIfCatelLoggingIsDisabled = new Lazy<bool>(ShouldIgnoreIfCatelLoggingIsDisabled);
         }
 
