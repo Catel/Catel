@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using Catel.Caching;
     using Catel.Caching.Policies;
     using Catel.Logging;
@@ -513,6 +514,20 @@
                 Assert.That(evDispose, Is.EqualTo(dispose));
                 Assert.That(evKey, Is.EqualTo(key));
                 Assert.That(evValue, Is.EqualTo(value));
+            }
+
+            [TestCase]
+            public async Task Is_Disabled_By_Default_Async()
+            {
+                var cache = new CacheStorage<string, int>();
+
+                cache.Add("1", 1);
+
+                Assert.That(cache.Contains("1"), Is.True);
+
+                await Task.Delay(TimeSpan.FromSeconds(2));
+
+                Assert.That(cache.Contains("1"), Is.True);
             }
         }
 

@@ -78,7 +78,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default);
+        TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, bool @override = false, TimeSpan? expiration = default);
 
         /// <summary>
         /// Adds a value to the cache associated with to a key.
@@ -100,7 +100,7 @@
         /// <param name="override">Indicates if the key exists the value will be overridden.</param>
         /// <param name="expiration">The timespan in which the cache item should expire when added.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
-        void Add(TKey key, TValue @value, bool @override = false, TimeSpan expiration = default);
+        void Add(TKey key, TValue @value, bool @override = false, TimeSpan? expiration = default);
 
         /// <summary>
         /// Removes an item from the cache.
@@ -142,7 +142,7 @@
         /// <summary>
         /// Adds a value to the cache associated with to a key asynchronously.
         /// <para />
-        /// Note that this is a wrapper around <see cref="CacheStorage{TKey,TValue}.GetFromCacheOrFetch(TKey,System.Func{TValue},bool,System.TimeSpan)"/>.
+        /// Note that this is a wrapper around <see cref="CacheStorage{TKey,TValue}.GetFromCacheOrFetch(TKey,System.Func{TValue},bool,System.TimeSpan?)"/>.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="code">The deferred initialization code of the value.</param>
@@ -151,6 +151,6 @@
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default);
+        Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan? expiration = default);
     }
 }

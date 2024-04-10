@@ -546,14 +546,15 @@ namespace Catel.Caching
         public event System.EventHandler<Catel.Caching.ExpiredEventArgs<TKey, TValue>>? Expired;
         public event System.EventHandler<Catel.Caching.ExpiringEventArgs<TKey, TValue>>? Expiring;
         public void Add(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false) { }
-        public void Add(TKey key, TValue value, bool override = false, System.TimeSpan expiration = default) { }
+        public void Add(TKey key, TValue value, bool override = false, System.TimeSpan? expiration = default) { }
         public void Clear() { }
         public bool Contains(TKey key) { }
+        protected virtual Catel.Caching.Policies.ExpirationPolicy? CreateDefaultExpirationPolicy(System.TimeSpan? expiration) { }
         public TValue? Get(TKey key) { }
         public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false) { }
-        public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, bool override = false, System.TimeSpan expiration = default) { }
+        public TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, bool override = false, System.TimeSpan? expiration = default) { }
         public System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false) { }
-        public System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, bool override = false, System.TimeSpan expiration = default) { }
+        public System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, bool override = false, System.TimeSpan? expiration = default) { }
         public void Remove(TKey key, System.Action? action = null) { }
     }
     public class ExpiredEventArgs<TKey, TValue> : System.EventArgs
@@ -583,14 +584,14 @@ namespace Catel.Caching
         event System.EventHandler<Catel.Caching.ExpiredEventArgs<TKey, TValue>>? Expired;
         event System.EventHandler<Catel.Caching.ExpiringEventArgs<TKey, TValue>>? Expiring;
         void Add(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false);
-        void Add(TKey key, TValue value, bool override = false, System.TimeSpan expiration = default);
+        void Add(TKey key, TValue value, bool override = false, System.TimeSpan? expiration = default);
         void Clear();
         bool Contains(TKey key);
         TValue? Get(TKey key);
         TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false);
-        TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, bool override = false, System.TimeSpan expiration = default);
+        TValue GetFromCacheOrFetch(TKey key, System.Func<TValue> code, bool override = false, System.TimeSpan? expiration = default);
         System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, Catel.Caching.Policies.ExpirationPolicy? expirationPolicy, bool override = false);
-        System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, bool override = false, System.TimeSpan expiration = default);
+        System.Threading.Tasks.Task<TValue> GetFromCacheOrFetchAsync(TKey key, System.Func<System.Threading.Tasks.Task<TValue>> code, bool override = false, System.TimeSpan? expiration = default);
         void Remove(TKey key, System.Action? action = null);
     }
 }
