@@ -6,6 +6,7 @@
     using Catel.Caching;
     using Catel.IoC;
     using Catel.MVVM;
+    using Catel.Reflection;
     using Catel.Runtime.Serialization;
     using Catel.Services;
     using Catel.Tests.Data;
@@ -81,7 +82,7 @@
             }
 
             [TestCase]
-            public void UsesCorrectTypeFactoryToConstructTypes()
+            public void Uses_Correct_TypeFactory_To_Construct_Types()
             {
                 using (var serviceLocator = CreateLocator())
                 {
@@ -92,7 +93,26 @@
             }
 
             [TestCase]
-            public void ResolvesTypeFromItself()
+            public void Registers_Separate_Type_Factory()
+            {
+                using (var serviceLocator = CreateLocator())
+                {
+                    var parentServiceLocator = (IServiceLocator)serviceLocator.GetType().GetFieldEx("_parentServiceLocator").GetValue(serviceLocator);
+
+                    var typeFactory = serviceLocator.GetType().GetFieldEx("_typeFactory").GetValue(serviceLocator);
+                    var parentTypeFactory = serviceLocator.GetType().GetFieldEx("_typeFactory").GetValue(parentServiceLocator);
+
+//#pragma warning disable IDISP001 // Dispose created.
+//                    var typeFactory = serviceLocator.GetTypeFactory();
+//                    var parentTypeFactory = parentServiceLocator.GetTypeFactory();
+//#pragma warning restore IDISP001 // Dispose created.
+
+                    Assert.That(ReferenceEquals(typeFactory, parentTypeFactory), Is.False);
+                }
+            }
+
+            [TestCase]
+            public void Resolves_Type_From_Itself()
             {
                 using (var serviceLocator = CreateLocator())
                 {
