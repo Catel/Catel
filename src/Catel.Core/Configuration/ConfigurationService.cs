@@ -31,7 +31,7 @@
 
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
-        private readonly IAppDataService _appDataService; 
+        private readonly IAppDataService _appDataService;
         private readonly IDispatcherService _dispatcherService;
 
         private DynamicConfiguration? _localConfiguration;
@@ -161,7 +161,7 @@
 
             try
             {
-                var value = string.Empty;
+                object? value;
 
                 var lockObject = GetLockObject(container);
                 using (lockObject.Lock())
@@ -174,19 +174,12 @@
                     value = GetValueFromStore(container, key);
                 }
 
-                if (value is null)
+                return value switch
                 {
-                    return defaultValue;
-                }
-
-                // ObjectConverterService doesn't support object, but just return the value as is
-                if (typeof(T) == typeof(object))
-                {
-                    return (T)(object)value;
-                }
-
-                var finalValue = (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture)!;
-                return finalValue;
+                    null => defaultValue,
+                    string s => (T)_objectConverterService.ConvertFromStringToObject(s, typeof(T), CultureInfo.InvariantCulture)!,
+                    _ => (T)value
+                };
             }
             catch (Exception ex)
             {
@@ -385,7 +378,7 @@
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns>The value.</returns>
-        protected virtual string GetValueFromStore(ConfigurationContainer container, string key)
+        protected virtual object? GetValueFromStore(ConfigurationContainer container, string key)
         {
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
@@ -393,10 +386,10 @@
                 var settings = GetSettingsContainer(container);
                 if (settings is null)
                 {
-                    return string.Empty;
+                    return null;
                 }
 
-                return settings.GetConfigurationValue(key, string.Empty);
+                return settings.GetConfigurationValue(key);
             }
         }
 
