@@ -204,18 +204,17 @@
             var originalKey = key;
             key = GetFinalKey(key);
 
-            var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
-            var existingValue = string.Empty;
+            object? existingValue;
 
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
             {
                 existingValue = GetValueFromStore(container, key);
 
-                SetValueToStore(container, key, stringValue);
+                SetValueToStore(container, key, value);
             }
 
-            if (!string.Equals(stringValue, existingValue))
+            if (!Equals(value, existingValue))
             {
                 RaiseConfigurationChanged(container, originalKey, value);
             }
@@ -407,7 +406,7 @@
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        protected virtual void SetValueToStore(ConfigurationContainer container, string key, string value)
+        protected virtual void SetValueToStore(ConfigurationContainer container, string key, object? value)
         {
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
