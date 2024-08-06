@@ -32,7 +32,7 @@
                 {
                 }
 
-                protected override void SetValueToStore(ConfigurationContainer container, string key, object value)
+                protected override void SetValueToStore(ConfigurationContainer container, string key, object? value)
                 {
                     base.SetValueToStore(container, key, value);
 
