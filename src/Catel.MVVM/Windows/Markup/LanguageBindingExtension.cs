@@ -13,7 +13,7 @@
     public class LanguageBindingExtension : UpdatableMarkupExtension
     {
         private readonly ILanguageService _languageService;
-        private Catel.IWeakEventListener? _onLanguageUpdatedWeakListener;
+        private Catel.IWeakEventListener? _onLanguageServiceLanguageUpdatedWeakListener;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageBindingExtension"/> class.
@@ -127,25 +127,25 @@
         {
             // CTL-925 Use weak events so unloaded elements (like a ComboBoxItem) can also update. The usage of 
             // weak events should prevent memory leaks
-            var listener = _onLanguageUpdatedWeakListener;
+            var listener = _onLanguageServiceLanguageUpdatedWeakListener;
             if (listener is not null)
             {
                 if (!ReferenceEquals(listener.Source, TargetObject))
                 {
                     listener.Detach();
-                    _onLanguageUpdatedWeakListener = null;
+                    _onLanguageServiceLanguageUpdatedWeakListener = null;
                 }
 
                 if (!listener.IsSourceAlive)
                 {
                     listener.Detach();
-                    _onLanguageUpdatedWeakListener = null;
+                    _onLanguageServiceLanguageUpdatedWeakListener = null;
                 }
             }
 
-            if (_onLanguageUpdatedWeakListener is null)
+            if (_onLanguageServiceLanguageUpdatedWeakListener is null)
             {
-                _onLanguageUpdatedWeakListener = this.SubscribeToWeakGenericEvent<EventArgs>(_languageService, "LanguageUpdated", OnLanguageUpdated);
+                _onLanguageServiceLanguageUpdatedWeakListener = this.SubscribeToWeakGenericEvent<EventArgs>(_languageService, "LanguageUpdated", OnLanguageUpdated);
             }
 
             //_languageService.LanguageUpdated += OnLanguageUpdated;
