@@ -10,7 +10,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Row="0" Text="{Binding Title}" />
-        <TextBlock Grid.Row="1" Text="Here goes your real content" />
+        <TextBlock Grid.Row="1" Text="B" />
     </Grid>
     
 </catel:DataWindow>

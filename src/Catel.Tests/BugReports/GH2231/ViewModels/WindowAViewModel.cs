@@ -17,6 +17,8 @@
         {
             await base.InitializeAsync();
 
+            await Task.Delay(1000);
+
             _ = _uiVisualizerService.ShowDialogAsync<WindowBViewModel>();
         }
     }

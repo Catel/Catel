@@ -1,6 +1,7 @@
 ﻿namespace Catel.Tests.BugReports.GH2231.Views
 {
     using System;
+    using System.Threading.Tasks;
 
     public partial class WindowBView
     {
@@ -13,8 +14,10 @@
         {
             base.OnLoaded(e);
 
-            Dispatcher.BeginInvoke(() =>
+            Dispatcher.BeginInvoke(async () =>
             {
+                await Task.Delay(5000);
+
                 var parent = this.Owner;
                 parent.Close();
             });

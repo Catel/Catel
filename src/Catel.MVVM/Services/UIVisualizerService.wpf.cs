@@ -215,12 +215,17 @@
             // Note: no async/await because we use a TaskCompletionSource
             var tcs = new TaskCompletionSource<UIVisualizerResult>();
 
-            HandleCloseSubscription(window, context, (sender, args) => tcs.TrySetResult(args.Result));
+            HandleCloseSubscription(window, context, (sender, args) =>
+            {
+                Log.Debug($"Handling close subscription of '{window.GetType().Name}'");
+
+                tcs.TrySetResult(args.Result);
+            });
 
             var showMethodInfo = context.IsModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
             if (context.IsModal && showMethodInfo is null)
             {
-                Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
+                Log.Warning($"Method 'ShowDialog' not found on '{window.GetType().Name}', falling back to 'Show'");
 
                 showMethodInfo = window.GetType().GetMethodEx("Show");
             }
