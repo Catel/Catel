@@ -38,6 +38,14 @@
         }
 
         /// <summary>
+        /// Determines whether to throw exceptions when a window that still has modal child windows
+        /// is being closed.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        protected virtual bool ThrowExceptionWhenClosingWithModalChildWindows { get { return true; } }
+
+        /// <summary>
         /// Determines whether the specified name is registered.
         /// </summary>
         /// <param name="name">The name.</param>

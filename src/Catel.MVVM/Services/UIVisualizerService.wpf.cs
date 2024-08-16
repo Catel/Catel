@@ -1,13 +1,16 @@
 ﻿namespace Catel.Services
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Threading;
+    using Catel.Collections;
     using Logging;
     using MVVM;
     using Reflection;
     using Windows;
+    using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
     /// <summary>
     /// Service to show modal or non-modal popup windows.
@@ -219,15 +222,42 @@
             {
                 Log.Debug($"Handling close subscription of '{window.GetType().Name}'");
 
-#if DEBUG
                 if (window is System.Windows.Window wpfWindow)
                 {
+                    // #2231 Unfortunately these checks are not working
+                    //var application = Application.Current;
+                    //if (application is not null)
+                    //{
+                    //    var ownedWindows = wpfWindow.OwnedWindows;
+                    //    if (ownedWindows is not null &&
+                    //        ownedWindows.Count > 0)
+                    //    {
+                    //        foreach (System.Windows.Window ownedWindow in ownedWindows)
+                    //        {
+                    //            if (ownedWindow.IsShowingAsDialog())
+                    //            {
+                    //                const string message = "Window still has owned modal windows, this will cause deadlocks in WPF (see https://github.com/Catel/Catel/issues/2231)";
+                                    
+                    //                if (ThrowExceptionWhenClosingWithModalChildWindows)
+                    //                {
+                    //                    throw Log.ErrorAndCreateException<CatelException>(message);
+                    //                }
+                    //                else
+                    //                {
+                    //                    Log.Warning(message);
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+#if DEBUG
                     Log.Debug($"Window active: {wpfWindow.IsActive}");
                     Log.Debug($"Window dialog result: {wpfWindow.DialogResult}");
                     Log.Debug($"Window loaded: {wpfWindow.IsLoaded}");
                     Log.Debug($"Window visible: {wpfWindow.IsVisible}");
-                }
 #endif
+                }
 
                 tcs.TrySetResult(args.Result);
             });
