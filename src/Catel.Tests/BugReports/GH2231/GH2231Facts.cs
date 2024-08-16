@@ -6,6 +6,7 @@
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Tests.BugReports.GH2231.ViewModels;
+    using Catel.Tests.BugReports.GH2231.Views;
     using NUnit.Framework;
 
     [TestFixture, Explicit("UI Tests")]
@@ -18,6 +19,7 @@
             if (application is null)
             {
                 application = new Application();
+                application.ShutdownMode = ShutdownMode.OnMainWindowClose;
             }
 
             var viewLocator = new ViewLocator();
@@ -30,6 +32,22 @@
             {
                 IsModal = true
             });
+
+            Debug.WriteLine("Success");
+        }
+
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public async Task Wpf_Default_Behavior_Async()
+        {
+            var application = Application.Current;
+            if (application is null)
+            {
+                application = new Application();
+                application.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            }
+
+            var windowA = new WpfWindowA();
+            windowA.ShowDialog();
 
             Debug.WriteLine("Success");
         }

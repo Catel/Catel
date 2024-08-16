@@ -219,6 +219,16 @@
             {
                 Log.Debug($"Handling close subscription of '{window.GetType().Name}'");
 
+#if DEBUG
+                if (window is System.Windows.Window wpfWindow)
+                {
+                    Log.Debug($"Window active: {wpfWindow.IsActive}");
+                    Log.Debug($"Window dialog result: {wpfWindow.DialogResult}");
+                    Log.Debug($"Window loaded: {wpfWindow.IsLoaded}");
+                    Log.Debug($"Window visible: {wpfWindow.IsVisible}");
+                }
+#endif
+
                 tcs.TrySetResult(args.Result);
             });
 

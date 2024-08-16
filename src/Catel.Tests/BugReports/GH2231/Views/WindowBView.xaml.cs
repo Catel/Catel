@@ -18,7 +18,7 @@
             {
                 await Task.Delay(5000);
 
-                var parent = this.Owner;
+                var parent = Owner;
                 parent.Close();
             });
         }
