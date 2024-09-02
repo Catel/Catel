@@ -25,13 +25,13 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Moq" Version="4.20.70" />
-    <PackageReference Include="NUnit" Version="4.2.1" PrivateAssets="all" />
+    <PackageReference Include="NUnit" Version="4.2.2" PrivateAssets="all" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="PublicApiGenerator" Version="11.1.0" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="26.2.0" />
+    <PackageReference Include="Verify.NUnit" Version="26.3.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
