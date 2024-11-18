@@ -11,12 +11,6 @@
 
         public virtual object GetApplicationDispatcher()
         {
-            if (CatelEnvironment.IsInTestMode)
-            {
-                // Important: let the unit test decide the dispatcher
-                return GetCurrentDispatcher();
-            }
-
             var dispatcher = _appDispatcher;
             if (dispatcher is null)
             {
