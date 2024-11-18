@@ -6,7 +6,6 @@
     using Logging;
     using System.Windows.Threading;
     using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
-    using System.Linq;
 
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
@@ -14,28 +13,6 @@
     public class DispatcherService : IDispatcherService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly Lazy<bool> _isRunningUnitTests = new Lazy<bool>(() =>
-            AppDomain.CurrentDomain.GetAssemblies().Any(x =>
-            {
-                var fullName = x.FullName;
-                if (string.IsNullOrEmpty(fullName))
-                {
-                    return false;
-                }
-
-                if (fullName.StartsWithIgnoreCase("testhost,"))
-                {
-                    return true;
-                }
-
-                if (fullName.StartsWithIgnoreCase("Microsoft.TestPlatform"))
-                {
-                    return true;
-                }
-
-                return false;
-            }));
 
         private readonly IDispatcherProviderService _dispatcherProviderService;
 
@@ -67,13 +44,13 @@
         }
 
         /// <summary>
-        /// 
+        /// Gets a value indicating whether the current environment is in test mode.
         /// </summary>
-        protected virtual bool IsRunningUnitTests
+        protected virtual bool IsInTestMode
         {
             get
             {
-                return _isRunningUnitTests.Value;
+                return CatelEnvironment.IsInTestMode;
             }
         }
 
@@ -90,7 +67,7 @@
 
             var task = dispatcher.InvokeAsync(action).Task;
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
 
             return task;
         }
@@ -109,7 +86,7 @@
 
             var task = DispatcherExtensions.InvokeAsync(dispatcher, method, args);
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
 
             return task;
         }
@@ -128,7 +105,7 @@
 
             var task = DispatcherExtensions.InvokeAsync(dispatcher, func);
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
 
             return task;
         }
@@ -146,7 +123,7 @@
 
             var task = DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
 
             return task;
         }
@@ -165,7 +142,7 @@
 
             var task = DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
 
             return task;
         }
@@ -183,7 +160,7 @@
 
             var task = DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
 
             return task;
         }
@@ -203,7 +180,7 @@
 
             var task = DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
 
             return task;
         }
@@ -236,12 +213,12 @@
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.BeginInvoke(dispatcher, action, onlyBeginInvokeWhenNoAccess);
 
-            ProcessEventsDuringUnitTests(dispatcher);
+            ProcessEventsDuringTests(dispatcher);
         }
 
-        protected virtual void ProcessEventsDuringUnitTests(Dispatcher dispatcher)
+        protected virtual void ProcessEventsDuringTests(Dispatcher dispatcher)
         {
-            if (!IsRunningUnitTests)
+            if (!IsInTestMode)
             {
                 return;
             }
