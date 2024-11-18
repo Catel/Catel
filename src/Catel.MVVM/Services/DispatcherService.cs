@@ -6,6 +6,7 @@
     using Logging;
     using System.Windows.Threading;
     using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
+    using System.Linq;
 
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
@@ -13,6 +14,28 @@
     public class DispatcherService : IDispatcherService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly Lazy<bool> _isRunningUnitTests = new Lazy<bool>(() =>
+            AppDomain.CurrentDomain.GetAssemblies().Any(x =>
+            {
+                var fullName = x.FullName;
+                if (string.IsNullOrEmpty(fullName))
+                {
+                    return false;
+                }
+
+                if (fullName.StartsWithIgnoreCase("testhost,"))
+                {
+                    return true;
+                }
+
+                if (fullName.StartsWithIgnoreCase("Microsoft.TestPlatform"))
+                {
+                    return true;
+                }
+
+                return false;
+            }));
 
         private readonly IDispatcherProviderService _dispatcherProviderService;
 
@@ -44,6 +67,17 @@
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        protected virtual bool IsRunningUnitTests
+        {
+            get
+            {
+                return _isRunningUnitTests.Value;
+            }
+        }
+
+        /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
         /// <param name="action">The action.</param>
@@ -52,7 +86,13 @@
         {
             ArgumentNullException.ThrowIfNull(action);
 
-            return CurrentDispatcher.InvokeAsync(action).Task;
+            var dispatcher = CurrentDispatcher;
+
+            var task = dispatcher.InvokeAsync(action).Task;
+
+            ProcessEventsDuringUnitTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -67,7 +107,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+
+            ProcessEventsDuringUnitTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -82,7 +126,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, func);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, func);
+
+            ProcessEventsDuringUnitTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -96,7 +144,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
+
+            ProcessEventsDuringUnitTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -111,7 +163,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
+
+            ProcessEventsDuringUnitTests(dispatcher);
+
+            return task;
         }
         /// <summary>
         /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value.
@@ -125,7 +181,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
+
+            ProcessEventsDuringUnitTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -141,7 +201,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
+
+            ProcessEventsDuringUnitTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -171,6 +235,37 @@
 
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.BeginInvoke(dispatcher, action, onlyBeginInvokeWhenNoAccess);
+
+            ProcessEventsDuringUnitTests(dispatcher);
+        }
+
+        protected virtual void ProcessEventsDuringUnitTests(Dispatcher dispatcher)
+        {
+            if (!IsRunningUnitTests)
+            {
+                return;
+            }
+
+            DispatcherUtil.DoEvents(dispatcher);
+        }
+
+        /// <summary>
+        /// Dispatcher util comes from https://stackoverflow.com/questions/1106881/using-the-wpf-dispatcher-in-unit-tests.
+        /// </summary>
+        private static class DispatcherUtil
+        {
+            public static void DoEvents(Dispatcher dispatcher)
+            {
+                var frame = new DispatcherFrame();
+                dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(ExitFrame), frame);
+                Dispatcher.PushFrame(frame);
+            }
+
+            private static object? ExitFrame(object frame)
+            {
+                ((DispatcherFrame)frame).Continue = false;
+                return null;
+            }
         }
     }
 }
