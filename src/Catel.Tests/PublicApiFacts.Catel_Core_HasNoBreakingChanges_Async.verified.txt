@@ -989,7 +989,7 @@ namespace Catel.Configuration
         protected virtual double GetSaveSettingsSchedulerIntervalInMilliseconds() { }
         protected virtual Catel.Configuration.DynamicConfiguration GetSettingsContainer(Catel.Configuration.ConfigurationContainer container) { }
         public virtual T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
-        protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
+        protected virtual object? GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
         public virtual void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue) { }
         public virtual bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
         public virtual System.Threading.Tasks.Task LoadAsync(Catel.Configuration.ConfigurationContainer configuration) { }
@@ -1003,7 +1003,7 @@ namespace Catel.Configuration
         public virtual System.Threading.Tasks.Task SetLocalConfigFilePathAsync(string filePath) { }
         public virtual System.Threading.Tasks.Task SetRoamingConfigFilePathAsync(string filePath) { }
         public virtual void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
-        protected virtual void SetValueToStore(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
+        protected virtual void SetValueToStore(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
         public System.IDisposable SuspendNotifications() { }
         protected virtual bool ValueExists(Catel.Configuration.ConfigurationContainer container, string key) { }
     }
