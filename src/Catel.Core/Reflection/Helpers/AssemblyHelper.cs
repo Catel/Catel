@@ -300,10 +300,20 @@
             using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
                 fileStream.Position = 0x3C;
+
+#if NET7_0_OR_GREATER
+                fileStream.ReadExactly(buffer, 0, 4);
+                fileStream.Position = BitConverter.ToUInt32(buffer, 0); // COFF header offset
+                fileStream.ReadExactly(buffer, 0, 4); // "PE\0\0"
+                fileStream.ReadExactly(buffer, 0, buffer.Length);
+#else
+#pragma warning disable CA2022 // Avoid inexact read with 'Stream.Read'
                 fileStream.Read(buffer, 0, 4);
                 fileStream.Position = BitConverter.ToUInt32(buffer, 0); // COFF header offset
                 fileStream.Read(buffer, 0, 4); // "PE\0\0"
                 fileStream.Read(buffer, 0, buffer.Length);
+#pragma warning restore CA2022 // Avoid inexact read with 'Stream.Read'
+#endif
             }
 
             var pinnedBuffer = GCHandle.Alloc(buffer, GCHandleType.Pinned);

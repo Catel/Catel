@@ -1972,6 +1972,7 @@ namespace Catel.Services
     {
         protected readonly System.Collections.Generic.Dictionary<string, System.Type> RegisteredWindows;
         public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator, Catel.Services.IDispatcherService dispatcherService) { }
+        protected virtual bool ThrowExceptionWhenClosingWithModalChildWindows { get; }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(Catel.Services.UIVisualizerContext context) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, Catel.Services.UIVisualizerContext context) { }
         protected virtual void EnsureViewIsRegistered(string name) { }
@@ -2204,6 +2205,7 @@ namespace Catel.Windows
         public static void BringWindowToTop(this System.Windows.Window window) { }
         public static bool CanSetDialogResult(this System.Windows.Window window) { }
         public static System.IntPtr GetWindowHandle(this System.Windows.Window window) { }
+        public static bool IsShowingAsDialog(this System.Windows.Window window) { }
         public static bool IsValidAsOwnerWindow(this System.Windows.Window window) { }
         public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
         public static void SetOwnerWindow(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }
