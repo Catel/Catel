@@ -11,6 +11,12 @@
 
         public virtual object GetApplicationDispatcher()
         {
+            if (CatelEnvironment.IsInTestMode)
+            {
+                // Important: let the unit test decide the dispatcher
+                return GetCurrentDispatcher();
+            }
+
             var dispatcher = _appDispatcher;
             if (dispatcher is null)
             {
@@ -23,7 +29,7 @@
 
                     // Dispatcher.CurrentDispatcher is not useful, but we use it as fallback value, 
                     // see https://github.com/Catel/Catel/issues/1762, but never store it in the field
-                    dispatcher = Dispatcher.CurrentDispatcher;
+                    dispatcher = GetCurrentDispatcher();
                 }
             }
 
