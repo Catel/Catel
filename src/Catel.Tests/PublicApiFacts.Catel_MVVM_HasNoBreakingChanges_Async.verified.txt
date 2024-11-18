@@ -1619,6 +1619,7 @@ namespace Catel.Services
     {
         public DispatcherService(Catel.Services.IDispatcherProviderService dispatcherProviderService) { }
         protected virtual System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
+        protected virtual bool IsRunningUnitTests { get; }
         public virtual void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true) { }
         public virtual void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true) { }
         public virtual System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
@@ -1628,6 +1629,7 @@ namespace Catel.Services
         public virtual System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
         public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
         public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
+        protected virtual void ProcessEventsDuringUnitTests(System.Windows.Threading.Dispatcher dispatcher) { }
     }
     public abstract class FileServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.IFileSupport
     {
