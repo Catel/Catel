@@ -190,8 +190,10 @@ public class ComponentsProcessor : ProcessorBase
 
             // Special exception for Blazor projects
             var isBlazorProject = IsBlazorProject(BuildContext, component);
+            var isPackageContainerProject = IsPackageContainerProject(BuildContext, component);
 
             BuildContext.CakeContext.LogSeparator("Packaging component '{0}'", component);
+            CakeContext.Information("IsPackageContainerProject = '{0}'", isPackageContainerProject);
 
             var projectDirectory = GetProjectDirectory(component);
             var projectFileName = GetProjectFileName(BuildContext, component);
@@ -285,6 +287,17 @@ public class ComponentsProcessor : ProcessorBase
                 
                 msBuildSettings.Restore = true;
                 noBuild = false;
+            }
+
+            if (isPackageContainerProject)
+            {
+                // In debug / local builds, automatic building of reference projects
+                // is enabled for convenience. If that is the case, noBuild must be
+                // set to false, but *only* in debug mode
+                if (BuildContext.General.IsLocalBuild)
+                {
+                    noBuild = false;
+                }
             }
 
             // As described in the this issue: https://github.com/NuGet/Home/issues/4360
