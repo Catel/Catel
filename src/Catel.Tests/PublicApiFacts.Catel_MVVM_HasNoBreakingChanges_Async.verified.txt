@@ -2869,6 +2869,7 @@ namespace Catel.Windows.Threading
         public virtual System.TimeSpan Interval { get; set; }
         public virtual bool IsEnabled { get; set; }
         public virtual bool OnlyBeginInvokeIfRequired { get; set; }
+        public virtual bool PreventDuplicateTicks { get; set; }
         public virtual object? Tag { get; set; }
         public event System.EventHandler<System.EventArgs>? Tick;
         protected virtual void RaiseEvent() { }

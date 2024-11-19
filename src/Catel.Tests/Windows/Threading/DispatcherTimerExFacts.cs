@@ -86,5 +86,65 @@
 
             Assert.That(invoked, Is.True);
         }
+
+        [TestCase(100, 1)]
+        [TestCase(300, 2)]
+        [TestCase(800, 4)]
+        public async Task Does_Prevent_Duplicate_Ticks_Async(int durationInMilliseconds, int expectedInvocationCount)
+        {
+            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(new DispatcherProviderService()))
+            {
+                Interval = TimeSpan.FromMilliseconds(50),
+                PreventDuplicateTicks = true
+            };
+
+            int invocationCount = 0;
+
+            dispatcherTimerEx.Tick += (sender, args) =>
+            {
+                invocationCount++;
+
+                Task.Delay(150).Wait();
+            };
+
+            using (new DisposableToken<DispatcherTimerEx>(dispatcherTimerEx,
+                (x) => x.Instance.Start(),
+                (x) => x.Instance.Stop()))
+            {
+                await Task.Delay(durationInMilliseconds);
+            }
+
+            Assert.That(invocationCount, Is.EqualTo(expectedInvocationCount));
+        }
+
+        [Test]
+        public async Task Does_Not_Prevent_Duplicate_Ticks_Async()
+        {
+            var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+            var dispatcherTimerEx = new DispatcherTimerEx(dispatcherServiceMock.Object)
+            {
+                Interval = TimeSpan.FromMilliseconds(50),
+                PreventDuplicateTicks = false
+            };
+
+            var invocationCount = 0;
+
+            dispatcherTimerEx.Tick += (sender, args) =>
+            {
+                invocationCount++;
+
+                Task.Delay(150).Wait();
+            };
+
+            using (new DisposableToken<DispatcherTimerEx>(dispatcherTimerEx,
+                (x) => x.Instance.Start(),
+                (x) => x.Instance.Stop()))
+            {
+                await Task.Delay(100);
+
+                dispatcherServiceMock.Verify(x => x.BeginInvoke(It.IsAny<Action>(), It.Is<bool>(y => y == true)), Times.Exactly(2));
+            }
+        }
     }
 }

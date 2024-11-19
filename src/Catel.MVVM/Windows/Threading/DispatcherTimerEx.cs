@@ -18,12 +18,14 @@
 
         private readonly object _lockObject = new object();
         private bool _isSubscribed;
+        private bool _isHandlingTick;
 
         public DispatcherTimerEx(IDispatcherService dispatcherService)
         {
             _dispatcherService = dispatcherService;
 
             OnlyBeginInvokeIfRequired = true;
+            PreventDuplicateTicks = true;
         }
 
         /// <summary>
@@ -51,8 +53,18 @@
 
         /// <summary>
         /// If set the <c>true</c>, the timer will pass <c>true</c> to <see cref="IDispatcherService.BeginInvoke(Action, bool)"/>.
+        /// <para />
+        /// The default value is <c>true</c>.
         /// </summary>
         public virtual bool OnlyBeginInvokeIfRequired { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value whether duplicate ticks should be prevented. In case a tick is already being processed, the
+        /// next tick event will be ignored.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        public virtual bool PreventDuplicateTicks { get; set; }
 
         /// <summary>
         /// Occurs when the timer ticks.
@@ -100,7 +112,19 @@
             var handler = Tick;
             if (handler is not null)
             {
-                _dispatcherService.BeginInvoke(() => handler(this, EventArgs.Empty), OnlyBeginInvokeIfRequired);
+                if (PreventDuplicateTicks && _isHandlingTick)
+                {
+                    return;
+                }
+
+                _isHandlingTick = true;
+
+                _dispatcherService.BeginInvoke(() =>
+                {
+                    handler(this, EventArgs.Empty);
+
+                    _isHandlingTick = false;
+                }, OnlyBeginInvokeIfRequired);
             }
         }
     }
