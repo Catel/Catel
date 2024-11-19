@@ -6,14 +6,14 @@
     using Catel.Data;
     using Catel.Logging;
     using Catel.Services;
-    using System.Windows.Threading;
+    using Catel.Windows.Threading;
 
     public partial class ViewModelBase
     {
         /// <summary>
         /// The throttling timer.
         /// </summary>
-        private readonly DispatcherTimer _throttlingTimer = new DispatcherTimer();
+        private readonly DispatcherTimerEx _throttlingTimer;
 
         /// <summary>
         /// The throttling rate.

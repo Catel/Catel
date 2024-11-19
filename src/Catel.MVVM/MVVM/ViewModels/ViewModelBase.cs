@@ -168,6 +168,8 @@
             _objectAdapter = DependencyResolver.ResolveRequired<IObjectAdapter>();
             _dispatcherService = DependencyResolver.ResolveRequired<IDispatcherService>();
 
+            _throttlingTimer = new Windows.Threading.DispatcherTimerEx(_dispatcherService);
+
             var type = GetType();
 
             // Note: we get the type *every time*, but it should be cheaper than checking the existance of the type in the 
