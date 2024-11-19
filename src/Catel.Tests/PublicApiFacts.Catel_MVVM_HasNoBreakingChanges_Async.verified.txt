@@ -2862,4 +2862,16 @@ namespace Catel.Windows.Threading
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
     }
+    public class DispatcherTimerEx
+    {
+        protected readonly Catel.Services.IDispatcherService _dispatcherService;
+        public DispatcherTimerEx(Catel.Services.IDispatcherService dispatcherService) { }
+        public virtual System.TimeSpan Interval { get; set; }
+        public virtual bool IsEnabled { get; set; }
+        public virtual bool OnlyBeginInvokeIfRequired { get; set; }
+        public event System.EventHandler<System.EventArgs>? Tick;
+        protected virtual void RaiseEvent() { }
+        public virtual void Start() { }
+        public virtual void Stop() { }
+    }
 }
