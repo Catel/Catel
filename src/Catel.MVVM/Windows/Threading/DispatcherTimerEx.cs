@@ -45,6 +45,11 @@
         }
 
         /// <summary>
+        /// Gets or sets a user-defined data object.
+        /// </summary>
+        public virtual object? Tag { get; set; }
+
+        /// <summary>
         /// If set the <c>true</c>, the timer will pass <c>true</c> to <see cref="IDispatcherService.BeginInvoke(Action, bool)"/>.
         /// </summary>
         public virtual bool OnlyBeginInvokeIfRequired { get; set; }
