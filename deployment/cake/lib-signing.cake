@@ -28,14 +28,18 @@ public static bool ShouldSignImmediately(BuildContext buildContext, string proje
 
 public static void SignProjectFiles(BuildContext buildContext, string projectName)
 {
+    var codeSignContext = buildContext.General.CodeSign;
+    var azureCodeSignContext = buildContext.General.AzureCodeSign;
+
     var certificateSubjectName = buildContext.General.CodeSign.CertificateSubjectName;
-    if (string.IsNullOrWhiteSpace(certificateSubjectName))
+    if (!codeSignContext.IsAvailable &&
+        !azureCodeSignContext.IsAvailable)
     {
-        buildContext.CakeContext.Information("Skipping code signing because the certificate subject name was not specified");
+        buildContext.CakeContext.Information("Skipping code signing because none of the options is available");
         return;
     }
 
-    var codeSignWildCard = buildContext.General.CodeSign.WildCard;
+    var codeSignWildCard = codeSignContext.WildCard;
     if (string.IsNullOrWhiteSpace(codeSignWildCard))
     {
         // Empty, we need to override with project name for valid default value
@@ -58,26 +62,25 @@ public static void SignProjectFiles(BuildContext buildContext, string projectNam
 
     var signToolCommand = string.Empty;
 
-    var codeSign = buildContext.General.CodeSign;
-    if (codeSign.IsAvailable)
+    if (codeSignContext.IsAvailable)
     {
         signToolCommand = string.Format("sign /a /t {0} /n {1} /fd {2}", 
-            codeSign.TimeStampUri, 
-            certificateSubjectName, 
-            codeSign.HashAlgorithm);
+            codeSignContext.TimeStampUri, 
+            codeSignContext.CertificateSubjectName, 
+            codeSignContext.HashAlgorithm);
     }
 
     // Note: Azure always wins
-    var azureCodeSign = buildContext.General.AzureCodeSign;
-    if (azureCodeSign.IsAvailable)
+    if (azureCodeSignContext.IsAvailable)
     {
-        signToolCommand = string.Format("sign -kvu {0} -kvi {1} -kvs {2} -kvc {3} -tr {4} -fd {5}", 
-            azureCodeSign.VaultUrl,
-            azureCodeSign.ClientId,
-            azureCodeSign.ClientSecret,
-            azureCodeSign.CertificateName,
-            azureCodeSign.TimeStampUri,
-            azureCodeSign.HashAlgorithm);
+        signToolCommand = string.Format("sign -kvu {0} -kvt -{1} -kvi {2} -kvs {3} -kvc {4} -tr {5} -fd {6}", 
+            azureCodeSignContext.VaultUrl,
+            azureCodeSignContext.TenantId,
+            azureCodeSignContext.ClientId,
+            azureCodeSignContext.ClientSecret,
+            azureCodeSignContext.CertificateName,
+            azureCodeSignContext.TimeStampUri,
+            azureCodeSignContext.HashAlgorithm);
     }
 
     SignFiles(buildContext, signToolCommand, projectFilesToSign);
@@ -129,16 +132,23 @@ public static void SignFile(BuildContext buildContext, string signToolCommand, s
     if (string.IsNullOrWhiteSpace(_signToolFileName))
     {
         // Always fetch, it is used for verification
-        _signToolFileName = FindSignToolFileName(buildContext);
-        
-        // Azure always wins
-        if (azureCodeSignContext.IsAvailable)
-        {
-            _azureSignToolFileName = FindAzureSignToolFileName(buildContext);
-        }
+        _signToolFileName = FindSignToolFileName(buildContext);   
     }
 
-    if (string.IsNullOrWhiteSpace(_signToolFileName))
+    if (string.IsNullOrWhiteSpace(_azureSignToolFileName))
+    {
+        _azureSignToolFileName = FindAzureSignToolFileName(buildContext);
+    }
+
+    var signToolFileName = _signToolFileName;
+    
+    // Azure always wins
+    if (azureCodeSignContext.IsAvailable)
+    {
+        signToolFileName = _azureSignToolFileName;
+    }
+
+    if (string.IsNullOrWhiteSpace(signToolFileName))
     {
         throw new InvalidOperationException("Cannot find signtool, make sure to install a Windows Development Kit");
     }
@@ -190,7 +200,7 @@ public static void SignFile(BuildContext buildContext, string signToolCommand, s
             Silent = true
         };
 
-        using (var signProcess = buildContext.CakeContext.StartAndReturnProcess(_signToolFileName, signProcessSettings))
+        using (var signProcess = buildContext.CakeContext.StartAndReturnProcess(signToolFileName, signProcessSettings))
         {
             signProcess.WaitForExit();
 

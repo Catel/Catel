@@ -385,6 +385,7 @@ public class AzureCodeSignContext : BuildContextBase
     public string CertificateName { get; set; }
     public string TimeStampUri { get; set; }
     public string HashAlgorithm { get; set; }
+    public string TenantId { get; set; }
     public string ClientId { get; set; }
     public string ClientSecret { get; set; }
 
@@ -393,7 +394,10 @@ public class AzureCodeSignContext : BuildContextBase
         get
         {
             if (string.IsNullOrWhiteSpace(VaultName) ||
-                string.IsNullOrWhiteSpace(CertificateName))
+                string.IsNullOrWhiteSpace(CertificateName) ||
+                string.IsNullOrWhiteSpace(TenantId) ||
+                string.IsNullOrWhiteSpace(ClientId) ||
+                string.IsNullOrWhiteSpace(ClientSecret))
             {
                 return false;
             }
@@ -570,6 +574,7 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
         CertificateName = buildContext.BuildServer.GetVariable("AzureCodeSignCertificateName", showValue: true),
         TimeStampUri = buildContext.BuildServer.GetVariable("AzureCodeSignTimeStampUri", "http://timestamp.digicert.com", showValue: true),
         HashAlgorithm = buildContext.BuildServer.GetVariable("AzureCodeSignHashAlgorithm", "SHA256", showValue: true),
+        TenantId = buildContext.BuildServer.GetVariable("AzureCodeSignTenantId", showValue: false),
         ClientId = buildContext.BuildServer.GetVariable("AzureCodeSignClientId", showValue: false),
         ClientSecret = buildContext.BuildServer.GetVariable("AzureCodeSignClientSecret", showValue: false),
     };
