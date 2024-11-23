@@ -73,7 +73,7 @@ public static void SignProjectFiles(BuildContext buildContext, string projectNam
     // Note: Azure always wins
     if (azureCodeSignContext.IsAvailable)
     {
-        signToolCommand = string.Format("sign -kvu {0} -kvt -{1} -kvi {2} -kvs {3} -kvc {4} -tr {5} -fd {6}", 
+        signToolCommand = string.Format("sign -kvu {0} -kvt {1} -kvi {2} -kvs {3} -kvc {4} -tr {5} -fd {6}", 
             azureCodeSignContext.VaultUrl,
             azureCodeSignContext.TenantId,
             azureCodeSignContext.ClientId,
