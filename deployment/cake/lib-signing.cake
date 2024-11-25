@@ -1,4 +1,5 @@
 #tool "dotnet:?package=AzureSignTool&version=6.0.0"
+#tool "dotnet:?package=NuGetKeyVaultSignTool&version=3.2.3"
 
 private static string _signToolFileName;
 private static string _azureSignToolFileName;
@@ -28,6 +29,23 @@ public static bool ShouldSignImmediately(BuildContext buildContext, string proje
 
 public static void SignProjectFiles(BuildContext buildContext, string projectName)
 {
+    var outputDirectory = string.Format("{0}/{1}", buildContext.General.OutputRootDirectory, projectName);
+
+    var codeSignContext = buildContext.General.CodeSign;
+    var codeSignWildCard = codeSignContext.WildCard;
+    if (string.IsNullOrWhiteSpace(codeSignWildCard))
+    {
+        // Empty, we need to override with project name for valid default value
+        codeSignWildCard = projectName;
+    }
+
+    SignFilesInDirectory(buildContext, outputDirectory, codeSignWildCard);
+}
+
+//-------------------------------------------------------------
+
+public static void SignFilesInDirectory(BuildContext buildContext, string directory, string codeSignWildCard)
+{
     var codeSignContext = buildContext.General.CodeSign;
     var azureCodeSignContext = buildContext.General.AzureCodeSign;
 
@@ -39,56 +57,52 @@ public static void SignProjectFiles(BuildContext buildContext, string projectNam
         return;
     }
 
-    var codeSignWildCard = codeSignContext.WildCard;
-    if (string.IsNullOrWhiteSpace(codeSignWildCard))
-    {
-        // Empty, we need to override with project name for valid default value
-        codeSignWildCard = projectName;
-    }
-
-    var outputDirectory = string.Format("{0}/{1}", buildContext.General.OutputRootDirectory, projectName);
-
     var projectFilesToSign = new List<FilePath>();
 
-    var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}*.exe", outputDirectory, codeSignWildCard);
+    if (!string.IsNullOrWhiteSpace(codeSignWildCard))
+    {
+        // Make sure the pattern becomes *[wildcard]*
+        codeSignWildCard += "*";
+    }
+    else
+    {
+        codeSignWildCard = string.Empty;
+    }
+
+    var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}.exe", directory, codeSignWildCard);
     buildContext.CakeContext.Information(exeSignFilesSearchPattern);
     projectFilesToSign.AddRange(buildContext.CakeContext.GetFiles(exeSignFilesSearchPattern));
 
-    var dllSignFilesSearchPattern = string.Format("{0}/**/*{1}*.dll", outputDirectory, codeSignWildCard);
+    var dllSignFilesSearchPattern = string.Format("{0}/**/*{1}.dll", directory, codeSignWildCard);
     buildContext.CakeContext.Information(dllSignFilesSearchPattern);
     projectFilesToSign.AddRange(buildContext.CakeContext.GetFiles(dllSignFilesSearchPattern));
 
-    buildContext.CakeContext.Information("Found '{0}' files to code sign for '{1}'", projectFilesToSign.Count, projectName);
+    buildContext.CakeContext.Information("Found '{0}' files to code sign", projectFilesToSign.Count);
 
-    var signToolCommand = string.Empty;
+    var signToolCommand = GetSignToolCommandLine(buildContext);
 
-    if (codeSignContext.IsAvailable)
-    {
-        signToolCommand = string.Format("sign /a /t {0} /n {1} /fd {2}", 
-            codeSignContext.TimeStampUri, 
-            codeSignContext.CertificateSubjectName, 
-            codeSignContext.HashAlgorithm);
-    }
-
-    // Note: Azure always wins
-    if (azureCodeSignContext.IsAvailable)
-    {
-        signToolCommand = string.Format("sign -kvu {0} -kvt {1} -kvi {2} -kvs {3} -kvc {4} -tr {5} -fd {6}", 
-            azureCodeSignContext.VaultUrl,
-            azureCodeSignContext.TenantId,
-            azureCodeSignContext.ClientId,
-            azureCodeSignContext.ClientSecret,
-            azureCodeSignContext.CertificateName,
-            azureCodeSignContext.TimeStampUri,
-            azureCodeSignContext.HashAlgorithm);
-    }
-
-    SignFiles(buildContext, signToolCommand, projectFilesToSign);
+    SignFiles(buildContext, signToolCommand, projectFilesToSign, null);
 }
 
 //-------------------------------------------------------------
 
-public static void SignFiles(BuildContext buildContext, string signToolCommand, IEnumerable<FilePath> fileNames, string additionalCommandLineArguments = null)
+public static void SignFile(BuildContext buildContext, FilePath filePath)
+{
+    SignFile(buildContext, filePath.FullPath);
+}
+
+//-------------------------------------------------------------
+
+public static void SignFile(BuildContext buildContext, string fileName)
+{
+    var signToolCommand = GetSignToolCommandLine(buildContext);
+
+    SignFiles(buildContext, signToolCommand, new [] { fileName }, null);
+}
+
+//-------------------------------------------------------------
+
+public static void SignFiles(BuildContext buildContext, string signToolCommand, IEnumerable<FilePath> fileNames, string additionalCommandLineArguments)
 {
     if (fileNames.Any())
     {
@@ -103,7 +117,7 @@ public static void SignFiles(BuildContext buildContext, string signToolCommand, 
 
 //-------------------------------------------------------------
 
-public static void SignFiles(BuildContext buildContext, string signToolCommand, IEnumerable<string> fileNames, string additionalCommandLineArguments = null)
+public static void SignFiles(BuildContext buildContext, string signToolCommand, IEnumerable<string> fileNames, string additionalCommandLineArguments)
 {    
     if (fileNames.Any())
     {
@@ -118,14 +132,8 @@ public static void SignFiles(BuildContext buildContext, string signToolCommand, 
 
 //-------------------------------------------------------------
 
-public static void SignFile(BuildContext buildContext, string signToolCommand, string fileName, string additionalCommandLineArguments = null)
+public static void SignFile(BuildContext buildContext, string signToolCommand, string fileName, string additionalCommandLineArguments)
 {
-    // Skip code signing in specific scenarios
-    if (string.IsNullOrWhiteSpace(signToolCommand))
-    {
-        return;
-    }
-
     var codeSignContext = buildContext.General.CodeSign;
     var azureCodeSignContext = buildContext.General.AzureCodeSign;
 
@@ -146,6 +154,19 @@ public static void SignFile(BuildContext buildContext, string signToolCommand, s
     if (azureCodeSignContext.IsAvailable)
     {
         signToolFileName = _azureSignToolFileName;
+    }
+
+    SignFile(buildContext, signToolFileName, signToolCommand, fileName, additionalCommandLineArguments);
+}
+
+//-------------------------------------------------------------
+
+public static void SignFile(BuildContext buildContext, string signToolFileName, string signToolCommand, string fileName, string additionalCommandLineArguments)
+{
+    // Skip code signing in specific scenarios
+    if (string.IsNullOrWhiteSpace(signToolCommand))
+    {
+        return;
     }
 
     if (string.IsNullOrWhiteSpace(signToolFileName))
@@ -170,6 +191,8 @@ public static void SignFile(BuildContext buildContext, string signToolCommand, s
             RedirectStandardError = true,
             RedirectStandardOutput = true
         };
+
+        // Note: we can safely use SignTool.exe here
 
         using (var checkProcess = buildContext.CakeContext.StartAndReturnProcess(_signToolFileName, checkProcessSettings))
         {
@@ -225,6 +248,57 @@ public static void SignFile(BuildContext buildContext, string signToolCommand, s
 
 //-------------------------------------------------------------
 
+public static void SignNuGetPackage(BuildContext buildContext, string fileName)
+{
+    var codeSignContext = buildContext.General.CodeSign;
+    var azureCodeSignContext = buildContext.General.AzureCodeSign;
+
+    if (buildContext.General.IsCiBuild || 
+        buildContext.General.IsLocalBuild)
+    {
+        return;
+    }
+    
+    buildContext.CakeContext.Information($"Signing NuGet package '{fileName}'");
+
+    if (azureCodeSignContext.IsAvailable)
+    {
+        var signToolFileName = FindNuGetAzureSignToolFileName(buildContext);
+        var signToolCommandLine = string.Format("sign -kvu {0} -kvt {1} -kvi {2} -kvs {3} -kvc {4} -tr {5} -fd {6}", 
+            azureCodeSignContext.VaultUrl,
+            azureCodeSignContext.TenantId,
+            azureCodeSignContext.ClientId,
+            azureCodeSignContext.ClientSecret,
+            azureCodeSignContext.CertificateName,
+            azureCodeSignContext.TimeStampUri,
+            azureCodeSignContext.HashAlgorithm);
+
+        var finalCommand = $"{signToolFileName} {signToolCommandLine} {fileName}";
+
+        buildContext.CakeContext.Information($"{finalCommand}'");
+
+        SignFile(buildContext, signToolFileName, signToolCommandLine, fileName, null);
+
+        return;
+    }
+
+    if  (codeSignContext.IsAvailable)
+    {
+        var exitCode = buildContext.CakeContext.StartProcess(buildContext.General.NuGet.Executable, new ProcessSettings
+        {
+            Arguments = $"sign \"{fileName}\" -CertificateSubjectName \"{codeSignContext.CertificateSubjectName}\" -Timestamper \"{codeSignContext.TimeStampUri}\""
+        });
+
+        buildContext.CakeContext.Information("Signing NuGet package exited with '{0}'", exitCode);
+
+        return;
+    }
+    
+    throw new NotSupportedException("No supported code signing method could be found");
+}
+
+//-------------------------------------------------------------
+
 public static string FindSignToolFileName(BuildContext buildContext)
 {
     var directory = FindLatestWindowsKitsDirectory(buildContext);
@@ -240,5 +314,53 @@ public static string FindSignToolFileName(BuildContext buildContext)
 
 public static string FindAzureSignToolFileName(BuildContext buildContext)
 {
-    return "AzureSignTool";
+    var path = buildContext.CakeContext.Tools.Resolve("AzureSignTool.exe");
+
+    buildContext.CakeContext.Information("Found path '{0}'", path);
+
+    return path.FullPath;
+}
+
+//-------------------------------------------------------------
+
+public static string FindNuGetAzureSignToolFileName(BuildContext buildContext)
+{
+    var path = buildContext.CakeContext.Tools.Resolve("NuGetKeyVaultSignTool.exe");
+
+    buildContext.CakeContext.Information("Found path '{0}'", path);
+
+    return path.FullPath;
+}
+
+//-------------------------------------------------------------
+
+public static string GetSignToolCommandLine(BuildContext buildContext)
+{
+    var codeSignContext = buildContext.General.CodeSign;
+    var azureCodeSignContext = buildContext.General.AzureCodeSign;
+
+    var signToolCommand = string.Empty;
+
+    if (codeSignContext.IsAvailable)
+    {
+        signToolCommand = string.Format("sign /a /t {0} /n {1} /fd {2}", 
+            codeSignContext.TimeStampUri, 
+            codeSignContext.CertificateSubjectName, 
+            codeSignContext.HashAlgorithm);
+    }
+
+    // Note: Azure always wins
+    if (azureCodeSignContext.IsAvailable)
+    {
+        signToolCommand = string.Format("sign -kvu {0} -kvt {1} -kvi {2} -kvs {3} -kvc {4} -tr {5} -fd {6}", 
+            azureCodeSignContext.VaultUrl,
+            azureCodeSignContext.TenantId,
+            azureCodeSignContext.ClientId,
+            azureCodeSignContext.ClientSecret,
+            azureCodeSignContext.CertificateName,
+            azureCodeSignContext.TimeStampUri,
+            azureCodeSignContext.HashAlgorithm);
+    }
+
+    return signToolCommand;
 }
