@@ -140,7 +140,7 @@ public static void SignFile(BuildContext buildContext, string signToolCommand, s
     if (string.IsNullOrWhiteSpace(_signToolFileName))
     {
         // Always fetch, it is used for verification
-        _signToolFileName = FindSignToolFileName(buildContext);   
+        _signToolFileName = FindWindowsSignToolFileName(buildContext);   
     }
 
     if (string.IsNullOrWhiteSpace(_azureSignToolFileName))
@@ -299,7 +299,7 @@ public static void SignNuGetPackage(BuildContext buildContext, string fileName)
 
 //-------------------------------------------------------------
 
-public static string FindSignToolFileName(BuildContext buildContext)
+public static string FindWindowsSignToolFileName(BuildContext buildContext)
 {
     var directory = FindLatestWindowsKitsDirectory(buildContext);
     if (directory != null)
@@ -330,6 +330,27 @@ public static string FindNuGetAzureSignToolFileName(BuildContext buildContext)
     buildContext.CakeContext.Information("Found path '{0}'", path);
 
     return path.FullPath;
+}
+
+//-------------------------------------------------------------
+
+public static string GetSignToolFileName(BuildContext buildContext)
+{
+    var codeSignContext = buildContext.General.CodeSign;
+    var azureCodeSignContext = buildContext.General.AzureCodeSign;
+
+    // Azure first
+    if (azureCodeSignContext.IsAvailable)
+    {
+        return FindAzureSignToolFileName(buildContext);
+    }
+
+    if (codeSignContext.IsAvailable)
+    {
+        return FindWindowsSignToolFileName(buildContext);
+    }
+
+    return string.Empty;
 }
 
 //-------------------------------------------------------------
