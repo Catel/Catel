@@ -6,6 +6,7 @@
     using System.ComponentModel;
     using IoC;
     using MVVM;
+    using System.Linq;
 
     /// <summary>
     /// Class containing environment information.
@@ -20,9 +21,10 @@
 
         private static bool _bypassDevEnvCheck;
         private static bool? _isInDesignMode;
+        private static bool? _isInTestMode;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the environment is currently in design mode.
+        /// Gets a value indicating whether the environment is currently in design mode.
         /// </summary>
         /// <value>
         /// <c>true</c> if the environment is in design mode; otherwise, <c>false</c>.
@@ -42,6 +44,43 @@
                 }
 
                 return _isInDesignMode.Value;
+            }
+        }
+
+        /// <summary>
+        /// Get a value indicating whether the environment is currently in unit test mode.
+        /// </summary>
+        public static bool IsInTestMode
+        {
+            get
+            {
+                if (_isInTestMode is null)
+                {
+                    _isInTestMode = AppDomain.CurrentDomain.GetAssemblies().Any(x =>
+                    {
+                        var fullName = x.FullName;
+                        if (string.IsNullOrEmpty(fullName))
+                        {
+                            return false;
+                        }
+
+                        if (fullName.StartsWithIgnoreCase("testhost,"))
+                        {
+                            return true;
+                        }
+
+                        // Note: this might potentially not work when using Catel inside a 
+                        // vs extension, but we will see if someone reports anything about this
+                        if (fullName.StartsWithIgnoreCase("Microsoft.TestPlatform"))
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    });
+                }
+
+                return _isInTestMode.Value;
             }
         }
 

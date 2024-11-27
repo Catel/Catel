@@ -27,7 +27,13 @@
 
             var buffer = new byte[length];
 
+#if NET7_0_OR_GREATER
+            stream.ReadExactly(buffer, 0, length);
+#else
+#pragma warning disable CA2022 // Avoid inexact read with 'Stream.Read'
             stream.Read(buffer, 0, length);
+#pragma warning restore CA2022 // Avoid inexact read with 'Stream.Read'
+#endif
 
             return buffer;
         }

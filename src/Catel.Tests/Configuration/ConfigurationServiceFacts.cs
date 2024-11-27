@@ -125,11 +125,48 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
+            public async Task Returns_Existing_Complex_Value_Async(ConfigurationContainer container)
+            {
+                var configurationService = await GetConfigurationServiceAsync();
+
+                var testObject = new ComplexObject
+                {
+                    ValueA = "Test83123",
+                    ValueB = 42
+                };
+
+                configurationService.SetValue(container, "myComplexKey", testObject);
+
+                var result = configurationService.GetValue<ComplexObject>(container, "myComplexKey");
+                Assert.Multiple(() =>
+                {
+                    Assert.That(testObject.ValueA, Is.EqualTo(result.ValueA));
+                    Assert.That(testObject.ValueB, Is.EqualTo(result.ValueB));
+                });
+            }
+
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
             public async Task ReturnsDefaultValueForNonExistingValueAsync(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
                 Assert.That(configurationService.GetValue(container, "nonExistingKey", "nonExistingValue"), Is.EqualTo("nonExistingValue"));
+            }
+
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public async Task ReturnsDefaultValueForNonExistingComplexValueAsync(ConfigurationContainer container)
+            {
+                var configurationService = await GetConfigurationServiceAsync();
+
+                var defaultValue = new ComplexObject
+                {
+                    ValueA = "Test8312",
+                    ValueB = 5421
+                };
+
+                Assert.That(configurationService.GetValue(container, "nonExistingKey", defaultValue), Is.EqualTo(defaultValue));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -174,6 +211,28 @@
                 configurationService.SetValue(container, "myKey", "myValue");
 
                 Assert.That(configurationService.GetValue<string>(container, "myKey"), Is.EqualTo("myValue"));
+            }
+
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public async Task SetsComplexValueCorrectlyAsync(ConfigurationContainer container)
+            {
+                var configurationService = await GetConfigurationServiceAsync();
+
+                var testObject = new ComplexObject
+                {
+                    ValueA = "Test83123",
+                    ValueB = 42
+                };
+
+                configurationService.SetValue(container, "myComplexKey", testObject);
+
+                var result = configurationService.GetValue<ComplexObject>(container, "myComplexKey");
+                Assert.Multiple(() =>
+                {
+                    Assert.That(testObject.ValueA, Is.EqualTo(result.ValueA));
+                    Assert.That(testObject.ValueB, Is.EqualTo(result.ValueB));
+                });
             }
 
             [TestCase(ConfigurationContainer.Local)]

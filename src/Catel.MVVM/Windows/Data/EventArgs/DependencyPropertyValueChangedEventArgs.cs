@@ -18,7 +18,6 @@
         internal DependencyPropertyValueChangedEventArgs(string propertyName, DependencyPropertyChangedEventArgs e)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            ArgumentNullException.ThrowIfNull(e);
             
             FxEventArgs = e;
             PropertyName = propertyName;
