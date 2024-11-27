@@ -440,6 +440,35 @@ private static bool IsCppProject(string projectName)
     return projectName.EndsWith(".vcxproj");
 }
 
+//--------------------------------------------------------------
+
+private static bool IsPackageContainerProject(BuildContext buildContext, string projectName)
+{
+    var isPackageContainer = false;
+
+    var projectFileName = CreateInlinedProjectXml(buildContext, projectName);
+
+    var projectFileContents = System.IO.File.ReadAllText(projectFileName);
+
+    var xmlDocument = XDocument.Parse(projectFileContents);
+    var projectElement = xmlDocument.Root;
+
+    foreach (var propertyGroupElement in projectElement.Elements("PropertyGroup"))
+    {
+        var packageContainerElement = propertyGroupElement.Element("PackageContainer");
+        if (packageContainerElement != null)
+        {
+            if (packageContainerElement.Value.ToLower() == "true")
+            {
+                isPackageContainer = true;
+            }
+            break;
+        }
+    }
+
+    return isPackageContainer;
+}
+
 //-------------------------------------------------------------
 
 private static bool IsBlazorProject(BuildContext buildContext, string projectName)
@@ -488,16 +517,7 @@ private static bool IsDotNetCoreProject(BuildContext buildContext, string projec
             var lowerCase = line.ToLower();
             if (lowerCase.Contains("targetframework"))
             {
-                if (lowerCase.Contains("netcore"))
-                {
-                    isDotNetCore = true;
-                    break;
-                }
-
-                if (lowerCase.Contains("net5") ||
-                    lowerCase.Contains("net6") ||
-                    lowerCase.Contains("net7") ||
-                    lowerCase.Contains("net8"))
+                if (IsDotNetCoreTargetFramework(buildContext, lowerCase))
                 {
                     isDotNetCore = true;
                     break;
@@ -509,6 +529,30 @@ private static bool IsDotNetCoreProject(BuildContext buildContext, string projec
     }
 
     return _dotNetCoreCache[projectFileName];
+}
+
+//-------------------------------------------------------------
+
+private static bool IsDotNetCoreTargetFramework(BuildContext buildContext, string targetFramework)
+{
+    var lowerCase = targetFramework.ToLower();
+
+    if (lowerCase.Contains("netcore"))
+    {
+        return true;
+    }
+
+    if (lowerCase.Contains("net5") ||
+        lowerCase.Contains("net6") ||
+        lowerCase.Contains("net7") ||
+        lowerCase.Contains("net8") ||
+        lowerCase.Contains("net9") ||
+        lowerCase.Contains("net10"))
+    {
+        return true;
+    }
+
+    return false;
 }
 
 //-------------------------------------------------------------
@@ -595,9 +639,43 @@ private static bool ShouldProcessProject(BuildContext buildContext, string proje
     return true;
 }
 
+private static string CreateInlinedProjectXml(BuildContext buildContext, string projectName)
+{
+    buildContext.CakeContext.Information($"Running 'msbuild /pp' for project '{projectName}'");
+
+    var projectInlinedFileName = System.IO.Path.Combine(GetProjectOutputDirectory(buildContext, projectName),
+        "..", $"{projectName}.inlined.xml");
+
+    // Note: disabled caching until we correctly clean up everything
+    //if (!buildContext.CakeContext.FileExists(projectInlinedFileName))
+    {
+        // Run "msbuild /pp" to create a single project file
+        
+        var msBuildSettings = new MSBuildSettings 
+        {
+            Verbosity = Verbosity.Quiet,
+            ToolVersion = MSBuildToolVersion.Default,
+            Configuration = buildContext.General.Solution.ConfigurationName,
+            MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
+            PlatformTarget = PlatformTarget.MSIL
+        };
+
+        ConfigureMsBuild(buildContext, msBuildSettings, projectName, "pp");
+
+        msBuildSettings.Target = string.Empty;
+        msBuildSettings.ArgumentCustomization = args => args.Append($"/pp:{projectInlinedFileName}");
+
+        var projectFileName = GetProjectFileName(buildContext, projectName);
+
+        RunMsBuild(buildContext, projectName, projectFileName, msBuildSettings, "pp");
+    }
+
+    return projectInlinedFileName;
+}
+
 //-------------------------------------------------------------
 
-private static List<string> GetProjectRuntimesIdentifiers(BuildContext buildContext, Cake.Core.IO.FilePath solutionOrProjectFileName, List<string> runtimeIdentifiersToInvestigate)
+private static List<string> GetProjectRuntimesIdentifiers(BuildContext buildContext, Cake.Core.IO.FilePath solutionOrProjectFileName, IReadOnlyList<string> runtimeIdentifiersToInvestigate)
 {
     var projectFileContents = System.IO.File.ReadAllText(solutionOrProjectFileName.FullPath)?.ToLower();
 
@@ -607,7 +685,7 @@ private static List<string> GetProjectRuntimesIdentifiers(BuildContext buildCont
     {
         if (!string.IsNullOrWhiteSpace(runtimeIdentifier))
         {
-            if (!projectFileContents.Contains(runtimeIdentifier.ToLower()))
+            if (!projectFileContents.Contains(runtimeIdentifier, StringComparison.OrdinalIgnoreCase))
             {
                 buildContext.CakeContext.Information("Project '{0}' does not support runtime identifier '{1}', removing from supported runtime identifiers list", solutionOrProjectFileName, runtimeIdentifier);
                 continue;

@@ -44,6 +44,17 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether the current environment is in test mode.
+        /// </summary>
+        protected virtual bool IsInTestMode
+        {
+            get
+            {
+                return CatelEnvironment.IsInTestMode;
+            }
+        }
+
+        /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
         /// <param name="action">The action.</param>
@@ -52,7 +63,13 @@
         {
             ArgumentNullException.ThrowIfNull(action);
 
-            return CurrentDispatcher.InvokeAsync(action).Task;
+            var dispatcher = CurrentDispatcher;
+
+            var task = dispatcher.InvokeAsync(action).Task;
+
+            ProcessEventsDuringTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -67,7 +84,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+
+            ProcessEventsDuringTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -82,7 +103,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, func);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, func);
+
+            ProcessEventsDuringTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -96,7 +121,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
+
+            ProcessEventsDuringTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -111,7 +140,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
+
+            ProcessEventsDuringTests(dispatcher);
+
+            return task;
         }
         /// <summary>
         /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value.
@@ -125,7 +158,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
+
+            ProcessEventsDuringTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -141,7 +178,11 @@
 
             var dispatcher = CurrentDispatcher;
 
-            return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
+            var task = DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
+
+            ProcessEventsDuringTests(dispatcher);
+
+            return task;
         }
 
         /// <summary>
@@ -171,6 +212,37 @@
 
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.BeginInvoke(dispatcher, action, onlyBeginInvokeWhenNoAccess);
+
+            ProcessEventsDuringTests(dispatcher);
+        }
+
+        protected virtual void ProcessEventsDuringTests(Dispatcher dispatcher)
+        {
+            if (!IsInTestMode)
+            {
+                return;
+            }
+
+            DispatcherUtil.DoEvents(dispatcher);
+        }
+
+        /// <summary>
+        /// Dispatcher util comes from https://stackoverflow.com/questions/1106881/using-the-wpf-dispatcher-in-unit-tests.
+        /// </summary>
+        private static class DispatcherUtil
+        {
+            public static void DoEvents(Dispatcher dispatcher)
+            {
+                var frame = new DispatcherFrame();
+                dispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(ExitFrame), frame);
+                Dispatcher.PushFrame(frame);
+            }
+
+            private static object? ExitFrame(object frame)
+            {
+                ((DispatcherFrame)frame).Continue = false;
+                return null;
+            }
         }
     }
 }

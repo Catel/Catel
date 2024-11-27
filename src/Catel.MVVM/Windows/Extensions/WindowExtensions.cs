@@ -148,6 +148,17 @@
         {
             ArgumentNullException.ThrowIfNull(window);
 
+            if (!IsShowingAsDialog(window))
+            {
+                return false;
+            }
+
+            // Assume true, at this stage we are willing to take the first chance exception if we need to
+            return true;
+        }
+
+        public static bool IsShowingAsDialog(this SystemWindow window)
+        {
             // See #1616, not fully reliable, so we can only exit if this returns *false*
             if (!ComponentDispatcher.IsThreadModal)
             {
@@ -168,7 +179,6 @@
                 }
             }
 
-            // Assume true, at this stage we are willing to take the first chance exception if we need to
             return true;
         }
 

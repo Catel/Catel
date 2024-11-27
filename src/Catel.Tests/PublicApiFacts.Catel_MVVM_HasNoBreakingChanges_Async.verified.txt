@@ -18,6 +18,7 @@ namespace Catel
     {
         public const string DefaultMultiLingualDependencyPropertyValue = "SET IN CONSTRUCTOR TO SUPPORT RUNTIME LANGUAGE SWITCHING";
         public static bool IsInDesignMode { get; }
+        public static bool IsInTestMode { get; }
         public static System.Windows.Window? MainWindow { get; }
         public static bool BypassDevEnvCheck { get; set; }
         public static bool DisablePropertyChangeNotifications { get; set; }
@@ -1619,6 +1620,7 @@ namespace Catel.Services
     {
         public DispatcherService(Catel.Services.IDispatcherProviderService dispatcherProviderService) { }
         protected virtual System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
+        protected virtual bool IsInTestMode { get; }
         public virtual void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true) { }
         public virtual void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true) { }
         public virtual System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
@@ -1628,6 +1630,7 @@ namespace Catel.Services
         public virtual System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
         public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
         public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
+        protected virtual void ProcessEventsDuringTests(System.Windows.Threading.Dispatcher dispatcher) { }
     }
     public abstract class FileServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.IFileSupport
     {
@@ -1972,6 +1975,7 @@ namespace Catel.Services
     {
         protected readonly System.Collections.Generic.Dictionary<string, System.Type> RegisteredWindows;
         public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator, Catel.Services.IDispatcherService dispatcherService) { }
+        protected virtual bool ThrowExceptionWhenClosingWithModalChildWindows { get; }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(Catel.Services.UIVisualizerContext context) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, Catel.Services.UIVisualizerContext context) { }
         protected virtual void EnsureViewIsRegistered(string name) { }
@@ -2204,6 +2208,7 @@ namespace Catel.Windows
         public static void BringWindowToTop(this System.Windows.Window window) { }
         public static bool CanSetDialogResult(this System.Windows.Window window) { }
         public static System.IntPtr GetWindowHandle(this System.Windows.Window window) { }
+        public static bool IsShowingAsDialog(this System.Windows.Window window) { }
         public static bool IsValidAsOwnerWindow(this System.Windows.Window window) { }
         public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
         public static void SetOwnerWindow(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }
@@ -2856,5 +2861,19 @@ namespace Catel.Windows.Threading
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
+    }
+    public class DispatcherTimerEx
+    {
+        protected readonly Catel.Services.IDispatcherService _dispatcherService;
+        public DispatcherTimerEx(Catel.Services.IDispatcherService dispatcherService) { }
+        public virtual System.TimeSpan Interval { get; set; }
+        public virtual bool IsEnabled { get; set; }
+        public virtual bool OnlyBeginInvokeIfRequired { get; set; }
+        public virtual bool PreventDuplicateTicks { get; set; }
+        public virtual object? Tag { get; set; }
+        public event System.EventHandler<System.EventArgs>? Tick;
+        protected virtual void RaiseEvent() { }
+        public virtual void Start() { }
+        public virtual void Stop() { }
     }
 }
