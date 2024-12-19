@@ -187,10 +187,11 @@
 
             var path = System.IO.Path.Combine(rootDirectory, companyName, productName);
 
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            // Note: don't create the directory, see https://github.com/Catel/Catel/issues/2289
+            //if (!Directory.Exists(path))
+            //{
+            //    Directory.CreateDirectory(path);
+            //}
 
             return path;
         }
