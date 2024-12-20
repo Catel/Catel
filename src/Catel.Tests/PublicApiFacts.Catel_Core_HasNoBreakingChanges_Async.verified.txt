@@ -2346,7 +2346,9 @@ namespace Catel.Logging
         public FileLogListener(string filePath, int maxSizeInKiloBytes, System.Reflection.Assembly? assembly = null) { }
         public string FilePath { get; set; }
         public int MaxSizeInKiloBytes { get; set; }
+        protected virtual void CreateDirectory(string directory) { }
         protected virtual string DetermineFilePath(string filePath) { }
+        protected virtual string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget target, string company, string product) { }
         protected override System.Threading.Tasks.Task WriteBatchAsync(System.Collections.Generic.List<Catel.Logging.LogBatchEntry> batchEntries) { }
         public static class FilePathKeyword
         {
