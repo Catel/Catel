@@ -13,11 +13,23 @@
         public class The_Constructor
         {
             [TestCase]
-            public void Does_Not_Invoke_Path_Methods()
+            public void Does_Not_Invoke_Path_Methods_01()
             {
                 var assembly = GetType().Assembly;
 
                 var fileLogListener = new CustomFileLogListener();
+
+                Assert.That(fileLogListener.HasCreatedDirectory, Is.False);
+                Assert.That(fileLogListener.FilePath, Is.Not.Empty);
+                Assert.That(fileLogListener.HasCreatedDirectory, Is.True);
+            }
+
+            [TestCase]
+            public void Does_Not_Invoke_Path_Methods_02()
+            {
+                var assembly = GetType().Assembly;
+
+                var fileLogListener = new CustomFileLogListener("some-path");
 
                 Assert.That(fileLogListener.HasCreatedDirectory, Is.False);
                 Assert.That(fileLogListener.FilePath, Is.Not.Empty);
@@ -64,6 +76,16 @@
 
         private class CustomFileLogListener : FileLogListener
         {
+            public CustomFileLogListener()
+            {
+                
+            }
+
+            public CustomFileLogListener(string path)
+                : base(path, 10000)
+            {
+            }
+
             public bool HasCreatedDirectory { get { return Calls.Any(); } }
 
             public List<string> Calls { get; private set; } = new List<string>();

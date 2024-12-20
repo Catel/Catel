@@ -94,7 +94,9 @@
 
         private readonly string AutoLogFileNameReplacement = $"{FilePathKeyword.AssemblyName}_{FilePathKeyword.Date}_{FilePathKeyword.Time}_{FilePathKeyword.ProcessId}";
 
-        private Assembly _assembly;
+        private readonly string? _providedFilePath;
+        private readonly Assembly _assembly;
+
         private string? _filePath;
 
         /// <summary>
@@ -121,7 +123,7 @@
 
             _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
 
-            FilePath = filePath;
+            _providedFilePath = filePath;
             MaxSizeInKiloBytes = maxSizeInKiloBytes;
         }
 
@@ -135,7 +137,14 @@
             {
                 if (_filePath is null)
                 {
-                    Initialize(true);
+                    if (!string.IsNullOrWhiteSpace(_providedFilePath))
+                    {
+                        _filePath = DetermineFilePath(_providedFilePath);
+                    }
+                    else
+                    {
+                        Initialize(true);
+                    }
                 }
 
                 return _filePath!;
