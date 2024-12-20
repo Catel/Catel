@@ -95,7 +95,7 @@
         private readonly string AutoLogFileNameReplacement = $"{FilePathKeyword.AssemblyName}_{FilePathKeyword.Date}_{FilePathKeyword.Time}_{FilePathKeyword.ProcessId}";
 
         private Assembly _assembly;
-        private string _filePath = string.Empty;
+        private string? _filePath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogListener" /> class.
@@ -104,8 +104,6 @@
         public FileLogListener(Assembly? assembly = null)
         {
             _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-
-            Initialize(true);
 
             MaxSizeInKiloBytes = 1000 * 10; // 10 MB
         }
@@ -122,8 +120,6 @@
             Argument.IsNotNullOrWhitespace(nameof(filePath), filePath);
 
             _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-            
-            Initialize(false);
 
             FilePath = filePath;
             MaxSizeInKiloBytes = maxSizeInKiloBytes;
@@ -135,7 +131,15 @@
         /// <value>The file path.</value>
         public string FilePath
         {
-            get { return _filePath; }
+            get
+            {
+                if (_filePath is null)
+                {
+                    Initialize(true);
+                }
+
+                return _filePath!;
+            }
             set { _filePath = DetermineFilePath(value); }
         }
 

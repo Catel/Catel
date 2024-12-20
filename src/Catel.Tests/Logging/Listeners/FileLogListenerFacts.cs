@@ -10,6 +10,22 @@
     public class FileLogListenerFacts
     {
         [TestFixture]
+        public class The_Constructor
+        {
+            [TestCase]
+            public void Does_Not_Invoke_Path_Methods()
+            {
+                var assembly = GetType().Assembly;
+
+                var fileLogListener = new CustomFileLogListener();
+
+                Assert.That(fileLogListener.HasCreatedDirectory, Is.False);
+                Assert.That(fileLogListener.FilePath, Is.Not.Empty);
+                Assert.That(fileLogListener.HasCreatedDirectory, Is.True);
+            }
+        }
+
+        [TestFixture]
         public class The_FilePath_Property
         {
             [TestCase(@"myapp.log", @"{AppData}\CatenaLogic\Catel.Tests\myapp.log")]
@@ -41,19 +57,20 @@
 
                 var fileLogListener = new CustomFileLogListener();
 
+                Assert.That(fileLogListener.FilePath, Is.Not.Empty);
                 Assert.That(fileLogListener.Calls.Count, Is.Not.EqualTo(0));
             }
+        }
 
-            private class CustomFileLogListener : FileLogListener
+        private class CustomFileLogListener : FileLogListener
+        {
+            public bool HasCreatedDirectory { get { return Calls.Any(); } }
+
+            public List<string> Calls { get; private set; } = new List<string>();
+
+            protected override void CreateDirectory(string directory)
             {
-                public bool HasCreatedDirectory { get { return Calls.Any(); } }
-
-                public List<string> Calls { get; private set; } = new List<string>();
-
-                protected override void CreateDirectory(string directory)
-                {
-                    Calls.Add(directory);
-                }
+                Calls.Add(directory);
             }
         }
     }
