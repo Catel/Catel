@@ -94,8 +94,10 @@
 
         private readonly string AutoLogFileNameReplacement = $"{FilePathKeyword.AssemblyName}_{FilePathKeyword.Date}_{FilePathKeyword.Time}_{FilePathKeyword.ProcessId}";
 
-        private Assembly _assembly;
-        private string _filePath = string.Empty;
+        private readonly string? _providedFilePath;
+        private readonly Assembly _assembly;
+
+        private string? _filePath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogListener" /> class.
@@ -104,8 +106,6 @@
         public FileLogListener(Assembly? assembly = null)
         {
             _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-
-            Initialize(true);
 
             MaxSizeInKiloBytes = 1000 * 10; // 10 MB
         }
@@ -122,10 +122,8 @@
             Argument.IsNotNullOrWhitespace(nameof(filePath), filePath);
 
             _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-            
-            Initialize(false);
 
-            FilePath = filePath;
+            _providedFilePath = filePath;
             MaxSizeInKiloBytes = maxSizeInKiloBytes;
         }
 
@@ -135,7 +133,22 @@
         /// <value>The file path.</value>
         public string FilePath
         {
-            get { return _filePath; }
+            get
+            {
+                if (_filePath is null)
+                {
+                    if (!string.IsNullOrWhiteSpace(_providedFilePath))
+                    {
+                        _filePath = DetermineFilePath(_providedFilePath);
+                    }
+                    else
+                    {
+                        Initialize(true);
+                    }
+                }
+
+                return _filePath!;
+            }
             set { _filePath = DetermineFilePath(value); }
         }
 
@@ -178,11 +191,11 @@
 
             if (_assembly is not null)
             {
-                dataDirectory = IO.Path.GetApplicationDataDirectory(company, product);
+                dataDirectory = GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, company, product);
             }
             else
             {
-                dataDirectory = IO.Path.GetApplicationDataDirectory();
+                dataDirectory = GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, string.Empty, string.Empty);
             }
 
             if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyName))
@@ -222,8 +235,8 @@
 
             if (filePath.Contains(FilePathKeyword.AppDataLocal))
             {
-                var dataDirectoryLocal = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal, company, product)
-                                                            : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal);
+                var dataDirectoryLocal = _assembly is not null ? GetApplicationDataDirectory(ApplicationDataTarget.UserLocal, company, product)
+                                                            : GetApplicationDataDirectory(ApplicationDataTarget.UserLocal, string.Empty, string.Empty);
 
 
                 filePath = filePath.Replace(FilePathKeyword.AppDataLocal, dataDirectoryLocal);
@@ -231,8 +244,8 @@
 
             if (filePath.Contains(FilePathKeyword.AppDataRoaming))
             {
-                var dataDirectoryRoaming = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, company, product)
-                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming);
+                var dataDirectoryRoaming = _assembly is not null ? GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, company, product)
+                                                             : GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, string.Empty, string.Empty);
 
 
                 filePath = filePath.Replace(FilePathKeyword.AppDataRoaming, dataDirectoryRoaming);
@@ -240,8 +253,8 @@
 
             if (filePath.Contains(FilePathKeyword.AppDataMachine))
             {
-                var dataDirectoryMachine = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine, company, product)
-                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine);
+                var dataDirectoryMachine = _assembly is not null ? GetApplicationDataDirectory(ApplicationDataTarget.Machine, company, product)
+                                                             : GetApplicationDataDirectory(ApplicationDataTarget.Machine, string.Empty, string.Empty);
 
                 filePath = filePath.Replace(FilePathKeyword.AppDataMachine, dataDirectoryMachine);
             }
@@ -263,7 +276,36 @@
                 filePath += ".log";
             }
 
+            var finalDirectory = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrWhiteSpace(finalDirectory))
+            {
+                CreateDirectory(finalDirectory);
+            }
+
             return filePath;
+        }
+
+        protected virtual string GetApplicationDataDirectory(ApplicationDataTarget target, string company, string product)
+        {
+            var hasCompany = !string.IsNullOrWhiteSpace(company);
+            var hasProduct = !string.IsNullOrWhiteSpace(product);
+            if (!hasCompany && !hasProduct)
+            {
+                return IO.Path.GetApplicationDataDirectory(target);
+            }
+
+            if (!hasCompany || !hasProduct)
+            {
+                return IO.Path.GetApplicationDataDirectory(target, hasCompany ? company : product);
+            }
+
+            return IO.Path.GetApplicationDataDirectory(target, company, product);
+        }
+
+        protected virtual void CreateDirectory(string directory)
+        {
+            // Note: created to allow overridden behavior
+            Directory.CreateDirectory(directory);
         }
 
         /// <summary>

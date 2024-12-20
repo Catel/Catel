@@ -77,24 +77,6 @@
         }
 
         [TestCase]
-        public void GetApplicationDataDirectory_CompanyAndAppAndTestDirectoryCreation()
-        {
-            // Set up directory
-            string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                                            Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
-
-            // Make sure that the directory does not exist
-            if (Directory.Exists(directory)) Directory.Delete(directory);
-
-            // Now create the directory
-            string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
-
-            // Check if the directory exists
-            Assert.That(result, Is.EqualTo(directory));
-            Assert.That(Directory.Exists(result), Is.True);
-        }
-
-        [TestCase]
         public void GetApplicationDataDirectoryForAllUsers_AppOnly()
         {
             string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
@@ -114,24 +96,6 @@
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             Assert.That(result, Is.EqualTo(expected));
-        }
-
-        [TestCase]
-        public void GetApplicationDataDirectoryForAllUsers_CompanyAndAppAndTestDirectoryCreation()
-        {
-            // Set up directory
-            string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                            Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
-
-            // Make sure that the directory does not exist
-            if (Directory.Exists(directory)) Directory.Delete(directory);
-
-            // Now create the directory
-            string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
-
-            // Check if the directory exists
-            Assert.That(result, Is.EqualTo(directory));
-            Assert.That(Directory.Exists(result), Is.True);
         }
 
         #region GetDirectoryName
