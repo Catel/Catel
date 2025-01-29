@@ -2640,7 +2640,7 @@ namespace Catel.Logging
         public static bool? IsInfoEnabled { get; set; }
         public static bool? IsStatusEnabled { get; set; }
         public static bool? IsWarningEnabled { get; set; }
-        public  static  event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
+        public static event System.EventHandler<Catel.Logging.LogMessageEventArgs>? LogMessage;
         public static Catel.Logging.ILogListener AddDebugListener(bool ignoreCatelLogging = false) { }
         public static void AddListener(Catel.Logging.ILogListener listener) { }
         public static void ClearListeners() { }
@@ -3124,7 +3124,7 @@ namespace Catel.Reflection
         public static bool IsAutomaticInitializationEnabled { get; set; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> ShouldIgnoreTypeEvaluators { get; }
-        public  static  event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs>? AssemblyLoaded;
+        public static event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs>? AssemblyLoaded;
         public static void Clear() { }
         public static System.Type? GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true) { }
         public static System.Type? GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true) { }
