@@ -708,7 +708,7 @@ namespace Catel.Collections
         public FastBindingList(System.Collections.Generic.IEnumerable<T> collection) { }
         public FastBindingList(System.Collections.IEnumerable collection) { }
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; protected set; }
         protected override bool IsSortedCore { get; }
         public bool NotificationsSuspended { get; }
         protected override System.ComponentModel.ListSortDirection SortDirectionCore { get; }
@@ -741,7 +741,7 @@ namespace Catel.Collections
         public FastObservableCollection(System.Collections.Generic.IEnumerable<T> collection) { }
         public FastObservableCollection(System.Collections.IEnumerable collection) { }
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; protected set; }
         public bool NotificationsSuspended { get; }
         public void AddItems(System.Collections.Generic.IEnumerable<T> collection) { }
         public void AddItems(System.Collections.IEnumerable collection) { }
@@ -1473,10 +1473,10 @@ namespace Catel.Data
         protected bool AlwaysInvokeNotifyChanged { get; set; }
         [System.ComponentModel.Browsable(false)]
         [System.Xml.Serialization.XmlIgnore]
-        public bool IsDirty { get; set; }
+        public bool IsDirty { get; protected set; }
         [System.ComponentModel.Browsable(false)]
         [System.Xml.Serialization.XmlIgnore]
-        public bool IsReadOnly { get; set; }
+        public bool IsReadOnly { get; protected set; }
         protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
         protected Catel.Data.IPropertyData GetPropertyData(string name) { }
         protected System.Func<object, TValue>? GetPropertyGetterExpression<TValue>(string propertyName) { }
@@ -2743,7 +2743,7 @@ namespace Catel.Messaging
     {
         protected MessageBase() { }
         protected MessageBase(TData data) { }
-        public TData Data { get; set; }
+        public TData Data { get; protected set; }
         public static void Register(object recipient, System.Action<TMessage> handler, object? tag = null) { }
         protected static void Send(TMessage message, object? tag = null) { }
         public static void SendWith(TData data, object? tag = null) { }
@@ -3121,9 +3121,9 @@ namespace Catel.Reflection
     public static class TypeCache
     {
         public static System.Collections.Generic.IReadOnlyList<string> InitializedAssemblies { get; }
+        public static bool IsAutomaticInitializationEnabled { get; set; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> ShouldIgnoreTypeEvaluators { get; }
-        public static bool IsAutomaticInitializationEnabled { get; set; }
         public  static  event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs>? AssemblyLoaded;
         public static void Clear() { }
         public static System.Type? GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true) { }

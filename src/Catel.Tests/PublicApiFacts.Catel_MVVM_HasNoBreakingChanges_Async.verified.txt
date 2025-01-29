@@ -17,11 +17,11 @@ namespace Catel
     public static class CatelEnvironment
     {
         public const string DefaultMultiLingualDependencyPropertyValue = "SET IN CONSTRUCTOR TO SUPPORT RUNTIME LANGUAGE SWITCHING";
+        public static bool BypassDevEnvCheck { get; set; }
+        public static bool DisablePropertyChangeNotifications { get; set; }
         public static bool IsInDesignMode { get; }
         public static bool IsInTestMode { get; }
         public static System.Windows.Window? MainWindow { get; }
-        public static bool BypassDevEnvCheck { get; set; }
-        public static bool DisablePropertyChangeNotifications { get; set; }
         public static bool GetIsInDesignMode(bool initializeDesignTime) { }
         public static void RegisterDefaultViewModelServices() { }
     }
@@ -672,7 +672,7 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidation]
         protected System.TimeSpan ThrottlingRate { get; set; }
         [Catel.Data.ExcludeFromValidation]
-        public virtual string Title { get; set; }
+        public virtual string Title { get; protected set; }
         [Catel.Data.ExcludeFromValidation]
         public int UniqueIdentifier { get; }
         [Catel.Data.ExcludeFromValidation]
@@ -1224,7 +1224,7 @@ namespace Catel.MVVM.Providers
         protected Catel.MVVM.Views.IView? TargetView { get; set; }
         protected System.Type? TargetViewType { get; }
         public int UniqueIdentifier { get; }
-        public Catel.MVVM.IViewModel? ViewModel { get; set; }
+        public Catel.MVVM.IViewModel? ViewModel { get; protected set; }
         public Catel.MVVM.Providers.LogicViewModelBehavior ViewModelBehavior { get; }
         protected Catel.MVVM.IViewModelFactory ViewModelFactory { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
@@ -1561,7 +1561,7 @@ namespace Catel.Services
     public class DetermineDirectoryContext
     {
         public DetermineDirectoryContext() { }
-        public string? DirectoryName { get; set; }
+        public string? DirectoryName { get; protected set; }
         public string? Filter { get; set; }
         public string? InitialDirectory { get; set; }
         public bool ShowNewFolderButton { get; set; }
@@ -2207,14 +2207,14 @@ namespace Catel.Windows
         public static void ApplyIconFromApplication(this System.Windows.Window window) { }
         public static void BringWindowToTop(this System.Windows.Window window) { }
         public static bool CanSetDialogResult(this System.Windows.Window window) { }
-        public static System.IntPtr GetWindowHandle(this System.Windows.Window window) { }
+        public static nint GetWindowHandle(this System.Windows.Window window) { }
         public static bool IsShowingAsDialog(this System.Windows.Window window) { }
         public static bool IsValidAsOwnerWindow(this System.Windows.Window window) { }
         public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
-        public static void SetOwnerWindow(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }
+        public static void SetOwnerWindow(this System.Windows.Window window, nint owner, bool forceNewOwner = false) { }
         public static void SetOwnerWindow(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = false) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = true) { }
-        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }
+        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, nint owner, bool forceNewOwner = false) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = false) { }
     }
 }
