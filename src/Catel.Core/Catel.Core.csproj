@@ -24,14 +24,6 @@
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
   </ItemGroup>
-  
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.2" />
-  </ItemGroup>  
-    
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
-  </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />

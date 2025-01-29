@@ -34,16 +34,12 @@
     <PackageReference Include="Verify.NUnit" Version="28.9.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
-    <!-- No net6.0 specific packages yet -->
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
-    <!-- No net7.0 specific packages yet -->
-  </ItemGroup>
-
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
     <!-- No net8.0 specific packages yet -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net9.0')) ">
+    <!-- No net9.0 specific packages yet -->
   </ItemGroup>
 
   <ItemGroup>
