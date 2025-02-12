@@ -12,7 +12,6 @@
 #l "notifications.cake"
 #l "generic-tasks.cake"
 #l "apps-uwp-tasks.cake"
-#l "apps-web-tasks.cake"
 #l "apps-wpf-tasks.cake"
 #l "codesigning-tasks.cake"
 #l "components-tasks.cake"
@@ -91,7 +90,6 @@ public class BuildContext : BuildContextBase
     public InstallerIntegration Installer { get; set; }
     public NotificationsIntegration Notifications { get; set; }
     public SourceControlIntegration SourceControl { get; set; }
-    public OctopusDeployIntegration OctopusDeploy { get; set; }
 
     // Contexts
     public GeneralContext General { get; set; }
@@ -106,7 +104,6 @@ public class BuildContext : BuildContextBase
     public ToolsContext Tools { get; set; }
     public UwpContext Uwp { get; set; }
     public VsExtensionsContext VsExtensions { get; set; }
-    public WebContext Web { get; set; }
     public WpfContext Wpf { get; set; }
 
     public List<string> AllProjects { get; private set; }
@@ -154,14 +151,12 @@ Setup<BuildContext>(setupContext =>
     buildContext.Tools = InitializeToolsContext(buildContext, buildContext);
     buildContext.Uwp = InitializeUwpContext(buildContext, buildContext);
     buildContext.VsExtensions = InitializeVsExtensionsContext(buildContext, buildContext);
-    buildContext.Web = InitializeWebContext(buildContext, buildContext);
     buildContext.Wpf = InitializeWpfContext(buildContext, buildContext);
 
     // Other integrations last
     buildContext.IssueTracker = new IssueTrackerIntegration(buildContext);
     buildContext.Installer = new InstallerIntegration(buildContext);
     buildContext.Notifications = new NotificationsIntegration(buildContext);
-    buildContext.OctopusDeploy = new OctopusDeployIntegration(buildContext);
     buildContext.SourceControl = new SourceControlIntegration(buildContext);
 
     setupContext.LogSeparator("Validating build context");
@@ -179,7 +174,6 @@ Setup<BuildContext>(setupContext =>
     buildContext.Processors.Add(new ToolsProcessor(buildContext));
     buildContext.Processors.Add(new UwpProcessor(buildContext));
     buildContext.Processors.Add(new VsExtensionsProcessor(buildContext));
-    buildContext.Processors.Add(new WebProcessor(buildContext));
     buildContext.Processors.Add(new WpfProcessor(buildContext));
     // !!! Note: we add test projects *after* preparing all the other processors, see Prepare task !!!
 
@@ -249,7 +243,6 @@ Task("Prepare")
     buildContext.RegisteredProjects.AddRange(buildContext.Tools.Items);
     buildContext.RegisteredProjects.AddRange(buildContext.Uwp.Items);
     buildContext.RegisteredProjects.AddRange(buildContext.VsExtensions.Items);
-    buildContext.RegisteredProjects.AddRange(buildContext.Web.Items);
     buildContext.RegisteredProjects.AddRange(buildContext.Wpf.Items);
 
     await buildContext.BuildServer.BeforePrepareAsync();
@@ -272,7 +265,6 @@ Task("Prepare")
     buildContext.AllProjects.AddRange(buildContext.Tools.Items);
     buildContext.AllProjects.AddRange(buildContext.Uwp.Items);
     buildContext.AllProjects.AddRange(buildContext.VsExtensions.Items);
-    buildContext.AllProjects.AddRange(buildContext.Web.Items);
     buildContext.AllProjects.AddRange(buildContext.Wpf.Items);
 
     buildContext.CakeContext.LogSeparator("Final check which test projects should be included (1/2)");
@@ -795,7 +787,6 @@ Task("TestNotifications")
     await buildContext.Notifications.NotifyAsync("MyProject", "This is a generic test");
     await buildContext.Notifications.NotifyAsync("MyProject", "This is a component test", TargetType.Component);
     await buildContext.Notifications.NotifyAsync("MyProject", "This is a docker image test", TargetType.DockerImage);
-    await buildContext.Notifications.NotifyAsync("MyProject", "This is a web app test", TargetType.WebApp);
     await buildContext.Notifications.NotifyAsync("MyProject", "This is a wpf app test", TargetType.WpfApp);
     await buildContext.Notifications.NotifyErrorAsync("MyProject", "This is an error");
 });
