@@ -7,7 +7,7 @@
     public partial class MessageMediatorFacts
     {
         [TestFixture]
-        public class TheCleanUpMethod
+        public class The_CleanUp_Method
         {
             [TestCase]
             public void CleanUpWorksWhenNoHandlersRegistered()

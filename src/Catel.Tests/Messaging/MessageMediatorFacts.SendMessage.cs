@@ -1,6 +1,8 @@
 ﻿namespace Catel.Tests.Messaging
 {
     using System;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
     using Catel.Messaging;
     using NUnit.Framework;
 
@@ -73,6 +75,49 @@
 
                 Assert.That(sender.SendMessage(mediator, "test"), Is.False);
                 Assert.That(mediator.GetRegisteredHandlers<string>().Count, Is.EqualTo(0), "SendMessage should auto cleanup");
+            }
+
+            [TestCase]
+            public void Sends_Message_Using_Instance_Function()
+            {
+                var mediator = new MessageMediator();
+                var recipient = new MessageRecipient();
+
+                mediator.Register<string>(this, recipient.OnMessage);
+                mediator.SendMessage("hello world");
+
+                Assert.That(recipient.MessagesReceived, Is.EqualTo(1));
+            }
+
+            [TestCase]
+            public void Sends_Message_Using_Local_Function()
+            {
+                var mediator = new MessageMediator();
+
+                var isCalled = false;
+
+                mediator.Register<string>(this, OnCoding2Received);
+                mediator.SendMessage("hello world");
+
+                void OnCoding2Received(string strValue)
+                {
+                    isCalled = true;
+                }
+
+                Assert.That(isCalled, Is.True);
+            }
+
+            [TestCase]
+            public void Sends_Message_Using_Lambda_Expression()
+            {
+                var mediator = new MessageMediator();
+
+                var isCalled = false;
+
+                mediator.Register<string>(this, strValue => isCalled = true);
+                mediator.SendMessage("hello world");
+
+                Assert.That(isCalled, Is.True);
             }
         }
     }
