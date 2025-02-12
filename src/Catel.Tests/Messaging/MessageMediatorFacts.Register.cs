@@ -37,7 +37,7 @@
             }
 
             [TestCase]
-            public void ReturnsFalsForDoubleRegistration()
+            public void ReturnsFalseForDoubleRegistration()
             {
                 var mediator = new MessageMediator();
                 var recipient = new MessageRecipient();
