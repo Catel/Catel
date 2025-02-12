@@ -200,8 +200,6 @@ public enum TargetType
 
     VsExtension,
 
-    WebApp,
-
     WpfApp
 }
 
@@ -846,12 +844,6 @@ private static bool IsOnlyDependencyProject(BuildContext buildContext, string pr
         buildContext.CakeContext.Information($"Project is list of VS extensions, assuming not dependency only");
         return false;
     }   
-
-    if (buildContext.Web.Items.Contains(projectName))
-    {
-        buildContext.CakeContext.Information($"Project is list of web apps, assuming not dependency only");
-        return false;
-    }  
 
     if (buildContext.Wpf.Items.Contains(projectName))
     {
