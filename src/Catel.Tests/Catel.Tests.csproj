@@ -17,33 +17,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="6.9.1" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.6.0" PrivateAssets="all" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="Moq" Version="4.20.70" />
-    <PackageReference Include="NUnit" Version="4.0.1" PrivateAssets="all" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0">
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="NUnit" Version="4.3.2" PrivateAssets="all" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PublicApiGenerator" Version="11.1.0" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="22.8.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
-    <!-- No net6.0 specific packages yet -->
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net7.0')) ">
-    <!-- No net7.0 specific packages yet -->
+    <PackageReference Include="PublicApiGenerator" Version="11.4.1" PrivateAssets="all" />
+    <PackageReference Include="Verify.NUnit" Version="28.10.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
     <!-- No net8.0 specific packages yet -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net9.0')) ">
+    <!-- No net9.0 specific packages yet -->
   </ItemGroup>
 
   <ItemGroup>
