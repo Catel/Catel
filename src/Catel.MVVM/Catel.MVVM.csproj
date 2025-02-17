@@ -30,7 +30,7 @@
     <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="5.3.1" PrivateAssets="all" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 

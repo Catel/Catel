@@ -2754,6 +2754,7 @@ namespace Catel.Messaging
     public class MessageMediator : Catel.Messaging.IMessageMediator
     {
         public MessageMediator() { }
+        public bool EnableDynamicTargets { get; set; }
         public static Catel.Messaging.IMessageMediator Default { get; }
         public void CleanUp() { }
         public bool IsMessageRegistered(System.Type messageType, object? tag = null) { }

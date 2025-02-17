@@ -48,6 +48,14 @@
         private readonly Dictionary<Type, List<WeakActionInfo>> _registeredHandlers = new Dictionary<Type, List<WeakActionInfo>>();
 
         /// <summary>
+        /// The default constructor.
+        /// </summary>
+        public MessageMediator()
+        {
+            EnableDynamicTargets = true;
+        }
+
+        /// <summary>
         /// Gets the default instance of the message mediator.
         /// </summary>
         /// <value>The default instance.</value>
@@ -55,6 +63,14 @@
         {
             get { return _instance; }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the mediator should allow dynamic targets.
+        /// <para/>
+        /// This will allow the usage of lambdas and local functions as message handlers. This property is introduced
+        /// to allow rollback of the new feature introduced in hotfix 6.0.6.
+        /// </summary>
+        public bool EnableDynamicTargets { get; set; }
 
         /// <summary>
         /// Determines whether the specified message type is registered.
@@ -111,6 +127,14 @@
                     _registeredHandlers.Add(messageType, list);
                 }
 
+                // See https://github.com/Catel/Catel/issues/2308, use real target
+                if (EnableDynamicTargets &&
+                    handler.Target is not null &&
+                    !ReferenceEquals(handler.Target, recipient))
+                {
+                    recipient = handler.Target;
+                }
+
                 var handlerInfo = new WeakActionInfo
                 {
                     Action = new WeakAction<TMessage>(recipient, handler),
@@ -152,7 +176,17 @@
                         var handlerInfo = messageHandlers[i];
                         var weakAction = (IWeakAction<TMessage>)handlerInfo.Action;
 
-                        if (!ReferenceEquals(recipient, weakAction.Target))
+                        var localRecipient = recipient;
+
+                        // See https://github.com/Catel/Catel/issues/2308, use real target
+                        if (EnableDynamicTargets &&
+                            handler.Target is not null &&
+                            !ReferenceEquals(handler.Target, localRecipient))
+                        {
+                            localRecipient = handler.Target;
+                        }
+
+                        if (!ReferenceEquals(localRecipient, weakAction.Target))
                         {
                             continue;
                         }

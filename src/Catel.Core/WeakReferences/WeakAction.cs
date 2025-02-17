@@ -183,6 +183,12 @@
                 throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
+            if (action.Target is not null && action.Target != target)
+            {
+                // Prefer action target, required for local functions / lambdas
+                target = action.Target;
+            }
+
             var targetType = (target is not null) ? target.GetType() : typeof(object);
 #pragma warning disable HAA0101 // Array allocation for params parameter
             var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericType(typeof(TParameter), targetType);
