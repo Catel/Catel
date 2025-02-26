@@ -984,21 +984,21 @@ namespace Catel.MVVM.Converters
         object? Convert(object? sender, object? args);
     }
     public interface IValueConverter : System.Windows.Data.IValueConverter { }
-    [System.Windows.Data.ValueConversion(typeof(string?), typeof(System.Nullable<int>?))]
+    [System.Windows.Data.ValueConversion(typeof(string?), typeof(int?))]
     public class IntToStringConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IntToStringConverter() { }
         protected override object? Convert(object? value, System.Type targetType, object? parameter) { }
         protected override object? ConvertBack(object? value, System.Type targetType, object? parameter) { }
     }
-    [System.Windows.Data.ValueConversion(typeof(System.Nullable<bool>?), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(bool?), typeof(bool))]
     public class IsSelectedConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IsSelectedConverter() { }
         protected override object? Convert(object? value, System.Type targetType, object? parameter) { }
         protected override object? ConvertBack(object? value, System.Type targetType, object? parameter) { }
     }
-    [System.Windows.Data.ValueConversion(typeof(System.Nullable<int>?), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(int?), typeof(bool))]
     public class IsSelectedValueConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IsSelectedValueConverter() { }
@@ -1052,7 +1052,7 @@ namespace Catel.MVVM.Converters
         public ShortDateFormattingConverter() { }
         protected override object? ConvertBack(object? value, System.Type targetType, object? parameter) { }
     }
-    [System.Windows.Data.ValueConversion(typeof(string?), typeof(System.Nullable<int>?))]
+    [System.Windows.Data.ValueConversion(typeof(string?), typeof(int?))]
     public class StringToIntConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public StringToIntConverter() { }
@@ -1171,14 +1171,14 @@ namespace Catel.MVVM.Navigation
     }
     public static class NavigationEventArgsExtensions
     {
+        public static string GetUriWithoutQueryInfo(this string uri) { }
         public static string GetUriWithoutQueryInfo(this System.Windows.Navigation.NavigatingCancelEventArgs e) { }
         public static string GetUriWithoutQueryInfo(this System.Windows.Navigation.NavigationEventArgs e) { }
-        public static string GetUriWithoutQueryInfo(this string uri) { }
+        public static bool IsNavigationForView(this string uriString, System.Type viewType) { }
         public static bool IsNavigationForView(this System.Windows.Navigation.NavigatingCancelEventArgs e, System.Type viewType) { }
         public static bool IsNavigationForView(this System.Windows.Navigation.NavigationEventArgs e, System.Type viewType) { }
-        public static bool IsNavigationForView(this string uriString, System.Type viewType) { }
-        public static bool IsNavigationToExternal(this System.Uri uri) { }
         public static bool IsNavigationToExternal(this string uriString) { }
+        public static bool IsNavigationToExternal(this System.Uri uri) { }
     }
     public enum NavigationMode
     {
@@ -1425,8 +1425,8 @@ namespace Catel.MVVM.Views
         public static object? GetParent(this Catel.MVVM.Views.IView view) { }
         public static System.Windows.FrameworkElement? GetParent(this System.Windows.FrameworkElement element) { }
         public static System.Windows.FrameworkElement[] GetPossibleParents(this System.Windows.FrameworkElement element) { }
-        public static string[] GetProperties(System.Type viewType) { }
         public static string[] GetProperties(this Catel.MVVM.Views.IView view) { }
+        public static string[] GetProperties(System.Type viewType) { }
         public static void SubscribeToPropertyChanged(this Catel.MVVM.Views.IView view, string propertyName, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> handler) { }
     }
     public class ViewLoadEventArgs : System.EventArgs
