@@ -73,7 +73,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
-        /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
+        /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
         public Command(Action execute, Func<bool>? canExecute = null, object? tag = null)
             : this(null, execute, null, canExecute, tag) { }
@@ -82,7 +82,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
-        /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
+        /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
         public Command(Action<TExecuteParameter?> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : this(execute, null, canExecute, null, tag) { }
@@ -92,8 +92,8 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="executeWithParameter">The action to execute with parameter.</param>
         /// <param name="executeWithoutParameter">The action to execute without parameter.</param>
-        /// <param name="canExecuteWithParameter">The function to call to determine wether the command can be executed with parameter.</param>
-        /// <param name="canExecuteWithoutParameter">The function to call to determine wether the command can be executed without parameter.</param>
+        /// <param name="canExecuteWithParameter">The function to call to determine whether the command can be executed with parameter.</param>
+        /// <param name="canExecuteWithoutParameter">The function to call to determine whether the command can be executed without parameter.</param>
         /// <param name="tag">The tag of the command.</param>
         internal Command(Action<TExecuteParameter?>? executeWithParameter, Action? executeWithoutParameter,
             Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter,
@@ -327,7 +327,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
-        /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
+        /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
         public Command(Action execute, Func<bool>? canExecute = null, object? tag = null)
             : base(null, execute, null, canExecute, tag) { }
@@ -336,7 +336,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
-        /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
+        /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
         public Command(Action<TExecuteParameter?> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
             : base(execute, null, canExecute, null, tag) { }
@@ -351,7 +351,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
-        /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
+        /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
         public Command(Action execute, Func<bool>? canExecute = null, object? tag = null)
             : base(execute, canExecute, tag) { }
