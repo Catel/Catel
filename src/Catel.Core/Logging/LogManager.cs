@@ -531,7 +531,7 @@
         /// Gets the catel logger with the specified name.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <param name="alwaysLog">The flag indicating wether or not the logger should always write logging statements regardless of log filter settings.</param>
+        /// <param name="alwaysLog">The flag indicating whether or not the logger should always write logging statements regardless of log filter settings.</param>
         /// <returns>The <see cref="ICatelLog"/> object for the specified type.</returns>
         /// <exception cref="ArgumentException">An element with the same key already exists in the <see cref="LogManager"/> and does not implement <see cref="ICatelLog"/>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>

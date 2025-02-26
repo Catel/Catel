@@ -140,10 +140,10 @@ namespace Catel
         public static TEnum Parse(string input, bool ignoreCase = false) { }
         public static System.Collections.Generic.List<TEnum> ToList() { }
         public static string ToString(TEnum value) { }
-        public static bool TryParse(string input, out TEnum result) { }
         public static bool TryParse(string input, out TEnum? result) { }
-        public static bool TryParse(string input, bool ignoreCase, out TEnum result) { }
+        public static bool TryParse(string input, out TEnum result) { }
         public static bool TryParse(string input, bool ignoreCase, out TEnum? result) { }
+        public static bool TryParse(string input, bool ignoreCase, out TEnum result) { }
         public static class DataBinding
         {
             public static System.Collections.Generic.IList<Catel.IBindableEnum<TEnum>> CreateList(Catel.Enum<TEnum>.DataBinding.FormatEnumName? formatName = null) { }
@@ -1077,33 +1077,33 @@ namespace Catel.Data
         public static object? GetBoxedValue(bool value) { }
         public static object? GetBoxedValue(byte value) { }
         public static object? GetBoxedValue(char value) { }
-        public static object? GetBoxedValue(System.Char? value) { }
         public static object? GetBoxedValue(System.DateTime value) { }
-        public static object? GetBoxedValue(System.DateTime? value) { }
         public static object? GetBoxedValue(decimal value) { }
         public static object? GetBoxedValue(double value) { }
         public static object? GetBoxedValue(short value) { }
         public static object? GetBoxedValue(int value) { }
         public static object? GetBoxedValue(long value) { }
+        public static object? GetBoxedValue(bool? value) { }
+        public static object? GetBoxedValue(byte? value) { }
+        public static object? GetBoxedValue(char? value) { }
+        public static object? GetBoxedValue(System.DateTime? value) { }
+        public static object? GetBoxedValue(decimal? value) { }
+        public static object? GetBoxedValue(double? value) { }
+        public static object? GetBoxedValue(short? value) { }
+        public static object? GetBoxedValue(int? value) { }
+        public static object? GetBoxedValue(long? value) { }
+        public static object? GetBoxedValue(sbyte? value) { }
+        public static object? GetBoxedValue(float? value) { }
+        public static object? GetBoxedValue(ushort? value) { }
+        public static object? GetBoxedValue(uint? value) { }
+        public static object? GetBoxedValue(ulong? value) { }
         public static object? GetBoxedValue(sbyte value) { }
         public static object? GetBoxedValue(float value) { }
         public static object? GetBoxedValue(string value) { }
         public static object? GetBoxedValue(ushort value) { }
         public static object? GetBoxedValue(uint value) { }
         public static object? GetBoxedValue(ulong value) { }
-        public static object? GetBoxedValue(bool? value) { }
-        public static object? GetBoxedValue(byte? value) { }
-        public static object? GetBoxedValue(decimal? value) { }
-        public static object? GetBoxedValue(double? value) { }
-        public static object? GetBoxedValue(float? value) { }
-        public static object? GetBoxedValue(int? value) { }
-        public static object? GetBoxedValue(long? value) { }
         public static object? GetBoxedValue(object? value) { }
-        public static object? GetBoxedValue(sbyte? value) { }
-        public static object? GetBoxedValue(short? value) { }
-        public static object? GetBoxedValue(uint? value) { }
-        public static object? GetBoxedValue(ulong? value) { }
-        public static object? GetBoxedValue(ushort? value) { }
         public static object? GetBoxedValue<TValue>(TValue value)
             where TValue :  notnull { }
     }
@@ -2125,6 +2125,11 @@ namespace Catel.IoC
             where TService :  notnull { }
         public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object? tag = null)
             where TService :  notnull { }
+        public static TServiceImplementation? RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+            where TServiceImplementation :  notnull { }
+        public static TService RegisterRequiredTypeAndInstantiate<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+            where TService :  notnull
+            where TServiceImplementation : TService { }
         public static void RegisterType<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RegisterType<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
             where TService :  notnull { }
@@ -2852,22 +2857,22 @@ namespace Catel.Reflection
     }
     public static class CastExtensions
     {
-        public static TValue CastTo<TValue>(this System.DateTime value) { }
         public static TValue CastTo<TValue>(this bool value) { }
         public static TValue CastTo<TValue>(this byte value) { }
         public static TValue CastTo<TValue>(this char value) { }
+        public static TValue CastTo<TValue>(this System.DateTime value) { }
         public static TValue CastTo<TValue>(this decimal value) { }
         public static TValue CastTo<TValue>(this double value) { }
-        public static TValue CastTo<TValue>(this float value) { }
+        public static TValue CastTo<TValue>(this short value) { }
         public static TValue CastTo<TValue>(this int value) { }
         public static TValue CastTo<TValue>(this long value) { }
         public static TValue CastTo<TValue>(this object value) { }
         public static TValue CastTo<TValue>(this sbyte value) { }
-        public static TValue CastTo<TValue>(this short value) { }
+        public static TValue CastTo<TValue>(this float value) { }
         public static TValue CastTo<TValue>(this string value) { }
+        public static TValue CastTo<TValue>(this ushort value) { }
         public static TValue CastTo<TValue>(this uint value) { }
         public static TValue CastTo<TValue>(this ulong value) { }
-        public static TValue CastTo<TValue>(this ushort value) { }
         public static bool CastToBoolean<TValue>(this TValue value) { }
         public static byte CastToByte<TValue>(this TValue value) { }
         public static char CastToChar<TValue>(this TValue value) { }
