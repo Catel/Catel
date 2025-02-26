@@ -23,7 +23,7 @@
 
             serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
             serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();
-            serviceCollection.TryAddSingleton<IMessageMediator>(MessageMediator.Default);
+            serviceCollection.TryAddSingleton<IMessageMediator, MessageMediator>();
             serviceCollection.TryAddSingleton<IDispatcherService, ShimDispatcherService>();
 
             serviceCollection.TryAddSingleton<IValidatorProvider, AttributeValidatorProvider>();

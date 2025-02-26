@@ -34,11 +34,6 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The static instance of the message mediator.
-        /// </summary>
-        private static readonly IMessageMediator _instance = new MessageMediator();
-
         private readonly object _lockObject = new object();
 
         /// <summary>
@@ -53,15 +48,6 @@
         public MessageMediator()
         {
             EnableDynamicTargets = true;
-        }
-
-        /// <summary>
-        /// Gets the default instance of the message mediator.
-        /// </summary>
-        /// <value>The default instance.</value>
-        public static IMessageMediator Default
-        {
-            get { return _instance; }
         }
 
         /// <summary>
