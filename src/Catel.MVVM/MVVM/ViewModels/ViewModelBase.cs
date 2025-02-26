@@ -767,6 +767,9 @@
                 childViewModel.ClosedAsync -= OnChildViewModelClosedAsync;
 
                 ChildViewModels.RemoveAt(index);
+
+                // #2036: revalidate
+                Validate();
             }
         }
 

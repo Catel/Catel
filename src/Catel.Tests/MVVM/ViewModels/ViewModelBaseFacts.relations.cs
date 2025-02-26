@@ -140,6 +140,71 @@
             Assert.That(childViewModel.HasErrors, Is.True);
         }
 
+        [TestFixture]
+        public class The_RegisterChildViewModel_Method
+        {
+            [Test]
+            public void Throws_ArgumentNullException_For_Null_ChildViewModel()
+            {
+                var viewModel = new TestViewModel();
+
+                Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
+            }
+
+            [Test]
+            public async Task Revalidates_Parent_After_Adding_ChildViewModel_Async()
+            {
+                var parentViewModel = new TestViewModel(new SpecialValidationModel());
+                var childViewModel = new TestViewModel(new SpecialValidationModel());
+
+                await parentViewModel.InitializeViewModelAsync();
+                await childViewModel.InitializeViewModelAsync();
+
+                childViewModel.BusinessRuleErrorWhenEmpty = null;
+
+                Assert.That(parentViewModel.HasErrors, Is.False);
+                Assert.That(childViewModel.HasErrors, Is.True);
+
+                ((IRelationalViewModel)parentViewModel).RegisterChildViewModel(childViewModel);
+
+                Assert.That(parentViewModel.HasErrors, Is.True);
+            }
+        }
+
+        [TestFixture]
+        public class The_UnregisterChildViewModel_Method
+        {
+            [Test]
+            public void Throws_ArgumentNullException_For_Null_ChildViewModel()
+            {
+                var viewModel = new TestViewModel();
+
+                Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).UnregisterChildViewModel(null));
+            }
+
+            [Test]
+            public async Task Revalidates_Parent_After_Removing_ChildViewModel_Async()
+            {
+                var parentViewModel = new TestViewModel(new SpecialValidationModel());
+                var childViewModel = new TestViewModel(new SpecialValidationModel());
+
+                await parentViewModel.InitializeViewModelAsync();
+                await childViewModel.InitializeViewModelAsync();
+
+                ((IRelationalViewModel)parentViewModel).RegisterChildViewModel(childViewModel);
+
+                Assert.That(parentViewModel.HasErrors, Is.False);
+
+                childViewModel.BusinessRuleErrorWhenEmpty = null;
+
+                Assert.That(parentViewModel.HasErrors, Is.True);
+
+                ((IRelationalViewModel)parentViewModel).UnregisterChildViewModel(childViewModel);
+
+                Assert.That(parentViewModel.HasErrors, Is.False);
+            }
+        }
+
 
         [TestFixture]
         public class DeferValidationUntilFirstSaveCallWithChildViewModels
