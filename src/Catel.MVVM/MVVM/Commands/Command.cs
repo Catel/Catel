@@ -35,6 +35,10 @@ namespace Catel.MVVM
 
                 return _authenticationProvider;
             }
+            set
+            {
+                _authenticationProvider = value;
+            }
         }
 
         /// <summary>
@@ -51,6 +55,10 @@ namespace Catel.MVVM
                 }
 
                 return _dispatcherService;
+            }
+            set
+            {
+                _dispatcherService = value;
             }
         }
     }

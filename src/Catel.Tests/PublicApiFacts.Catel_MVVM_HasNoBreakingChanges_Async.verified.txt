@@ -151,8 +151,8 @@ namespace Catel.MVVM
     public abstract class CommandBase
     {
         protected CommandBase() { }
-        protected static Catel.MVVM.IAuthenticationProvider? AuthenticationProvider { get; }
-        protected static Catel.Services.IDispatcherService? DispatcherService { get; }
+        protected static Catel.MVVM.IAuthenticationProvider? AuthenticationProvider { get; set; }
+        protected static Catel.Services.IDispatcherService? DispatcherService { get; set; }
     }
     public class CommandCanceledEventArgs : Catel.MVVM.CommandEventArgs
     {
