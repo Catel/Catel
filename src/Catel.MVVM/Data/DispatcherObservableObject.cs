@@ -1,7 +1,6 @@
 ﻿namespace Catel.Data
 {
     using System.ComponentModel;
-    using IoC;
     using Services;
 
     /// <summary>
@@ -10,20 +9,11 @@
     /// </summary>
     public class DispatcherObservableObject : ObservableObject
     {
-        /// <summary>
-        /// The dispatcher service used to dispatch all calls.
-        /// </summary>
-        private static readonly IDispatcherService _dispatcherService;
+        private readonly IDispatcherService _dispatcherService;
 
-        /// <summary>
-        /// Initializes the <see cref="DispatcherObservableObject"/> class.
-        /// </summary>
-        static DispatcherObservableObject()
+        public DispatcherObservableObject(IDispatcherService dispatcherService)
         {
-            var serviceLocator = IoCConfiguration.DefaultServiceLocator;
-            serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
-
-            _dispatcherService = serviceLocator.ResolveRequiredType<IDispatcherService>();
+            _dispatcherService = dispatcherService;
         }
 
         /// <summary>

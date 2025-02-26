@@ -1,7 +1,5 @@
 ﻿namespace Catel
 {
-    using Catel.IoC;
-
     /// <summary>
     /// Initializes design-time code.
     /// </summary>
@@ -42,14 +40,6 @@
             }
 
             _internallyInitialized = true;
-
-            var serviceLocator = ServiceLocator.Default;
-
-            var coreModule = new CoreModule();
-            coreModule.Initialize(serviceLocator);
-
-            var mvvmModule = new MVVMModule();
-            mvvmModule.Initialize(serviceLocator);
         }
 
         /// <summary>

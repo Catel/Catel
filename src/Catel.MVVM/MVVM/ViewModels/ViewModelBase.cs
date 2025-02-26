@@ -137,9 +137,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// <para/>
-        /// This constructor allows the injection of a custom <see cref="IServiceLocator"/>.
+        /// This constructor allows the injection of a custom <see cref="IServiceProvider"/>.
         /// </summary>
-        /// <param name="serviceLocator">The service locator to inject. If <c>null</c>, the <see cref="Catel.IoC.ServiceLocator.Default"/> will be used.</param>
+        /// <param name="serviceProvider">The service provider to inject.</param>
         /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
         /// implement the <see cref="IEditableObject"/> interface.</param>
         /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
@@ -147,7 +147,7 @@
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        protected ViewModelBase(IServiceLocator? serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+        protected ViewModelBase(IServiceProvider serviceProvider, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             ViewModelConstructionTime = FastDateTime.Now;
@@ -159,12 +159,6 @@
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-            if (serviceLocator is null)
-            {
-                serviceLocator = ServiceLocator.Default;
-            }
-
-            DependencyResolver = serviceLocator.ResolveRequiredType<IDependencyResolver>();
             _objectAdapter = DependencyResolver.ResolveRequired<IObjectAdapter>();
             _dispatcherService = DependencyResolver.ResolveRequired<IDispatcherService>();
 
@@ -176,7 +170,7 @@
             // service locator. Note that we should *not* use a callback since that will create a memory leak because the 
             // service locator will hold a reference to the first vm *per type*
             var objectGeneratorType = GetObjectIdGeneratorType();
-            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
+            serviceProvider.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
 
             _objectIdGenerator = DependencyResolver.ResolveRequired<IObjectIdGenerator<int>>(type);
             UniqueIdentifier = GetObjectId(_objectIdGenerator);
@@ -211,7 +205,7 @@
             }
 
             // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
-            AuditingHelper.RegisterViewModel(this);
+            AuditingWrapper.RegisterViewModel(this);
         }
 
         /// <summary>

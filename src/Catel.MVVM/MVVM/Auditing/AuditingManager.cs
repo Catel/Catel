@@ -2,62 +2,59 @@
 {
     using System;
     using System.Collections.Generic;
-    using IoC;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Handles the auditing for MVVM inside Catel.
     /// <para/>
     /// Use this manager to register custom auditors.
     /// </summary>
-    public class AuditingManager
+    public class AuditingManager : IAuditingManager
     {
-        /// <summary>
-        /// Instance of this singleton class.
-        /// </summary>
-        private static readonly AuditingManager _instance = new AuditingManager();
-
-        /// <summary>
-        /// List of currently registered auditors.
-        /// </summary>
         private readonly List<IAuditor> _auditors = new List<IAuditor>();
+        private readonly IServiceProvider _serviceProvider;
+
+        public AuditingManager(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
 
         /// <summary>
         /// Gets a value indicating whether auditing is enabled. Auditing is enabled when at least 1 auditor is registered.
         /// </summary>
         /// <value><c>true</c> if auditing is enabled; otherwise, <c>false</c>.</value>
-        public static bool IsAuditingEnabled { get; private set; }
+        public bool IsAuditingEnabled { get; private set; }
 
         /// <summary>
         /// Gets the number of registered auditors.
         /// </summary>
         /// <value>The number of registered auditors.</value>
-        public static int RegisteredAuditorsCount
+        public int RegisteredAuditorsCount
         {
-            get { return _instance._auditors.Count; }
+            get { return _auditors.Count; }
         }
 
         /// <summary>
         /// Clears all the current auditors.
         /// </summary>
-        public static void Clear()
+        public void Clear()
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                _instance._auditors.Clear();
+                _auditors.Clear();
 
                 UpdateState();
             }
         }
 
         /// <summary>
-        /// Registers a auditor and automatically instantiates it by using the <see cref="ITypeFactory"/>.
+        /// Registers a auditor and automatically instantiates it by using the <see cref="ActivatorUtilities.CreateInstance"/>.
         /// </summary>
         /// <typeparam name="TAuditor">The type of the auditor.</typeparam>
-        public static void RegisterAuditor<TAuditor>()
+        public void RegisterAuditor<TAuditor>()
             where TAuditor : class, IAuditor
         {
-            var typeFactory = IoCConfiguration.DefaultTypeFactory;
-            var auditor = typeFactory.CreateRequiredInstance<TAuditor>();
+            var auditor = ActivatorUtilities.CreateInstance<TAuditor>(_serviceProvider);
 
             RegisterAuditor(auditor);
         }
@@ -67,15 +64,15 @@
         /// </summary>
         /// <param name="auditor">The auditor.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="auditor"/> is <c>null</c>.</exception>
-        public static void RegisterAuditor(IAuditor auditor)
+        public void RegisterAuditor(IAuditor auditor)
         {
             ArgumentNullException.ThrowIfNull(auditor);
 
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                if (!_instance._auditors.Contains(auditor))
+                if (!_auditors.Contains(auditor))
                 {
-                    _instance._auditors.Add(auditor);
+                    _auditors.Add(auditor);
                 }
 
                 UpdateState();
@@ -88,13 +85,13 @@
         /// If the auditor is not registered, nothing happens.
         /// </summary>
         /// <exception cref="ArgumentNullException">The <paramref name="auditor"/> is <c>null</c>.</exception>
-        public static void UnregisterAuditor(IAuditor auditor)
+        public void UnregisterAuditor(IAuditor auditor)
         {
             ArgumentNullException.ThrowIfNull(auditor);
 
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                _instance._auditors.Remove(auditor);
+                _auditors.Remove(auditor);
 
                 UpdateState();
             }
@@ -104,11 +101,11 @@
         /// Must be called when a specific view model type is being created.
         /// </summary>
         /// <param name="viewModelType">Type of the view model.</param>
-        internal static void OnViewModelCreating(Type viewModelType)
+        public void OnViewModelCreating(Type viewModelType)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelCreating(viewModelType);
                 }
@@ -119,11 +116,11 @@
         /// Must be called when a specific view model type is created.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelCreated(IViewModel viewModel)
+        public void OnViewModelCreated(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelCreated(viewModel);
                 }
@@ -134,11 +131,11 @@
         /// Must be called when a specific view model type is initialized.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelInitialized(IViewModel viewModel)
+        public void OnViewModelInitialized(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelInitialized(viewModel);
                 }
@@ -151,11 +148,11 @@
         /// <param name="viewModel">The view model.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="newValue">The new property value.</param>
-        internal static void OnPropertyChanged(IViewModel viewModel, string? propertyName, object? newValue)
+        public void OnPropertyChanged(IViewModel viewModel, string? propertyName, object? newValue)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     if (propertyName is not null && auditor.PropertiesToIgnore is not null)
                     {
@@ -177,11 +174,11 @@
         /// <param name="commandName">Name of the command, which is the name of the command property.</param>
         /// <param name="command">The command that has been executed.</param>
         /// <param name="commandParameter">The command parameter.</param>
-        internal static void OnCommandExecuted(IViewModel? viewModel, string? commandName, ICatelCommand command, object? commandParameter)
+        public void OnCommandExecuted(IViewModel? viewModel, string? commandName, ICatelCommand command, object? commandParameter)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnCommandExecuted(viewModel, commandName, command, commandParameter);
                 }
@@ -192,11 +189,11 @@
         /// Must be called when a view model is about to be saved.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelSaving(IViewModel viewModel)
+        public void OnViewModelSaving(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelSaving(viewModel);
                 }
@@ -207,11 +204,11 @@
         /// Must be called when a view model has just been saved.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelSaved(IViewModel viewModel)
+        public void OnViewModelSaved(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelSaved(viewModel);
                 }
@@ -222,11 +219,11 @@
         /// Must be called when a view model is about to be canceled.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelCanceling(IViewModel viewModel)
+        public void OnViewModelCanceling(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelCanceling(viewModel);
                 }
@@ -237,11 +234,11 @@
         /// Must be called when a view model has just been canceled.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelCanceled(IViewModel viewModel)
+        public void OnViewModelCanceled(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelCanceled(viewModel);
                 }
@@ -252,11 +249,11 @@
         /// Must be called when a view model is about to be closed.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelClosing(IViewModel viewModel)
+        public void OnViewModelClosing(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelClosing(viewModel);
                 }
@@ -267,11 +264,11 @@
         /// Must be called when a view model has just been closed.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        internal static void OnViewModelClosed(IViewModel viewModel)
+        public void OnViewModelClosed(IViewModel viewModel)
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                foreach (var auditor in _instance._auditors)
+                foreach (var auditor in _auditors)
                 {
                     auditor.OnViewModelClosed(viewModel);
                 }
@@ -281,11 +278,11 @@
         /// <summary>
         /// Updates the state.
         /// </summary>
-        private static void UpdateState()
+        private void UpdateState()
         {
-            lock (_instance._auditors)
+            lock (_auditors)
             {
-                IsAuditingEnabled = _instance._auditors.Count > 0;
+                IsAuditingEnabled = _auditors.Count > 0;
             }
         }
     }

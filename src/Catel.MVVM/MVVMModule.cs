@@ -1,47 +1,73 @@
 ﻿namespace Catel
 {
+    using System;
+    using System.Linq;
+    using Catel.MVVM.Auditing;
+    using IoC;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
     using MVVM;
     using MVVM.Views;
     using Services;
-    using IoC;
-    using Catel.MVVM.Auditing;
-    using System;
 
     /// <summary>
     /// MVVM module which allows the registration of default services in the service locator.
     /// </summary>
-    public class MVVMModule : IServiceLocatorInitializer
+    public static class MVVMModule
     {
-        /// <summary>
-        /// Initializes the specified service locator.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        public void Initialize(IServiceLocator serviceLocator)
-        {
-            ArgumentNullException.ThrowIfNull(serviceLocator);
+        public static IServiceCollection AddCatelMvvmServices(IServiceCollection serviceCollection)
+        { 
+            serviceCollection.TryAddSingleton<IDataContextSubscriptionService, DataContextSubscriptionService>();
+            serviceCollection.TryAddSingleton<ICommandManager, CommandManager>();
+            serviceCollection.TryAddSingleton<IViewLoadManager, ViewLoadManager>();
+            serviceCollection.TryAddSingleton<IViewModelWrapperService, ViewModelWrapperService>();
+            serviceCollection.TryAddSingleton<IViewManager, ViewManager>();
+            serviceCollection.TryAddSingleton<IViewModelManager, ViewModelManager>();
+            serviceCollection.TryAddSingleton<IAutoCompletionService, AutoCompletionService>();
+            serviceCollection.TryAddSingleton<IWrapControlService, WrapControlService>();
 
-            serviceLocator.RegisterTypeIfNotYetRegistered<IDataContextSubscriptionService, DataContextSubscriptionService>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewLoadManager, ViewLoadManager>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelWrapperService, ViewModelWrapperService>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IWrapControlService, WrapControlService>();
+            // VM services
+            serviceCollection.TryAddSingleton<IViewModelLocator, ViewModelLocator>();
 
-            ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
+            // Always overwrite the dispatcher service since we know Catel.Core registers a shim
+            var registrationInfo = serviceCollection.FirstOrDefault(x => x.ServiceType == typeof(IDispatcherService));
+            if (registrationInfo is null || registrationInfo.ImplementationType == typeof(ShimDispatcherService))
+            {
+                serviceCollection.TryAddSingleton<IDispatcherService, DispatcherService>();
+            }
 
-#pragma warning disable IDISP001
-            var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
-#pragma warning restore IDISP001
+            // Only register if not yet registered
+            serviceCollection.TryAddSingleton<IViewPropertySelector, FastViewPropertySelector>();
+            serviceCollection.TryAddSingleton<IStateService, StateService>();
+            serviceCollection.TryAddSingleton<IDispatcherProviderService, DispatcherProviderService>();
+            serviceCollection.TryAddSingleton<IMessageService, MessageService>();
+            serviceCollection.TryAddSingleton<IUrlLocator, UrlLocator>();
+            serviceCollection.TryAddSingleton<IViewLocator, ViewLocator>();
+            serviceCollection.TryAddSingleton<IViewModelLocator, ViewModelLocator>();
+            serviceCollection.TryAddSingleton<IViewModelFactory, ViewModelFactory>();
+            serviceCollection.TryAddSingleton<INavigationService, NavigationService>();
+            serviceCollection.TryAddSingleton<INavigationRootService, NavigationRootService>();
+            serviceCollection.TryAddSingleton<IViewContextService, ViewContextService>();
+            serviceCollection.TryAddSingleton<IUIVisualizerService, UIVisualizerService>();
+            serviceCollection.TryAddSingleton<IOpenFileService, OpenFileService>();
+            serviceCollection.TryAddSingleton<ISaveFileService, SaveFileService>();
+            serviceCollection.TryAddSingleton<ISelectDirectoryService, SelectDirectoryService>();
+            serviceCollection.TryAddSingleton<IBusyIndicatorService, BusyIndicatorService>();
+            serviceCollection.TryAddSingleton<IProcessService, ProcessService>();
 
-            var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateRequiredInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
-            AuditingManager.RegisterAuditor(invalidateCommandManagerOnViewModelInitializationAuditor);
+            // Auditing
+            serviceCollection.TryAddSingleton<IAuditingManager, AuditingManager>();
 
-            var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateRequiredInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
-            AuditingManager.RegisterAuditor(subscribeKeyboardEventsOnViewModelCreationAuditor);
+            // TODO: How to instantiate these and register them?
+            //var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateRequiredInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
+            //AuditingManager.RegisterAuditor(invalidateCommandManagerOnViewModelInitializationAuditor);
+
+            //var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateRequiredInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
+            //AuditingManager.RegisterAuditor(subscribeKeyboardEventsOnViewModelCreationAuditor);
 
             DesignTimeHelper.InitializeDesignTime();
+
+            return serviceCollection;
         }
     }
 }

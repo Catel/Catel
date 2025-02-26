@@ -18,6 +18,8 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly INavigationRootService _navigationRootService;
+
         private NavigationAdapter? _navigationAdapter;
 
         private bool _hasHandledNavigatingAway;
@@ -25,12 +27,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PageLogic"/> class.
         /// </summary>
+        /// <param name="navigationRootService">The navigation root service.</param>
         /// <param name="targetPage">The page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
-        protected NavigationLogicBase(T targetPage, Type? viewModelType = null)
+        protected NavigationLogicBase(INavigationRootService navigationRootService, T targetPage, Type? viewModelType = null)
             : base(targetPage, viewModelType)
         {
+            _navigationRootService = navigationRootService;
+
             CreateNavigationAdapter(false);
         }
 
@@ -47,12 +52,7 @@
         {
             if (_navigationAdapter is null)
             {
-#pragma warning disable IDISP001 // Dispose created.
-                var serviceLocator = this.GetServiceLocator();
-#pragma warning restore IDISP001 // Dispose created.
-
-                var navigationService = serviceLocator.ResolveRequiredType<INavigationRootService>();
-                var navigationRoot = navigationService.GetNavigationRoot();
+                var navigationRoot = _navigationRootService.GetNavigationRoot();
                 if (navigationRoot is null)
                 {
                     throw Log.ErrorAndCreateException<CatelException>($"Navigation root is null, cannot create navigation adapter");

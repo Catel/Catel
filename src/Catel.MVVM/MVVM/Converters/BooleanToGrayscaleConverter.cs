@@ -11,7 +11,7 @@
     public class BooleanToGrayscaleConverter : ValueConverterBase
     {
         /// <summary>
-        /// Initialzies the <see cref="BooleanToGrayscaleConverter"/>.
+        /// Initializes the <see cref="BooleanToGrayscaleConverter"/>.
         /// </summary>
         public BooleanToGrayscaleConverter()
         {

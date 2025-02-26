@@ -1,6 +1,7 @@
 ﻿namespace Catel.MVVM.Providers
 {
     using System;
+    using Catel.Services;
     using Views;
 
     /// <summary>
@@ -13,11 +14,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PageLogic"/> class.
         /// </summary>
+        /// <param name="navigationRootService">The navigation root service.</param>
         /// <param name="targetPage">The page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
-        public PageLogic(IPage targetPage, Type? viewModelType = null)
-            : base(targetPage, viewModelType)
+        public PageLogic(INavigationRootService navigationRootService, IPage targetPage, Type? viewModelType = null)
+            : base(navigationRootService, targetPage, viewModelType)
         {
         }
 

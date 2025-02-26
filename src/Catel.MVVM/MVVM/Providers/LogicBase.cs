@@ -5,7 +5,6 @@
     using System.ComponentModel;
     using System.Threading.Tasks;
     using Data;
-    using IoC;
     using Logging;
     using MVVM;
     using Views;
