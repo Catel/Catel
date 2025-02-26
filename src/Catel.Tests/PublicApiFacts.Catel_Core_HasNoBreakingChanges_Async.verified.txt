@@ -2125,6 +2125,11 @@ namespace Catel.IoC
             where TService :  notnull { }
         public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object? tag = null)
             where TService :  notnull { }
+        public static TServiceImplementation? RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+            where TServiceImplementation :  notnull { }
+        public static TService RegisterRequiredTypeAndInstantiate<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+            where TService :  notnull
+            where TServiceImplementation : TService { }
         public static void RegisterType<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RegisterType<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
             where TService :  notnull { }
