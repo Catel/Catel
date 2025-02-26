@@ -6,9 +6,9 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Xml.Serialization;
-
-    using IoC;
+    using Catel.Runtime.Serialization;
     using Logging;
+    using Microsoft.Extensions.DependencyInjection;
     using Reflection;
 
     /// <summary>
@@ -65,8 +65,6 @@
 
         private readonly HashSet<string> _propertiesCurrentlyBeingValidated = new HashSet<string>();
 
-        private IObjectAdapter? _objectAdapter;
-
         private bool _firstAnnotationValidation = true;
 
         /// <summary>
@@ -96,8 +94,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatableModelBase"/> class.
         /// </summary>
-        protected ValidatableModelBase()
+        protected ValidatableModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter,
+            ISerializer serializer)
+            : base(serializer)
         {
+            ServiceProvider = serviceProvider;
+            ObjectAdapter = objectAdapter;
+
             InitializeModelValidation();
         }
 
@@ -120,9 +123,6 @@
 
         /// <summary>
         /// Gets or sets the validator to use.
-        /// <para />
-        /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
-        /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
         [Browsable(false)]
         [XmlIgnore]
@@ -144,23 +144,14 @@
         }
 
         /// <summary>
-        /// Gets or sets the object adapter. If unset, this value will be retrieved via the default <see cref="IDependencyResolver"/>
-        /// as soon as it is required.
+        /// Gets the service provider.
         /// </summary>
-        protected IObjectAdapter? ObjectAdapter
-        {
-            get
-            {
-                if (_objectAdapter is null)
-                {
-                    var dependencyResolver = this.GetDependencyResolver();
-                    _objectAdapter = dependencyResolver.Resolve<IObjectAdapter>();
-                }
+        public IServiceProvider ServiceProvider { get; }
 
-                return _objectAdapter;
-            }
-            set => _objectAdapter = value;
-        }
+        /// <summary>
+        /// Gets or sets the object adapter.
+        /// </summary>
+        protected virtual IObjectAdapter? ObjectAdapter { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the validation should not try to process data annotations.
@@ -182,7 +173,7 @@
         /// <summary>
         /// Gets or sets a value indicating whether the validation results should be hidden. This means that 
         /// the <see cref="ValidationContext"/> should be filled, but the <see cref="IDataErrorInfo"/> and 
-        /// <see cref="INotifyDataErrorInfo"/> should not expose any of the validation ressults.
+        /// <see cref="INotifyDataErrorInfo"/> should not expose any of the validation results.
         /// <para />
         /// This is very useful when the validation in the UI should be delayed to a specific point. However, the
         /// validation is still available for retrieval.
@@ -384,8 +375,7 @@
             {
                 if (!_hasRetrievedValidatorOnce)
                 {
-                    var dependencyResolver = this.GetDependencyResolver();
-                    var validatorProvider = dependencyResolver.Resolve<IValidatorProvider>();
+                    var validatorProvider = ServiceProvider.GetService<IValidatorProvider>();
                     if (validatorProvider is not null)
                     {
                         _validator = validatorProvider.GetValidator(GetType());

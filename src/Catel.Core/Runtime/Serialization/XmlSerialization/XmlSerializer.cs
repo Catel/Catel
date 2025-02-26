@@ -11,7 +11,6 @@
     using Collections;
     using Caching;
     using Data;
-    using IoC;
     using Logging;
     using Reflection;
     using System.Runtime.Serialization;
@@ -49,14 +48,14 @@
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="dataContractSerializerFactory">The data contract serializer factory.</param>
         /// <param name="xmlNamespaceManager">The XML namespace manager.</param>
-        /// <param name="typeFactory">The type factory.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="xmlNamespaceManager" /> is <c>null</c>.</exception>
         public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory,
-            IXmlNamespaceManager xmlNamespaceManager, ITypeFactory typeFactory, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
-            : base(serializationManager, typeFactory, objectAdapter)
+            IXmlNamespaceManager xmlNamespaceManager, IServiceProvider serviceProvider, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
+            : base(serializationManager, serviceProvider, objectAdapter)
         {
             _dataContractSerializerFactory = dataContractSerializerFactory;
             _xmlNamespaceManager = xmlNamespaceManager;

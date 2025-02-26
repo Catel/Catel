@@ -8,9 +8,9 @@
     using System.IO;
     using System.Reflection;
     using Catel.Caching;
-    using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Extensions.DependencyInjection;
     using Scoping;
 
     /// <summary>
@@ -64,13 +64,13 @@
         /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContextInfo}" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
-        /// <param name="typeFactory">The type factory.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+        protected SerializerBase(ISerializationManager serializationManager, IServiceProvider serviceProvider, IObjectAdapter objectAdapter)
         {
             SerializationManager = serializationManager;
-            TypeFactory = typeFactory;
+            ServiceProvider = serviceProvider;
             ObjectAdapter = objectAdapter;
 
             SerializationManager.CacheInvalidated += OnSerializationManagerCacheInvalidated;
@@ -83,10 +83,10 @@
         protected ISerializationManager SerializationManager { get; private set; }
 
         /// <summary>
-        /// Gets the type factory.
+        /// Gets the service provider.
         /// </summary>
-        /// <value>The type factory.</value>
-        protected ITypeFactory TypeFactory { get; private set; }
+        /// <value>The service provider.</value>
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         /// Gets the object adapter.
@@ -969,7 +969,7 @@
                 type = genericCollectionType;
             }
 
-            return TypeFactory.CreateRequiredInstance(type);
+            return ServiceProvider.GetRequiredService(type);
         }
 
         /// <summary>

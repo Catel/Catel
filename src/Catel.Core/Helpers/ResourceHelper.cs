@@ -1,12 +1,9 @@
 ﻿namespace Catel
 {
-    using System;
     using System.IO;
     using System.Reflection;
     using System.Text;
-    using Catel.IoC;
     using Catel.Logging;
-    using Catel.Services;
 
     /// <summary>
     /// Resource helper class to read resource files.
@@ -14,38 +11,6 @@
     public static class ResourceHelper
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly ILanguageService _languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
-
-        /// <summary>
-        /// Gets the string from the specified resource file.
-        /// </summary>
-        /// <param name="callingType">Type of the calling.</param>
-        /// <param name="resourceFile">The resource file.</param>
-        /// <param name="resourceName">Name of the resource.</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        /// <exception cref="ArgumentException">The <paramref name="resourceFile"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="resourceName"/> is <c>null</c> or whitespace.</exception>
-        public static string? GetString(Type callingType, string resourceFile, string resourceName)
-        {
-            Argument.IsNotNullOrWhitespace("resourceName", resourceName);
-
-            return GetString(resourceName);
-        }
-
-        /// <summary>
-        /// Gets the string from the specified resource file.
-        /// </summary>
-        /// <param name="resourceName">Name of the resource.</param>
-        /// <returns>System.String.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c> or whitespace.</exception>
-        public static string? GetString(string resourceName)
-        {
-            Argument.IsNotNullOrWhitespace("resourceName", resourceName);
-
-            return _languageService.GetString(resourceName);
-        }
 
         /// <summary>
         /// Extracts the embedded resource and reads it as a string.

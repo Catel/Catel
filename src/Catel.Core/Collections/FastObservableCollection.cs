@@ -7,7 +7,6 @@
     using System.Collections.Specialized;
     using System.ComponentModel;
 
-    using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
 
@@ -20,14 +19,7 @@
     public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
-
-            return dispatcherService;
-        });
+        private readonly IDispatcherService _dispatcherService;
 
         /// <summary>
         /// The current suspension context.
@@ -37,17 +29,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FastObservableCollection{T}" /> class.
         /// </summary>
-        public FastObservableCollection()
+        public FastObservableCollection(IDispatcherService dispatcherService)
         {
+            _dispatcherService = dispatcherService;
+
             AutomaticallyDispatchChangeNotifications = true;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastObservableCollection{T}" /> class.
         /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="collection">The collection.</param>
-        public FastObservableCollection(IEnumerable<T> collection)
-            : this()
+        public FastObservableCollection(IDispatcherService dispatcherService, IEnumerable<T> collection)
+            : this(dispatcherService)
         {
             AddItems(collection);
         }
@@ -55,9 +50,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FastObservableCollection{T}" /> class.
         /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="collection">The collection.</param>
-        public FastObservableCollection(IEnumerable collection)
-            : this()
+        public FastObservableCollection(IDispatcherService dispatcherService, IEnumerable collection)
+            : this(dispatcherService)
         {
             AddItems(collection);
         }
@@ -435,7 +431,7 @@
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.Value.BeginInvokeIfRequired(action);
+                _dispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {
@@ -453,7 +449,7 @@
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
-                    _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
+                    _dispatcherService.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
                 }
                 else
                 {
@@ -479,7 +475,7 @@
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
-                    _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnPropertyChanged(e));
+                    _dispatcherService.BeginInvokeIfRequired(() => base.OnPropertyChanged(e));
                 }
                 else
                 {

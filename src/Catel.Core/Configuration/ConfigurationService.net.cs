@@ -166,7 +166,7 @@
         {
             using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                configuration.Save(fileStream, _serializer);
+                configuration.Save(fileStream, _xmlSerializer);
             }
         }
     }

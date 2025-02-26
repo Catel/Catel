@@ -1,7 +1,5 @@
 ﻿namespace Catel.MVVM
 {
-    using Catel.IoC;
-
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -15,10 +13,7 @@
         /// </summary>
         public static void Initialize()
         {
-            var serviceLocator = ServiceLocator.Default;
-
-            var module = new MVVMModule();
-            module.Initialize(serviceLocator);
+            // Empty by design
         }
     }
 }

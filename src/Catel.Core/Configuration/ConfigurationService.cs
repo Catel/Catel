@@ -30,7 +30,7 @@
         private const int IgnoreTimerThresholdInMilliseconds = 10;
 
         private readonly IObjectConverterService _objectConverterService;
-        private readonly ISerializer _serializer;
+        private readonly IXmlSerializer _xmlSerializer;
         private readonly IAppDataService _appDataService;
         private readonly IDispatcherService _dispatcherService;
 
@@ -60,27 +60,14 @@
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
         /// <param name="objectConverterService">The object converter service.</param>
-        /// <param name="serializer">The serializer.</param>
+        /// <param name="xmlSerializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
         /// <param name="dispatcherService">Dispatcher service.</param>
-        public ConfigurationService(IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService,
+        public ConfigurationService(IObjectConverterService objectConverterService, IXmlSerializer xmlSerializer, IAppDataService appDataService,
             IDispatcherService dispatcherService)
-            : this(objectConverterService, (ISerializer)serializer, appDataService, dispatcherService)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
-        /// </summary>
-        /// <param name="objectConverterService">The object converter service.</param>
-        /// <param name="serializer">The serializer.</param>
-        /// <param name="appDataService">The application data service.</param>
-        /// <param name="dispatcherService">The application data service.</param>
-        public ConfigurationService(IObjectConverterService objectConverterService, ISerializer serializer,
-            IAppDataService appDataService, IDispatcherService dispatcherService)
         {
             _objectConverterService = objectConverterService;
-            _serializer = serializer;
+            _xmlSerializer = xmlSerializer;
             _appDataService = appDataService;
             _dispatcherService = dispatcherService;
 
@@ -313,7 +300,7 @@
             if (!File.Exists(source))
             {
                 // No file, we can really start from scratch
-                return new DynamicConfiguration();
+                return new DynamicConfiguration(_xmlSerializer);
             }
 
             // Try for 5 seconds
@@ -330,13 +317,13 @@
 
                         if (fileStream.Length == 0)
                         {
-                            return new DynamicConfiguration();
+                            return new DynamicConfiguration(_xmlSerializer);
                         }
 
-                        var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
+                        var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _xmlSerializer);
                         if (configuration is null)
                         {
-                            return new DynamicConfiguration();
+                            return new DynamicConfiguration(_xmlSerializer);
                         }
 
                         return configuration;

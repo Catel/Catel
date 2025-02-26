@@ -10,7 +10,7 @@
 
     public partial class ModelBase
     {
-        private static readonly Func<SerializationScope> XmlSerializationScopeFactory = new Func<SerializationScope>(() => new SerializationScope(SerializationFactory.GetXmlSerializer(), null));
+        private readonly Func<SerializationScope> _xmlSerializationScopeFactory;
 
         /// <summary>
         /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
@@ -38,7 +38,7 @@
             var contextInfo = new XmlSerializationContextInfo(reader, this);
 
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, _xmlSerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 serializer.Deserialize(this, contextInfo, scopeManager.ScopeObject.Configuration);
@@ -56,7 +56,7 @@
             // https://referencesource.microsoft.com/#System.Runtime.Serialization/System/Runtime/Serialization/XmlSerializableWriter.cs
 
             var scopeName = SerializationContextHelper.GetSerializationScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, _xmlSerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 serializer.Serialize(this, new XmlSerializationContextInfo(writer, this), scopeManager.ScopeObject.Configuration);

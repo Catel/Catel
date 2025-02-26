@@ -3,7 +3,6 @@
     using System;
 
     using Catel.Caching;
-    using Catel.IoC;
     using Catel.Reflection;
 
     /// <summary>
@@ -11,7 +10,13 @@
     /// </summary>
     public class AttributeValidatorProvider : ValidatorProviderBase
     {
-        private readonly ICacheStorage<Type, IValidator?> _validatorPerType = new CacheStorage<Type, IValidator?>(storeNullValues: true); 
+        private readonly ICacheStorage<Type, IValidator?> _validatorPerType = new CacheStorage<Type, IValidator?>(storeNullValues: true);
+        private readonly IServiceProvider _serviceProvider;
+
+        public AttributeValidatorProvider(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
 
         /// <summary>
         /// Provides an access point to allow a custom implementation in order to retrieve the available validator for the specified type.
@@ -24,7 +29,7 @@
             {
                 if (targetType.TryGetAttribute<ValidateModelAttribute>(out var attribute))
                 {
-                    var validator = TypeFactory.Default.CreateInstance(attribute.ValidatorType) as IValidator;
+                    var validator = _serviceProvider.GetService(attribute.ValidatorType) as IValidator;
                     return validator;
                 }
 

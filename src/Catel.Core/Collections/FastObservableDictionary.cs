@@ -8,7 +8,6 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Runtime.Serialization;
-    using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
 
@@ -23,15 +22,7 @@
         ISuspendChangeNotificationsCollection
         where TKey : notnull
     {
-        #region Fields & Properties
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
-            return dispatcherService;
-        });
 
         /// <summary>
         /// The current suspension context.
@@ -59,34 +50,29 @@
         [field: NonSerialized]
         private readonly SerializationInfo? _serializationInfo;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
-        /// </summary>
-        /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
+        [field: NonSerialized]
+        private readonly IDispatcherService _dispatcherService;
 
-        /// <see cref="Dictionary{TKey,TValue}.Comparer"/>>
-        public IEqualityComparer<TKey> Comparer => _dict.Comparer;
-        #endregion
-
-        #region Constructors
-        public FastObservableDictionary()
+        public FastObservableDictionary(IDispatcherService dispatcherService)
+            : this(dispatcherService, 0)
         {
-            _dict = new Dictionary<TKey, TValue>();
-            _dictIndexMapping = new Dictionary<TKey, int>();
-            _list = new List<TKey>();
+            // Keep empty
         }
 
-        public FastObservableDictionary(int capacity)
+        public FastObservableDictionary(IDispatcherService dispatcherService, int capacity)
         {
+            _dispatcherService = dispatcherService;
+
             _dict = new Dictionary<TKey, TValue>(capacity);
             _dictIndexMapping = new Dictionary<TKey, int>(capacity);
             _list = new List<TKey>(capacity);
         }
 
-        public FastObservableDictionary(IEnumerable<KeyValuePair<TKey, TValue>> originalDict)
+        public FastObservableDictionary(IDispatcherService dispatcherService, IEnumerable<KeyValuePair<TKey, TValue>> originalDict)
         {
             ArgumentNullException.ThrowIfNull(originalDict);
+
+            _dispatcherService = dispatcherService;
 
             if (originalDict is ICollection<KeyValuePair<TKey, TValue>> collection)
             {
@@ -104,28 +90,35 @@
             InsertMultipleValues(0, originalDict, false);
         }
 
-        public FastObservableDictionary(IEqualityComparer<TKey>? comparer)
+        public FastObservableDictionary(IDispatcherService dispatcherService, IEqualityComparer<TKey>? comparer)
         {
+            _dispatcherService = dispatcherService;
+
             _list = new List<TKey>();
             _dictIndexMapping = new Dictionary<TKey, int>(comparer);
             _dict = new Dictionary<TKey, TValue>(comparer);
         }
 
-        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary)
-            : this((IEnumerable<KeyValuePair<TKey, TValue>>)dictionary)
+        public FastObservableDictionary(IDispatcherService dispatcherService, IDictionary<TKey, TValue> dictionary)
+            : this(dispatcherService, (IEnumerable<KeyValuePair<TKey, TValue>>)dictionary)
         {
+            _dispatcherService = dispatcherService;
         }
 
-        public FastObservableDictionary(int capacity, IEqualityComparer<TKey>? comparer)
+        public FastObservableDictionary(IDispatcherService dispatcherService, int capacity, IEqualityComparer<TKey>? comparer)
         {
+            _dispatcherService = dispatcherService;
+
             _list = new List<TKey>(capacity);
             _dictIndexMapping = new Dictionary<TKey, int>(capacity, comparer);
             _dict = new Dictionary<TKey, TValue>(capacity, comparer);
         }
 
-        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? comparer)
+        public FastObservableDictionary(IDispatcherService dispatcherService, IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? comparer)
         {
             ArgumentNullException.ThrowIfNull(dictionary);
+
+            _dispatcherService = dispatcherService;
 
             _dict = new Dictionary<TKey, TValue>(dictionary.Count, comparer);
             _dictIndexMapping = new Dictionary<TKey, int>(dictionary.Count, comparer);
@@ -133,23 +126,35 @@
             InsertMultipleValues(dictionary, false);
         }
 
-
-        private FastObservableDictionary(Dictionary<TKey, TValue> dict, Dictionary<TKey, int> dictIndexMapping, List<TKey> list)
+        private FastObservableDictionary(IDispatcherService dispatcherService, Dictionary<TKey, TValue> dict, Dictionary<TKey, int> dictIndexMapping, List<TKey> list)
         {
             ArgumentNullException.ThrowIfNull(dict);
             ArgumentNullException.ThrowIfNull(dictIndexMapping);
             ArgumentNullException.ThrowIfNull(list);
+            
+            _dispatcherService = dispatcherService;
 
             _dict = dict;
             _list = list;
             _dictIndexMapping = dictIndexMapping;
         }
-        #endregion
+
+        /// <summary>
+        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
+        /// </summary>
+        /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
+        public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
+
+        /// <see cref="Dictionary{TKey,TValue}.Comparer"/>>
+        public IEqualityComparer<TKey> Comparer => _dict.Comparer;
 
         #region Methods
         public FastObservableDictionary<TKey, TValue> AsReadOnly()
         {
-            return new FastObservableDictionary<TKey, TValue>(_dict, _dictIndexMapping, _list) { IsReadOnly = true };
+            return new FastObservableDictionary<TKey, TValue>(_dispatcherService, _dict, _dictIndexMapping, _list) 
+            { 
+                IsReadOnly = true 
+            };
         }
 
         /// <summary>
@@ -970,8 +975,9 @@
 
         #region ISerializable and IDeserializationCallback
         private const string EntriesName = "entries";
-        protected FastObservableDictionary(SerializationInfo info, StreamingContext context)
-            : this()
+
+        protected FastObservableDictionary(IDispatcherService dispatcherService, SerializationInfo info, StreamingContext context)
+            : this(dispatcherService)
         {
             _serializationInfo = info;
         }
@@ -979,6 +985,7 @@
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             var entries = new Collection<KeyValuePair<TKey, TValue>>();
+
             foreach (var item in AsEnumerable())
             {
                 entries.Add(item);
@@ -1020,14 +1027,13 @@
 
         protected readonly NotifyCollectionChangedEventArgs _cachedResetArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
 
-
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
             if (_suspensionContext is null || _suspensionContext.Count == 0)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
-                    _dispatcherService.Value.BeginInvokeIfRequired(() => PropertyChanged?.Invoke(this, eventArgs));
+                    _dispatcherService.BeginInvokeIfRequired(() => PropertyChanged?.Invoke(this, eventArgs));
                 }
                 else
                 {
@@ -1043,7 +1049,7 @@
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
-                    _dispatcherService.Value.BeginInvokeIfRequired(() => CollectionChanged?.Invoke(this, eventArgs));
+                    _dispatcherService.BeginInvokeIfRequired(() => CollectionChanged?.Invoke(this, eventArgs));
                 }
                 else
                 {
@@ -1143,7 +1149,7 @@
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.Value.BeginInvokeIfRequired(action);
+                _dispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {

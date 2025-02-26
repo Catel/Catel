@@ -10,9 +10,6 @@
     {
         /// <summary>
         /// Gets or sets the validator to use.
-        /// <para />
-        /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
-        /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
         IValidator? Validator { get; set; }
 

@@ -31,13 +31,14 @@
         /// <summary>
         /// Send a <see cref="CombinedMessage"/> with the given payload data.
         /// </summary>
+        /// <param name="messageMediator">The mediator service to be used.</param>
         /// <param name="data">The boolean payload Data to be sent with.</param>
         /// <param name="exception">The exception payload Data to be sent with.</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
-        public static void SendWith(bool data, Exception exception, object? tag = null)
+        public static void SendWith(IMessageMediator messageMediator, bool data, Exception exception, object? tag = null)
         {
             var message = new CombinedMessage(data, exception);
-            Send(message, tag);
+            Send(messageMediator, message, tag);
         }
 
         /// <summary>

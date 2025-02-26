@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Catel.Services;
 
     /// <summary>
     /// Extension methods for <see cref="IEnumerable{T}"/> implementations.
@@ -17,13 +18,15 @@
         /// <param name="source">An <see cref="IEnumerable{T}"/> to create an <see cref="FastObservableDictionary{TKey,TValue}"/> from.</param>
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to compare keys.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains values of type <typeparamref name="TElement"/> selected from the input sequence.</returns>
-        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, 
-            Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, 
+            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector,
+            IDispatcherService dispatcherService, IEqualityComparer<TKey>? comparer)
             where TKey : notnull
         {
-            var d = new FastObservableDictionary<TKey, TElement>(comparer);
+            var d = new FastObservableDictionary<TKey, TElement>(dispatcherService, comparer);
 
             foreach (var element in source)
             {
@@ -42,11 +45,14 @@
         /// <param name="source">An <see cref="IEnumerable{T}"/> to create an <see cref="FastObservableDictionary{TKey,TValue}"/> from.</param>
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains values of type <typeparamref name="TElement"/> selected from the input sequence.</returns>
-        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+        public static FastObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, 
+            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector,
+            IDispatcherService dispatcherService)
             where TKey : notnull
         {
-            return ToObservableDictionary(source, keySelector, elementSelector, null);
+            return ToObservableDictionary(source, keySelector, elementSelector, dispatcherService, null);
         }
 
         /// <summary>
@@ -56,12 +62,14 @@
         /// <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
         /// <param name="source">An <see cref="IEnumerable{T}"/> to create an <see cref="FastObservableDictionary{TKey,TValue}"/> from.</param>
         /// <param name="keySelector">A function to extract a key from each element.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to compare keys.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains keys and values.</returns>
-        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, 
+            Func<TSource, TKey> keySelector, IDispatcherService dispatcherService, IEqualityComparer<TKey>? comparer)
             where TKey : notnull
         {
-            return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, comparer);
+            return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, dispatcherService, comparer);
         }
 
         /// <summary>
@@ -71,11 +79,13 @@
         /// <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
         /// <param name="source">An <see cref="IEnumerable{T}"/> to create an <see cref="FastObservableDictionary{TKey,TValue}"/> from.</param>
         /// <param name="keySelector">A function to extract a key from each element.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <returns>An <see cref="FastObservableDictionary{TKey,TValue}"/> that contains keys and values.</returns>
-        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        public static FastObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this IEnumerable<TSource> source, 
+            Func<TSource, TKey> keySelector, IDispatcherService dispatcherService)
             where TKey : notnull
         {
-            return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, null);
+            return ToObservableDictionary(source, keySelector, IdentityFunction<TSource>.Instance, dispatcherService, null);
         }
 
         internal class IdentityFunction<TElement>

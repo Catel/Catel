@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Xml;
     using Catel.Data;
-    using Catel.IoC;
     using Catel.Reflection;
     using Catel.Runtime.Serialization.Xml;
     using Runtime.Serialization;
@@ -20,7 +19,13 @@
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
-        private IXmlSerializer? _xmlSerializer;
+        private readonly IXmlSerializer _xmlSerializer;
+
+        public DynamicConfiguration(IXmlSerializer xmlSerializer)
+            : base(xmlSerializer)
+        {
+            _xmlSerializer = xmlSerializer;
+        }
 
         protected override IPropertyBag CreatePropertyBag()
         {
@@ -106,11 +111,6 @@
 
         protected virtual IXmlSerializer GetXmlSerializer()
         {
-            if (_xmlSerializer is null)
-            {
-                _xmlSerializer = ServiceLocator.Default.ResolveRequiredType<IXmlSerializer>();
-            }
-
             return _xmlSerializer;
         }
 

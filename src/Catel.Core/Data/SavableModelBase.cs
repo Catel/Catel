@@ -21,7 +21,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SavableModelBase{T}"/> class.
         /// </summary>
-        protected SavableModelBase()
+        /// <param name="serializer">The serializer.</param>
+        protected SavableModelBase(ISerializer serializer)
+            : base(serializer)
         {
         }
 

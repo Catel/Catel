@@ -1,7 +1,6 @@
 ﻿namespace Catel.Messaging
 {
     using System;
-    using IoC;
     using Logging;
     using Reflection;
 
@@ -24,17 +23,10 @@
         /// <exception cref="NotSupportedException">The object has non-public methods decorated with the <see cref="MessageRecipientAttribute"/>, but the
         /// application is not written in full .NET.</exception>
         /// <exception cref="InvalidCastException">One of the methods cannot be casted to a valid message method.</exception>
-        public static void SubscribeRecipient(object instance, IMessageMediator? messageMediator = null)
+        public static void SubscribeRecipient(object instance, IMessageMediator messageMediator)
         {
             ArgumentNullException.ThrowIfNull(instance);
 
-            if (messageMediator is null)
-            {
-                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-                messageMediator = dependencyResolver.ResolveRequired<IMessageMediator>();
-            }
-
-            var mediator = messageMediator;
             var methodInfos = instance.GetType().GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false));
 
             foreach (var methodInfo in methodInfos)
@@ -69,15 +61,15 @@
                     var action = DelegateHelper.CreateDelegate(actionType, instance, methodInfo);
 
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                    var registerMethod = mediator.GetType().GetMethodEx("Register");
+                    var registerMethod = messageMediator.GetType().GetMethodEx("Register");
                     if (registerMethod is null)
                     {
-                        throw Log.ErrorAndCreateException<CatelException>($"Cannot find the Register method on '{mediator.GetType().GetSafeFullName()}'");
+                        throw Log.ErrorAndCreateException<CatelException>($"Cannot find the Register method on '{messageMediator.GetType().GetSafeFullName()}'");
                     }
 
                     var genericRegisterMethod = registerMethod.MakeGenericMethod(actionParameterType);
 #pragma warning restore HAA0101 // Array allocation for params parameter
-                    genericRegisterMethod.Invoke(mediator, new[] { instance, action, tag });
+                    genericRegisterMethod.Invoke(messageMediator, new[] { instance, action, tag });
                 }
             }
         }
@@ -88,15 +80,9 @@
         /// <param name="instance">The instance.</param>
         /// <param name="messageMediator">The message mediator. If <c>null</c>, the default will be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
-        public static void UnsubscribeRecipient(object instance, IMessageMediator? messageMediator = null)
+        public static void UnsubscribeRecipient(object instance, IMessageMediator messageMediator)
         {
             ArgumentNullException.ThrowIfNull(instance);
-
-            if (messageMediator is null)
-            {
-                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-                messageMediator = dependencyResolver.ResolveRequired<IMessageMediator>();
-            }
 
             messageMediator.UnregisterRecipient(instance);
         }

@@ -7,7 +7,6 @@
     using System.Runtime.Serialization;
     using Catel.Caching;
     using Catel.Data;
-    using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
 
@@ -20,8 +19,6 @@
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private readonly ITypeFactory _typeFactory = TypeFactory.Default;
 
         private readonly object _lock = new object();
 
@@ -41,6 +38,16 @@
         private readonly Dictionary<Type, List<Type>> _serializationModifierDefinitionsPerTypeCache = new Dictionary<Type, List<Type>>();
         private readonly ICacheStorage<Type, ISerializerModifier?> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier?>();
         private readonly ICacheStorage<Type, ISerializerModifier[]> _serializationModifiersPerTypeCache = new CacheStorage<Type, ISerializerModifier[]>();
+
+        public SerializationManager(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
+
+        /// <summary>
+        /// Gets the service provider.
+        /// </summary>
+        protected IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// Occurs when the cache for a specific type has been invalidated.
@@ -579,7 +586,7 @@
 
                     var serializerModifier = _serializerModifierCache.GetFromCacheOrFetch(serializerModifierType, () =>
                     {
-                        return (ISerializerModifier?)_typeFactory.CreateInstance(serializerModifierType);
+                        return (ISerializerModifier?)ServiceProvider.GetService(serializerModifierType);
                     });
 
                     if (serializerModifier is not null)

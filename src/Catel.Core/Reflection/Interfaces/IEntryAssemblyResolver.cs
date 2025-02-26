@@ -3,7 +3,7 @@
     using System.Reflection;
 
     /// <summary>
-    /// Allows custom logic to be injected into <see cref="AssemblyHelper.GetEntryAssembly"/>.
+    /// Determines the entry assembly.
     /// </summary>
     public interface IEntryAssemblyResolver
     {

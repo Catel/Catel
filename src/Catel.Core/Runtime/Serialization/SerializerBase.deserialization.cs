@@ -6,9 +6,9 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using Catel.IoC;
     using Collections;
     using Logging;
+    using Microsoft.Extensions.DependencyInjection;
     using Reflection;
 
     /// <summary>
@@ -221,7 +221,7 @@
         /// </returns>
         public virtual object? Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration? configuration = null)
         {
-            var model = TypeFactory.CreateRequiredInstance(modelType);
+            var model = ServiceProvider.GetRequiredService(modelType);
 
             Deserialize(model, serializationContext, configuration);
 
@@ -418,7 +418,7 @@
             if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary ||
                 ShouldSerializeAsDictionary(member))
             {
-                var targetDictionary = TypeFactory.CreateInstance(member.MemberType) as IDictionary;
+                var targetDictionary = ServiceProvider.GetService(member.MemberType) as IDictionary;
                 if (targetDictionary is null)
                 {
                     throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
@@ -469,7 +469,7 @@
                     }
                     else
                     {
-                        var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
+                        var targetCollection = ServiceProvider.GetService(member.MemberType) as IList;
                         if (targetCollection is null)
                         {
                             throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",

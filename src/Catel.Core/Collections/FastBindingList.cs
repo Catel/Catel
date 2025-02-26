@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    using IoC;
     using Logging;
     using Services;
 
@@ -19,15 +18,8 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#pragma warning disable IDE1006 // Naming Styles
-        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
-#pragma warning restore IDE1006 // Naming Styles
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
-            return dispatcherService;
-        });
-
+        private readonly IDispatcherService _dispatcherService;
+        
         private bool _sorted;
         private ListSortDirection _sortDirection = ListSortDirection.Ascending;
         private PropertyDescriptor? _sortProperty;
@@ -40,17 +32,19 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FastBindingList{T}" /> class.
         /// </summary>
-        public FastBindingList()
+        public FastBindingList(IDispatcherService dispatcherService)
         {
+            _dispatcherService = dispatcherService;
             AutomaticallyDispatchChangeNotifications = true;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastBindingList{T}" /> class.
         /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="collection">The collection.</param>
-        public FastBindingList(IEnumerable<T> collection)
-            : this()
+        public FastBindingList(IDispatcherService dispatcherService, IEnumerable<T> collection)
+            : this(dispatcherService)
         {
             AddItems(collection);
         }
@@ -58,9 +52,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FastBindingList{T}" /> class.
         /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="collection">The collection.</param>
-        public FastBindingList(IEnumerable collection)
-            : this()
+        public FastBindingList(IDispatcherService dispatcherService, IEnumerable collection)
+            : this(dispatcherService)
         {
             AddItems(collection);
         }
@@ -414,7 +409,7 @@
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.Value.BeginInvokeIfRequired(action);
+                _dispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {
@@ -454,7 +449,7 @@
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnListChanged(e));
+                _dispatcherService.BeginInvokeIfRequired(() => base.OnListChanged(e));
             }
             else
             {

@@ -5,7 +5,6 @@
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-    using IoC;
     using IO;
     using Logging;
     using Runtime.Serialization;
@@ -209,10 +208,7 @@
                 return _editableObjectSerializer;
             }
 
-            var dependencyResolver = this.GetDependencyResolver();
-
-            var serializer = dependencyResolver.ResolveRequired<ISerializer>();
-            return serializer;
+            return _serializer;
         }
 
         /// <summary>

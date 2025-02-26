@@ -7,7 +7,6 @@
     using System.Reflection;
     using Collections;
     using Data;
-    using IoC;
     using Logging;
     using MethodTimer;
     using System.Runtime.InteropServices;
@@ -42,42 +41,10 @@
         /// Gets the entry assembly.
         /// </summary>
         /// <returns>Assembly.</returns>
+        [ObsoleteEx(Message = "Use IEntryAssemblyResolver instead", TreatAsErrorFromVersion = "7.0", RemoveInVersion = "8.0")]
         public static Assembly? GetEntryAssembly()
         {
-            Assembly? assembly = null;
-
-            try
-            {
-                var serviceLocator = ServiceLocator.Default;
-                if (serviceLocator.IsTypeRegistered<IEntryAssemblyResolver>())
-                {
-                    var entryAssemblyResolver = serviceLocator.ResolveRequiredType<IEntryAssemblyResolver>();
-                    assembly = entryAssemblyResolver.Resolve();
-
-                    if (assembly is not null)
-                    {
-                        return assembly;
-                    }
-                }
-
-                if (assembly is null)
-                {
-                    assembly = Assembly.GetEntryAssembly();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to get assembly");
-            }
-
-            if (assembly is null)
-            {
-                Log.Warning("Entry assembly could not be determined, returning Catel.Core as fallback");
-
-                assembly = typeof(AssemblyHelper).GetAssemblyEx();
-            }
-
-            return assembly;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -132,7 +99,7 @@
                                       where type is not null
                                       select type).ToArray();
 
-                Log.Warning($"A ReflectionTypeLoadException occured, adding all {BoxingCache.GetBoxedValue(foundAssemblyTypes.Length)} types that were loaded correctly");
+                Log.Warning($"A ReflectionTypeLoadException occurred, adding all {BoxingCache.GetBoxedValue(foundAssemblyTypes.Length)} types that were loaded correctly");
 
                 if (logLoaderExceptions)
                 {

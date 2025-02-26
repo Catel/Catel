@@ -2,7 +2,6 @@
 {
     using System;
     using Catel.Logging;
-    using IoC;
     using Services;
 
     /// <summary>
@@ -11,50 +10,25 @@
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Field)]
     public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly Lazy<ILanguageService> DefaultLanguageService = new Lazy<ILanguageService>(() =>
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var languageService = dependencyResolver.ResolveRequired<ILanguageService>();
-            return languageService;
-        });
-
         private readonly string _resourceName;
-        private ILanguageService? _languageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
         /// </summary>
-        public DisplayNameAttribute(string resourceName)
+        public DisplayNameAttribute(ILanguageService languageService, string resourceName)
             : base(string.Empty)
         {
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
 
+            LanguageService = languageService;
             _resourceName = resourceName;
         }
 
         /// <summary>
-        /// Gets or sets the language service. By default or when set to <c>null</c>, this property will resolve the language
-        /// service from the default <see cref="IDependencyResolver"/>.
+        /// Gets or sets the language service.
         /// </summary>
         /// <value>The language service.</value>
-        public ILanguageService LanguageService
-        {
-            get
-            {
-                if (_languageService is not null)
-                {
-                    return _languageService;
-                }
-
-                return DefaultLanguageService.Value;
-            }
-            set
-            {
-                _languageService = value;
-            }
-        }
+        public ILanguageService LanguageService { get; set; }
 
         /// <summary>
         /// Gets the display name.

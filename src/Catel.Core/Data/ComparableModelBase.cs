@@ -2,19 +2,14 @@
 {
     using System.Collections.Generic;
     using System.Xml.Serialization;
-    using IoC;
     using System.ComponentModel;
+    using Catel.Runtime.Serialization;
 
     /// <summary>
     /// Comparable model base.
     /// </summary>
     public abstract class ComparableModelBase : ModelBase
     {
-        /// <summary>
-        /// Backing field for the <see cref="EqualityComparer{T}"/> property. Because it has custom logic, it needs a backing field.
-        /// </summary>
-        private IModelEqualityComparer? _equalityComparer;
-
         /// <summary>
         /// Backing field for the <see cref="GetHashCode"/> method so it only has to be calculated once to gain the best performance possible.
         /// </summary>
@@ -23,8 +18,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
         /// </summary>
-        protected ComparableModelBase()
+        /// <param name="serializer">The serializer.</param>
+        /// <param name="equalityComparer">The equality comparer.</param>
+        protected ComparableModelBase(ISerializer serializer, IModelEqualityComparer equalityComparer)
+            : base(serializer)
         {
+            EqualityComparer = equalityComparer;
         }
 
         /// <summary>
@@ -55,24 +54,7 @@
         /// <value>The equality comparer.</value>
         [Browsable(false)]
         [XmlIgnore]
-        protected IModelEqualityComparer EqualityComparer
-        {
-            get
-            {
-                if (_equalityComparer is null)
-                {
-                    var dependencyResolver = this.GetDependencyResolver();
-
-                    _equalityComparer = dependencyResolver.ResolveRequired<IModelEqualityComparer>();
-                }
-
-                return _equalityComparer;
-            }
-            set
-            {
-                _equalityComparer = value;
-            }
-        }
+        protected IModelEqualityComparer EqualityComparer { get; set; }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.

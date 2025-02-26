@@ -380,66 +380,6 @@
         }
 
         /// <summary>
-        /// Loads the listeners from the specified configuration file.
-        /// </summary>
-        /// <param name="configurationFilePath">The configuration file path.</param>
-        /// <param name="assembly">The assembly to determine product info. If <c>null</c>, the entry assembly will be used.</param>
-        public static void LoadListenersFromConfigurationFile(string configurationFilePath, Assembly? assembly = null)
-        {
-            if (string.IsNullOrWhiteSpace(configurationFilePath))
-            {
-                return;
-            }
-
-            try
-            {
-                var configFile = configurationFilePath;
-                var map = new ExeConfigurationFileMap
-                {
-                    ExeConfigFilename = configFile
-                };
-
-                var configuration = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-
-                LoadListenersFromConfiguration(configuration, assembly);
-            }
-            catch (Exception)
-            {
-                // Swallow
-            }
-        }
-
-        /// <summary>
-        /// Loads the listeners from the specified configuration.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="assembly">The assembly to determine product info. If <c>null</c>, the entry assembly will be used.</param>
-        public static void LoadListenersFromConfiguration(Configuration configuration, Assembly? assembly = null)
-        {
-            if (configuration is null)
-            {
-                return;
-            }
-
-            try
-            {
-                var configurationSection = configuration.GetSection<LoggingConfigurationSection>("logging", "catel");
-                if (configurationSection is not null)
-                {
-                    var logListeners = configurationSection.GetLogListeners(assembly);
-                    foreach (var logListener in logListeners)
-                    {
-                        AddListener(logListener);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Swallow
-            }
-        }
-
-        /// <summary>
         /// Registers the default debug listener. Starting with Catel 2.4, the debug listener is no longer
         /// attached for performance reasons. To register the debug listener, call this method.
         /// <para />

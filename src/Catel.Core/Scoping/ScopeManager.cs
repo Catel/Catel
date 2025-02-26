@@ -4,7 +4,6 @@ namespace Catel.Scoping
 {
     using System;
     using System.Collections.Generic;
-    using IoC;
     using Logging;
     using Reflection;
 
@@ -52,8 +51,7 @@ namespace Catel.Scoping
             {
                 Log.Debug($"No custom function to create the scope is provided, creating custom scope for type '{TypeName}' with name '{_scopeName}' using TypeFactory");
 
-                var typeFactory = this.GetTypeFactory();
-                var scopeObject = typeFactory.CreateInstance<T>();
+                var scopeObject = Activator.CreateInstance<T>();
                 if (scopeObject is null)
                 {
                     throw Log.ErrorAndCreateException<CatelException>($"Failed to create scope object '{typeof(T).GetSafeFullName()}'");

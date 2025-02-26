@@ -1,49 +1,51 @@
 ﻿namespace Catel
 {
     using System;
+    using Catel.Reflection;
     using Configuration;
     using Data;
-    using IoC;
     using Messaging;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
     using Runtime.Serialization;
     using Runtime.Serialization.Xml;
     using Services;
 
     /// <summary>
-    /// Core module which allows the registration of default services in the service locator.
+    /// Core module which allows the registration of default services in the service collection.
     /// </summary>
-    public class CoreModule : IServiceLocatorInitializer
+    public static class CoreModule
     {
-        /// <summary>
-        /// Initializes the specified service locator.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        public void Initialize(IServiceLocator serviceLocator)
+        public static IServiceCollection AddCatelCoreServices(IServiceCollection serviceCollection)
         {
             // No need to clean the small boxing caches
             BoxingCache<bool>.Default.CleanUpInterval = TimeSpan.Zero;
 
-            serviceLocator.RegisterType<ILanguageService, LanguageService>();
-            serviceLocator.RegisterType<IAppDataService, AppDataService>();
-            serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
-            serviceLocator.RegisterType<IDispatcherService, ShimDispatcherService>();
+            serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
+            serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();
+            serviceCollection.TryAddSingleton<IMessageMediator>(MessageMediator.Default);
+            serviceCollection.TryAddSingleton<IDispatcherService, ShimDispatcherService>();
 
-            serviceLocator.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
+            serviceCollection.TryAddSingleton<IValidatorProvider, AttributeValidatorProvider>();
 
-            serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
-            serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
-            serviceLocator.RegisterType<IXmlNamespaceManager, XmlNamespaceManager>();
-            serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
-            serviceLocator.RegisterType<Catel.Runtime.Serialization.IObjectAdapter, Catel.Runtime.Serialization.ObjectAdapter>();
-            serviceLocator.RegisterType<Catel.Data.IObjectAdapter, Catel.Data.ExpressionTreeObjectAdapter>();
+            serviceCollection.TryAddSingleton<IDataContractSerializerFactory, DataContractSerializerFactory>();
+            serviceCollection.TryAddSingleton<IXmlSerializer, XmlSerializer>();
+            serviceCollection.TryAddSingleton<IXmlNamespaceManager, XmlNamespaceManager>();
+            serviceCollection.TryAddSingleton<ISerializationManager, SerializationManager>();
+            serviceCollection.TryAddSingleton<Catel.Runtime.Serialization.IObjectAdapter, Catel.Runtime.Serialization.ObjectAdapter>();
+            serviceCollection.TryAddSingleton<Catel.Data.IObjectAdapter, Catel.Data.ExpressionTreeObjectAdapter>();
 
-            serviceLocator.RegisterType<ISerializer, XmlSerializer>();
-            serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, XmlSerializationContextInfoFactory>(typeof(XmlSerializer));
+            serviceCollection.TryAddSingleton<ISerializer, XmlSerializer>();
+            serviceCollection.TryAddKeyedSingleton<ISerializationContextInfoFactory, XmlSerializationContextInfoFactory>(typeof(XmlSerializer));
 
-            serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
-            serviceLocator.RegisterType<IConfigurationService, ConfigurationService>();
-            serviceLocator.RegisterType<IObjectConverterService, ObjectConverterService>();
-            serviceLocator.RegisterType<IRollingInMemoryLogService, RollingInMemoryLogService>();
+            serviceCollection.TryAddSingleton<IEntryAssemblyResolver, EntryAssemblyResolver>();
+
+            serviceCollection.TryAddSingleton<IModelEqualityComparer, ModelEqualityComparer>();
+            serviceCollection.TryAddSingleton<IConfigurationService, ConfigurationService>();
+            serviceCollection.TryAddSingleton<IObjectConverterService, ObjectConverterService>();
+            serviceCollection.TryAddSingleton<IRollingInMemoryLogService, RollingInMemoryLogService>();
+
+            return serviceCollection;
         }
     }
 }

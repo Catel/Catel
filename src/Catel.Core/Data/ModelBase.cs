@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
     using System.Xml.Serialization;
+    using Catel.Runtime.Serialization;
     using Logging;
 
     /// <summary>
@@ -15,6 +16,8 @@
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly ISerializer _serializer;
 
         /// <summary>
         /// The property values.
@@ -40,9 +43,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
         /// </summary>
-        protected ModelBase()
+        protected ModelBase(ISerializer serializer)
         {
+            _serializer = serializer;
             _propertyBag = CreatePropertyBag();
+
+            _xmlSerializationScopeFactory = new Func<SerializationScope>(() => new SerializationScope(_serializer, null));
 
             Initialize();
         }
