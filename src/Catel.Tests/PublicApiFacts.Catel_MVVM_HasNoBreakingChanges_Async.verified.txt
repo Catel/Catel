@@ -44,6 +44,7 @@ namespace Catel
     {
         public static void CreateCommandWithGesture(this Catel.MVVM.ICommandManager commandManager, System.Type containerType, string commandNameFieldName) { }
         public static System.Collections.Generic.Dictionary<string, System.Windows.Input.ICommand> FindCommandsByGesture(this Catel.MVVM.ICommandManager commandManager, Catel.Windows.Input.InputGesture inputGesture) { }
+        public static System.Windows.Input.ICommand GetRequiredCommand(this Catel.MVVM.ICommandManager commandManager, string commandName) { }
     }
     public static class INotifyPropertyChangedExtensions
     {
