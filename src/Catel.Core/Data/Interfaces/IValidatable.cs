@@ -52,7 +52,7 @@
         /// since there is no reason for any values to have changed.
         /// </param>
         /// <remarks>
-        /// To check wether this object contains any errors, use the ValidationContext property.
+        /// To check whether this object contains any errors, use the ValidationContext property.
         /// </remarks>
         void Validate(bool force = false);
     }

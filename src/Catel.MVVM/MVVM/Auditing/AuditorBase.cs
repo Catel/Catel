@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Catel.Data;
 
     /// <summary>
     /// Convenience implementation of the <see cref="IAuditor"/> interface so not all interface members
@@ -19,10 +20,10 @@
         {
             PropertiesToIgnore = new HashSet<string>
             {
-                "IsDirty",
-                "IsReadOnly",
-                "ParentViewModel",
-                "Title"
+                nameof(ViewModelBase.IsDirty),
+                nameof(ViewModelBase.IsReadOnly),
+                nameof(ViewModelBase.ParentViewModel),
+                nameof(ViewModelBase.Title)
             };
         }
 

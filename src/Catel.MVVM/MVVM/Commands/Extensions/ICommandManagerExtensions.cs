@@ -66,7 +66,7 @@
 
             Log.Debug($"Creating command '{commandNameFieldName}'");
 
-            // Note: we must store bindingflags inside variable otherwise invalid IL will be generated
+            // Note: we must store binding flags inside variable otherwise invalid IL will be generated
             var bindingFlags = BindingFlags.Public | BindingFlags.Static;
             var commandNameField = containerType.GetFieldEx(commandNameFieldName, bindingFlags);
             if (commandNameField is null)
@@ -129,6 +129,24 @@
                     Log.Warning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the command by name. If the command does not exist, this method will throw an exception.
+        /// </summary>
+        /// <param name="commandManager"></param>
+        /// <param name="commandName">Name of the command.</param>
+        /// <returns>The command.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        public static ICommand GetRequiredCommand(this ICommandManager commandManager, string commandName)
+        {
+            var command = commandManager.GetCommand(commandName);
+            if (command is null)
+            {
+                throw Log.ErrorAndCreateException<CatelException>($"Command '{commandName}' is not registered in the command manager");
+            }
+
+            return command;
         }
     }
 }

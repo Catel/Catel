@@ -467,6 +467,19 @@
         /// <summary>
         /// Registers a service where the implementation type is the same as the registered type and immediately instantiates the type using the type factory.
         /// </summary>
+        /// <typeparam name="TServiceImplementation">The type of the service definition and implementation.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static TServiceImplementation? RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this IServiceLocator serviceLocator)
+            where TServiceImplementation : notnull
+        {
+            return RegisterRequiredTypeAndInstantiate<TServiceImplementation, TServiceImplementation>(serviceLocator);
+        }
+
+        /// <summary>
+        /// Registers a service where the implementation type is the same as the registered type and immediately instantiates the type using the type factory.
+        /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <typeparam name="TServiceImplementation">The type of the service definition and implementation.</typeparam>
         /// <param name="serviceLocator">The service locator.</param>
@@ -482,6 +495,28 @@
             RegisterTypeWithTag<TService, TServiceImplementation>(serviceLocator, tag, RegistrationType.Singleton);
 
             return ResolveType<TService>(serviceLocator, tag);
+        }
+
+        /// <summary>
+        /// Registers a service where the implementation type is the same as the registered type and immediately instantiates the type using the type factory.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <typeparam name="TServiceImplementation">The type of the service definition and implementation.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <returns>TService.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static TService RegisterRequiredTypeAndInstantiate<TService, TServiceImplementation>(this IServiceLocator serviceLocator)
+            where TService : notnull
+            where TServiceImplementation : TService
+        {
+            var instance = RegisterTypeAndInstantiate<TService, TServiceImplementation>(serviceLocator);
+            if (instance is null)
+            {
+                throw CreateExceptionForRequiredType(typeof(TService));
+            }
+
+            return instance;
         }
 
         private static Exception CreateExceptionForRequiredType(Type serviceType)
