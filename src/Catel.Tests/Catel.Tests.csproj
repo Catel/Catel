@@ -31,7 +31,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="PublicApiGenerator" Version="11.4.1" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="28.10.1" />
+    <PackageReference Include="Verify.NUnit" Version="28.13.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
