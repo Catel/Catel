@@ -29,12 +29,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowLogic"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="targetWindow">The window this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model to inject.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetWindow"/> is <c>null</c>.</exception>
-        public WindowLogic(IView targetWindow, Type? viewModelType = null, IViewModel? viewModel = null)
-            : base(targetWindow, viewModelType, viewModel)
+        public WindowLogic(IServiceProvider serviceProvider, IView targetWindow, Type? viewModelType = null, IViewModel? viewModel = null)
+            : base(serviceProvider, targetWindow, viewModelType, viewModel)
         {
             var targetWindowType = targetWindow.GetType();
 

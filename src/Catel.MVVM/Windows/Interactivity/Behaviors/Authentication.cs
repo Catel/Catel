@@ -3,7 +3,6 @@
     using System.Windows;
     using System.Windows.Controls;
     using System;
-    using IoC;
     using Logging;
     using MVVM;
 
@@ -41,19 +40,15 @@
         /// <summary>
         /// The authentication provider.
         /// </summary>
-        private static readonly IAuthenticationProvider _authenticationProvider;
-
-        static Authentication()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            _authenticationProvider = dependencyResolver.ResolveRequired<IAuthenticationProvider>();
-        }
+        private readonly IAuthenticationProvider _authenticationProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Authentication"/> class.
         /// </summary>
-        public Authentication()
+        public Authentication(IAuthenticationProvider authenticationProvider)
         {
+            _authenticationProvider = authenticationProvider;
+
             if (IsInDesignMode)
             {
                 return;
@@ -95,7 +90,6 @@
         /// <summary>
         /// Called when the associated object has been loaded.
         /// </summary>
-        /// <exception cref="InvalidOperationException">No instance of <see cref="IAuthenticationProvider"/> is registered in the <see cref="IServiceLocator"/>.</exception>
         /// <exception cref="InvalidOperationException">The <see cref="Action"/> is set to <see cref="AuthenticationAction.Disable"/> and the associated object is not a <see cref="Control"/>.</exception>
         protected override void OnAssociatedObjectLoaded()
         {

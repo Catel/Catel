@@ -2,7 +2,6 @@
 {
     using System;
     using System.Globalization;
-    using IoC;
     using Services;
 
     /// <summary>
@@ -15,9 +14,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageConverter"/> class.
         /// </summary>
-        public LanguageConverter()
+        public LanguageConverter(ILanguageService languageService)
         {
-            _languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
+            _languageService = languageService;
         }
 
         /// <summary>

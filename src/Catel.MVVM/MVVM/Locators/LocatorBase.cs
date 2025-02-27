@@ -58,7 +58,7 @@
         /// <param name="valueToResolve">The value to resolve.</param>
         /// <returns>A list of resolved values (can contain multiple items).</returns>
         /// <remarks>
-        /// This method can be overriden to implement custom behavior. Don't forget to register the value using the 
+        /// This method can be overridden to implement custom behavior. Don't forget to register the value using the 
         /// <see cref="Register"/> method if the result should be cached in a custom implementation.
         /// <para />
         /// By default, this value will assume the <paramref name="valueToResolve"/> is a type and will cast it as so. If the 
@@ -138,7 +138,7 @@
         /// <param name="valueToResolve">The value to resolve.</param>
         /// <returns>The resolved value or <c>null</c> if the value could not be resolved.</returns>
         /// <remarks>
-        /// This method can be overriden to implement custom behavior. Don't forget to register the value using the 
+        /// This method can be overridden to implement custom behavior. Don't forget to register the value using the 
         /// <see cref="Register"/> method if the result should be cached in a custom implementation.
         /// <para />
         /// By default, this value will assume the <paramref name="valueToResolve"/> is a type and will cast it as so. If the 

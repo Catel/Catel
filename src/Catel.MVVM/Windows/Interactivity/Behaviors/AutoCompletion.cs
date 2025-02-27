@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Collections;
     using Catel.Services;
-    using IoC;
     using Input;
     using System.Windows;
     using System.Windows.Controls;
@@ -28,10 +27,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoCompletion"/> class.
         /// </summary>
-        public AutoCompletion()
+        public AutoCompletion(IAutoCompletionService autoCompletionService)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            _autoCompletionService = dependencyResolver.ResolveRequired<IAutoCompletionService>();
+            _autoCompletionService = autoCompletionService;
 
             _suggestionListBox = new ListBox();
             _suggestionListBox.Margin = new Thickness(0d);

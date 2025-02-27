@@ -14,18 +14,23 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly IUrlLocator _urlLocator;
+
         private bool _navigationServiceInitialized;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationAdapter" /> class.
         /// </summary>
         /// <param name="navigationTarget">The navigation target.</param>
+        /// <param name="urlLocator">The URL locator.</param>
         /// <param name="navigationRoot">The navigation root.</param>
-        public NavigationAdapter(IView navigationTarget, object navigationRoot)
+        public NavigationAdapter(IView navigationTarget, IUrlLocator urlLocator, object navigationRoot)
         {
             ArgumentNullException.ThrowIfNull(navigationRoot);
 
             NavigationTarget = navigationTarget;
+            _urlLocator = urlLocator;
+
             NavigationTargetType = navigationTarget.GetType();
             NavigationRoot = navigationRoot;
             NavigationContext = new NavigationContext();

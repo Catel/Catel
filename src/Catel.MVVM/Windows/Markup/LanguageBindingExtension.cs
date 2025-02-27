@@ -3,7 +3,6 @@
     using System;
     using System.Globalization;
     using System.Windows;
-    using Catel.IoC;
     using Catel.Services;
     using System.Windows.Markup;
 
@@ -13,13 +12,15 @@
     public class LanguageBindingExtension : UpdatableMarkupExtension
     {
         private readonly ILanguageService _languageService;
+
         private Catel.IWeakEventListener? _onLanguageServiceLanguageUpdatedWeakListener;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageBindingExtension"/> class.
         /// </summary>
-        public LanguageBindingExtension()
-            : this(string.Empty)
+        /// <param name="languageService">The language service.</param>
+        public LanguageBindingExtension(ILanguageService languageService)
+            : this(languageService, string.Empty)
         {
             // Keep empty
         }
@@ -27,13 +28,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageBindingExtension" /> class.
         /// </summary>
+        /// <param name="languageService">The language service.</param>
         /// <param name="resourceName">Name of the resource.</param>
-        public LanguageBindingExtension(string resourceName)
+        public LanguageBindingExtension(ILanguageService languageService, string resourceName)
         {
+            _languageService = languageService;
             ResourceName = resourceName;
-
-            var dependencyResolver = this.GetDependencyResolver();
-            _languageService = dependencyResolver.ResolveRequired<ILanguageService>();
         }
 
         /// <summary>

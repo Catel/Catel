@@ -1,12 +1,9 @@
 ﻿namespace Catel.MVVM.Views
 {
     using System;
-    using Logging;
 
     public static partial class ViewExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Gets the parent of the specified view.
         /// </summary>

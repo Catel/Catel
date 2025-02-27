@@ -1,6 +1,5 @@
 ﻿namespace Catel.MVVM
 {
-    using Catel.IoC;
     using Logging;
     using System;
     using System.Windows;
@@ -22,11 +21,11 @@
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="commandManager">The command manager.</param>
-        public CommandManagerWrapper(FrameworkElement view, ICommandManager? commandManager = null)
+        public CommandManagerWrapper(FrameworkElement view, ICommandManager commandManager)
         {
             ArgumentNullException.ThrowIfNull(view);
 
-            _commandManager = commandManager ?? ServiceLocator.Default.ResolveRequiredType<ICommandManager>();
+            _commandManager = commandManager;
 
             View = view;
 

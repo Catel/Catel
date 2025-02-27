@@ -5,6 +5,7 @@
     using System.Linq;
     using Catel.Windows.Data;
     using System.Windows;
+    using System.Collections.Generic;
 
     public static partial class ViewExtensions
     {
@@ -13,7 +14,7 @@
         /// </summary>
         /// <param name="view">The view.</param>
         /// <returns>List of properties.</returns>
-        public static string[] GetProperties(this IView view)
+        public static IReadOnlyList<string> GetProperties(this IView view)
         {
             ArgumentNullException.ThrowIfNull(view);
 
@@ -26,7 +27,7 @@
         /// </summary>
         /// <param name="viewType">The view type.</param>
         /// <returns>List of properties.</returns>
-        public static string[] GetProperties(Type viewType)
+        public static IReadOnlyList<string> GetProperties(Type viewType)
         {
             ArgumentNullException.ThrowIfNull(viewType);
 

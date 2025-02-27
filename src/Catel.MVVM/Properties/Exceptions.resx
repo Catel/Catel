@@ -161,9 +161,6 @@ If you are sure that you have a model with this name, make sure it's public inst
 {1} = model property name
 {2} = model name</comment>
   </data>
-  <data name="ViewModelAlreadyRegistered" xml:space="preserve">
-    <value>View model already registered</value>
-  </data>
   <data name="ViewModelContainerMustBeOfTypeDependencyObject" xml:space="preserve">
     <value>The viewModelContainer must be of type DependencyObject</value>
   </data>

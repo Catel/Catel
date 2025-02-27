@@ -13,7 +13,7 @@
         {
             ArgumentNullException.ThrowIfNull(view);
 
-            // According to the documentation, no visual tree is garantueed in the Loaded event of the user control.
+            // According to the documentation, no visual tree is guaranteed in the Loaded event of the user control.
             // However, as a solution the documentation says you need to manually call ApplyTemplate, so let's do that.
             // For more info, see http://msdn.microsoft.com/en-us/library/ms596558(vs.95)
             var targetControl = view as Control;

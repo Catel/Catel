@@ -10,6 +10,7 @@
     using Views;
     using Reflection;
     using Catel.Services;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Available unload behaviors.
@@ -58,13 +59,15 @@
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static IViewModelFactory? _viewModelFactory;
-        private static readonly IViewModelLocator _viewModelLocator;
-        private static readonly IViewManager _viewManager;
-        private static readonly IViewPropertySelector _viewPropertySelector;
-        private static readonly IViewContextService _viewContextService;
-        private static readonly IObjectAdapter _objectAdapter;
-        private static readonly Dictionary<Type, bool> _hasVmPropertyCache = new Dictionary<Type, bool>();
+        protected readonly IViewModelFactory _viewModelFactory;
+        protected readonly IViewModelLocator _viewModelLocator;
+        protected readonly IViewManager _viewManager;
+        protected readonly IViewPropertySelector _viewPropertySelector;
+        protected readonly IViewContextService _viewContextService;
+        protected readonly IObjectAdapter _objectAdapter;
+        protected readonly IViewLoadManager _viewLoadManager;
+
+        private readonly Dictionary<Type, bool> _hasVmPropertyCache = new Dictionary<Type, bool>();
 
         /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
@@ -76,11 +79,6 @@
         private bool _isFirstValidationAfterLoaded = true;
 
         /// <summary>
-        /// The view load manager.
-        /// </summary>
-        protected static readonly IViewLoadManager ViewLoadManager;
-
-        /// <summary>
         /// The lock object.
         /// </summary>
         protected readonly object _lockObject = new object();
@@ -88,31 +86,25 @@
         private IView? _targetView;
 
         /// <summary>
-        /// Initializes static members of the <see cref="LogicBase"/> class.
-        /// </summary>
-        static LogicBase()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-
-            _viewModelLocator = dependencyResolver.ResolveRequired<IViewModelLocator>();
-            _viewManager = dependencyResolver.ResolveRequired<IViewManager>();
-            _viewPropertySelector = dependencyResolver.ResolveRequired<IViewPropertySelector>();
-            _viewContextService = dependencyResolver.ResolveRequired<IViewContextService>();
-            _objectAdapter = dependencyResolver.ResolveRequired<IObjectAdapter>();
-            ViewLoadManager = dependencyResolver.ResolveRequired<IViewLoadManager>();
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="LogicBase"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="targetView">The target control.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        protected LogicBase(IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
+        protected LogicBase(IServiceProvider serviceProvider, IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
         {
+            _viewModelFactory = serviceProvider.GetRequiredService<IViewModelFactory>();
+            _viewModelLocator = serviceProvider.GetRequiredService<IViewModelLocator>();
+            _viewManager = serviceProvider.GetRequiredService<IViewManager>();
+            _viewPropertySelector = serviceProvider.GetRequiredService<IViewPropertySelector>();
+            _viewContextService = serviceProvider.GetRequiredService<IViewContextService>();
+            _objectAdapter = serviceProvider.GetRequiredService<IObjectAdapter>();
+            _viewLoadManager = serviceProvider.GetRequiredService<IViewLoadManager>();
+
             if (CatelEnvironment.IsInDesignMode)
             {
                 ViewModelType = typeof(IViewModel);
@@ -158,34 +150,34 @@
 
             Log.Debug("Subscribing to view events");
 
-            ViewLoadManager.AddView(this);
+            _viewLoadManager.AddView(this);
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoading), OnViewLoadedManagerLoadingInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewLoading), OnViewLoadedManagerLoadingInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
 
-                ViewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
+                _viewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoaded), OnViewLoadedManagerLoadedInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewLoaded), OnViewLoadedManagerLoadedInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
 
-                ViewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
+                _viewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloading), OnViewLoadedManagerUnloadingInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewUnloading), OnViewLoadedManagerUnloadingInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
 
-                ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
+                _viewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloaded), OnViewLoadedManagerUnloadedInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewUnloaded), OnViewLoadedManagerUnloadedInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
 
-                ViewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloadedInternal;
+                _viewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloadedInternal;
             }
 
             // Required so the ViewLoadManager can handle the rest
@@ -204,24 +196,6 @@
             }
 
             Log.Debug($"Constructed behavior '{GetType().Name}' for '{TargetViewType?.Name}'");
-        }
-
-        #region Properties
-        /// <summary>
-        /// Gets the view model factory used to create the view model instances.
-        /// </summary>
-        protected IViewModelFactory ViewModelFactory
-        {
-            get
-            {
-                if (_viewModelFactory is null)
-                {
-                    var dependencyResolver = this.GetDependencyResolver();
-                    _viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
-                }
-
-                return _viewModelFactory;
-            }
         }
 
         /// <summary>
@@ -451,9 +425,7 @@
         {
             get { return TargetView; }
         }
-        #endregion
 
-        #region Events
         /// <summary>
         /// Occurs when the view model is about to construct a new view model. This event can be used to
         /// intercept and inject a dynamically instantiated view model.
@@ -505,9 +477,7 @@
         /// Occurs when the view model container is unloaded.
         /// </summary>
         public event EventHandler<EventArgs>? Unloaded;
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Determines the interesting view properties.
         /// </summary>
@@ -725,7 +695,7 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         /// <remarks>
-        /// This method will call the <see cref="OnTargetViewLoadedAsync"/> which can be overriden for custom 
+        /// This method will call the <see cref="OnTargetViewLoadedAsync"/> which can be overridden for custom 
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
@@ -846,7 +816,7 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         /// <remarks>
-        /// This method will call the <see cref="OnTargetViewUnloadedAsync"/> which can be overriden for custom 
+        /// This method will call the <see cref="OnTargetViewUnloadedAsync"/> which can be overridden for custom 
         /// behavior. This method is required to protect from duplicate unloaded events.
         /// </remarks>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
@@ -1242,7 +1212,7 @@
                 if (determineViewModelInstanceEventArgs.ViewModel is not null)
                 {
                     var viewModel = determineViewModelInstanceEventArgs.ViewModel;
-                    Log.Info("ViewModel instance is overriden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
+                    Log.Info("ViewModel instance is overridden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
 
                     return viewModel;
                 }
@@ -1261,7 +1231,7 @@
                 determineViewModelTypeHandler(this, determineViewModelTypeEventArgs);
                 if (determineViewModelTypeEventArgs.ViewModelType is not null)
                 {
-                    Log.Info("ViewModelType is overriden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
+                    Log.Info("ViewModelType is overridden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
                         determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
 
                     viewModelType = determineViewModelTypeEventArgs.ViewModelType;
@@ -1273,7 +1243,7 @@
             {
                 var injectionObjectViewModelType = injectionObjectAsViewModel.GetType();
 
-                if (ViewModelFactory.CanReuseViewModel(targetViewtype, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
+                if (_viewModelFactory.CanReuseViewModel(targetViewtype, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
                 {
                     Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
                              viewModelType.GetSafeFullName(), targetViewtype.GetSafeFullName());
@@ -1282,15 +1252,14 @@
                 }
             }
 
-            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", ViewModelFactory.GetType().GetSafeFullName());
+            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", _viewModelFactory.GetType().GetSafeFullName());
 
-            var viewModelInstance = ViewModelFactory.CreateViewModel(viewModelType, injectionObject);
+            var viewModelInstance = _viewModelFactory.CreateViewModel(viewModelType, injectionObject);
 
             Log.Debug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
                 (viewModelInstance is not null) ? string.Empty : " NOT");
 
             return viewModelInstance;
         }
-        #endregion
     }
 }

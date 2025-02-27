@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using IoC;
     using Logging;
     using Navigation;
     using Views;
@@ -19,6 +18,7 @@
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly INavigationRootService _navigationRootService;
+        private readonly IUrlLocator _urlLocator;
 
         private NavigationAdapter? _navigationAdapter;
 
@@ -27,14 +27,17 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PageLogic"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="navigationRootService">The navigation root service.</param>
+        /// <param name="urlLocator"></param>
         /// <param name="targetPage">The page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
-        protected NavigationLogicBase(INavigationRootService navigationRootService, T targetPage, Type? viewModelType = null)
-            : base(targetPage, viewModelType)
+        protected NavigationLogicBase(IServiceProvider serviceProvider, INavigationRootService navigationRootService, IUrlLocator urlLocator, T targetPage, Type? viewModelType = null)
+            : base( serviceProvider, targetPage, viewModelType)
         {
             _navigationRootService = navigationRootService;
+            _urlLocator = urlLocator;
 
             CreateNavigationAdapter(false);
         }
@@ -64,7 +67,7 @@
                     throw Log.ErrorAndCreateException<CatelException>($"Target page is null, cannot create navigation adapter");
                 }
 
-                _navigationAdapter = new NavigationAdapter(targetPage, navigationRoot);
+                _navigationAdapter = new NavigationAdapter(targetPage, _urlLocator, navigationRoot);
                 _navigationAdapter.NavigatedTo += OnNavigatedTo;
                 _navigationAdapter.NavigatingAway += OnNavigatingAway;
                 _navigationAdapter.NavigatedAway += OnNavigatedAway;

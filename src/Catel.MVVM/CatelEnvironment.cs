@@ -4,8 +4,6 @@
     using Data;
     using System;
     using System.ComponentModel;
-    using IoC;
-    using MVVM;
     using System.Linq;
 
     /// <summary>
@@ -109,15 +107,6 @@
         {
             get { return ModelBase.DisablePropertyChangeNotifications; }
             set { ModelBase.DisablePropertyChangeNotifications = value; }
-        }
-
-        /// <summary>
-        /// Registers the default view model services in the default <see cref="ServiceLocator"/>. This call can come in handy when the 
-        /// services should be accessed before any view model is created.
-        /// </summary>
-        public static void RegisterDefaultViewModelServices()
-        {
-            ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
         }
 
         /// <summary>

@@ -51,7 +51,7 @@
             DependencyProperty.Register(nameof(ScrollOnLoaded), typeof(bool), typeof(AutoScroll), new PropertyMetadata(true));
 
         /// <summary>
-        /// The scoll direction.
+        /// The scroll direction.
         /// <para />
         /// The default value is <see cref="Catel.Windows.Interactivity.ScrollDirection.Bottom"/>.
         /// </summary>
@@ -68,21 +68,21 @@
             DependencyProperty.Register(nameof(ScrollDirection), typeof(ScrollDirection), typeof(AutoScroll), new PropertyMetadata(ScrollDirection.Bottom));
 
         /// <summary>
-        /// The scoll threshold in which the behavior will scroll down even when it is not fully down.
+        /// The scroll threshold in which the behavior will scroll down even when it is not fully down.
         /// <para />
         /// The default value is <c>5</c>.
         /// </summary>
-        public int ScrollTreshold
+        public int ScrollThreshold
         {
-            get { return (int)GetValue(ScrollTresholdProperty); }
-            set { SetValue(ScrollTresholdProperty, value); }
+            get { return (int)GetValue(ScrollThresholdProperty); }
+            set { SetValue(ScrollThresholdProperty, value); }
         }
 
         /// <summary>
-        /// The scroll treshold property.
+        /// The scroll threshold property.
         /// </summary>
-        public static readonly DependencyProperty ScrollTresholdProperty =
-            DependencyProperty.Register(nameof(ScrollTreshold), typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
+        public static readonly DependencyProperty ScrollThresholdProperty =
+            DependencyProperty.Register(nameof(ScrollThreshold), typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
 
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
@@ -191,11 +191,11 @@
             switch (ScrollDirection)
             {
                 case ScrollDirection.Top:
-                    _isScrollbarAtEnd = e.VerticalOffset <= ScrollTreshold;
+                    _isScrollbarAtEnd = e.VerticalOffset <= ScrollThreshold;
                     break;
 
                 case ScrollDirection.Bottom:
-                    _isScrollbarAtEnd = e.VerticalOffset >= _scrollViewer.ScrollableHeight - ScrollTreshold;
+                    _isScrollbarAtEnd = e.VerticalOffset >= _scrollViewer.ScrollableHeight - ScrollThreshold;
                     break;
 
                 default:

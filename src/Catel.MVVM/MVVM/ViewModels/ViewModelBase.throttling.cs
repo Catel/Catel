@@ -65,7 +65,7 @@
             }
             set
             {
-                Log.Debug("Updating throttling rate of view model '{0}' to an interval of '{1}' ms", BoxingCache.GetBoxedValue(UniqueIdentifier), BoxingCache.GetBoxedValue(value.TotalMilliseconds));
+                Log.Debug("Updating throttling rate of view model to an interval of '{1}' ms", BoxingCache.GetBoxedValue(value.TotalMilliseconds));
 
                 _throttlingRate = value;
                 if (_throttlingRate.TotalMilliseconds.Equals(0d))

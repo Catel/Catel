@@ -1,6 +1,7 @@
 ﻿namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Services;
     using Logging;
 
     /// <summary>
@@ -25,14 +26,18 @@
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(string))]
     public class BooleanToTextConverter : ValueConverterBase
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Methods
+        private readonly ILanguageService _languageService;
+
+        public BooleanToTextConverter(ILanguageService languageService)
+        {
+            _languageService = languageService;
+        }
+
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
         /// </summary>
@@ -57,11 +62,11 @@
                     return (typedValue) ? "x" : string.Empty;
 
                 case BooleanToTextConverterMode.YesNo:
-                    return (typedValue) ? ResourceHelper.GetString("Yes") : Catel.ResourceHelper.GetString("No");
+                    return (typedValue) ? _languageService.GetString("Yes") : _languageService.GetString("No");
 
                 default:
                     // Some strange way, this method fails (all known modes must be handled), so return "failed"
-                    return Catel.ResourceHelper.GetString("Failed");
+                    return _languageService.GetString("Failed");
             }
         }
 
@@ -96,6 +101,5 @@
 
             return mode;
         }
-        #endregion
     }
 }

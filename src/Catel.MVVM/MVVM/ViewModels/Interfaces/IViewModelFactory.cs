@@ -39,10 +39,9 @@
         /// </summary>
         /// <param name="viewModelType">Type of the view model that needs to be created.</param>
         /// <param name="dataContext">The data context of the view model.</param>
-        /// <param name="tag">The preferred scope to use when resolving dependencies.</param>
         /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
-        IViewModel? CreateViewModel(Type viewModelType, object? dataContext, object? tag = null);
+        IViewModel? CreateViewModel(Type viewModelType, object? dataContext);
     }
 }

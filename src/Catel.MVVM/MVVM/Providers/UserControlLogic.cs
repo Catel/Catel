@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using IoC;
     using Views;
     using Services;
     using Logging;
@@ -21,6 +20,9 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IViewModelWrapperService _viewModelWrapperService;
+
         private IViewModelContainer? _parentViewModelContainer;
         private IViewModel? _parentViewModel;
         private InfoBarMessageControl? _infoBarMessageControl;
@@ -38,13 +40,19 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="UserControlLogic"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="viewModelWrapperService">The view model wrapper service.</param>
         /// <param name="targetView">The target control.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
-        public UserControlLogic(IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
-            : base(targetView, viewModelType, viewModel)
+        public UserControlLogic(IServiceProvider serviceProvider, IViewModelWrapperService viewModelWrapperService,
+            IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
+            : base(serviceProvider, targetView, viewModelType, viewModel)
         {
+            _serviceProvider = serviceProvider;
+            _viewModelWrapperService = viewModelWrapperService;
+
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
@@ -210,10 +218,7 @@
                 return null;
             }
 
-            var dependencyResolver = this.GetDependencyResolver();
-            var viewModelWrapperService = dependencyResolver.ResolveRequired<IViewModelWrapperService>();
-
-            var wrapper = viewModelWrapperService.GetWrapper(targetView);
+            var wrapper = _viewModelWrapperService.GetWrapper(targetView);
             if (wrapper is null)
             {
                 var wrapOptions = WrapOptions.None;
@@ -228,7 +233,7 @@
                     wrapOptions |= WrapOptions.Force;
                 }
 
-                wrapper = viewModelWrapperService.Wrap(targetView, this, wrapOptions);
+                wrapper = _viewModelWrapperService.Wrap(targetView, this, wrapOptions);
             }
 
             return wrapper;
@@ -246,10 +251,7 @@
                 return null;
             }
 
-            var dependencyResolver = this.GetDependencyResolver();
-            var viewModelWrapperService = dependencyResolver.ResolveRequired<IViewModelWrapperService>();
-
-            return viewModelWrapperService.GetWrapper(targetView);
+            return _viewModelWrapperService.GetWrapper(targetView);
         }
 
         private void OnTargetViewInitialized(object? sender, EventArgs e)
@@ -652,7 +654,7 @@
                 {
                     var viewModelType = ViewModelType;
 
-                    var canKeepViewModel = !ViewModelFactory.IsViewModelWithModelInjection(viewModelType);
+                    var canKeepViewModel = !_viewModelFactory.IsViewModelWithModelInjection(viewModelType);
                     if (canKeepViewModel)
                     {
                         Log.Debug($"DataContext has changed, but view model '{viewModelType}' is a view model without model injection, keeping current view model");

@@ -4,21 +4,26 @@
     using System.Windows.Input;
     using ModifierKeys = System.Windows.Input.ModifierKeys;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using System.ComponentModel;
 
     /// <summary>
     /// Input gesture class.
     /// </summary>
-    public class InputGesture : ModelBase
+    public class InputGesture : ObservableObject
     {
         /// <summary>
         /// <see cref="ToString"/> method result cache.
         /// </summary>
         private string? _string;
 
+        private Key _key;
+        private ModifierKeys _modifiers;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InputGesture"/> class.
         /// </summary>
         public InputGesture()
+            : base()
         {
         }
 
@@ -45,35 +50,30 @@
         /// <summary>
         /// Gets the key.
         /// </summary>
-        public Key Key
+        public Key Key 
         {
-            get { return GetValue<Key>(KeyProperty); }
-            set { SetValue(KeyProperty, value); }
+            get => _key;
+            set
+            {
+                _key = value;
+                RaisePropertyChanged(nameof(Key));
+            }
         }
-
-        /// <summary>
-        /// Register the Key property so it is known in the class.
-        /// </summary>
-        public static readonly IPropertyData KeyProperty = RegisterProperty<InputGesture, Key>(o => o.Key, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
 
         /// <summary>
         /// Gets the modifiers.
         /// </summary>
-        public ModifierKeys Modifiers
-        {
-            get { return GetValue<ModifierKeys>(ModifiersProperty); }
-            set { SetValue(ModifiersProperty, value); }
+        public ModifierKeys Modifiers 
+        { 
+            get => _modifiers;
+            set
+            {
+                _modifiers = value;
+                RaisePropertyChanged(nameof(Modifiers));
+            }
         }
 
-        /// <summary>
-        /// Register the Modifiers property so it is known in the class.
-        /// </summary>
-        public static readonly IPropertyData ModifiersProperty = RegisterProperty<InputGesture, ModifierKeys>(o => o.Modifiers, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
-
-        /// <summary>
-        /// Called whether <see cref="Modifiers"/> or <see cref="Key"/> properties changed.
-        /// </summary>
-        private void OnInputGesturePropertyChanged()
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             _string = null;
         }
@@ -95,7 +95,7 @@
         }
 
         /// <summary>
-        /// Equalses the specified other.
+        /// Equals the specified other.
         /// </summary>
         /// <param name="other">The other.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>

@@ -1,7 +1,6 @@
 ﻿namespace Catel.MVVM.Converters
 {
     using System;
-    using IoC;
     using MVVM;
 
     /// <summary>
@@ -11,16 +10,11 @@
     [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
     public class ViewModelToViewConverter : ValueConverterBase
     {
-        private static readonly IViewLocator _viewLocator;
+        private readonly IViewLocator _viewLocator;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="ViewModelToViewConverter"/> class.
-        /// </summary>
-        static ViewModelToViewConverter()
+        public ViewModelToViewConverter(IViewLocator viewLocator)
         {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-
-            _viewLocator = dependencyResolver.ResolveRequired<IViewLocator>();
+            _viewLocator = viewLocator;
         }
 
         /// <summary>

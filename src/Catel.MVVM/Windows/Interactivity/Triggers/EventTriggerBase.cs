@@ -64,7 +64,7 @@
         /// </summary>
         protected override string? GetEventName()
         {
-            throw new InvalidOperationException("This method MUST be overriden and the base cannot be called");
+            throw new InvalidOperationException("This method MUST be overridden and the base cannot be called");
         }
 
         /// <summary>

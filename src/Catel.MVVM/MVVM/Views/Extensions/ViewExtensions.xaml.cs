@@ -4,21 +4,21 @@
     using System.Collections.Generic;
     using System.Linq;
     using Windows;
-    using IoC;
     using Reflection;
     using System.Windows;
     using System.Windows.Media;
 
     public static partial class ViewExtensions
     {
-        private static readonly HashSet<Type> _autoDetectedViewtypes = new HashSet<Type>(); 
+        private static readonly HashSet<Type> _autoDetectedViewtypes = new HashSet<Type>();
 
         /// <summary>
         /// Automatically detects view properties to subscribe to by searching for dependency properties
         /// decorated with the <see cref="ViewToViewModelAttribute"/>.
         /// </summary>
         /// <param name="viewType">The view type.</param>
-        public static void AutoDetectViewPropertiesToSubscribe(this Type viewType)
+        /// <param name="viewPropertySelector">The view property selector.</param>
+        public static void AutoDetectViewPropertiesToSubscribe(this Type viewType, IViewPropertySelector viewPropertySelector)
         {
             ArgumentNullException.ThrowIfNull(viewType);
 
@@ -28,9 +28,6 @@
                 {
                     return;
                 }
-
-                var serviceLocator = ServiceLocator.Default;
-                var viewPropertySelector = serviceLocator.ResolveRequiredType<IViewPropertySelector>();
 
                 var dependencyProperties = Catel.Windows.Data.DependencyPropertyHelper.GetDependencyProperties(viewType);
                 foreach (var dependencyProperty in dependencyProperties)

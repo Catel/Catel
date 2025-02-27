@@ -6,7 +6,6 @@
     using System.Windows;
     using System.Windows.Controls;
     using Catel.Services;
-    using IoC;
     using Logging;
     using System.ComponentModel;
     using System.Windows.Data;
@@ -17,7 +16,7 @@
     /// </summary>
     /// <remarks>
     /// A long, long, long time ago, the messages were hold in a dependency property (DP). However, even though DP values are
-    /// not static, several instances that were open at the same time were still clearing eachother values (thus it seemed the
+    /// not static, several instances that were open at the same time were still clearing each other values (thus it seemed the
     /// DP behaves like it's a static member). Therefore, the messages are now hold in a field, and all problems are now gone.
     /// <para />
     /// And the control lived happily ever after.
@@ -34,6 +33,8 @@
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly ILanguageService _languageService;
 
         private readonly object _lock = new object();
 
@@ -52,16 +53,22 @@
         /// </summary>
         static InfoBarMessageControl()
         {
-            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
-            DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle") ?? string.Empty;
+            DefaultTextPropertyValue = string.Empty;
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InfoBarMessageControl), new FrameworkPropertyMetadata(typeof(InfoBarMessageControl)));
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InfoBarMessageControl"/> class.
         /// </summary>
-        public InfoBarMessageControl()
+        public InfoBarMessageControl(ILanguageService languageService)
         {
+            _languageService = languageService;
+
+            if (string.IsNullOrEmpty(DefaultTextPropertyValue))
+            {
+                DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle") ?? string.Empty;
+            }
+
             Text = DefaultTextPropertyValue;
             IsTabStop = false;
             Focusable = false;

@@ -246,10 +246,10 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the global IgnoreCatelLogging should be overriden.
+        /// Gets a value indicating whether the global IgnoreCatelLogging should be overridden.
         /// <para />
         /// Note that this value will override all settings of each listener globally. If this value is
-        /// set to <c>null</c>, nothing will be overriden.
+        /// set to <c>null</c>, nothing will be overridden.
         /// </summary>
         /// <value><c>true</c> if Catel logging must be ignored for all log listeners; otherwise, <c>false</c>.</value>
         public static bool? IgnoreCatelLogging
@@ -263,10 +263,10 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the global IsDebugEnabled should be overriden.
+        /// Gets a value indicating whether the global IsDebugEnabled should be overridden.
         /// <para />
         /// Note that this value will override all settings of each listener globally. If this value is
-        /// set to <c>null</c>, nothing will be overriden.
+        /// set to <c>null</c>, nothing will be overridden.
         /// </summary>
         /// <value><c>true</c> if debug logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
         public static bool? IsDebugEnabled
@@ -280,10 +280,10 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the global IsInfoEnabled should be overriden.
+        /// Gets a value indicating whether the global IsInfoEnabled should be overridden.
         /// <para />
         /// Note that this value will override all settings of each listener globally. If this value is
-        /// set to <c>null</c>, nothing will be overriden.
+        /// set to <c>null</c>, nothing will be overridden.
         /// </summary>
         /// <value><c>true</c> if info logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
         public static bool? IsInfoEnabled
@@ -297,10 +297,10 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the global IsWarningEnabled should be overriden.
+        /// Gets a value indicating whether the global IsWarningEnabled should be overridden.
         /// <para />
         /// Note that this value will override all settings of each listener globally. If this value is
-        /// set to <c>null</c>, nothing will be overriden.
+        /// set to <c>null</c>, nothing will be overridden.
         /// </summary>
         /// <value><c>true</c> if warning logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
         public static bool? IsWarningEnabled
@@ -314,10 +314,10 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the global IsErrorEnabled should be overriden.
+        /// Gets a value indicating whether the global IsErrorEnabled should be overridden.
         /// <para />
         /// Note that this value will override all settings of each listener globally. If this value is
-        /// set to <c>null</c>, nothing will be overriden.
+        /// set to <c>null</c>, nothing will be overridden.
         /// </summary>
         /// <value><c>true</c> if error logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
         public static bool? IsErrorEnabled
@@ -331,10 +331,10 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the global IsStatusEnabled should be overriden.
+        /// Gets a value indicating whether the global IsStatusEnabled should be overridden.
         /// <para />
         /// Note that this value will override all settings of each listener globally. If this value is
-        /// set to <c>null</c>, nothing will be overriden.
+        /// set to <c>null</c>, nothing will be overridden.
         /// </summary>
         /// <value><c>true</c> if status logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
         public static bool? IsStatusEnabled

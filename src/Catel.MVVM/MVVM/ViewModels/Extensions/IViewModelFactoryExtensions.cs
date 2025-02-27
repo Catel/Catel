@@ -10,7 +10,7 @@
         /// <summary>
         /// Creates a new view model.
         /// <para />
-        /// This is a convenience wrapper around the <see cref="IViewModelFactory.CreateViewModel(Type, object, object)" /> method. This method cannot be overriden.
+        /// This is a convenience wrapper around the <see cref="IViewModelFactory.CreateViewModel(Type, object)" /> method. This method cannot be overridden.
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="viewModelFactory">The view model factory.</param>
@@ -31,7 +31,7 @@
         /// <summary>
         /// Creates a new view model.
         /// <para />
-        /// This is a convenience wrapper around the <see cref="IViewModelFactory.CreateViewModel(Type, object, object)" /> method. This method cannot be overriden.
+        /// This is a convenience wrapper around the <see cref="IViewModelFactory.CreateViewModel(Type, object, object)" /> method. This method cannot be overridden.
         /// </summary>
         /// <param name="viewModelFactory">The view model factory.</param>
         /// <param name="viewModelType">The type of the view model.</param>
@@ -56,7 +56,7 @@
         /// <summary>
         /// Creates a new view model.
         /// <para />
-        /// This is a convenience wrapper around the <see cref="IViewModelFactory.CreateViewModel(Type, object, object)" /> method. This method cannot be overriden.
+        /// This is a convenience wrapper around the <see cref="IViewModelFactory.CreateViewModel(Type, object, object)" /> method. This method cannot be overridden.
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="viewModelFactory">The view model factory.</param>

@@ -1,8 +1,7 @@
-﻿namespace Catel.Windows.Markup
+﻿namespace Catel.Windows.Markup  
 {
     using System;
     using Catel.MVVM;
-    using IoC;
     using System.Windows.Markup;
 
     /// <summary>
@@ -15,8 +14,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
         /// </summary>
-        public CommandManagerBindingExtension()
-            : this(string.Empty)
+        /// <param name="commandManager">The command manager.</param>
+        public CommandManagerBindingExtension(ICommandManager commandManager)
+            : this(commandManager, string.Empty)
         {
             // Leave empty
         }
@@ -24,13 +24,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
         /// </summary>
+        /// <param name="commandManager">The command manager.</param>
         /// <param name="commandName">Name of the command.</param>
-        public CommandManagerBindingExtension(string commandName)
+        public CommandManagerBindingExtension(ICommandManager commandManager, string commandName)
         {
+            _commandManager = commandManager;
             CommandName = commandName;
-
-            var dependencyResolver = this.GetDependencyResolver();
-            _commandManager = dependencyResolver.ResolveRequired<ICommandManager>();
         }
 
         /// <summary>

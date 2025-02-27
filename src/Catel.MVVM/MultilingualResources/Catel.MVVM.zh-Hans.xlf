@@ -124,10 +124,6 @@ If you are sure that you have a model with this name, make sure it's public inst
 {1} = model property name
 {2} = model name</note>
         </trans-unit>
-        <trans-unit id="ViewModelAlreadyRegistered" translate="yes" xml:space="preserve">
-          <source>View model already registered</source>
-          <target state="new">View model already registered</target>
-        </trans-unit>
         <trans-unit id="ViewModelContainerMustBeOfTypeDependencyObject" translate="yes" xml:space="preserve">
           <source>The viewModelContainer must be of type DependencyObject</source>
           <target state="new">The viewModelContainer must be of type DependencyObject</target>

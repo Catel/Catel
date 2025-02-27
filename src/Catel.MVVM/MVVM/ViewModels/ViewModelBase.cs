@@ -10,8 +10,8 @@
     using Auditing;
     using Collections;
     using Data;
-    using IoC;
     using Logging;
+    using Microsoft.Extensions.DependencyInjection;
     using Reflection;
     using Services;
 
@@ -20,7 +20,7 @@
     /// common interfaces used by WPF.
     /// </summary>
     /// <remarks>This view model base does not add any services.</remarks>
-    public abstract partial class ViewModelBase : ValidatableModelBase, IRelationalViewModel, IUniqueIdentifyable
+    public abstract partial class ViewModelBase : ValidatableModelBase, IRelationalViewModel
     {
         /// <summary>
         /// The log.
@@ -50,7 +50,7 @@
         /// <summary>
         /// Value indicating whether the view model attributes are initialized. 
         /// </summary>
-        private bool _areViewModelAttributesIntialized;
+        private bool _areViewModelAttributesInitialized;
 
         private readonly object _modelLock = new object();
 
@@ -70,7 +70,7 @@
         private readonly Dictionary<string, ModelErrorInfo> _modelErrorInfo = new Dictionary<string, ModelErrorInfo>();
 
         /// <summary>
-        /// List of child view models which can be registed by the <c>RegisterChildViewModel</c> method.
+        /// List of child view models which can be registered by the <c>RegisterChildViewModel</c> method.
         /// </summary>
         internal readonly List<IViewModel> ChildViewModels = new List<IViewModel>();
 
@@ -83,56 +83,29 @@
         /// Gets the view model manager.
         /// </summary>
         /// <value>The view model manager.</value>
-        protected static readonly IViewModelManager ViewModelManager;
+        protected readonly IViewModelManager _viewModelManager;
 
         /// <summary>
         /// Mappings from view model properties to models and their properties.
         /// </summary>
         private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
 
+        private readonly AuditingWrapper? _auditingWrapper;
+
         /// <summary>
         /// The backing field for the title property.
         /// </summary>
         private string _title;
 
-        private readonly IObjectIdGenerator<int> _objectIdGenerator;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="ViewModelBase" /> class.
-        /// </summary>
-        static ViewModelBase()
-        {
-            var serviceLocator = IoC.ServiceLocator.Default;
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
-            ViewModelManager = serviceLocator.ResolveRequiredType<IViewModelManager>();
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase()
-            : this(true, false, false)
+        protected ViewModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter, Catel.Runtime.Serialization.ISerializer serializer, IDispatcherService dispatcherService, IViewModelManager viewModelManager)
+            : this(serviceProvider, objectAdapter, serializer, dispatcherService, viewModelManager, true, false, false)
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
-        /// </summary>
-        /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
-        /// implement the <see cref="IEditableObject"/> interface.</param>
-        /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
-        /// <param name="skipViewModelAttributesInitialization">
-        /// if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.
-        /// </param>
-        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
-        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
-            : this(null, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
-        {
-        }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
@@ -140,6 +113,10 @@
         /// This constructor allows the injection of a custom <see cref="IServiceProvider"/>.
         /// </summary>
         /// <param name="serviceProvider">The service provider to inject.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
+        /// <param name="serializer">The serializer.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="viewModelManager">The view model manager.</param>
         /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
         /// implement the <see cref="IEditableObject"/> interface.</param>
         /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
@@ -147,10 +124,13 @@
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        protected ViewModelBase(IServiceProvider serviceProvider, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+        protected ViewModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter, Catel.Runtime.Serialization.ISerializer serializer, IDispatcherService dispatcherService,
+            IViewModelManager viewModelManager, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+            : base(serviceProvider, objectAdapter, serializer)
         {
-            ViewModelConstructionTime = FastDateTime.Now;
+            _viewModelManager = viewModelManager;
+            _dispatcherService = dispatcherService;
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -159,21 +139,10 @@
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-            _objectAdapter = DependencyResolver.ResolveRequired<IObjectAdapter>();
-            _dispatcherService = DependencyResolver.ResolveRequired<IDispatcherService>();
-
             _throttlingTimer = new Windows.Threading.DispatcherTimerEx(_dispatcherService);
 
             var type = GetType();
 
-            // Note: we get the type *every time*, but it should be cheaper than checking the existance of the type in the 
-            // service locator. Note that we should *not* use a callback since that will create a memory leak because the 
-            // service locator will hold a reference to the first vm *per type*
-            var objectGeneratorType = GetObjectIdGeneratorType();
-            serviceProvider.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
-
-            _objectIdGenerator = DependencyResolver.ResolveRequired<IObjectIdGenerator<int>>(type);
-            UniqueIdentifier = GetObjectId(_objectIdGenerator);
 
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
@@ -199,13 +168,17 @@
                     InitializeViewModelAttributes();
                 }
 
-                ViewModelManager.RegisterViewModelInstance(this);
+                _viewModelManager.RegisterViewModelInstance(this);
 
                 InitializeThrottling();
             }
 
             // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
-            AuditingWrapper.RegisterViewModel(this);
+            var auditingManager = serviceProvider.GetService<IAuditingManager>();
+            if (auditingManager is not null)
+            {
+                _auditingWrapper = new AuditingWrapper(auditingManager, objectAdapter, this);
+            }
         }
 
         /// <summary>
@@ -234,7 +207,7 @@
         public event AsyncEventHandler<CancelingEventArgs>? CancelingAsync;
 
         /// <summary>
-        /// Occurrs when the view model is canceled.
+        /// Occurs when the view model is canceled.
         /// </summary>
         public event AsyncEventHandler<EventArgs>? CanceledAsync;
 
@@ -254,14 +227,6 @@
         /// <value>The unique identifier.</value>
         [ExcludeFromValidation]
         public int UniqueIdentifier { get; private set; }
-
-        /// <summary>
-        /// Gets the view model construction time, which is used to get unique instances of view models.
-        /// </summary>
-        /// <value>The view model construction time.</value>
-        [ExcludeFromValidation]
-        public DateTime ViewModelConstructionTime { get; private set; }
-
         /// <summary>
         /// Gets the parent view model.
         /// </summary>
@@ -405,13 +370,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the dependency resolver.
-        /// </summary>
-        /// <value>The dependency resolver.</value>
-        [ExcludeFromValidation]
-        protected IDependencyResolver DependencyResolver { get; private set; }
-
         partial void InitializeThrottling();
 
         partial void UninitializeThrottling();
@@ -451,12 +409,12 @@
         /// <param name="viewModelType">Type of the view model.</param>
         /// <returns>ViewModelMetadata.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
-        private static ViewModelMetadata GetViewModelMetaData(Type viewModelType)
+        private ViewModelMetadata GetViewModelMetaData(Type viewModelType)
         {
             return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
         }
 
-        private static ViewModelMetadata CreateViewModelMetaData(Type viewModelType)
+        private ViewModelMetadata CreateViewModelMetaData(Type viewModelType)
         {
             var properties = new List<PropertyInfo>();
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, false, true);
@@ -507,7 +465,7 @@
                     {
                         var modelProperty = modelObjectsInfo[viewModelToModelAttribute.Model];
 
-                        viewModelToModelMap.Add(propertyInfo.Name, new ViewModelToModelMapping(propertyInfo, modelProperty.PropertyType, viewModelToModelAttribute));
+                        viewModelToModelMap.Add(propertyInfo.Name, new ViewModelToModelMapping(ServiceProvider, propertyInfo, modelProperty.PropertyType, viewModelToModelAttribute));
                     }
                 }
             }
@@ -568,12 +526,12 @@
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
         protected void InitializeViewModelAttributes()
         {
-            if (_areViewModelAttributesIntialized)
+            if (_areViewModelAttributesInitialized)
             {
                 return;
             }
 
-            _areViewModelAttributesIntialized = true;
+            _areViewModelAttributesInitialized = true;
 
             using (SuspendValidations(false))
             {
@@ -710,7 +668,9 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+#pragma warning disable CTL0003 // Fix method name to match some property raising NotifyPropertyChanged event
         private void OnChildViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+#pragma warning restore CTL0003 // Fix method name to match some property raising NotifyPropertyChanged event
         {
             if (e.PropertyName == nameof(HasErrors) || e.PropertyName == nameof(HasWarnings))
             {
@@ -1100,7 +1060,7 @@
                 return;
             }
 
-            ViewModelManager.RegisterModel(this, model);
+            _viewModelManager.RegisterModel(this, model);
 
             var modelAsINotifyPropertyChanged = model as INotifyPropertyChanged;
             if (modelAsINotifyPropertyChanged is not null)
@@ -1160,7 +1120,7 @@
                 return;
             }
 
-            ViewModelManager.UnregisterModel(this, model);
+            _viewModelManager.UnregisterModel(this, model);
 
             if (_modelErrorInfo.TryGetValue(modelProperty, out var modelErrorInfo))
             {
@@ -1304,16 +1264,6 @@
             }
 
             return _modelObjects.ContainsKey(name);
-        }
-
-        /// <summary>
-        /// Registers the default view model services.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
-        protected virtual void RegisterViewModelServices(IServiceLocator serviceLocator)
-        {
-            ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
         }
 
         /// <summary>
@@ -1504,7 +1454,7 @@
 
             await OnClosingAsync();
 
-            ViewModelManager.UnregisterAllModels(this);
+            _viewModelManager.UnregisterAllModels(this);
 
             await CloseAsync();
 
@@ -1522,28 +1472,7 @@
 
             Log.Info("Closed view model '{0}'", type);
 
-            ViewModelManager.UnregisterViewModelInstance(this);
-
-            _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
-        }
-
-        /// <summary>
-        /// Gets the object id generator type.
-        /// </summary>
-        /// <returns>The object id generator</returns>
-        protected virtual Type GetObjectIdGeneratorType()
-        {
-            return typeof(IntegerObjectIdGenerator<ViewModelBase>);
-        }
-
-        /// <summary>
-        /// Gets the object id. 
-        /// </summary>
-        /// <param name="objectIdGenerator">The object id generator</param>
-        /// <returns>The object id</returns>
-        protected virtual int GetObjectId(IObjectIdGenerator<int> objectIdGenerator)
-        {
-            return objectIdGenerator.GetUniqueIdentifier();
+            _viewModelManager.UnregisterViewModelInstance(this);
         }
     }
 }

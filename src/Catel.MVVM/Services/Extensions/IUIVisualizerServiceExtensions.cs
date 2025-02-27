@@ -1,13 +1,10 @@
 ﻿namespace Catel.Services
 {
     using System;
-    using System.Threading.Tasks;
     using System.Windows;
     using Windows.Threading;
-    using IoC;
     using Logging;
     using MVVM;
-    using MVVM.Views;
     using Reflection;
 
     /// <summary>
@@ -101,107 +98,6 @@
         }
 
         /// <summary>
-        /// Shows the window in non-modal state and creates the view model automatically using the specified model.
-        /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="uiVisualizerService">The UI visualizer service.</param>
-        /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
-        /// <param name="completedProc">The completed proc.</param>
-        /// <returns><c>true</c> if shown successfully, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static Task<UIVisualizerResult> ShowAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? model = null, EventHandler<UICompletedEventArgs>? completedProc = null)
-            where TViewModel : IViewModel
-        {
-            ArgumentNullException.ThrowIfNull(uiVisualizerService);
-
-            var viewModelFactory = GetViewModelFactory(uiVisualizerService);
-            var vm = viewModelFactory.CreateRequiredViewModel<TViewModel>(model);
-            return uiVisualizerService.ShowAsync(vm, completedProc);
-        }
-
-        /// <summary>
-        /// Shows the window in modal state and creates the view model automatically using the specified model.
-        /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="uiVisualizerService">The UI visualizer service.</param>
-        /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
-        /// <param name="completedProc">The completed proc.</param>
-        /// <returns>The dialog result.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static Task<UIVisualizerResult> ShowDialogAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? model = null, EventHandler<UICompletedEventArgs>? completedProc = null)
-            where TViewModel : IViewModel
-        {
-            ArgumentNullException.ThrowIfNull(uiVisualizerService);
-
-            var viewModelFactory = GetViewModelFactory(uiVisualizerService);
-            var vm = viewModelFactory.CreateRequiredViewModel<TViewModel>(model);
-            return uiVisualizerService.ShowDialogAsync(vm, completedProc);
-        }
-
-        private static IViewModelFactory GetViewModelFactory(IUIVisualizerService uiVisualizerService)
-        {
-            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-            var viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
-            return viewModelFactory;
-        }
-
-        /// <summary>
-        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
-        /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="uiVisualizerService">The UI visualizer service.</param>
-        /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
-        /// <param name="scope">The service locator scope.</param>
-        /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
-        /// <returns>
-        ///   <c>true</c> if shown or activated successfully, <c>false</c> otherwise.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static async Task<bool?> ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? model = null, object? scope = null, EventHandler<UICompletedEventArgs>? completedProc = null)
-            where TViewModel : IViewModel
-        {
-            ArgumentNullException.ThrowIfNull(uiVisualizerService);
-
-            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-
-#pragma warning disable IDISP001
-            var viewModelManager = dependencyResolver.ResolveRequired<IViewModelManager>();
-#pragma warning restore IDISP001
-            var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
-            if (viewModel is null)
-            {
-                var viewModelFactory = GetViewModelFactory(uiVisualizerService);
-                var vm = viewModelFactory.CreateRequiredViewModel<TViewModel>(model, scope);
-                var result = await uiVisualizerService.ShowAsync(vm, completedProc);
-                return result.DialogResult;
-            }
-
-            var viewLocator = dependencyResolver.ResolveRequired<IViewLocator>();
-            var viewType = viewLocator.ResolveView(viewModel.GetType());
-            if (viewType is null)
-            {
-                throw Log.ErrorAndCreateException<CatelException>($"Found active instance of '{viewModel.GetType().GetSafeFullName()}', but could not find a related view type");
-            }
-
-            var viewManager = dependencyResolver.ResolveRequired<IViewManager>();
-            var view = viewManager.GetFirstOrDefaultInstance(viewType);
-            if (viewType is null)
-            {
-                throw Log.ErrorAndCreateException<CatelException>($"Found active instance of '{viewModel.GetType().GetSafeFullName()}', but could not find a related view");
-            }
-
-            var window = view as System.Windows.Window;
-            if (view is null || window is null)
-            {
-                var result = await uiVisualizerService.ShowAsync(viewModel, completedProc);
-                return result.DialogResult;
-            }
-
-            var activated = ActivateWindow(window);
-            return activated;
-        }
-
-        /// <summary>
         /// Activates the window.
         /// </summary>
         /// <param name="window">The window.</param>
@@ -219,35 +115,6 @@
             bool? result = false;
             window.Dispatcher.InvokeIfRequired(() => result = (bool?)activateMethodInfo.Invoke(window, null));
             return result;
-        }
-
-        /// <summary>
-        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
-        /// </summary>
-        /// <typeparam name="TViewModel">The view model type.</typeparam>
-        /// <param name="uiVisualizerService">The uiVisualizerService</param>
-        /// <param name="dataContext">The data context.</param>
-        /// <param name="scope">The scope.</param>
-        /// <returns>
-        /// A task.
-        /// </returns>
-        public static async Task ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object? dataContext = null, object? scope = null)
-            where TViewModel : IViewModel
-        {
-            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
-            var viewModelManager = dependencyResolver.ResolveRequired<IViewModelManager>();
-            var viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
-
-            var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
-            if (existingViewModel is not null)
-            {
-                await uiVisualizerService.ShowOrActivateAsync<TViewModel>(dataContext, scope);
-            }
-            else
-            {
-                var vm = viewModelFactory.CreateRequiredViewModel(typeof(TViewModel), dataContext, scope);
-                await uiVisualizerService.ShowAsync(vm);
-            }
         }
     }
 }

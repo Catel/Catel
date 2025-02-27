@@ -5,7 +5,7 @@
 
     /// <summary>
     /// This interface defines a UI controller which can be used to display dialogs
-    /// in either modal or modaless form from a ViewModel.
+    /// in either modal or non-modal form from a ViewModel.
     /// </summary>
     public interface IUIVisualizerService
     {

@@ -1,7 +1,6 @@
 ﻿namespace Catel.Windows.Markup
 {
     using System;
-    using IoC;
     using System.Windows.Markup;
 
     /// <summary>
@@ -52,8 +51,7 @@
                 return null;
             }
 
-            var dependencyResolver = this.GetDependencyResolver();
-            return dependencyResolver.Resolve(Type, Tag);
+            return serviceProvider?.GetService(Type);
         }
     }
 }

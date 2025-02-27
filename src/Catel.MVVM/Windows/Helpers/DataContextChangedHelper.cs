@@ -3,7 +3,6 @@
     using System;
     using System.Windows;
     using Data;
-    using IoC;
     using MVVM;
 
     /// <summary>
@@ -16,11 +15,12 @@
         /// </summary>
         /// <param name="element">Element to which the handler is added.</param>
         /// <param name="handler">The handler to add.</param>
+        /// <param name="dataContextSubscriptionService">The data context subscription service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="element" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler" /> is <c>null</c>.</exception>
-        public static void AddDataContextChangedHandler(this FrameworkElement element, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        public static void AddDataContextChangedHandler(this FrameworkElement element, EventHandler<DependencyPropertyValueChangedEventArgs> handler, IDataContextSubscriptionService dataContextSubscriptionService)
         {
-            var subscriptionMode = GetDataContextSubscriptionMode(element);
+            var subscriptionMode = GetDataContextSubscriptionMode(element, dataContextSubscriptionService);
 
             element.SubscribeToDataContext(handler, subscriptionMode == DataContextSubscriptionMode.InheritedDataContext);
         }
@@ -30,20 +30,18 @@
         /// </summary>
         /// <param name="element">The element from which the handler has to be removed.</param>
         /// <param name="handler">The handler to remove.</param>
+        /// <param name="dataContextSubscriptionService">The data context subscription service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void RemoveDataContextChangedHandler(this FrameworkElement element, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        public static void RemoveDataContextChangedHandler(this FrameworkElement element, EventHandler<DependencyPropertyValueChangedEventArgs> handler, IDataContextSubscriptionService dataContextSubscriptionService)
         {
-            var subscriptionMode = GetDataContextSubscriptionMode(element);
+            var subscriptionMode = GetDataContextSubscriptionMode(element, dataContextSubscriptionService);
 
             element.UnsubscribeFromDataContext(handler, subscriptionMode == DataContextSubscriptionMode.InheritedDataContext);
         }
 
-        private static DataContextSubscriptionMode GetDataContextSubscriptionMode(FrameworkElement element)
+        private static DataContextSubscriptionMode GetDataContextSubscriptionMode(FrameworkElement element, IDataContextSubscriptionService dataContextSubscriptionService)
         {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var dataContextSubscriptionService = dependencyResolver.ResolveRequired<IDataContextSubscriptionService>();
-
             return dataContextSubscriptionService.GetDataContextSubscriptionMode(element.GetType());
         }
     }

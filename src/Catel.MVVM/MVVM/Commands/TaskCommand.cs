@@ -35,11 +35,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<Task> execute, Func<bool>? canExecute = null, object? tag = null)
-            : this(canExecuteWithoutParameter: canExecute, tag: tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<Task> execute, Func<bool>? canExecute = null, object? tag = null)
+            : this(authenticationProvider, dispatcherService, canExecuteWithoutParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute();
         }
@@ -47,11 +50,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<CancellationToken, Task> execute, Func<bool>? canExecute = null, object? tag = null)
-            : this(canExecuteWithoutParameter: canExecute, tag: tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<CancellationToken, Task> execute, Func<bool>? canExecute = null, object? tag = null)
+            : this(authenticationProvider, dispatcherService, canExecuteWithoutParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken);
         }
@@ -59,12 +65,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
-            : this(canExecuteWithoutParameter: canExecute, reportProgress: reportProgress, tag: tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
+            : this(authenticationProvider, dispatcherService, canExecuteWithoutParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken, progress);
         }
@@ -72,11 +81,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : this(canExecuteWithParameter: canExecute, tag: tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TExecuteParameter?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : this(authenticationProvider, dispatcherService, canExecuteWithParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter);
         }
@@ -84,11 +96,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : this(canExecuteWithParameter: canExecute, tag: tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : this(authenticationProvider, dispatcherService, canExecuteWithParameter: canExecute, tag: tag)
         {
             _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter, cancellationToken);
         }
@@ -97,13 +112,16 @@
         /// Initializes a new instance of the
         /// <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter?, CancellationToken, IProgress<TProgress>?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null,
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TExecuteParameter?, CancellationToken, IProgress<TProgress>?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null,
             Action<TProgress>? reportProgress = null, object? tag = null)
-            : this(canExecuteWithParameter: canExecute, reportProgress: reportProgress, tag: tag)
+            : this(authenticationProvider, dispatcherService, canExecuteWithParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
             _executeAsync = execute;
         }
@@ -112,19 +130,22 @@
         /// Initializes a new instance of the
         /// <see cref="Catel.MVVM.TaskCommand{TExecuteParameter,TCanExecuteParameter, TProgress}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="canExecuteWithParameter">The function to call to determine whether the command can be executed with
         /// parameter.</param>
         /// <param name="canExecuteWithoutParameter">The function to call to determine whether the command can be executed without
         /// parameter.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        protected TaskCommand(Func<TCanExecuteParameter?, bool>? canExecuteWithParameter = null, Func<bool>? canExecuteWithoutParameter = null,
+        protected TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter = null, Func<bool>? canExecuteWithoutParameter = null,
             Action<TProgress>? reportProgress = null, object? tag = null)
-            : base(null, null, canExecuteWithParameter, canExecuteWithoutParameter, tag)
+            : base(authenticationProvider, dispatcherService, null, null, canExecuteWithParameter, canExecuteWithoutParameter, tag)
         {
             _reportProgress = reportProgress;
 
-            CancelCommand = new Command(() =>
+            CancelCommand = new Command(authenticationProvider, dispatcherService, () =>
             {
                 if (_cancellationTokenSource is not null)
                 {
@@ -381,22 +402,28 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : base(execute, canExecute, tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TExecuteParameter?, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, tag)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : base(execute, canExecute, tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, tag)
         {
         }
     }
@@ -411,22 +438,28 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter?, Task> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : base(execute, canExecute, tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TExecuteParameter?, Task> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, tag)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : base(execute, canExecute, tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<TExecuteParameter?, CancellationToken, Task> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, tag)
         {
         }
     }
@@ -440,22 +473,28 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<Task> execute, Func<bool>? canExecute = null, object? tag = null)
-            : base(execute, canExecute, tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<Task> execute, Func<bool>? canExecute = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, tag)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Catel.MVVM.TaskCommand" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(Func<CancellationToken, Task> execute, Func<bool>? canExecute = null, object? tag = null)
-            : base(execute, canExecute, tag)
+        public TaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<CancellationToken, Task> execute, Func<bool>? canExecute = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, tag)
         {
         }
     }
@@ -473,12 +512,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressiveTaskCommand{TProgress, TExecuteParameter}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public ProgressiveTaskCommand(Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
-            : base(execute, canExecute, reportProgress, tag)
+        public ProgressiveTaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, reportProgress, tag)
         {
         }
     }
@@ -494,12 +536,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
         /// </summary>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        public ProgressiveTaskCommand(Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
-            : base(execute, canExecute, reportProgress, tag)
+        public ProgressiveTaskCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
+            Func<CancellationToken, IProgress<TProgress>?, Task> execute, Func<bool>? canExecute = null, Action<TProgress>? reportProgress = null, object? tag = null)
+            : base(authenticationProvider, dispatcherService, execute, canExecute, reportProgress, tag)
         {
         }
     }

@@ -5,10 +5,10 @@
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
-    using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Reflection;
+    using Microsoft.Extensions.DependencyInjection;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
     /// <summary>
@@ -53,12 +53,13 @@
         /// Creates a command using a naming convention with the specified gesture.
         /// </summary>
         /// <param name="commandManager">The command manager.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="containerType">Type of the container.</param>
         /// <param name="commandNameFieldName">Name of the command name field.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="commandManager"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="containerType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="commandNameFieldName"/> is <c>null</c>.</exception>
-        public static void CreateCommandWithGesture(this ICommandManager commandManager, Type containerType, string commandNameFieldName)
+        public static void CreateCommandWithGesture(this ICommandManager commandManager, IServiceProvider serviceProvider, Type containerType, string commandNameFieldName)
         {
             ArgumentNullException.ThrowIfNull(commandManager);
             ArgumentNullException.ThrowIfNull(containerType);
@@ -110,19 +111,13 @@
 
             Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
 
-#pragma warning disable IDISP001 // Dispose created.
-            var serviceLocator = commandManager.GetServiceLocator();
-#pragma warning restore IDISP001 // Dispose created.
-
-            if (!serviceLocator.IsTypeRegistered(commandContainerType))
+            if (!serviceProvider.IsRegistered(commandContainerType))
             {
-#pragma warning disable IDISP001
-                var typeFactory = serviceLocator.ResolveRequiredType<ITypeFactory>();
-#pragma warning restore IDISP001
-                var commandContainer = typeFactory.CreateInstance(commandContainerType);
+                var commandContainer = ActivatorUtilities.CreateInstance(serviceProvider, commandContainerType);
                 if (commandContainer is not null)
                 {
-                    serviceLocator.RegisterInstance(commandContainerType, commandContainer);
+                    // TODO: How to keep alive?
+                    //serviceLocator.RegisterInstance(commandContainerType, commandContainer);
                 }
                 else
                 {

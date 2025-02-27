@@ -3,12 +3,12 @@
     using System;
     using System.Linq;
     using Caching;
-    using IoC;
     using Logging;
+    using Microsoft.Extensions.DependencyInjection;
     using Reflection;
 
     /// <summary>
-    /// Default implementation of the <see cref="IViewModelFactory"/> which allows custom instantation of view models. This way,
+    /// Default implementation of the <see cref="IViewModelFactory"/> which allows custom instantiation of view models. This way,
     /// if a view model contains a complex constructor or needs caching, this factory can be used.
     /// <para />
     /// This default implementation will first try to inject the data context into the view model constructor. If that is not possible,
@@ -18,24 +18,20 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly ITypeFactory _typeFactory;
-        private readonly IServiceLocator _serviceLocator;
+        private readonly IServiceProvider _serviceProvider;
 
         private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
         /// </summary>
-        /// <param name="typeFactory">The type factory.</param>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public ViewModelFactory(ITypeFactory typeFactory, IServiceLocator serviceLocator)
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceProvider" /> is <c>null</c>.</exception>
+        public ViewModelFactory(IServiceProvider serviceProvider)
         {
-            ArgumentNullException.ThrowIfNull(typeFactory);
-            ArgumentNullException.ThrowIfNull(serviceLocator);
+            ArgumentNullException.ThrowIfNull(serviceProvider);
 
-            _typeFactory = typeFactory;
-            _serviceLocator = serviceLocator;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -58,7 +54,7 @@
                     var firstParameter = constructor.GetParameters().FirstOrDefault();
                     if (firstParameter is not null)
                     {
-                        if (!_serviceLocator.IsTypeRegistered(firstParameter.ParameterType))
+                        if (!_serviceProvider.IsRegistered(firstParameter.ParameterType))
                         {
                             return true;
                         }
@@ -99,11 +95,10 @@
         /// </summary>
         /// <param name="viewModelType">Type of the view model that needs to be created.</param>
         /// <param name="dataContext">The data context of the view model.</param>
-        /// <param name="tag">The preferred tag to use when resolving dependencies.</param>
         /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
-        public virtual IViewModel? CreateViewModel(Type viewModelType, object? dataContext, object? tag = null)
+        public virtual IViewModel? CreateViewModel(Type viewModelType, object? dataContext)
         {
             ArgumentNullException.ThrowIfNull(viewModelType);
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
@@ -122,8 +117,7 @@
                     parameters = new object[] { dataContext };
                 }
 
-                viewModel = _typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(viewModelType, tag,
-                    parameters) as IViewModel;
+                viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, parameters) as IViewModel;
 
                 if (viewModel is not null)
                 {
@@ -133,7 +127,7 @@
             }
 
             // Try to construct view model using dependency injection
-            viewModel = _typeFactory.CreateInstanceWithTag(viewModelType, tag) as IViewModel;
+            viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType) as IViewModel;
             if (viewModel is not null)
             {
                 Log.Debug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);

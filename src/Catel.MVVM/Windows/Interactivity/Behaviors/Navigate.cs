@@ -1,7 +1,6 @@
 ﻿namespace Catel.Windows.Interactivity
 {
     using System.Windows.Documents;
-    using IoC;
     using System.Windows.Navigation;
     using Catel.Services;
     using Microsoft.Xaml.Behaviors;
@@ -11,16 +10,12 @@
     /// </summary>
     public class Navigate : Behavior<Hyperlink>
     {
-        private static readonly IProcessService _processService;
+        private readonly IProcessService _processService;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="Navigate"/> class.
-        /// </summary>
-        static Navigate()
+
+        public Navigate(IProcessService processService)
         {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-
-            _processService = dependencyResolver.ResolveRequired<IProcessService>();
+            _processService = processService;
         }
 
         /// <summary>

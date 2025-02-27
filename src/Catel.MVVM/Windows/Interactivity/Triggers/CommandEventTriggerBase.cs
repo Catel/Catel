@@ -239,7 +239,7 @@
         }
 
         /// <summary>
-        /// Invokes the command with the overriden parameter.
+        /// Invokes the command with the overridden parameter.
         /// <para />
         /// If the <see cref="CommandParameter"/> should be used, use the <see cref="ExecuteCommand()"/> instead.
         /// </summary>

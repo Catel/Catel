@@ -158,15 +158,6 @@ namespace Catel.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View model already registered.
-        /// </summary>
-        internal static string ViewModelAlreadyRegistered {
-            get {
-                return ResourceManager.GetString("ViewModelAlreadyRegistered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The viewModelContainer must be of type DependencyObject.
         /// </summary>
         internal static string ViewModelContainerMustBeOfTypeDependencyObject {

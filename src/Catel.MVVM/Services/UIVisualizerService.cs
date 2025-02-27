@@ -20,21 +20,25 @@
 
         private readonly IViewLocator _viewLocator;
         private readonly IDispatcherService _dispatcherService;
+        private readonly IViewModelFactory _viewModelFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
         /// </summary>
         /// <param name="viewLocator">The view locator.</param>
         /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="viewModelFactory">The view model factory.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        public UIVisualizerService(IViewLocator viewLocator, IDispatcherService dispatcherService)
+        public UIVisualizerService(IViewLocator viewLocator, IDispatcherService dispatcherService,
+            IViewModelFactory viewModelFactory)
         {
             ArgumentNullException.ThrowIfNull(viewLocator);
             ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _viewLocator = viewLocator;
             _dispatcherService = dispatcherService;
+            _viewModelFactory = viewModelFactory;
         }
 
         /// <summary>

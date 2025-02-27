@@ -73,7 +73,7 @@
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("ErrorTitle") ?? string.Empty;
+                caption = _languageService.GetString("ErrorTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;
@@ -92,7 +92,7 @@
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("WarningTitle") ?? string.Empty;
+                caption = _languageService.GetString("WarningTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;
@@ -111,7 +111,7 @@
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString("InfoTitle") ?? string.Empty;
+                caption = _languageService.GetString("InfoTitle") ?? string.Empty;
             }
 
             const MessageButton button = MessageButton.OK;

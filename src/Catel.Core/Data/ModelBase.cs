@@ -299,11 +299,11 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         /// <remarks>
-        /// This method is overriden en does not call the base because lots of additional logic is added in this class. The
+        /// This method is overridden en does not call the base because lots of additional logic is added in this class. The
         /// <see cref="RaisePropertyChanged(object,System.ComponentModel.PropertyChangedEventArgs,bool,bool)"/> will explicitly call 
         /// <see cref="ObservableObject.RaisePropertyChanged(object, PropertyChangedEventArgs)"/>.
         /// <para />
-        /// If this method is overriden, it is very important to call the base.
+        /// If this method is overridden, it is very important to call the base.
         /// </remarks>
         protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {

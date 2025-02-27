@@ -10,6 +10,7 @@
     using System.Windows;
     using System.Windows.Markup;
     using UIEventArgs = System.EventArgs;
+    using Catel.Services;
 
     /// <summary>
     /// <see cref="UserControl"/> that supports MVVM by using a <see cref="IViewModel"/> typed parameter.
@@ -42,15 +43,20 @@
         /// <remarks>
         /// This method is required for design time support.
         /// </remarks>
-        public UserControl()
-            : this(null) { }
+        public UserControl(IServiceProvider serviceProvider, IViewModelWrapperService viewModelWrapperService,
+            IDataContextSubscriptionService dataContextSubscriptionService)
+            : this(null, serviceProvider, viewModelWrapperService, dataContextSubscriptionService) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserControl"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="viewModelWrapperService">The view model wrapper service.</param>
+        /// <param name="dataContextSubscriptionService">The data context subscription service.</param>
         /// <param name="viewModel">The view model.</param>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public UserControl(IViewModel? viewModel)
+        public UserControl(IViewModel? viewModel, IServiceProvider serviceProvider, IViewModelWrapperService viewModelWrapperService,
+            IDataContextSubscriptionService dataContextSubscriptionService)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             if (CatelEnvironment.IsInDesignMode)
@@ -60,7 +66,7 @@
 
             this.FixBlurriness();
 
-            _logic = new UserControlLogic(this, null, viewModel);
+            _logic = new UserControlLogic(serviceProvider, viewModelWrapperService, this, null, viewModel);
 
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
@@ -97,7 +103,8 @@
                 OnUnloaded(e);
             };
 
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
+            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)),
+                dataContextSubscriptionService);
         }
 
         /// <summary>

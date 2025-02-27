@@ -195,7 +195,7 @@
             {
                 if (RegisteredUris.ContainsKey(name))
                 {
-                    throw Log.ErrorAndCreateException<Exception>(LanguageHelper.GetRequiredString("ViewModelAlreadyRegistered"));
+                    throw Log.ErrorAndCreateException<Exception>("View model already registered");
                 }
 
                 RegisteredUris.Add(name, uri.ToString());

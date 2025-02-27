@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Windows.Input;
     using Catel.Logging;
+    using Catel.Services;
+    using Microsoft.Extensions.DependencyInjection;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
     /// <summary>
@@ -15,18 +17,21 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly IServiceProvider _serviceProvider;
+
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
         private readonly Dictionary<string, InputGesture?> _originalCommandGestures = new Dictionary<string, InputGesture?>();
         private readonly Dictionary<string, InputGesture?> _commandGestures = new Dictionary<string, InputGesture?>();
-
+  
         private bool _suspendedKeyboardEvents;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManager"/> class.
         /// </summary>
-        public CommandManager()
+        public CommandManager(IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -100,7 +105,7 @@
 
                 if (compositeCommand is null)
                 {
-                    compositeCommand = new CompositeCommand();
+                    compositeCommand = ActivatorUtilities.CreateInstance<CompositeCommand>(_serviceProvider);
                 }
 
                 _commands.Add(commandName, compositeCommand);

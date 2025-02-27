@@ -2,11 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using IoC;
     using Logging;
     using System.Reflection;
     using System.Text;
     using System.Linq;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Model value class to store the mapping of the View Model to a Model mapping.
@@ -15,21 +15,25 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly IServiceProvider _serviceProvider;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="viewModelPropertyInfo">The view model property info.</param>
         /// <param name="modelPropertyType">The model property type.</param>
         /// <param name="attribute">The <see cref="ViewModelToModelAttribute"/> that was used to define the mapping.</param>
         /// <exception cref="ArgumentException">The <paramref name="viewModelPropertyInfo"/> is <c>null</c> or whitespace.</exception>
-        public ViewModelToModelMapping(PropertyInfo viewModelPropertyInfo, Type modelPropertyType, ViewModelToModelAttribute attribute)
-            : this(viewModelPropertyInfo.Name, viewModelPropertyInfo.PropertyType, modelPropertyType, attribute)
+        public ViewModelToModelMapping(IServiceProvider serviceProvider, PropertyInfo viewModelPropertyInfo, Type modelPropertyType, ViewModelToModelAttribute attribute)
+            : this(serviceProvider, viewModelPropertyInfo.Name, viewModelPropertyInfo.PropertyType, modelPropertyType, attribute)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="viewModelProperty">The view model property.</param>
         /// <param name="viewModelPropertyType">The view model property type.</param>
         /// <param name="modelPropertyType">The model property type.</param>
@@ -37,14 +41,15 @@
         /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelPropertyType"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="modelPropertyType"/> is <c>null</c> or whitespace.</exception>
-        public ViewModelToModelMapping(string viewModelProperty, Type viewModelPropertyType, Type modelPropertyType, ViewModelToModelAttribute attribute)
-            : this(viewModelProperty, viewModelPropertyType, attribute.Model, modelPropertyType, attribute.Property, attribute.Mode, attribute.ConverterType, attribute.AdditionalConstructorArgs, attribute.AdditionalPropertiesToWatch)
+        public ViewModelToModelMapping(IServiceProvider serviceProvider, string viewModelProperty, Type viewModelPropertyType, Type modelPropertyType, ViewModelToModelAttribute attribute)
+            : this(serviceProvider, viewModelProperty, viewModelPropertyType, attribute.Model, modelPropertyType, attribute.Property, attribute.Mode, attribute.ConverterType, attribute.AdditionalConstructorArgs, attribute.AdditionalPropertiesToWatch)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="viewModelProperty">The view model property.</param>
         /// <param name="viewModelPropertyType">The view model property type.</param>
         /// <param name="modelProperty">The model property.</param>
@@ -56,13 +61,14 @@
         /// <param name="additionalPropertiesToWatch"></param>
         /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="modelPropertyType"/> is <c>null</c> or whitespace.</exception>
-        public ViewModelToModelMapping(string viewModelProperty, Type viewModelPropertyType, string modelProperty, Type modelPropertyType, string valueProperty, 
+        public ViewModelToModelMapping(IServiceProvider serviceProvider, string viewModelProperty, Type viewModelPropertyType, string modelProperty, Type modelPropertyType, string valueProperty, 
             ViewModelToModelMode mode, Type converterType, object[] additionalConstructorArgs, string[] additionalPropertiesToWatch)
         {
             Argument.IsNotNullOrWhitespace("viewModelProperty", viewModelProperty);
             ArgumentNullException.ThrowIfNull(viewModelPropertyType);
 
             IgnoredProperties = new HashSet<string>();
+            _serviceProvider = serviceProvider;
             ViewModelProperty = viewModelProperty;
             ViewModelPropertyType = viewModelPropertyType;
             ModelProperty = modelProperty;
@@ -88,11 +94,7 @@
                 additionalConstructorArgs?.CopyTo(args, 1);
             }
 
-#pragma warning disable IDISP001 // Dispose created.
-            var typeFactory = this.GetTypeFactory();
-#pragma warning restore IDISP001 // Dispose created.
-
-            var converter = typeFactory.CreateInstanceWithParameters(ConverterType, args) as IViewModelToModelConverter;
+            var converter = ActivatorUtilities.CreateInstance(_serviceProvider, ConverterType, args) as IViewModelToModelConverter;
             if (converter is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to create converter '{ConverterType}'");

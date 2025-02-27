@@ -10,12 +10,20 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Documents;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.
     /// </summary>
     public class WrapControlService : IWrapControlService
     {
+        private readonly IServiceProvider _serviceProvider;
+
+        public WrapControlService(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
         /// <summary>
         /// Determines whether the specified <see cref="FrameworkElement"/> can be safely wrapped.
         /// </summary>
@@ -232,11 +240,10 @@
                 Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
             {
                 // Create info bar message control
-                var infoBarMessageControl = new InfoBarMessageControl
-                {
-                    Name = WrapControlServiceControlNames.InfoBarMessageControlName,
-                    Content = mainContent
-                };
+                var infoBarMessageControl = ActivatorUtilities.CreateInstance<InfoBarMessageControl>(_serviceProvider);
+
+                infoBarMessageControl.Name = WrapControlServiceControlNames.InfoBarMessageControlName;
+                infoBarMessageControl.Content = mainContent;
 
                 if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
                 {

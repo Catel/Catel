@@ -4,7 +4,6 @@
     using System.Windows.Controls;
     using System.Windows.Navigation;
     using Catel.Logging;
-    using IoC;
     using System.Collections.Generic;
 
     public partial class NavigationAdapter
@@ -105,10 +104,7 @@
         /// <returns>System.String.</returns>
         protected override string? GetNavigationUri(object target)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            var urlLocator = dependencyResolver.ResolveRequired<IUrlLocator>();
-
-            return urlLocator.ResolveUrl(NavigationTargetType);
+            return _urlLocator.ResolveUrl(NavigationTargetType);
         }
 
         private void OnNavigatingEvent(object? sender, NavigatingCancelEventArgs e)
@@ -122,7 +118,7 @@
 
         private void OnNavigatedEvent(object? sender, NavigationEventArgs e)
         {
-            // CTL-906: clear current navication context if (re) navigating to the same view
+            // CTL-906: clear current navigation context if (re) navigating to the same view
             if (e.IsNavigationForView(NavigationTargetType))
             {
                 _lastNavigationContext = null;
