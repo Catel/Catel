@@ -1,23 +1,19 @@
 ﻿namespace Catel
 {
-    using System;
-    using IoC;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
     using Runtime.Serialization.Json;
 
     /// <summary>
     /// Core module which allows the registration of default services in the service locator.
     /// </summary>
-    public class SerializationJsonModule : IServiceLocatorInitializer
+    public static class SerializationJsonModule
     {
-        /// <summary>
-        /// Initializes the specified service locator.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        public void Initialize(IServiceLocator serviceLocator)
+        public static IServiceCollection AddCatelSerializationJsonServices(IServiceCollection serviceCollection)
         {
-            ArgumentNullException.ThrowIfNull(serviceLocator);
+            serviceCollection.TryAddSingleton<IJsonSerializer, JsonSerializer>();
 
-            serviceLocator.RegisterType<IJsonSerializer, JsonSerializer>();
+            return serviceCollection;
         }
     }
 }

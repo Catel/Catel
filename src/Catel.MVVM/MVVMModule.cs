@@ -1,9 +1,7 @@
 ﻿namespace Catel
 {
-    using System;
     using System.Linq;
     using Catel.MVVM.Auditing;
-    using IoC;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using MVVM;

@@ -11,7 +11,6 @@ namespace Catel.Runtime.Serialization.Json
     using System.Runtime.Serialization;
     using System.Text;
     using Data;
-    using IoC;
     using Logging;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -51,11 +50,11 @@ namespace Catel.Runtime.Serialization.Json
         /// Initializes a new instance of the <see cref="JsonSerializer" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
-        /// <param name="typeFactory">The type factory.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
-            : base(serializationManager, typeFactory, objectAdapter)
+        public JsonSerializer(ISerializationManager serializationManager, IServiceProvider serviceProvider, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
+            : base(serializationManager, serviceProvider, objectAdapter)
         {
             PreserveReferences = true;
             WriteTypeInfo = true;
