@@ -3,7 +3,6 @@
     using System;
     using System.Diagnostics;
     using System.Threading.Tasks;
-    using Catel.IoC;
     using Catel.Services;
     using NUnit.Framework;
 
@@ -31,8 +30,11 @@
                 }
             }
 
-            var worker = new WorkingClass(ServiceLocator.Default.ResolveRequiredType<IDispatcherService>());
+            var dispatcherService = new ShimDispatcherService();
+            var worker = new WorkingClass(dispatcherService);
+
             await worker.InvokeAsync().ConfigureAwait(true);
+
             Assert.That(worker.CounterProperty, Is.EqualTo(1));
         }
     }

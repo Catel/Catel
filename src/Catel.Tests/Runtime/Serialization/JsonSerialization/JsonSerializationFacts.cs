@@ -3,9 +3,9 @@
     using System;
     using System.Globalization;
     using System.IO;
-    using Catel.IoC;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Json;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestModels;
 
@@ -17,28 +17,34 @@
             [TestCase]
             public void CorrectlySerializesEnumsToString()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var model = new CustomJsonSerializationModelWithEnum
+                serviceCollection.AddCatelSerializationJsonServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    Name = "Test model with enum",
-                    EnumWithAttribute = CustomSerializationEnum.SecondValue,
-                    EnumWithoutAttribute = CustomSerializationEnum.SecondValue,
-                };
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
 
-                using (var memoryStream = new MemoryStream())
-                {
-                    serializer.Serialize(model, memoryStream);
-
-                    memoryStream.Position = 0L;
-
-                    using (var streamReader = new StreamReader(memoryStream))
+                    var model = new CustomJsonSerializationModelWithEnum(serializer)
                     {
-                        var streamAsText = streamReader.ReadToEnd();
+                        Name = "Test model with enum",
+                        EnumWithAttribute = CustomSerializationEnum.SecondValue,
+                        EnumWithoutAttribute = CustomSerializationEnum.SecondValue,
+                    };
 
-                        Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"), Is.True);
-                        Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"), Is.True);
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        serializer.Serialize(model, memoryStream);
+
+                        memoryStream.Position = 0L;
+
+                        using (var streamReader = new StreamReader(memoryStream))
+                        {
+                            var streamAsText = streamReader.ReadToEnd();
+
+                            Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"), Is.True);
+                            Assert.That(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"), Is.True);
+                        }
                     }
                 }
             }
@@ -46,23 +52,29 @@
             [TestCase]
             public void CorrectlyDeserializesEnumsFromString()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var model = new CustomJsonSerializationModelWithEnum
+                serviceCollection.AddCatelSerializationJsonServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    Name = "Test model with enum",
-                    EnumWithAttribute = CustomSerializationEnum.SecondValue,
-                    EnumWithoutAttribute = CustomSerializationEnum.SecondValue,
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
 
-                };
+                    var model = new CustomJsonSerializationModelWithEnum(serializer)
+                    {
+                        Name = "Test model with enum",
+                        EnumWithAttribute = CustomSerializationEnum.SecondValue,
+                        EnumWithoutAttribute = CustomSerializationEnum.SecondValue,
 
-                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+                    };
 
-                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.That(clonedModel.EnumWithAttribute, Is.EqualTo(model.EnumWithAttribute));
-                Assert.That(clonedModel.EnumWithoutAttribute, Is.EqualTo(model.EnumWithoutAttribute));
+                    // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+
+                    Assert.That(clonedModel.EnumWithAttribute, Is.EqualTo(model.EnumWithAttribute));
+                    Assert.That(clonedModel.EnumWithoutAttribute, Is.EqualTo(model.EnumWithoutAttribute));
+                }
             }
         }
 
@@ -72,121 +84,157 @@
             [TestCase]
             public void CorrectlySerializesObjectsImplementingICustomJsonSerializable_Simple()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var model = new CustomJsonSerializationModel
+                serviceCollection.AddCatelSerializationJsonServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    FirstName = "Geert"
-                };
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
 
-                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+                    var model = new CustomJsonSerializationModel(serializer)
+                    {
+                        FirstName = "Geert"
+                    };
 
-                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.That(model.IsCustomSerialized, Is.True);
-                Assert.That(clonedModel.IsCustomDeserialized, Is.True);
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
+                    // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                    Assert.That(model.IsCustomSerialized, Is.True);
+                    Assert.That(clonedModel.IsCustomDeserialized, Is.True);
+
+                    Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
+                }
             }
 
             [TestCase]
             public void CorrectlySerializesObjectsImplementingICustomJsonSerializable_Nested()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var model = new CustomJsonSerializationModelWithNesting
+                serviceCollection.AddCatelSerializationJsonServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    Name = "Test model with nesting",
-                    NestedModel = new CustomJsonSerializationModel
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
+
+                    var model = new CustomJsonSerializationModelWithNesting(serializer)
                     {
-                        FirstName = "Geert"
-                    }
-                };
+                        Name = "Test model with nesting",
+                        NestedModel = new CustomJsonSerializationModel(serializer)
+                        {
+                            FirstName = "Geert"
+                        }
+                    };
 
-                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.That(clonedModel.NestedModel, Is.Not.Null);
+                    Assert.That(clonedModel.NestedModel, Is.Not.Null);
 
-                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.That(model.NestedModel.IsCustomSerialized, Is.True);
-                Assert.That(clonedModel.NestedModel.IsCustomDeserialized, Is.True);
+                    // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                    Assert.That(model.NestedModel.IsCustomSerialized, Is.True);
+                    Assert.That(clonedModel.NestedModel.IsCustomDeserialized, Is.True);
 
-                Assert.That(clonedModel.Name, Is.EqualTo(model.Name));
-                Assert.That(clonedModel.NestedModel.FirstName, Is.EqualTo(model.NestedModel.FirstName));
+                    Assert.That(clonedModel.Name, Is.EqualTo(model.Name));
+                    Assert.That(clonedModel.NestedModel.FirstName, Is.EqualTo(model.NestedModel.FirstName));
+                }
             }
 
             [TestCase]
             public void CorrectlySerializesToJsonString()
             {
-                var testModel = new TestModel();
+                var serviceCollection = new ServiceCollection();
 
-                testModel._excludedField = "excluded";
-                testModel._includedField = "included";
+                serviceCollection.AddCatelSerializationJsonServices();
 
-                testModel.ExcludedRegularProperty = "excluded";
-                testModel.IncludedRegularProperty = "included";
-
-                testModel.ExcludedCatelProperty = "excluded";
-                testModel.IncludedCatelProperty = "included";
-
-                var configuration = new JsonSerializationConfiguration
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    UseBson = true
-                };
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
 
-                var json = testModel.ToJson(configuration);
+                    var testModel = new TestModel(serializer);
 
-                Assert.That(json.Contains("Excluded"), Is.False);
+                    testModel._excludedField = "excluded";
+                    testModel._includedField = "included";
+
+                    testModel.ExcludedRegularProperty = "excluded";
+                    testModel.IncludedRegularProperty = "included";
+
+                    testModel.ExcludedCatelProperty = "excluded";
+                    testModel.IncludedCatelProperty = "included";
+
+                    var configuration = new JsonSerializationConfiguration
+                    {
+                        UseBson = true
+                    };
+
+                    var json = testModel.ToJson(serializer, configuration);
+
+                    Assert.That(json.Contains("Excluded"), Is.False);
+                }
             }
 
             [TestCase]
             public void CorrectlySerializesToBsonString()
             {
-                var testModel = new TestModel();
+                var serviceCollection = new ServiceCollection();
 
-                testModel._excludedField = "excluded";
-                testModel._includedField = "included";
+                serviceCollection.AddCatelSerializationJsonServices();
 
-                testModel.ExcludedRegularProperty = "excluded";
-                testModel.IncludedRegularProperty = "included";
-
-                testModel.ExcludedCatelProperty = "excluded";
-                testModel.IncludedCatelProperty = "included";
-
-                var configuration = new JsonSerializationConfiguration
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    UseBson = true
-                };
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
 
-                var json = testModel.ToJson(configuration);
+                    var testModel = new TestModel(serializer);
 
-                Assert.That(json.Contains("Excluded"), Is.False);
+                    testModel._excludedField = "excluded";
+                    testModel._includedField = "included";
+
+                    testModel.ExcludedRegularProperty = "excluded";
+                    testModel.IncludedRegularProperty = "included";
+
+                    testModel.ExcludedCatelProperty = "excluded";
+                    testModel.IncludedCatelProperty = "included";
+
+                    var configuration = new JsonSerializationConfiguration
+                    {
+                        UseBson = true
+                    };
+
+                    var json = testModel.ToJson(serializer, configuration);
+
+                    Assert.That(json.Contains("Excluded"), Is.False);
+                }
             }
 
             [TestCase]
             public void CorrectlySerializesObjectsWithFormattedIndents()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var model = new CustomJsonSerializationModel
+                serviceCollection.AddCatelSerializationJsonServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    FirstName = "Geert"
-                };
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
 
-                var configuration = new JsonSerializationConfiguration
-                {
-                    Formatting = Newtonsoft.Json.Formatting.Indented
-                };
+                    var model = new CustomJsonSerializationModel(serializer)
+                    {
+                        FirstName = "Geert"
+                    };
 
-                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, configuration);
+                    var configuration = new JsonSerializationConfiguration
+                    {
+                        Formatting = Newtonsoft.Json.Formatting.Indented
+                    };
 
-                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.That(model.IsCustomSerialized, Is.True);
-                Assert.That(clonedModel.IsCustomDeserialized, Is.True);
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, configuration);
 
-                Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
+                    // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                    Assert.That(model.IsCustomSerialized, Is.True);
+                    Assert.That(clonedModel.IsCustomDeserialized, Is.True);
+
+                    Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
+                }
             }
 
             //[TestCase]
@@ -215,19 +263,28 @@
 
             private void TestSerializationUsingCulture(CultureInfo culture)
             {
-                var testModel = new TestModel();
+                var serviceCollection = new ServiceCollection();
 
-                var currentDateTime = DateTime.Now;
-                testModel.DateTimeProperty = currentDateTime;
+                serviceCollection.AddCatelSerializationJsonServices();
 
-                var configuration = new SerializationConfiguration
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    Culture = culture
-                };
+                    var serializer = serviceProvider.GetRequiredService<IJsonSerializer>();
 
-                var json = testModel.ToJson(configuration);
+                    var testModel = new TestModel(serializer);
 
-                Assert.That(json.Contains(currentDateTime.ToString(culture)), Is.True);
+                    var currentDateTime = DateTime.Now;
+                    testModel.DateTimeProperty = currentDateTime;
+
+                    var configuration = new SerializationConfiguration
+                    {
+                        Culture = culture
+                    };
+
+                    var json = testModel.ToJson(serializer, configuration);
+
+                    Assert.That(json.Contains(currentDateTime.ToString(culture)), Is.True);
+                }
             }
         }
     }

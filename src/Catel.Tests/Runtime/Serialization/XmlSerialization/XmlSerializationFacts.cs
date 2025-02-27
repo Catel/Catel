@@ -5,10 +5,10 @@
     using System.Linq;
     using System.Xml.Serialization;
     using Catel.Data;
-    using Catel.IoC;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
     using Data;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestModels;
 
@@ -20,22 +20,38 @@
             [TestCase]
             public void XmlSerializationWithXmlIgnore()
             {
-                var serializer = SerializationFactory.GetXmlSerializer();
+                var serviceCollection = new ServiceCollection();
 
-                var obj = new ObjectWithXmlMappings();
+                serviceCollection.AddCatelCoreServices();
 
-                var xml = obj.ToXml(serializer).ToString();
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                Assert.That(xml.Contains("IgnoredProperty"), Is.False);
+                    var obj = new ObjectWithXmlMappings();
+
+                    var xml = obj.ToXml(serializer).ToString();
+
+                    Assert.That(xml.Contains("IgnoredProperty"), Is.False);
+                }
             }
 
             [TestCase]
             public void XmlSerializationWithXmlMappings()
             {
-                var originalObject = ModelBaseTestHelper.CreateComputerSettingsWithXmlMappingsObject();
-                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+                var serviceCollection = new ServiceCollection();
 
-                Assert.That(clonedObject, Is.EqualTo(originalObject));
+                serviceCollection.AddCatelCoreServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
+
+                    var originalObject = ModelBaseTestHelper.CreateComputerSettingsWithXmlMappingsObject();
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.That(clonedObject, Is.EqualTo(originalObject));
+                }
             }
 
             [TestCase]
@@ -49,40 +65,47 @@
             [TestCase]
             public void RespectsTheXmlRootAndXmlElementAttribute()
             {
-                var serializer = SerializationFactory.GetXmlSerializer();
+                var serviceCollection = new ServiceCollection();
 
-                var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml(serializer);
+                serviceCollection.AddCatelCoreServices();
 
-                var personElement = xmlDocument.Element("MappedPerson");
-                Assert.That(personElement, Is.Not.Null);
-
-                var firstNameElement = personElement.Element("NameFirst");
-                Assert.That(firstNameElement, Is.Not.Null);
-                Assert.That(firstNameElement.Value, Is.EqualTo("Geert"));
-
-                var middleNameElement = personElement.Element("NameMiddle");
-                Assert.That(middleNameElement, Is.Not.Null);
-                Assert.That(middleNameElement.Value, Is.EqualTo("van"));
-
-                var lastNameElement = personElement.Element("NameLast");
-                Assert.That(lastNameElement, Is.Not.Null);
-                Assert.That(lastNameElement.Value, Is.EqualTo("Horrik"));
-
-                using (var memoryStream = new MemoryStream())
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    using (var streamWriter = new StreamWriter(memoryStream))
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
+
+                    var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
+                    var xmlDocument = person.ToXml(serializer);
+
+                    var personElement = xmlDocument.Element("MappedPerson");
+                    Assert.That(personElement, Is.Not.Null);
+
+                    var firstNameElement = personElement.Element("NameFirst");
+                    Assert.That(firstNameElement, Is.Not.Null);
+                    Assert.That(firstNameElement.Value, Is.EqualTo("Geert"));
+
+                    var middleNameElement = personElement.Element("NameMiddle");
+                    Assert.That(middleNameElement, Is.Not.Null);
+                    Assert.That(middleNameElement.Value, Is.EqualTo("van"));
+
+                    var lastNameElement = personElement.Element("NameLast");
+                    Assert.That(lastNameElement, Is.Not.Null);
+                    Assert.That(lastNameElement.Value, Is.EqualTo("Horrik"));
+
+                    using (var memoryStream = new MemoryStream())
                     {
-                        streamWriter.Write(xmlDocument.ToString());
-                        streamWriter.Flush();
+                        using (var streamWriter = new StreamWriter(memoryStream))
+                        {
+                            streamWriter.Write(xmlDocument.ToString());
+                            streamWriter.Flush();
 
-                        memoryStream.Position = 0L;
+                            memoryStream.Position = 0L;
 
-                        var deserializedPerson = serializer.Deserialize<ModelBaseFacts.Person>(memoryStream);
+                            var deserializedPerson = serializer.Deserialize<ModelBaseFacts.Person>(memoryStream);
 
-                        Assert.That(deserializedPerson.FirstName, Is.EqualTo("Geert"));
-                        Assert.That(deserializedPerson.MiddleName, Is.EqualTo("van"));
-                        Assert.That(deserializedPerson.LastName, Is.EqualTo("Horrik"));
+                            Assert.That(deserializedPerson.FirstName, Is.EqualTo("Geert"));
+                            Assert.That(deserializedPerson.MiddleName, Is.EqualTo("van"));
+                            Assert.That(deserializedPerson.LastName, Is.EqualTo("Horrik"));
+                        }
                     }
                 }
             }
@@ -90,30 +113,37 @@
             [TestCase]
             public void RespectsTheXmlAttributeAttribute()
             {
-                var serializer = SerializationFactory.GetXmlSerializer();
+                var serviceCollection = new ServiceCollection();
 
-                var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml(serializer);
+                serviceCollection.AddCatelCoreServices();
 
-                var personElement = xmlDocument.Element("MappedPerson");
-                Assert.That(personElement, Is.Not.Null);
-
-                var ageAttribute = personElement.Attribute("FutureAge");
-                Assert.That(ageAttribute, Is.Not.Null);
-                Assert.That(ageAttribute.Value, Is.EqualTo("42"));
-
-                using (var memoryStream = new MemoryStream())
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    using (var streamWriter = new StreamWriter(memoryStream))
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
+
+                    var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
+                    var xmlDocument = person.ToXml(serializer);
+
+                    var personElement = xmlDocument.Element("MappedPerson");
+                    Assert.That(personElement, Is.Not.Null);
+
+                    var ageAttribute = personElement.Attribute("FutureAge");
+                    Assert.That(ageAttribute, Is.Not.Null);
+                    Assert.That(ageAttribute.Value, Is.EqualTo("42"));
+
+                    using (var memoryStream = new MemoryStream())
                     {
-                        streamWriter.Write(xmlDocument.ToString());
-                        streamWriter.Flush();
+                        using (var streamWriter = new StreamWriter(memoryStream))
+                        {
+                            streamWriter.Write(xmlDocument.ToString());
+                            streamWriter.Flush();
 
-                        memoryStream.Position = 0L;
+                            memoryStream.Position = 0L;
 
-                        var deserializedPerson = serializer.Deserialize<ModelBaseFacts.Person>(memoryStream);
+                            var deserializedPerson = serializer.Deserialize<ModelBaseFacts.Person>(memoryStream);
 
-                        Assert.That(deserializedPerson.Age, Is.EqualTo(42));
+                            Assert.That(deserializedPerson.Age, Is.EqualTo(42));
+                        }
                     }
                 }
             }
@@ -123,28 +153,37 @@
             [TestCase(XmlSerializerOptimalizationMode.Performance)]
             public void RespectsTheXmlAttributeAttributeOnRootElements(XmlSerializerOptimalizationMode mode)
             {
-                var family = new XmlFamily();
-                family.LastName = "van Horrik";
-                family.Persons.Add(new XmlPerson
-                {
-                    FirstName = "Geert",
-                    LastName = family.LastName,
-                    Gender = Gender.Male
-                });
+                var serviceCollection = new ServiceCollection();
 
-                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(),
-                    new XmlSerializationConfiguration
+                serviceCollection.AddCatelCoreServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
+
+                    var family = new XmlFamily();
+                    family.LastName = "van Horrik";
+                    family.Persons.Add(new XmlPerson
                     {
+                        FirstName = "Geert",
+                        LastName = family.LastName,
+                        Gender = Gender.Male
                     });
 
-                Assert.That(newFamily.LastName, Is.EqualTo(family.LastName));
-                Assert.That(newFamily.Persons.Count, Is.EqualTo(1));
+                    var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, serializer,
+                        new XmlSerializationConfiguration
+                        {
+                        });
 
-                var newPerson = newFamily.Persons.First();
+                    Assert.That(newFamily.LastName, Is.EqualTo(family.LastName));
+                    Assert.That(newFamily.Persons.Count, Is.EqualTo(1));
 
-                Assert.That(newPerson.FirstName, Is.EqualTo(family.Persons[0].FirstName));
-                Assert.That(newPerson.LastName, Is.EqualTo(family.Persons[0].LastName));
-                Assert.That(newPerson.Gender, Is.EqualTo(family.Persons[0].Gender));
+                    var newPerson = newFamily.Persons.First();
+
+                    Assert.That(newPerson.FirstName, Is.EqualTo(family.Persons[0].FirstName));
+                    Assert.That(newPerson.LastName, Is.EqualTo(family.Persons[0].LastName));
+                    Assert.That(newPerson.Gender, Is.EqualTo(family.Persons[0].Gender));
+                }
             }
 
             [TestCase(XmlSerializerOptimalizationMode.PrettyXml)]
@@ -152,64 +191,87 @@
             [TestCase(XmlSerializerOptimalizationMode.Performance)]
             public void SerializesModelsWithOnlyAttributes(XmlSerializerOptimalizationMode mode)
             {
-                var family = new XmlFamily();
-                family.LastName = "van Horrik";
-                family.ModelsWithAttributesOnly.Add(new XmlModelWithAttributesOnly
-                {
-                    FirstName = "Geert",
-                });
+                var serviceCollection = new ServiceCollection();
 
-                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(),
-                    new XmlSerializationConfiguration
+                serviceCollection.AddCatelCoreServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
+
+                    var family = new XmlFamily();
+                    family.LastName = "van Horrik";
+                    family.ModelsWithAttributesOnly.Add(new XmlModelWithAttributesOnly
                     {
-                        // No longer using optimization mode, but keep this test alive
+                        FirstName = "Geert",
                     });
 
-                Assert.That(newFamily.LastName, Is.EqualTo(family.LastName));
-                Assert.That(newFamily.ModelsWithAttributesOnly.Count, Is.EqualTo(1));
+                    var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, serializer,
+                        new XmlSerializationConfiguration
+                        {
+                            // No longer using optimization mode, but keep this test alive
+                        });
 
-                var newModelWithAttributesOnly = newFamily.ModelsWithAttributesOnly.First();
+                    Assert.That(newFamily.LastName, Is.EqualTo(family.LastName));
+                    Assert.That(newFamily.ModelsWithAttributesOnly.Count, Is.EqualTo(1));
 
-                Assert.That(newModelWithAttributesOnly.FirstName, Is.EqualTo(family.ModelsWithAttributesOnly[0].FirstName));
+                    var newModelWithAttributesOnly = newFamily.ModelsWithAttributesOnly.First();
+
+                    Assert.That(newModelWithAttributesOnly.FirstName, Is.EqualTo(family.ModelsWithAttributesOnly[0].FirstName));
+                }
             }
 
             [TestCase]
             public void RespectsTheXmlIgnoreAttribute()
             {
-                var serializer = SerializationFactory.GetXmlSerializer();
+                var serviceCollection = new ServiceCollection();
 
-                var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml(serializer);
+                serviceCollection.AddCatelCoreServices();
 
-                var personElement = xmlDocument.Element("MappedPerson");
-                Assert.That(personElement, Is.Not.Null);
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                Assert.That(personElement.Element("FullName"), Is.Null);
+                    var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
+                    var xmlDocument = person.ToXml(serializer);
+
+                    var personElement = xmlDocument.Element("MappedPerson");
+                    Assert.That(personElement, Is.Not.Null);
+
+                    Assert.That(personElement.Element("FullName"), Is.Null);
+                }
             }
 
             [TestCase]
             public void SupportsNestedHierarchySerialization()
             {
-                var serializer = SerializationFactory.GetXmlSerializer();
+                var serviceCollection = new ServiceCollection();
 
-                var root = new ModelBaseFacts.Group()
+                serviceCollection.AddCatelCoreServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    Name = "myRoot"
-                };
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                var child = new ModelBaseFacts.Group()
-                {
-                    Name = "myChild"
-                };
+                    var root = new ModelBaseFacts.Group()
+                    {
+                        Name = "myRoot"
+                    };
 
-                root.Items = new ObservableCollection<ModelBaseFacts.Item>();
-                root.Items.Add(child);
+                    var child = new ModelBaseFacts.Group()
+                    {
+                        Name = "myChild"
+                    };
 
-                var newRoot = SerializationTestHelper.SerializeAndDeserialize(root, serializer);
-                Assert.That(newRoot, Is.Not.Null);
-                Assert.That(newRoot.Name, Is.EqualTo("myRoot"));
-                Assert.That(newRoot.Items.Count, Is.EqualTo(1));
-                Assert.That(newRoot.Items[0].Name, Is.EqualTo("myChild"));
+                    root.Items = new ObservableCollection<ModelBaseFacts.Item>();
+                    root.Items.Add(child);
+
+                    var newRoot = SerializationTestHelper.SerializeAndDeserialize(root, serializer);
+                    Assert.That(newRoot, Is.Not.Null);
+                    Assert.That(newRoot.Name, Is.EqualTo("myRoot"));
+                    Assert.That(newRoot.Items.Count, Is.EqualTo(1));
+                    Assert.That(newRoot.Items[0].Name, Is.EqualTo("myChild"));
+                }
             }
         }
 
@@ -219,111 +281,138 @@
             [TestCase]
             public void SerializesAbstractBaseCollections()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IXmlSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var collection = new ObservableCollection<AbstractBase>();
+                serviceCollection.AddCatelCoreServices();
 
-                collection.Add(new Derived1
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    Name = "1"
-                });
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                collection.Add(new Derived2
-                {
-                    Name = "2"
-                });
+                    var collection = new ObservableCollection<AbstractBase>();
 
-                collection.Add(new Derived1
-                {
-                    Name = "3"
-                });
+                    collection.Add(new Derived1
+                    {
+                        Name = "1"
+                    });
 
-                collection.Add(new Derived1
-                {
-                    Name = "4"
-                });
+                    collection.Add(new Derived2
+                    {
+                        Name = "2"
+                    });
 
-                collection.Add(new Derived2
-                {
-                    Name = "5"
-                });
+                    collection.Add(new Derived1
+                    {
+                        Name = "3"
+                    });
 
-                var clonedCollection = SerializationTestHelper.SerializeAndDeserialize(collection, serializer, null);
+                    collection.Add(new Derived1
+                    {
+                        Name = "4"
+                    });
 
-                Assert.That(clonedCollection.Count, Is.EqualTo(collection.Count));
-                Assert.That(((Derived1)clonedCollection[0]).Name, Is.EqualTo(((Derived1)collection[0]).Name));
-                Assert.That(((Derived2)clonedCollection[1]).Name, Is.EqualTo(((Derived2)collection[1]).Name));
-                Assert.That(((Derived1)clonedCollection[2]).Name, Is.EqualTo(((Derived1)collection[2]).Name));
-                Assert.That(((Derived1)clonedCollection[3]).Name, Is.EqualTo(((Derived1)collection[3]).Name));
-                Assert.That(((Derived2)clonedCollection[4]).Name, Is.EqualTo(((Derived2)collection[4]).Name));
+                    collection.Add(new Derived2
+                    {
+                        Name = "5"
+                    });
+
+                    var clonedCollection = SerializationTestHelper.SerializeAndDeserialize(collection, serializer, null);
+
+                    Assert.That(clonedCollection.Count, Is.EqualTo(collection.Count));
+                    Assert.That(((Derived1)clonedCollection[0]).Name, Is.EqualTo(((Derived1)collection[0]).Name));
+                    Assert.That(((Derived2)clonedCollection[1]).Name, Is.EqualTo(((Derived2)collection[1]).Name));
+                    Assert.That(((Derived1)clonedCollection[2]).Name, Is.EqualTo(((Derived1)collection[2]).Name));
+                    Assert.That(((Derived1)clonedCollection[3]).Name, Is.EqualTo(((Derived1)collection[3]).Name));
+                    Assert.That(((Derived2)clonedCollection[4]).Name, Is.EqualTo(((Derived2)collection[4]).Name));
+                }
             }
 
             [TestCase]
             public void CorrectlySerializesObjectsImplementingICustomXmlSerializable_Simple()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IXmlSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var model = new CustomXmlSerializationModel
+                serviceCollection.AddCatelCoreServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    FirstName = "Geert"
-                };
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+                    var model = new CustomXmlSerializationModel
+                    {
+                        FirstName = "Geert"
+                    };
 
-                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.That(model.IsCustomSerialized, Is.True);
-                Assert.That(clonedModel.IsCustomDeserialized, Is.True);
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
+                    // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                    Assert.That(model.IsCustomSerialized, Is.True);
+                    Assert.That(clonedModel.IsCustomDeserialized, Is.True);
+
+                    Assert.That(clonedModel.FirstName, Is.EqualTo(model.FirstName));
+                }
             }
 
             [TestCase]
             public void CorrectlySerializesObjectsImplementingICustomXmlSerializable_Nested()
             {
-                var serviceLocator = ServiceLocator.Default;
-                var serializer = serviceLocator.ResolveType<IXmlSerializer>();
+                var serviceCollection = new ServiceCollection();
 
-                var model = new CustomXmlSerializationModelWithNesting
+                serviceCollection.AddCatelCoreServices();
+
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    Name = "Test model with nesting",
-                    NestedModel = new CustomXmlSerializationModel
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
+
+                    var model = new CustomXmlSerializationModelWithNesting
                     {
-                        FirstName = "Geert"
-                    }
-                };
+                        Name = "Test model with nesting",
+                        NestedModel = new CustomXmlSerializationModel
+                        {
+                            FirstName = "Geert"
+                        }
+                    };
 
-                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
 
-                Assert.That(clonedModel.NestedModel, Is.Not.Null);
+                    Assert.That(clonedModel.NestedModel, Is.Not.Null);
 
-                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
-                Assert.That(model.NestedModel.IsCustomSerialized, Is.True);
-                Assert.That(clonedModel.NestedModel.IsCustomDeserialized, Is.True);
+                    // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                    Assert.That(model.NestedModel.IsCustomSerialized, Is.True);
+                    Assert.That(clonedModel.NestedModel.IsCustomDeserialized, Is.True);
 
-                Assert.That(clonedModel.Name, Is.EqualTo(model.Name));
-                Assert.That(clonedModel.NestedModel.FirstName, Is.EqualTo(model.NestedModel.FirstName));
+                    Assert.That(clonedModel.Name, Is.EqualTo(model.Name));
+                    Assert.That(clonedModel.NestedModel.FirstName, Is.EqualTo(model.NestedModel.FirstName));
+                }
             }
 
 
             [TestCase]
             public void CorrectlySerializesToXmlString()
             {
-                var testModel = new TestModel();
+                var serviceCollection = new ServiceCollection();
 
-                testModel._excludedField = "excluded";
-                testModel._includedField = "included";
+                serviceCollection.AddCatelCoreServices();
 
-                testModel.ExcludedRegularProperty = "excluded";
-                testModel.IncludedRegularProperty = "included";
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var serializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                testModel.ExcludedCatelProperty = "excluded";
-                testModel.IncludedCatelProperty = "included";
+                    var testModel = new TestModel(serializer);
 
-                var xml = testModel.ToXmlString();
+                    testModel._excludedField = "excluded";
+                    testModel._includedField = "included";
 
-                Assert.That(xml.Contains("Excluded"), Is.False);
+                    testModel.ExcludedRegularProperty = "excluded";
+                    testModel.IncludedRegularProperty = "included";
+
+                    testModel.ExcludedCatelProperty = "excluded";
+                    testModel.IncludedCatelProperty = "included";
+
+                    var xml = testModel.ToXmlString(serializer);
+
+                    Assert.That(xml.Contains("Excluded"), Is.False);
+                }
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿namespace Catel.ComponentModel
 {
     using System;
-    using Catel.Logging;
     using Services;
 
     /// <summary>

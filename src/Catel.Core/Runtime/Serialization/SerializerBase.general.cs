@@ -67,7 +67,7 @@
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        protected SerializerBase(ISerializationManager serializationManager, IServiceProvider serviceProvider, IObjectAdapter objectAdapter)
+        protected SerializerBase(ISerializationManager serializationManager, IServiceProvider serviceProvider, ISerializationObjectAdapter objectAdapter)
         {
             SerializationManager = serializationManager;
             ServiceProvider = serviceProvider;
@@ -92,7 +92,7 @@
         /// Gets the object adapter.
         /// </summary>
         /// <value>The object adapter.</value>
-        protected IObjectAdapter ObjectAdapter { get; private set; }
+        protected ISerializationObjectAdapter ObjectAdapter { get; private set; }
 
         /// <summary>
         /// Gets the serializable members for the specified model.

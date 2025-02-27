@@ -1,9 +1,16 @@
 ﻿namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public class CustomSerializationModelBase : ModelBase
     {
+        public CustomSerializationModelBase(ISerializer serializer) 
+            : base(serializer)
+        {
+            
+        }
+
         public string FirstName
         {
             get { return GetValue<string>(FirstNameProperty); }

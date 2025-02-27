@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using Catel.Data;
-using Catel.IoC;
 using Catel.Logging;
 using Catel.Reflection;
 using NUnit.Framework;
@@ -21,11 +20,11 @@ public class GlobalInitialization
             LogManager.AddDebugListener();
         }
 
-        // For testing purposes, enable features we disabled for CTL-234
-        var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
-        modelEqualityComparer.CompareProperties = true;
-        modelEqualityComparer.CompareValues = true;
-        modelEqualityComparer.CompareCollections = true;
+        //// For testing purposes, enable features we disabled for CTL-234
+        //var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
+        //modelEqualityComparer.CompareProperties = true;
+        //modelEqualityComparer.CompareValues = true;
+        //modelEqualityComparer.CompareCollections = true;
 
         var culture = new CultureInfo("en-US");
         System.Threading.Thread.CurrentThread.CurrentCulture = culture;

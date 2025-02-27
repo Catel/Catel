@@ -54,7 +54,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="xmlNamespaceManager" /> is <c>null</c>.</exception>
         public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory,
-            IXmlNamespaceManager xmlNamespaceManager, IServiceProvider serviceProvider, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
+            IXmlNamespaceManager xmlNamespaceManager, IServiceProvider serviceProvider, Catel.Runtime.Serialization.ISerializationObjectAdapter objectAdapter)
             : base(serializationManager, serviceProvider, objectAdapter)
         {
             _dataContractSerializerFactory = dataContractSerializerFactory;

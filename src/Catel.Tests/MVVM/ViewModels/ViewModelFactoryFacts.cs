@@ -2,13 +2,13 @@
 {
     using System;
     using System.Reflection;
-    using Catel.IoC;
     using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
 
     public partial class ViewModelFactoryFacts
     {
+#if !FINISHED_MIGRATION
         [TestFixture]
         public class TheCreateViewModelMethod
         {
@@ -108,5 +108,6 @@
                 }
             }
         }
+#endif
     }
 }

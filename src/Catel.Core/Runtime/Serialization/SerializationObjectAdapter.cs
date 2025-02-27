@@ -8,13 +8,13 @@
     /// <summary>
     /// Adapter to interact with objects.
     /// </summary>
-    public class ObjectAdapter : IObjectAdapter
+    public class SerializationObjectAdapter : ISerializationObjectAdapter
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly Data.IObjectAdapter _objectAdapter;
 
-        public ObjectAdapter(Data.IObjectAdapter objectAdapter)
+        public SerializationObjectAdapter(Data.IObjectAdapter objectAdapter)
         {
             _objectAdapter = objectAdapter;
         }

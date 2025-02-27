@@ -53,7 +53,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public JsonSerializer(ISerializationManager serializationManager, IServiceProvider serviceProvider, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
+        public JsonSerializer(ISerializationManager serializationManager, IServiceProvider serviceProvider, Catel.Runtime.Serialization.ISerializationObjectAdapter objectAdapter)
             : base(serializationManager, serviceProvider, objectAdapter)
         {
             PreserveReferences = true;

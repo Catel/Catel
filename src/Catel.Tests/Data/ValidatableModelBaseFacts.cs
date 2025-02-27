@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
@@ -7,9 +8,9 @@
     using System.Reflection;
 
     using Catel.Data;
-    using Catel.IoC;
     using Catel.Reflection;
-
+    using Catel.Runtime.Serialization;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
@@ -21,60 +22,78 @@
             [TestCase("IsDirty", true)]
             public void DoesNotCauseValidationWhenKnownModelBasePropertiesChange(string propertyName, object propertyValue)
             {
-                var validationObject = (IValidatable)new ObjectWithValidation();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCoreServices();
 
-                validationObject.Validate();
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var validationObject = (IValidatable)ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
 
-                Assert.That(validationObject.IsValidated, Is.True);
+                    validationObject.Validate();
 
-                var modelEditor = (IModelEditor)validationObject;
-                modelEditor.SetValue(propertyName, propertyValue);
+                    Assert.That(validationObject.IsValidated, Is.True);
 
-                Assert.That(validationObject.IsValidated, Is.True);
+                    var modelEditor = (IModelEditor)validationObject;
+                    modelEditor.SetValue(propertyName, propertyValue);
+
+                    Assert.That(validationObject.IsValidated, Is.True);
+                }
             }
 
             #region Validation
             [TestCase]
             public void ValidationWithWarnings()
             {
-                var validationObject = new ObjectWithValidation();
-                var validation = (IValidatableModel)validationObject;
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCoreServices();
 
-                // Check if the object now has warnings
-                Assert.That(validation.HasWarnings, Is.EqualTo(false));
-                Assert.That(validation.HasErrors, Is.EqualTo(false));
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var validationObject = ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
+                    var validation = (IValidatableModel)validationObject;
 
-                // Now set a field warning and check it
-                validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesFieldWarning;
-                Assert.That(validation.HasWarnings, Is.EqualTo(true));
-                Assert.That(validation.HasErrors, Is.EqualTo(false));
+                    // Check if the object now has warnings
+                    Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                    Assert.That(validation.HasErrors, Is.EqualTo(false));
 
-                // Now set a business warning and check it
-                validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesBusinessWarning;
-                Assert.That(validation.HasWarnings, Is.EqualTo(true));
-                Assert.That(validation.HasErrors, Is.EqualTo(false));
+                    // Now set a field warning and check it
+                    validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesFieldWarning;
+                    Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                    Assert.That(validation.HasErrors, Is.EqualTo(false));
 
-                // Clear warning
-                validationObject.ValueToValidate = ObjectWithValidation.ValueThatHasNoWarningsOrErrors;
-                Assert.That(validation.HasWarnings, Is.EqualTo(false));
-                Assert.That(validation.HasErrors, Is.EqualTo(false));
+                    // Now set a business warning and check it
+                    validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesBusinessWarning;
+                    Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                    Assert.That(validation.HasErrors, Is.EqualTo(false));
+
+                    // Clear warning
+                    validationObject.ValueToValidate = ObjectWithValidation.ValueThatHasNoWarningsOrErrors;
+                    Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                    Assert.That(validation.HasErrors, Is.EqualTo(false));
+                }
             }
 
             [TestCase]
             public void ValidationUsingAnnotationsForCatelProperties()
             {
-                var validationObject = new ObjectWithValidation();
-                var validation = (IValidatableModel)validationObject;
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCoreServices();
 
-                Assert.That(validation.HasErrors, Is.False);
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var validationObject = ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
+                    var validation = (IValidatableModel)validationObject;
 
-                validationObject.ValueWithAnnotations = string.Empty;
+                    Assert.That(validation.HasErrors, Is.False);
 
-                Assert.That(validation.HasErrors, Is.True);
+                    validationObject.ValueWithAnnotations = string.Empty;
 
-                validationObject.ValueWithAnnotations = "value";
+                    Assert.That(validation.HasErrors, Is.True);
 
-                Assert.That(validation.HasErrors, Is.False);
+                    validationObject.ValueWithAnnotations = "value";
+
+                    Assert.That(validation.HasErrors, Is.False);
+                }
             }
 
             //[TestCase]
@@ -98,9 +117,16 @@
             [TestCase]
             public void ValidationUsingAnnotationsForNonCatelCalculatedProperties()
             {
-                var validationObject = new ObjectWithValidation();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCoreServices();
 
-                Assert.That(validationObject.HasErrors, Is.False);
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
+                {
+                    var validationObject = ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
+                    var validation = (IValidatableModel)validationObject;
+
+                    Assert.That(validationObject.HasErrors, Is.False);
+                }
             }
             #endregion
 
@@ -458,6 +484,12 @@
             [ValidateModel(typeof(TestValidator))]
             public class TestValidatorModel : ValidatableModelBase
             {
+                public TestValidatorModel(IServiceProvider serviceProvider, IObjectAdapter objectAdapter, ISerializer serializer)
+                    : base(serviceProvider, objectAdapter, serviceProvider)
+                {
+                    
+                }
+
                 /// <summary>
                 /// Gets or sets the property value.
                 /// </summary>

@@ -6,14 +6,17 @@
 
     public class TestModel : ModelBase
     {
-        #region Fields
         public string _excludedField;
 
         [IncludeInSerialization]
         public string _includedField;
-        #endregion
 
-        #region Properties
+        public TestModel(ISerializer serializer)
+            : base(serializer)
+        {
+
+        }
+
         /// <summary>
         /// Gets or sets the property value.
         /// </summary>
@@ -80,6 +83,5 @@
 
         [IncludeInSerialization]
         public string IncludedRegularProperty { get; set; }
-        #endregion
     }
 }

@@ -2,8 +2,8 @@
 {
     using System;
     using System.Linq;
-    using Catel.IoC;
     using Catel.Reflection;
+    using Catel.Runtime.Serialization;
     using Catel.Windows;
     using NUnit.Framework;
 
@@ -49,8 +49,8 @@
         {
             [TestCase(typeof(string), false, "System.String")]
             [TestCase(typeof(string), true, "System.String, System")]
-            [TestCase(typeof(TypeFactory), false, "Catel.IoC.typeFactory")]
-            [TestCase(typeof(TypeFactory), true, "Catel.IoC.typeFactory, Catel.Core")]
+            [TestCase(typeof(ISerializer), false, "Catel.Runtime.Serialization.ISerializer")]
+            [TestCase(typeof(ISerializer), true, "Catel.Runtime.Serialization.ISerializer, Catel.Core")]
             public void ReturnsFullName(Type type, bool includeAssembly, string expected)
             {
 

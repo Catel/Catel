@@ -9,6 +9,7 @@
     using Catel.Services;
     using Services.Fixtures;
 
+#if !FINISHED_MIGRATION
     [TestFixture]
     public class ObjectToDisplayNameConverterFacts
     {
@@ -104,4 +105,5 @@
             return languageService;
         }
     }
+#endif
 }

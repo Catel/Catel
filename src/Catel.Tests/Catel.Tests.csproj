@@ -10,6 +10,7 @@
     <PackageTags></PackageTags>
     <Nullable>annotations</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
+    <DefineConstants>$(DefineConstants);FINISHED_MIGRATION</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>

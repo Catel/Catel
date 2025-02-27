@@ -7,34 +7,9 @@
     using Catel.Data;
     using Catel.Runtime.Serialization;
     using System.Diagnostics;
-    using Catel.IoC;
-    using Catel.Runtime.Serialization.Json;
-    using Catel.Runtime.Serialization.Xml;
 
     public static class SerializationTestHelper
     {
-        public static IXmlSerializer GetXmlSerializer(ISerializationManager serializationManager = null)
-        {
-            if (serializationManager is null)
-            {
-                serializationManager = new SerializationManager();
-            }
-
-            var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<XmlSerializer>(serializationManager);
-            return serializer;
-        }
-
-        public static IJsonSerializer GetJsonSerializer(ISerializationManager serializationManager = null)
-        {
-            if (serializationManager is null)
-            {
-                serializationManager = new SerializationManager();
-            }
-
-            var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<JsonSerializer>(serializationManager);
-            return serializer;
-        }
-
         /// <summary>
         /// Serializes and deserializes using the specified serializer.
         /// </summary>
@@ -70,14 +45,13 @@
             }
         }
 
-        public static string ToXmlString(this object model)
+        public static string ToSerializedString(this object model, ISerializer serializer)
         {
             ArgumentNullException.ThrowIfNull(model);
 
             using (var memoryStream = new MemoryStream())
             {
-                var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                xmlSerializer.Serialize(model, memoryStream, null);
+                serializer.Serialize(model, memoryStream, null);
 
                 memoryStream.Position = 0L;
                 using (var xmlReader = XmlReader.Create(memoryStream))
@@ -87,7 +61,7 @@
             }
         }
 
-        public static T FromXmlString<T>(this string xml)
+        public static T FromSerializedString<T>(this string xml, ISerializer serializer)
             where T : ModelBase
         {
             Argument.IsNotNullOrWhitespace(() => xml);
@@ -103,8 +77,7 @@
 
                 memoryStream.Position = 0L;
 
-                var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                return (T)xmlSerializer.Deserialize(typeof(T), memoryStream, null);
+                return (T)serializer.Deserialize(typeof(T), memoryStream, null);
             }
         }
 

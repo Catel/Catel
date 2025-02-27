@@ -17,7 +17,7 @@
     /// </summary>
     public static class CoreModule
     {
-        public static IServiceCollection AddCatelCoreServices(IServiceCollection serviceCollection)
+        public static IServiceCollection AddCatelCoreServices(this IServiceCollection serviceCollection)
         {
             // No need to clean the small boxing caches
             BoxingCache<bool>.Default.CleanUpInterval = TimeSpan.Zero;
@@ -33,7 +33,7 @@
             serviceCollection.TryAddSingleton<IXmlSerializer, XmlSerializer>();
             serviceCollection.TryAddSingleton<IXmlNamespaceManager, XmlNamespaceManager>();
             serviceCollection.TryAddSingleton<ISerializationManager, SerializationManager>();
-            serviceCollection.TryAddSingleton<Catel.Runtime.Serialization.IObjectAdapter, Catel.Runtime.Serialization.ObjectAdapter>();
+            serviceCollection.TryAddSingleton<Catel.Runtime.Serialization.ISerializationObjectAdapter, Catel.Runtime.Serialization.SerializationObjectAdapter>();
             serviceCollection.TryAddSingleton<Catel.Data.IObjectAdapter, Catel.Data.ExpressionTreeObjectAdapter>();
 
             serviceCollection.TryAddSingleton<ISerializer, XmlSerializer>();

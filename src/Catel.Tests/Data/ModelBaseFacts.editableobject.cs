@@ -4,17 +4,19 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using Catel.Data;
-    using Catel.IoC;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Json;
     using Catel.Runtime.Serialization.Xml;
+    using Microsoft.Extensions.DependencyInjection;
+    using Moq;
     using NUnit.Framework;
 
     public partial class ModelBaseFacts
     {
         public class NonConstructableEditableObject : EditableObject
         {
-            public NonConstructableEditableObject(string firstName)
+            public NonConstructableEditableObject(string firstName, ISerializer serializer)
+                : base(serializer)
             {
                 FirstName = firstName;
             }
@@ -32,7 +34,8 @@
 
         public class EditableObject : ModelBase
         {
-            public EditableObject()
+            public EditableObject(ISerializer serializer)
+                : base(serializer)
             {
                 var advancedEditableObject = (IAdvancedEditableObject)this;
                 advancedEditableObject.BeginEditing += (sender, e) => BeginEditingCalled = true;
@@ -139,6 +142,12 @@
 
         public class ClearIsDirtyModel : ModelBase
         {
+            public ClearIsDirtyModel(ISerializer serializer)
+                : base(serializer)
+            {
+
+            }
+
             public string Name
             {
                 get { return GetValue<string>(NameProperty); }
@@ -146,11 +155,6 @@
             }
 
             public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name", default(string));
-
-            public ClearIsDirtyModel()
-            {
-
-            }
 
             internal void ClearIsDirty()
             {
@@ -186,7 +190,9 @@
             [TestCase]
             public void AllowsDoubleCalls()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 editableObjectAsIEditableObject.BeginEdit();
@@ -196,7 +202,9 @@
             [TestCase]
             public void InvokesBeginEditingEvent()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 Assert.That(editableObject.BeginEditingCalled, Is.False);
@@ -247,7 +255,9 @@
             [TestCase]
             public void WorksForNonConstructableEditableObject()
             {
-                var editableObject = new NonConstructableEditableObject("Geert");
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new NonConstructableEditableObject("Geert", serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 editableObjectAsIEditableObject.BeginEdit();
@@ -265,7 +275,9 @@
             [TestCase]
             public void DoesNotInvokeCancelEditingEventWhenBeginEditWasNotCalled()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 Assert.That(editableObject.CancelEditingCalled, Is.False);
@@ -282,7 +294,9 @@
             [TestCase]
             public void InvokesCancelEditingEventAfterBeginEditIsCalled()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 Assert.That(editableObject.CancelEditingCalled, Is.False);
@@ -300,7 +314,9 @@
             [TestCase]
             public void InvokesCancelEditingCompletedEventAfterCancelEditIsCanceled()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 editableObject.DoCancelCancel = true;
@@ -320,7 +336,9 @@
             [TestCase]
             public void IgnoresPropertiesNotInBackup()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 editableObject.IgnoredPropertyInBackup = 1;
@@ -337,28 +355,33 @@
             public void CancelEdit<TModel>(Func<TModel> createModel, Action<TModel> beforeBeginEdit, Action<TModel> afterBeginEdit, Action<TModel> assert)
                 where TModel : ModelBase
             {
-                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCoreServices();
+                serviceCollection.AddCatelSerializationJsonServices();
 
-                var serializers = new List<ISerializer>();
-                serializers.Add(dependencyResolver.Resolve<XmlSerializer>());
-                serializers.Add(dependencyResolver.Resolve<JsonSerializer>());
-
-                foreach (var serializer in serializers)
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    var model = createModel();
-                    model._editableObjectSerializer = serializer;
+                    var serializers = new List<ISerializer>();
+                    serializers.Add(serviceProvider.GetRequiredService<XmlSerializer>());
+                    serializers.Add(serviceProvider.GetRequiredService<JsonSerializer>());
 
-                    var modelAsIEditableObject = (IEditableObject)model;
+                    foreach (var serializer in serializers)
+                    {
+                        var model = createModel();
+                        model._editableObjectSerializer = serializer;
 
-                    beforeBeginEdit(model);
+                        var modelAsIEditableObject = (IEditableObject)model;
 
-                    modelAsIEditableObject.BeginEdit();
+                        beforeBeginEdit(model);
 
-                    afterBeginEdit(model);
+                        modelAsIEditableObject.BeginEdit();
 
-                    modelAsIEditableObject.CancelEdit();
+                        afterBeginEdit(model);
 
-                    assert(model);
+                        modelAsIEditableObject.CancelEdit();
+
+                        assert(model);
+                    }
                 }
             }
         }
@@ -409,7 +432,9 @@
             [TestCase]
             public void DoesNotInvokeEndEditingEventWhenBeginEditWasNotCalled()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 Assert.That(editableObject.EndEditingCalled, Is.False);
@@ -424,7 +449,9 @@
             [TestCase]
             public void InvokesEndEditingEventAfterBeginEditIsCalled()
             {
-                var editableObject = new EditableObject();
+                var serializerMock = new Mock<ISerializer>();
+
+                var editableObject = new EditableObject(serializerMock.Object);
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
                 Assert.That(editableObject.EndEditingCalled, Is.False);
@@ -444,8 +471,10 @@
             [TestCase]
             public void CorrectlyRaisesPropertyChangedForIsDirty()
             {
+                var serializerMock = new Mock<ISerializer>();
+
                 int isDirtyChangedCalls = 0;
-                var model = new ClearIsDirtyModel();
+                var model = new ClearIsDirtyModel(serializerMock.Object);
 
                 ((INotifyPropertyChanged)model).PropertyChanged += (sender, e) =>
                 {

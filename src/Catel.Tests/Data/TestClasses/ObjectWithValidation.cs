@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     [Serializable]
     public class ObjectWithValidation : ValidatableModelBase
@@ -17,7 +18,8 @@
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
-        public ObjectWithValidation()
+        public ObjectWithValidation(IServiceProvider serviceProvider, Catel.Data.IObjectAdapter objectAdapter, ISerializer serializer)
+            : base(serviceProvider, objectAdapter, serializer)
         {
             NonCatelPropertyWithAnnotations = "default value";
         }

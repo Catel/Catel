@@ -13,8 +13,10 @@
     /// </summary>
     public static class MVVMModule
     {
-        public static IServiceCollection AddCatelMvvmServices(IServiceCollection serviceCollection)
-        { 
+        public static IServiceCollection AddCatelMvvmServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddCatelCoreServices();
+
             serviceCollection.TryAddSingleton<IDataContextSubscriptionService, DataContextSubscriptionService>();
             serviceCollection.TryAddSingleton<ICommandManager, CommandManager>();
             serviceCollection.TryAddSingleton<IViewLoadManager, ViewLoadManager>();

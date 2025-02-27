@@ -9,8 +9,10 @@
     /// </summary>
     public static class SerializationJsonModule
     {
-        public static IServiceCollection AddCatelSerializationJsonServices(IServiceCollection serviceCollection)
+        public static IServiceCollection AddCatelSerializationJsonServices(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddCatelCoreServices();
+
             serviceCollection.TryAddSingleton<IJsonSerializer, JsonSerializer>();
 
             return serviceCollection;

@@ -9,6 +9,12 @@
 
     public class CustomJsonSerializationModel : CustomSerializationModelBase, ICustomJsonSerializable
     {
+        public CustomJsonSerializationModel(ISerializer serializer) 
+            : base(serializer)
+        {
+            
+        }
+
         void ICustomJsonSerializable.Serialize(JsonWriter jsonWriter)
         {
             jsonWriter.WriteStartObject();
@@ -32,6 +38,12 @@
 
     public class CustomJsonSerializationModelWithNesting : ModelBase
     {
+        public CustomJsonSerializationModelWithNesting(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string Name
         {
             get { return GetValue<string>(NameProperty); }
@@ -52,6 +64,12 @@
 
     public class CustomJsonSerializationModelWithEnum : ModelBase
     {
+        public CustomJsonSerializationModelWithEnum(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string Name
         {
             get { return GetValue<string>(NameProperty); }

@@ -1,64 +1,35 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.Data;
-    using Catel.IoC;
     using Catel.MVVM;
+    using Catel.Services;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Test view model.
     /// </summary>
     public class TestViewModel : ViewModelBase
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestViewModel"/> class.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        public TestViewModel(IServiceLocator serviceLocator)
-            : this(serviceLocator, null, null)
+        public TestViewModel(IServiceProvider serviceProvider)
+            : this(null, null, serviceProvider)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestViewModel"/> class.
-        /// </summary>
-        public TestViewModel()
-            : this(null, null, null)
+        public TestViewModel(IPerson person, IServiceProvider serviceProvider)
+            : this(person, serviceProvider)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestViewModel" /> class.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <param name="validateModelsOnInitialization">if set to <c>true</c>, the view model will validate on initialization.</param>
-        public TestViewModel(IPerson person, bool validateModelsOnInitialization = true)
-            : this(null, person, null, validateModelsOnInitialization)
+        public TestViewModel(SpecialValidationModel specialValidationModel, IServiceProvider serviceProvider)
+            : this(null, specialValidationModel, serviceProvider)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestViewModel"/> class.
-        /// </summary>
-        /// <param name="specialValidationModel">The special validation model.</param>
-        public TestViewModel(SpecialValidationModel specialValidationModel)
-            : this(null, null, specialValidationModel)
+        private TestViewModel(IPerson person, SpecialValidationModel specialValidationModel, IServiceProvider serviceProvider)
+            : base(serviceProvider, serviceProvider.GetRequiredService<IObjectAdapter>(), serviceProvider.GetRequiredService<Catel.Runtime.Serialization.ISerializer>(),
+                  serviceProvider.GetRequiredService<IDispatcherService>(), serviceProvider.GetRequiredService<IViewModelManager>())
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestViewModel"/> class.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <param name="person">The person.</param>
-        /// <param name="specialValidationModel">The special validation model.</param>
-        /// <param name="validateModelsOnInitialization">if set to <c>true</c>, the view model will validate on initialization.</param>
-        private TestViewModel(IServiceLocator serviceLocator, IPerson person, SpecialValidationModel specialValidationModel,
-            bool validateModelsOnInitialization = true)
-            : base(serviceLocator)
-        {
-            ValidateModelsOnInitialization = validateModelsOnInitialization;
-
             Person = person;
             SpecialValidationModel = specialValidationModel;
 
@@ -67,18 +38,17 @@
 
             DeferValidationUntilFirstSaveCall = false;
         }
-        #endregion
 
-        #region Properties
-        /// <summary>
-        /// Gets the title of the view model.
-        /// </summary>
-        /// <value>The title.</value>
+        public bool ValidateModelsOnInitializationWrapper
+        {
+            get { return ValidateModelsOnInitialization; }
+            set { ValidateModelsOnInitialization = value; }
+        }
+
         public override string Title
         {
             get { return "View model title"; }
         }
-        #endregion
 
         #region Models
 

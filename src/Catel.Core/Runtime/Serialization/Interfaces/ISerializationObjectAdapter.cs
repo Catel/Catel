@@ -3,7 +3,7 @@
     /// <summary>
     /// Adapter to interact with objects.
     /// </summary>
-    public interface IObjectAdapter
+    public interface ISerializationObjectAdapter
     {
         /// <summary>
         /// Gets the member value.
