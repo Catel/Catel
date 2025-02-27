@@ -1,5 +1,7 @@
 ﻿namespace Catel.Services
 {
+    using System;
+
     /// <summary>
     /// The object id generator service.
     /// </summary>
@@ -9,14 +11,17 @@
         /// <summary>
         /// Gets the unique identifier for the specified type.
         /// </summary>
+        /// <param name="objectType">Type of the object.</param>
         /// <param name="reuse">Indicates whether the id will be returned from released id pool</param>
         /// <returns>A new unique identifier but if <paramref name="reuse"/> is <c>true</c> will return a released identifier.</returns>
-        TUniqueIdentifier GetUniqueIdentifier(bool reuse = false);
+        TUniqueIdentifier GetUniqueIdentifier(Type objectType, bool reuse = false);
 
         /// <summary>
         /// Release the unique identifier for the specified type.
         /// </summary>
-        void ReleaseIdentifier(TUniqueIdentifier identifier);
+        /// <param name="objectType">Type of the object.</param>
+        /// <param name="identifier">The identifier.</param>
+        void ReleaseIdentifier(Type objectType, TUniqueIdentifier identifier);
     }
 
     /// <summary>

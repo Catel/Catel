@@ -1,5 +1,6 @@
 ﻿namespace Catel.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
 
@@ -20,7 +21,7 @@
         protected readonly object _lock = new object();
 
         /// <inheritdoc />
-        public TUniqueIdentifier GetUniqueIdentifier(bool reuse = false)
+        public TUniqueIdentifier GetUniqueIdentifier(Type objectType, bool reuse = false)
         {
             if (reuse)
             {
@@ -37,7 +38,7 @@
         }
 
         /// <inheritdoc />
-        public void ReleaseIdentifier(TUniqueIdentifier identifier)
+        public void ReleaseIdentifier(Type objectType, TUniqueIdentifier identifier)
         {
             lock (SyncObj)
             {
@@ -55,12 +56,14 @@
         {
             lock (SyncObj)
             {
+                var objectType = instance.GetType();
+
                 if (AllocatedUniqueIdentifierPerInstances.TryGetValue(instance, out var wrapper))
                 {
                     return wrapper.UniqueIdentifier;
                 }
 
-                wrapper = new InstanceWrapper(this, GetUniqueIdentifier(reuse));
+                wrapper = new InstanceWrapper(this, objectType, GetUniqueIdentifier(objectType, reuse));
 
                 AllocatedUniqueIdentifierPerInstances.Add(instance, wrapper);
 
@@ -78,20 +81,23 @@
 
         private class InstanceWrapper
         {
-            public InstanceWrapper(IObjectIdGenerator<TObjectType, TUniqueIdentifier> objectIdGenerator, TUniqueIdentifier uniqueIdentifier)
+            public InstanceWrapper(IObjectIdGenerator<TObjectType, TUniqueIdentifier> objectIdGenerator, Type objectType, TUniqueIdentifier uniqueIdentifier)
             {
                 ObjectIdGenerator = objectIdGenerator;
+                ObjectType = objectType;
                 UniqueIdentifier = uniqueIdentifier;
             }
 
             public IObjectIdGenerator<TObjectType, TUniqueIdentifier> ObjectIdGenerator { get; }
+
+            public Type ObjectType { get; }
 
             public TUniqueIdentifier UniqueIdentifier { get; }
 
             ~InstanceWrapper()
             {
 #pragma warning disable IDISP023 // Don't use reference types in finalizer context.
-                ObjectIdGenerator?.ReleaseIdentifier(UniqueIdentifier);
+                ObjectIdGenerator?.ReleaseIdentifier(ObjectType, UniqueIdentifier);
 #pragma warning restore IDISP023 // Don't use reference types in finalizer context.
             }
         }

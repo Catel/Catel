@@ -1,6 +1,7 @@
 ﻿namespace Catel
 {
     using System;
+    using System.Runtime.Serialization;
     using Catel.Reflection;
     using Configuration;
     using Data;
@@ -44,6 +45,10 @@
             serviceCollection.TryAddSingleton<IConfigurationService, ConfigurationService>();
             serviceCollection.TryAddSingleton<IObjectConverterService, ObjectConverterService>();
             serviceCollection.TryAddSingleton<IRollingInMemoryLogService, RollingInMemoryLogService>();
+
+            //serviceCollection.TryAddSingleton(typeof(IObjectIdGenerator<TObject,int>)  <IObjectIdGenerator<T, int>, IntegerObjectIdGenerator<T>();
+            //serviceCollection.TryAddSingleton<IObjectIdGenerator<T, long>, LongObjectIdGenerator<T>();
+            //serviceCollection.TryAddSingleton<IObjectIdGenerator<T, ulong>, ULongObjectIdGenerator<T>();
 
             return serviceCollection;
         }
