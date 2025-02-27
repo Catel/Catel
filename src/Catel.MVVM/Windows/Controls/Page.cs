@@ -25,7 +25,7 @@
         /// </summary>
         /// <remarks>It is not possible to inject view models.</remarks>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public Page(IServiceProvider serviceProvider, INavigationRootService navigationRootService, IDataContextSubscriptionService dataContextSubscriptionService)
+        public Page(IServiceProvider serviceProvider, INavigationRootService navigationRootService, IUrlLocator urlLocator, IDataContextSubscriptionService dataContextSubscriptionService)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             if (CatelEnvironment.IsInDesignMode)
@@ -33,7 +33,7 @@
                 return;
             }
 
-            _logic = new PageLogic(serviceProvider, navigationRootService, this);
+            _logic = new PageLogic(serviceProvider, navigationRootService, urlLocator, this);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 

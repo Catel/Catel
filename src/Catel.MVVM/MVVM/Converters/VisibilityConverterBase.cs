@@ -12,20 +12,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="VisibilityConverterBase"/> class.
         /// </summary>
-        /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visibible should be returned.</param>
+        /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visible should be returned.</param>
         /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
         protected VisibilityConverterBase(Visibility notVisibleVisibility)
         {
             if (notVisibleVisibility == Visibility.Visible)
             {
-                throw new ArgumentException(Catel.ResourceHelper.GetString("VisibilityIsNotAllowedForConverter"), "notVisibleVisibility");
+                throw new ArgumentException($"Visibility.Visible is not possible as not-visible option", "notVisibleVisibility");
             }
 
             NotVisibleVisibility = notVisibleVisibility;
         }
 
         /// <summary>
-        /// Gets the <see cref="Visibility"/> state when not visibible should be returned.
+        /// Gets the <see cref="Visibility"/> state when not visible should be returned.
         /// </summary>
         /// <value>The not visible visibility.</value>
         public Visibility NotVisibleVisibility { get; private set; }

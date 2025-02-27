@@ -145,9 +145,6 @@ If you are sure that you have a model with this name, make sure it's public inst
   <data name="NoExpectedResultsInQueueForUnitTest" xml:space="preserve">
     <value>No expected results in the queue, set up expected result first</value>
   </data>
-  <data name="PageNotRegistered" xml:space="preserve">
-    <value>There is no page registered as '{0}'</value>
-  </data>
   <data name="PropertyNotFoundInModel" xml:space="preserve">
     <value>Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'&lt;/value&gt;
     &lt;comment&gt;{0} = view model property name
@@ -159,12 +156,6 @@ If you are sure that you have a model with this name, make sure it's public inst
   </data>
   <data name="ViewModelNotRegistered" xml:space="preserve">
     <value>The view model of type '{0}' is not registered thus cannot be used in this context</value>
-  </data>
-  <data name="VisibilityIsNotAllowedForConverter" xml:space="preserve">
-    <value>Visibility.Visible is not possible as not-visible option</value>
-  </data>
-  <data name="WindowNotRegistered" xml:space="preserve">
-    <value>There is no window registered as '{0}'</value>
   </data>
   <data name="WrongViewModelType" xml:space="preserve">
     <value>The view model is of the wrong type. Expected '{0}', but type is '{1}'</value>

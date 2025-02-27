@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="name">The name of the window.</param>
         public WindowNotRegisteredException(string name)
-            : base(string.Format(ResourceHelper.GetString("WindowNotRegistered") ?? string.Empty, name))
+            : base($"There is no window registered as '{name}'")
         {
             Name = name;
         }

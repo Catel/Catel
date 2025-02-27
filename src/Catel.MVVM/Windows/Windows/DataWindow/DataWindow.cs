@@ -18,6 +18,8 @@
     using Exceptions = Properties.Exceptions;
     using MVVM.Providers;
     using Catel.Services;
+    using Catel.Reflection;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// <see cref="Window"/> class that implements the <see cref="InfoBarMessageControl"/> and
@@ -27,6 +29,7 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly IServiceProvider _serviceProvider;
         private readonly IWrapControlService _wrapControlService;
         private readonly ILanguageService _languageService;
 
@@ -51,18 +54,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Windows.FrameworkElement"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="languageService">The language service.</param>
         /// <param name="wrapControlService">The wrap control service.</param>
         /// <remarks>
         /// This method is required for design time support.
         /// </remarks>
-        public DataWindow(IWrapControlService wrapControlService, ILanguageService languageService)
-            : this(wrapControlService, languageService, DataWindowMode.OkCancel)
+        public DataWindow(IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
+            : this(serviceProvider, wrapControlService, languageService, DataWindowMode.OkCancel)
         { }
 
         /// <summary>
         /// Initializes a new instance of this class with custom commands.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="languageService">The language service.</param>
         /// <param name="wrapControlService">The wrap control service.</param>
         /// <param name="mode"><see cref="DataWindowMode"/>.</param>
@@ -71,24 +76,25 @@
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
         /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
-        public DataWindow(IWrapControlService wrapControlService, ILanguageService languageService, DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
+        public DataWindow(IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService, DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
-            : this(null, wrapControlService, languageService, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode, focusFirstControl)
+            : this(null, serviceProvider, wrapControlService, languageService, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode, focusFirstControl)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindow"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="languageService">The language service.</param>
         /// <param name="wrapControlService">The wrap control service.</param>
         /// <remarks>
         /// Explicit constructor with view model injection, required for <see cref="Activator.CreateInstance(System.Type)"/> which
         /// does not seem to support default parameter values.
         /// </remarks>
-        public DataWindow(IViewModel? viewModel, IWrapControlService wrapControlService, ILanguageService languageService)
-            : this(viewModel, wrapControlService, languageService, DataWindowMode.OkCancel)
+        public DataWindow(IViewModel? viewModel, IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
+            : this(viewModel, serviceProvider, wrapControlService, languageService, DataWindowMode.OkCancel)
         {
             // Do not remove this constructor, see remarks
         }
@@ -97,6 +103,7 @@
         /// Initializes a new instance of the <see cref="DataWindow"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="languageService">The language service.</param>
         /// <param name="wrapControlService">The wrap control service.</param>
         /// <param name="mode"><see cref="DataWindowMode"/>.</param>
@@ -106,11 +113,13 @@
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
         /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public DataWindow(IViewModel? viewModel, IWrapControlService wrapControlService, ILanguageService languageService, DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public DataWindow(IViewModel? viewModel, IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService, 
+            DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
+            _serviceProvider = serviceProvider;
             _wrapControlService = wrapControlService;
             _languageService = languageService;
 
@@ -134,11 +143,15 @@
             ResizeMode = ResizeMode.NoResize;
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-            this.ApplyIconFromApplication();
+            var entryAssemblyResolver = serviceProvider.GetService<IEntryAssemblyResolver>();
+            if (entryAssemblyResolver is not null)
+            {
+                this.ApplyIconFromApplication(entryAssemblyResolver);
+            }
 
             ThemeHelper.EnsureCatelMvvmThemeIsLoaded();
 
-            _logic = new WindowLogic(this, null, viewModel);
+            _logic = new WindowLogic(serviceProvider, this, null, viewModel);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
@@ -726,25 +739,25 @@
 
             if (IsOKButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(_languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
+                var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.OK;
                 _buttons.Add(button);
             }
             if (IsCancelButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(_languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
+                var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
             if (IsApplyButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(_languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
+                var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Apply;
                 _buttons.Add(button);
             }
             if (IsCloseButtonAvailable)
             {
-                var button = DataWindowButton.FromSync(_languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
+                var button = DataWindowButton.FromSync(_serviceProvider, _languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Close;
                 _buttons.Add(button);
             }

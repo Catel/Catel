@@ -1,6 +1,7 @@
 ﻿namespace Catel.MVVM
 {
     using System;
+    using Catel.Properties;
 
     /// <summary>
     /// Exception for when a model is not registered on a class, but a <see cref="ViewModelToModelAttribute"/> is used with the model.
@@ -13,7 +14,7 @@
         /// <param name="modelName">Name of the model.</param>
         /// <param name="propertyDeclaringViewModelToModelAttribute">The property declaring the view model to model attribute.</param>
         public ModelNotRegisteredException(string modelName, string propertyDeclaringViewModelToModelAttribute)
-            : base(string.Format(ResourceHelper.GetString("ModelNotRegistered") ?? string.Empty, modelName, propertyDeclaringViewModelToModelAttribute))
+            : base(string.Format(Exceptions.ModelNotRegistered ?? string.Empty, modelName, propertyDeclaringViewModelToModelAttribute))
         {
             ModelName = modelName;
             PropertyDeclaringViewModelToModelAttribute = propertyDeclaringViewModelToModelAttribute;

@@ -137,15 +137,6 @@ namespace Catel.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no page registered as &apos;{0}&apos;.
-        /// </summary>
-        internal static string PageNotRegistered {
-            get {
-                return ResourceManager.GetString("PageNotRegistered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Mapped viewmodel property &apos;{0}&apos; to model property &apos;{1}&apos; is invalid because property &apos;{1}&apos; is not found on the model &apos;{2}&apos;&lt;/value&gt;
         ///    &lt;comment&gt;{0} = view model property name
         ///{1} = model property name
@@ -172,24 +163,6 @@ namespace Catel.Properties {
         internal static string ViewModelNotRegistered {
             get {
                 return ResourceManager.GetString("ViewModelNotRegistered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Visibility.Visible is not possible as not-visible option.
-        /// </summary>
-        internal static string VisibilityIsNotAllowedForConverter {
-            get {
-                return ResourceManager.GetString("VisibilityIsNotAllowedForConverter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is no window registered as &apos;{0}&apos;.
-        /// </summary>
-        internal static string WindowNotRegistered {
-            get {
-                return ResourceManager.GetString("WindowNotRegistered", resourceCulture);
             }
         }
         

@@ -4,6 +4,8 @@
     using System.Threading.Tasks;
     using Auditing;
     using Catel.Logging;
+    using Catel.Services;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Container for application-wide commands.
@@ -15,8 +17,9 @@
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
-            : base(commandName, commandManager)
+        /// <param name="serviceProvider">The service provider.</param>
+        protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
+            : base(commandName, commandManager, serviceProvider)
         {
         }
     }
@@ -32,8 +35,9 @@
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
-            : base(commandName, commandManager)
+        /// <param name="serviceProvider">The service provider.</param>
+        protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
+            : base(commandName, commandManager, serviceProvider)
         {
         }
     }
@@ -50,8 +54,9 @@
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
-            : base(commandName, commandManager)
+        /// <param name="serviceProvider">The service provider.</param>
+        protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
+            : base(commandName, commandManager, serviceProvider)
         {
         }
     }
@@ -61,14 +66,17 @@
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the command execute parameter.</typeparam>
     /// <typeparam name="TCanExecuteParameter">The type of the command can execute parameter.</typeparam>
-    /// <typeparam name="TPogress">The type of the pogress.</typeparam>
-    public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TPogress> 
-        where TPogress : ITaskProgressReport
+    /// <typeparam name="TProgress">The type of the progress.</typeparam>
+    public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TProgress> 
+        where TProgress : ITaskProgressReport
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ICatelCommand _command;
         private readonly ICommandManager _commandManager;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IAuditingManager _auditingManager;
+
         private readonly ICompositeCommand _compositeCommand;
 
         /// <summary>
@@ -76,13 +84,16 @@
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
+        /// <param name="serviceProvider">The service provider.</param>
+        protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
             ArgumentNullException.ThrowIfNull(commandManager);
 
             CommandName = commandName;
             _commandManager = commandManager;
+            _serviceProvider = serviceProvider;
+            _auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var compositeCommand = _commandManager.GetCommand(commandName) as ICompositeCommand;
             if (compositeCommand is null)
@@ -90,8 +101,11 @@
                 throw Log.ErrorAndCreateException<CatelException>($"Cannot find composite command command '{commandName}'");
             }
 
+            var authenticationProvider = serviceProvider.GetRequiredService<IAuthenticationProvider>();
+            var dispatcherService = serviceProvider.GetRequiredService<IDispatcherService>();
+
             _compositeCommand = compositeCommand;
-            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteInternalAsync, CanExecute);
+            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress>(authenticationProvider, dispatcherService, ExecuteInternalAsync, CanExecute);
 
             _commandManager.RegisterCommand(commandName, _command);
         }
@@ -129,9 +143,7 @@
         {
             await ExecuteAsync(parameter);
 
-#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-            AuditingManager.OnCommandExecuted(null, CommandName, _command, parameter);
-#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+            _auditingManager.OnCommandExecuted(null, CommandName, _command, parameter);
         }
 
         /// <summary>

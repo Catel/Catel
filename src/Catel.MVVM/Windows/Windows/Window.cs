@@ -1,6 +1,8 @@
 ﻿namespace Catel.Windows
 {
+    using System;
     using System.Windows;
+    using Catel.Services;
 
     /// <summary>
     /// Easy implementation of the <see cref="DataWindow"/> that adds some features to make
@@ -11,8 +13,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Window"/> class.
         /// </summary>
-        public Window()
-            : base(DataWindowMode.Custom)
+        public Window(IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
+            : base(serviceProvider, wrapControlService, languageService, DataWindowMode.Custom)
         {
             SizeToContent = SizeToContent.Manual;
             ShowInTaskbar = true;

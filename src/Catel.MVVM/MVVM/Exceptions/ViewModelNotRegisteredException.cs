@@ -1,6 +1,7 @@
 ﻿namespace Catel.MVVM
 {
     using System;
+    using Catel.Properties;
 
     /// <summary>
     /// Exception in case a view model is not registered, but still being used.
@@ -12,7 +13,7 @@
         /// </summary>
         /// <param name="viewModelType">Type of the view model.</param>
         public ViewModelNotRegisteredException(Type viewModelType)
-            : base(string.Format(ResourceHelper.GetString("ViewModelNotRegistered") ?? string.Empty, viewModelType.Name))
+            : base(string.Format(Exceptions.ViewModelNotRegistered ?? string.Empty, viewModelType.Name))
         {
             ViewModelType = viewModelType;
         }

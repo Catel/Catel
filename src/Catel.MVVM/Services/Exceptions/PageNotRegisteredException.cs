@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="name">The name of the page.</param>
         public PageNotRegisteredException(string name)
-            : base(string.Format(ResourceHelper.GetString("PageNotRegistered") ?? string.Empty, name))
+            : base($"There is no page registered as '{name}'")
         {
             Name = name;
         }

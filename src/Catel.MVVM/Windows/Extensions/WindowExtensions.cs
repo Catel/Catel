@@ -346,7 +346,8 @@
         /// Applies the icon from the entry assembly (the application) to the window.
         /// </summary>
         /// <param name="window">The window.</param>
-        public static void ApplyIconFromApplication(this SystemWindow window)
+        /// <param name="entryAssemblyResolver">The entry assembly resolver.</param>
+        public static void ApplyIconFromApplication(this SystemWindow window, IEntryAssemblyResolver entryAssemblyResolver)
         {
             ArgumentNullException.ThrowIfNull(window);
 
@@ -360,7 +361,7 @@
                 var currentApplication = Application.Current;
                 if (currentApplication is not null)
                 {
-                    var entryAssembly = AssemblyHelper.GetEntryAssembly();
+                    var entryAssembly = entryAssemblyResolver.Resolve();
                     if (entryAssembly is not null)
                     {
                         var icon = Icon.ExtractAssociatedIcon(entryAssembly.Location);

@@ -5,6 +5,8 @@
     using System.Windows.Input;
     using System.Windows.Data;
     using MVVM;
+    using Microsoft.Extensions.DependencyInjection;
+    using Catel.Services;
 
     /// <summary>
     /// Information for a button that should be generated.
@@ -14,17 +16,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="text">The text.</param>
         /// <param name="execute">The execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
-        public static DataWindowButton FromSync(string text, Action execute, Func<bool>? canExecute = null)
+        public static DataWindowButton FromSync(IServiceProvider serviceProvider, string text, Action execute, Func<bool>? canExecute = null)
         {
-            return new DataWindowButton(text, new Command(execute, canExecute));
+            return new DataWindowButton(text, new Command(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), 
+                execute, canExecute));
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="text">The text.</param>
         /// <param name="execute">The execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
@@ -33,28 +38,31 @@
         /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
-        public static DataWindowButton FromSync(string text, Action execute, Func<bool>? canExecute = null, string? contentBindingPath = null, 
+        public static DataWindowButton FromSync(IServiceProvider serviceProvider, string text, Action execute, Func<bool>? canExecute = null, string? contentBindingPath = null, 
             IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
         {
-            return new DataWindowButton(text, new Command(execute, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
+            return new DataWindowButton(text, new Command(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), execute, canExecute), 
+                contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="text">The text.</param>
         /// <param name="executeAsync">The async execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
 #pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
-        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool>? canExecute = null)
+        public static DataWindowButton FromAsync(IServiceProvider serviceProvider, string text, Func<Task> executeAsync, Func<bool>? canExecute = null)
 #pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
-            return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute));
+            return new DataWindowButton(text, new TaskCommand(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), executeAsync, canExecute));
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="text">The text.</param>
         /// <param name="executeAsync">The async execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
@@ -64,11 +72,12 @@
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
 #pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
-        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool>? canExecute = null, string? contentBindingPath = null, 
+        public static DataWindowButton FromAsync(IServiceProvider serviceProvider, string text, Func<Task> executeAsync, Func<bool>? canExecute = null, string? contentBindingPath = null, 
             IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
 #pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
-            return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
+            return new DataWindowButton(text, new TaskCommand(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), executeAsync, canExecute), 
+                contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
 
         /// <summary>
