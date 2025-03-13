@@ -10,7 +10,6 @@
     [TestFixture]
     public class ManagedViewModelTest
     {
-        #region Methods
         [TestCase]
         public void Constructor()
         {
@@ -87,6 +86,5 @@
             viewModel.AddViewModelInstance(interestingViewModel);
             viewModel.RemoveViewModelInstance(interestingViewModel);
         }
-        #endregion
     }
 }

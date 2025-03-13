@@ -11,6 +11,7 @@
         [TestCase]
         public async Task CanSaveViewModelWithSuspendedValidationAsync()
         {
+
             var person = new Person();
             var vm = new TestViewModel(person);
 

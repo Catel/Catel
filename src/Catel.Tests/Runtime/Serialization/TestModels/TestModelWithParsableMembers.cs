@@ -7,6 +7,12 @@
 
     public class TestModelWithParsableMembersWithoutAttributes : ModelBase
     {
+        public TestModelWithParsableMembersWithoutAttributes(ISerializer serializer)
+            : base(serializer)
+        {
+
+        }
+
         /// <summary>
         /// Gets or sets the property value.
         /// </summary>
@@ -24,6 +30,12 @@
 
     public class TestModelWithParsableMembersWithAttributes : ModelBase
     {
+        public TestModelWithParsableMembersWithAttributes(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         /// <summary>
         /// Gets or sets the property value.
         /// </summary>

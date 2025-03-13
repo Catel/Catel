@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public interface IPerson
     {
@@ -36,7 +37,8 @@
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
-        public Person()
+        public Person(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
         }
 
@@ -173,7 +175,8 @@
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
-        public PersonWithDataAnnotations()
+        public PersonWithDataAnnotations(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
         }
 
@@ -242,7 +245,7 @@
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ContactInfoProperty = RegisterProperty<IContactInfo>("ContactInfo", () => new ContactInfo());
+        public static readonly IPropertyData ContactInfoProperty = RegisterProperty<IContactInfo>("ContactInfo", () => new ContactInfo(_serializer));
     }
 
     /// <summary>
@@ -255,7 +258,8 @@
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
-        public ContactInfo()
+        public ContactInfo(ISerializer serializer)
+            : base(serializer)
         {
         }
 

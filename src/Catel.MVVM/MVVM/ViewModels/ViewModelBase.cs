@@ -102,8 +102,8 @@
         /// </summary>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter, Catel.Runtime.Serialization.ISerializer serializer, IDispatcherService dispatcherService, IViewModelManager viewModelManager)
-            : this(serviceProvider, objectAdapter, serializer, dispatcherService, viewModelManager, true, false, false)
+        protected ViewModelBase(IServiceProvider serviceProvider)
+            : this(serviceProvider, true, false, false)
         {
         }
 
@@ -113,10 +113,6 @@
         /// This constructor allows the injection of a custom <see cref="IServiceProvider"/>.
         /// </summary>
         /// <param name="serviceProvider">The service provider to inject.</param>
-        /// <param name="objectAdapter">The object adapter.</param>
-        /// <param name="serializer">The serializer.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <param name="viewModelManager">The view model manager.</param>
         /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
         /// implement the <see cref="IEditableObject"/> interface.</param>
         /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
@@ -124,13 +120,12 @@
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        protected ViewModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter, Catel.Runtime.Serialization.ISerializer serializer, IDispatcherService dispatcherService,
-            IViewModelManager viewModelManager, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+        protected ViewModelBase(IServiceProvider serviceProvider, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-            : base(serviceProvider, objectAdapter, serializer)
+            : base(serviceProvider)
         {
-            _viewModelManager = viewModelManager;
-            _dispatcherService = dispatcherService;
+            _viewModelManager = serviceProvider.GetRequiredService<IViewModelManager>();
+            _dispatcherService = serviceProvider.GetRequiredService<IDispatcherService>();
 
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -177,7 +172,7 @@
             var auditingManager = serviceProvider.GetService<IAuditingManager>();
             if (auditingManager is not null)
             {
-                _auditingWrapper = new AuditingWrapper(auditingManager, objectAdapter, this);
+                _auditingWrapper = new AuditingWrapper(auditingManager, serviceProvider.GetRequiredService<IObjectAdapter>(), this);
             }
         }
 

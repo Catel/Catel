@@ -10,16 +10,17 @@ namespace Catel.MVVM
     using Services;
 
     using Logging;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Base class for generic command classes. Contains protected static services for using in derived classes.
     /// </summary>
     public abstract class CommandBase
     {
-        protected CommandBase(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService)
+        protected CommandBase(IServiceProvider serviceProvider)
         {
-            AuthenticationProvider = authenticationProvider;
-            DispatcherService = dispatcherService;
+            AuthenticationProvider = serviceProvider.GetRequiredService<IAuthenticationProvider>();
+            DispatcherService = serviceProvider.GetRequiredService<IDispatcherService>();
         }
 
         /// <summary>
@@ -50,42 +51,35 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
-            Action execute, Func<bool>? canExecute = null, object? tag = null)
-            : this(authenticationProvider, dispatcherService, null, execute, null, canExecute, tag) { }
+        public Command(IServiceProvider serviceProvider, Action execute, Func<bool>? canExecute = null, object? tag = null)
+            : this(serviceProvider, null, execute, null, canExecute, tag) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
-            Action<TExecuteParameter?> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : this(authenticationProvider, dispatcherService, execute, null, canExecute, null, tag) { }
+        public Command(IServiceProvider serviceProvider, Action<TExecuteParameter?> execute, Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : this(serviceProvider, execute, null, canExecute, null, tag) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TExecuteParameter, TCanExecuteParameter}"/> class.
         /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="executeWithParameter">The action to execute with parameter.</param>
         /// <param name="executeWithoutParameter">The action to execute without parameter.</param>
         /// <param name="canExecuteWithParameter">The function to call to determine whether the command can be executed with parameter.</param>
         /// <param name="canExecuteWithoutParameter">The function to call to determine whether the command can be executed without parameter.</param>
         /// <param name="tag">The tag of the command.</param>
-        internal Command(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
-            Action<TExecuteParameter?>? executeWithParameter, Action? executeWithoutParameter,
-            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter,
-            object? tag)
-            : base(authenticationProvider, dispatcherService)
+        internal Command(IServiceProvider serviceProvider, Action<TExecuteParameter?>? executeWithParameter, Action? executeWithoutParameter,
+            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter, object? tag)
+            : base(serviceProvider)
         {
             InitializeActions(executeWithParameter, executeWithoutParameter, canExecuteWithParameter, canExecuteWithoutParameter);
 
@@ -209,7 +203,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Defines the method to be called when the command is invoked.
         /// </summary>
-        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        /// <param name="parameter">Data used by the command. If the command does not require data to be passed, this object can be set to null.</param>
         public void Execute(object? parameter)
         {
             if (!(parameter is TExecuteParameter))
@@ -223,7 +217,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Defines the method to be called when the command is invoked.
         /// </summary>
-        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        /// <param name="parameter">Data used by the command. If the command does not require data to be passed, this object can be set to null.</param>
         public void Execute(TExecuteParameter? parameter)
         {
             Execute(parameter, false);
@@ -232,7 +226,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Defines the method to be called when the command is invoked.
         /// </summary>
-        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        /// <param name="parameter">Data used by the command. If the command does not require data to be passed, this object can be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
         protected virtual void Execute(TExecuteParameter? parameter, bool ignoreCanExecuteCheck)
         {
@@ -314,26 +308,22 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
-            Action execute, Func<bool>? canExecute = null, object? tag = null)
-            : base(authenticationProvider, dispatcherService, null, execute, null, canExecute, tag) { }
+        public Command(IServiceProvider serviceProvider, Action execute, Func<bool>? canExecute = null, object? tag = null)
+            : base(serviceProvider, null, execute, null, canExecute, tag) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
-            Action<TExecuteParameter?> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
-            : base(authenticationProvider, dispatcherService, execute, null, canExecute, null, tag) { }
+        public Command(IServiceProvider serviceProvider, Action<TExecuteParameter?> execute, Func<TExecuteParameter?, bool>? canExecute = null, object? tag = null)
+            : base(serviceProvider, execute, null, canExecute, null, tag) { }
     }
 
     /// <summary>
@@ -344,13 +334,11 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public Command(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService, 
-            Action execute, Func<bool>? canExecute = null, object? tag = null)
-            : base(authenticationProvider, dispatcherService, execute, canExecute, tag) { }
+        public Command(IServiceProvider serviceProvider, Action execute, Func<bool>? canExecute = null, object? tag = null)
+            : base(serviceProvider, execute, canExecute, tag) { }
     }
 }

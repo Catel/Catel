@@ -34,7 +34,8 @@
         {
             public class TestDisplayClassViewModel : ViewModelBase
             {
-                public TestDisplayClassViewModel()
+                public TestDisplayClassViewModel(IServiceProvider serviceProvider, IObjectAdapter objectAdapter)
+                    : base()
                 {
                     int localVariable = 1;
                     TestCommand = new Command(TestFunction, () =>

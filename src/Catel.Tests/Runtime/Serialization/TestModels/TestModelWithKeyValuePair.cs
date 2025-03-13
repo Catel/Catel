@@ -7,7 +7,8 @@
     [SerializerModifier(typeof(KeyValuePairSerializerModifier))]
     public class TestModelWithKeyValuePair : ModelBase
     {
-        public TestModelWithKeyValuePair()
+        public TestModelWithKeyValuePair(ISerializer serializer)
+            : base(serializer)
         {
             KeyValuePair = new KeyValuePair<string, string>("somekey", "somevalue");
             KeyValuePairAsObject = new KeyValuePair<string, int>("somekey", 42);

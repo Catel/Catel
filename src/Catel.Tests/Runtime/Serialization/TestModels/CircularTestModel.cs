@@ -2,11 +2,13 @@
 {
     using System;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     [Serializable]
     public class CircularTestModel : ModelBase
     {
-        public CircularTestModel()
+        public CircularTestModel(ISerializer serializer)
+            : base(serializer)
         {
             Name = UniqueIdentifierHelper.GetUniqueIdentifier<CircularTestModel>().ToString();
         }

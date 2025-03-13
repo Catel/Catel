@@ -29,7 +29,7 @@
         /// </summary>
         protected ChildAwareModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter,
             ISerializer serializer)
-            : base(serviceProvider, objectAdapter, serializer)
+            : base(serviceProvider)
         {
             InitializeChildAwareModelBase();
         }

@@ -22,8 +22,7 @@
         /// <param name="canExecute">The can execute delegate.</param>
         public static DataWindowButton FromSync(IServiceProvider serviceProvider, string text, Action execute, Func<bool>? canExecute = null)
         {
-            return new DataWindowButton(text, new Command(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), 
-                execute, canExecute));
+            return new DataWindowButton(text, new Command(serviceProvider, execute, canExecute));
         }
 
         /// <summary>
@@ -41,7 +40,7 @@
         public static DataWindowButton FromSync(IServiceProvider serviceProvider, string text, Action execute, Func<bool>? canExecute = null, string? contentBindingPath = null, 
             IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
         {
-            return new DataWindowButton(text, new Command(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), execute, canExecute), 
+            return new DataWindowButton(text, new Command(serviceProvider, execute, canExecute), 
                 contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
 
@@ -56,7 +55,7 @@
         public static DataWindowButton FromAsync(IServiceProvider serviceProvider, string text, Func<Task> executeAsync, Func<bool>? canExecute = null)
 #pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
-            return new DataWindowButton(text, new TaskCommand(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), executeAsync, canExecute));
+            return new DataWindowButton(text, new TaskCommand(serviceProvider, executeAsync, canExecute));
         }
 
         /// <summary>
@@ -76,7 +75,7 @@
             IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
 #pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
-            return new DataWindowButton(text, new TaskCommand(serviceProvider.GetRequiredService<IAuthenticationProvider>(), serviceProvider.GetRequiredService<IDispatcherService>(), executeAsync, canExecute), 
+            return new DataWindowButton(text, new TaskCommand(serviceProvider, executeAsync, canExecute), 
                 contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
 

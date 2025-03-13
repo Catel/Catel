@@ -4,9 +4,16 @@
     using System.Collections.Generic;
     using System.Xml.Serialization;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public class InheritedFromModelBase : ModelBase
     {
+        public InheritedFromModelBase(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         [XmlAttribute]
         public string? Name { get; set; }
     }
@@ -30,6 +37,12 @@
     [Serializable]
     public class DataItemV : ModelBase, IDataItem
     {
+        public DataItemV(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string? Name
         {
             get { return GetValue<string?>(NameProperty); }
@@ -72,7 +85,8 @@
     [Serializable]
     public class DataItemR : ModelBase, IDataItem
     {
-        public DataItemR()
+        public DataItemR(ISerializer serializer)
+            : base(serializer)
         {
             Parts = new List<DataItemRPart>();
             Parts2 = new List<DataItemRPart2>();
@@ -106,6 +120,12 @@
     [Serializable]
     public class DataItemD : ModelBase, IDataItem
     {
+        public DataItemD(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string? Name
         {
             get { return GetValue<string?>(NameProperty); }

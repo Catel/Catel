@@ -101,11 +101,8 @@
                 throw Log.ErrorAndCreateException<CatelException>($"Cannot find composite command command '{commandName}'");
             }
 
-            var authenticationProvider = serviceProvider.GetRequiredService<IAuthenticationProvider>();
-            var dispatcherService = serviceProvider.GetRequiredService<IDispatcherService>();
-
             _compositeCommand = compositeCommand;
-            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress>(authenticationProvider, dispatcherService, ExecuteInternalAsync, CanExecute);
+            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress>(serviceProvider, ExecuteInternalAsync, CanExecute);
 
             _commandManager.RegisterCommand(commandName, _command);
         }

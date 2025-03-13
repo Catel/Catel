@@ -94,12 +94,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatableModelBase"/> class.
         /// </summary>
-        protected ValidatableModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter,
-            ISerializer serializer)
-            : base(serializer)
+        protected ValidatableModelBase(IServiceProvider serviceProvider)
+            : base(serviceProvider.GetRequiredService<ISerializer>())
         {
             ServiceProvider = serviceProvider;
-            ObjectAdapter = objectAdapter;
+            ObjectAdapter = serviceProvider.GetRequiredService<IObjectAdapter>();
 
             InitializeModelValidation();
         }

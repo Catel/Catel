@@ -19,12 +19,13 @@
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
+
         private readonly IXmlSerializer _xmlSerializer;
 
-        public DynamicConfiguration(IXmlSerializer xmlSerializer)
-            : base(xmlSerializer)
+        public DynamicConfiguration(IXmlSerializer serializer)
+            : base(serializer)
         {
-            _xmlSerializer = xmlSerializer;
+            _xmlSerializer = serializer;
         }
 
         protected override IPropertyBag CreatePropertyBag()

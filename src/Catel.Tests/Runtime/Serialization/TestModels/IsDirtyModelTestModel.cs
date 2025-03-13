@@ -2,12 +2,11 @@
 {
     using System;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     [Serializable]
     public class IsDirtyModelTestModel : SavableModelBase<IsDirtyModelTestModel>
     {
-        #region Fields
-
         /// <summary>
         /// Register the MyInteger property so it is known in the class.
         /// </summary>
@@ -29,18 +28,11 @@
             Justification = "This is declared by the Catel MVVM framework.")]
         public static readonly IPropertyData MyStringProperty = RegisterProperty<string>("MyString");
 
-        #endregion
-
-        #region Constructors
-
-        public IsDirtyModelTestModel()
+        public IsDirtyModelTestModel(ISerializer serializer)
+            : base(serializer)
         {
             // Create a new object from scratch
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the MyIntegerProperty value.
@@ -89,7 +81,5 @@
                 SetValue(MyStringProperty, value);
             }
         }
-
-        #endregion
     }
 }

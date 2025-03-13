@@ -9,7 +9,6 @@
     [TestFixture]
     public class ContainsItemsConverterTest
     {
-        #region Methods
         [TestCase]
         public void Convert_Null()
         {
@@ -65,6 +64,5 @@
             var converter = new ContainsItemsConverter();
             Assert.That(converter.ConvertBack(null, typeof(object), null, (CultureInfo)null), Is.EqualTo(ConverterHelper.UnsetValue));
         }
-        #endregion
     }
 }

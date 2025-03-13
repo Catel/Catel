@@ -2,10 +2,17 @@
 {
     using System.Xml;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
 
     public class CustomXmlSerializationModel : CustomSerializationModelBase, ICustomXmlSerializable
     {
+        public CustomXmlSerializationModel(ISerializer serializer) 
+            : base(serializer)
+        {
+            
+        }
+
         void ICustomXmlSerializable.Serialize(XmlWriter xmlWriter)
         {
             xmlWriter.WriteElementString("FirstName", FirstName);
@@ -30,6 +37,12 @@
 
     public class CustomXmlSerializationModelWithNesting : ModelBase
     {
+        public CustomXmlSerializationModelWithNesting(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string Name
         {
             get { return GetValue<string>(NameProperty); }

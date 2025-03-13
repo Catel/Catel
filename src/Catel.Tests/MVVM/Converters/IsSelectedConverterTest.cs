@@ -12,7 +12,6 @@
     [TestFixture]
     public class IsSelectedConverterTest
     {
-        #region Methods
         [TestCase]
         public void Convert_Null()
         {
@@ -103,6 +102,5 @@
             var converter = new IsSelectedConverter();
             Assert.That(converter.ConvertBack(false, typeof(bool?), true, (CultureInfo)null), Is.EqualTo(false));
         }
-        #endregion
     }
 }

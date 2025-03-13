@@ -17,7 +17,7 @@
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly ISerializer _serializer;
+        protected readonly ISerializer _serializer;
 
         /// <summary>
         /// The property values.

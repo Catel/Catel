@@ -4,7 +4,9 @@
     using System.Threading.Tasks;
     using Catel.Configuration;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Xml;
     using Catel.Services;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
     public partial class ConfigurationServiceFacts
@@ -26,8 +28,8 @@
 
             private class SerializationConfigurationService : ConfigurationService
             {
-                public SerializationConfigurationService()
-                    : base(new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), 
+                public SerializationConfigurationService(IXmlSerializer xmlSerializer)
+                    : base(new ObjectConverterService(), xmlSerializer, 
                         new AppDataService(), new DispatcherService(new DispatcherProviderService()))
                 {
                 }
@@ -104,75 +106,102 @@
             [Test]
             public async Task DoesNotCallSaveMultipleTimesAsync()
             {
-                var configurationService = new SerializationConfigurationService();
+                var serviceCollection = new ServiceCollection();
 
-                await configurationService.LoadAsync();
+                serviceCollection.AddCatelCoreServices();
 
-                for (int j = 0; j < 50; j++)
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    configurationService.SetRoamingValue($"Key_{j:D2}", j);
+                    var xmlSerializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                    await Task.Delay(10);
+                    var configurationService = new SerializationConfigurationService(xmlSerializer);
+
+                    await configurationService.LoadAsync();
+
+                    for (int j = 0; j < 50; j++)
+                    {
+                        configurationService.SetRoamingValue($"Key_{j:D2}", j);
+
+                        await Task.Delay(10);
+                    }
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        await Task.Delay(200);
+                    }
+
+                    Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(1));
                 }
-
-                for (int i = 0; i < 10; i++)
-                {
-                    await Task.Delay(200);
-                }
-
-                Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(1));
             }
 
             [Test]
             public async Task CorrectlySchedulesLocalSerializationAsync()
             {
-                var configurationService = new SerializationConfigurationService();
+                var serviceCollection = new ServiceCollection();
 
-                await configurationService.LoadAsync();
+                serviceCollection.AddCatelCoreServices();
 
-                for (int i = 0; i < 5; i++)
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    for (int j = 0; j < 50; j++)
-                    {
-                        configurationService.SetLocalValue($"Key_{i:D2}_{j:D2}", i + j);
+                    var xmlSerializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                        await Task.Delay(25);
+                    var configurationService = new SerializationConfigurationService(xmlSerializer);
+
+                    await configurationService.LoadAsync();
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        for (int j = 0; j < 50; j++)
+                        {
+                            configurationService.SetLocalValue($"Key_{i:D2}_{j:D2}", i + j);
+
+                            await Task.Delay(25);
+                        }
+
+                        await Task.Delay(100);
                     }
 
-                    await Task.Delay(100);
+                    Assert.That(configurationService.RoamingChangeCount, Is.EqualTo(0));
+                    Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(0));
+
+                    Assert.That(configurationService.LocalChangeCount, Is.EqualTo(5 * 50));
+                    Assert.That(configurationService.LocalSaveCount, Is.EqualTo(5));
                 }
-
-                Assert.That(configurationService.RoamingChangeCount, Is.EqualTo(0));
-                Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(0));
-
-                Assert.That(configurationService.LocalChangeCount, Is.EqualTo(5 * 50));
-                Assert.That(configurationService.LocalSaveCount, Is.EqualTo(5));
             }
 
             [Test]
             public async Task CorrectlySchedulesRoamingSerializationAsync()
             {
-                var configurationService = new SerializationConfigurationService();
+                var serviceCollection = new ServiceCollection();
 
-                await configurationService.LoadAsync();
+                serviceCollection.AddCatelCoreServices();
 
-                for (int i = 0; i < 5; i++)
+                using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    for (int j = 0; j < 50; j++)
-                    {
-                        configurationService.SetRoamingValue($"Key_{i:D2}_{j:D2}", i + j);
+                    var xmlSerializer = serviceProvider.GetRequiredService<IXmlSerializer>();
 
-                        await Task.Delay(25);
+                    var configurationService = new SerializationConfigurationService(xmlSerializer);
+
+                    await configurationService.LoadAsync();
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        for (int j = 0; j < 50; j++)
+                        {
+                            configurationService.SetRoamingValue($"Key_{i:D2}_{j:D2}", i + j);
+
+                            await Task.Delay(25);
+                        }
+
+                        await Task.Delay(100);
                     }
 
-                    await Task.Delay(100);
+                    Assert.That(configurationService.LocalChangeCount, Is.EqualTo(0));
+                    Assert.That(configurationService.LocalSaveCount, Is.EqualTo(0));
+
+                    Assert.That(configurationService.RoamingChangeCount, Is.EqualTo(5 * 50));
+                    Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(5));
                 }
-
-                Assert.That(configurationService.LocalChangeCount, Is.EqualTo(0));
-                Assert.That(configurationService.LocalSaveCount, Is.EqualTo(0));
-
-                Assert.That(configurationService.RoamingChangeCount, Is.EqualTo(5 * 50));
-                Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(5));
             }
         }
     }

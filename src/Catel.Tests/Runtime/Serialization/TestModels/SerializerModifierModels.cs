@@ -10,6 +10,12 @@
     [SerializerModifier(typeof(ModelASerializerModifier))]
     public class ModelA : ModelBase
     {
+        public ModelA(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string ModelAProperty
         {
             get { return GetValue<string>(ModelAPropertyProperty); }
@@ -22,6 +28,12 @@
     [SerializerModifier(typeof(ModelBSerializerModifier))]
     public class ModelB : ModelA
     {
+        public ModelB(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string ModelBProperty
         {
             get { return GetValue<string>(ModelBPropertyProperty); }
@@ -34,6 +46,12 @@
     [SerializerModifier(typeof(ModelCSerializerModifier))]
     public class ModelC : ModelB
     {
+        public ModelC(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         public string ModelCProperty
         {
             get { return GetValue<string>(ModelCPropertyProperty); }
@@ -54,6 +72,12 @@
     [SerializerModifier(typeof(CTL550ModelSerializerModifier))]
     public class CTL550Model : ModelBase
     {
+        public CTL550Model(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         [IncludeInSerialization]
         public Color Color { get; set; }
     }
@@ -61,6 +85,12 @@
     [SerializerModifier(typeof(ChangingTypeSerializerModifier))]
     public class ChangingType : ModelBase
     {
+        public ChangingType(ISerializer serializer)
+            : base(serializer)
+        {
+            
+        }
+
         /// <summary>
         /// Gets or sets the property value.
         /// </summary>
@@ -78,6 +108,12 @@
 
     public class DynamicSerializerModifierModel : ModelBase
     {
+        public DynamicSerializerModifierModel(ISerializer serializer)
+            : base(serializer)
+        {
+
+        }
+
         /// <summary>
         /// Gets or sets the property value.
         /// </summary>

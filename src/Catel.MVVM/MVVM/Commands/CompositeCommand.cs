@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
     using Logging;
     using System.Windows.Input;
-    using Catel.Services;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -30,10 +29,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}" /> class.
         /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
-        public CompositeCommand(IAuthenticationProvider authenticationProvider, IDispatcherService dispatcherService)
-            : base(authenticationProvider, dispatcherService) // dummy action
+        /// <param name="serviceProvider">The service provider.</param>
+        public CompositeCommand(IServiceProvider serviceProvider)
+            : base(serviceProvider) // dummy action
         {
             AllowPartialExecution = false;
             AtLeastOneMustBeExecutable = true;

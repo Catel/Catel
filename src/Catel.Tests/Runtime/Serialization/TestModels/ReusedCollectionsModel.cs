@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public class ReusedCollectionsModel : ModelBase
     {
-        public ReusedCollectionsModel()
+        public ReusedCollectionsModel(ISerializer serializer)
+            : base(serializer)
         {
             var collection = new List<int>();
 

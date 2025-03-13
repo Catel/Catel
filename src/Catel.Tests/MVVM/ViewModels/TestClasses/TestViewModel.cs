@@ -17,7 +17,7 @@
         }
 
         public TestViewModel(IPerson person, IServiceProvider serviceProvider)
-            : this(person, serviceProvider)
+            : this(person, null, serviceProvider)
         {
         }
 

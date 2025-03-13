@@ -2,14 +2,14 @@
 {
     using System.IO;
     using System.Text;
+    using System.Threading.Tasks;
     using Catel.Configuration;
     using Catel.Data;
-    using Catel.Runtime.Serialization;
     using Catel.IO;
+    using Catel.Runtime.Serialization;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
-
     using static VerifyNUnit.Verifier;
-    using System.Threading.Tasks;
 
     [TestFixture, Explicit]
     public class DynamicConfigurationFacts
@@ -23,8 +23,8 @@
 
         public class ComplexSetting : ModelBase
         {
-            public ComplexSetting()
-                : base()
+            public ComplexSetting(ISerializer serializer)
+                : base(serializer)
             {
 
             }
@@ -132,18 +132,27 @@
         [Test, Explicit]
         public async Task CorrectlySerializesConfigurationAsync()
         {
-            var dynamicConfiguration = new DynamicConfiguration();
-            dynamicConfiguration.SetConfigurationValue("KeyX", "Value X");
-            dynamicConfiguration.SetConfigurationValue("KeyY", "Value Y");
-            dynamicConfiguration.SetConfigurationValue("KeyZ.SomeAddition", "Value Z");
+            var serviceCollection = new ServiceCollection();
 
-            using (var memoryStream = new MemoryStream())
+            serviceCollection.AddCatelSerializationJsonServices();
+
+            using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {
-                dynamicConfiguration.SaveAsXml(memoryStream);
+                var serializer = serviceProvider.GetRequiredService<ISerializer>();
 
-                var outputXml = memoryStream.GetUtf8String();
+                var dynamicConfiguration = new DynamicConfiguration(serializer);
+                dynamicConfiguration.SetConfigurationValue("KeyX", "Value X");
+                dynamicConfiguration.SetConfigurationValue("KeyY", "Value Y");
+                dynamicConfiguration.SetConfigurationValue("KeyZ.SomeAddition", "Value Z");
 
-                await Verify(outputXml);
+                using (var memoryStream = new MemoryStream())
+                {
+                    dynamicConfiguration.SaveAsXml(memoryStream);
+
+                    var outputXml = memoryStream.GetUtf8String();
+
+                    await Verify(outputXml);
+                }
             }
         }
 

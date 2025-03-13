@@ -5,6 +5,7 @@
     public partial class AutoClosingView
     {
         public AutoClosingView()
+            : base(IServiceProvider serviceProvider)
         {
             InitializeComponent();
         }
