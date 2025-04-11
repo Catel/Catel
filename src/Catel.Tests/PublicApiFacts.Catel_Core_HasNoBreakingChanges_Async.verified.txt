@@ -3868,6 +3868,9 @@ namespace Catel.Services
         public static string GetRequiredString(this Catel.Services.ILanguageService languageService, string resourceName) { }
         public static string GetRequiredString(this Catel.Services.ILanguageService languageService, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
         public static string GetRequiredString(this Catel.Services.ILanguageService languageService, Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
+        public static string GetRequiredStringAndFormat(this Catel.Services.ILanguageService languageService, string resourceName, params object?[] args) { }
+        public static string GetRequiredStringAndFormat(this Catel.Services.ILanguageService languageService, string resourceName, System.Globalization.CultureInfo cultureInfo, params object?[] args) { }
+        public static string GetRequiredStringAndFormat(this Catel.Services.ILanguageService languageService, Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo, params object?[] args) { }
     }
     public interface ILanguageSource
     {
