@@ -1172,14 +1172,14 @@ namespace Catel.MVVM.Navigation
     }
     public static class NavigationEventArgsExtensions
     {
-        public static string GetUriWithoutQueryInfo(this string uri) { }
         public static string GetUriWithoutQueryInfo(this System.Windows.Navigation.NavigatingCancelEventArgs e) { }
         public static string GetUriWithoutQueryInfo(this System.Windows.Navigation.NavigationEventArgs e) { }
-        public static bool IsNavigationForView(this string uriString, System.Type viewType) { }
+        public static string GetUriWithoutQueryInfo(this string uri) { }
         public static bool IsNavigationForView(this System.Windows.Navigation.NavigatingCancelEventArgs e, System.Type viewType) { }
         public static bool IsNavigationForView(this System.Windows.Navigation.NavigationEventArgs e, System.Type viewType) { }
-        public static bool IsNavigationToExternal(this string uriString) { }
+        public static bool IsNavigationForView(this string uriString, System.Type viewType) { }
         public static bool IsNavigationToExternal(this System.Uri uri) { }
+        public static bool IsNavigationToExternal(this string uriString) { }
     }
     public enum NavigationMode
     {
@@ -1692,14 +1692,14 @@ namespace Catel.Services
         System.Threading.Tasks.Task GoBackAsync();
         System.Threading.Tasks.Task GoForwardAsync();
         System.Threading.Tasks.Task NavigateAsync(System.Uri uri);
-        System.Threading.Tasks.Task NavigateAsync(string uri, System.Collections.Generic.Dictionary<string, object>? parameters = null);
         System.Threading.Tasks.Task NavigateAsync(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object>? parameters = null);
-        void Register(string name, System.Uri uri);
+        System.Threading.Tasks.Task NavigateAsync(string uri, System.Collections.Generic.Dictionary<string, object>? parameters = null);
         void Register(System.Type viewModelType, System.Uri uri);
+        void Register(string name, System.Uri uri);
         void RemoveAllBackEntries();
         void RemoveBackEntry();
-        bool Unregister(string name);
         bool Unregister(System.Type viewModelType);
+        bool Unregister(string name);
     }
     public static class INavigationServiceExtensions
     {
@@ -1863,15 +1863,15 @@ namespace Catel.Services
         public virtual System.Threading.Tasks.Task GoBackAsync() { }
         public virtual System.Threading.Tasks.Task GoForwardAsync() { }
         public virtual System.Threading.Tasks.Task NavigateAsync(System.Uri uri) { }
-        public virtual System.Threading.Tasks.Task NavigateAsync(string uri, System.Collections.Generic.Dictionary<string, object>? parameters = null) { }
         public virtual System.Threading.Tasks.Task NavigateAsync(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object>? parameters = null) { }
-        public virtual void Register(string name, System.Uri uri) { }
+        public virtual System.Threading.Tasks.Task NavigateAsync(string uri, System.Collections.Generic.Dictionary<string, object>? parameters = null) { }
         public virtual void Register(System.Type viewModelType, System.Uri uri) { }
+        public virtual void Register(string name, System.Uri uri) { }
         public override void RemoveAllBackEntries() { }
         public override void RemoveBackEntry() { }
         protected override string? ResolveNavigationTarget(System.Type viewModelType) { }
-        public virtual bool Unregister(string name) { }
         public virtual bool Unregister(System.Type viewModelType) { }
+        public virtual bool Unregister(string name) { }
     }
     public abstract class NavigationServiceBase : Catel.Services.ViewModelServiceBase
     {
@@ -2115,10 +2115,10 @@ namespace Catel.Windows
     }
     public class DataWindowButton
     {
-        public DataWindowButton(string text, string commandBindingPath) { }
         public DataWindowButton(string text, System.Windows.Input.ICommand command) { }
-        public DataWindowButton(string text, string commandBindingPath, string? contentBindingPath = null, System.Windows.Data.IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, System.Windows.Data.IValueConverter? visibilityValueConverter = null) { }
+        public DataWindowButton(string text, string commandBindingPath) { }
         public DataWindowButton(string text, System.Windows.Input.ICommand command, string? contentBindingPath = null, System.Windows.Data.IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, System.Windows.Data.IValueConverter? visibilityValueConverter = null) { }
+        public DataWindowButton(string text, string commandBindingPath, string? contentBindingPath = null, System.Windows.Data.IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, System.Windows.Data.IValueConverter? visibilityValueConverter = null) { }
         public System.Windows.Input.ICommand? Command { get; }
         public string? CommandBindingPath { get; }
         public string? ContentBindingPath { get; }
@@ -2187,8 +2187,8 @@ namespace Catel.Windows
     {
         public static void EnsurePackUriIsAllowed() { }
         public static string GetResourceUri(string resourceUri, string? shortAssemblyName = null) { }
-        public static bool XamlPageExists(string uriString) { }
         public static bool XamlPageExists(System.Uri uri) { }
+        public static bool XamlPageExists(string uriString) { }
     }
     public static class UIElementExtensions
     {
@@ -2211,12 +2211,12 @@ namespace Catel.Windows
         public static nint GetWindowHandle(this System.Windows.Window window) { }
         public static bool IsShowingAsDialog(this System.Windows.Window window) { }
         public static bool IsValidAsOwnerWindow(this System.Windows.Window window) { }
-        public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
         public static void SetOwnerWindow(this System.Windows.Window window, nint owner, bool forceNewOwner = false) { }
         public static void SetOwnerWindow(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = false) { }
-        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = true) { }
+        public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, nint owner, bool forceNewOwner = false) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = false) { }
+        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = true) { }
     }
 }
 namespace Catel.Windows.Controls
@@ -2833,8 +2833,8 @@ namespace Catel.Windows.Threading
     public static class DispatcherExtensions
     {
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
-        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object?[] args) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority, bool onlyBeginInvokeWhenNoAccess) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object?[] args) { }
@@ -2845,8 +2845,8 @@ namespace Catel.Windows.Threading
         public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static int GetThreadId(this System.Windows.Threading.Dispatcher dispatcher) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
-        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
+        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object?[] args) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority, bool onlyInvokeWhenNoAccess) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object?[] args) { }
