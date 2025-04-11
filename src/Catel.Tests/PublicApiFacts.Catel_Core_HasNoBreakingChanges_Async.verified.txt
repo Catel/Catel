@@ -4050,7 +4050,6 @@ namespace Catel.Threading
     {
         public AsyncLock() { }
         public AsyncLock(Catel.Threading.IAsyncWaitQueue<System.IDisposable> queue) { }
-        public bool EnableExtremeLogging { get; set; }
         public int Id { get; }
         public bool IsTaken { get; }
         public bool IsTakenByCurrentTask { get; }
