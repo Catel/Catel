@@ -278,5 +278,23 @@
                 Assert.That(catelTypeInfo.GetPropertyData("LastName"), Is.Not.Null);
             }
         }
+
+        [TestFixture]
+        public class The_Constructor_Method
+        {
+            [Test]
+            public void Prevents_Running_Change_Notifications_Async()
+            {
+                var model = new ModelWithChangeHandler();
+
+                Assert.That(model.B, Is.EqualTo("default value"));
+                Assert.That(model.ChangeCount, Is.EqualTo(0));
+
+                model.B = "new value";
+
+                Assert.That(model.B, Is.EqualTo("new value"));
+                Assert.That(model.ChangeCount, Is.EqualTo(1));
+            }
+        }
     }
 }
