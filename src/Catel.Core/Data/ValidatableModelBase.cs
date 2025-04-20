@@ -42,7 +42,7 @@
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
         /// attribute validation.
         /// </summary>
-        protected static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
+        protected internal static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
 
         private bool _isValidated;
 
@@ -505,6 +505,13 @@
                 return true;
             }
 
+            var type = GetType();
+
+            if (PropertiesNotCausingValidation[type].Contains(propertyName))
+            {
+                return true;
+            }
+
             var validationSuspensionContext = _validationSuspensionContext;
             if (validationSuspensionContext is not null)
             {
@@ -512,11 +519,7 @@
                 return true;
             }
 
-            var type = GetType();
-
             try
-            {
-                if (!PropertiesNotCausingValidation[type].Contains(propertyName))
                 {
                     object? value = null;
                     var handled = false;
@@ -526,7 +529,12 @@
                     {
                         var catelPropertyData = PropertyDataManager.GetPropertyData(type, propertyName);
                         if (catelPropertyData is not null)
+                        if (catelPropertyData.IsDecoratedWithValidationAttributes == true)
                         {
+                        PropertiesNotCausingValidation[type].Add(propertyName);
+                            return true;
+                        }
+
                             var propertyInfo = catelPropertyData.GetPropertyInfo(type);
                             if (propertyInfo is null || !propertyInfo.HasPublicGetter)
                             {
@@ -537,7 +545,6 @@
                             value = GetValue<object>(catelPropertyData);
                             handled = true;
                         }
-                    }
 
                     if (!handled)
                     {
@@ -582,7 +589,6 @@
                         _dataAnnotationValidationResults[propertyName] = null;
                     }
                 }
-            }
             catch (System.ComponentModel.DataAnnotations.ValidationException validationException)
             {
                 _dataAnnotationValidationResults[propertyName] = validationException.Message;

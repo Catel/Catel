@@ -58,6 +58,20 @@
         public static readonly IPropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", "value");
 
         /// <summary>
+        /// Gets or sets the object with annotation validation.
+        /// </summary>
+        public string ValueWithoutAnnotations
+        {
+            get { return GetValue<string>(ValueWithoutAnnotations); }
+            set { SetValue(ValueWithoutAnnotations, value); }
+        }
+
+        /// <summary>
+        /// Register the ValueWithAnnotations property so it is known in the class.
+        /// </summary>
+        public static readonly IPropertyData ValueWithoutAnnotationsProperty = RegisterProperty("ValueWithoutAnnotations", "value");
+
+        /// <summary>
         ///   Validates the fields.
         /// </summary>
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
