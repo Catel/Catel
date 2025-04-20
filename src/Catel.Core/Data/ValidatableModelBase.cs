@@ -525,29 +525,25 @@
                 var handled = false;
 
                 var propertyDataManager = PropertyDataManager;
-                if (propertyDataManager.IsPropertyRegistered(type, propertyName))
+                if (propertyDataManager.TryGetPropertyData(type, propertyName, out var catelPropertyData))
                 {
-                    var catelPropertyData = PropertyDataManager.GetPropertyData(type, propertyName);
-                    if (catelPropertyData is not null)
+                    // Note: only if false. If this value is null, we will leave default behavior intact
+                    if (catelPropertyData.IsDecoratedWithValidationAttributes == false)
                     {
-                        // Note: only if false. If this value is null, we will leave default behavior intact
-                        if (catelPropertyData.IsDecoratedWithValidationAttributes == false)
-                        {
-                            // Note: do not add to PropertiesNotCausingValidation,
-                            // then it will be completely disabled
-                            return true;
-                        }
-
-                        var propertyInfo = catelPropertyData.GetPropertyInfo(type);
-                        if (propertyInfo is null || !propertyInfo.HasPublicGetter)
-                        {
-                            PropertiesNotCausingValidation[type].Add(propertyName);
-                            return false;
-                        }
-
-                        value = GetValue<object>(catelPropertyData);
-                        handled = true;
+                        // Note: do not add to PropertiesNotCausingValidation,
+                        // then it will be completely disabled
+                        return true;
                     }
+
+                    var propertyInfo = catelPropertyData.GetPropertyInfo(type);
+                    if (propertyInfo is null || !propertyInfo.HasPublicGetter)
+                    {
+                        PropertiesNotCausingValidation[type].Add(propertyName);
+                        return false;
+                    }
+
+                    value = GetValue<object>(catelPropertyData);
+                    handled = true;
                 }
 
                 if (!handled)

@@ -1139,6 +1139,7 @@ namespace Catel.Data
         public bool IsPropertyRegistered(string name) { }
         public void RegisterProperties() { }
         public void RegisterProperty(string name, Catel.Data.IPropertyData propertyData) { }
+        public bool TryGetPropertyData(string name, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Catel.Data.IPropertyData? propertyData) { }
         public void UnregisterProperty(string name) { }
     }
     public class ChangeNotificationWrapper
@@ -1612,6 +1613,7 @@ namespace Catel.Data
         public string MapXmlElementNameToPropertyName(System.Type type, string xmlName) { }
         public Catel.Data.CatelTypeInfo RegisterProperties(System.Type type) { }
         public void RegisterProperty(System.Type type, string name, Catel.Data.IPropertyData propertyData) { }
+        public bool TryGetPropertyData(System.Type type, string name, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Catel.Data.IPropertyData? propertyData) { }
         public void UnregisterProperty(System.Type type, string name) { }
     }
     public class PropertyData<T> : Catel.Data.IPropertyData

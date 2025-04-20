@@ -186,11 +186,10 @@
 
                     var valueSet = false;
 
-                    if (!DynamicProperties.Contains(elementName) && propertyDataManager.IsPropertyRegistered(type, elementName))
+                    if (!DynamicProperties.Contains(elementName) && 
+                        propertyDataManager.TryGetPropertyData(type, elementName, out var propertyData))
                     {
                         // If registered property, cast & set
-                        var propertyData = propertyDataManager.GetPropertyData(type, elementName);
-
                         if (value is string stringValue)
                         {
                             value = StringToObjectHelper.ToRightType(propertyData.Type, stringValue);
