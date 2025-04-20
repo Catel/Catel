@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
     using Catel.Logging;
@@ -87,6 +88,24 @@
                 }
 
                 return catelProperty;
+            }
+        }
+
+        /// <summary>
+        /// Gets the property data.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
+        /// <param name="propertyData">The <see cref="IPropertyData"/> of the requested property.</param>
+        /// <returns><c>true</c> if the property is found, otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
+        public bool TryGetPropertyData(string name, [NotNullWhen(true)]out IPropertyData? propertyData)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_lockObject)
+            {
+                return _catelProperties.TryGetValue(name, out propertyData);
             }
         }
 

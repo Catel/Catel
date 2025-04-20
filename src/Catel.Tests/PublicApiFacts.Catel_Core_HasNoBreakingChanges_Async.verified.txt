@@ -1139,6 +1139,7 @@ namespace Catel.Data
         public bool IsPropertyRegistered(string name) { }
         public void RegisterProperties() { }
         public void RegisterProperty(string name, Catel.Data.IPropertyData propertyData) { }
+        public bool TryGetPropertyData(string name, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Catel.Data.IPropertyData? propertyData) { }
         public void UnregisterProperty(string name) { }
     }
     public class ChangeNotificationWrapper
@@ -1307,6 +1308,7 @@ namespace Catel.Data
         bool IncludeInBackup { get; }
         bool IncludeInSerialization { get; }
         bool IsCalculatedProperty { get; set; }
+        bool? IsDecoratedWithValidationAttributes { get; set; }
         bool IsModelBaseProperty { get; }
         bool IsSerializable { get; }
         string Name { get; }
@@ -1611,6 +1613,7 @@ namespace Catel.Data
         public string MapXmlElementNameToPropertyName(System.Type type, string xmlName) { }
         public Catel.Data.CatelTypeInfo RegisterProperties(System.Type type) { }
         public void RegisterProperty(System.Type type, string name, Catel.Data.IPropertyData propertyData) { }
+        public bool TryGetPropertyData(System.Type type, string name, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Catel.Data.IPropertyData? propertyData) { }
         public void UnregisterProperty(System.Type type, string name) { }
     }
     public class PropertyData<T> : Catel.Data.IPropertyData
@@ -1621,6 +1624,8 @@ namespace Catel.Data
         public bool IncludeInSerialization { get; }
         [System.Xml.Serialization.XmlIgnore]
         public bool IsCalculatedProperty { get; set; }
+        [System.Xml.Serialization.XmlIgnore]
+        public bool? IsDecoratedWithValidationAttributes { get; set; }
         [System.Xml.Serialization.XmlIgnore]
         public bool IsModelBaseProperty { get; }
         [System.Xml.Serialization.XmlIgnore]
@@ -3868,6 +3873,9 @@ namespace Catel.Services
         public static string GetRequiredString(this Catel.Services.ILanguageService languageService, string resourceName) { }
         public static string GetRequiredString(this Catel.Services.ILanguageService languageService, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
         public static string GetRequiredString(this Catel.Services.ILanguageService languageService, Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo) { }
+        public static string GetRequiredStringAndFormat(this Catel.Services.ILanguageService languageService, string resourceName, params object?[] args) { }
+        public static string GetRequiredStringAndFormat(this Catel.Services.ILanguageService languageService, string resourceName, System.Globalization.CultureInfo cultureInfo, params object?[] args) { }
+        public static string GetRequiredStringAndFormat(this Catel.Services.ILanguageService languageService, Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo, params object?[] args) { }
     }
     public interface ILanguageSource
     {

@@ -2,6 +2,8 @@
 {
     using System;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
     using Logging;
@@ -223,6 +225,7 @@
 
             var property = new PropertyData<TValue>(name, createDefaultValue, propertyChangedEventHandler, isSerializable,
                 includeInSerialization, includeInBackup, isModelBaseProperty, false);
+
             return property;
         }
 
@@ -296,10 +299,12 @@
             var objectType = GetType();
             var propertyName = propertyData.Name;
 
+            PropertyInfo? propertyInfo = null;
+
             if (propertyData.Type == typeof(Type))
             {
                 // If default value is a type, something smells (could be the result of a bad migration)
-                var propertyInfo = PropertyHelper.GetPropertyInfo(this, propertyName);
+                propertyInfo = PropertyHelper.GetPropertyInfo(this, propertyName);
                 if (propertyInfo is not null)
                 {
                     if (propertyInfo.PropertyType != typeof(Type))
@@ -314,6 +319,28 @@
                 propertyData.IsCalculatedProperty = isCalculatedProperty;
 
                 PropertyDataManager.RegisterProperty(objectType, propertyName, propertyData);
+            }
+
+            if (propertyData.IsDecoratedWithValidationAttributes is null)
+            {
+                var hasValidationAttributes = false;
+
+                try
+                {
+                    propertyInfo = propertyInfo ?? PropertyHelper.GetPropertyInfo(this, propertyName);
+
+                    if (propertyInfo is not null)
+                    {
+                        var attributes = propertyInfo.GetCustomAttributesEx(true);
+                        hasValidationAttributes = attributes.Any(x => x is ValidationAttribute);
+                    }
+                }
+                catch (Exception)
+                {
+                    // ignore
+                }
+
+                propertyData.IsDecoratedWithValidationAttributes = hasValidationAttributes;
             }
 
             lock (_lock)

@@ -40,6 +40,41 @@
                 }
             }
 
+            [Test]
+            public void PropertyData_Contains_True_For_Validation_Attributes_Value()
+            {
+                var validationObject = new ObjectWithValidation();
+
+                var propertyDataManager = PropertyDataManager.Default.GetCatelTypeInfo(typeof(ObjectWithValidation));
+
+                var propertyData = propertyDataManager.GetPropertyData(nameof(ObjectWithValidation.ValueWithAnnotations));
+
+                Assert.That(propertyData.IsDecoratedWithValidationAttributes, Is.True);
+            }
+
+            [Test]
+            public void PropertyData_Contains_False_For_Non_Validation_Attributes_Value()
+            {
+                var validationObject = new ObjectWithValidation();
+
+                var propertyDataManager = PropertyDataManager.Default.GetCatelTypeInfo(typeof(ObjectWithValidation));
+
+                var propertyData = propertyDataManager.GetPropertyData(nameof(ObjectWithValidation.ValueWithoutAnnotations));
+
+                Assert.That(propertyData.IsDecoratedWithValidationAttributes, Is.False);
+            }
+
+            [Test, Explicit]
+            public void Skips_Data_Annotation_For_Values_Not_Decorated_With_Attributes()
+            {
+                var validationObject = new ObjectWithValidation();
+
+                validationObject.Validate(true);
+
+                // Note: there is no good way to validate, so this test is set to explicit
+                Assert.That(ValidatableModelBase.PropertiesNotCausingValidation[typeof(ObjectWithValidation)].Contains(nameof(ObjectWithValidation.ValueWithoutAnnotations)));
+            }
+
             #region Validation
             [TestCase]
             public void ValidationWithWarnings()

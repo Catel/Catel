@@ -101,7 +101,7 @@
                 var modelEditor = instance as IModelEditor;
                 if (modelEditor is not null && modelEditor.IsPropertyRegistered(memberName))
                 {
-                    // Don't use SetValueFastbutUnsecure, change notifications must be possible
+                    // Don't use SetValueFastButUnsecure, change notifications must be possible
                     modelEditor.SetValue(memberName, value);
                     return true;
                 }

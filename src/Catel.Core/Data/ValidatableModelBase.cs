@@ -35,14 +35,14 @@
         /// The name of the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </summary>
         internal const string HasErrorsMessageProperty = "HasErrors";
-        
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
         /// attribute validation.
         /// </summary>
-        protected static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
+        protected internal static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
 
         private bool _isValidated;
 
@@ -494,6 +494,13 @@
                 return true;
             }
 
+            var type = GetType();
+
+            if (PropertiesNotCausingValidation[type].Contains(propertyName))
+            {
+                return true;
+            }
+
             var validationSuspensionContext = _validationSuspensionContext;
             if (validationSuspensionContext is not null)
             {
@@ -501,75 +508,74 @@
                 return true;
             }
 
-            var type = GetType();
-
             try
             {
-                if (!PropertiesNotCausingValidation[type].Contains(propertyName))
+                object? value = null;
+                var handled = false;
+
+                var propertyDataManager = PropertyDataManager;
+                if (propertyDataManager.TryGetPropertyData(type, propertyName, out var catelPropertyData))
                 {
-                    object? value = null;
-                    var handled = false;
-
-                    var propertyDataManager = PropertyDataManager;
-                    if (propertyDataManager.IsPropertyRegistered(type, propertyName))
+                    // Note: only if false. If this value is null, we will leave default behavior intact
+                    if (catelPropertyData.IsDecoratedWithValidationAttributes == false)
                     {
-                        var catelPropertyData = PropertyDataManager.GetPropertyData(type, propertyName);
-                        if (catelPropertyData is not null)
-                        {
-                            var propertyInfo = catelPropertyData.GetPropertyInfo(type);
-                            if (propertyInfo is null || !propertyInfo.HasPublicGetter)
-                            {
-                                PropertiesNotCausingValidation[type].Add(propertyName);
-                                return false;
-                            }
-
-                            value = GetValue<object>(catelPropertyData);
-                            handled = true;
-                        }
+                        // Note: do not add to PropertiesNotCausingValidation,
+                        // then it will be completely disabled
+                        return true;
                     }
 
-                    if (!handled)
+                    var propertyInfo = catelPropertyData.GetPropertyInfo(type);
+                    if (propertyInfo is null || !propertyInfo.HasPublicGetter)
                     {
-                        var objectAdapter = ObjectAdapter;
-                        if (objectAdapter is null)
-                        {
-                            // Fall back to reflection
-                            if (!PropertyHelper.IsPublicProperty(this, propertyName))
-                            {
-                                Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
+                        PropertiesNotCausingValidation[type].Add(propertyName);
+                        return false;
+                    }
 
-                                PropertiesNotCausingValidation[type].Add(propertyName);
-                                return false;
-                            }
+                    value = GetValue<object>(catelPropertyData);
+                    handled = true;
+                }
 
-                            value = PropertyHelper.GetPropertyValue(this, propertyName);
-                        }
-                        else if (!objectAdapter.TryGetMemberValue(this, propertyName, out value))
+                if (!handled)
+                {
+                    var objectAdapter = ObjectAdapter;
+                    if (objectAdapter is null)
+                    {
+                        // Fall back to reflection
+                        if (!PropertyHelper.IsPublicProperty(this, propertyName))
                         {
                             Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 
                             PropertiesNotCausingValidation[type].Add(propertyName);
                             return false;
                         }
-                    }
 
-                    if (!_dataAnnotationsValidationContext.TryGetValue(propertyName, out var validationContext))
+                        value = PropertyHelper.GetPropertyValue(this, propertyName);
+                    }
+                    else if (!objectAdapter.TryGetMemberValue(this, propertyName, out value))
                     {
-                        validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null)
-                        {
-                            MemberName = propertyName
-                        };
+                        Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 
-                        _dataAnnotationsValidationContext[propertyName] = validationContext;
+                        PropertiesNotCausingValidation[type].Add(propertyName);
+                        return false;
                     }
+                }
 
-                    System.ComponentModel.DataAnnotations.Validator.ValidateProperty(value, validationContext);
-
-                    // If succeeded, clear any previous error
-                    if (_dataAnnotationValidationResults.ContainsKey(propertyName))
+                if (!_dataAnnotationsValidationContext.TryGetValue(propertyName, out var validationContext))
+                {
+                    validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null)
                     {
-                        _dataAnnotationValidationResults[propertyName] = null;
-                    }
+                        MemberName = propertyName
+                    };
+
+                    _dataAnnotationsValidationContext[propertyName] = validationContext;
+                }
+
+                System.ComponentModel.DataAnnotations.Validator.ValidateProperty(value, validationContext);
+
+                // If succeeded, clear any previous error
+                if (_dataAnnotationValidationResults.ContainsKey(propertyName))
+                {
+                    _dataAnnotationValidationResults[propertyName] = null;
                 }
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException validationException)
@@ -1109,7 +1115,7 @@
                 return GetFieldWarnings(columnName) ?? string.Empty;
             }
         }
-        
+
         /// <summary>
         /// Gets the current error.
         /// </summary>
@@ -1152,7 +1158,7 @@
                 return GetFieldErrors(columnName) ?? string.Empty;
             }
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether this object contains any field or business errors.
         /// </summary>
@@ -1294,7 +1300,7 @@
 
             return elements;
         }
-        
+
         /// <summary>
         /// Raises the right events based on the validation result.
         /// </summary>

@@ -158,7 +158,16 @@
         /// <value><c>true</c> if this is a calculated property; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public bool IsCalculatedProperty { get; set; }
-        
+
+        /// <summary>
+        /// Gets a value indicating whether this property has validation attributes.
+        /// <para/>
+        /// If this value is <c>null</c>, the state is unknown and needs to be determined.
+        /// </summary>
+        /// <value><c>true</c> if this property has validation attributes; otherwise, <c>false</c>.</value>
+        [XmlIgnore]
+        public bool? IsDecoratedWithValidationAttributes { get; set; }
+
         /// <summary>
         /// Returns the default value of the property.
         /// </summary>
