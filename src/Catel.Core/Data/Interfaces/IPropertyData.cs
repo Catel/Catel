@@ -14,6 +14,8 @@
         bool IsCalculatedProperty { get; set; }
         bool IsModelBaseProperty { get; }
         bool IsSerializable { get; }
+        bool? IsDecoratedWithValidationAttributes { get; set; }
+
         string Name { get; }
         Type Type { get; }
 

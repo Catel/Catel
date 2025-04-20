@@ -1307,6 +1307,7 @@ namespace Catel.Data
         bool IncludeInBackup { get; }
         bool IncludeInSerialization { get; }
         bool IsCalculatedProperty { get; set; }
+        bool? IsDecoratedWithValidationAttributes { get; set; }
         bool IsModelBaseProperty { get; }
         bool IsSerializable { get; }
         string Name { get; }
@@ -1621,6 +1622,8 @@ namespace Catel.Data
         public bool IncludeInSerialization { get; }
         [System.Xml.Serialization.XmlIgnore]
         public bool IsCalculatedProperty { get; set; }
+        [System.Xml.Serialization.XmlIgnore]
+        public bool? IsDecoratedWithValidationAttributes { get; set; }
         [System.Xml.Serialization.XmlIgnore]
         public bool IsModelBaseProperty { get; }
         [System.Xml.Serialization.XmlIgnore]
