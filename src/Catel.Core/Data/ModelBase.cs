@@ -29,6 +29,8 @@
         internal SuspensionContext? _changeCallbacksSuspensionContext;
         internal SuspensionContext? _changeNotificationsSuspensionContext;
 
+        private bool _finishedConstructor = false;
+
         /// <summary>
         /// Initializes static members of the <see cref="ModelBase"/> class.
         /// </summary>
@@ -42,9 +44,50 @@
         /// </summary>
         protected ModelBase()
         {
+            var value = IsRunningInConstructor;
+
             _propertyBag = CreatePropertyBag();
 
             Initialize();
+        }
+
+        private bool IsRunningInConstructor
+        {
+            get
+            {
+                if (!_finishedConstructor)
+                {
+                    var stackTrace = new System.Diagnostics.StackTrace(false);
+
+                    var finished = true;
+
+                    // Skip the first frame
+                    for (var i = 1; i < stackTrace.FrameCount; i++)
+                    {
+                        var frame = stackTrace.GetFrame(i);
+                        if (frame is null)
+                        {
+                            continue;
+                        }
+
+                        var methodInfo = frame.GetMethod();
+                        if (methodInfo is not null &&
+                            methodInfo.IsConstructor)
+                        {
+                            // Still in ctor
+                            finished = false;
+                            break;
+                        }
+                    }
+
+                    if (finished)
+                    {
+                        _finishedConstructor = true;
+                    }
+                }
+
+                return !_finishedConstructor;
+            }
         }
 
         /// <summary>

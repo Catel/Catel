@@ -295,6 +295,28 @@
                 Assert.That(model.B, Is.EqualTo("new value"));
                 Assert.That(model.ChangeCount, Is.EqualTo(1));
             }
+
+            [Test]
+            public void Correctly_Knows_That_The_Object_Is_Working()
+            {
+                var model = new ModelWithChangeHandler();
+
+                Assert.That(model.B, Is.EqualTo("default value"));
+                Assert.That(model.ChangeCount, Is.EqualTo(0));
+
+                var parent = new ParentObject(model);
+
+                Assert.That(model.B, Is.EqualTo("new value"));
+                Assert.That(model.ChangeCount, Is.EqualTo(1));
+            }
+
+            private class ParentObject
+            {
+                public ParentObject(ModelWithChangeHandler injected)
+                {
+                    injected.B = "new value";
+                }
+            }
         }
     }
 }
