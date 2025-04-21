@@ -1,10 +1,8 @@
 ﻿namespace Catel.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using Catel.Runtime.Serialization;
 
     /// <summary>
     /// Class that is aware of changes of child objects by using the <see cref="ChangeNotificationWrapper"/>.
@@ -27,9 +25,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ChildAwareModelBase"/> class.
         /// </summary>
-        protected ChildAwareModelBase(IServiceProvider serviceProvider, IObjectAdapter objectAdapter,
-            ISerializer serializer)
-            : base(serviceProvider)
+        protected ChildAwareModelBase()
+            : base()
         {
             InitializeChildAwareModelBase();
         }

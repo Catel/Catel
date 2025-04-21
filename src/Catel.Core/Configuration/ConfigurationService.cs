@@ -1,13 +1,10 @@
 ﻿namespace Catel.Configuration
 {
-    using Runtime.Serialization;
     using Services;
     using System;
     using System.Globalization;
     using System.IO;
-    using Data;
     using Catel.Logging;
-    using Runtime.Serialization.Xml;
     using System.Timers;
     using System.Diagnostics;
     using System.Threading.Tasks;
@@ -30,7 +27,6 @@
         private const int IgnoreTimerThresholdInMilliseconds = 10;
 
         private readonly IObjectConverterService _objectConverterService;
-        private readonly IXmlSerializer _xmlSerializer;
         private readonly IAppDataService _appDataService;
         private readonly IDispatcherService _dispatcherService;
 
@@ -60,14 +56,12 @@
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
         /// <param name="objectConverterService">The object converter service.</param>
-        /// <param name="xmlSerializer">The serializer.</param>
         /// <param name="appDataService">The application data service.</param>
         /// <param name="dispatcherService">Dispatcher service.</param>
-        public ConfigurationService(IObjectConverterService objectConverterService, IXmlSerializer xmlSerializer, IAppDataService appDataService,
+        public ConfigurationService(IObjectConverterService objectConverterService, IAppDataService appDataService,
             IDispatcherService dispatcherService)
         {
             _objectConverterService = objectConverterService;
-            _xmlSerializer = xmlSerializer;
             _appDataService = appDataService;
             _dispatcherService = dispatcherService;
 
@@ -300,7 +294,7 @@
             if (!File.Exists(source))
             {
                 // No file, we can really start from scratch
-                return new DynamicConfiguration(_xmlSerializer);
+                return new DynamicConfiguration();
             }
 
             // Try for 5 seconds
@@ -317,16 +311,18 @@
 
                         if (fileStream.Length == 0)
                         {
-                            return new DynamicConfiguration(_xmlSerializer);
+                            return new DynamicConfiguration();
                         }
 
-                        var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _xmlSerializer);
-                        if (configuration is null)
-                        {
-                            return new DynamicConfiguration(_xmlSerializer);
-                        }
+                        throw Log.ErrorAndCreateException<NotImplementedException>("Need to implement loading of configuration");
 
-                        return configuration;
+                        //var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _xmlSerializer);
+                        //if (configuration is null)
+                        //{
+                        //    return new DynamicConfiguration(_xmlSerializer);
+                        //}
+
+                        //return configuration;
                     }
                 }
                 catch (IOException)

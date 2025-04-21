@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using Catel.Logging;
     using Catel.Reflection;
-    using Catel.Runtime.Serialization;
 
     /// <summary>
     /// Object adapter allowing to customize reflection and property mappings.
@@ -32,26 +31,6 @@
                 {
                     value = modelEditor.GetValueFastButUnsecure<TValue>(memberName);
                     return true;
-                }
-
-                if (instance is IPropertySerializable propertySerializable)
-                {
-                    object? objectValue = null;
-                    if (propertySerializable.GetPropertyValue(memberName, ref objectValue))
-                    {
-                        value = (TValue)objectValue!;
-                        return true;
-                    }
-                }
-
-                if (instance is IFieldSerializable fieldSerializable)
-                {
-                    object? objectValue = null;
-                    if (fieldSerializable.GetFieldValue(memberName, ref objectValue))
-                    {
-                        value = (TValue)objectValue!;
-                        return true;
-                    }
                 }
 
                 var modelType = instance.GetType();
@@ -104,22 +83,6 @@
                     // Don't use SetValueFastButUnsecure, change notifications must be possible
                     modelEditor.SetValue(memberName, value);
                     return true;
-                }
-
-                if (instance is IPropertySerializable propertySerializable)
-                {
-                    if (propertySerializable.SetPropertyValue(memberName, value))
-                    {
-                        return true;
-                    }
-                }
-
-                if (instance is IFieldSerializable fieldSerializable)
-                {
-                    if (fieldSerializable.SetFieldValue(memberName, value))
-                    {
-                        return true;
-                    }
                 }
 
                 var modelType = instance.GetType();

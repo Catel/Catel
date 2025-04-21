@@ -1,9 +1,7 @@
 ﻿namespace Catel.Data
 {
-    using System.Collections.Generic;
     using System.Xml.Serialization;
     using System.ComponentModel;
-    using Catel.Runtime.Serialization;
 
     /// <summary>
     /// Comparable model base.
@@ -18,10 +16,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
         /// </summary>
-        /// <param name="serializer">The serializer.</param>
         /// <param name="equalityComparer">The equality comparer.</param>
-        protected ComparableModelBase(ISerializer serializer, IModelEqualityComparer equalityComparer)
-            : base(serializer)
+        protected ComparableModelBase(IModelEqualityComparer equalityComparer)
+            : base()
         {
             EqualityComparer = equalityComparer;
         }

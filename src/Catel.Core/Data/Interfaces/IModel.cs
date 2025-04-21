@@ -9,27 +9,13 @@
     /// <remarks>
     /// This interface defines all the non-generic interfaces that the <see cref="ModelBase"/> class implements.
     /// </remarks>
-    public interface IModel : INotifyPropertyChanged, IAdvancedEditableObject, IModelEditor, IModelSerialization, IFreezable
+    public interface IModel : INotifyPropertyChanged, IModelEditor, IFreezable
     {
         /// <summary>
         /// Gets the name of the object. By default, this is the name of the inherited class.
         /// </summary>
         /// <value>The name of the key.</value>
         string KeyName { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this object is dirty.
-        /// </summary>
-        /// <value><c>true</c> if this object is dirty; otherwise, <c>false</c>.</value>
-        bool IsDirty { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the object is currently in an edit session, started by the <see cref="IEditableObject.BeginEdit"/> method.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is currently in an edit session; otherwise, <c>false</c>.
-        /// </value>
-        bool IsInEditSession { get; }
 
         /// <summary>
         /// Returns the default value of a specific property.

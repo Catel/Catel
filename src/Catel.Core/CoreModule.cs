@@ -1,15 +1,12 @@
 ﻿namespace Catel
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Reflection;
     using Configuration;
     using Data;
     using Messaging;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
-    using Runtime.Serialization;
-    using Runtime.Serialization.Xml;
     using Services;
 
     /// <summary>
@@ -29,15 +26,7 @@
 
             serviceCollection.TryAddSingleton<IValidatorProvider, AttributeValidatorProvider>();
 
-            serviceCollection.TryAddSingleton<IDataContractSerializerFactory, DataContractSerializerFactory>();
-            serviceCollection.TryAddSingleton<IXmlSerializer, XmlSerializer>();
-            serviceCollection.TryAddSingleton<IXmlNamespaceManager, XmlNamespaceManager>();
-            serviceCollection.TryAddSingleton<ISerializationManager, SerializationManager>();
-            serviceCollection.TryAddSingleton<Catel.Runtime.Serialization.ISerializationObjectAdapter, Catel.Runtime.Serialization.SerializationObjectAdapter>();
             serviceCollection.TryAddSingleton<Catel.Data.IObjectAdapter, Catel.Data.ExpressionTreeObjectAdapter>();
-
-            serviceCollection.TryAddSingleton<ISerializer, XmlSerializer>();
-            serviceCollection.TryAddKeyedSingleton<ISerializationContextInfoFactory, XmlSerializationContextInfoFactory>(typeof(XmlSerializer));
 
             serviceCollection.TryAddSingleton<IEntryAssemblyResolver, EntryAssemblyResolver>();
 

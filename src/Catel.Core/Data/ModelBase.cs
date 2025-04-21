@@ -3,7 +3,6 @@
     using System;
     using System.ComponentModel;
     using System.Xml.Serialization;
-    using Catel.Runtime.Serialization;
     using Logging;
 
     /// <summary>
@@ -16,8 +15,6 @@
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        protected readonly ISerializer _serializer;
 
         /// <summary>
         /// The property values.
@@ -43,12 +40,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
         /// </summary>
-        protected ModelBase(ISerializer serializer)
+        protected ModelBase()
         {
-            _serializer = serializer;
             _propertyBag = CreatePropertyBag();
-
-            _xmlSerializationScopeFactory = new Func<SerializationScope>(() => new SerializationScope(_serializer, null));
 
             Initialize();
         }
@@ -90,17 +84,6 @@
         string IModel.KeyName
         {
             get { return GetHashCode().ToString(); }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the object is currently in an edit session, started by the <see cref="IEditableObject.BeginEdit"/> method.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is currently in an edit session; otherwise, <c>false</c>.
-        /// </value>
-        bool IModel.IsInEditSession
-        {
-            get { return _backup is not null; }
         }
 
         /// <summary>

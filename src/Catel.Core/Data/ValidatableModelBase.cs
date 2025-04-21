@@ -6,10 +6,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Xml.Serialization;
-    using Catel.Runtime.Serialization;
     using Logging;
-    using Microsoft.Extensions.DependencyInjection;
-    using Reflection;
 
     /// <summary>
     /// ModelBase implementation that supports validation.
@@ -45,16 +42,6 @@
         protected internal static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
 
         private bool _isValidated;
-
-        /// <summary>
-        /// Field that determines whether a validator has been retrieved yet.
-        /// </summary>
-        private bool _hasRetrievedValidatorOnce;
-
-        /// <summary>
-        /// The backing field for the <see cref="IValidatable.Validator"/> property.
-        /// </summary>
-        private IValidator? _validator;
 
         /// <summary>
         /// The validation context, which can contain in-between validation info.
@@ -94,12 +81,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatableModelBase"/> class.
         /// </summary>
-        protected ValidatableModelBase(IServiceProvider serviceProvider)
-            : base(serviceProvider.GetRequiredService<ISerializer>())
+        protected ValidatableModelBase()
         {
-            ServiceProvider = serviceProvider;
-            ObjectAdapter = serviceProvider.GetRequiredService<IObjectAdapter>();
-
             InitializeModelValidation();
         }
 
@@ -128,7 +111,6 @@
         IValidator? IValidatable.Validator
         {
             get { return GetValidator(); }
-            set { _validator = value; }
         }
 
         /// <summary>
@@ -141,16 +123,6 @@
         {
             get { return _validationContext; }
         }
-
-        /// <summary>
-        /// Gets the service provider.
-        /// </summary>
-        public IServiceProvider ServiceProvider { get; }
-
-        /// <summary>
-        /// Gets or sets the object adapter.
-        /// </summary>
-        protected virtual IObjectAdapter? ObjectAdapter { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the validation should not try to process data annotations.
@@ -368,27 +340,9 @@
         /// Gets the validator. If the field is <c>null</c>, it will query the service locator.
         /// </summary>
         /// <returns>IValidator.</returns>
-        private IValidator? GetValidator()
+        protected virtual IValidator? GetValidator()
         {
-            if (_validator is null)
-            {
-                if (!_hasRetrievedValidatorOnce)
-                {
-                    var validatorProvider = ServiceProvider.GetService<IValidatorProvider>();
-                    if (validatorProvider is not null)
-                    {
-                        _validator = validatorProvider.GetValidator(GetType());
-                        if (_validator is not null)
-                        {
-                            Log.Debug("Found validator '{0}' for view model '{1}' via the registered IValidatorProvider", _validator.GetType().FullName, GetType().FullName);
-                        }
-                    }
-
-                    _hasRetrievedValidatorOnce = true;
-                }
-            }
-
-            return _validator;
+            return null;
         }
 
         /// <summary>
@@ -511,7 +465,6 @@
             try
             {
                 object? value = null;
-                var handled = false;
 
                 var propertyDataManager = PropertyDataManager;
                 if (propertyDataManager.TryGetPropertyData(type, propertyName, out var catelPropertyData))
@@ -532,32 +485,6 @@
                     }
 
                     value = GetValue<object>(catelPropertyData);
-                    handled = true;
-                }
-
-                if (!handled)
-                {
-                    var objectAdapter = ObjectAdapter;
-                    if (objectAdapter is null)
-                    {
-                        // Fall back to reflection
-                        if (!PropertyHelper.IsPublicProperty(this, propertyName))
-                        {
-                            Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
-
-                            PropertiesNotCausingValidation[type].Add(propertyName);
-                            return false;
-                        }
-
-                        value = PropertyHelper.GetPropertyValue(this, propertyName);
-                    }
-                    else if (!objectAdapter.TryGetMemberValue(this, propertyName, out value))
-                    {
-                        Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
-
-                        PropertiesNotCausingValidation[type].Add(propertyName);
-                        return false;
-                    }
                 }
 
                 if (!_dataAnnotationsValidationContext.TryGetValue(propertyName, out var validationContext))

@@ -3,7 +3,6 @@
     using System;
     using Catel.Logging;
     using Catel.Reflection;
-    using Catel.Runtime.Serialization;
 
     /// <summary>
     /// Object adapter allowing to customize reflection and property mappings.
@@ -60,16 +59,6 @@
         /// <returns><c>true</c> if the member value was retrieved; otherwise <c>false</c>.</returns>
         protected virtual bool TryGetPropertyValue<TValue>(object instance, string memberName, out TValue? value)
         {
-            if (instance is IPropertySerializable serializable)
-            {
-                object? objectValue = null;
-                if (serializable.GetPropertyValue(memberName, ref objectValue))
-                {
-                    value = (TValue?)objectValue;
-                    return true;
-                }
-            }
-
             var propertyInfo = instance.GetType().GetPropertyEx(memberName);
             if (propertyInfo is not null)
             {
@@ -91,16 +80,6 @@
         /// <returns><c>true</c> if the member value was retrieved; otherwise <c>false</c>.</returns>
         protected virtual bool TryGetFieldValue<TValue>(object instance, string memberName, out TValue? value)
         {
-            if (instance is IFieldSerializable serializable)
-            {
-                object? objectValue = null;
-                if (serializable.GetFieldValue(memberName, ref objectValue))
-                {
-                    value = (TValue?)objectValue;
-                    return true; 
-                }
-            }
-
             var fieldInfo = instance.GetType().GetFieldEx(memberName);
             if (fieldInfo is not null)
             {
@@ -160,14 +139,6 @@
         /// <returns><c>true</c> if the value as successfully set; otherwise <c>false</c>.</returns>
         protected virtual bool TrySetPropertyValue<TValue>(object instance, string memberName, TValue value)
         {
-            if (instance is IPropertySerializable serializable)
-            {
-                if (serializable.SetPropertyValue(memberName, value))
-                {
-                    return true;
-                }
-            }
-
             var propertyInfo = instance.GetType().GetPropertyEx(memberName);
             if (propertyInfo is not null)
             {
@@ -188,14 +159,6 @@
         /// <returns><c>true</c> if the value as successfully set; otherwise <c>false</c>.</returns>
         protected virtual bool TrySetFieldValue<TValue>(object instance, string memberName, TValue value)
         {
-            if (instance is IFieldSerializable serializable)
-            {
-                if (serializable.SetFieldValue(memberName, value))
-                {
-                    return true;
-                }
-            }
-
             var fieldInfo = instance.GetType().GetFieldEx(memberName);
             if (fieldInfo is not null)
             {

@@ -164,10 +164,12 @@
 
         protected virtual async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
         {
-            using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                configuration.Save(fileStream, _xmlSerializer);
-            }
+            throw Log.ErrorAndCreateException<NotImplementedException>("Need to implement");
+
+            //using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+            //{
+            //    configuration.Save(fileStream, _xmlSerializer);
+            //}
         }
     }
 }
