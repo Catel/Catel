@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<ModelC xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
-  <D>D</D>
-  <E ctl:graphid="2" ctl:type="Catel.Tests.Data.ModelA">
-    <B>B</B>
-    <A>A</A>
-  </E>
-</ModelC>

@@ -1,1 +1,0 @@
-﻿{"$graphid":1,"$typename":"Catel.Tests.Data.IniEntry","Group":"MyGroup","Key":"MyKey","Value":"MyValue","IniEntryType":1}

@@ -1,1 +1,0 @@
-﻿{"$graphid":1,"$typename":"Catel.Tests.Data.ModelC","D":"D","$E_$graphid":2,"E":{"$graphid":2,"$typename":"Catel.Tests.Data.ModelA","B":"B","A":"A"}}

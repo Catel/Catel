@@ -122,7 +122,7 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         protected ViewModelBase(IServiceProvider serviceProvider, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-            : base(serviceProvider)
+            : base()
         {
             _viewModelManager = serviceProvider.GetRequiredService<IViewModelManager>();
             _dispatcherService = serviceProvider.GetRequiredService<IDispatcherService>();
@@ -222,6 +222,13 @@
         /// <value>The unique identifier.</value>
         [ExcludeFromValidation]
         public int UniqueIdentifier { get; private set; }
+
+        /// <summary>
+        /// Gets the service provider for this object.
+        /// </summary>
+        [ExcludeFromValidation]
+        protected IServiceProvider ServiceProvider { get; private set; }
+
         /// <summary>
         /// Gets the parent view model.
         /// </summary>
@@ -550,11 +557,7 @@
                             {
                                 if (modelKeyValuePair.Value is not null)
                                 {
-                                    var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
-                                    if ((modelKeyValuePairValueAsModelBaseBase is null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
-                                    {
-                                        EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
-                                    }
+                                    EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
                                 }
                             }
                         }

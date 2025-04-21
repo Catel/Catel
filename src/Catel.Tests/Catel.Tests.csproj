@@ -46,7 +46,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
     <ProjectReference Include="..\Catel.MVVM\Catel.MVVM.csproj" />
-    <ProjectReference Include="..\Catel.Serialization.Json\Catel.Serialization.Json.csproj" />
     <ProjectReference Include="..\Catel.Tests.TestReferenceA\Catel.Tests.TestReferenceA.csproj" />
     <ProjectReference Include="..\Catel.Tests.TestReferenceB\Catel.Tests.TestReferenceB.csproj" />
     <ProjectReference Include="..\Catel.Tests.TestReferenceC\Catel.Tests.TestReferenceC.csproj" />

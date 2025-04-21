@@ -27,7 +27,6 @@ Parameters["UseVisualStudioPrerelease"] = "true";
 // All catel libraries are  a dependency of the test references
 Dependencies.Add("Catel.Core");
 Dependencies.Add("Catel.MVVM");
-Dependencies.Add("Catel.Serialization.Json");
 Dependencies.Add("Catel.Tests.TestReferenceB", new [] 
 {
     "Catel.Tests.TestReferenceA",
@@ -46,7 +45,6 @@ Dependencies.Add("Catel.Tests");
 
 Components.Add("Catel.Core");
 Components.Add("Catel.MVVM");
-Components.Add("Catel.Serialization.Json");
 
 TestProjects.Add("Catel.Tests");
 
