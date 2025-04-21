@@ -1,11 +1,13 @@
 ﻿namespace Catel.Tests.Views
 {
     using System;
+    using Catel.Services;
 
     public partial class AutoClosingView
     {
-        public AutoClosingView()
-            : base(IServiceProvider serviceProvider)
+        public AutoClosingView(IServiceProvider serviceProvider, IWrapControlService wrapControlService,
+            ILanguageService languageService)
+            : base(serviceProvider, wrapControlService, languageService)
         {
             InitializeComponent();
         }
