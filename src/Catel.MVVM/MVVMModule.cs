@@ -25,6 +25,7 @@
             serviceCollection.TryAddSingleton<IViewModelManager, ViewModelManager>();
             serviceCollection.TryAddSingleton<IAutoCompletionService, AutoCompletionService>();
             serviceCollection.TryAddSingleton<IWrapControlService, WrapControlService>();
+            serviceCollection.TryAddSingleton<IAuthenticationProvider, AuthenticationProvider>();
 
             // VM services
             serviceCollection.TryAddSingleton<IViewModelLocator, ViewModelLocator>();

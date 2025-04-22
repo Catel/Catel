@@ -20,7 +20,7 @@ namespace Catel.MVVM
         /// <param name="command">The command that is requested.</param>
         /// <param name="commandParameter">The command parameter.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified command can be excecuted; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the specified command can be executed; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>
         /// The <c>CanExecute</c> state of a command is queried a lot. The command itself does not cache any results because
