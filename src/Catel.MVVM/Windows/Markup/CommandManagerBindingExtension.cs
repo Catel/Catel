@@ -3,20 +3,20 @@
     using System;
     using Catel.MVVM;
     using System.Windows.Markup;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Binds commands to the command manager.
     /// </summary>
     public class CommandManagerBindingExtension : UpdatableMarkupExtension
     {
-        private readonly ICommandManager _commandManager;
+        private ICommandManager? _commandManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
         /// </summary>
-        /// <param name="commandManager">The command manager.</param>
-        public CommandManagerBindingExtension(ICommandManager commandManager)
-            : this(commandManager, string.Empty)
+        public CommandManagerBindingExtension()
+            : this(string.Empty)
         {
             // Leave empty
         }
@@ -24,11 +24,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
         /// </summary>
-        /// <param name="commandManager">The command manager.</param>
         /// <param name="commandName">Name of the command.</param>
-        public CommandManagerBindingExtension(ICommandManager commandManager, string commandName)
+        public CommandManagerBindingExtension(string commandName)
         {
-            _commandManager = commandManager;
             CommandName = commandName;
         }
 
@@ -46,7 +44,11 @@
         {
             base.OnTargetObjectLoaded();
 
-            _commandManager.CommandCreated += OnCommandManagerCommandCreated;
+            var commandManager = _commandManager;
+            if (commandManager is not null)
+            {
+                commandManager.CommandCreated += OnCommandManagerCommandCreated;
+            }
 
             // It's possible that we have a late-bound command, always update
             UpdateValue();
@@ -57,7 +59,11 @@
         /// </summary>
         protected override void OnTargetObjectUnloaded()
         {
-            _commandManager.CommandCreated -= OnCommandManagerCommandCreated;
+            var commandManager = _commandManager;
+            if (commandManager is not null)
+            {
+                commandManager.CommandCreated -= OnCommandManagerCommandCreated;
+            }
 
             base.OnTargetObjectUnloaded();
         }
@@ -75,11 +81,11 @@
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <returns>System.Object.</returns>
-        protected override object? ProvideDynamicValue(IServiceProvider? serviceProvider)
+        protected override object? ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             if (_commandManager is null)
             {
-                return null;
+                _commandManager = serviceProvider.GetRequiredService<ICommandManager>();
             }
 
             if (string.IsNullOrWhiteSpace(CommandName))

@@ -1,5 +1,6 @@
 ﻿namespace Catel.Windows.Markup
 {
+    using Catel.IoC;
     using Catel.Logging;
     using System;
     using System.ComponentModel;
@@ -69,6 +70,22 @@
         }
 
         /// <summary>
+        /// Gets or sets the service provider.
+        /// <para />
+        /// If the service provider is not set, the <see cref="IoCContainer.ServiceProvider" /> will be used.
+        /// <para/>
+        /// This property has a public setter to be used in unit tests.
+        /// </summary>
+        public virtual IServiceProvider ServiceProvider
+        {
+            get
+            {
+                return _serviceProvider ?? IoCContainer.ServiceProvider;
+            }
+            set { _serviceProvider = value; }
+        }
+
+        /// <summary>
         /// Gets the value of this markup extension.
         /// </summary>
         public object? Value
@@ -88,8 +105,6 @@
         /// <returns>The object value to set on the property where the extension is applied.</returns>
         public sealed override object? ProvideValue(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-
             var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
             if (target is not null)
             {
@@ -269,7 +284,9 @@
         /// <returns>System.Object.</returns>
         private object? GetValue()
         {
-            var value = ProvideDynamicValue(_serviceProvider);
+            var serviceProvider = ServiceProvider;
+
+            var value = ProvideDynamicValue(serviceProvider);
             return value;
         }
 
@@ -278,7 +295,7 @@
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <returns>System.Object.</returns>
-        protected virtual object? ProvideDynamicValue(IServiceProvider? serviceProvider)
+        protected virtual object? ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             return null;
         }
