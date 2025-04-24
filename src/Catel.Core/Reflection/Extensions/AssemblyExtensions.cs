@@ -139,14 +139,14 @@
         /// <summary>
         /// Gets the assembly attribute.
         /// </summary>
-        /// <typeparam name="TAttibute">The type of the attribute.</typeparam>
+        /// <typeparam name="TAttribute">The type of the attribute.</typeparam>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The attribute that the assembly is decorated with or <c>null</c> if the assembly is not decorated with the attribute.</returns>
-        private static TAttibute? GetAssemblyAttribute<TAttibute>(Assembly assembly) 
-            where TAttibute : Attribute
+        private static TAttribute? GetAssemblyAttribute<TAttribute>(Assembly assembly) 
+            where TAttribute : Attribute
         {
-            var attibutes = assembly.GetCustomAttributesEx(typeof(TAttibute));
-            return attibutes.Length > 0 ? attibutes[0] as TAttibute : null;
+            var attributes = assembly.GetCustomAttributesEx(typeof(TAttribute));
+            return attributes.Length > 0 ? attributes[0] as TAttribute : null;
         }
 
         /// <summary>

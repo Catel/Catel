@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Xml.Serialization;
     using Catel.Reflection;
     using Logging;
@@ -191,6 +192,32 @@
                 }
 
                 return propertyDataOfType.GetPropertyData(name);
+            }
+        }
+
+        /// <summary>
+        /// Gets the property data.
+        /// </summary>
+        /// <param name="type">The type for which to get the property data.</param>
+        /// <param name="name">The name of the property.</param>
+        /// <param name="propertyData">The <see cref="PropertyData"/> of the requested property or <c>null</c> if the property cannot be found.</param>
+        /// <returns><c>true</c> if the property is returned, otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
+        public bool TryGetPropertyData(Type type, string name, [NotNullWhen(true)]out IPropertyData? propertyData)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_propertyDataLock)
+            {
+                if (!_propertyData.TryGetValue(type, out var propertyDataOfType))
+                {
+                    propertyData = null;
+                    return false;
+                }
+
+                return propertyDataOfType.TryGetPropertyData(name, out propertyData);
             }
         }
 
