@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="4.10.0-alpha0522" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="6.9.1" PrivateAssets="all">
+    <PackageReference Include="Catel.Fody" Version="4.9.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.9.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MethodTimer.Fody" Version="3.2.3" PrivateAssets="all" />
@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net9.0')) ">
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
