@@ -328,7 +328,7 @@ namespace Catel.IoC
         /// <returns><c>true</c> if this instance [can constructor be used] the specified constructor; otherwise, <c>false</c>.</returns>
         private bool CanConstructorBeUsed(ConstructorInfo constructor, object? tag, bool autoCompleteDependencies, params object?[] parameters)
         {
-            // Some loging like .GetSignature are expensive
+            // Some logging like .GetSignature are expensive
 #if EXTREME_LOGGING
             var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
 #else
@@ -653,7 +653,7 @@ namespace Catel.IoC
                 }
             });
 
-            // This log entry makes sence in optimistic lock scenarios
+            // This log entry makes sense in optimistic lock scenarios
             Log.Debug("Cleared type constructor cache");
         }
 
@@ -681,7 +681,7 @@ namespace Catel.IoC
         {
             private readonly int _hashCode;
 
-            public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object?[] parameters)
+            public ConstructorCacheKey(Type type, bool autoCompleteDependencies, object?[] parameters)
             {
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append(type.GetSafeFullName(true));
@@ -699,13 +699,13 @@ namespace Catel.IoC
                 }
 
                 Key = stringBuilder.ToString();
-                AutoCompleteDependecies = autoCompleteDependecies;
+                AutoCompleteDependencies = autoCompleteDependencies;
                 _hashCode = Key.GetHashCode();
             }
 
             public string Key { get; private set; }
 
-            public bool AutoCompleteDependecies { get; private set; }
+            public bool AutoCompleteDependencies { get; private set; }
 
             public override bool Equals(object? obj)
             {
@@ -720,7 +720,7 @@ namespace Catel.IoC
 
             private bool Equals(ConstructorCacheKey other)
             {
-                if (AutoCompleteDependecies != other.AutoCompleteDependecies)
+                if (AutoCompleteDependencies != other.AutoCompleteDependencies)
                 {
                     return false;
                 }
