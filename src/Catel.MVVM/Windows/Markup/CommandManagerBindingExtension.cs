@@ -83,6 +83,11 @@
         /// <returns>System.Object.</returns>
         protected override object? ProvideDynamicValue(IServiceProvider serviceProvider)
         {
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return null;
+            }
+
             if (_commandManager is null)
             {
                 _commandManager = serviceProvider.GetRequiredService<ICommandManager>();
