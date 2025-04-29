@@ -219,6 +219,11 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         private object? CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object? tag, object?[] parameters, bool autoCompleteDependencies)
         {
+            if (_disposedValue)
+            {
+                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(TypeFactory).Name);
+            }
+
             if (typeToConstruct.IsBasicType())
             {
                 return Activator.CreateInstance(typeToConstruct);
@@ -328,7 +333,7 @@ namespace Catel.IoC
         /// <returns><c>true</c> if this instance [can constructor be used] the specified constructor; otherwise, <c>false</c>.</returns>
         private bool CanConstructorBeUsed(ConstructorInfo constructor, object? tag, bool autoCompleteDependencies, params object?[] parameters)
         {
-            // Some loging like .GetSignature are expensive
+            // Some logging like .GetSignature are expensive
 #if EXTREME_LOGGING
             var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
 #else
@@ -635,6 +640,11 @@ namespace Catel.IoC
         /// </summary>
         public void ClearCache()
         {
+            if (_disposedValue)
+            {
+                return;
+            }
+
             // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an
             // application lifetime
 
@@ -653,7 +663,7 @@ namespace Catel.IoC
                 }
             });
 
-            // This log entry makes sence in optimistic lock scenarios
+            // This log entry makes sense in optimistic lock scenarios
             Log.Debug("Cleared type constructor cache");
         }
 
@@ -664,6 +674,11 @@ namespace Catel.IoC
         /// <param name="eventArgs">The <see cref="TypeRegisteredEventArgs" /> instance containing the event data.</param>
         private void OnServiceLocatorTypeRegistered(object? sender, TypeRegisteredEventArgs eventArgs)
         {
+            if (_disposedValue)
+            {
+                return;
+            }
+
             ClearCache();
         }
 
@@ -674,6 +689,11 @@ namespace Catel.IoC
         /// <param name="e">The <see cref="AssemblyLoadedEventArgs"/> instance containing the event data.</param>
         private void OnAssemblyLoaded(object? sender, AssemblyLoadedEventArgs e)
         {
+            if (_disposedValue)
+            {
+                return;
+            }
+
             ClearCache();
         }
 
@@ -681,7 +701,7 @@ namespace Catel.IoC
         {
             private readonly int _hashCode;
 
-            public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object?[] parameters)
+            public ConstructorCacheKey(Type type, bool autoCompleteDependencies, object?[] parameters)
             {
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append(type.GetSafeFullName(true));
@@ -699,13 +719,13 @@ namespace Catel.IoC
                 }
 
                 Key = stringBuilder.ToString();
-                AutoCompleteDependecies = autoCompleteDependecies;
+                AutoCompleteDependencies = autoCompleteDependencies;
                 _hashCode = Key.GetHashCode();
             }
 
             public string Key { get; private set; }
 
-            public bool AutoCompleteDependecies { get; private set; }
+            public bool AutoCompleteDependencies { get; private set; }
 
             public override bool Equals(object? obj)
             {
@@ -720,7 +740,7 @@ namespace Catel.IoC
 
             private bool Equals(ConstructorCacheKey other)
             {
-                if (AutoCompleteDependecies != other.AutoCompleteDependecies)
+                if (AutoCompleteDependencies != other.AutoCompleteDependencies)
                 {
                     return false;
                 }
@@ -860,6 +880,9 @@ namespace Catel.IoC
             {
                 if (disposing)
                 {
+                    _serviceLocator.TypeRegistered -= OnServiceLocatorTypeRegistered;
+                    TypeCache.AssemblyLoaded -= OnAssemblyLoaded;
+
                     _constructorCacheLock?.Dispose();
                     _typeConstructorsMetadataLock?.Dispose();
                     _currentTypeRequestPath?.Dispose();

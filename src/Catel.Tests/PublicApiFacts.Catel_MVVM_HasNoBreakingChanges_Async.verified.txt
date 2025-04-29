@@ -264,7 +264,7 @@ namespace Catel.MVVM
         public virtual void RaiseCanExecuteChanged() { }
         protected virtual void RaiseExecuted(object? parameter) { }
     }
-    public class CompositeCommand : Catel.MVVM.TaskCommand<object?, object?, Catel.MVVM.ITaskProgressReport>, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand<Catel.MVVM.ITaskProgressReport>, Catel.MVVM.ICompositeCommand, System.Windows.Input.ICommand
+    public class CompositeCommand : Catel.MVVM.TaskCommand<object?, object?, Catel.MVVM.ITaskProgressReport>, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand, Catel.MVVM.ICatelTaskCommand<Catel.MVVM.ITaskProgressReport>, Catel.MVVM.ICompositeCommand, System.Windows.Input.ICommand
     {
         public CompositeCommand() { }
         public bool AllowPartialExecution { get; set; }
@@ -325,16 +325,24 @@ namespace Catel.MVVM
         bool CanExecute(TCanExecuteParameter parameter);
         void Execute(TExecuteParameter parameter);
     }
-    public interface ICatelTaskCommand<TProgress> : Catel.MVVM.ICatelCommand, System.Windows.Input.ICommand
-        where TProgress : Catel.MVVM.ITaskProgressReport
+    public interface ICatelTaskCommand : Catel.MVVM.ICatelCommand, System.Windows.Input.ICommand
     {
         Catel.MVVM.Command? CancelCommand { get; }
         bool IsCancellationRequested { get; }
         bool IsExecuting { get; }
+        System.Threading.Tasks.Task Task { get; }
         event System.EventHandler<Catel.MVVM.CommandEventArgs>? Canceled;
         event System.EventHandler<Catel.MVVM.CommandCanceledEventArgs>? Executing;
-        event System.EventHandler<Catel.MVVM.CommandProgressChangedEventArgs<TProgress>>? ProgressChanged;
         void Cancel();
+    }
+    public interface ICatelTaskCommand<TProgress> : Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand, System.Windows.Input.ICommand
+        where TProgress : Catel.MVVM.ITaskProgressReport
+    {
+        event System.EventHandler<Catel.MVVM.CommandProgressChangedEventArgs<TProgress>>? ProgressChanged;
+    }
+    public static class ICommandExtensions
+    {
+        public static System.Threading.Tasks.Task GetTask(this System.Windows.Input.ICommand command) { }
     }
     public interface ICommandManager
     {
@@ -359,7 +367,7 @@ namespace Catel.MVVM
         void UnregisterCommand(string commandName, System.Windows.Input.ICommand command);
         void UpdateInputGesture(string commandName, Catel.Windows.Input.InputGesture? inputGesture = null);
     }
-    public interface ICompositeCommand : Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand<Catel.MVVM.ITaskProgressReport>, System.Windows.Input.ICommand
+    public interface ICompositeCommand : Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand, Catel.MVVM.ICatelTaskCommand<Catel.MVVM.ITaskProgressReport>, System.Windows.Input.ICommand
     {
         bool AllowPartialExecution { get; set; }
         bool AtLeastOneMustBeExecutable { get; set; }
@@ -587,7 +595,7 @@ namespace Catel.MVVM
         public TaskCommand(System.Func<TExecuteParameter?, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter?, System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter?, bool>? canExecute = null, object? tag = null) { }
     }
-    public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : Catel.MVVM.Command<TExecuteParameter, TCanExecuteParameter>, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand<TProgress>, System.Windows.Input.ICommand
+    public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : Catel.MVVM.Command<TExecuteParameter, TCanExecuteParameter>, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand, Catel.MVVM.ICatelTaskCommand<TProgress>, System.Windows.Input.ICommand
         where TProgress : Catel.MVVM.ITaskProgressReport
     {
         public TaskCommand(System.Func<System.Threading.Tasks.Task> execute, System.Func<bool>? canExecute = null, object? tag = null) { }
