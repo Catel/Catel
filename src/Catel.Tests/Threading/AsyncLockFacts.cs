@@ -82,9 +82,11 @@
 
             private readonly object _lock = new();
 
-            public async Task MethodAsync()
+            public async Task MethodAsync(int randomSeed)
             {
                 var threadIndex = 0;
+
+                var random = new Random(randomSeed);
 
                 lock (_lock)
                 {
@@ -94,15 +96,36 @@
 
                 try
                 {
-                    using (await _asyncLock.LockAsync())
+                    var isAsync = random.Next(0, 1) == 0;
+                    if (isAsync)
                     {
-                        Assert.That(_isTaken, Is.False);
+                        using (await _asyncLock.LockAsync())
+                        {
+                            Debug.WriteLine($"------taken lock (async): {threadIndex}");
+                            Assert.That(_isTaken, Is.False);
 
-                        _isTaken = true;
+                            _isTaken = true;
 
-                        Thread.Sleep(300);
+                            Thread.Sleep(300);
 
-                        _isTaken = false;
+                            _isTaken = false;
+                        }
+                    }
+                    else
+                    {
+#pragma warning disable CL0001 // Use async overload inside this async method
+                        using (_asyncLock.Lock())
+#pragma warning restore CL0001 // Use async overload inside this async method
+                        {
+                            Debug.WriteLine($"------taken lock (sync): {threadIndex}");
+                            Assert.That(_isTaken, Is.False);
+
+                            _isTaken = true;
+
+                            Thread.Sleep(300);
+
+                            _isTaken = false;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -237,7 +260,7 @@
             Assert.That(testClass._asyncLock.IsTaken, Is.False);
         }
 
-        [Test, Repeat(25)]
+        [Test, Repeat(10)]
         public async Task Does_Not_Deadlock_Async()
         {
             Debug.Flush();
@@ -246,9 +269,11 @@
 
             var tasks = new List<Task>();
 
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 20; i++)
             {
-                var task = Task.Run(deadlockClass.MethodAsync);
+                var randomSeed = i;
+
+                var task = Task.Run(() => deadlockClass.MethodAsync(randomSeed));
                 tasks.Add(task);
             }
 

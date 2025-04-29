@@ -1,16 +1,16 @@
 ﻿namespace Catel.MVVM
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
-    /// <summary>
-    /// Advanced <see cref="ICommand" /> interface definition to provide advanced functionality.
-    /// Supports async/await/Task methods for commands with progress reporting and cancellation token.
-    /// </summary>
-    /// <typeparam name="TProgress">The type of the progress.</typeparam>
-    public interface ICatelTaskCommand<TProgress> : ICatelCommand
-        where TProgress : ITaskProgressReport
+    public interface ICatelTaskCommand : ICatelCommand
     {
+        /// <summary>
+        /// Gets the task being executed by this command.
+        /// </summary>
+        Task Task { get; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance is executing.
         /// </summary>
@@ -43,7 +43,16 @@
         /// Occurs when the command is canceled.
         /// </summary>
         event EventHandler<CommandEventArgs>? Canceled;
+    }
 
+    /// <summary>
+    /// Advanced <see cref="ICommand" /> interface definition to provide advanced functionality.
+    /// Supports async/await/Task methods for commands with progress reporting and cancellation token.
+    /// </summary>
+    /// <typeparam name="TProgress">The type of the progress.</typeparam>
+    public interface ICatelTaskCommand<TProgress> : ICatelTaskCommand
+        where TProgress : ITaskProgressReport
+    {
         /// <summary>
         /// Raised for each reported progress value.
         /// </summary>
