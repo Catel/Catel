@@ -219,6 +219,11 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         private object? CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object? tag, object?[] parameters, bool autoCompleteDependencies)
         {
+            if (_disposedValue)
+            {
+                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(TypeFactory).Name);
+            }
+
             if (typeToConstruct.IsBasicType())
             {
                 return Activator.CreateInstance(typeToConstruct);
@@ -635,6 +640,11 @@ namespace Catel.IoC
         /// </summary>
         public void ClearCache()
         {
+            if (_disposedValue)
+            {
+                return;
+            }
+
             // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an
             // application lifetime
 
@@ -664,6 +674,11 @@ namespace Catel.IoC
         /// <param name="eventArgs">The <see cref="TypeRegisteredEventArgs" /> instance containing the event data.</param>
         private void OnServiceLocatorTypeRegistered(object? sender, TypeRegisteredEventArgs eventArgs)
         {
+            if (_disposedValue)
+            {
+                return;
+            }
+
             ClearCache();
         }
 
@@ -674,6 +689,11 @@ namespace Catel.IoC
         /// <param name="e">The <see cref="AssemblyLoadedEventArgs"/> instance containing the event data.</param>
         private void OnAssemblyLoaded(object? sender, AssemblyLoadedEventArgs e)
         {
+            if (_disposedValue)
+            {
+                return;
+            }
+
             ClearCache();
         }
 
@@ -860,6 +880,9 @@ namespace Catel.IoC
             {
                 if (disposing)
                 {
+                    _serviceLocator.TypeRegistered -= OnServiceLocatorTypeRegistered;
+                    TypeCache.AssemblyLoaded -= OnAssemblyLoaded;
+
                     _constructorCacheLock?.Dispose();
                     _typeConstructorsMetadataLock?.Dispose();
                     _currentTypeRequestPath?.Dispose();
