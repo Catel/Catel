@@ -13,6 +13,12 @@ public class VelopackInstaller : IInstaller
         if (IsEnabled)
         {
             IsAvailable = IsEnabled;
+
+            // Protection
+            if (BuildContext.BuildServer.GetVariableAsBool("SquirrelEnabled", true, showValue: true))
+            {
+                throw new Exception("Both Velopack and Squirrel are enabled, make sure to disable Squirrel when migrating to Velopack");
+            }
         }
     }
 
