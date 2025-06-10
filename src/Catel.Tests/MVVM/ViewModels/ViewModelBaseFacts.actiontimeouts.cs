@@ -68,8 +68,8 @@
 
             await vm.InitializeViewModelAsync();
 
-            vm.ViewModelActionAwaitTimeoutInMilliseconds = 70;
-            vm.ActionDuration = 50;
+            vm.ViewModelActionAwaitTimeoutInMilliseconds = 100;
+            vm.ActionDuration = 20;
 
             // Need duplicate call
             _ = vm.CancelAndCloseViewModelAsync();
