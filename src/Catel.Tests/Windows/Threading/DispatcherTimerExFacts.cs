@@ -12,7 +12,7 @@
     public class DispatcherTimerExFacts
     {
         [Test]
-        public async Task Runs_Dispatcher_Methods_With_Mock_Async()
+        public async Task Runs_Dispatcher_Methods_With_Mock()
         {
             var dispatcherServiceMock = new Mock<IDispatcherService>();
 
@@ -37,7 +37,7 @@
         }
 
         [Test]
-        public async Task Runs_Dispatcher_Methods_Without_BeginInvokeIfRequired_With_Mock_Async()
+        public async Task Runs_Dispatcher_Methods_Without_BeginInvokeIfRequired_With_Mock()
         {
             var dispatcherServiceMock = new Mock<IDispatcherService>();
 
@@ -63,7 +63,7 @@
         }
 
         [Test]
-        public async Task Runs_Dispatcher_Methods_With_Implementation_Async()
+        public async Task Runs_Dispatcher_Methods_With_Implementation()
         {
             var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(new DispatcherProviderService()))
             {
@@ -90,7 +90,7 @@
         [TestCase(100, 1)]
         [TestCase(300, 2)]
         [TestCase(800, 4)]
-        public async Task Does_Prevent_Duplicate_Ticks_Async(int durationInMilliseconds, int expectedInvocationCount)
+        public async Task Does_Prevent_Duplicate_Ticks(int durationInMilliseconds, int expectedInvocationCount)
         {
             var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(new DispatcherProviderService()))
             {
@@ -118,7 +118,7 @@
         }
 
         [Test]
-        public async Task Does_Not_Prevent_Duplicate_Ticks_Async()
+        public async Task Does_Not_Prevent_Duplicate_Ticks()
         {
             var dispatcherServiceMock = new Mock<IDispatcherService>();
 
@@ -145,6 +145,34 @@
 
                 dispatcherServiceMock.Verify(x => x.BeginInvoke(It.IsAny<Action>(), It.Is<bool>(y => y == true)), Times.Exactly(2));
             }
+        }
+
+        [Test]
+        public async Task Keeps_Invoking_When_Exception_Occurs()
+        {
+            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(new DispatcherProviderService()))
+            {
+                Interval = TimeSpan.FromMilliseconds(50),
+                PreventDuplicateTicks = true
+            };
+
+            var invocationCount = 0;
+
+            dispatcherTimerEx.Tick += (sender, args) =>
+            {
+                invocationCount++;
+
+                throw new Exception();
+            };
+
+            using (new DisposableToken<DispatcherTimerEx>(dispatcherTimerEx,
+                (x) => x.Instance.Start(),
+                (x) => x.Instance.Stop()))
+            {
+                await Task.Delay(100);
+            }
+
+            Assert.That(invocationCount, Is.GreaterThan(1));
         }
     }
 }
