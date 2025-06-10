@@ -169,7 +169,7 @@
                 (x) => x.Instance.Start(),
                 (x) => x.Instance.Stop()))
             {
-                await Task.Delay(100);
+                await Task.Delay(200);
             }
 
             Assert.That(invocationCount, Is.GreaterThan(1));

@@ -25,6 +25,8 @@
 
             public bool CreateDelayDuringSave { get; set; }
 
+            public int SaveConfigurationCallCount { get; private set; }
+
             protected override string GetConfigurationFileName(ApplicationDataTarget applicationDataTarget)
             {
                 var configFileName = base.GetConfigurationFileName(applicationDataTarget);
@@ -39,6 +41,8 @@
 
             protected override async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
             {
+                SaveConfigurationCallCount++;
+
                 await base.SaveConfigurationAsync(container, configuration, fileName);
 
                 if (CreateDelayDuringSave)
@@ -69,7 +73,7 @@
         public class The_LoadConfigurationAsync_Method
         {
             [Test]
-            public async Task IgnoresEmptyFilesAsync()
+            public async Task Ignores_Empty_Files()
             {
                 var configurationService = await GetConfigurationServiceAsync();
                 var fileName = System.IO.Path.GetTempFileName();
@@ -96,7 +100,7 @@
         {
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ThrowsArgumentExceptionForNullKeyAsync(ConfigurationContainer container)
+            public async Task Throws_ArgumentException_For_Null_Key(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -105,7 +109,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ThrowsArgumentExceptionForEmptyKeyAsync(ConfigurationContainer container)
+            public async Task Throws_ArgumentException_For_Empty_Key(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -114,7 +118,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ReturnsExistingValueAsync(ConfigurationContainer container)
+            public async Task Returns_Existing_Value(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -125,7 +129,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task Returns_Existing_Complex_Value_Async(ConfigurationContainer container)
+            public async Task Returns_Existing_Complex_Value(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -147,7 +151,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ReturnsDefaultValueForNonExistingValueAsync(ConfigurationContainer container)
+            public async Task Returns_Default_Value_For_Non_Existing_Value(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -156,7 +160,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ReturnsDefaultValueForNonExistingComplexValueAsync(ConfigurationContainer container)
+            public async Task Returns_Default_Value_For_Non_Existing_Complex_Value(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -171,7 +175,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ReturnsValueForKeyWithSpecialCharactersAsync(ConfigurationContainer container)
+            public async Task Returns_Value_For_Key_With_Special_Characters(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -186,7 +190,7 @@
         {
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ThrowsArgumentExceptionForNullKeyAsync(ConfigurationContainer container)
+            public async Task Throws_ArgumentException_For_Null_Key(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -195,7 +199,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task ThrowsArgumentExceptionForEmptyKeyAsync(ConfigurationContainer container)
+            public async Task Throws_ArgumentException_For_Empty_Key(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -204,7 +208,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task SetsValueCorrectlyAsync(ConfigurationContainer container)
+            public async Task Sets_Value_Correctly(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -215,7 +219,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task SetsComplexValueCorrectlyAsync(ConfigurationContainer container)
+            public async Task Sets_Complex_Value_Correctly(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -237,13 +241,32 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task SetsValueCorrectlyForKeyWithSpecialCharactersAsync(ConfigurationContainer container)
+            public async Task Sets_Value_Correctly_For_Key_With_Special_Characters(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
                 configurationService.SetValue(container, "key with special chars", "myValue");
 
                 Assert.That(configurationService.GetValue<string>(container, "key with special chars"), Is.EqualTo("myValue"));
+            }
+            
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public async Task Does_Not_Schedule_Save_When_Values_Are_Equal(ConfigurationContainer container)
+            {
+                var configurationService = await GetConfigurationServiceAsync();
+
+                configurationService.SetValue(container, "test_key", "myValue");
+
+                await Task.Delay(1000);
+
+                var currentValue = configurationService.SaveConfigurationCallCount;
+
+                configurationService.SetValue(container, "test_key", "myValue");
+
+                await Task.Delay(1000);
+
+                Assert.That(configurationService.SaveConfigurationCallCount, Is.EqualTo(currentValue));
             }
         }
 
@@ -252,7 +275,7 @@
         {
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task IsInvokedDuringSetValueMethodAsync(ConfigurationContainer container)
+            public async Task Is_Invoked_During_SetValue_Method(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
@@ -281,7 +304,7 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task IsNotInvokedDuringSetValueMethodForEqualValuesAsync(ConfigurationContainer container)
+            public async Task Is_Not_Invoked_During_SetValue_Method_For_Equal_Values(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
                 var invoked = false;
