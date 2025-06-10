@@ -121,9 +121,14 @@
 
                 _dispatcherService.BeginInvoke(() =>
                 {
-                    handler(this, EventArgs.Empty);
-
-                    _isHandlingTick = false;
+                    try
+                    {
+                        handler(this, EventArgs.Empty);
+                    }
+                    finally
+                    {
+                        _isHandlingTick = false;
+                    }
                 }, OnlyBeginInvokeIfRequired);
             }
         }
