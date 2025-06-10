@@ -321,7 +321,7 @@
             {
                 try
                 {
-                    using (var fileStream = File.Open(source, FileMode.Open))
+                    using (var fileStream = File.Open(source, FileMode.Open, FileAccess.Read, FileShare.None))
                     {
                         if (!fileStream.CanRead)
                         {
