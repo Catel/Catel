@@ -97,7 +97,7 @@
             {
                 _timer.Stop();
 
-                _timer.Elapsed += OnTimerElapsed;
+                _timer.Elapsed -= OnTimerElapsed;
                 _isSubscribed = false;
             }
         }
