@@ -199,15 +199,21 @@
 
             object? existingValue;
 
+            var areEqual = false;
+
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
             {
                 existingValue = GetValueFromStore(container, key);
 
-                SetValueToStore(container, key, value);
+                areEqual = ObjectHelper.AreEqual(value, existingValue);
+                if (!areEqual)
+                {
+                    SetValueToStore(container, key, value);
+                }
             }
 
-            if (!ObjectHelper.AreEqual(value, existingValue))
+            if (!areEqual)
             {
                 RaiseConfigurationChanged(container, originalKey, value);
             }
@@ -321,7 +327,7 @@
             {
                 try
                 {
-                    using (var fileStream = File.Open(source, FileMode.Open))
+                    using (var fileStream = File.Open(source, FileMode.Open, FileAccess.Read, FileShare.None))
                     {
                         if (!fileStream.CanRead)
                         {
