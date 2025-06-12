@@ -125,7 +125,7 @@
                     newSet.Add(fullResolvedTypeName);
                 }
 
-                _cache.Add(valueToResolve, newSet);
+                _cache[valueToResolve] = newSet;
 
                 return newSet;
             }
