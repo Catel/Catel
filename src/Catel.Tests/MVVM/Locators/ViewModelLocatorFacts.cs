@@ -96,6 +96,20 @@
                 Assert.Throws<ArgumentNullException>(() => viewModelLocator.ResolveViewModel(null));
             }
 
+            [TestCase(Description = "Fixes https://github.com/Catel/Catel/issues/2355")]
+            public void Caches_Invalid_Value_Correctly()
+            {
+                var viewModelLocator = new ViewModelLocator();
+
+                var resolvedType1 = viewModelLocator.ResolveViewModel(typeof(object));
+
+                Assert.That(resolvedType1, Is.Null);
+
+                var resolvedType2 = viewModelLocator.ResolveViewModel(typeof(object));
+
+                Assert.That(resolvedType2, Is.Null);
+            }
+
             [TestCase(typeof(PersonView), typeof(PersonViewModel))]
             [TestCase(typeof(Controls.PersonControl), typeof(PersonViewModel))]
             [TestCase(typeof(Pages.PersonPage), typeof(PersonViewModel))]
