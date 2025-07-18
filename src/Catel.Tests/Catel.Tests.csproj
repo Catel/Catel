@@ -10,6 +10,7 @@
     <PackageTags></PackageTags>
     <Nullable>annotations</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
