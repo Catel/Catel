@@ -39,6 +39,6 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props')" />
-  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
-  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.shared.explicit.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.shared.mat.props')" />
 </Project>
