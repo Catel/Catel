@@ -364,7 +364,7 @@
         {
             var deserializedMemberValues = new List<MemberValue>();
 
-            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType).Reverse();
+            var serializerModifiers = System.Linq.Enumerable.Reverse(SerializationManager.GetSerializerModifiers(context.ModelType));
 
             var membersToDeserialize = GetSerializableMembers(context, context.Model);
 
