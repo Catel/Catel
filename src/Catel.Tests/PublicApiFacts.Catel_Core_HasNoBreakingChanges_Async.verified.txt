@@ -2130,7 +2130,7 @@ namespace Catel.IoC
             where TService :  notnull { }
         public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object? tag = null)
             where TService :  notnull { }
-        public static TServiceImplementation? RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+        public static TServiceImplementation RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
             where TServiceImplementation :  notnull { }
         public static TService RegisterRequiredTypeAndInstantiate<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
             where TService :  notnull

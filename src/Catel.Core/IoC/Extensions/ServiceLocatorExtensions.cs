@@ -471,7 +471,7 @@
         /// <param name="serviceLocator">The service locator.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static TServiceImplementation? RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this IServiceLocator serviceLocator)
+        public static TServiceImplementation RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this IServiceLocator serviceLocator)
             where TServiceImplementation : notnull
         {
             return RegisterRequiredTypeAndInstantiate<TServiceImplementation, TServiceImplementation>(serviceLocator);
