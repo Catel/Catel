@@ -33,7 +33,7 @@ foreach (TypeCode typeCode in typeCodes)
 
 #>
         public bool TryGetFieldValue(TEntity entity, string fieldName, out <#= typeCode #> item) => 
-            TryGetFieldValue<<#= typeCode #>>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<<#= typeCode #>>(entity, fieldName, out item);
 
 <# } #>
     }

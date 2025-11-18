@@ -15,52 +15,52 @@ namespace Catel.Reflection
     public partial class FastMemberInvoker<TEntity>
     {
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item) => 
-            TryGetFieldValue<Object>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Object>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item) => 
-            TryGetFieldValue<Boolean>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Boolean>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item) => 
-            TryGetFieldValue<Char>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Char>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item) => 
-            TryGetFieldValue<SByte>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<SByte>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item) => 
-            TryGetFieldValue<Byte>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Byte>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item) => 
-            TryGetFieldValue<Int16>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Int16>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item) => 
-            TryGetFieldValue<UInt16>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<UInt16>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item) => 
-            TryGetFieldValue<Int32>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Int32>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item) => 
-            TryGetFieldValue<UInt32>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<UInt32>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item) => 
-            TryGetFieldValue<Int64>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Int64>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item) => 
-            TryGetFieldValue<UInt64>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<UInt64>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item) => 
-            TryGetFieldValue<Single>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Single>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item) => 
-            TryGetFieldValue<Double>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Double>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item) => 
-            TryGetFieldValue<Decimal>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<Decimal>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item) => 
-            TryGetFieldValue<DateTime>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<DateTime>(entity, fieldName, out item);
 
         public bool TryGetFieldValue(TEntity entity, string fieldName, out String item) => 
-            TryGetFieldValue<String>((TEntity)entity, fieldName, out item);
+            TryGetFieldValue<String>(entity, fieldName, out item);
 
     }
 }
