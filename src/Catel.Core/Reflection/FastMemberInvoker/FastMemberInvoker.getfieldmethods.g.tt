@@ -31,7 +31,6 @@ foreach (TypeCode typeCode in typeCodes)
         continue;
     }
 
-    string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldGettersCache";
 #>
         public bool TryGetFieldValue(TEntity entity, string fieldName, out <#= typeCode #> item) => 
             TryGetFieldValue<<#= typeCode #>>((TEntity)entity, fieldName, out item);

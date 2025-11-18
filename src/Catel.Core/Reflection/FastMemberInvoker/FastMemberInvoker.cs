@@ -115,6 +115,7 @@
 
             return false;
         }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryGetPropertyValueObject<TValue>(TEntity entity, string propertyName, out TValue value)
         {

@@ -30,7 +30,6 @@ foreach (TypeCode typeCode in typeCodes)
         continue;
     }
 
-    string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldSettersCache";
 #>
         public bool TrySetFieldValue(TEntity entity, string fieldName, <#= typeCode #> value) =>
             TrySetFieldValue<<#= typeCode #>>(entity, fieldName, value);
