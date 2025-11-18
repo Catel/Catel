@@ -107,11 +107,13 @@
                 value = getter(entity);
                 return true;
             }
+            
             // It will not be null for value types and it is allowed to be null if return false
             // so we have to live with that 
 #pragma warning disable CS8601 
             value = default;
 #pragma warning restore CS8601
+
             return false;
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -123,11 +125,13 @@
                 value = (TValue)getter(entity);
                 return true;
             }
+            
             // It will not be null for value types and it is allowed to be null if return false
             // so we have to live with that 
 #pragma warning disable CS8601 
             value = default;
 #pragma warning restore CS8601
+
             return false;
         }
 
@@ -170,11 +174,13 @@
                 value = getter(entity);
                 return true;
             }
+            
             // It will not be null for value types and it is allowed to be null if return false
             // so we have to live with that 
 #pragma warning disable CS8601
             value = default;
 #pragma warning restore CS8601
+
             return false;
         }
 
@@ -187,11 +193,13 @@
                 value = (TValue)getter(entity);
                 return true;
             }
+            
             // It will not be null for value types and it is allowed to be null if return false
             // so we have to live with that 
 #pragma warning disable CS8601
             value = default;
 #pragma warning restore CS8601
+
             return false;
         }
     }
