@@ -692,32 +692,32 @@
                     var testInterfaceRef1 = serviceLocator.ResolveType<ITestInterface>();
                     var testInterfaceRef2 = serviceLocator.ResolveType<ITestInterface>();
                     Assert.That(testInterfaceRef2, Is.SameAs(testInterfaceRef1));
-                    Assert.That(typeof(TestClass1), Is.EqualTo(testInterfaceRef2.GetType()));
+                    Assert.That(testInterfaceRef2.GetType(), Is.EqualTo(typeof(TestClass1)));
 
                     serviceLocator.RegisterType<ITestInterface, TestClass2>(registrationType: RegistrationType.Transient);
                     testInterfaceRef1 = serviceLocator.ResolveType<ITestInterface>();
                     testInterfaceRef2 = serviceLocator.ResolveType<ITestInterface>();
                     Assert.That(testInterfaceRef2, Is.Not.SameAs(testInterfaceRef1));
 
-                    Assert.That(typeof(TestClass2), Is.EqualTo(testInterfaceRef2.GetType()));
+                    Assert.That(testInterfaceRef2.GetType(), Is.EqualTo(typeof(TestClass2)));
                 }
             }
 
             [TestCase]
-            public void RegisterType_DoubleRegistration_WitoutChangeInstantiationStyle_And_JustChangingTheType()
+            public void RegisterType_DoubleRegistration_WithoutChangeInstantiationStyle_And_JustChangingTheType()
             {
                 ServiceLocator.Default.RegisterType<ITestInterface, TestClass1>();
                 var testInterfaceRef1 = ServiceLocator.Default.ResolveType<ITestInterface>();
                 var testInterfaceRef2 = ServiceLocator.Default.ResolveType<ITestInterface>();
                 Assert.That(testInterfaceRef2, Is.SameAs(testInterfaceRef1));
-                Assert.That(typeof(TestClass1), Is.EqualTo(testInterfaceRef2.GetType()));
+                Assert.That(testInterfaceRef2.GetType(), Is.EqualTo(typeof(TestClass1)));
 
                 ServiceLocator.Default.RegisterType<ITestInterface, TestClass2>();
                 testInterfaceRef1 = ServiceLocator.Default.ResolveType<ITestInterface>();
                 testInterfaceRef2 = ServiceLocator.Default.ResolveType<ITestInterface>();
                 Assert.That(testInterfaceRef2, Is.SameAs(testInterfaceRef1));
 
-                Assert.That(typeof(TestClass2), Is.EqualTo(testInterfaceRef2.GetType()));
+                Assert.That(testInterfaceRef2.GetType(), Is.EqualTo(typeof(TestClass2)));
             }
 
             [TestCase]

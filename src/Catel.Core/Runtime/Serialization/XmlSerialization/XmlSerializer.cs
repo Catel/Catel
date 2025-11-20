@@ -417,7 +417,7 @@
             var modelType = context.ModelType;
 
             var propertyDataManager = PropertyDataManager.Default;
-            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType).Reverse();
+            var serializerModifiers = System.Linq.Enumerable.Reverse(SerializationManager.GetSerializerModifiers(context.ModelType));
             var membersToDeserialize = GetSerializableMembers(context, context.Model);
 
             // Important: we need to respect the xml order (since it's a forward-only reader). We will do this in 

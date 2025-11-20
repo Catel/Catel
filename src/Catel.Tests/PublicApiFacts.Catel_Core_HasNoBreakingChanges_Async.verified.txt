@@ -2,7 +2,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.MVVM")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Serialization.Json")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v8.0", FrameworkDisplayName=".NET 8.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
 namespace Catel
 {
     public static class Argument
@@ -2130,7 +2130,7 @@ namespace Catel.IoC
             where TService :  notnull { }
         public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object? tag = null)
             where TService :  notnull { }
-        public static TServiceImplementation? RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
+        public static TServiceImplementation RegisterRequiredTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
             where TServiceImplementation :  notnull { }
         public static TService RegisterRequiredTypeAndInstantiate<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
             where TService :  notnull

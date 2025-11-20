@@ -14,506 +14,53 @@ namespace Catel.Reflection
 
     public partial class FastMemberInvoker<TEntity>
     {
-        public bool TryGetPropertyValue<TValue>(object entity, string propertyName, out TValue value)
-        {
-            if (!typeof(TValue).IsValueTypeEx())
-            {
-                object localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item) =>
+            TryGetPropertyValue<Object>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // Already object, so no need to work around boxing
-                    value = (TValue)localValue;
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item) =>
+            TryGetPropertyValue<Boolean>(entity, propertyName, out item);
 
-            if (typeof(TValue) == typeof(Boolean))
-            {
-                Boolean localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item) =>
+            TryGetPropertyValue<Char>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item) =>
+            TryGetPropertyValue<SByte>(entity, propertyName, out item);
 
-            if (typeof(TValue) == typeof(Char))
-            {
-                Char localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item) =>
+            TryGetPropertyValue<Byte>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item) =>
+            TryGetPropertyValue<Int16>(entity, propertyName, out item);
 
-            if (typeof(TValue) == typeof(SByte))
-            {
-                SByte localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item) =>
+            TryGetPropertyValue<UInt16>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item) =>
+            TryGetPropertyValue<Int32>(entity, propertyName, out item);
 
-            if (typeof(TValue) == typeof(Byte))
-            {
-                Byte localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item) =>
+            TryGetPropertyValue<UInt32>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item) =>
+            TryGetPropertyValue<Int64>(entity, propertyName, out item);
 
-            if (typeof(TValue) == typeof(Int16))
-            {
-                Int16 localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item) =>
+            TryGetPropertyValue<UInt64>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item) =>
+            TryGetPropertyValue<Single>(entity, propertyName, out item);
 
-            if (typeof(TValue) == typeof(UInt16))
-            {
-                UInt16 localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item) =>
+            TryGetPropertyValue<Double>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item) =>
+            TryGetPropertyValue<Decimal>(entity, propertyName, out item);
 
-            if (typeof(TValue) == typeof(Int32))
-            {
-                Int32 localValue;
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item) =>
+            TryGetPropertyValue<DateTime>(entity, propertyName, out item);
 
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(UInt32))
-            {
-                UInt32 localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Int64))
-            {
-                Int64 localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(UInt64))
-            {
-                UInt64 localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Single))
-            {
-                Single localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Double))
-            {
-                Double localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Decimal))
-            {
-                Decimal localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(DateTime))
-            {
-                DateTime localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(String))
-            {
-                String localValue;
-
-                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            value = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item)
-        {
-            var getter = GetObjectPropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item)
-        {
-            var getter = GetBooleanPropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item)
-        {
-            var getter = GetCharPropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item)
-        {
-            var getter = GetSBytePropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item)
-        {
-            var getter = GetBytePropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item)
-        {
-            var getter = GetInt16PropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item)
-        {
-            var getter = GetUInt16PropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item)
-        {
-            var getter = GetInt32PropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item)
-        {
-            var getter = GetUInt32PropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item)
-        {
-            var getter = GetInt64PropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item)
-        {
-            var getter = GetUInt64PropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item)
-        {
-            var getter = GetSinglePropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item)
-        {
-            var getter = GetDoublePropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item)
-        {
-            var getter = GetDecimalPropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item)
-        {
-            var getter = GetDateTimePropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item)
-        {
-            var getter = GetStringPropertyGetter(propertyName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item) =>
+            TryGetPropertyValue<String>(entity, propertyName, out item);
 
     }
 }
