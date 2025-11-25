@@ -1,4 +1,5 @@
-﻿namespace Catel.Tests
+using System.Runtime.CompilerServices;
+namespace Catel.Tests
 {
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
@@ -11,7 +12,8 @@
         /// <summary>
         /// Initializes the module.
         /// </summary>
-        public static void Initialize()
+        [ModuleInitializer]
+    public static void Initialize()
         {
 
         }

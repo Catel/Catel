@@ -1,4 +1,5 @@
-﻿namespace Catel.MVVM
+using System.Runtime.CompilerServices;
+namespace Catel.MVVM
 {
     using Catel.IoC;
 
@@ -13,7 +14,8 @@
         /// <summary>
         /// Initializes the module
         /// </summary>
-        public static void Initialize()
+        [ModuleInitializer]
+    public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
 

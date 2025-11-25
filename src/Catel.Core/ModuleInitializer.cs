@@ -1,4 +1,5 @@
-﻿namespace Catel.Core
+using System.Runtime.CompilerServices;
+namespace Catel.Core
 {
     using System;
     using Reflection;
@@ -21,7 +22,8 @@
         /// <summary>
         /// Initializes the module.
         /// </summary>
-        public static void Initialize()
+        [ModuleInitializer]
+    public static void Initialize()
         {
             try
             {
