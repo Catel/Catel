@@ -546,6 +546,7 @@ namespace Catel.MVVM
     }
     public static class ModuleInitializer
     {
+        [System.Runtime.CompilerServices.ModuleInitializer]
         public static void Initialize() { }
     }
     public static class ObjectExtensions

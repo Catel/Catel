@@ -1,10 +1,10 @@
-using System.Runtime.CompilerServices;
-namespace Catel.Core
+﻿namespace Catel.Core
 {
+    using System.Runtime.CompilerServices;
     using System;
-    using Reflection;
-    using IoC;
-    using Logging;
+    using Catel.Reflection;
+    using Catel.IoC;
+    using Catel.Logging;
     using System.Configuration;
     using System.Reflection;
     using System.Collections.Generic;
@@ -22,8 +22,10 @@ namespace Catel.Core
         /// <summary>
         /// Initializes the module.
         /// </summary>
+#pragma warning disable CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
         [ModuleInitializer]
-    public static void Initialize()
+#pragma warning restore CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
+        public static void Initialize()
         {
             try
             {

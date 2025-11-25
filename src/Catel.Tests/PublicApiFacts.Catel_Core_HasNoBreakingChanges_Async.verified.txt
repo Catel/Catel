@@ -1062,6 +1062,7 @@ namespace Catel.Core
 {
     public static class ModuleInitializer
     {
+        [System.Runtime.CompilerServices.ModuleInitializer]
         public static void Initialize() { }
     }
 }

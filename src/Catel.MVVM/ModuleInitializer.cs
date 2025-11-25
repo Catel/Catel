@@ -1,6 +1,6 @@
-using System.Runtime.CompilerServices;
-namespace Catel.MVVM
+﻿namespace Catel.MVVM
 {
+    using System.Runtime.CompilerServices;
     using Catel.IoC;
 
     /// <summary>
@@ -14,8 +14,10 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes the module
         /// </summary>
+#pragma warning disable CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
         [ModuleInitializer]
-    public static void Initialize()
+#pragma warning restore CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
+        public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
 

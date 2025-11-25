@@ -29,8 +29,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PublicApiGenerator" Version="11.5.0" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="31.7.1" />
+    <PackageReference Include="PublicApiGenerator" Version="11.5.1" PrivateAssets="all" />
+    <PackageReference Include="Verify.NUnit" Version="31.7.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
