@@ -7,4 +7,4 @@
 
 [assembly: SuppressMessage("WpfAnalyzers.DependencyProperties", "WPF1010:Property '[property]' must notify when value changes.", Justification = "Don't enforce this")]
 [assembly: SuppressMessage("WpfAnalyzers.DependencyProperties", "WPF1011:Implement INotifyPropertyChanged.", Justification = "Don't enforce this")]
-[assembly: SuppressMessage("Usage", "CA2255:The 'ModuleInitializer' attribute should not be used in libraries", Justification = "Used to register language resources and types", Scope = "member", Target = "~M:ModuleInitializer.Initialize")]
+[assembly: SuppressMessage("Usage", "CA2255:The 'ModuleInitializer' attribute should not be used in libraries", Justification = "Used to register language resources and types")]
