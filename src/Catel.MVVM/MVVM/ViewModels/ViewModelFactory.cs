@@ -117,7 +117,14 @@
                     parameters = new object[] { dataContext };
                 }
 
-                viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, parameters) as IViewModel;
+                try
+                {
+                    viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, parameters) as IViewModel;
+                }
+                catch (Exception)
+                {
+                    // Ignore since this probably does not support injection
+                }
 
                 if (viewModel is not null)
                 {
