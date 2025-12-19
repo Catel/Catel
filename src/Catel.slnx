@@ -1,0 +1,31 @@
+<Solution>
+  <Folder Name="/doc/">
+    <File Path="../doc/release steps.txt" />
+  </Folder>
+  <Folder Name="/misc/">
+    <File Path="Catel.snk" />
+    <File Path="CustomDictionary.xml" />
+    <File Path="Directory.build.project.props" />
+    <File Path="Directory.build.props" />
+    <File Path="Directory.build.shared.explicit.props" />
+    <File Path="Directory.build.shared.implicit.props" />
+    <File Path="Directory.build.targets" />
+    <File Path="GlobalSuppressions.cs" />
+    <File Path="MethodTimeLogger.cs" />
+    <File Path="nuget.config" />
+    <File Path="Settings.StyleCop" />
+    <File Path="SolutionAssemblyInfo.cs" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/">
+    <Project Path="Catel.Core/Catel.Core.csproj" />
+    <Project Path="Catel.MVVM/Catel.MVVM.csproj" />
+    <Project Path="Catel.Serialization.Json/Catel.Serialization.Json.csproj" />
+  </Folder>
+  <Folder Name="/src/Tests/">
+    <Project Path="Catel.Tests.TestReferenceA/Catel.Tests.TestReferenceA.csproj" />
+    <Project Path="Catel.Tests.TestReferenceB/Catel.Tests.TestReferenceB.csproj" />
+    <Project Path="Catel.Tests.TestReferenceC/Catel.Tests.TestReferenceC.csproj" />
+    <Project Path="Catel.Tests/Catel.Tests.csproj" />
+  </Folder>
+</Solution>

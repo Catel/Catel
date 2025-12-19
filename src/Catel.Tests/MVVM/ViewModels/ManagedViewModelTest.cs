@@ -42,8 +42,8 @@
             }
             catch (WrongViewModelTypeException ex)
             {
-                Assert.That(typeof(TestViewModelWithDeferredValidation), Is.EqualTo(ex.ActualType));
-                Assert.That(typeof(TestViewModel), Is.EqualTo(ex.ExpectedType));
+                Assert.That(ex.ActualType, Is.EqualTo(typeof(TestViewModelWithDeferredValidation)));
+                Assert.That(ex.ExpectedType, Is.EqualTo(typeof(TestViewModel)));
             }
         }
 

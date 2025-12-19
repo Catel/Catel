@@ -6,7 +6,6 @@ Name|Badge
 Downloads|![NuGet downloads](https://img.shields.io/nuget/dt/catel.core.svg)
 NuGet stable version|![Version](https://img.shields.io/nuget/v/catel.core.svg)
 NuGet unstable version|![Pre-release version](https://img.shields.io/nuget/vpre/catel.core.svg)
-MyGet unstable version|![Pre-release version](https://img.shields.io/myget/catel/vpre/catel.core.svg)
 Open Collective|[![Backers on Open Collective](https://opencollective.com/Catel/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/Catel/sponsors/badge.svg)](#sponsors)
 
 Catel is an application development platform with the focus on MVVM (WPF, UWP, Xamarin.Android, Xamarin.iOS and Xamarin.Forms). 

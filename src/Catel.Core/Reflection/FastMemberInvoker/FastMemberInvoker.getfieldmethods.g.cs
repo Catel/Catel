@@ -14,506 +14,53 @@ namespace Catel.Reflection
 
     public partial class FastMemberInvoker<TEntity>
     {
-        public bool TryGetFieldValue<TValue>(object entity, string fieldName, out TValue value)
-        {
-            if (!typeof(TValue).IsValueTypeEx())
-            {
-                object localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item) => 
+            TryGetFieldValue<Object>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // Already object, so no need to work around boxing
-                    value = (TValue)localValue;
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item) => 
+            TryGetFieldValue<Boolean>(entity, fieldName, out item);
 
-            if (typeof(TValue) == typeof(Boolean))
-            {
-                Boolean localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item) => 
+            TryGetFieldValue<Char>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item) => 
+            TryGetFieldValue<SByte>(entity, fieldName, out item);
 
-            if (typeof(TValue) == typeof(Char))
-            {
-                Char localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item) => 
+            TryGetFieldValue<Byte>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item) => 
+            TryGetFieldValue<Int16>(entity, fieldName, out item);
 
-            if (typeof(TValue) == typeof(SByte))
-            {
-                SByte localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item) => 
+            TryGetFieldValue<UInt16>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item) => 
+            TryGetFieldValue<Int32>(entity, fieldName, out item);
 
-            if (typeof(TValue) == typeof(Byte))
-            {
-                Byte localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item) => 
+            TryGetFieldValue<UInt32>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item) => 
+            TryGetFieldValue<Int64>(entity, fieldName, out item);
 
-            if (typeof(TValue) == typeof(Int16))
-            {
-                Int16 localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item) => 
+            TryGetFieldValue<UInt64>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item) => 
+            TryGetFieldValue<Single>(entity, fieldName, out item);
 
-            if (typeof(TValue) == typeof(UInt16))
-            {
-                UInt16 localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item) => 
+            TryGetFieldValue<Double>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item) => 
+            TryGetFieldValue<Decimal>(entity, fieldName, out item);
 
-            if (typeof(TValue) == typeof(Int32))
-            {
-                Int32 localValue;
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item) => 
+            TryGetFieldValue<DateTime>(entity, fieldName, out item);
 
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(UInt32))
-            {
-                UInt32 localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Int64))
-            {
-                Int64 localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(UInt64))
-            {
-                UInt64 localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Single))
-            {
-                Single localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Double))
-            {
-                Double localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(Decimal))
-            {
-                Decimal localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(DateTime))
-            {
-                DateTime localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            if (typeof(TValue) == typeof(String))
-            {
-                String localValue;
-
-                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
-                {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
-                    return true;
-                }
-                else
-                {
-                    value = default;
-                    return false;
-                }
-            }
-
-            value = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item)
-        {
-            var getter = GetObjectFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item)
-        {
-            var getter = GetBooleanFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item)
-        {
-            var getter = GetCharFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item)
-        {
-            var getter = GetSByteFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item)
-        {
-            var getter = GetByteFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item)
-        {
-            var getter = GetInt16FieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item)
-        {
-            var getter = GetUInt16FieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item)
-        {
-            var getter = GetInt32FieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item)
-        {
-            var getter = GetUInt32FieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item)
-        {
-            var getter = GetInt64FieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item)
-        {
-            var getter = GetUInt64FieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item)
-        {
-            var getter = GetSingleFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item)
-        {
-            var getter = GetDoubleFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item)
-        {
-            var getter = GetDecimalFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item)
-        {
-            var getter = GetDateTimeFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
-
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out String item)
-        {
-            var getter = GetStringFieldGetter(fieldName);
-            if (getter is not null)
-            {
-                item = getter(entity);
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out String item) => 
+            TryGetFieldValue<String>(entity, fieldName, out item);
 
     }
 }

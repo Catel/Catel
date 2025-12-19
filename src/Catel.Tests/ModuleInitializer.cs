@@ -1,5 +1,7 @@
 ﻿namespace Catel.Tests
 {
+    using System.Runtime.CompilerServices;
+
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -11,6 +13,7 @@
         /// <summary>
         /// Initializes the module.
         /// </summary>
+        [ModuleInitializer]
         public static void Initialize()
         {
 

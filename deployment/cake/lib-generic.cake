@@ -188,6 +188,8 @@ public enum TargetType
 {
     Unknown,
 
+    AspireProject,
+
     Component,
 
     DockerImage,
@@ -201,6 +203,13 @@ public enum TargetType
     VsExtension,
 
     WpfApp
+}
+
+//-------------------------------------------------------------
+
+private static string GetTime()
+{
+    return DateTime.Now.ToString("HH:mm:ss.fff");
 }
 
 //-------------------------------------------------------------
@@ -691,7 +700,7 @@ private static bool ShouldProcessProject(BuildContext buildContext, string proje
 
 private static string CreateInlinedProjectXml(BuildContext buildContext, string projectName)
 {
-    buildContext.CakeContext.Information($"Running 'msbuild /pp' for project '{projectName}'");
+    buildContext.CakeContext.Information($"Running 'msbuild /pp' for project '{projectName}' to create inlined project XML");
 
     var projectInlinedFileName = System.IO.Path.Combine(GetProjectOutputDirectory(buildContext, projectName),
         "..", $"{projectName}.inlined.xml");
