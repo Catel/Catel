@@ -9,7 +9,7 @@
     /// <summary>
     /// Hides the view until the view model is loaded.
     /// </summary>
-    public class HideUntilViewModelLoaded : BehaviorBase<FrameworkElement>
+    public partial class HideUntilViewModelLoaded : BehaviorBase<FrameworkElement>
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 

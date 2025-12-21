@@ -31,7 +31,7 @@
     /// Behavior to set focus to a <see cref="FrameworkElement"/>. This behavior sets the focus
     /// only once on the first time the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
     /// </summary>
-    public class Focus : FocusBehaviorBase
+    public partial class Focus : FocusBehaviorBase
     {
         /// <summary>
         /// The log.

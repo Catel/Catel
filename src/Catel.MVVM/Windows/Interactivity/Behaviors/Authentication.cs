@@ -30,7 +30,7 @@
     /// <summary>
     /// Authentication behavior to show/hide UI elements based on the some authentication parameters.
     /// </summary>
-    public class Authentication : BehaviorBase<FrameworkElement>
+    public partial class Authentication : BehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// The log.

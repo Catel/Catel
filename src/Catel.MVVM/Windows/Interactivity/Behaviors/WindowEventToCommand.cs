@@ -8,7 +8,7 @@
     /// <para />
     /// The event is forwarded to the DataContext of the <see cref="FrameworkElement"/> it is attached to.
     /// </summary>
-    public class WindowEventToCommand : CommandBehaviorBase<FrameworkElement>
+    public partial class WindowEventToCommand : CommandBehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// Will be executed instead of the command if set.

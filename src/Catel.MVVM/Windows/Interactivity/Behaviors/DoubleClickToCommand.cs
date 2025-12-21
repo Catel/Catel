@@ -15,7 +15,7 @@
     /// This behavior allows any element that supports a double click to command for every element
     /// that supports <c>MouseLeftButtonDown</c>.
     /// </summary>
-    public class DoubleClickToCommand : CommandBehaviorBase<FrameworkElement>
+    public partial class DoubleClickToCommand : CommandBehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// The log.

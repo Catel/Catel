@@ -8,7 +8,7 @@
     /// This behavior automatically updates the binding of a <see cref="PasswordBox"/> when the
     /// <c>PasswordChanged</c> event occurs.
     /// </summary>
-    public class UpdateBindingOnPasswordChanged : BehaviorBase<PasswordBox>
+    public partial class UpdateBindingOnPasswordChanged : BehaviorBase<PasswordBox>
     {
         /// <summary>
         /// Gets or sets the password.

@@ -8,7 +8,7 @@
     /// <summary>
     /// Behavior that converts a key press on a specific UI element to a command.
     /// </summary>
-    public class KeyPressToCommand : CommandBehaviorBase<FrameworkElement>
+    public partial class KeyPressToCommand : CommandBehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// Gets or sets the key to which the behavior should respond.

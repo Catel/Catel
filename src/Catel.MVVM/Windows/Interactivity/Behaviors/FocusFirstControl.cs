@@ -5,7 +5,7 @@
     /// <summary>
     /// Behavior to focus the first control in a window.
     /// </summary>
-    public class FocusFirstControl : BehaviorBase<FrameworkElement>
+    public partial class FocusFirstControl : BehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// Gets or sets a value indicating whether the parent should be focused first. 

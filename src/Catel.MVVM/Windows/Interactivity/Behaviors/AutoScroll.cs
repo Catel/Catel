@@ -26,7 +26,7 @@
     /// <summary>
     /// Automatically scrolls to the bottom when the scrollbar is at the bottom.
     /// </summary>
-    public class AutoScroll : BehaviorBase<ItemsControl>
+    public partial class AutoScroll : BehaviorBase<ItemsControl>
     {
         private bool _isScrollbarAtEnd;
         private ScrollViewer? _scrollViewer;

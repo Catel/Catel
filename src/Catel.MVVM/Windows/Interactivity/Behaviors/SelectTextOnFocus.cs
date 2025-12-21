@@ -7,7 +7,7 @@
     /// <summary>
     /// Selects all the text when the <see cref="TextBox"/> or <see cref="PasswordBox"/> is focused.
     /// </summary>
-    public class SelectTextOnFocus : BehaviorBase<Control>
+    public partial class SelectTextOnFocus : BehaviorBase<Control>
     {
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.

@@ -10,7 +10,7 @@
     /// This behavior automatically updates the binding of a <see cref="TextBox"/> when the
     /// <c>TextChanged</c> event occurs.
     /// </summary>
-    public class UpdateBindingOnTextChanged : UpdateBindingBehaviorBase<TextBox>
+    public partial class UpdateBindingOnTextChanged : UpdateBindingBehaviorBase<TextBox>
     {
         private readonly DispatcherTimer _timer;
 

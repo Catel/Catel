@@ -6,7 +6,7 @@
     /// <summary>
     /// Trigger that enables a property to bind the several mouse events for the associated object.
     /// </summary>
-    public class MouseInfo : BehaviorBase<FrameworkElement>
+    public partial class MouseInfo : BehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// Gets or sets a value indicating whether the mouse is currently over the associated object.

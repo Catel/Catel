@@ -17,7 +17,7 @@
     /// This behaviors sets the binding to <see cref="UpdateSourceTrigger.Explicit"/> and manually updates the
     /// binding from view to view model after the delay.
     /// </summary>
-    public class DelayBindingUpdate : BehaviorBase<FrameworkElement>
+    public partial class DelayBindingUpdate : BehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// The log.

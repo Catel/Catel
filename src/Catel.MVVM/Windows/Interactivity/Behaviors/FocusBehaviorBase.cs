@@ -11,7 +11,7 @@
     /// <summary>
     /// Base class for focus behaviors.
     /// </summary>
-    public class FocusBehaviorBase : BehaviorBase<FrameworkElement>
+    public abstract class FocusBehaviorBase : BehaviorBase<FrameworkElement>
     {
         /// <summary>
         /// The log.

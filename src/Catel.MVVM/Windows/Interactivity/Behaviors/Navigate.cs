@@ -8,10 +8,9 @@
     /// <summary>
     /// Navigate behavior to allow the execution of an url in non-pages for WPF.
     /// </summary>
-    public class Navigate : Behavior<Hyperlink>
+    public partial class Navigate : Behavior<Hyperlink>
     {
         private readonly IProcessService _processService;
-
 
         public Navigate(IProcessService processService)
         {

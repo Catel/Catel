@@ -7,9 +7,17 @@
     /// <summary>
     /// Behavior base for all behaviors that should update a binding.
     /// </summary>
-    public class UpdateBindingBehaviorBase<T> : BehaviorBase<T>
+    public abstract class UpdateBindingBehaviorBase<T> : BehaviorBase<T>
         where T : FrameworkElement
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateBindingOnTextChanged"/> class.
+        /// </summary>
+        public UpdateBindingBehaviorBase()
+        : this(string.Empty)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateBindingOnTextChanged"/> class.
         /// </summary>
@@ -17,8 +25,6 @@
         /// <exception cref="ArgumentException">The <paramref name="dependencyPropertyName"/> is <c>null</c> or whitespace.</exception>
         public UpdateBindingBehaviorBase(string dependencyPropertyName)
         {
-            Argument.IsNotNullOrWhitespace("dependencyPropertyName", dependencyPropertyName);
-
             DependencyPropertyName = dependencyPropertyName;
         }
 
@@ -26,7 +32,7 @@
         /// Gets the name of the dependency property.
         /// </summary>
         /// <remarks></remarks>
-        protected string DependencyPropertyName { get; private set; }
+        protected string DependencyPropertyName { get; set; }
 
         /// <summary>
         /// Gets the dependency property, which is retrieved at runtime.
@@ -45,8 +51,8 @@
                 return;
             }
 
-            var dependencyPropery = DependencyProperty;
-            if (dependencyPropery is null)
+            var dependencyProperty = DependencyProperty;
+            if (dependencyProperty is null)
             {
                 return;
             }

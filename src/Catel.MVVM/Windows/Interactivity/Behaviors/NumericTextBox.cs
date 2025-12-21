@@ -13,7 +13,7 @@
     /// <summary>
     /// Behavior to only allow numeric input on a <see cref="TextBox"/>.
     /// </summary>
-    public class NumericTextBox : BehaviorBase<TextBox>
+    public partial class NumericTextBox : BehaviorBase<TextBox>
     {
         /// <summary>
         /// The log.

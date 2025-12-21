@@ -12,7 +12,7 @@
     /// <summary>
     /// Auto complete behavior to support auto complete on a <c>TextBox</c> control.
     /// </summary>
-    public class AutoCompletion : BehaviorBase<TextBox>
+    public partial class AutoCompletion : BehaviorBase<TextBox>
     {
         private readonly IAutoCompletionService _autoCompletionService;
         private readonly ListBox? _suggestionListBox;

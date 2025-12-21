@@ -11,7 +11,7 @@
     /// <summary>
     /// Behavior to set the focus on a key press.
     /// </summary>
-    public class FocusOnKeyPress : FocusBehaviorBase
+    public partial class FocusOnKeyPress : FocusBehaviorBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
