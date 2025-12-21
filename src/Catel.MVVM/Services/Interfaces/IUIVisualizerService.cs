@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Catel.MVVM;
 
     /// <summary>
     /// This interface defines a UI controller which can be used to display dialogs
@@ -46,5 +47,11 @@
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="context"/> is <c>null</c> or whitespace.</exception>
         Task<UIVisualizerResult> ShowContextAsync(UIVisualizerContext context);
+
+        Task<UIVisualizerResult> ShowAsync<TViewModel>(object? dataContext = null)
+            where TViewModel : IViewModel;
+
+        Task<UIVisualizerResult> ShowDialogAsync<TViewModel>(object? dataContext = null) 
+            where TViewModel : IViewModel;
     }
 }

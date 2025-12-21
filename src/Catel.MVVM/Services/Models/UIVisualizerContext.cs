@@ -12,6 +12,16 @@
             SetParentWindow = true;
         }
 
+        public UIVisualizerContext(UIVisualizerContext otherContext)
+        {
+            Name = otherContext.Name;
+            IsModal = otherContext.IsModal;
+            SetParentWindow = otherContext.SetParentWindow;
+            Data = otherContext.Data;
+            CompletedCallback = otherContext.CompletedCallback;
+            SetParentWindowCallback = otherContext.SetParentWindowCallback;
+        }
+
         /// <summary>
         /// If set the <c>true</c>, the UI will be shown in a modal state.
         /// </summary>

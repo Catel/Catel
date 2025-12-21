@@ -44,6 +44,7 @@
             serviceCollection.TryAddSingleton<IMessageService, MessageService>();
             serviceCollection.TryAddSingleton<IUrlLocator, UrlLocator>();
             serviceCollection.TryAddSingleton<IViewLocator, ViewLocator>();
+            serviceCollection.TryAddSingleton<IViewFactory, ViewFactory>();
             serviceCollection.TryAddSingleton<IViewModelLocator, ViewModelLocator>();
             serviceCollection.TryAddSingleton<IViewModelFactory, ViewModelFactory>();
             serviceCollection.TryAddSingleton<INavigationService, NavigationService>();

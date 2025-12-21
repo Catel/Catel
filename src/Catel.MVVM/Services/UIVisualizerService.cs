@@ -6,6 +6,7 @@
     using MVVM;
     using Logging;
     using Catel.Reflection;
+    using Catel.MVVM.Views;
 
     /// <summary>
     /// Service to show modal or non-modal popup windows.
@@ -19,6 +20,7 @@
         protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
 
         private readonly IViewLocator _viewLocator;
+        private readonly IViewFactory _viewFactory;
         private readonly IDispatcherService _dispatcherService;
         private readonly IViewModelFactory _viewModelFactory;
 
@@ -26,17 +28,19 @@
         /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
         /// </summary>
         /// <param name="viewLocator">The view locator.</param>
+        /// <param name="viewFactory">The view factory.</param>
         /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        public UIVisualizerService(IViewLocator viewLocator, IDispatcherService dispatcherService,
+        public UIVisualizerService(IViewLocator viewLocator, IViewFactory viewFactory, IDispatcherService dispatcherService,
             IViewModelFactory viewModelFactory)
         {
             ArgumentNullException.ThrowIfNull(viewLocator);
             ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _viewLocator = viewLocator;
+            _viewFactory = viewFactory;
             _dispatcherService = dispatcherService;
             _viewModelFactory = viewModelFactory;
         }
@@ -114,6 +118,44 @@
 
                 return result;
             }
+        }
+
+        public virtual async Task<UIVisualizerResult> ShowAsync<TViewModel>(object? dataContext = null)
+            where TViewModel : IViewModel
+        {
+            var viewModel = dataContext as IViewModel;
+            if (viewModel is null)
+            {
+                viewModel = _viewModelFactory.CreateViewModel<TViewModel>(dataContext);
+            }
+
+            var newContext = new UIVisualizerContext()
+            {
+                Data = viewModel,
+                IsModal = false
+            };
+
+            var result = await ShowContextAsync(newContext);
+            return result;
+        }
+
+        public virtual async Task<UIVisualizerResult> ShowDialogAsync<TViewModel>(object? dataContext = null)
+            where TViewModel : IViewModel
+        {
+            var viewModel = dataContext as IViewModel;
+            if (viewModel is null)
+            {
+                viewModel = _viewModelFactory.CreateViewModel<TViewModel>(dataContext);
+            }
+
+            var newContext = new UIVisualizerContext()
+            {
+                Data = viewModel,
+                IsModal = true
+            };
+
+            var result = await ShowContextAsync(newContext);
+            return result;
         }
 
         /// <summary>

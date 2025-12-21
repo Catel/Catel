@@ -1,6 +1,7 @@
 ﻿namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.MVVM.Views;
     using MVVM;
 
     /// <summary>
@@ -11,10 +12,12 @@
     public class ViewModelToViewConverter : ValueConverterBase
     {
         private readonly IViewLocator _viewLocator;
+        private readonly IViewFactory _viewFactory;
 
-        public ViewModelToViewConverter(IViewLocator viewLocator)
+        public ViewModelToViewConverter(IViewLocator viewLocator, IViewFactory viewFactory)
         {
             _viewLocator = viewLocator;
+            _viewFactory = viewFactory;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@
             }
 
             var viewType = _viewLocator.ResolveView(value.GetType());
-            return (viewType is not null) ? ViewHelper.ConstructViewWithViewModel(viewType, value) : ConverterHelper.UnsetValue;
+            return (viewType is not null) ? _viewFactory.ConstructViewWithViewModel(viewType, value) : ConverterHelper.UnsetValue;
         }
     }
 }
