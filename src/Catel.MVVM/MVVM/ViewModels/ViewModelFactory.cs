@@ -133,12 +133,19 @@
                 }
             }
 
-            // Try to construct view model using dependency injection
-            viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType) as IViewModel;
-            if (viewModel is not null)
+            try
             {
-                Log.Debug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
-                return viewModel;
+                // Try to construct view model using dependency injection
+                viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType) as IViewModel;
+                if (viewModel is not null)
+                {
+                    Log.Debug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
+                    return viewModel;
+                }
+            }
+            catch (Exception)
+            {
+                // ignore
             }
 
             Log.Debug("Could not construct view model '{0}' using injection of data context '{1}'",
