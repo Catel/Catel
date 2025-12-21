@@ -8,7 +8,7 @@
     using Catel.Services;
     using Catel.Windows.Threading;
 
-    public partial class ViewModelBase
+    public partial class FeaturedViewModelBase
     {
         /// <summary>
         /// The throttling timer.

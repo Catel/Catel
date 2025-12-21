@@ -22,7 +22,7 @@
             {
                 nameof(ViewModelBase.IsDirty),
                 nameof(ViewModelBase.IsReadOnly),
-                nameof(ViewModelBase.ParentViewModel),
+                nameof(FeaturedViewModelBase.ParentViewModel),
                 nameof(ViewModelBase.Title)
             };
         }

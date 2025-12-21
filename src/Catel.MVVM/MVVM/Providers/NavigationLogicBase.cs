@@ -184,11 +184,11 @@
                 Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on navigation event for '{TargetViewType?.Name}'");
             }
 
-            var viewModelAsViewModelBase = ViewModel as ViewModelBase;
-            if (viewModelAsViewModelBase is not null)
+            var navigationViewModel = ViewModel as INavigationViewModel;
+            if (navigationViewModel is not null)
             {
                 var navigationContext = _navigationAdapter?.NavigationContext;
-                viewModelAsViewModelBase.UpdateNavigationContext(navigationContext);
+                navigationViewModel.UpdateNavigationContext(navigationContext);
             }
         }
 

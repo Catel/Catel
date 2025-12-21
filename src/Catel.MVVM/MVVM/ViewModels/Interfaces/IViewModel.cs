@@ -68,7 +68,7 @@
         event AsyncEventHandler<CancelingEventArgs>? CancelingAsync;
 
         /// <summary>
-        /// Occurrs when the view model is canceled.
+        /// Occurs when the view model is canceled.
         /// </summary>
         event AsyncEventHandler<EventArgs>? CanceledAsync;
 

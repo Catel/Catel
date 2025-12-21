@@ -4,7 +4,7 @@
     using Catel.Data;
     using Catel.MVVM.Navigation;
 
-    public partial class ViewModelBase
+    public partial class NavigationViewModelBase : ViewModelBase, INavigationViewModel
     {
         private readonly NavigationContext _navigationContext = new NavigationContext();
 
@@ -30,7 +30,7 @@
         /// <para />
         /// It is also possible to use the <see cref="OnNavigationCompleted"/> event.
         /// </remarks>
-        public event EventHandler NavigationCompleted;
+        public event EventHandler? NavigationCompleted;
 
         /// <summary>
         /// Updates the navigation context. The navigation context provided by this class is different

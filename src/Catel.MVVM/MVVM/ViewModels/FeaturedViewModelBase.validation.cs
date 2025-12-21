@@ -4,12 +4,12 @@
     using System.Linq;
     using Data;
 
-    public partial class ViewModelBase
+    public partial class FeaturedViewModelBase
     {
         /// <summary>
-        /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModelAsync"/>.
+        /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="ViewModelBase.SaveViewModelAsync"/>.
         /// <para />
-        /// If this value is <c>true</c>, all validation will be suspended. As soon as the first call is made to the <see cref="SaveViewModelAsync"/>,
+        /// If this value is <c>true</c>, all validation will be suspended. As soon as the first call is made to the <see cref="ViewModelBase.SaveViewModelAsync"/>,
         /// the validation will no longer be suspended and activated.
         /// <para />
         /// The default value is <c>true</c>.
@@ -34,7 +34,7 @@
 
                 foreach (var childViewModel in ChildViewModels.ToList())
                 {
-                    var childVm = childViewModel as ViewModelBase;
+                    var childVm = childViewModel as FeaturedViewModelBase;
                     if (childVm is not null)
                     {
                         childVm.DeferValidationUntilFirstSaveCall = DeferValidationUntilFirstSaveCall;
@@ -72,6 +72,11 @@
         /// </remarks>
         public override void Validate(bool force = false)
         {
+            if (IsSaving && DeferValidationUntilFirstSaveCall)
+            {
+                DeferValidationUntilFirstSaveCall = false;
+            }
+
             if (IsClosed)
             {
                 return;
