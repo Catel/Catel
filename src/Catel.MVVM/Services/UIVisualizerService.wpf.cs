@@ -1,16 +1,13 @@
 ﻿namespace Catel.Services
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Threading;
-    using Catel.Collections;
     using Logging;
     using MVVM;
     using Reflection;
     using Windows;
-    using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
     /// <summary>
     /// Service to show modal or non-modal popup windows.

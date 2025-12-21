@@ -5,34 +5,24 @@
     using System.Windows;
     using Catel.Services;
     using System.Windows.Markup;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Binding that uses the <see cref="ILanguageService" /> to retrieve the binding values.
     /// </summary>
     public class LanguageBindingExtension : UpdatableMarkupExtension
     {
-        private readonly ILanguageService _languageService;
+        private ILanguageService? _languageService;
 
         private Catel.IWeakEventListener? _onLanguageServiceLanguageUpdatedWeakListener;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LanguageBindingExtension"/> class.
-        /// </summary>
-        /// <param name="languageService">The language service.</param>
-        public LanguageBindingExtension(ILanguageService languageService)
-            : this(languageService, string.Empty)
+        public LanguageBindingExtension()
+            : this(string.Empty)
         {
-            // Keep empty
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LanguageBindingExtension" /> class.
-        /// </summary>
-        /// <param name="languageService">The language service.</param>
-        /// <param name="resourceName">Name of the resource.</param>
-        public LanguageBindingExtension(ILanguageService languageService, string resourceName)
+        public LanguageBindingExtension(string resourceName)
         {
-            _languageService = languageService;
             ResourceName = resourceName;
         }
 
@@ -77,12 +67,19 @@
         {
             if (_languageService is null)
             {
-                if (ShowDesignTimeMessages())
-                {
-                    return "[Language service not available]";
-                }
+                var finalServiceProvider = serviceProvider ?? ServiceProvider;
 
-                return null;
+                _languageService = finalServiceProvider.GetService<ILanguageService>();
+
+                if (_languageService is null)
+                {
+                    if (ShowDesignTimeMessages())
+                    {
+                        return "[Language service not available]";
+                    }
+
+                    return null;
+                }
             }
 
             if (string.IsNullOrWhiteSpace(ResourceName))
@@ -143,12 +140,16 @@
                 }
             }
 
-            if (_onLanguageServiceLanguageUpdatedWeakListener is null)
+            var languageService = _languageService;
+            if (languageService is not null)
             {
-                _onLanguageServiceLanguageUpdatedWeakListener = this.SubscribeToWeakGenericEvent<EventArgs>(_languageService, "LanguageUpdated", OnLanguageUpdated);
-            }
+                if (_onLanguageServiceLanguageUpdatedWeakListener is null)
+                {
+                    _onLanguageServiceLanguageUpdatedWeakListener = this.SubscribeToWeakGenericEvent<EventArgs>(languageService, "LanguageUpdated", OnLanguageUpdated);
+                }
 
-            //_languageService.LanguageUpdated += OnLanguageUpdated;
+                //_languageService.LanguageUpdated += OnLanguageUpdated;
+            }
         }
 
         /// <summary>
