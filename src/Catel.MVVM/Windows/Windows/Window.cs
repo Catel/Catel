@@ -14,8 +14,9 @@
         /// Initializes a new instance of the <see cref="Window"/> class.
         /// </summary>
         public Window(IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
-            : base(serviceProvider, wrapControlService, languageService, DataWindowMode.Custom)
+            : base(serviceProvider, wrapControlService, languageService)
         {
+            Mode = DataWindowMode.Custom;
             SizeToContent = SizeToContent.Manual;
             ShowInTaskbar = true;
             ResizeMode = ResizeMode.CanResize;

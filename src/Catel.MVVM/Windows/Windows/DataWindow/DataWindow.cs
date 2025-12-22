@@ -11,15 +11,16 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Input;
-    using MVVM.Views;
+    using Catel.Reflection;
+    using Catel.Services;
+    using Catel.Windows.Interactivity;
     using Controls;
     using Logging;
-    using MVVM;
-    using Exceptions = Properties.Exceptions;
-    using MVVM.Providers;
-    using Catel.Services;
-    using Catel.Reflection;
     using Microsoft.Extensions.DependencyInjection;
+    using MVVM;
+    using MVVM.Providers;
+    using MVVM.Views;
+    using Exceptions = Properties.Exceptions;
 
     /// <summary>
     /// <see cref="Window"/> class that implements the <see cref="InfoBarMessageControl"/> and
@@ -33,7 +34,6 @@
         private readonly IWrapControlService _wrapControlService;
         private readonly ILanguageService _languageService;
 
-        private readonly bool _focusFirstControl;
         private bool _isWrapped;
         private bool _forceClose;
 
@@ -43,7 +43,6 @@
 
         private readonly Collection<DataWindowButton> _buttons = new Collection<DataWindowButton>();
         private readonly Collection<ICommand> _commands = new Collection<ICommand>();
-        private readonly InfoBarMessageControlGenerationMode _infoBarMessageControlGenerationMode;
 
         private readonly WindowLogic _logic;
 
@@ -61,25 +60,7 @@
         /// This method is required for design time support.
         /// </remarks>
         public DataWindow(IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
-            : this(serviceProvider, wrapControlService, languageService, DataWindowMode.OkCancel)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of this class with custom commands.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="languageService">The language service.</param>
-        /// <param name="wrapControlService">The wrap control service.</param>
-        /// <param name="mode"><see cref="DataWindowMode"/>.</param>
-        /// <param name="additionalButtons">The additional buttons.</param>
-        /// <param name="defaultButton">The default button.</param>
-        /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
-        /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
-        /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
-        public DataWindow(IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService, DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
-            DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
-            InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
-            : this(null, serviceProvider, wrapControlService, languageService, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode, focusFirstControl)
+            : this(null, serviceProvider, wrapControlService, languageService)
         { }
 
         /// <summary>
@@ -94,37 +75,14 @@
         /// does not seem to support default parameter values.
         /// </remarks>
         public DataWindow(IViewModel? viewModel, IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
-            : this(viewModel, serviceProvider, wrapControlService, languageService, DataWindowMode.OkCancel)
-        {
-            // Do not remove this constructor, see remarks
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataWindow"/> class.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="languageService">The language service.</param>
-        /// <param name="wrapControlService">The wrap control service.</param>
-        /// <param name="mode"><see cref="DataWindowMode"/>.</param>
-        /// <param name="additionalButtons">The additional buttons.</param>
-        /// <param name="defaultButton">The default button.</param>
-        /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
-        /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
-        /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public DataWindow(IViewModel? viewModel, IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService, 
-            DataWindowMode mode, IEnumerable<DataWindowButton>? additionalButtons = null,
-            DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
-            InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             _serviceProvider = serviceProvider;
             _wrapControlService = wrapControlService;
             _languageService = languageService;
 
             if (CatelEnvironment.IsInDesignMode)
-            { 
+            {
+                _logic = default!;
                 return;
             }
 
@@ -132,9 +90,9 @@
             // For more info, see http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/3059c0e4-c372-4da2-b384-28f271feef05/
             SetResourceReference(StyleProperty, typeof(DataWindow));
 
-            Mode = mode;
-            DefaultButton = defaultButton;
-            _infoBarMessageControlGenerationMode = infoBarMessageControlGenerationMode;
+            Mode = DataWindowMode.OkCancel;
+            DefaultButton = DataWindowDefaultButton.OK;
+            InfoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline;
 
             this.FixBlurriness();
 
@@ -177,6 +135,15 @@
             {
                 _viewLoaded?.Invoke(this, EventArgs.Empty);
 
+                if (SetOwner)
+                {
+                    this.SetOwnerWindowAndFocus(focusFirstControl: FocusFirstControl);
+                }
+                else if (FocusFirstControl)
+                {
+                    this.FocusFirstControl();
+                }
+
                 OnLoaded(e);
             };
 
@@ -189,14 +156,6 @@
 
             SetBinding(TitleProperty, new Binding("Title"));
 
-            if (additionalButtons is not null)
-            {
-                foreach (var button in additionalButtons)
-                {
-                    _buttons.Add(button);
-                }
-            }
-
             CanClose = true;
             CanCloseUsingEscape = true;
 
@@ -208,18 +167,19 @@
             {
                 Closing += OnDataWindowClosing;
             });
-
-            _focusFirstControl = focusFirstControl;
-
-            if (setOwnerAndFocus)
-            {
-                this.SetOwnerWindowAndFocus(focusFirstControl: focusFirstControl);
-            }
-            else if (focusFirstControl)
-            {
-                this.FocusFirstControl();
-            }
         }
+
+        /// <summary>
+        /// If set to true, the parent window (owner) will be set.
+        /// </summary>
+        protected bool SetOwner { get; set; } = true;
+
+        /// <summary>
+        /// If set to true, the first control in the window will be focused.
+        /// </summary>
+        protected bool FocusFirstControl { get; set; } = true;
+
+        protected InfoBarMessageControlGenerationMode InfoBarMessageControlGenerationMode { get; set; }
 
         /// <summary>
         /// Gets the type of the view model that this user control uses.
@@ -255,7 +215,7 @@
         /// <summary>
         /// Gets the <see cref="DataWindowMode"/> that this window uses.
         /// </summary>
-        protected DataWindowMode Mode { get; private set; }
+        protected DataWindowMode Mode { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance can close.
@@ -279,7 +239,7 @@
         /// Gets the default button.
         /// </summary>
         /// <value>The default button.</value>
-        protected DataWindowDefaultButton DefaultButton { get; private set; }
+        protected DataWindowDefaultButton DefaultButton { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is OK button available.
@@ -368,8 +328,8 @@
         /// the dynamically created grid.
         /// </summary>
         /// <value>The internal grid.</value>
-        internal Grid InternalGrid { get; private set; }
-        
+        internal Grid? InternalGrid { get; private set; }
+
         /// <summary>
         /// Executes the OK command.
         /// </summary>
@@ -560,6 +520,11 @@
             {
                 RaisePropertyChanged("VM");
             }
+        }
+
+        protected void AddButton(DataWindowButton button)
+        {
+            _buttons.Add(button);
         }
 
         /// <summary>
@@ -772,7 +737,7 @@
 
             var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext | WrapControlServiceWrapOptions.GenerateAdornerDecorator | WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary;
 
-            switch (_infoBarMessageControlGenerationMode)
+            switch (InfoBarMessageControlGenerationMode)
             {
                 case InfoBarMessageControlGenerationMode.None:
                     break;
@@ -797,7 +762,7 @@
                 {
                     internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
-                    if (_focusFirstControl)
+                    if (FocusFirstControl)
                     {
                         newContentAsFrameworkElement.FocusFirstControl();
                     }

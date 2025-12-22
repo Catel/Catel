@@ -100,7 +100,7 @@
             {
                 try
                 {
-                    var window = _viewFactory.ConstructViewWithViewModel(windowType, context.Data);
+                    var window = _viewFactory.CreateViewWithViewModel(windowType, context.Data);
                     if (window is null)
                     {
                         throw Log.ErrorAndCreateException<CatelException>($"Cannot create window '{windowType.GetSafeFullName()}'");

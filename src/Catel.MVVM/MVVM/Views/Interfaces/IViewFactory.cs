@@ -5,6 +5,6 @@
 
     public interface IViewFactory
     {
-        FrameworkElement? ConstructViewWithViewModel(Type viewType, object? dataContext);
+        FrameworkElement? CreateViewWithViewModel(Type viewType, object? dataContext);
     }
 }

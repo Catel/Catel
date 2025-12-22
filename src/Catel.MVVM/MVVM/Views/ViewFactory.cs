@@ -31,7 +31,7 @@
         /// The constructed view or <c>null</c> if it was not possible to construct the view.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType" /> is <c>null</c>.</exception>
-        public virtual FrameworkElement? ConstructViewWithViewModel(Type viewType, object? dataContext)
+        public virtual FrameworkElement? CreateViewWithViewModel(Type viewType, object? dataContext)
         {
             ArgumentNullException.ThrowIfNull(viewType);
 

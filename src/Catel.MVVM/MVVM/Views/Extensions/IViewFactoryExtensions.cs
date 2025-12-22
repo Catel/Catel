@@ -12,19 +12,17 @@
         /// </summary>
         /// <typeparam name="T">The type of the view to return.</typeparam>
         /// <param name="viewFactory">The view factory.</param>
-        /// <param name="viewType">Type of the view to instantiate.</param>
         /// <param name="dataContext">The data context to inject into the view. In most cases, this will be a view model.</param>
         /// <returns>
         /// The constructed view or <c>null</c> if it was not possible to construct the view.
         /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewType" /> is <c>null</c>.</exception>
         /// <remarks>
-        /// Internally uses the <see cref="ConstructViewWithViewModel" /> method and casts the result.
+        /// Internally uses the <see cref="CreateViewWithViewModel" /> method and casts the result.
         /// </remarks>
-        public static T? ConstructViewWithViewModel<T>(this IViewFactory viewFactory, Type viewType, object? dataContext)
+        public static T? CreateViewWithViewModel<T>(this IViewFactory viewFactory, object? dataContext)
             where T : FrameworkElement
         {
-            return viewFactory.ConstructViewWithViewModel(viewType, dataContext) as T;
+            return viewFactory.CreateViewWithViewModel(typeof(T), dataContext) as T;
         }
     }
 }

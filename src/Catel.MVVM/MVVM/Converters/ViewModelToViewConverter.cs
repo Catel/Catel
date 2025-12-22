@@ -35,7 +35,7 @@
             }
 
             var viewType = _viewLocator.ResolveView(value.GetType());
-            return (viewType is not null) ? _viewFactory.ConstructViewWithViewModel(viewType, value) : ConverterHelper.UnsetValue;
+            return (viewType is not null) ? _viewFactory.CreateViewWithViewModel(viewType, value) : ConverterHelper.UnsetValue;
         }
     }
 }
