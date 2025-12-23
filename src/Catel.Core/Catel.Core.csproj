@@ -81,16 +81,6 @@
       <DependentUpon>TypedPropertyBag.storage.tt</DependentUpon>
     </Compile>
     
-    <None Update="Logging\Extensions\LogExtensions.g.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LogExtensions.g.cs</LastGenOutput>
-    </None>
-    <Compile Update="Logging\Extensions\LogExtensions.g.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LogExtensions.g.tt</DependentUpon>
-    </Compile>
-    
     <None Update="Reflection\Extensions\CastExtensions.generics.g.tt">
       <LastGenOutput>CastExtensions.generics.g.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>

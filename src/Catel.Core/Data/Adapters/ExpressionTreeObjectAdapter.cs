@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Object adapter allowing to customize reflection and property mappings.
     /// </summary>
     public partial class ExpressionTreeObjectAdapter : IObjectAdapter
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ExpressionTreeObjectAdapter));
 
         private readonly Dictionary<Type, IFastMemberInvoker> _fastMemberInvokerCache = new Dictionary<Type, IFastMemberInvoker>();
 
@@ -59,7 +60,7 @@
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
+                Logger.LogWarning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
             }
 
             value = default!;
@@ -107,11 +108,11 @@
                     return true;
                 }
 
-                Log.Warning($"Failed to set member '{instance.GetType().GetSafeFullName(false)}.{memberName}' because the member cannot be found on the model");
+                Logger.LogWarning($"Failed to set member '{instance.GetType().GetSafeFullName(false)}.{memberName}' because the member cannot be found on the model");
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"Failed to populate '{instance.GetType().GetSafeFullName(false)}.{memberName}', setting the member value threw an exception");
+                Logger.LogWarning(ex, $"Failed to populate '{instance.GetType().GetSafeFullName(false)}.{memberName}', setting the member value threw an exception");
             }
 
             return false;
@@ -128,7 +129,7 @@
             var fastMemberInvoker = Activator.CreateInstance(typeDefinition) as IFastMemberInvoker;
             if (fastMemberInvoker is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Failed to get fast member invoker for type '{modelType.GetSafeFullName(false)}'");
+                throw Logger.LogErrorAndCreateException<CatelException>($"Failed to get fast member invoker for type '{modelType.GetSafeFullName(false)}'");
             }
 
             return fastMemberInvoker;

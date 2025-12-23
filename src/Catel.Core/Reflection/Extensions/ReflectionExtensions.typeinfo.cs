@@ -5,14 +5,13 @@
     using System.Reflection;
     using Collections;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// The type info extensions.
     /// </summary>
     public static class TypeInfoExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Determines whether the hierarchy should be flattened based on the specified binding flags.
         /// </summary>

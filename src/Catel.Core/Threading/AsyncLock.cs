@@ -10,6 +10,7 @@ namespace Catel.Threading
     using System.Threading;
     using System.Threading.Tasks;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// A mutual exclusion lock that is compatible with async.
@@ -21,7 +22,9 @@ namespace Catel.Threading
     [DebuggerTypeProxy(typeof(DebugView))]
     public sealed partial class AsyncLock
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+#if DEBUG && EXTREME_LOGGING
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(AsyncLock));
+#endif
 
 #pragma warning disable IDISP006 // Implement IDisposable
         private readonly Key _cachedKey;
@@ -262,7 +265,7 @@ namespace Catel.Threading
 
                 logBuilder.Append($"[{_id}] {message}");
 
-                Log.Debug(logBuilder.ToString());
+                Logger.LogDebug(logBuilder.ToString());
             }
         }
 #endif

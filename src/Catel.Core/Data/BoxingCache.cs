@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Timers;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Boxing cache helper.
@@ -19,7 +20,8 @@
     public class BoxingCache<T>
         where T : notnull
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(BoxingCache<T>));
+
         private readonly Dictionary<T, object?> _boxedValues = new();
         private TimeSpan _cleanUpInterval = TimeSpan.FromMinutes(5);
 
@@ -56,7 +58,7 @@
             {
                 _cleanUpInterval = value;
 
-                Log.Debug($"Cleanup interval is set to '{value}'");
+                Logger.LogDebug($"Cleanup interval is set to '{value}'");
 
                 _cleanUpTimer.Stop();
 
@@ -159,7 +161,7 @@
         /// </summary>
         public void CleanUp()
         {
-            Log.Debug("Cleaning up boxed values from the cache to decrease memory pressure");
+            Logger.LogDebug("Cleaning up boxed values from the cache to decrease memory pressure");
 
             lock (_boxedValues)
             {

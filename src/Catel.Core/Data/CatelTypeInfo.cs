@@ -8,17 +8,15 @@
     using Catel.Logging;
     using Catel.Reflection;
     using Collections;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Class containing all information about a Catel type (such as properties).
     /// </summary>
     public class CatelTypeInfo
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CatelTypeInfo));
+
         private readonly object _lockObject = new object();
 
         private readonly IDictionary<string, IPropertyData> _catelProperties = new ListDictionary<string, IPropertyData>();
@@ -83,7 +81,7 @@
             {
                 if (!_catelProperties.TryGetValue(name, out var catelProperty))
                 {
-                    throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
+                    throw Logger.LogErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
                         "Property '{0}' on type '{1}' is not registered", name, Type.GetSafeFullName());
                 }
 
@@ -184,7 +182,7 @@
             {
                 if (_catelProperties.ContainsKey(name))
                 {
-                    throw Log.ErrorAndCreateException(msg => new PropertyAlreadyRegisteredException(name, Type),
+                    throw Logger.LogErrorAndCreateException(msg => new PropertyAlreadyRegisteredException(name, Type),
                         "Property '{0}' on type '{1}' is already registered", name, Type.GetSafeFullName());
                 }
 
@@ -264,7 +262,7 @@
             if (nonStaticProperties.Count > 0)
             {
                 var nonStaticProperty = nonStaticProperties[0];
-                throw Log.ErrorAndCreateException<InvalidOperationException>("The property '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("The property '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
             }
         }
 
@@ -318,7 +316,7 @@
             if (nonStaticFields.Count > 0)
             {
                 var nonStaticField = nonStaticFields[0];
-                throw Log.ErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
             }
         }
     }

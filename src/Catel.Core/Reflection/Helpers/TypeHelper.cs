@@ -5,16 +5,14 @@
     using System.Globalization;
     using System.Linq;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// <see cref="Type"/> helper class.
     /// </summary>
     public static class TypeHelper
     {
-        /// <summary>
-        ///   The <see cref = "ILog">log</see> object.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(TypeHelper));
 
         /// <summary>
         /// A list of microsoft public key tokens.
@@ -68,7 +66,7 @@
             var typedInstance = instance as TTargetType;
             if (typedInstance is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
+                throw Logger.LogErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
             }
 
             return typedInstance;
@@ -404,7 +402,7 @@
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to retrieve inner types");
+                Logger.LogWarning(ex, "Failed to retrieve inner types");
             }
 
             return innerTypes.ToArray();
@@ -501,7 +499,7 @@
                     msg = string.Concat(msg, " for value '{2}'");
                 }
 
-                throw Log.ErrorAndCreateException<InvalidCastException>(msg, tI, tO, vl);
+                throw Logger.LogErrorAndCreateException<InvalidCastException>(msg, tI, tO, vl);
             }
 
             return output;

@@ -2,6 +2,7 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -57,10 +58,7 @@
         /// </summary>
         public delegate void OpenInstanceAction<TTarget>(TTarget @this);
 
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakAction));
 
         /// <summary>
         /// The action that must be invoked on the action.
@@ -80,14 +78,14 @@
             var methodInfo = action.GetMethodInfoEx();
             if (methodInfo is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
+                throw Logger.LogErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
             }
 
             MethodName = methodInfo.ToString() ?? string.Empty;
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                throw Logger.LogErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             var targetType = (target is not null) ? target.GetType() : typeof(object);
@@ -129,7 +127,7 @@
                     return true;
                 }
 
-                Log.Debug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
+                Logger.LogDebug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
 
                 _action = null;
             }
@@ -150,10 +148,7 @@
         /// </summary>
         public delegate void OpenInstanceGenericAction<TTarget>(TTarget @this, TParameter parameter);
 
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakAction<TParameter>));
 
         /// <summary>
         /// The action that must be invoked on the action.
@@ -173,14 +168,14 @@
             var methodInfo = action.GetMethodInfoEx();
             if (methodInfo is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
+                throw Logger.LogErrorAndCreateException<CatelException>("Cannot retrieve method info from provided action");
             }
 
             MethodName = methodInfo.ToString() ?? string.Empty;
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                throw Logger.LogErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             if (action.Target is not null && action.Target != target)
@@ -228,7 +223,7 @@
                     return true;
                 }
 
-                Log.Debug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
+                Logger.LogDebug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
 
                 _action = null;
             }

@@ -75,7 +75,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Boolean);
+                        return default(Boolean)!;
                     });
                 }
                 else
@@ -83,7 +83,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Boolean>(() => 
                     {
-                        return default(Boolean);
+                        return default(Boolean)!;
                     });
                 }
 
@@ -105,7 +105,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Char);
+                        return default(Char)!;
                     });
                 }
                 else
@@ -113,7 +113,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Char>(() => 
                     {
-                        return default(Char);
+                        return default(Char)!;
                     });
                 }
 
@@ -135,7 +135,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(SByte);
+                        return default(SByte)!;
                     });
                 }
                 else
@@ -143,7 +143,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<SByte>(() => 
                     {
-                        return default(SByte);
+                        return default(SByte)!;
                     });
                 }
 
@@ -165,7 +165,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Byte);
+                        return default(Byte)!;
                     });
                 }
                 else
@@ -173,7 +173,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Byte>(() => 
                     {
-                        return default(Byte);
+                        return default(Byte)!;
                     });
                 }
 
@@ -195,7 +195,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Int16);
+                        return default(Int16)!;
                     });
                 }
                 else
@@ -203,7 +203,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Int16>(() => 
                     {
-                        return default(Int16);
+                        return default(Int16)!;
                     });
                 }
 
@@ -225,7 +225,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(UInt16);
+                        return default(UInt16)!;
                     });
                 }
                 else
@@ -233,7 +233,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<UInt16>(() => 
                     {
-                        return default(UInt16);
+                        return default(UInt16)!;
                     });
                 }
 
@@ -255,7 +255,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Int32);
+                        return default(Int32)!;
                     });
                 }
                 else
@@ -263,7 +263,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Int32>(() => 
                     {
-                        return default(Int32);
+                        return default(Int32)!;
                     });
                 }
 
@@ -285,7 +285,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(UInt32);
+                        return default(UInt32)!;
                     });
                 }
                 else
@@ -293,7 +293,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<UInt32>(() => 
                     {
-                        return default(UInt32);
+                        return default(UInt32)!;
                     });
                 }
 
@@ -315,7 +315,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Int64);
+                        return default(Int64)!;
                     });
                 }
                 else
@@ -323,7 +323,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Int64>(() => 
                     {
-                        return default(Int64);
+                        return default(Int64)!;
                     });
                 }
 
@@ -345,7 +345,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(UInt64);
+                        return default(UInt64)!;
                     });
                 }
                 else
@@ -353,7 +353,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<UInt64>(() => 
                     {
-                        return default(UInt64);
+                        return default(UInt64)!;
                     });
                 }
 
@@ -375,7 +375,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Single);
+                        return default(Single)!;
                     });
                 }
                 else
@@ -383,7 +383,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Single>(() => 
                     {
-                        return default(Single);
+                        return default(Single)!;
                     });
                 }
 
@@ -405,7 +405,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Double);
+                        return default(Double)!;
                     });
                 }
                 else
@@ -413,7 +413,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Double>(() => 
                     {
-                        return default(Double);
+                        return default(Double)!;
                     });
                 }
 
@@ -435,7 +435,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(Decimal);
+                        return default(Decimal)!;
                     });
                 }
                 else
@@ -443,7 +443,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<Decimal>(() => 
                     {
-                        return default(Decimal);
+                        return default(Decimal)!;
                     });
                 }
 
@@ -465,7 +465,7 @@ namespace Catel.Data
                             return typedValue;
                         }
 
-                        return default(DateTime);
+                        return default(DateTime)!;
                     });
                 }
                 else
@@ -473,7 +473,7 @@ namespace Catel.Data
                     // Just return the default
                     createTypedDefaultValue = new Func<DateTime>(() => 
                     {
-                        return default(DateTime);
+                        return default(DateTime)!;
                     });
                 }
 
@@ -483,31 +483,31 @@ namespace Catel.Data
 
             if (type == typeof(String))
             {
-                Func<string?>? createTypedDefaultValue = null;
+                Func<String>? createTypedDefaultValue = null;
 
                 if (createDefaultValue is Func<object?> func)
                 {
-                    createTypedDefaultValue = new Func<string?>(() => 
+                    createTypedDefaultValue = new Func<String>(() => 
                     {
                         var finalDefaultValue = createDefaultValue();
-                        if (finalDefaultValue is string typedValue)
+                        if (finalDefaultValue is String typedValue)
                         {
                             return typedValue;
                         }
 
-                        return default(string);
+                        return default(String)!;
                     });
                 }
                 else
                 {
                     // Just return the default
-                    createTypedDefaultValue = new Func<string?>(() => 
+                    createTypedDefaultValue = new Func<String>(() => 
                     {
-                        return default(string);
+                        return default(String)!;
                     });
                 }
 
-                return RegisterProperty<string?>(name, createTypedDefaultValue, propertyChangedEventHandler,
+                return RegisterProperty<String>(name, createTypedDefaultValue, propertyChangedEventHandler,
                     includeInSerialization, includeInBackup, isModelBaseProperty);
             }
 
@@ -538,7 +538,7 @@ namespace Catel.Data
                 }
 
                 var parameterInfo = parameters[1];
-                if (parameterInfo.ParameterType != typeof(Func<object?>))
+                if (parameterInfo.ParameterType != typeof(Func<object>))
                 {
                     continue;
                 }
@@ -547,19 +547,9 @@ namespace Catel.Data
                 break;
             }
 
-            if (registerPropertyMethod is null)
-            {
-                throw Log.ErrorAndCreateException<CatelException>("No valid register property method found on model class");
-            }
-
-            var finalMethod = registerPropertyMethod.MakeGenericMethod(type);
-            var propertyData = (IPropertyData?)finalMethod.Invoke(null, new object?[] { name, createDefaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty });
-            if (propertyData is null)
-            {
-                throw Log.ErrorAndCreateException<CatelException>($"Failed to register property '{type.Name}.{name}'");
-            }
-
-            return propertyData;
+            var finalMethod = registerPropertyMethod!.MakeGenericMethod(type);
+            var propertyData = (IPropertyData)finalMethod!.Invoke(null, new object?[] { name, createDefaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty })!;
+            return propertyData!;
         }
 
         protected void SetDefaultValueToPropertyBag(IPropertyData propertyData)

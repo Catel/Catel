@@ -5,6 +5,7 @@
     using System.Linq;
     using Catel.Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// This class creates a simple Mediator which loosely connects different objects together.
@@ -29,10 +30,7 @@
             public object? Tag;
         }
 
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<MessageMediator> _logger;
 
         private readonly object _lockObject = new object();
 
@@ -45,8 +43,10 @@
         /// <summary>
         /// The default constructor.
         /// </summary>
-        public MessageMediator()
+        public MessageMediator(ILogger<MessageMediator> logger)
         {
+            _logger = logger;
+
             EnableDynamicTargets = true;
         }
 
@@ -102,7 +102,7 @@
 
                 if (IsRegistered(recipient, handler, tag))
                 {
-                    Log.Warning("Same handler for message type '{0}' with tag '{1}' is already registered, skipping registration", messageType.Name, ObjectToStringHelper.ToString(tag));
+                    _logger.LogWarning("Same handler for message type '{0}' with tag '{1}' is already registered, skipping registration", messageType.Name, ObjectToStringHelper.ToString(tag));
 
                     return false;
                 }
@@ -129,7 +129,7 @@
 
                 list.Add(handlerInfo);
 
-                Log.Debug("Registered handler for message type '{0}' with tag '{1}'", messageType.Name, ObjectToStringHelper.ToString(tag));
+                _logger.LogDebug("Registered handler for message type '{0}' with tag '{1}'", messageType.Name, ObjectToStringHelper.ToString(tag));
 
                 return true;
             }
@@ -181,14 +181,14 @@
                         {
                             messageHandlers.RemoveAt(i--);
 
-                            Log.Debug("Unregistered handler for message type '{0}' with tag '{1}'", messageType.Name, ObjectToStringHelper.ToString(tag));
+                            _logger.LogDebug("Unregistered handler for message type '{0}' with tag '{1}'", messageType.Name, ObjectToStringHelper.ToString(tag));
 
                             return true;
                         }
                     }
                 }
 
-                Log.Warning("Failed to unregister handler for message type '{0}' with tag '{1}' because handler was not registered", messageType.Name, ObjectToStringHelper.ToString(tag));
+                _logger.LogWarning("Failed to unregister handler for message type '{0}' with tag '{1}' because handler was not registered", messageType.Name, ObjectToStringHelper.ToString(tag));
 
                 return false;
             }
@@ -240,7 +240,7 @@
         public bool SendMessage<TMessage>(TMessage message, object? tag = null)
             where TMessage : notnull
         {
-            Log.Debug("Sending message of type '{0}' with tag '{1}'", message.GetType().FullName, ObjectToStringHelper.ToString(tag));
+            _logger.LogDebug("Sending message of type '{0}' with tag '{1}'", message.GetType().FullName, ObjectToStringHelper.ToString(tag));
 
             var invokedHandlersCount = 0;
 
@@ -266,7 +266,7 @@
                 }
             }
 
-            Log.Debug($"Sent message to {BoxingCache.GetBoxedValue(invokedHandlersCount)} recipients");
+            _logger.LogDebug($"Sent message to {BoxingCache.GetBoxedValue(invokedHandlersCount)} recipients");
 
             CleanUp();
 
@@ -282,7 +282,7 @@
         /// </summary>
         public void CleanUp()
         {
-            Log.Debug("Cleaning up handlers");
+            _logger.LogDebug("Cleaning up handlers");
 
             lock (_lockObject)
             {
@@ -296,16 +296,16 @@
                         {
                             handlers.RemoveAt(i--);
 
-                            Log.Debug("Removed handler for message type '{0}' with tag '{1}' because target is no longer alive",
+                            _logger.LogDebug("Removed handler for message type '{0}' with tag '{1}' because target is no longer alive",
                                       handlerKeyPair.Key.Name, ObjectToStringHelper.ToString(handler.Tag));
                         }
                     }
                 }
             }
 
-            Log.Debug("Cleaned up handlers");
+            _logger.LogDebug("Cleaned up handlers");
         }
-        
+
         /// <summary>
         /// Unregisters a specific recipient for all the (non-static) message the recipient is subscribed to.
         /// </summary>
@@ -336,13 +336,13 @@
                                 messageHandlers.RemoveAt(i--);
                                 handlerCounter++;
 
-                                Log.Debug("Unregistered handler for message type '{0}' with tag '{1}'", key.Name, ObjectToStringHelper.ToString(tag));
+                                _logger.LogDebug("Unregistered handler for message type '{0}' with tag '{1}'", key.Name, ObjectToStringHelper.ToString(tag));
                             }
                         }
                     }
                 }
 
-                Log.Debug("Unregistered '{0}' handlers for the recipient with tag '{1}'", BoxingCache.GetBoxedValue(handlerCounter), ObjectToStringHelper.ToString(tag));
+                _logger.LogDebug("Unregistered '{0}' handlers for the recipient with tag '{1}'", BoxingCache.GetBoxedValue(handlerCounter), ObjectToStringHelper.ToString(tag));
 
                 return true;
             }

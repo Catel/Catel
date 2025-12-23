@@ -5,13 +5,14 @@
     using System.Linq;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Memory efficient typed property bag that takes care of boxing.
     /// </summary>
     public partial class TypedPropertyBag : PropertyBagBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(TypedPropertyBag));
 
         private readonly Dictionary<string, Type> _propertyTypes = new Dictionary<string, Type>();
 
@@ -54,7 +55,7 @@
                 {
                     if (existingType != type && !existingType.IsAssignableFromEx(type))
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Property '{name}' is already registered as '{existingType.FullName}' which is not compatible with '{type.FullName}'");
+                        throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Property '{name}' is already registered as '{existingType.FullName}' which is not compatible with '{type.FullName}'");
                     }
                 }
                 else

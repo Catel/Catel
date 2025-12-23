@@ -6,16 +6,14 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Extensions for the <see cref="ICollection"/> and <see cref="Collection{T}"/> classes.
     /// </summary>
     public static class CollectionExtensions
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CollectionExtensions));
 
         /// <summary>Searches for the specified object and returns the zero-based index of the first occurrence within the range of elements in the <see cref="T:System.Collections.Generic.List`1" /> that extends from the specified index to the last element.</summary>
         /// <param name="list">The list</param>
@@ -104,7 +102,7 @@
             var currentIndex = list.IndexOf(item);
             if (currentIndex == -1)
             {
-                Log.Warning("Object not found in list, cannot move up");
+                Logger.LogWarning("Object not found in list, cannot move up");
                 return false;
             }
 
@@ -161,13 +159,13 @@
 
             if (list.Count < index - 1)
             {
-                Log.Error("Number of items in list is {0}, cannot move index {1} up", list.Count.ToString(), index.ToString());
+                Logger.LogError("Number of items in list is {0}, cannot move index {1} up", list.Count.ToString(), index.ToString());
                 return false;
             }
 
             if (index == 0)
             {
-                Log.Debug("Index of item to move up is 0, no move up required");
+                Logger.LogDebug("Index of item to move up is 0, no move up required");
                 return true;
             }
 
@@ -194,7 +192,7 @@
             var currentIndex = list.IndexOf(item);
             if (currentIndex == -1)
             {
-                Log.Warning("Object not found in list, cannot move down");
+                Logger.LogWarning("Object not found in list, cannot move down");
                 return false;
             }
 
@@ -216,13 +214,13 @@
 
             if (list.Count < index - 1)
             {
-                Log.Error("Number of items in list is {0}, cannot move index {1} down", list.Count.ToString(), index.ToString());
+                Logger.LogError("Number of items in list is {0}, cannot move index {1} down", list.Count.ToString(), index.ToString());
                 return false;
             }
 
             if (index == list.Count - 1)
             {
-                Log.Debug("Index of item to move down equals the count, no move down required");
+                Logger.LogDebug("Index of item to move down equals the count, no move down required");
                 return true;
             }
 

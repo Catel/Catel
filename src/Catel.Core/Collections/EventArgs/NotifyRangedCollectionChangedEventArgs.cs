@@ -5,13 +5,14 @@
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// The ranged notify collection changed event args.
     /// </summary>
     public class NotifyRangedCollectionChangedEventArgs : NotifyCollectionChangedEventArgs
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(NotifyRangedCollectionChangedEventArgs));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
@@ -107,7 +108,7 @@
             // Check for mixed modes except for Mixed, others fail
             if (mode == SuspensionMode.Mixed || !mode.IsMixedMode())
             {
-                throw Log.ErrorAndCreateException<ArgumentException>($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
+                throw Logger.LogErrorAndCreateException<ArgumentException>($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
             }
 
             // Check for action Add or Remove, others fail
@@ -118,7 +119,7 @@
                     return action;
                 
                 default: 
-                    throw Log.ErrorAndCreateException<ArgumentException>($"Wrong action '{Enum<NotifyCollectionChangedAction>.ToString(action)}' for constructor.");
+                    throw Logger.LogErrorAndCreateException<ArgumentException>($"Wrong action '{Enum<NotifyCollectionChangedAction>.ToString(action)}' for constructor.");
             }
         }
 
@@ -139,7 +140,7 @@
                     return NotifyCollectionChangedAction.Remove;
 
                 default: 
-                    throw Log.ErrorAndCreateException<ArgumentException>($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
+                    throw Logger.LogErrorAndCreateException<ArgumentException>($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
             }
         }
     }

@@ -6,6 +6,7 @@
     using System.ComponentModel;
 
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Services;
 
     /// <summary>
@@ -16,7 +17,7 @@
     [Serializable]
     public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCollection
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(FastBindingList<T>));
 
         private readonly IDispatcherService _dispatcherService;
         
@@ -194,7 +195,7 @@
         {
             if (NotificationsSuspended)
             {
-                Log.Error("Cannot reset while notifications are suspended");
+                Logger.LogError("Cannot reset while notifications are suspended");
                 return;
             }
 
@@ -344,7 +345,7 @@
             }
             else if (_suspensionContext.Mode != mode)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
 
             return new DisposableToken<FastBindingList<T>>(
@@ -528,7 +529,7 @@
             // Check
             if (_suspensionContext is not null && _suspensionContext.Mode != SuspensionMode.None)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'.");
             }
 
             if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.None)
@@ -589,7 +590,7 @@
             var suspensionContext = _suspensionContext;
             if (suspensionContext is not null && suspensionContext.Mode == SuspensionMode.Removing)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
             // Call base
@@ -632,7 +633,7 @@
             // Check
             if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
 
             // Get item
@@ -687,7 +688,7 @@
             // Check
             if (_suspensionContext is not null && _suspensionContext.Mode != SuspensionMode.None)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
             // Get old item

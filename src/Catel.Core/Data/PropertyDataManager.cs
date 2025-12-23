@@ -6,16 +6,14 @@
     using System.Xml.Serialization;
     using Catel.Reflection;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Property data manager.
     /// </summary>
     public class PropertyDataManager
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(PropertyDataManager));
 
         /// <summary>
         /// Dictionary containing all the properties per type.
@@ -187,7 +185,7 @@
             {
                 if (!_propertyData.TryGetValue(type, out var propertyDataOfType))
                 {
-                    throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
+                    throw Logger.LogErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
                         "Property '{0}' on type '{1}' is not registered", name, type.GetSafeFullName());
                 }
 

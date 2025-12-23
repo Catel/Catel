@@ -2,6 +2,7 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -9,7 +10,7 @@
     /// </summary>
     public abstract class Disposable : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(Disposable));
 
         private readonly object _syncRoot = new object();
 
@@ -44,7 +45,7 @@
             {
                 if (IsDisposed)
                 {
-                    throw Log.ErrorAndCreateException(msg => new ObjectDisposedException(GetType().GetSafeFullName(false)),
+                    throw Logger.LogErrorAndCreateException(msg => new ObjectDisposedException(GetType().GetSafeFullName(false)),
                         "Object '{0}' is already disposed", GetType().GetSafeFullName(false));
                 }
             }
@@ -90,7 +91,7 @@
                                 throw;
                             }
 
-                            Log.Error(ex, "Error while disposing managed resources of '{0}'.", GetType().GetSafeFullName(false));
+                            Logger.LogError(ex, "Error while disposing managed resources of '{0}'.", GetType().GetSafeFullName(false));
                         }
                     }
 
@@ -105,7 +106,7 @@
                             throw;
                         }
 
-                        Log.Error(ex, "Error while disposing unmanaged resources of '{0}'.", GetType().GetSafeFullName(false));
+                        Logger.LogError(ex, "Error while disposing unmanaged resources of '{0}'.", GetType().GetSafeFullName(false));
                     }
 
                     IsDisposed = true;

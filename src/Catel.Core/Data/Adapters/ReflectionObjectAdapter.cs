@@ -3,13 +3,14 @@
     using System;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Object adapter allowing to customize reflection and property mappings.
     /// </summary>
     public class ReflectionObjectAdapter : IObjectAdapter
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ReflectionObjectAdapter));
 
         /// <summary>
         /// Gets the property value of the instance.
@@ -42,7 +43,7 @@
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
+                Logger.LogWarning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
             }
 
             value = default!;
@@ -119,11 +120,11 @@
                     return true;
                 }
                 
-                Log.Warning($"Failed to set member '{instance.GetType().GetSafeFullName(false)}.{memberName}' because the member cannot be found on the model");
+                Logger.LogWarning($"Failed to set member '{instance.GetType().GetSafeFullName(false)}.{memberName}' because the member cannot be found on the model");
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"Failed to populate '{instance.GetType().GetSafeFullName(false)}.{memberName}', setting the member value threw an exception");
+                Logger.LogWarning(ex, $"Failed to populate '{instance.GetType().GetSafeFullName(false)}.{memberName}', setting the member value threw an exception");
             }
 
             return false;

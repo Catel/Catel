@@ -10,6 +10,7 @@
     using Collections;
     using Logging;
     using MethodTimer;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Cache containing the types of an appdomain.
@@ -19,10 +20,7 @@
         private const int DefaultCollectionSizeForTypes = 10 * 1000;
         private const int DefaultCollectionSizeForAssemblies = 50;
 
-        /// <summary>
-        ///   The <see cref = "ILog">log</see> object.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(TypeCache));
 
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
 
@@ -158,7 +156,7 @@
             var assembly = args.LoadedAssembly;
             if (ShouldIgnoreAssembly(assembly))
             {
-                Log.Debug($"Reflection '{assembly.FullName}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly");
+                Logger.LogDebug($"Reflection '{assembly.FullName}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly");
                 return;
             }
 
@@ -405,11 +403,11 @@
                 }
                 catch (System.IO.FileLoadException fle)
                 {
-                    Log.Debug(fle, "Failed to load type '{0}' using Type.GetType(), failed to load file", typeNameWithAssembly);
+                    Logger.LogDebug(fle, "Failed to load type '{0}' using Type.GetType(), failed to load file", typeNameWithAssembly);
                 }
                 catch (Exception ex)
                 {
-                    Log.Debug(ex, "Failed to load type '{0}' using Type.GetType()", typeNameWithAssembly);
+                    Logger.LogDebug(ex, "Failed to load type '{0}' using Type.GetType()", typeNameWithAssembly);
                 }
 
                 // Fallback for this assembly only
@@ -667,7 +665,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, $"Failed to get all types in assembly '{assembly.FullName}'");
+                        Logger.LogWarning(ex, $"Failed to get all types in assembly '{assembly.FullName}'");
                     }
                 }
             }

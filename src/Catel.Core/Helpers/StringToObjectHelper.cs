@@ -5,6 +5,7 @@
     using System.Text;
     using Catel.Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -12,7 +13,7 @@
     /// </summary>
     public static class StringToObjectHelper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(StringToObjectHelper));
 
         /// <summary>
         /// Initializes static members of the <see cref="StringToObjectHelper"/> class.
@@ -606,7 +607,7 @@
                 return Enum.Parse(targetType, value, false);
             }
 
-            throw Log.ErrorAndCreateException<NotSupportedException>($"Type '{targetType.FullName}' is not yet supported");
+            throw Logger.LogErrorAndCreateException<NotSupportedException>($"Type '{targetType.FullName}' is not yet supported");
         }
 
         /// <summary>

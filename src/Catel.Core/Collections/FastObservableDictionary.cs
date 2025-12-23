@@ -10,6 +10,7 @@
     using System.Runtime.Serialization;
     using Catel.Logging;
     using Catel.Services;
+    using Microsoft.Extensions.Logging;
 
     public class FastObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>,
         IReadOnlyDictionary<TKey, TValue>,
@@ -22,7 +23,7 @@
         ISuspendChangeNotificationsCollection
         where TKey : notnull
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(FastObservableDictionary<TKey, TValue>));
 
         /// <summary>
         /// The current suspension context.
@@ -231,7 +232,7 @@
                 // Check
                 if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                    throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
                 }
 
                 //simply change the value
@@ -259,7 +260,7 @@
                 // Check
                 if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
+                    throw Logger.LogErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
                 }
 
                 //append to the end of the list
@@ -298,7 +299,7 @@
             // Check
             if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
             var changedItem = new KeyValuePair<TKey, TValue>(key, newValue);
@@ -311,7 +312,7 @@
                     // Check
                     if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                        throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
                     }
 
                     //raise replace event
@@ -339,7 +340,7 @@
                 // Check
                 if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
+                    throw Logger.LogErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
                 }
 
                 for (var i = index; i < Count; i++)
@@ -378,7 +379,7 @@
             // Check
             if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
             var temp = _list[oldIndex];
@@ -422,7 +423,7 @@
                 // Check
                 if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
+                    throw Logger.LogErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
                 }
 
                 _list.RemoveAt(removedKeyIndex);
@@ -470,7 +471,7 @@
             // Check      
             if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
             var keyToRemove = _list[index];
             value = _dict[keyToRemove];
@@ -704,7 +705,7 @@
             // Check
             if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
             List<KeyValuePair<TKey, TValue>>? copyList = null;
@@ -754,7 +755,7 @@
         {
             if (array.Length - arrayIndex < Count)
             {
-                throw Log.ErrorAndCreateException<IndexOutOfRangeException>("Array doesn't have enough space to copy all the elements");
+                throw Logger.LogErrorAndCreateException<IndexOutOfRangeException>("Array doesn't have enough space to copy all the elements");
             }
 
             for (var i = 0; i < Count; i++)
@@ -902,12 +903,12 @@
                 }
                 else
                 {
-                    throw Log.ErrorAndCreateException<InvalidCastException>($"Value must be of type {typeof(TValue)}");
+                    throw Logger.LogErrorAndCreateException<InvalidCastException>($"Value must be of type {typeof(TValue)}");
                 }
             }
             else
             {
-                throw Log.ErrorAndCreateException<InvalidCastException>($"Key must be of type {typeof(TKey)}");
+                throw Logger.LogErrorAndCreateException<InvalidCastException>($"Key must be of type {typeof(TKey)}");
             }
         }
 
@@ -932,7 +933,7 @@
         {
             if (array.Length - arrayIndex < Count)
             {
-                throw Log.ErrorAndCreateException<IndexOutOfRangeException>("Array doesn't have enough space to copy all the elements");
+                throw Logger.LogErrorAndCreateException<IndexOutOfRangeException>("Array doesn't have enough space to copy all the elements");
             }
 
             for (var i = 0; i < Count; i++)
@@ -1077,7 +1078,7 @@
         {
             if (NotificationsSuspended)
             {
-                Log.Error("Cannot reset while notifications are suspended");
+                Logger.LogError("Cannot reset while notifications are suspended");
                 return;
             }
 
@@ -1098,7 +1099,7 @@
             }
             else if (_suspensionContext is not null && _suspensionContext.Mode != mode)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
 
             return new DisposableToken<FastObservableDictionary<TKey, TValue>>(

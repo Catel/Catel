@@ -6,16 +6,14 @@
     using System.Linq;
     using System.Reflection;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// <see cref="AppDomain"/> extensions.
     /// </summary>
     public static class AppDomainExtensions
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(AppDomainExtensions));
 
         /// <summary>
         /// Gets a list of all types inside the <see cref="AppDomain"/>.
@@ -29,48 +27,6 @@
         internal static Type[] GetTypes(this AppDomain appDomain)
         {
             return TypeCache.GetTypes();
-        }
-
-        /// <summary>
-        /// Preloads all the assemblies inside the specified directory into the specified <see cref="AppDomain" />.
-        /// <para />
-        /// This method also preloads all referenced assemblies.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <param name="directory">The directory. If <c>null</c>, only the referenced assemblies are forced to be loaded.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
-        public static void PreloadAssemblies(this AppDomain appDomain, string? directory = null)
-        {
-            Log.Info("Preloading assemblies from AppDomain");
-            Log.Indent();
-
-            var loadedAssemblies = new HashSet<string>();
-
-            var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in currentAssemblies)
-            {
-                var referencedAssemblies = assembly.GetReferencedAssemblies();
-                foreach (var referencedAssembly in referencedAssemblies)
-                {
-                    LoadAssemblyIntoAppDomain(appDomain, referencedAssembly, true, loadedAssemblies);
-                }
-            }
-
-            Log.Unindent();
-
-            if (!string.IsNullOrWhiteSpace(directory))
-            {
-                Log.Info("Preloading assemblies from directory '{0}'", directory);
-                Log.Indent();
-
-                var files = new DirectoryInfo(directory).GetFiles("*.dll");
-                foreach (var file in files)
-                {
-                    LoadAssemblyIntoAppDomain(appDomain, file.FullName, true, loadedAssemblies);
-                }
-
-                Log.Unindent();
-            }
         }
 
         /// <summary>
@@ -102,7 +58,7 @@
 
             if (!File.Exists(assemblyFilename))
             {
-                Log.Warning("Assembly file '{0}' does not exist, cannot preload assembly", assemblyFilename);
+                Logger.LogWarning("Assembly file '{0}' does not exist, cannot preload assembly", assemblyFilename);
                 return;
             }
 
@@ -113,7 +69,7 @@
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to retrieve the assembly name of file '{0}', cannot preload assembly", assemblyFilename);
+                Logger.LogWarning(ex, "Failed to retrieve the assembly name of file '{0}', cannot preload assembly", assemblyFilename);
             }
         }
 
@@ -184,18 +140,18 @@
 
                 alreadyLoadedAssemblies.Add(assemblyName.FullName);
 
-                Log.Debug("Preloading assembly '{0}'", assemblyName);
+                Logger.LogDebug("Preloading assembly '{0}'", assemblyName);
 
                 var loadedAssembly = appDomain.Load(assemblyName);
 
                 // Note: actually load a type so the assembly is loaded
                 var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => x.IsClassEx() && !x.IsInterfaceEx());
 
-                Log.Debug("Loaded assembly, found '{0}' as first class type", type?.GetSafeFullName(false) ?? "[no type]");
+                Logger.LogDebug("Loaded assembly, found '{0}' as first class type", type?.GetSafeFullName(false) ?? "[no type]");
 
                 if (includeReferencedAssemblies)
                 {
-                    Log.Debug("Loading referenced assemblies of assembly '{0}'", assemblyName);
+                    Logger.LogDebug("Loading referenced assemblies of assembly '{0}'", assemblyName);
 
                     var referencedAssemblies = loadedAssembly.GetReferencedAssemblies();
                     foreach (var referencedAssembly in referencedAssemblies)
@@ -208,7 +164,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to load assembly '{0}'", assemblyName);
+                Logger.LogError(ex, "Failed to load assembly '{0}'", assemblyName);
             }
         }
     }

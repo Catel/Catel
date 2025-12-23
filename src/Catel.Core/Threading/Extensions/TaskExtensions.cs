@@ -4,13 +4,14 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Class TaskExtensions.
     /// </summary>
     public static class TaskExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(TaskExtensions));
 
         /// <summary>
         /// Awaits the task with the specified time out. If the 
@@ -36,7 +37,7 @@
                 }
 
                 // Failed
-                throw Log.ErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
+                throw Logger.LogErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
             }
         }
 

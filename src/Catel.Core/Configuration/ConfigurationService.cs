@@ -1,14 +1,15 @@
 ﻿namespace Catel.Configuration
 {
-    using Services;
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using Catel.Logging;
-    using System.Timers;
-    using System.Diagnostics;
     using System.Threading.Tasks;
+    using System.Timers;
+    using Catel.Logging;
     using Catel.Threading;
+    using Microsoft.Extensions.Logging;
+    using Services;
 
     /// <summary>
     /// Configuration service implementation that allows customization how configuration values
@@ -18,14 +19,13 @@
     /// </summary>
     public partial class ConfigurationService : IConfigurationService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// If the timer duration is smaller than this threshold, the
         /// timer will not be used.
         /// </summary>
         private const int IgnoreTimerThresholdInMilliseconds = 10;
 
+        private readonly ILogger<IConfigurationService> _logger;
         private readonly IObjectConverterService _objectConverterService;
         private readonly IAppDataService _appDataService;
         private readonly IDispatcherService _dispatcherService;
@@ -55,12 +55,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="appDataService">The application data service.</param>
         /// <param name="dispatcherService">Dispatcher service.</param>
-        public ConfigurationService(IObjectConverterService objectConverterService, IAppDataService appDataService,
+        public ConfigurationService(ILogger<IConfigurationService> logger, 
+            IObjectConverterService objectConverterService, IAppDataService appDataService,
             IDispatcherService dispatcherService)
         {
+            _logger = logger;
             _objectConverterService = objectConverterService;
             _appDataService = appDataService;
             _dispatcherService = dispatcherService;
@@ -164,7 +167,7 @@
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
+                _logger.LogWarning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
 
                 return defaultValue;
             }
@@ -230,7 +233,7 @@
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
-            Log.Debug($"Setting roaming config file path to '{filePath}'");
+            _logger.LogDebug($"Setting roaming config file path to '{filePath}'");
 
             var lockObject = GetLockObject(ConfigurationContainer.Roaming);
             using (await lockObject.LockAsync())
@@ -245,7 +248,7 @@
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
-            Log.Debug($"Setting local config file path to '{filePath}'");
+            _logger.LogDebug($"Setting local config file path to '{filePath}'");
 
             var lockObject = GetLockObject(ConfigurationContainer.Local);
             using (await lockObject.LockAsync())
@@ -320,7 +323,7 @@
                             return new DynamicConfiguration();
                         }
 
-                        throw Log.ErrorAndCreateException<NotImplementedException>("Need to implement loading of configuration");
+                        throw _logger.LogErrorAndCreateException<NotImplementedException>("Need to implement loading of configuration");
 
                         //var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _xmlSerializer);
                         //if (configuration is null)
@@ -337,7 +340,7 @@
                 }
             }
 
-            throw Log.ErrorAndCreateException<InvalidOperationException>($"File '{source}' could not be used to load the configuration, it was locked for too long");
+            throw _logger.LogErrorAndCreateException<InvalidOperationException>($"File '{source}' could not be used to load the configuration, it was locked for too long");
         }
 
         /// <summary>
@@ -433,7 +436,7 @@
                     return _roamingConfigurationLock;
             }
 
-            throw Log.ErrorAndCreateException<InvalidOperationException>($"Container type '{container}' has no lock object");
+            throw _logger.LogErrorAndCreateException<InvalidOperationException>($"Container type '{container}' has no lock object");
         }
 
         protected void RaiseConfigurationChanged(ConfigurationContainer container, string key, object? value)

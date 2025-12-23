@@ -5,16 +5,16 @@
     using System.Globalization;
     using Caching;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Service to implement the retrieval of language services.
     /// </summary>
     public partial class LanguageService : LanguageServiceBase, ILanguageService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<ILanguageService> _logger;
 
         private readonly List<ILanguageSource> _languageSources = new List<ILanguageSource>();
-
         private readonly ICacheStorage<LanguageResourceKey, string?> _stringCache = new CacheStorage<LanguageResourceKey, string?>();
 
         private CultureInfo _fallbackCulture;
@@ -23,8 +23,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageService"/> class.
         /// </summary>
-        public LanguageService()
+        public LanguageService(ILogger<ILanguageService> logger)
         {
+            _logger = logger;
+
             // Note: we don't have resources in Catel.Core at the moment
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
@@ -34,6 +36,7 @@
 
             _fallbackCulture = CultureInfo.CurrentUICulture;
             _preferredCulture = CultureInfo.CurrentUICulture;
+
             CacheResults = true;
         }
 
@@ -77,13 +80,13 @@
         /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
         /// </summary>
         public event EventHandler<EventArgs>? LanguageUpdated;
-        
+
         /// <summary>
         /// Preloads the language sources to provide optimal performance.
         /// </summary>
         public virtual void PreloadLanguageSources()
         {
-            Log.Debug("Preloading language sources");
+            _logger.LogDebug("Preloading language sources");
 
             lock (_languageSources)
             {
@@ -93,7 +96,7 @@
                 }
             }
 
-            Log.Debug("Preloaded language sources");
+            _logger.LogDebug("Preloaded language sources");
         }
 
         /// <summary>
@@ -178,7 +181,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to get string for resource name '{0}' from resource file '{1}'", resourceName, resourceFile);
+                        _logger.LogError(ex, "Failed to get string for resource name '{0}' from resource file '{1}'", resourceName, resourceFile);
                     }
                 }
             }

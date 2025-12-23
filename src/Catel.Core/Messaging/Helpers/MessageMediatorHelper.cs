@@ -2,6 +2,7 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -9,10 +10,7 @@
     /// </summary>
     public static class MessageMediatorHelper
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(MessageMediatorHelper));
 
         /// <summary>
         /// Subscribes all methods of the specified instance that are decorated with the <see cref="MessageRecipientAttribute"/>.
@@ -54,7 +52,7 @@
                             break;
 
                         default:
-                            throw Log.ErrorAndCreateException<InvalidCastException>("Cannot cast '{0}' to Action or Action<T> delegate type.", methodInfo.Name);
+                            throw Logger.LogErrorAndCreateException<InvalidCastException>("Cannot cast '{0}' to Action or Action<T> delegate type.", methodInfo.Name);
                     }
 
                     var tag = attribute.Tag;
@@ -64,7 +62,7 @@
                     var registerMethod = messageMediator.GetType().GetMethodEx("Register");
                     if (registerMethod is null)
                     {
-                        throw Log.ErrorAndCreateException<CatelException>($"Cannot find the Register method on '{messageMediator.GetType().GetSafeFullName()}'");
+                        throw Logger.LogErrorAndCreateException<CatelException>($"Cannot find the Register method on '{messageMediator.GetType().GetSafeFullName()}'");
                     }
 
                     var genericRegisterMethod = registerMethod.MakeGenericMethod(actionParameterType);

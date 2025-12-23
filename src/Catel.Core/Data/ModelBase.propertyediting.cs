@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using Catel.Linq.Expressions;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     public partial class ModelBase
@@ -37,7 +38,7 @@
 
             if ((value is null) && !property.Type.IsNullableType())
             {
-                throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
+                throw Logger.LogErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
                     "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().GetSafeFullName());
             }
 
@@ -68,14 +69,14 @@
             {
                 if (property != IsReadOnlyProperty)
                 {
-                    Log.Warning("Cannot set property '{0}', object is currently read-only", property.Name);
+                    Logger.LogWarning("Cannot set property '{0}', object is currently read-only", property.Name);
                     return;
                 }
             }
 
             if (property.IsCalculatedProperty)
             {
-                Log.Warning("Cannot set property '{0}', the property is a calculated property", property.Name);
+                Logger.LogWarning("Cannot set property '{0}', the property is a calculated property", property.Name);
                 return;
             }
 
@@ -83,7 +84,7 @@
             {
                 if (!value.GetType().IsCOMObjectEx())
                 {
-                    throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
+                    throw Logger.LogErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
                         "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().GetSafeFullName());
                 }
             }

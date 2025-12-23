@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Xml.Serialization;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// ModelBase implementation that supports validation.
@@ -33,7 +34,7 @@
         /// </summary>
         internal const string HasErrorsMessageProperty = "HasErrors";
 
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ValidatableModelBase));
 
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
@@ -514,7 +515,7 @@
             {
                 PropertiesNotCausingValidation[type].Add(propertyName);
 
-                Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
+                Logger.LogWarning(ex, "Failed to validate property '{0}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
             }
 
             return true;
@@ -709,7 +710,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, "Failed to validate property '{0}.{1}', adding it to the ignore list", type.Name, propertyInfo.Key);
+                        Logger.LogWarning(ex, "Failed to validate property '{0}.{1}', adding it to the ignore list", type.Name, propertyInfo.Key);
                         ignoredOrFailedPropertyValidations.Add(propertyInfo.Key);
                     }
                 }

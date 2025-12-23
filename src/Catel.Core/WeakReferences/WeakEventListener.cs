@@ -6,6 +6,7 @@
     using System.ComponentModel;
     using System.Reflection;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
     using EventArgsBase = System.EventArgs;
 
@@ -31,10 +32,7 @@
     /// </remarks>
     public static class WeakEventListener
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakEventListener));
 
         private static readonly Dictionary<string, MethodInfo?> ListenerTypeCache = new Dictionary<string, MethodInfo?>();
 
@@ -230,7 +228,7 @@
 
             if (methodInfo is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource>, but did not find it");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource>, but did not find it");
             }
 
 #pragma warning disable HAA0101 // Array allocation for params parameter

@@ -5,6 +5,7 @@
     using System.Linq;
     using Caching;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
     using ResourceManager = System.Resources.ResourceManager;
 
@@ -79,7 +80,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to get the resource manager for source '{0}'", source);
+                    _logger.LogWarning(ex, "Failed to get the resource manager for source '{0}'", source);
                     return null;
                 }
             };

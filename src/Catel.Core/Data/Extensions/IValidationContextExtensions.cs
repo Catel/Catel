@@ -2,15 +2,16 @@
 {
     using System;
     using System.Text;
-    using Text;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
+    using Text;
 
     /// <summary>
     /// Extension methods for the validation context.
     /// </summary>
     public static class IValidationContextExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(IValidationContextExtensions));
 
         /// <summary>
         /// Checks whether the validation context contains warnings or errors.
@@ -69,7 +70,7 @@
                     break;
 
                 default:
-                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(validationResult));
+                    throw Logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(validationResult));
             }
 
             return messageBuilder.ToString();

@@ -6,16 +6,14 @@
     using System.Threading.Tasks;
 
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Helper class to execute groups of methods in parallel.
     /// </summary>
     public static class ParallelHelper
     {
-        /// <summary>
-        /// The log
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ParallelHelper));
 
         /// <summary>
         /// Executes all the items in the collection in parallel batches.
@@ -31,7 +29,7 @@
         {
             taskName = ObjectToStringHelper.ToString(taskName);
 
-            Log.Debug($"[{taskName}] Executing '{items.Count}' actions in parallel in batches of '{itemsPerBatch}' items per batch");
+            Logger.LogDebug($"[{taskName}] Executing '{items.Count}' actions in parallel in batches of '{itemsPerBatch}' items per batch");
 
             var batches = new List<List<T>>();
             if (itemsPerBatch > 0)
@@ -72,7 +70,7 @@
                 Parallel.Invoke(actions.ToArray());
             }
 
-            Log.Debug($"[{taskName}] Executed '{items.Count}' actions in parallel in '{batches.Count}' batches of '{itemsPerBatch}' items per batch");
+            Logger.LogDebug($"[{taskName}] Executed '{items.Count}' actions in parallel in '{batches.Count}' batches of '{itemsPerBatch}' items per batch");
         }
 
         /// <summary>
@@ -87,7 +85,7 @@
         {
             var finalName = string.Format("[{0} | {1}]", taskName, batchName);
 
-            Log.Debug($"{finalName} Starting batch for '{items.Count}' items");
+            Logger.LogDebug($"{finalName} Starting batch for '{items.Count}' items");
 
             foreach (var item in items)
             {
@@ -97,11 +95,11 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "{0} An error occurred while executing a batch action", finalName);
+                    Logger.LogWarning(ex, "{0} An error occurred while executing a batch action", finalName);
                 }
             }
 
-            Log.Debug($"{finalName} Finished batch for '{items.Count}' items");
+            Logger.LogDebug($"{finalName} Finished batch for '{items.Count}' items");
         }
 
         /// <summary>
@@ -114,7 +112,7 @@
         {
             taskName = ObjectToStringHelper.ToString(taskName);
 
-            Log.Debug($"[{taskName}] Executing '{tasks.Count}' async tasks in parallel in batches of size '{batchSize}'");
+            Logger.LogDebug($"[{taskName}] Executing '{tasks.Count}' async tasks in parallel in batches of size '{batchSize}'");
 
             for (var i = 0; i < tasks.Count; i = i + batchSize)
             {

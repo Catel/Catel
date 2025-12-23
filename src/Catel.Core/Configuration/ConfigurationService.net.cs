@@ -6,6 +6,7 @@
     using System.Timers;
     using Catel.Data;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     public partial class ConfigurationService
     {
@@ -29,12 +30,12 @@
                     break;
 
                 default:
-                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>("container");
+                    throw _logger.LogErrorAndCreateException<ArgumentOutOfRangeException>("container");
             }
 
             if (settings is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Configuration is not yet initialized for '{container}' container, make sure to call LoadAsync first");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>($"Configuration is not yet initialized for '{container}' container, make sure to call LoadAsync first");
             }
 
             return settings;
@@ -116,7 +117,7 @@
                 var fileName = _localConfigFilePath;
                 if (fileName is null)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>("Cannot save local configuration without a file name");
+                    throw _logger.LogErrorAndCreateException<CatelException>("Cannot save local configuration without a file name");
                 }
 
                 try
@@ -125,7 +126,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to save local configuration");
+                    _logger.LogWarning(ex, "Failed to save local configuration");
                 }
             }
         }
@@ -148,7 +149,7 @@
                 var fileName = _roamingConfigFilePath;
                 if (fileName is null)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>("Cannot save roaming configuration without a file name");
+                    throw _logger.LogErrorAndCreateException<CatelException>("Cannot save roaming configuration without a file name");
                 }
 
                 try
@@ -157,14 +158,14 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to save roaming configuration");
+                    _logger.LogWarning(ex, "Failed to save roaming configuration");
                 }
             }
         }
 
         protected virtual async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
         {
-            throw Log.ErrorAndCreateException<NotImplementedException>("Need to implement");
+            throw _logger.LogErrorAndCreateException<NotImplementedException>("Need to implement");
 
             //using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             //{

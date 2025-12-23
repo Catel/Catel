@@ -7,16 +7,14 @@
     using Catel.Caching;
     using Catel.Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Property helper class.
     /// </summary>
     public static partial class PropertyHelper
     {
-        /// <summary>
-        /// The <see cref="ILog">log</see> object.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(PropertyHelper));
 
         private static readonly ICacheStorage<string, PropertyInfo?> _availableProperties = new CacheStorage<string, PropertyInfo?>();
 
@@ -193,7 +191,7 @@
             {
                 if (throwOnException)
                 {
-                    throw Log.ErrorAndCreateException(s => new PropertyNotFoundException(property),
+                    throw Logger.LogErrorAndCreateException(s => new PropertyNotFoundException(property),
                         "Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
                 }
 
@@ -205,7 +203,7 @@
             {
                 if (throwOnException)
                 {
-                    throw Log.ErrorAndCreateException(s => new CannotGetPropertyValueException(property), 
+                    throw Logger.LogErrorAndCreateException(s => new CannotGetPropertyValueException(property), 
                         "Cannot read property {0}.'{1}'", obj.GetType().Name, property);
                 }
 
@@ -221,7 +219,7 @@
             {
                 if (throwOnException)
                 {
-                    throw Log.ErrorAndCreateException(s => new CannotGetPropertyValueException(property),
+                    throw Logger.LogErrorAndCreateException(s => new CannotGetPropertyValueException(property),
                         "Cannot read property {0}.'{1}'", obj.GetType().Name, property);
                 }
 
@@ -275,7 +273,7 @@
             {
                 if (throwOnError)
                 {
-                    throw Log.ErrorAndCreateException(s => new PropertyNotFoundException(property),
+                    throw Logger.LogErrorAndCreateException(s => new PropertyNotFoundException(property),
                         "Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
                 }
 
@@ -286,7 +284,7 @@
             {
                 if (throwOnError)
                 {
-                    throw Log.ErrorAndCreateException(s => new CannotSetPropertyValueException(property),
+                    throw Logger.LogErrorAndCreateException(s => new CannotSetPropertyValueException(property),
                         "Cannot write property {0}.'{1}'", obj.GetType().Name, property);
                 }
 
@@ -298,7 +296,7 @@
             {
                 if (throwOnError)
                 {
-                    throw Log.ErrorAndCreateException(s => new CannotSetPropertyValueException(property),
+                    throw Logger.LogErrorAndCreateException(s => new CannotSetPropertyValueException(property),
                         "Cannot write property {0}.'{1}', SetMethod is null", obj.GetType().Name, property);
                 }
 
@@ -333,7 +331,7 @@
             var propertyInfo = baseType.GetPropertyEx(property, bindingFlags);
             if (propertyInfo is null)
             {
-                throw Log.ErrorAndCreateException(s => new PropertyNotFoundException(property),
+                throw Logger.LogErrorAndCreateException(s => new PropertyNotFoundException(property),
                     "Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
             }
 

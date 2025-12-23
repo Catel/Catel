@@ -33,7 +33,6 @@
             serviceCollection.TryAddSingleton<IModelEqualityComparer, ModelEqualityComparer>();
             serviceCollection.TryAddSingleton<IConfigurationService, ConfigurationService>();
             serviceCollection.TryAddSingleton<IObjectConverterService, ObjectConverterService>();
-            serviceCollection.TryAddSingleton<IRollingInMemoryLogService, RollingInMemoryLogService>();
 
             //serviceCollection.TryAddSingleton(typeof(IObjectIdGenerator<TObject,int>)  <IObjectIdGenerator<T, int>, IntegerObjectIdGenerator<T>();
             //serviceCollection.TryAddSingleton<IObjectIdGenerator<T, long>, LongObjectIdGenerator<T>();

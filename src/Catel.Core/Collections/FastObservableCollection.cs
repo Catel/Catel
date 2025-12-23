@@ -9,6 +9,7 @@
 
     using Catel.Logging;
     using Catel.Services;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Fast implementation of <see cref="ObservableCollection{T}"/> where the change notifications
@@ -18,7 +19,8 @@
     [Serializable]
     public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(FastObservableCollection<T>));
+
         private readonly IDispatcherService _dispatcherService;
 
         /// <summary>
@@ -165,7 +167,7 @@
         {
             if (NotificationsSuspended)
             {
-                Log.Error("Cannot reset while notifications are suspended");
+                Logger.LogError("Cannot reset while notifications are suspended");
                 return;
             }
 
@@ -378,7 +380,7 @@
             }
             else if (_suspensionContext is not null && _suspensionContext.Mode != mode)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
 
             return new DisposableToken<FastObservableCollection<T>>(
@@ -492,7 +494,7 @@
             // Check
             if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
             if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
@@ -518,7 +520,7 @@
             // Check
             if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
             // Call base
@@ -548,7 +550,7 @@
             // Check
             if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
             if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
@@ -574,7 +576,7 @@
             // Check
             if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
 
             // Get item
@@ -607,7 +609,7 @@
             // Check
             if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
             if (_suspensionContext is not null && _suspensionContext.IsMixedMode())

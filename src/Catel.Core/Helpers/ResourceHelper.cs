@@ -4,13 +4,14 @@
     using System.Reflection;
     using System.Text;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Resource helper class to read resource files.
     /// </summary>
     public static class ResourceHelper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ResourceHelper));
 
         /// <summary>
         /// Extracts the embedded resource and reads it as a string.
@@ -58,7 +59,7 @@
         /// <param name="targetStream">The target stream to write the resource to.</param>
         public static void ExtractEmbeddedResource(this Assembly assembly, string assemblyName, string relativeResourceName, Stream targetStream)
         {
-            Log.Debug($"Extracting embedded resource '{relativeResourceName}' from assembly '{assembly.FullName}'");
+            Logger.LogDebug($"Extracting embedded resource '{relativeResourceName}' from assembly '{assembly.FullName}'");
 
             var finalResourceName = relativeResourceName;
             if (!string.IsNullOrWhiteSpace(assemblyName))
@@ -78,7 +79,7 @@
                         warning.AppendLine($"  * {name}");
                     }
 
-                    Log.Warning(warning.ToString());
+                    Logger.LogWarning(warning.ToString());
                     return;
                 }
 

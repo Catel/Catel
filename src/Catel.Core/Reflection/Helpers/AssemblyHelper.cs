@@ -5,21 +5,19 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using Collections;
     using Data;
     using Logging;
     using MethodTimer;
-    using System.Runtime.InteropServices;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Assembly helper class.
     /// </summary>
     public static class AssemblyHelper
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(AssemblyHelper));
 
         private static readonly object _lockObject = new object();
 
@@ -31,7 +29,7 @@
             var assembly = GetEntryAssembly();
             if (assembly is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Could not automatically determine the entry assembly");
+                throw Logger.LogErrorAndCreateException<CatelException>("Could not automatically determine the entry assembly");
             }
 
             return assembly;
@@ -99,25 +97,25 @@
                                       where type is not null
                                       select type).ToArray();
 
-                Log.Warning($"A ReflectionTypeLoadException occurred, adding all {BoxingCache.GetBoxedValue(foundAssemblyTypes.Length)} types that were loaded correctly");
+                Logger.LogWarning($"A ReflectionTypeLoadException occurred, adding all {BoxingCache.GetBoxedValue(foundAssemblyTypes.Length)} types that were loaded correctly");
 
                 if (logLoaderExceptions)
                 {
-                    Log.Warning("The following loading exceptions occurred:");
+                    Logger.LogWarning("The following loading exceptions occurred:");
 
                     foreach (var error in typeLoadException.LoaderExceptions)
                     {
                         // Fix mono issue https://github.com/Catel/Catel/issues/1071 
                         if (error is not null)
                         {
-                            Log.Warning("  " + error.Message);
+                            Logger.LogWarning("  " + error.Message);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to get types from assembly '{0}'", assembly.FullName);
+                Logger.LogError(ex, "Failed to get types from assembly '{0}'", assembly.FullName);
 
                 foundAssemblyTypes = Array.Empty<Type>();
             }
@@ -226,7 +224,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to retrieve the information about assembly '{0}'", assembly);
+                    Logger.LogWarning(ex, "Failed to retrieve the information about assembly '{0}'", assembly);
                 }
             }
         }
@@ -302,7 +300,7 @@
                 {
                     // Something is off here, are we running a .NET core "deterministic" app?
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-                    Log.Warning($"Determined '{localTime}' as linker timestamp which is in the future. This app is probably compiled by Roslyn (.NET Core) in deterministic mode. If the linker timestamp is required, set <Deterministic>False</Deterministic> in the project file. For now falling back to DateTime.Now");
+                    Logger.LogWarning($"Determined '{localTime}' as linker timestamp which is in the future. This app is probably compiled by Roslyn (.NET Core) in deterministic mode. If the linker timestamp is required, set <Deterministic>False</Deterministic> in the project file. For now falling back to DateTime.Now");
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
                     localTime = DateTime.Now;

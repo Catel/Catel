@@ -7,6 +7,7 @@
     using System.Reflection;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Implements a weak event listener that allows the owner to be garbage
@@ -32,10 +33,7 @@
         where TSource : class
         //where TEventArgs : class // Note: don't require class since DependencyPropertyChangedEventArgs is a struct
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakEventListener<TTarget, TSource, TEventArgs>));
 
         /// <summary>
         /// WeakReference to the target listening for the event.
@@ -306,7 +304,7 @@
 
             if ((source is null) && (target is null))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Both the source and target are null, which means that a static event handler subscribes to a static event. In such cases, there are no memory leaks, so there is no reason to use this class");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Both the source and target are null, which means that a static event handler subscribes to a static event. In such cases, there are no memory leaks, so there is no reason to use this class");
             }
 
             object? finalTarget = target;
@@ -314,7 +312,7 @@
             var methodInfo = handler.GetMethodInfoEx();
             if (methodInfo is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Failed to find the method info of the handler");
+                throw Logger.LogErrorAndCreateException<CatelException>("Failed to find the method info of the handler");
             }
 
             if ((methodInfo.Name.Contains("_AnonymousDelegate>")) || (methodInfo.DeclaringType?.FullName?.Contains("__DisplayClass") ?? false))
@@ -336,7 +334,7 @@
             }
             catch (ArgumentException ex)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>(ex, "Failed to create the delegate. Probably the wrong type of EventArgs is used and does not match the EventHandler<TEventArgs>");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>(ex, "Failed to create the delegate. Probably the wrong type of EventArgs is used and does not match the EventHandler<TEventArgs>");
             }
 
             var isAction = methodInfo.GetParameters().Length == 0;
@@ -397,11 +395,11 @@
             }
 
             var error = $"No add-method available for event '{eventName}', cannot subscribe using weak events. Make sure the event is public";
-            Log.Error(error);
+            Logger.LogError(error);
 
             if (throwOnError)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>(error);
+                throw Logger.LogErrorAndCreateException<NotSupportedException>(error);
             }
 
             return false;
@@ -492,11 +490,11 @@
                     return;
                 }
 
-                Log.Warning("Failed to unsubscribe from event '{0}'", eventName);
+                Logger.LogWarning("Failed to unsubscribe from event '{0}'", eventName);
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to unsubscribe from event '{0}'", eventName);
+                Logger.LogWarning(ex, "Failed to unsubscribe from event '{0}'", eventName);
             }
         }
 
@@ -634,7 +632,7 @@
         {
             if (!IsStaticEvent && (Source is null))
             {
-                Log.Warning("Event on source '{0}' is not static, yet the source does no longer exists", typeof(TSource).FullName);
+                Logger.LogWarning("Event on source '{0}' is not static, yet the source does no longer exists", typeof(TSource).FullName);
                 return;
             }
 

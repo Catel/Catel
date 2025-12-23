@@ -4,6 +4,7 @@
     using System.ComponentModel;
     using System.Xml.Serialization;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
@@ -11,10 +12,7 @@
     [Serializable]
     public abstract partial class ModelBase : ObservableObject, IModel
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ModelBase));
 
         /// <summary>
         /// The property values.

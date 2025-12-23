@@ -4,6 +4,7 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -11,10 +12,7 @@
     /// </summary>
     public static class ExpressionHelper
     {
-        /// <summary>
-        /// The <see cref="ILog">log</see> object.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ExpressionHelper));
 
         /// <summary>
         /// Gets the name of the property from the expression.
@@ -63,7 +61,7 @@
             var body = expressionToHandle as MemberExpression;
             if (body is null)
             {
-                Log.Warning("Failed to retrieve the body of the expression (value is null)");
+                Logger.LogWarning("Failed to retrieve the body of the expression (value is null)");
                 return null;
             }
 

@@ -34,7 +34,7 @@
 
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
-                throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
+                throw Logger.LogErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
             }
 
             var propertyName = memberExpression.Member.Name;
@@ -71,7 +71,7 @@
 
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
-                throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
+                throw Logger.LogErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
             }
 
             if (createDefaultValue is null)
@@ -309,7 +309,7 @@
                 {
                     if (propertyInfo.PropertyType != typeof(Type))
                     {
-                        throw Log.ErrorAndCreateException<CatelException>($"Default property value for property '{objectType.Name}.{propertyName}' is of type 'Type', but actual type is '{propertyInfo.PropertyType.Name}'. This appears to be an upgrade issue to Catel 6.x");
+                        throw Logger.LogErrorAndCreateException<CatelException>($"Default property value for property '{objectType.Name}.{propertyName}' is of type 'Type', but actual type is '{propertyInfo.PropertyType.Name}'. This appears to be an upgrade issue to Catel 6.x");
                     }
                 }
             }

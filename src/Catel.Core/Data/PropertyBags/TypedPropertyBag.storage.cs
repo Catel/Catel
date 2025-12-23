@@ -667,7 +667,7 @@ namespace Catel.Data
                 {
                     if (propertyType.IsValueTypeEx() && value is null)
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Property '{name}' cannot be updated with a null value since it represents a value of '{propertyType.FullName}'");
+                        throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Property '{name}' cannot be updated with a null value since it represents a value of '{propertyType.FullName}'");
                     }
 
                     // Slowest path, we need to cast and store in the right dictionary

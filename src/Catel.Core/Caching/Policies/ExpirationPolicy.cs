@@ -2,13 +2,14 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// The expiration policy.
     /// </summary>
     public abstract class ExpirationPolicy
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ExpirationPolicy));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpirationPolicy" /> class.
@@ -93,7 +94,7 @@
             {
                 if (!CanReset)
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("This policy can't be reset");
+                    throw Logger.LogErrorAndCreateException<InvalidOperationException>("This policy can't be reset");
                 }
 
                 OnReset();

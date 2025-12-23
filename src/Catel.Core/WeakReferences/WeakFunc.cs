@@ -4,6 +4,7 @@
     using System.Reflection;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// A weak func which allows the invocation of a command in a weak manner. This way, actions will not cause
@@ -17,10 +18,7 @@
         /// </summary>
         public delegate TResult OpenInstanceAction<TTarget>(TTarget @this);
 
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakFunc<TResult>));
 
         /// <summary>
         /// The action that must be invoked on the action.
@@ -40,13 +38,13 @@
             var methodInfo = func.GetMethodInfoEx();
             if (methodInfo is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Could not find method info for specified func");
+                throw Logger.LogErrorAndCreateException<CatelException>("Could not find method info for specified func");
             }
 
             MethodName = methodInfo.ToString() ?? string.Empty;
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                throw Logger.LogErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             var targetType = target?.GetType() ?? typeof(object);
@@ -104,7 +102,7 @@
                     return true;
                 }
 
-                Log.Debug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
+                Logger.LogDebug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
 
                 _action = null;
             }
@@ -119,16 +117,13 @@
     /// </summary>
     public class WeakFunc<TParameter, TResult> : WeakActionBase, IWeakFunc<TParameter, TResult>
     {
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakFunc<TParameter, TResult>));
+
         /// <summary>
         /// Open instance action which allows the creation of an instance method without an actual reference
         /// to the target.
         /// </summary>
         public delegate TResult OpenInstanceGenericAction<TTarget>(TTarget @this, TParameter parameter);
-
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The action that must be invoked on the action.
@@ -147,13 +142,13 @@
         {
             var methodInfo = func.GetMethodInfoEx(); if (methodInfo is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Could not find method info for specified func");
+                throw Logger.LogErrorAndCreateException<CatelException>("Could not find method info for specified func");
             }
 
             MethodName = methodInfo.ToString() ?? string.Empty;
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                throw Logger.LogErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             var targetType = target?.GetType() ?? typeof(object);
@@ -207,7 +202,7 @@
                     return true;
                 }
 
-                Log.Debug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
+                Logger.LogDebug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
 
                 _action = null;
             }

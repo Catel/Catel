@@ -8,6 +8,7 @@
     using Catel.Caching;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Extensions.Logging;
     using EventArgsBase = System.EventArgs;
 
     /// <summary>
@@ -20,10 +21,7 @@
         where TTarget : class
         where TSource : class
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakEventListener<TTarget, TSource>));
 
         /// <summary>
         /// The event handler event arguments cache.
@@ -211,7 +209,7 @@
 
             if (eventArgsType is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Only handlers of type 'Action', 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs>' are supported. '{0}' does not belong to these supported types", handlerType.Name);
+                throw Logger.LogErrorAndCreateException<NotSupportedException>("Only handlers of type 'Action', 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs>' are supported. '{0}' does not belong to these supported types", handlerType.Name);
             }
 
             var targetType = typeof(TTarget);
@@ -235,7 +233,7 @@
 
             if (methodInfo is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource, TEventArgs>, but did not find it");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource, TEventArgs>, but did not find it");
             }
 
 #pragma warning disable HAA0101 // Array allocation for params parameter
@@ -244,7 +242,7 @@
             var weakEventListener = (IWeakEventListener?)genericMethodInfo.Invoke(null, new object[] { target, source, eventName, handler, throwWhenSubscriptionFails });
             if (weakEventListener is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Failed to create weak event listener subscription");
+                throw Logger.LogErrorAndCreateException<CatelException>("Failed to create weak event listener subscription");
             }
 
             return weakEventListener;

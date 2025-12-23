@@ -10,6 +10,7 @@ namespace Catel
 
     using Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -19,10 +20,7 @@ namespace Catel
     /// </summary>
     public static partial class Argument
     {
-        /// <summary>
-        /// The <see cref="ILog">log</see> object.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCatelLogger(typeof(Argument), true);
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(Argument));
 
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c>.
@@ -37,7 +35,7 @@ namespace Catel
             if (paramValue is null)
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentNullException(paramName, error);
             }
         }
@@ -55,7 +53,7 @@ namespace Catel
             if (paramValue is null)
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentNullException(paramName, error);
             }
         }
@@ -73,7 +71,7 @@ namespace Catel
             if (string.IsNullOrEmpty(paramValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null or empty";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -90,7 +88,7 @@ namespace Catel
             if (paramValue == Guid.Empty)
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be Guid.Empty";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -108,7 +106,7 @@ namespace Catel
             if (!paramValue.HasValue || paramValue.Value == Guid.Empty)
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null or Guid.Empty";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -126,7 +124,7 @@ namespace Catel
             if (string.IsNullOrWhiteSpace(paramValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null or whitespace";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -144,7 +142,7 @@ namespace Catel
             if ((paramValue is null) || (paramValue.Length == 0))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null or an empty array";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -167,7 +165,7 @@ namespace Catel
             if (!validation(paramValue, minimumValue, maximumValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' should be between {minimumValue} and {maximumValue}";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
             }
         }
@@ -206,7 +204,7 @@ namespace Catel
             if (!validation(paramValue, minimumValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' should be minimal {minimumValue}";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
             }
         }
@@ -244,7 +242,7 @@ namespace Catel
             if (!validation(paramValue, maximumValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' should be at maximum {maximumValue}";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
             }
         }
@@ -301,7 +299,7 @@ namespace Catel
             } while (runtimeBaseType is not null);
 
             var error = $"Type '{type.Name}' should have type '{baseType.Name}' as base class, but does not";
-            Log.Error(error);
+            Logger.LogError(error);
             throw new ArgumentException(error, paramName);
         }
 
@@ -404,7 +402,7 @@ namespace Catel
             }
 
             var error = $"Type '{type.Name}' should implement interface '{interfaceType.Name}', but does not";
-            Log.Error(error);
+            Logger.LogError(error);
             throw new ArgumentException(error, paramName);
         }
 
@@ -457,7 +455,7 @@ namespace Catel
             }
 
             var error = errorBuilder.ToString();
-            Log.Error(error);
+            Logger.LogError(error);
             throw new ArgumentException(error, paramName);
         }
 
@@ -506,7 +504,7 @@ namespace Catel
             }
 
             var error = $"Type '{type.Name}' should be of type '{requiredType.Name}', but is not";
-            Log.Error(error);
+            Logger.LogError(error);
             throw new ArgumentException(error, paramName);
         }
 
@@ -564,7 +562,7 @@ namespace Catel
             }
 
             var error = errorBuilder.ToString();
-            Log.Error(error);
+            Logger.LogError(error);
             throw new ArgumentException(error, paramName);
         }
 
@@ -613,7 +611,7 @@ namespace Catel
             }
 
             var error = $"Type '{type.Name}' should not be of type '{notRequiredType.Name}', but is";
-            Log.Error(error);
+            Logger.LogError(error);
             throw new ArgumentException(error, paramName);
         }
 
@@ -660,7 +658,7 @@ namespace Catel
                 if (notRequiredType.IsAssignableFromEx(type))
                 {
                     var error = $"Type '{type.Name}' should not be of type '{notRequiredType.Name}', but is";
-                    Log.Error(error);
+                    Logger.LogError(error);
                     throw new ArgumentException(error, paramName);
                 }
             }
@@ -686,7 +684,7 @@ namespace Catel
             if (Regex.IsMatch(paramValue, pattern, regexOptions))
             {
                 var error = $"Argument '{paramName}' matches with pattern '{pattern}'";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -711,7 +709,7 @@ namespace Catel
             if (!Regex.IsMatch(paramValue, pattern, regexOptions))
             {
                 var error = $"Argument '{paramName}' doesn't match with pattern '{pattern}'";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -784,7 +782,7 @@ namespace Catel
             if (!validation)
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' is not valid";
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -804,7 +802,7 @@ namespace Catel
             if (!isSupported)
             {
                 var error = string.Format(errorFormat, args);
-                Log.Error(error);
+                Logger.LogError(error);
                 throw new NotSupportedException(error);
             }
         }

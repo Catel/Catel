@@ -4,13 +4,14 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Extensions for asynchronous event handlers.
     /// </summary>
     public static class AsyncEventHandlerExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(AsyncEventHandlerExtensions));
 
         /// <summary>
         /// Invokes the specified <paramref name="handler" />
@@ -54,7 +55,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to invoke event handler in parallel");
+                    Logger.LogError(ex, "Failed to invoke event handler in parallel");
                     throw;
                 }
             }
@@ -69,7 +70,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, $"Failed to invoke event handler at index '{i.ToString()}'");
+                        Logger.LogError(ex, $"Failed to invoke event handler at index '{i}'");
                         throw;
                     }
                 }

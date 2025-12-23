@@ -66,7 +66,7 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, Func<object>? createDefaultValue,
+        public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, Func<object?>? createDefaultValue,
             EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool isModelBaseProperty = false)
         {
@@ -84,9 +84,9 @@ foreach (TypeCode typeCode in typeCodes)
 #>
             if (type == typeof(<#= typeCode.ToString() #>))
             {
-                Func<<#= typeCode.ToString() #>> createTypedDefaultValue = null;
+                Func<<#= typeCode.ToString() #>>? createTypedDefaultValue = null;
 
-                if (createDefaultValue is Func<object> func)
+                if (createDefaultValue is Func<object?> func)
                 {
                     createTypedDefaultValue = new Func<<#= typeCode.ToString() #>>(() => 
                     {
@@ -96,7 +96,7 @@ foreach (TypeCode typeCode in typeCodes)
                             return typedValue;
                         }
 
-                        return default(<#= typeCode.ToString() #>);
+                        return default(<#= typeCode.ToString() #>)!;
                     });
                 }
                 else
@@ -104,7 +104,7 @@ foreach (TypeCode typeCode in typeCodes)
                     // Just return the default
                     createTypedDefaultValue = new Func<<#= typeCode.ToString() #>>(() => 
                     {
-                        return default(<#= typeCode.ToString() #>);
+                        return default(<#= typeCode.ToString() #>)!;
                     });
                 }
 
@@ -121,7 +121,7 @@ foreach (TypeCode typeCode in typeCodes)
             //    EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
             //    bool includeInBackup = true, bool isModelBaseProperty = false)
 
-            MethodInfo registerPropertyMethod = null;
+            MethodInfo? registerPropertyMethod = null;
 
             foreach (var methodInfo in typeof(ModelBase).GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true)))
             {
@@ -151,9 +151,9 @@ foreach (TypeCode typeCode in typeCodes)
                 break;
             }
 
-            var finalMethod = registerPropertyMethod.MakeGenericMethod(type);
-            var propertyData = (IPropertyData)finalMethod.Invoke(null, new object[] { name, createDefaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty });
-            return propertyData;
+            var finalMethod = registerPropertyMethod!.MakeGenericMethod(type);
+            var propertyData = (IPropertyData)finalMethod!.Invoke(null, new object?[] { name, createDefaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty })!;
+            return propertyData!;
         }
 
         protected void SetDefaultValueToPropertyBag(IPropertyData propertyData)

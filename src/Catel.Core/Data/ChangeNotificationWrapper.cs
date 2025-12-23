@@ -8,6 +8,8 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using Catel.Logging;
+    using Catel.Reflection;
+    using Microsoft.Extensions.Logging;
     using IWeakEventListener = Catel.IWeakEventListener;
 
     /// <summary>
@@ -33,7 +35,7 @@
     /// </summary>
     public class ChangeNotificationWrapper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ChangeNotificationWrapper));
 
         private readonly object _lockObject = new object();
 
@@ -160,7 +162,7 @@
                     }
                     else
                     {
-                        Log.Warning("Received NotifyCollectionChangedAction.Reset for '{sender?.GetType().GetSafeFullName(false)}', but the type does not implement ICollection");
+                        Logger.LogWarning($"Received NotifyCollectionChangedAction.Reset for '{sender?.GetType().GetSafeFullName(false)}', but the type does not implement ICollection");
                     }
                 }
                 else if (e.NewItems is not null)
@@ -330,7 +332,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, "Failed to subscribe to PropertyChanged event, the event is probably not public");
+                        Logger.LogWarning(ex, "Failed to subscribe to PropertyChanged event, the event is probably not public");
                     }
                 }
             }
@@ -381,7 +383,7 @@
                         break;
 
                     default:
-                        throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>("eventChangeType");
+                        throw Logger.LogErrorAndCreateException<ArgumentOutOfRangeException>("eventChangeType");
                 }
 
                 if (eventsTable is not null && eventsTable.TryGetValue(value, out var oldSubscription))
@@ -401,7 +403,7 @@
                             weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectCollectionItemPropertyChanged, false);
                             if (weakListener is null)
                             {
-                                Log.Debug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
+                                Logger.LogDebug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
 
                                 ((INotifyPropertyChanged)value).PropertyChanged += OnObjectCollectionItemPropertyChanged;
                             }
@@ -419,7 +421,7 @@
                             weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectPropertyChanged, false);
                             if (weakListener is null)
                             {
-                                Log.Debug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
+                                Logger.LogDebug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
 
                                 ((INotifyPropertyChanged)value).PropertyChanged += OnObjectPropertyChanged;
                             }
@@ -430,14 +432,14 @@
                         weakListener = this.SubscribeToWeakCollectionChangedEvent(value, OnObjectCollectionChanged, false);
                         if (weakListener is null)
                         {
-                            Log.Debug("Failed to use weak events to subscribe to 'value.CollectionChanged', going to subscribe without weak events");
+                            Logger.LogDebug("Failed to use weak events to subscribe to 'value.CollectionChanged', going to subscribe without weak events");
 
                             ((INotifyCollectionChanged)value).CollectionChanged += OnObjectCollectionChanged;
                         }
                         break;
 
                     default:
-                        throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(eventChangeType));
+                        throw Logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(eventChangeType));
                 }
 
                 if (weakListener is not null)
@@ -493,7 +495,7 @@
                         break;
 
                     default:
-                        throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(eventChangeType));
+                        throw Logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(eventChangeType));
                 }
 
                 if (eventsTable is not null && eventsTable.TryGetValue(value, out var oldSubscription))
