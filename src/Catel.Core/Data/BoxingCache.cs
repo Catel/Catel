@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Timers;
     using Catel.Logging;
+    using Catel.Reflection;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -36,6 +37,12 @@
 
         public BoxingCache()
         {
+            if (typeof(T) == typeof(bool))
+            {
+                // Don't clean up small caches, default to zero
+                CleanUpInterval = TimeSpan.Zero;
+            }
+
             _cleanUpTimer = new Timer();
             _cleanUpTimer.AutoReset = false;
             _cleanUpTimer.Elapsed += OnCleanUpTimerElapsed;

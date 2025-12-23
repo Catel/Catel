@@ -16,9 +16,6 @@
     {
         public static IServiceCollection AddCatelCoreServices(this IServiceCollection serviceCollection)
         {
-            // No need to clean the small boxing caches
-            BoxingCache<bool>.Default.CleanUpInterval = TimeSpan.Zero;
-
             serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
             serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();
             serviceCollection.TryAddSingleton<IMessageMediator, MessageMediator>();
