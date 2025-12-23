@@ -12,7 +12,7 @@
         public static ILogger<T> GetLogger<T>()
         {
             // Try global config first
-            var serviceProvider = IoCContainer.ServiceProvider;
+            var serviceProvider = IoCContainer.GetServiceProvider();
             if (serviceProvider is not null)
             {
                 return serviceProvider.GetRequiredService<ILogger<T>>();
@@ -32,7 +32,7 @@
         public static ILogger GetLogger(Type type)
         {
             // Try global config first
-            var serviceProvider = IoCContainer.ServiceProvider;
+            var serviceProvider = IoCContainer.GetServiceProvider();
             if (serviceProvider is not null)
             {
                 var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();

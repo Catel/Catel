@@ -27,5 +27,14 @@
                 _serviceProvider = value;
             }
         }
+
+        /// <summary>
+        /// Gets the service provider or returns <c>null</c> if the service provider is not registered.
+        /// </summary>
+        /// <returns></returns>
+        public static IServiceProvider? GetServiceProvider()
+        {
+            return _serviceProvider;
+        }
     }
 }
