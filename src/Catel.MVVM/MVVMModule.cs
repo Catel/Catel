@@ -67,6 +67,9 @@
             //var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateRequiredInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
             //AuditingManager.RegisterAuditor(subscribeKeyboardEventsOnViewModelCreationAuditor);
 
+            serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
+            serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));
+
             DesignTimeHelper.InitializeDesignTime();
 
             return serviceCollection;

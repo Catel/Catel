@@ -35,6 +35,10 @@
             //serviceCollection.TryAddSingleton<IObjectIdGenerator<T, long>, LongObjectIdGenerator<T>();
             //serviceCollection.TryAddSingleton<IObjectIdGenerator<T, ulong>, ULongObjectIdGenerator<T>();
 
+            // Note: we don't have resources in Catel.Core at the moment
+            //serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
+            //serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
+
             return serviceCollection;
         }
     }

@@ -23,16 +23,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageService"/> class.
         /// </summary>
-        public LanguageService(ILogger<ILanguageService> logger)
+        public LanguageService(ILogger<ILanguageService> logger, IEnumerable<ILanguageSource> languageSources)
         {
             _logger = logger;
-
-            // Note: we don't have resources in Catel.Core at the moment
-            //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
-            //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
-
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));
+            _languageSources.AddRange(languageSources);
 
             _fallbackCulture = CultureInfo.CurrentUICulture;
             _preferredCulture = CultureInfo.CurrentUICulture;
