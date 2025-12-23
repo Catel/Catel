@@ -5,21 +5,19 @@
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows.Input;
-    using Logging;
-    using Reflection;
-    using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object?>;
-    using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object?, System.Threading.Tasks.Task>;
     using Catel.Data;
+    using Logging;
+    using Microsoft.Extensions.Logging;
+    using Reflection;
+    using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object?, System.Threading.Tasks.Task>;
+    using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object?>;
 
     /// <summary>
     /// Command manager that manages the execution state of all commands of a view model.
     /// </summary>
     public class ViewModelCommandManager : IViewModelCommandManager
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ViewModelCommandManager));
 
         /// <summary>
         /// Dictionary containing all instances of all view model command managers.
@@ -74,7 +72,7 @@
         {
             ArgumentNullException.ThrowIfNull(viewModel);
 
-            Log.Debug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            Logger.LogDebug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             _viewModel = viewModel;
             _viewModelType = viewModel.GetType();
@@ -94,7 +92,7 @@
 
             RegisterCommands(false);
 
-            Log.Debug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            Logger.LogDebug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
 
         /// <summary>
@@ -116,7 +114,7 @@
                 // in the meantime
                 if (viewModel.IsClosed)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>($"View model '{viewModel.GetType().GetSafeFullName()}' with unique identifier '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}' is already closed, cannot manage commands of a closed view model");
+                    throw Logger.LogErrorAndCreateException<CatelException>($"View model '{viewModel.GetType().GetSafeFullName()}' with unique identifier '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}' is already closed, cannot manage commands of a closed view model");
                 }
 
                 if (!_instances.TryGetValue(viewModel.UniqueIdentifier, out var commandManager))
@@ -161,7 +159,7 @@
                     UnregisterCommands();
                 }
 
-                Log.Debug("Registering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+                Logger.LogDebug("Registering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
                 foreach (var propertyInfo in _commandProperties)
                 {
@@ -172,7 +170,7 @@
                         {
                             if (!_commands.ContainsKey(command))
                             {
-                                Log.Debug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
+                                Logger.LogDebug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
 
                                 var commandAsICatelCommand = command as ICatelCommand;
                                 if (commandAsICatelCommand is not null)
@@ -186,11 +184,11 @@
                     }
                     catch (Exception)
                     {
-                        Log.Error("Failed to get command from property '{0}'", propertyInfo.Name);
+                        Logger.LogError("Failed to get command from property '{0}'", propertyInfo.Name);
                     }
                 }
 
-                Log.Debug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+                Logger.LogDebug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
             }
         }
 
@@ -236,7 +234,7 @@
         /// </summary>
         private void UnregisterCommands()
         {
-            Log.Debug("Unregistering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+            Logger.LogDebug("Unregistering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
             lock (_lock)
             {
@@ -252,7 +250,7 @@
                 _commands.Clear();
             }
 
-            Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+            Logger.LogDebug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
         }
 
 #pragma warning disable AvoidAsyncVoid // Avoid async void

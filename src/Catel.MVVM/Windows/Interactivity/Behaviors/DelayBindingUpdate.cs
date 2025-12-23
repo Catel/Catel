@@ -1,17 +1,18 @@
 ﻿namespace Catel.Windows.Interactivity
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Windows;
     using System.Windows.Data;
-    using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
-    using TimerTickEventArgs = System.EventArgs;
-    using System;
     using Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Xaml.Behaviors;
     using Reflection;
+    using TimerTickEventArgs = System.EventArgs;
 
     /// <summary>
     /// This behaviors sets the binding to <see cref="UpdateSourceTrigger.Explicit"/> and manually updates the
@@ -19,10 +20,7 @@
     /// </summary>
     public partial class DelayBindingUpdate : BehaviorBase<FrameworkElement>
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(DelayBindingUpdate));
 
         private static readonly List<PropertyInfo> BindingProperties;
 
@@ -125,7 +123,7 @@
         {
             if (GetDependencyProperty() is null)
             {
-                Log.ErrorAndCreateException<InvalidOperationException>("Dependency property is not found on the associated object, make sure to set the PropertyName or DependencyPropertyName");
+                Logger.LogErrorAndCreateException<InvalidOperationException>("Dependency property is not found on the associated object, make sure to set the PropertyName or DependencyPropertyName");
             }
         }
 
@@ -139,14 +137,14 @@
             var dependencyProperty = GetDependencyProperty();
             if (dependencyProperty is null)
             {
-                Log.Error($"No dependency property found on '{dependencyPropertyName}'");
+                Logger.LogError($"No dependency property found on '{dependencyPropertyName}'");
                 return;
             }
 
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
             if (bindingExpression is null)
             {
-                Log.Error($"No binding expression found on '{dependencyPropertyName}'");
+                Logger.LogError($"No binding expression found on '{dependencyPropertyName}'");
                 return;
             }
 
@@ -160,18 +158,18 @@
             associatedObject.ClearValue(dependencyProperty);
             associatedObject.SetBinding(dependencyProperty, newBinding);
 
-            Log.Debug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", dependencyPropertyName);
+            Logger.LogDebug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", dependencyPropertyName);
 
             var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
             if (finalDependencyPropertyName is null)
             {
-                Log.Error($"Dependency property '{dependencyPropertyName}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
+                Logger.LogError($"Dependency property '{dependencyPropertyName}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
                 return;
             }
 
             AssociatedObject.SubscribeToDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
-            Log.Debug("Subscribed to property changes of the original object");
+            Logger.LogDebug("Subscribed to property changes of the original object");
 
             _timer.Tick += OnTimerTick;
         }
@@ -188,18 +186,18 @@
                 associatedObject.ClearValue(dependencyProperty);
                 associatedObject.SetBinding(dependencyProperty, _originalBinding);
 
-                Log.Debug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
+                Logger.LogDebug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
 
                 var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
                 if (finalDependencyPropertyName is null)
                 {
-                    Log.Error($"Dependency property '{dependencyProperty}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
+                    Logger.LogError($"Dependency property '{dependencyProperty}' could not be found on associated object '{ObjectToStringHelper.ToTypeString(associatedObject)}'");
                     return;
                 }
 
                 AssociatedObject.UnsubscribeFromDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
-                Log.Debug("Unsubscribed from property changes of the original object");
+                Logger.LogDebug("Unsubscribed from property changes of the original object");
             }
 
             _timer.Stop();
@@ -258,14 +256,14 @@
             var dependencyProperty = GetDependencyProperty();
             if (dependencyProperty is null)
             {
-                Log.Error("No dependency property found on '{0}'", dependencyPropertyName);
+                Logger.LogError("No dependency property found on '{0}'", dependencyPropertyName);
                 return;
             }
 
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
             if (bindingExpression is null)
             {
-                Log.Warning($"Binding expression is null, make sure the binding to '{DependencyPropertyName ?? PropertyName}' is TwoWay");
+                Logger.LogWarning($"Binding expression is null, make sure the binding to '{DependencyPropertyName ?? PropertyName}' is TwoWay");
                 return;
             }
 
@@ -321,11 +319,11 @@
             var property = AssociatedObject.GetDependencyPropertyByName(dependencyPropertyName);
             if (property is null)
             {
-                Log.Error("Failed to retrieve dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
+                Logger.LogError("Failed to retrieve dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
             }
             else
             {
-                Log.Debug("Retrieved dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
+                Logger.LogDebug("Retrieved dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
             }
 
             return property;

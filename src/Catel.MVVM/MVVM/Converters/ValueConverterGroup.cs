@@ -9,6 +9,7 @@
     using System.Windows.Data;
     using System.Windows.Markup;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// A value converter which contains a list of IValueConverters and invokes their Convert or ConvertBack methods
@@ -29,7 +30,7 @@
     [ContentProperty(nameof(Converters))]
     public class ValueConverterGroup : IValueConverter
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ValueConverterGroup));
 
         private readonly ObservableCollection<System.Windows.Data.IValueConverter> _converters = new ObservableCollection<System.Windows.Data.IValueConverter>();
         private readonly Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute?> _cachedAttributes = new Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute?>();
@@ -128,7 +129,7 @@
                     nextConverter = Converters[converterIndex + 1];
                     if (nextConverter is null)
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"The Converters collection of the ValueConverterGroup contains a null reference at index: {(converterIndex + 1).ToString()}");
+                        throw Logger.LogErrorAndCreateException<InvalidOperationException>($"The Converters collection of the ValueConverterGroup contains a null reference at index: {(converterIndex + 1).ToString()}");
                     }
                 }
             }
@@ -139,7 +140,7 @@
                     nextConverter = Converters[converterIndex - 1];
                     if (nextConverter is null)
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"The Converters collection of the ValueConverterGroup contains a null reference at index: {(converterIndex - 1).ToString()}");
+                        throw Logger.LogErrorAndCreateException<InvalidOperationException>($"The Converters collection of the ValueConverterGroup contains a null reference at index: {(converterIndex - 1).ToString()}");
                     }
                 }
             }
@@ -200,7 +201,7 @@
                     // Maybe it is 'beter' (more robust) to use a default ValueConversion(typeof(object), typeof(bool)) attribute.
                     if (attributes.Length != 1)
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>("All value converters added to a ValueConverterGroup must be decorated with the ValueConversionAttribute attribute exactly once.");
+                        throw Logger.LogErrorAndCreateException<InvalidOperationException>("All value converters added to a ValueConverterGroup must be decorated with the ValueConversionAttribute attribute exactly once.");
                     }
 
                     _cachedAttributes.Add(converter, attributes[0] as ValueConversionAttribute);

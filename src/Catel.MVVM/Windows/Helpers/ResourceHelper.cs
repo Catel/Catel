@@ -3,16 +3,14 @@
     using System;
     using System.Windows;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Resource helper class.
     /// </summary>
     public static class ResourceHelper
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ResourceHelper));
 
         /// <summary>
         /// Ensures that the pack URI is allowed. Sometimes, when no application object is instantiated
@@ -22,7 +20,7 @@
         {
             if (!UriParser.IsKnownScheme("pack"))
             {
-                Log.Debug("Pack uri is not yet allowed, adding it as known scheme");
+                Logger.LogDebug("Pack uri is not yet allowed, adding it as known scheme");
 
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
             }

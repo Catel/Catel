@@ -2,17 +2,15 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Views;
 
     /// <summary>
-    /// Navigation adapter class because everyone seems to be implementing their own :-(
+    /// Navigation adapter class.
     /// </summary>
     public partial class NavigationAdapter : NavigationAdapterBase
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(NavigationAdapter));
 
         private readonly IUrlLocator _urlLocator;
 
@@ -166,7 +164,7 @@
 
             if (e.Uri is not null && e.Uri.IsNavigationToExternal())
             {
-                Log.Debug("Navigating away from the application, ignoring navigation");
+                Logger.LogDebug("Navigating away from the application, ignoring navigation");
                 return;
             }
 
@@ -221,7 +219,7 @@
                 return;
             }
 
-            Log.Debug("Navigated to '{0}'", NavigationTargetType);
+            Logger.LogDebug("Navigated to '{0}'", NavigationTargetType);
 
             DetermineNavigationContext();
 
@@ -239,7 +237,7 @@
                 return;
             }
 
-            Log.Debug("Navigating away from '{0}'", NavigationTargetType);
+            Logger.LogDebug("Navigating away from '{0}'", NavigationTargetType);
 
             NavigatingAway?.Invoke(this, e);
 
@@ -250,7 +248,7 @@
 
             if (e.Cancel)
             {
-                Log.Debug("Navigating away from '{0}' was canceled", NavigationTargetType);
+                Logger.LogDebug("Navigating away from '{0}' was canceled", NavigationTargetType);
             }
         }
 
@@ -265,7 +263,7 @@
                 return;
             }
 
-            Log.Debug("Navigated away from '{0}'", NavigationTargetType);
+            Logger.LogDebug("Navigated away from '{0}'", NavigationTargetType);
 
             NavigatedAway?.Invoke(this, e);
         }

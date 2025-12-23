@@ -1,9 +1,10 @@
 ﻿namespace Catel.Windows.Interactivity
 {
+    using System;
     using System.Windows;
     using System.Windows.Controls;
-    using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using MVVM;
 
     /// <summary>
@@ -32,10 +33,7 @@
     /// </summary>
     public partial class Authentication : BehaviorBase<FrameworkElement>
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(Authentication));
 
         /// <summary>
         /// The authentication provider.
@@ -95,7 +93,7 @@
         {
             if (!_authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))
             {
-                Log.Debug("User has no access to UI element with tag '{0}' and authentication tag '{1}'",
+                Logger.LogDebug("User has no access to UI element with tag '{0}' and authentication tag '{1}'",
                     ObjectToStringHelper.ToString(AssociatedObject.Tag), ObjectToStringHelper.ToString(AuthenticationTag));
 
                 switch (Action)

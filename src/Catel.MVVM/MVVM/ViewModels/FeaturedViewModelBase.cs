@@ -12,6 +12,7 @@
     using Data;
     using Logging;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Reflection;
     using Services;
 
@@ -22,10 +23,7 @@
     /// <remarks>This view model base does not add any services.</remarks>
     public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, IRelationalViewModel
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(FeaturedViewModelBase));
 
         /// <summary>
         /// Dictionary containing the view model metadata of a view model type so it has to be calculated only once.
@@ -108,7 +106,7 @@
 
             var type = GetType();
 
-            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
+            Logger.LogDebug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
             ValidateModelsOnInitialization = true;
 
@@ -267,11 +265,11 @@
 
                     if (string.IsNullOrWhiteSpace(viewModelToModelAttribute.Model))
                     {
-                        Log.Debug("ViewToViewModel is missing the Model name, searching for the right model automatically");
+                        Logger.LogDebug("ViewToViewModel is missing the Model name, searching for the right model automatically");
 
                         if (modelNames.Count != 1)
                         {
-                            throw Log.ErrorAndCreateException<InvalidOperationException>($"It is only possible to automatically select the right model if there is 1 model. There are '{modelNames.Count.ToString()}' models, so please specify the model name explicitly.");
+                            throw Logger.LogErrorAndCreateException<InvalidOperationException>($"It is only possible to automatically select the right model if there is 1 model. There are '{modelNames.Count.ToString()}' models, so please specify the model name explicitly.");
                         }
 
                         viewModelToModelAttribute.Model = modelNames[0];
@@ -292,7 +290,7 @@
                 var mapping = viewModelToModelMapping.Value;
                 if (!modelObjectsInfo.ContainsKey(mapping.ModelProperty))
                 {
-                    throw Log.ErrorAndCreateException(msg => new ModelNotRegisteredException(mapping.ModelProperty, mapping.ViewModelProperty),
+                    throw Logger.LogErrorAndCreateException(msg => new ModelNotRegisteredException(mapping.ModelProperty, mapping.ViewModelProperty),
                         "There is no model '{0}' registered with the model attribute, so the ViewModelToModel attribute on property '{1}' is invalid",
                         mapping.ModelProperty, mapping.ViewModelProperty);
                 }
@@ -308,9 +306,9 @@
                     var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(valueProperty);
                     if (modelPropertyPropertyInfo is null)
                     {
-                        Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
+                        Logger.LogWarning("Mapped viewmodel property '{ViewModelProperty}' to model property '{ValueProperty}' is invalid because property '{ValueProperty}' is not found on the model '{ModelProperty}'.\n\n" +
                                 "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
-                            mapping.ViewModelProperty, valueProperty, mapping.ModelProperty);
+                            mapping.ViewModelProperty, valueProperty, valueProperty,mapping.ModelProperty);
 
                         modelPropertyPropertyTypes[i] = typeof(object);
                     }
@@ -322,7 +320,7 @@
 
                 if (!mapping.Converter.CanConvert(modelPropertyPropertyTypes, viewModelPropertyType, viewModelType))
                 {
-                    Log.Warning("Property '{0}' mapped on model properties '{1}' cannot be converted via given converter '{2}'",
+                    Logger.LogWarning("Property '{0}' mapped on model properties '{1}' cannot be converted via given converter '{2}'",
                         mapping.ViewModelProperty, string.Join(", ", mapping.ValueProperties), mapping.ConverterType);
                 }
             }
@@ -384,7 +382,7 @@
                     {
                         if (_modelObjects.Count > 1)
                         {
-                            Log.Warning("The view model {0} implements {1} models.\n\n" +
+                            Logger.LogWarning("The view model {0} implements {1} models.\n\n" +
                                         "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
                                 GetType().Name, BoxingCache.GetBoxedValue(_modelObjects.Count));
                         }
@@ -411,7 +409,7 @@
 
                     if (value != parentVmValue)
                     {
-                        Log.Debug($"DeferValidationUntilFirstCall is '{BoxingCache.GetBoxedValue(value)}', but overriding value using parent view model value '{BoxingCache.GetBoxedValue(parentVmValue)}'");
+                        Logger.LogDebug($"DeferValidationUntilFirstCall is '{BoxingCache.GetBoxedValue(value)}', but overriding value using parent view model value '{BoxingCache.GetBoxedValue(parentVmValue)}'");
 
                         DeferValidationUntilFirstSaveCall = parentVmValue;
                     }
@@ -568,7 +566,7 @@
         /// </summary>
         protected void UpdateExplicitViewModelToModelMappings()
         {
-            Log.Debug("Updating all explicit view model to model mappings");
+            Logger.LogDebug("Updating all explicit view model to model mappings");
 
             var explicitMappings = (from mapping in _viewModelToModelMap
                                     where mapping.Value.Mode == ViewModelToModelMode.Explicit
@@ -585,17 +583,17 @@
                     {
                         if (_objectAdapter.TrySetMemberValue(model, mapping.ValueProperties[i], modelValues[i]))
                         {
-                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
+                            Logger.LogDebug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
                         }
                         else
                         {
-                            Log.Warning("Failed to set property '{0}' on model type '{1}'", mapping.ValueProperties, model.GetType().Name);
+                            Logger.LogWarning("Failed to set property '{0}' on model type '{1}'", mapping.ValueProperties, model.GetType().Name);
                         }
                     }
                 }
             }
 
-            Log.Debug("Updated all explicit view model to model mappings");
+            Logger.LogDebug("Updated all explicit view model to model mappings");
         }
 
         /// <summary>
@@ -706,7 +704,7 @@
                                     var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
                                     if (propertiesToSet.Length != valuesToSet.Length)
                                     {
-                                        Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
+                                        Logger.LogError("Properties - values count mismatch, properties '{0}', values '{1}'",
                                             string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
                                     }
 
@@ -731,14 +729,14 @@
 
                                             if (_objectAdapter.TrySetMemberValue(model, propertyToUpdate, valueToSet))
                                             {
-                                                Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valueToSet));
+                                                Logger.LogDebug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valueToSet));
 
                                                 // Force validation, see https://github.com/Catel/Catel/issues/1108
                                                 validate = true;
                                             }
                                             else
                                             {
-                                                Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                                Logger.LogWarning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
                                             }
                                         }
                                         finally
@@ -754,7 +752,7 @@
                         }
                         else
                         {
-                            Log.Warning("Value for model property '{0}' is null, cannot map properties from view model to model", mapping.ModelProperty);
+                            Logger.LogWarning("Value for model property '{0}' is null, cannot map properties from view model to model", mapping.ModelProperty);
                         }
                     }
                 }
@@ -958,7 +956,7 @@
                             }
                             catch (Exception ex)
                             {
-                                Log.Warning(ex, "Failed to cancel the edit of object for model '{0}'", modelProperty);
+                                Logger.LogWarning(ex, "Failed to cancel the edit of object for model '{0}'", modelProperty);
                             }
                             finally
                             {
@@ -973,7 +971,7 @@
                             }
                             catch (Exception ex)
                             {
-                                Log.Warning(ex, "Failed to end the edit of object for model '{0}'", modelProperty);
+                                Logger.LogWarning(ex, "Failed to end the edit of object for model '{0}'", modelProperty);
                             }
                             break;
                     }

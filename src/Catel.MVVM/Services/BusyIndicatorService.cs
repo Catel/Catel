@@ -2,24 +2,25 @@
 {
     using System;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Service to show a busy indicator.
     /// </summary>
     public partial class BusyIndicatorService : IBusyIndicatorService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+        private readonly ILogger<BusyIndicatorService> _logger;
         private readonly ILanguageService _languageService;
         private readonly IDispatcherService _dispatcherService;
 
         private string _lastStatus = string.Empty;
 
-        public BusyIndicatorService(ILanguageService languageService, IDispatcherService dispatcherService)
+        public BusyIndicatorService(ILogger<BusyIndicatorService> logger, 
+            ILanguageService languageService, IDispatcherService dispatcherService)
         {
             ArgumentNullException.ThrowIfNull(languageService);
             ArgumentNullException.ThrowIfNull(dispatcherService);
-
+            _logger = logger;
             _languageService = languageService;
             _dispatcherService = dispatcherService;
         }

@@ -1,10 +1,11 @@
 ﻿namespace Catel.Windows.Interactivity
 {
-    using System.Windows;
-    using Microsoft.Xaml.Behaviors;
     using System;
     using System.ComponentModel;
+    using System.Windows;
     using Logging;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// Available moments on which the focus can be set.
@@ -33,10 +34,7 @@
     /// </summary>
     public partial class Focus : FocusBehaviorBase
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(Focus));
 
         private Catel.IWeakEventListener? _weakEventListener;
 
@@ -178,7 +176,7 @@
                         }
                         else
                         {
-                            Log.Warning("Cannot unsubscribe from previous source because it does not implement 'INotifyPropertyChanged', this should not be possible and can lead to memory leaks");
+                            Logger.LogWarning("Cannot unsubscribe from previous source because it does not implement 'INotifyPropertyChanged', this should not be possible and can lead to memory leaks");
                         }
                         break;
                 }
@@ -192,7 +190,7 @@
                     case FocusMoment.Event:
                         if (string.IsNullOrEmpty(EventName))
                         {
-                            throw Log.ErrorAndCreateException<InvalidOperationException>("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
+                            throw Logger.LogErrorAndCreateException<InvalidOperationException>("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
                         }
 
                         _weakEventListener = this.SubscribeToWeakEvent(newSource, EventName, OnSourceEventOccurred);
@@ -201,13 +199,13 @@
                     case FocusMoment.PropertyChanged:
                         if (string.IsNullOrEmpty(PropertyName))
                         {
-                            throw Log.ErrorAndCreateException<InvalidOperationException>("Property 'PropertyName' is required when FocusMode is 'FocusMode.PropertyChanged'");
+                            throw Logger.LogErrorAndCreateException<InvalidOperationException>("Property 'PropertyName' is required when FocusMode is 'FocusMode.PropertyChanged'");
                         }
 
                         var sourceAsPropertyChanged = newSource as INotifyPropertyChanged;
                         if (sourceAsPropertyChanged is null)
                         {
-                            throw Log.ErrorAndCreateException<InvalidOperationException>("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");
+                            throw Logger.LogErrorAndCreateException<InvalidOperationException>("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");
                         }
 
                         sourceAsPropertyChanged.PropertyChanged += OnSourcePropertyChanged;

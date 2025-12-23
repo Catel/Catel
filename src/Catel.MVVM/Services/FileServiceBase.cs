@@ -20,7 +20,7 @@
         /// <summary>
         /// Gets the initial directory used for the file dialog.
         /// </summary>
-        /// <returns>The inital directory.</returns>
+        /// <returns>The initial directory.</returns>
         protected virtual string? GetInitialDirectory(DetermineFileContext context)
         {
             ArgumentNullException.ThrowIfNull(context);

@@ -5,23 +5,26 @@
     using System.Linq;
     using Catel.Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Manager that can search for views belonging to a view model.
     /// </summary>
     public class ViewManager : IViewManager
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<ViewManager> _logger;
 
         /// <summary>
-        /// List of views and the unique identifyer of the view models they own.
+        /// List of views and the unique identifier of the view models they own.
         /// </summary>
         private readonly Dictionary<IView, int?> _registeredViews = new Dictionary<IView, int?>();
 
         private readonly object _syncObj = new object();
+
+        public ViewManager(ILogger<ViewManager> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Gets the active views presently registered.
@@ -48,13 +51,13 @@
 
             var viewType = view.GetType().FullName;
 
-            Log.Debug("Registering view '{0}'", viewType);
+            _logger.LogDebug("Registering view '{0}'", viewType);
 
             lock (_syncObj)
             {
                 if (_registeredViews.ContainsKey(view))
                 {
-                    Log.Warning("View '{0}' is already registered", viewType);
+                    _logger.LogWarning("View '{0}' is already registered", viewType);
                     return;
                 }
 
@@ -63,7 +66,7 @@
                 SyncViewModelOfView(view);
             }
 
-            Log.Debug("Registered view '{0}'", viewType);
+            _logger.LogDebug("Registered view '{0}'", viewType);
         }
 
         /// <summary>
@@ -77,13 +80,13 @@
 
             var viewType = view.GetType().FullName;
 
-            Log.Debug("Unregistering view '{0}'", viewType);
+            _logger.LogDebug("Unregistering view '{0}'", viewType);
 
             lock (_syncObj)
             {
                 if (!_registeredViews.ContainsKey(view))
                 {
-                    Log.Warning("View '{0}' is not registered", viewType);
+                    _logger.LogWarning("View '{0}' is not registered", viewType);
                     return;
                 }
 
@@ -92,7 +95,7 @@
                 _registeredViews.Remove(view);
             }
 
-            Log.Debug("Unregistered view '{0}'", viewType);
+            _logger.LogDebug("Unregistered view '{0}'", viewType);
         }
 
         /// <summary>
@@ -105,7 +108,7 @@
         {
             ArgumentNullException.ThrowIfNull(viewModel);
 
-            Log.Debug("Getting the views of view model '{0}'", BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _logger.LogDebug("Getting the views of view model '{0}'", BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             var views = new List<IView>();
 
@@ -116,7 +119,7 @@
                                select registeredView.Key);
             }
 
-            Log.Debug("Found '{0}' views for view model '{1}'", BoxingCache.GetBoxedValue(views.Count), BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _logger.LogDebug("Found '{0}' views for view model '{1}'", BoxingCache.GetBoxedValue(views.Count), BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             return views.ToArray();
         }
@@ -146,7 +149,7 @@
             var view = sender as IView;
             if (view is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Received ViewModelChanged event from a view without valid sender, cannot handle events correctly");
+                throw _logger.LogErrorAndCreateException<CatelException>($"Received ViewModelChanged event from a view without valid sender, cannot handle events correctly");
             }
 
             SyncViewModelOfView(view);

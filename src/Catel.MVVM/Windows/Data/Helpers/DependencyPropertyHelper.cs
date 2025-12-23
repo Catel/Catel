@@ -3,19 +3,18 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-
+    using System.Windows;
     using Catel.Caching;
     using Catel.Logging;
-
+    using Microsoft.Extensions.Logging;
     using Reflection;
-    using System.Windows;
 
     /// <summary>
     /// Helper class for dependency properties.
     /// </summary>
     public static class DependencyPropertyHelper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(DependencyPropertyHelper));
 
         /// <summary>
         /// Cache containing all dependency properties of a specific type.
@@ -228,7 +227,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, $"Failed to enumerate member '{member.Name}' as dependency property");
+                    Logger.LogWarning(ex, $"Failed to enumerate member '{member.Name}' as dependency property");
                 }
             }
 

@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using System.Windows;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using RootFrameType = System.Windows.Controls.Frame;
 
     /// <summary>
@@ -31,7 +32,7 @@
         /// Gets a value indicating whether it is possible to navigate forward.
         /// </summary>
         /// <value>
-        /// <c>true</c> if it is possible to navigate backforward otherwise, <c>false</c>.
+        /// <c>true</c> if it is possible to navigate forward otherwise, <c>false</c>.
         /// </value>
         public override bool CanGoForward
         {
@@ -49,7 +50,7 @@
                 var rootFrame = NavigationRootService.GetNavigationRoot() as RootFrameType;
                 if (rootFrame is null)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>("No root frame is available for the navigation service");
+                    throw _logger.LogErrorAndCreateException<CatelException>("No root frame is available for the navigation service");
                 }
 
                 return rootFrame;
@@ -71,7 +72,7 @@
 
                         if (!await CloseApplicationAsync())
                         {
-                            Log.Debug("INavigationService.CloseApplication has canceled the closing of the main window");
+                            _logger.LogDebug("INavigationService.CloseApplication has canceled the closing of the main window");
                             e.Cancel = true;
                         }
 
@@ -81,7 +82,7 @@
             }
             else
             {
-                Log.Warning("Application.Current.MainWindow is null, cannot prevent application closing via service");
+                _logger.LogWarning("Application.Current.MainWindow is null, cannot prevent application closing via service");
             }
         }
 
@@ -92,7 +93,7 @@
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("No main window found (not running SL out of browser? Cannot close application without a window.");
+                throw _logger.LogErrorAndCreateException<NotSupportedException>("No main window found (not running SL out of browser? Cannot close application without a window.");
             }
 
             if (!_appClosingByMainWindow)
@@ -125,7 +126,7 @@
 
         private async Task NavigateWithParametersAsync(string uri, Dictionary<string, object>? parameters)
         {
-            Log.Debug($"Navigating to '{uri}'");
+            _logger.LogDebug($"Navigating to '{uri}'");
 
             RootFrame.Navigate(new Uri(uri, UriKind.RelativeOrAbsolute), parameters);
         }
@@ -155,7 +156,7 @@
         /// </summary>
         public override void RemoveBackEntry()
         {
-            Log.Debug("Removing last back entry");
+            _logger.LogDebug("Removing last back entry");
 
             RootFrame.RemoveBackEntry();
         }
@@ -165,7 +166,7 @@
         /// </summary>
         public override void RemoveAllBackEntries()
         {
-            Log.Debug("Clearing all back entries");
+            _logger.LogDebug("Clearing all back entries");
 
             while (RootFrame.RemoveBackEntry() is not null)
             {

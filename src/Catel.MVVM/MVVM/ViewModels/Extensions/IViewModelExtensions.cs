@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Threading;
 
     /// <summary>
@@ -10,7 +11,7 @@
     /// </summary>
     public static class IViewModelExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(IViewModelExtensions));
 
         public static int ViewModelActionAwaitTimeoutInMilliseconds { get; set; } = 50;
 
@@ -204,7 +205,7 @@
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"Failed to await saving of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
+                Logger.LogWarning(ex, $"Failed to await saving of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
                 throw;
             }
             finally
@@ -252,7 +253,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await canceling of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
+                Logger.LogError(ex, $"Failed to await canceling of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
                 throw;
             }
             finally
@@ -289,7 +290,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await closing of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
+                Logger.LogError(ex, $"Failed to await closing of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
                 throw;
             }
             finally

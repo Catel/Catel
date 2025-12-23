@@ -4,6 +4,7 @@
     using System.Runtime.CompilerServices;
     using System.Windows.Controls;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using MVVM.Views;
 
     /// <summary>
@@ -11,10 +12,15 @@
     /// </summary>
     public partial class ViewModelWrapperService : ViewModelWrapperServiceBase, IViewModelWrapperService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<ViewModelWrapperService> _logger;
 
         private readonly IViewModelWrapper _tempObject = new ViewModelWrapper(new Grid());
         private readonly ConditionalWeakTable<IView, IViewModelWrapper> _wrappers = new ConditionalWeakTable<IView, IViewModelWrapper>();
+
+        public ViewModelWrapperService(ILogger<ViewModelWrapperService> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Determines whether the specified view is already wrapped.

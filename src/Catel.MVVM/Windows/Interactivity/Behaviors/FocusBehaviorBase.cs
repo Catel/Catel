@@ -1,22 +1,20 @@
 ﻿namespace Catel.Windows.Interactivity
 {
+    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Threading;
-    using TimerTickEventArgs = System.EventArgs;
-    using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
+    using TimerTickEventArgs = System.EventArgs;
 
     /// <summary>
     /// Base class for focus behaviors.
     /// </summary>
     public abstract class FocusBehaviorBase : BehaviorBase<FrameworkElement>
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(FocusBehaviorBase));
 
         private readonly DispatcherTimer _timer = new DispatcherTimer();
 
@@ -65,7 +63,7 @@
                 focusDelay = 5000;
             }
 
-            Log.Debug("Starting focus on element '{0}' with a delay of '{1}' ms", AssociatedObject.GetType().GetSafeFullName(false), focusDelay);
+            Logger.LogDebug("Starting focus on element '{0}' with a delay of '{1}' ms", AssociatedObject.GetType().GetSafeFullName(false), focusDelay);
 
             if (focusDelay > 25)
             {
@@ -110,7 +108,7 @@
 
             if (AssociatedObject.Focus())
             {
-                Log.Debug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
+                Logger.LogDebug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
 
                 var textBox = AssociatedObject as TextBox;
                 if (textBox is not null)
@@ -121,7 +119,7 @@
                 return true;
             }
 
-            Log.Debug("Failed to focus '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
+            Logger.LogDebug("Failed to focus '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
 
             return false;
         }

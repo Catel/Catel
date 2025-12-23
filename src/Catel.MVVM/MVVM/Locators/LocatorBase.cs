@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -12,21 +13,19 @@
     /// </summary>
     public abstract class LocatorBase : ILocator
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger _logger;
 
         private readonly Dictionary<string, HashSet<string>> _cache = new Dictionary<string, HashSet<string>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        protected LocatorBase()
+        protected LocatorBase(ILogger logger)
         {
             NamingConventions = new List<string>(GetDefaultNamingConventions());
+            _logger = logger;
         }
- 
+
         /// <summary>
         /// Gets or sets the naming conventions to use to locate types.
         /// <para/>
@@ -85,7 +84,7 @@
                 var assembly = TypeHelper.GetAssemblyName(valueToResolve);
                 if (assembly is null)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>($"Cannot resolve value '{valueToResolve}', assembly name returned null");
+                    throw _logger.LogErrorAndCreateException<CatelException>($"Cannot resolve value '{valueToResolve}', assembly name returned null");
                 }
 
                 var typeToResolveName = TypeHelper.GetTypeName(valueToResolve);
@@ -116,7 +115,7 @@
 
                 var fullResolvedTypeName = (resolvedType is not null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.GetSafeFullName(true)) : null;
 
-                Log.Debug("Resolved type '{0}' for type '{1}'", fullResolvedTypeName, valueToResolve);
+                _logger.LogDebug("Resolved type '{0}' for type '{1}'", fullResolvedTypeName, valueToResolve);
 
                 var newSet = new HashSet<string>();
 

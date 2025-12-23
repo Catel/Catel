@@ -17,6 +17,7 @@
     using Controls;
     using Logging;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using MVVM;
     using MVVM.Providers;
     using MVVM.Views;
@@ -28,7 +29,7 @@
     /// </summary>
     public class DataWindow : System.Windows.Window, IDataWindow
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(DataWindow));
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IWrapControlService _wrapControlService;
@@ -579,7 +580,7 @@
             {
                 if (_defaultCancelCommand is not null)
                 {
-                    Log.Info("User pressed 'Escape', executing cancel command");
+                    Logger.LogDebug("User pressed 'Escape', executing cancel command");
 
                     // Not everyone is using the ICatelCommand, make sure to check if execution is allowed
                     if (_defaultCancelCommand.CanExecute(null))
@@ -590,7 +591,7 @@
                 }
                 else
                 {
-                    Log.Info("User pressed 'Escape' but no cancel command is found, setting DialogResult to false");
+                    Logger.LogDebug("User pressed 'Escape' but no cancel command is found, setting DialogResult to false");
 
                     if (!SetDialogResultAndMakeSureWindowGetsClosed(false))
                     {
@@ -624,7 +625,7 @@
             }
             catch (InvalidOperationException ex)
             {
-                Log.Warning(ex, "Failed to set DialogResult, probably the main window, closing window manually");
+                Logger.LogWarning(ex, "Failed to set DialogResult, probably the main window, closing window manually");
                 Close();
                 return true;
             }
@@ -655,7 +656,7 @@
         {
             if (_defaultOkCommand is not null)
             {
-                Log.Info("User pressed 'Enter', executing default command");
+                Logger.LogDebug("User pressed 'Enter', executing default command");
 
                 // Not everyone is using the ICatelCommand, make sure to check if execution is allowed
                 if (_defaultOkCommand.CanExecute(null))
@@ -674,7 +675,7 @@
         {
             if (InternalGrid is not null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>(Exceptions.DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded);
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>(Exceptions.DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded);
             }
 
             _buttons.Add(dataWindowButton);

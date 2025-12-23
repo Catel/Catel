@@ -1,6 +1,7 @@
 ﻿namespace Catel.MVVM.Views
 {
     using System;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Very fast view property selector because it does not select any view properties.
@@ -9,6 +10,12 @@
     /// </summary>
     public class FastViewPropertySelector : ViewPropertySelector
     {
+        public FastViewPropertySelector(ILogger<FastViewPropertySelector> logger)
+            : base(logger)
+        {
+            
+        }
+
         /// <summary>
         /// Determines whether all view properties must be subscribed for this type.
         /// </summary>

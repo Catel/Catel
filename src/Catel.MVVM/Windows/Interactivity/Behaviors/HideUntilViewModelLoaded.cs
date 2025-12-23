@@ -1,17 +1,18 @@
 ﻿namespace Catel.Windows.Interactivity
 {
     using System;
+    using System.Windows;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using MVVM;
     using Reflection;
-    using System.Windows;
 
     /// <summary>
     /// Hides the view until the view model is loaded.
     /// </summary>
     public partial class HideUntilViewModelLoaded : BehaviorBase<FrameworkElement>
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(HideUntilViewModelLoaded));
 
         /// <summary>
         /// Initializes this instance.
@@ -24,7 +25,7 @@
             if (viewModelContainer is null)
             {
                 var error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName(false));
-                throw Log.ErrorAndCreateException<InvalidOperationException>(error);
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>(error);
             }
 
             viewModelContainer.ViewModelChanged += OnViewModelChanged;

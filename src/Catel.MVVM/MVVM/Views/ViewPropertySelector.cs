@@ -1,6 +1,7 @@
 ﻿namespace Catel.MVVM.Views
 {
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
 
@@ -15,10 +16,15 @@
     /// </summary>
     public class ViewPropertySelector : IViewPropertySelector
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger _logger;
 
         private readonly HashSet<string> _allViewsProperties = new HashSet<string>();
         private readonly Dictionary<Type, HashSet<string>> _viewProperties = new Dictionary<Type, HashSet<string>>();
+
+        public ViewPropertySelector(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Adds the property to subscribe to.
@@ -34,7 +40,7 @@
 
             if (targetViewType is null)
             {
-                Log.Debug("Added property '{0}' on all views to subscribe to", propertyName);
+                _logger.LogDebug("Added property '{0}' on all views to subscribe to", propertyName);
 
                 if (!_allViewsProperties.Contains(propertyName))
                 {
@@ -43,7 +49,7 @@
             }
             else
             {
-                Log.Debug("Added property '{0}.{1}' to subscribe to", targetViewType.Name, propertyName);
+                _logger.LogDebug("Added property '{0}.{1}' to subscribe to", targetViewType.Name, propertyName);
 
                 if (!_viewProperties.TryGetValue(targetViewType, out var properties))
                 {

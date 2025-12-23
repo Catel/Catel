@@ -3,15 +3,16 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Logging;
     using System.Windows.Threading;
+    using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Extension methods for the dispatcher.
     /// </summary>
     public static partial class DispatcherExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(DispatcherExtensions));
 
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
@@ -279,7 +280,7 @@
 
             if (!tcs.TrySetResult(result))
             {
-                Log.Warning($"Failed to set the task result to '{result}', task was already completed. Current status is '{Enum<TaskStatus>.ToString(tcs.Task.Status)}'");
+                Logger.LogWarning($"Failed to set the task result to '{result}', task was already completed. Current status is '{Enum<TaskStatus>.ToString(tcs.Task.Status)}'");
                 return false;
             }
 
@@ -295,7 +296,7 @@
 
             if (!tcs.TrySetCanceled())
             {
-                Log.Warning("Failed to set the task as canceled, task was already completed or canceled before");
+                Logger.LogWarning("Failed to set the task as canceled, task was already completed or canceled before");
                 return false;
             }
 

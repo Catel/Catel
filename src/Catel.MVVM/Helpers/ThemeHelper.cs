@@ -1,16 +1,17 @@
 ﻿namespace Catel
 {
     using System;
+    using System.Windows;
     using Caching;
     using Catel.Logging;
-    using System.Windows;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Theme helper to ensure themes are loaded upon usage.
     /// </summary>
     public static class ThemeHelper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ThemeHelper));
 
         private static readonly ICacheStorage<Uri, bool> ThemeLoadedCache = new CacheStorage<Uri, bool>();
 
@@ -67,7 +68,7 @@
 
                     if (!predicate())
                     {
-                        Log.Info("Loading resource dictionary '{0}'", resourceUri.ToString());
+                        Logger.LogInformation("Loading resource dictionary '{0}'", resourceUri.ToString());
 
                         resources.MergedDictionaries.Add(new ResourceDictionary
                         {
@@ -78,7 +79,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to resource dictionary '{0}'", resourceUri.ToString());
+                Logger.LogError(ex, "Failed to resource dictionary '{0}'", resourceUri.ToString());
             }
         }
 

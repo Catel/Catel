@@ -4,6 +4,7 @@
     using Catel.MVVM.Views;
     using Catel.Reflection;
     using Catel.Windows.Controls;
+    using Microsoft.Extensions.Logging;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -56,7 +57,7 @@
             {
                 if (existingGrid.Name.StartsWith(InnerWrapperName))
                 {
-                    Log.Debug($"No need to create content wrapper grid for view model for view '{viewTypeName}', custom grid with special name defined");
+                    _logger.LogDebug($"No need to create content wrapper grid for view model for view '{viewTypeName}', custom grid with special name defined");
 
                     vmGrid = existingGrid;
                 }
@@ -64,7 +65,7 @@
 
             if (vmGrid is null)
             {
-                Log.Debug($"Creating content wrapper grid for view model for view '{viewTypeName}'");
+                _logger.LogDebug($"Creating content wrapper grid for view model for view '{viewTypeName}'");
 
                 vmGrid = new Grid();
                 vmGrid.Name = InnerWrapperName.GetUniqueControlName();
@@ -86,7 +87,7 @@
 
                 SetContent(view, vmGrid);
 
-                Log.Debug($"Created content wrapper grid for view model for view '{viewTypeName}'");
+                _logger.LogDebug($"Created content wrapper grid for view model for view '{viewTypeName}'");
             }
 
             var binding = vmGrid.GetBindingExpression(FrameworkElement.DataContextProperty);

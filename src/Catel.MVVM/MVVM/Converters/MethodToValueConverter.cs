@@ -2,6 +2,7 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -18,7 +19,7 @@
     [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
     public class MethodToValueConverter : ValueConverterBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(MethodToValueConverter));
 
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -58,7 +59,7 @@
         /// </remarks>
         protected override object? ConvertBack(object? value, Type targetType, object? parameter)
         {
-            throw Log.ErrorAndCreateException<NotSupportedException>("MethodToValueConverter can only be used for one way conversion");
+            throw Logger.LogErrorAndCreateException<NotSupportedException>("MethodToValueConverter can only be used for one way conversion");
         }
     }
 }

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Catel.Services;
-
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -14,6 +14,14 @@
     /// </summary>
     public class ViewLocator : LocatorBase, IViewLocator
     {
+        private readonly ILogger<ViewLocator> _logger;
+
+        public ViewLocator(ILogger<ViewLocator> logger)
+            : base(logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Registers the specified view in the local cache. This cache will also be used by the
         /// <see cref="ResolveView"/> method.

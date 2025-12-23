@@ -2,18 +2,19 @@
 {
     using System;
     using System.Collections.Generic;
-    using Logging;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
-    using System.Linq;
+    using Logging;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Model value class to store the mapping of the View Model to a Model mapping.
     /// </summary>
     public class ViewModelToModelMapping
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ViewModelToModelMapping));
 
         private readonly IServiceProvider _serviceProvider;
 
@@ -97,7 +98,7 @@
             var converter = ActivatorUtilities.CreateInstance(_serviceProvider, ConverterType, args) as IViewModelToModelConverter;
             if (converter is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to create converter '{ConverterType}'");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Failed to create converter '{ConverterType}'");
             }
 
             Converter = converter;

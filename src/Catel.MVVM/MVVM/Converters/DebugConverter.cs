@@ -2,16 +2,14 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Debug converter that allows to debug bindings easily and writes the output to the log.
     /// </summary>
     public class DebugConverter : ValueConverterBase
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(DebugConverter));
 
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -22,12 +20,10 @@
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object? Convert(object? value, Type targetType, object? parameter)
         {
-            Log.Debug("Debugging converter");
-            Log.Indent();
-            Log.Debug("Value: {0}", ObjectToStringHelper.ToString(value));
-            Log.Debug("TargetType: {0}", targetType.Name);
-            Log.Debug("Parameter: {0}", ObjectToStringHelper.ToString(parameter));
-            Log.Unindent();
+            Logger.LogDebug("Debugging converter");
+            Logger.LogDebug("  Value: {0}", ObjectToStringHelper.ToString(value));
+            Logger.LogDebug("  TargetType: {0}", targetType.Name);
+            Logger.LogDebug("  Parameter: {0}", ObjectToStringHelper.ToString(parameter));
 
             return value;
         }

@@ -5,6 +5,7 @@
     using System.Windows;
     using System.Windows.Threading;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using MVVM;
     using Reflection;
     using Windows;
@@ -76,7 +77,7 @@
             {
                 if (!RegisteredWindows.TryGetValue(context.Name, out windowType))
                 {
-                    throw Log.ErrorAndCreateException<CatelException>($"Cannot create window, no window is registered for name '{context.Name}'");
+                    throw _logger.LogErrorAndCreateException<CatelException>($"Cannot create window, no window is registered for name '{context.Name}'");
                 }
             }
 
@@ -103,7 +104,7 @@
                     var window = _viewFactory.CreateViewWithViewModel(windowType, context.Data);
                     if (window is null)
                     {
-                        throw Log.ErrorAndCreateException<CatelException>($"Cannot create window '{windowType.GetSafeFullName()}'");
+                        throw _logger.LogErrorAndCreateException<CatelException>($"Cannot create window '{windowType.GetSafeFullName()}'");
                     }
 
                     // Important: don't set owner window here. Whenever this owner gets closed between this moment and the actual
@@ -217,7 +218,7 @@
 
             HandleCloseSubscription(window, context, (sender, args) =>
             {
-                Log.Debug($"Handling close subscription of '{window.GetType().Name}'");
+                _logger.LogDebug($"Handling close subscription of '{window.GetType().Name}'");
 
                 if (window is System.Windows.Window wpfWindow)
                 {
@@ -237,11 +238,11 @@
                                     
                     //                if (ThrowExceptionWhenClosingWithModalChildWindows)
                     //                {
-                    //                    throw Log.ErrorAndCreateException<CatelException>(message);
+                    //                    throw _logger.LogErrorAndCreateException<CatelException>(message);
                     //                }
                     //                else
                     //                {
-                    //                    Log.Warning(message);
+                    //                    _logger.LogWarning(message);
                     //                }
                     //            }
                     //        }
@@ -249,10 +250,10 @@
                     //}
 
 #if DEBUG
-                    Log.Debug($"Window active: {wpfWindow.IsActive}");
-                    Log.Debug($"Window dialog result: {wpfWindow.DialogResult}");
-                    Log.Debug($"Window loaded: {wpfWindow.IsLoaded}");
-                    Log.Debug($"Window visible: {wpfWindow.IsVisible}");
+                    _logger.LogDebug($"Window active: {wpfWindow.IsActive}");
+                    _logger.LogDebug($"Window dialog result: {wpfWindow.DialogResult}");
+                    _logger.LogDebug($"Window loaded: {wpfWindow.IsLoaded}");
+                    _logger.LogDebug($"Window visible: {wpfWindow.IsVisible}");
 #endif
                 }
 
@@ -262,19 +263,19 @@
             var showMethodInfo = context.IsModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
             if (context.IsModal && showMethodInfo is null)
             {
-                Log.Warning($"Method 'ShowDialog' not found on '{window.GetType().Name}', falling back to 'Show'");
+                _logger.LogWarning($"Method 'ShowDialog' not found on '{window.GetType().Name}', falling back to 'Show'");
 
                 showMethodInfo = window.GetType().GetMethodEx("Show");
             }
 
             if (showMethodInfo is null)
             {
-                var exception = Log.ErrorAndCreateException<NotSupportedException>($"Methods 'Show' or 'ShowDialog' not found on '{window.GetType().Name}', cannot show the window");
+                var exception = _logger.LogErrorAndCreateException<NotSupportedException>($"Methods 'Show' or 'ShowDialog' not found on '{window.GetType().Name}', cannot show the window");
                 tcs.SetException(exception);
             }
             else
             {
-                Log.Debug($"Showing window '{window.GetType().Name}'");
+                _logger.LogDebug($"Showing window '{window.GetType().Name}'");
 
                 var handler = async () =>
                 {
@@ -299,7 +300,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
+                        _logger.LogError(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
                         tcs.TrySetException(ex);
                     }
                 };

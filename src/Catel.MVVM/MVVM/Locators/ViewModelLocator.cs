@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Catel.Services;
-
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -14,6 +14,14 @@
     /// </summary>
     public class ViewModelLocator : LocatorBase, IViewModelLocator
     {
+        private readonly ILogger<ViewModelLocator> _logger;
+
+        public ViewModelLocator(ILogger<ViewModelLocator> logger)
+            : base(logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Registers the specified view model in the local cache. This cache will also be used by the
         /// <see cref="ResolveViewModel"/> method.

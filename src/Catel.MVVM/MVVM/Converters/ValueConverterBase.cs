@@ -1,11 +1,12 @@
 ﻿namespace Catel.MVVM.Converters
 {
     using System;
-    using System.Globalization;
-    using Logging;
-    using Reflection;
     using System.ComponentModel;
+    using System.Globalization;
     using System.Windows.Markup;
+    using Logging;
+    using Microsoft.Extensions.Logging;
+    using Reflection;
 
     /// <summary>
     /// Base class for value converters which makes it compatible between .NET and WinRT.
@@ -29,7 +30,7 @@
     /// <typeparam name="TConvertBack">The type of the convert back input.</typeparam>
     public abstract class ValueConverterBase<TConvert, TConvertBack> : MarkupExtension, IValueConverter
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ValueConverterBase<TConvert, TConvertBack>));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueConverterBase{TConvert, TConvertBack}"/> class.
@@ -108,7 +109,7 @@
 
             if (!IsConvertable<TConvert>(returnValue))
             {
-                Log.Warning("Cannot convert value of type '{0}', expected type '{1}', ignoring converter results",
+                Logger.LogWarning("Cannot convert value of type '{0}', expected type '{1}', ignoring converter results",
                     ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvert));
 
                 return ConverterHelper.UnsetValue;
@@ -138,7 +139,7 @@
 
             if (!IsConvertable<TConvertBack>(returnValue))
             {
-                Log.Warning("Cannot convert back value of type '{0}', expected type '{1}', ignoring converter results",
+                Logger.LogWarning("Cannot convert back value of type '{0}', expected type '{1}', ignoring converter results",
                     ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvertBack));
 
                 returnValue = ConverterHelper.UnsetValue;

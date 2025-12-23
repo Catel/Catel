@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using Catel.Services;
     using Data;
     using Logging;
-    using MVVM;
-    using Views;
-    using Reflection;
-    using Catel.Services;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using MVVM;
+    using Reflection;
+    using Views;
 
     /// <summary>
     /// Available unload behaviors.
@@ -57,7 +58,7 @@
     {
         private const string DataContextPropertyName = "DataContext";
 
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(LogicBase));
 
         protected readonly IViewModelFactory _viewModelFactory;
         protected readonly IViewModelLocator _viewModelLocator;
@@ -128,13 +129,13 @@
                 viewModelType = (viewModel is not null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
                 if (viewModelType is null)
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>($"The view model of the view '{targetViewType.Name}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually");
+                    throw Logger.LogErrorAndCreateException<NotSupportedException>($"The view model of the view '{targetViewType.Name}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually");
                 }
             }
 
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<LogicBase>();
 
-            Log.Debug($"Constructing behavior '{GetType().Name}' for '{targetView.GetType().Name}' with unique id '{BoxingCache.GetBoxedValue(UniqueIdentifier)}'");
+            Logger.LogDebug($"Constructing behavior '{GetType().Name}' for '{targetView.GetType().Name}' with unique id '{BoxingCache.GetBoxedValue(UniqueIdentifier)}'");
 
             TargetView = targetView;
             ViewModelType = viewModelType;
@@ -148,34 +149,34 @@
                 SetDataContext(ViewModel);
             }
 
-            Log.Debug("Subscribing to view events");
+            Logger.LogDebug("Subscribing to view events");
 
             _viewLoadManager.AddView(this);
 
             if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewLoading), OnViewLoadedManagerLoadingInternal, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
 
                 _viewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
             }
 
             if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewLoaded), OnViewLoadedManagerLoadedInternal, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
 
                 _viewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
             }
 
             if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewUnloading), OnViewLoadedManagerUnloadingInternal, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
 
                 _viewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
             }
 
             if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewUnloaded), OnViewLoadedManagerUnloadedInternal, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
 
                 _viewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloadedInternal;
             }
@@ -186,7 +187,7 @@
 
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
 
-            Log.Debug("Subscribing to view properties");
+            Logger.LogDebug("Subscribing to view properties");
 
             // This also subscribes to DataContextChanged, don't double subscribe
             var viewPropertiesToSubscribe = DetermineInterestingViewProperties();
@@ -195,7 +196,7 @@
                 TargetView.SubscribeToPropertyChanged(viewPropertyToSubscribe, OnTargetViewPropertyChanged);
             }
 
-            Log.Debug($"Constructed behavior '{GetType().Name}' for '{TargetViewType?.Name}'");
+            Logger.LogDebug($"Constructed behavior '{GetType().Name}' for '{TargetViewType?.Name}'");
         }
 
         /// <summary>
@@ -226,7 +227,7 @@
                 var oldViewModel = _viewModel;
                 var newViewModel = value;
 
-                Log.Debug($"Changing view model from '{oldViewModel?.GetType()}' to '{newViewModel?.GetType()}'");
+                Logger.LogDebug($"Changing view model from '{oldViewModel?.GetType()}' to '{newViewModel?.GetType()}'");
 
                 OnViewModelChanging();
 
@@ -254,7 +255,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning("Caught exception while setting DataContext to new value", ex);
+                        Logger.LogWarning("Caught exception while setting DataContext to new value: {Exception}", ex);
                     }
                 }
 
@@ -388,14 +389,14 @@
                 // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
                 if (IsTargetViewLoaded)
                 {
-                    Log.Debug($"Cannot load target view '{TargetViewType?.Name}', view is already loaded");
+                    Logger.LogDebug($"Cannot load target view '{TargetViewType?.Name}', view is already loaded");
 
                     return false;
                 }
 
                 if (!CanViewBeLoaded)
                 {
-                    Log.Debug($"Cannot load target view '{TargetViewType?.Name}', CanViewBeLoaded returned false");
+                    Logger.LogDebug($"Cannot load target view '{TargetViewType?.Name}', CanViewBeLoaded returned false");
 
                     return false;
                 }
@@ -684,7 +685,7 @@
                 return;
             }
 
-            Log.Debug($"Target view '{TargetViewType?.Name}' is being loaded");
+            Logger.LogDebug($"Target view '{TargetViewType?.Name}' is being loaded");
 
             IsLoading = true;
         }
@@ -707,7 +708,7 @@
                 return;
             }
 
-            Log.Debug($"Target view '{TargetViewType?.Name}' has been loaded");
+            Logger.LogDebug($"Target view '{TargetViewType?.Name}' has been loaded");
 
             var view = TargetView;
             if (view is null)
@@ -783,7 +784,7 @@
 
             if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
                 return;
             }
 
@@ -805,7 +806,7 @@
                 return;
             }
 
-            Log.Debug($"Target view '{TargetViewType?.Name}' is being unloaded");
+            Logger.LogDebug($"Target view '{TargetViewType?.Name}' is being unloaded");
 
             IsUnloading = true;
         }
@@ -828,7 +829,7 @@
                 return;
             }
 
-            Log.Debug($"Target view '{TargetViewType?.Name}' has been unloaded");
+            Logger.LogDebug($"Target view '{TargetViewType?.Name}' has been unloaded");
 
             var view = TargetView;
             if (view is not null)
@@ -901,7 +902,7 @@
             var targetView = TargetView;
             if (targetView is null)
             {
-                Log.Warning($"Target view is null, cannot handle DataContextChanged event");
+                Logger.LogWarning($"Target view is null, cannot handle DataContextChanged event");
                 return;
             }
 
@@ -909,7 +910,7 @@
 
             var dataContext = GetDataContext(targetView);
 
-            Log.Debug($"DataContext of TargetView '{targetViewType.GetSafeFullName()}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
+            Logger.LogDebug($"DataContext of TargetView '{targetViewType.GetSafeFullName()}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
 
             LastKnownDataContext = null;
 
@@ -1149,7 +1150,7 @@
                     }
                 }
 
-                Log.Debug($"View '{TargetViewType}' is still closing the view model, awaiting completion");
+                Logger.LogDebug($"View '{TargetViewType}' is still closing the view model, awaiting completion");
 
                 await Task.Delay(5);
             }
@@ -1185,22 +1186,22 @@
                 return ViewModel;
             }
 
-            var targetViewtype = TargetViewType;
-            if (targetViewtype is null)
+            var targetViewType = TargetViewType;
+            if (targetViewType is null)
             {
-                Log.Debug($"Target view type is null, preventing view model creation");
+                Logger.LogDebug($"Target view type is null, preventing view model creation");
                 return null;
             }
 
             if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', preventing view model creation for '{targetViewtype.Name}'");
+                Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', preventing view model creation for '{targetViewType.Name}'");
                 return null;
             }
 
             if (IgnoreNullDataContext && (injectionObject is null))
             {
-                Log.Info("ViewModel construction is prevented by the IgnoreNullDataContext property");
+                Logger.LogDebug("ViewModel construction is prevented by the IgnoreNullDataContext property");
                 return null;
             }
 
@@ -1212,14 +1213,14 @@
                 if (determineViewModelInstanceEventArgs.ViewModel is not null)
                 {
                     var viewModel = determineViewModelInstanceEventArgs.ViewModel;
-                    Log.Info("ViewModel instance is overridden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
+                    Logger.LogDebug("ViewModel instance is overridden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
 
                     return viewModel;
                 }
 
                 if (determineViewModelInstanceEventArgs.DoNotCreateViewModel)
                 {
-                    Log.Info("ViewModel construction is prevented by the DetermineViewModelInstance event (DoNotCreateViewModel is set to true)");
+                    Logger.LogDebug("ViewModel construction is prevented by the DetermineViewModelInstance event (DoNotCreateViewModel is set to true)");
                     return null;
                 }
             }
@@ -1231,7 +1232,7 @@
                 determineViewModelTypeHandler(this, determineViewModelTypeEventArgs);
                 if (determineViewModelTypeEventArgs.ViewModelType is not null)
                 {
-                    Log.Info("ViewModelType is overridden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
+                    Logger.LogDebug("ViewModelType is overridden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
                         determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
 
                     viewModelType = determineViewModelTypeEventArgs.ViewModelType;
@@ -1243,20 +1244,20 @@
             {
                 var injectionObjectViewModelType = injectionObjectAsViewModel.GetType();
 
-                if (_viewModelFactory.CanReuseViewModel(targetViewtype, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
+                if (_viewModelFactory.CanReuseViewModel(targetViewType, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
                 {
-                    Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
-                             viewModelType.GetSafeFullName(), targetViewtype.GetSafeFullName());
+                    Logger.LogDebug("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
+                             viewModelType.GetSafeFullName(), targetViewType.GetSafeFullName());
 
                     return injectionObjectAsViewModel;
                 }
             }
 
-            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", _viewModelFactory.GetType().GetSafeFullName());
+            Logger.LogDebug("Using IViewModelFactory '{0}' to instantiate the view model", _viewModelFactory.GetType().GetSafeFullName());
 
             var viewModelInstance = _viewModelFactory.CreateViewModel(viewModelType, injectionObject);
 
-            Log.Debug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
+            Logger.LogDebug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
                 (viewModelInstance is not null) ? string.Empty : " NOT");
 
             return viewModelInstance;

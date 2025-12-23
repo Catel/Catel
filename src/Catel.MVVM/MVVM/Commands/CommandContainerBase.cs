@@ -6,6 +6,7 @@
     using Catel.Logging;
     using Catel.Services;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Container for application-wide commands.
@@ -70,8 +71,6 @@
     public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TProgress> 
         where TProgress : ITaskProgressReport
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly ICatelCommand _command;
         private readonly ICommandManager _commandManager;
         private readonly IServiceProvider _serviceProvider;
@@ -98,7 +97,7 @@
             var compositeCommand = _commandManager.GetCommand(commandName) as ICompositeCommand;
             if (compositeCommand is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Cannot find composite command command '{commandName}'");
+                throw new CatelException($"Cannot find composite command command '{commandName}'");
             }
 
             _compositeCommand = compositeCommand;

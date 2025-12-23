@@ -5,6 +5,7 @@
     using System.Windows.Navigation;
     using Catel.Logging;
     using System.Collections.Generic;
+    using Microsoft.Extensions.Logging;
 
     public partial class NavigationAdapter
     {
@@ -18,14 +19,14 @@
             var navigationFrame = NavigationRoot as Frame;
             if (navigationFrame is not null)
             {
-                Log.Debug("Initializing navigation adapter using frame");
+                Logger.LogDebug("Initializing navigation adapter using frame");
 
                 navigationFrame.Navigating += OnNavigatingEvent;
                 navigationFrame.Navigated += OnNavigatedEvent;
             }
             else
             {
-                Log.Debug("Initializing navigation adapter using application");
+                Logger.LogDebug("Initializing navigation adapter using application");
 
                 var app = Application.Current;
 
@@ -39,14 +40,14 @@
             var navigationFrame = NavigationRoot as Frame;
             if (navigationFrame is not null)
             {
-                Log.Debug("Uninitializing navigation adapter using frame");
+                Logger.LogDebug("Uninitializing navigation adapter using frame");
 
                 navigationFrame.Navigating -= OnNavigatingEvent;
                 navigationFrame.Navigated -= OnNavigatedEvent;
             }
             else
             {
-                Log.Debug("Uninitializing navigation adapter using application");
+                Logger.LogDebug("Uninitializing navigation adapter using application");
 
                 var app = Application.Current;
 

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Manager that handles top =&gt; bottom loaded events for all views inside an application.
@@ -35,7 +36,7 @@
     /// </summary>
     public class ViewLoadManager : IViewLoadManager
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<ViewLoadManager> _logger;
 
         private readonly List<WeakViewInfo> _views = new List<WeakViewInfo>();
 
@@ -48,9 +49,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewLoadManager"/> class.
         /// </summary>
-        public ViewLoadManager()
+        public ViewLoadManager(ILogger<ViewLoadManager> logger)
         {
             _cleanUpTimer = new Timer(x => CleanUp(), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+            _logger = logger;
         }
 
         /// <summary>
@@ -95,7 +97,7 @@
             var weakViewInfo = sender as WeakViewInfo;
             if (weakViewInfo is null || weakViewInfo.View is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
+                throw _logger.LogErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
             }
 
             // Just forward
@@ -107,7 +109,7 @@
             var weakViewInfo = sender as WeakViewInfo;
             if (weakViewInfo is null || weakViewInfo.View is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
+                throw _logger.LogErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
             }
 
             // Just forward
@@ -185,7 +187,7 @@
                     break;
 
                 default:
-                    throw Log.ErrorAndCreateException<ArgumentOutOfRangeException>(nameof(viewLoadStateEvent));
+                    throw _logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(viewLoadStateEvent));
             }
 
             if (handler is not null)

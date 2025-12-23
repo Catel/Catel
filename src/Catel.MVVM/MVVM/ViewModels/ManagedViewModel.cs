@@ -5,6 +5,7 @@
     using System.Linq;
     using Catel.Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -13,10 +14,7 @@
     /// </summary>
     internal class ManagedViewModel
     {
-        /// <summary>
-        /// The <see cref="ILog">log</see> object.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ManagedViewModel));
 
         /// <summary>
         /// List of alive view model instances.
@@ -92,7 +90,7 @@
 
             if (viewModel.GetType() != ViewModelType)
             {
-                throw Log.ErrorAndCreateException(msg => new WrongViewModelTypeException(viewModel.GetType(), ViewModelType),
+                throw Logger.LogErrorAndCreateException(msg => new WrongViewModelTypeException(viewModel.GetType(), ViewModelType),
                     "Cannot use view model type '{0}', expected type '{1}'", viewModel.GetType().GetSafeFullName(false), ViewModelType.GetSafeFullName(false));
             }
 
@@ -103,7 +101,7 @@
                 {
                     _viewModelInstances.Add(vmId, viewModel);
 
-                    Log.Debug("Added view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
+                    Logger.LogDebug("Added view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
                 }
             }
         }
@@ -122,7 +120,7 @@
                 var vmId = viewModel.UniqueIdentifier;
                 if (_viewModelInstances.Remove(vmId))
                 {
-                    Log.Debug("Removed view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
+                    Logger.LogDebug("Removed view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
                 }
             }
         }

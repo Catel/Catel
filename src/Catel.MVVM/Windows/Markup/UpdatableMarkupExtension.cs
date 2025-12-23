@@ -1,13 +1,14 @@
 ﻿namespace Catel.Windows.Markup
 {
-    using Catel.IoC;
-    using Catel.Logging;
     using System;
     using System.ComponentModel;
     using System.Reflection;
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Markup;
+    using Catel.IoC;
+    using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Markup extension that allows an update of the binding values.
@@ -17,7 +18,7 @@
     /// </remarks>
     public abstract class UpdatableMarkupExtension : MarkupExtension, INotifyPropertyChanged
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(UpdatableMarkupExtension));
 
         private WeakReference<object>? _targetObject;
         private object? _targetProperty;
@@ -157,8 +158,8 @@
                             };
                         }
 
-                        //throw Log.ErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
-                        Log.Warning($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                        //throw Logger.LogErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                        Logger.LogWarning($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
                     }
                 }
             }

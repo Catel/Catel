@@ -5,13 +5,19 @@
     using System.Diagnostics;
     using System.Threading.Tasks;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Process service to run files or start processes from a view model.
     /// </summary>
     public class ProcessService : IProcessService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<ProcessService> _logger;
+
+        public ProcessService(ILogger<ProcessService> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Starts a process and returns an awaitable task which will end once the application is closed.
@@ -34,7 +40,7 @@
 
             var tcs = new TaskCompletionSource<int>();
 
-            Log.Debug($"Running '{processContext.FileName}'");
+            _logger.LogDebug($"Running '{processContext.FileName}'");
 
             try
             {
@@ -52,7 +58,7 @@
                 if (!string.IsNullOrWhiteSpace(processContext.Verb) &&
                     !processStartInfo.UseShellExecute)
                 {
-                    Log.Warning($"Verb is specified, this requires UseShellExecute to be set to true");
+                    _logger.LogWarning($"Verb is specified, this requires UseShellExecute to be set to true");
 
                     processStartInfo.UseShellExecute = true;
                 }
@@ -67,7 +73,7 @@
 #pragma warning restore IDISP001 // Dispose created
                 if (process is null)
                 {
-                    Log.Debug($"Process is already completed, cannot wait for it to complete");
+                    _logger.LogDebug($"Process is already completed, cannot wait for it to complete");
 
                     tcs.SetResult(0);
                 }
@@ -79,7 +85,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"An error occurred while running '{processContext.FileName}'");
+                _logger.LogError(ex, $"An error occurred while running '{processContext.FileName}'");
 
                 tcs.SetException(ex);
             }

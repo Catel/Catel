@@ -5,8 +5,8 @@
     using System.Linq;
     using System.Windows.Input;
     using Catel.Logging;
-    using Catel.Services;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
     /// <summary>
@@ -15,8 +15,7 @@
     /// </summary>
     public partial class CommandManager : ICommandManager
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+        private readonly ILogger<CommandManager> _logger;
         private readonly IServiceProvider _serviceProvider;
 
         private readonly object _lockObject = new object();
@@ -29,8 +28,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandManager"/> class.
         /// </summary>
-        public CommandManager(IServiceProvider serviceProvider)
+        public CommandManager(ILogger<CommandManager> logger, IServiceProvider serviceProvider)
         {
+            _logger = logger;
             _serviceProvider = serviceProvider;
         }
 
@@ -52,11 +52,11 @@
 
                 if (value)
                 {
-                    Log.Debug("Suspended keyboard events");
+                    _logger.LogDebug("Suspended keyboard events");
                 }
                 else
                 {
-                    Log.Debug("Resumed keyboard events");
+                    _logger.LogDebug("Resumed keyboard events");
                 }
             }
         }
@@ -85,12 +85,12 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Creating command '{0}' with input gesture '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
+                _logger.LogDebug("Creating command '{0}' with input gesture '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
 
                 if (_commands.ContainsKey(commandName))
                 {
                     var error = $"Command '{commandName}' is already created using the CreateCommand method";
-                    Log.Error(error);
+                    _logger.LogError(error);
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
                     {
@@ -195,11 +195,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Executing command '{0}'", commandName);
+                _logger.LogDebug("Executing command '{0}'", commandName);
 
                 if (!_commands.TryGetValue(commandName, out var command))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 command.Execute(null);
@@ -227,11 +227,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Registering command to '{0}'", commandName);
+                _logger.LogDebug("Registering command to '{0}'", commandName);
 
                 if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 compositeCommand.RegisterCommand(command, viewModel);
@@ -260,11 +260,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Registering action to '{0}'", commandName);
+                _logger.LogDebug("Registering action to '{0}'", commandName);
 
                 if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 compositeCommand.RegisterAction(action);
@@ -293,11 +293,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Registering action to '{0}'", commandName);
+                _logger.LogDebug("Registering action to '{0}'", commandName);
 
                 if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 compositeCommand.RegisterAction(action);
@@ -326,11 +326,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Unregistering command from '{0}'", commandName);
+                _logger.LogDebug("Unregistering command from '{0}'", commandName);
 
                 if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 compositeCommand.UnregisterCommand(command);
@@ -359,11 +359,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Unregistering action from '{0}'", commandName);
+                _logger.LogDebug("Unregistering action from '{0}'", commandName);
 
                 if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 compositeCommand.UnregisterAction(action);
@@ -392,11 +392,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Unregistering action from '{0}'", commandName);
+                _logger.LogDebug("Unregistering action from '{0}'", commandName);
 
                 if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 compositeCommand.UnregisterAction(action);
@@ -419,7 +419,7 @@
             {
                 if (!_commands.ContainsKey(commandName))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 return _originalCommandGestures[commandName];
@@ -440,7 +440,7 @@
             {
                 if (!_commands.ContainsKey(commandName))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 return _commandGestures[commandName];
@@ -460,11 +460,11 @@
 
             lock (_lockObject)
             {
-                Log.Debug("Updating input gesture of command '{0}' to '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
+                _logger.LogDebug("Updating input gesture of command '{0}' to '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
                 _commandGestures[commandName] = inputGesture;
@@ -478,11 +478,11 @@
         {
             lock (_lockObject)
             {
-                Log.Info("Resetting input gestures");
+                _logger.LogInformation("Resetting input gestures");
 
                 foreach (var command in _commands)
                 {
-                    Log.Debug("Resetting input gesture for command '{0}' to '{1}'", command.Key, _originalCommandGestures[command.Key]);
+                    _logger.LogDebug("Resetting input gesture for command '{0}' to '{1}'", command.Key, _originalCommandGestures[command.Key]);
 
                     _commandGestures[command.Key] = _originalCommandGestures[command.Key];
                 }

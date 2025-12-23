@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
     using Services;
 
     /// <summary>
@@ -16,7 +17,7 @@
     public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : Command<TExecuteParameter, TCanExecuteParameter>, ICatelTaskCommand<TProgress>
         where TProgress : ITaskProgressReport
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress>));
 
         private readonly Action<TProgress>? _reportProgress;
 
@@ -279,18 +280,18 @@
 
             try
             {
-                Log.Debug("Executing task command");
+                Logger.LogDebug("Executing task command");
 
                 executionTask = executeAsync(parameter, _cancellationTokenSource.Token, _progress);
                 await executionTask.ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
-                Log.Debug("Task was canceled");
+                Logger.LogDebug("Task was canceled");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Task ended with exception");
+                Logger.LogError(ex, "Task ended with exception");
 
                 // Important: end the task, the exception thrown below will be earlier than the finally block
                 _cancellationTokenSource?.Dispose();

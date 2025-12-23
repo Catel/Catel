@@ -2,6 +2,7 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using LoadedEventArgs = System.EventArgs;
 
     /// <summary>
@@ -10,7 +11,7 @@
     /// </summary>
     public class WeakViewInfo
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WeakViewInfo));
 
         private readonly WeakReference _view;
 
@@ -103,14 +104,14 @@
 
             if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, nameof(View.Loaded), OnViewLoadStateLoaded, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
                 ((IView) viewObject).Loaded += OnViewLoadStateLoaded;
             }
 
             if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, nameof(View.Unloaded), OnViewLoadStateUnloaded, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 
                 ((IView)viewObject).Unloaded += OnViewLoadStateUnloaded;
             }

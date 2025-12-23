@@ -6,6 +6,7 @@
     using Catel.Services;
 
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
     using Windows;
 
@@ -14,10 +15,13 @@
     /// </summary>
     public class UrlLocator : LocatorBase, IUrlLocator
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<UrlLocator> _logger;
+
+        public UrlLocator(ILogger<UrlLocator> logger)
+            : base(logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Registers the specified url in the local cache. This cache will also be used by the <see cref="ResolveUrl"/>
@@ -56,7 +60,7 @@
             var assembly = TypeHelper.GetAssemblyName(viewModelType.GetSafeFullName(true));
             if (assembly is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Cannot resolve value '{viewModelType.GetSafeFullName()}', assembly name returned null");
+                throw _logger.LogErrorAndCreateException<CatelException>($"Cannot resolve value '{viewModelType.GetSafeFullName()}', assembly name returned null");
             }
 
             var viewModelTypeName = viewModelType.Name;
@@ -84,13 +88,13 @@
 
                 if (ResourceHelper.XamlPageExists(viewAsResourceUri))
                 {
-                    Log.Debug("Found view '{0}' for '{1}' via naming convention '{2}'", viewUri, viewModelTypeName, convention);
+                    _logger.LogDebug("Found view '{0}' for '{1}' via naming convention '{2}'", viewUri, viewModelTypeName, convention);
                     AddItemToCache(viewModelTypeNameWithAssembly, viewUri);
                     return viewUri;
                 }
             }
 
-            Log.Warning("Tried resolving the view for '{0}' via all naming conventions, but it did not succeed", viewModelTypeName);
+            _logger.LogWarning("Tried resolving the view for '{0}' via all naming conventions, but it did not succeed", viewModelTypeName);
             return null;
         }
 

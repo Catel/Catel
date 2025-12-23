@@ -3,6 +3,7 @@
     using System;
     using Catel.Services;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Available modes for the <see cref="BooleanToTextConverter"/>.
@@ -26,10 +27,7 @@
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(string))]
     public class BooleanToTextConverter : ValueConverterBase
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(BooleanToTextConverter));
 
         private readonly ILanguageService _languageService;
 
@@ -85,7 +83,7 @@
 
             if (string.IsNullOrEmpty(parameter))
             {
-                Log.Error($"Converter parameter cannot be null, default value '{Enum<BooleanToTextConverterMode>.ToString(mode)}' will be used");
+                Logger.LogError($"Converter parameter cannot be null, default value '{Enum<BooleanToTextConverterMode>.ToString(mode)}' will be used");
                 return mode;
             }
 
@@ -95,7 +93,7 @@
             }
             catch (ArgumentException)
             {
-                Log.Error("Failed to parse '{0}' as '{1}'", parameter, "BooleanToTextConverterMode");
+                Logger.LogError("Failed to parse '{0}' as '{1}'", parameter, "BooleanToTextConverterMode");
                 return mode;
             }
 

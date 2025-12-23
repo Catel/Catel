@@ -1,24 +1,22 @@
 ﻿namespace Catel.Windows.Interactivity
 {
-    using System.Windows.Controls;
-    using System.Windows.Input;
-    using UIKeyEventArgs = System.Windows.Input.KeyEventArgs;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
     using Catel.Logging;
     using Catel.Windows.Input;
+    using Microsoft.Extensions.Logging;
+    using UIKeyEventArgs = System.Windows.Input.KeyEventArgs;
 
     /// <summary>
     /// Behavior to only allow numeric input on a <see cref="TextBox"/>.
     /// </summary>
     public partial class NumericTextBox : BehaviorBase<TextBox>
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(NumericTextBox));
 
         private const string MinusCharacter = "-";
         private const string PeriodCharacter = ".";
@@ -258,20 +256,20 @@
                 var text = (string)e.DataObject.GetData(typeof(string));
                 if (!IsDecimalAllowed && !IsDigitsOnly(text))
                 {
-                    Log.Warning("Pasted text '{0}' contains decimal separator which is not allowed, paste is not allowed", text);
+                    Logger.LogWarning("Pasted text '{0}' contains decimal separator which is not allowed, paste is not allowed", text);
 
                     e.CancelCommand();
                 }
                 else if (!IsNegativeAllowed && text.Contains(MinusCharacter))
                 {
-                    Log.Warning("Pasted text '{0}' contains negative value which is not allowed, paste is not allowed", text);
+                    Logger.LogWarning("Pasted text '{0}' contains negative value which is not allowed, paste is not allowed", text);
 
                     e.CancelCommand();
                 }
 
                 if (!double.TryParse(text, NumberStyles.Any, Culture, out var tempDouble))
                 {
-                    Log.Warning("Pasted text '{0}' could not be parsed as double (wrong culture?), paste is not allowed", text);
+                    Logger.LogWarning("Pasted text '{0}' could not be parsed as double (wrong culture?), paste is not allowed", text);
 
                     e.CancelCommand();
                 }

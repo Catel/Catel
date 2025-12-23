@@ -2,18 +2,19 @@
 {
     using System.Windows;
     using System.Windows.Input;
-    using Microsoft.Xaml.Behaviors;
-    using KeyDownEventArgs = System.Windows.Input.KeyEventArgs;
     using Input;
     using Logging;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Xaml.Behaviors;
     using Reflection;
+    using KeyDownEventArgs = System.Windows.Input.KeyEventArgs;
 
     /// <summary>
     /// Behavior to set the focus on a key press.
     /// </summary>
     public partial class FocusOnKeyPress : FocusBehaviorBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(FocusOnKeyPress));
 
         private FrameworkElement? _layoutRoot;
 
@@ -84,7 +85,7 @@
             _layoutRoot = AssociatedObject.FindLogicalRoot() as FrameworkElement;
             if (_layoutRoot is not null)
             {
-                Log.Debug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName(false));
+                Logger.LogDebug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName(false));
 
                 _layoutRoot.KeyDown += OnKeyDown;
             }

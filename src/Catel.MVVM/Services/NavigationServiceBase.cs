@@ -19,7 +19,7 @@
         /// Gets a value indicating whether it is possible to navigate forward.
         /// </summary>
         /// <value>
-        /// <c>true</c> if it is possible to navigate backforward otherwise, <c>false</c>.
+        /// <c>true</c> if it is possible to navigate forward otherwise, <c>false</c>.
         /// </value>
         public abstract bool CanGoForward { get; }
 

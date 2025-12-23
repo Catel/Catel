@@ -2,12 +2,13 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Views;
-    using Services;
+    using System.Windows;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using MVVM;
     using Reflection;
-    using System.Windows;
+    using Services;
+    using Views;
     using Windows.Controls;
 
     /// <summary>
@@ -15,10 +16,7 @@
     /// </summary>
     public class UserControlLogic : LogicBase
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(UserControlLogic));
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IViewModelWrapperService _viewModelWrapperService;
@@ -280,20 +278,20 @@
 
             if (!SkipSearchingForInfoBarMessageControl)
             {
-                Log.Debug("Searching for an instance of the InfoBarMessageControl");
+                Logger.LogDebug("Searching for an instance of the InfoBarMessageControl");
 
                 _infoBarMessageControl = TargetView?.FindParentByPredicate(o => o is InfoBarMessageControl) as InfoBarMessageControl;
 
-                Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
+                Logger.LogDebug("Finished searching for an instance of the InfoBarMessageControl");
 
                 if (_infoBarMessageControl is null)
                 {
-                    Log.Warning($"No InfoBarMessageControl is found in the visual tree of '{GetType().Name}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance");
+                    Logger.LogWarning($"No InfoBarMessageControl is found in the visual tree of '{GetType().Name}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance");
                 }
             }
             else
             {
-                Log.Debug("Skipping the search for an instance of the InfoBarMessageControl");
+                Logger.LogDebug("Skipping the search for an instance of the InfoBarMessageControl");
             }
 
             if (ViewModel is null)
@@ -306,14 +304,14 @@
                 }
                 else
                 {
-                    Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                    Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
                 }
             }
             else
             {
                 if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.PartlyManual)
                 {
-                    Log.Debug("Re-using existing view model");
+                    Logger.LogDebug("Re-using existing view model");
                 }
             }
 
@@ -350,7 +348,7 @@
             }
             else
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
+                Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
             }
         }
 
@@ -476,11 +474,11 @@
 
             if (parentViewModelContainer is not null)
             {
-                Log.Debug("Found the parent view model container '{0}' for '{1}'", parentViewModelContainer.GetType().Name, TargetView?.GetType().Name);
+                Logger.LogDebug("Found the parent view model container '{0}' for '{1}'", parentViewModelContainer.GetType().Name, TargetView?.GetType().Name);
             }
             else
             {
-                Log.Debug("Couldn't find parent view model container");
+                Logger.LogDebug("Couldn't find parent view model container");
             }
 
             if (parentViewModelContainer is not null)
@@ -528,7 +526,7 @@
                 parentViewModel.CancelingAsync += OnParentViewModelCancelingAsync;
                 parentViewModel.ClosingAsync += OnParentViewModelClosingAsync;
 
-                Log.Debug("Subscribed to parent view model '{0}'", parentViewModel.GetType());
+                Logger.LogDebug("Subscribed to parent view model '{0}'", parentViewModel.GetType());
             }
         }
 
@@ -548,7 +546,7 @@
 
                 _parentViewModel = null;
 
-                Log.Debug("Unsubscribed from parent view model");
+                Logger.LogDebug("Unsubscribed from parent view model");
             }
         }
 
@@ -614,7 +612,7 @@
 
             if (ViewModelBehavior == LogicViewModelBehavior.Injected)
             {
-                Log.Debug("View model behavior is set to 'Injected' thus view model will not be updated");
+                Logger.LogDebug("View model behavior is set to 'Injected' thus view model will not be updated");
                 return;
             }
 
@@ -657,7 +655,7 @@
                     var canKeepViewModel = !_viewModelFactory.IsViewModelWithModelInjection(viewModelType);
                     if (canKeepViewModel)
                     {
-                        Log.Debug($"DataContext has changed, but view model '{viewModelType}' is a view model without model injection, keeping current view model");
+                        Logger.LogDebug($"DataContext has changed, but view model '{viewModelType}' is a view model without model injection, keeping current view model");
                         return;
                     }
                 }
@@ -759,7 +757,7 @@
         {
             if (!IgnoreNullDataContext)
             {
-                Log.Debug("Parent IViewModelContainer.Unloading event fired, now ignoring null DataContext");
+                Logger.LogDebug("Parent IViewModelContainer.Unloading event fired, now ignoring null DataContext");
 
                 IgnoreNullDataContext = true;
             }
@@ -769,7 +767,7 @@
         {
             if (IgnoreNullDataContext)
             {
-                Log.Debug("Parent IViewModelContainer.Loading event fired, no longer ignoring null DataContext");
+                Logger.LogDebug("Parent IViewModelContainer.Loading event fired, no longer ignoring null DataContext");
 
                 IgnoreNullDataContext = false;
             }
@@ -794,17 +792,17 @@
             {
                 if (ReferenceEquals(sender, viewModel))
                 {
-                    Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Canceling event", sender.GetType().FullName);
+                    Logger.LogWarning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Canceling event", sender.GetType().FullName);
                     return;
                 }
 
                 if (e.Cancel)
                 {
-                    Log.Info("Parent view model '{0}' is canceling, but canceling is canceled by another view model, canceling of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
+                    Logger.LogDebug("Parent view model '{0}' is canceling, but canceling is canceled by another view model, canceling of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                     return;
                 }
 
-                Log.Info("Parent view model '{0}' is canceled, cancelling view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
+                Logger.LogDebug("Parent view model '{0}' is canceled, cancelling view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
 
                 if (!viewModel.IsClosed)
                 {
@@ -832,17 +830,17 @@
             {
                 if (ReferenceEquals(sender, viewModel))
                 {
-                    Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Saving event", sender.GetType().FullName);
+                    Logger.LogWarning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Saving event", sender.GetType().FullName);
                     return;
                 }
 
                 if (e.Cancel)
                 {
-                    Log.Info("Parent view model '{0}' is saving, but saving is canceled by another view model, saving of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
+                    Logger.LogDebug("Parent view model '{0}' is saving, but saving is canceled by another view model, saving of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                     return;
                 }
 
-                Log.Info("Parent view model '{0}' is saving, saving view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
+                Logger.LogDebug("Parent view model '{0}' is saving, saving view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
 
                 if (!viewModel.IsClosed)
                 {
@@ -869,11 +867,11 @@
             {
                 if (ReferenceEquals(sender, viewModel))
                 {
-                    Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
+                    Logger.LogWarning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
                     return;
                 }
 
-                Log.Debug("Parent ViewModel is closing, ignoring null DataContext");
+                Logger.LogDebug("Parent ViewModel is closing, ignoring null DataContext");
 
                 IgnoreNullDataContext = true;
 
@@ -883,7 +881,7 @@
                 }
                 else
                 {
-                    Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
+                    Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
                 }
             }
         }
@@ -907,7 +905,7 @@
             {
                 _infoBarMessageControl.ClearObjectMessages(obj);
 
-                Log.Debug("Cleared all warnings and errors caused by '{0}' since this is caused by a DataContext issue in the .NET Framework", obj);
+                Logger.LogDebug("Cleared all warnings and errors caused by '{0}' since this is caused by a DataContext issue in the .NET Framework", obj);
             }
         }
     }

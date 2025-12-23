@@ -6,21 +6,19 @@
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
+    using Catel.Win32;
+    using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
     using Threading;
-    using Logging;
     using SystemWindow = System.Windows.Window;
-    using Catel.Win32;
 
     /// <summary>
     /// Extensions for <see cref="System.Windows.Window"/>.
     /// </summary>
     public static class WindowExtensions
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WindowExtensions));
 
         /// <summary>
         /// Sets the owner window to the main window of the current process.
@@ -260,13 +258,13 @@
                 {
                     if (ReferenceEquals(ownerWindow, window))
                     {
-                        Log.Warning("Cannot set owner window to itself, no owner window set");
+                        Logger.LogWarning("Cannot set owner window to itself, no owner window set");
                         return;
                     }
 
                     if (window.Dispatcher.GetThreadId() != ownerWindow.Dispatcher.GetThreadId())
                     {
-                        Log.Warning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
+                        Logger.LogWarning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
                             ownerWindow.GetType().GetSafeFullName(false), window.GetType().GetSafeFullName(false));
                         return;
                     }
@@ -313,7 +311,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to set the owner window");
+                Logger.LogError(ex, "Failed to set the owner window");
             }
         }
 
@@ -375,7 +373,7 @@
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to set the application icon to the window");
+                Logger.LogError(ex, "Failed to set the application icon to the window");
             }
         }
     }

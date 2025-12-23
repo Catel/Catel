@@ -6,11 +6,10 @@ namespace Catel.MVVM
 {
     using System;
     using System.Windows.Input;
-
-    using Services;
-
     using Logging;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Services;
 
     /// <summary>
     /// Base class for generic command classes. Contains protected static services for using in derived classes.
@@ -41,7 +40,7 @@ namespace Catel.MVVM
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
     public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICatelCommand<TExecuteParameter, TCanExecuteParameter>
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(Command<TExecuteParameter, TCanExecuteParameter>));
 
         private Func<TCanExecuteParameter?, bool>? _canExecuteWithParameter;
         private Func<bool>? _canExecuteWithoutParameter;
@@ -263,7 +262,7 @@ namespace Catel.MVVM
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to raise CanExecuteChanged");
+                    Logger.LogWarning(ex, "Failed to raise CanExecuteChanged");
                 }
             });
         }

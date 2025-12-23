@@ -7,6 +7,7 @@
     using Catel.Logging;
     using Catel.Services;
     using Catel.Windows.Threading;
+    using Microsoft.Extensions.Logging;
 
     public partial class FeaturedViewModelBase
     {
@@ -65,7 +66,7 @@
             }
             set
             {
-                Log.Debug("Updating throttling rate of view model to an interval of '{0}' ms", BoxingCache.GetBoxedValue(value.TotalMilliseconds));
+                Logger.LogDebug("Updating throttling rate of view model to an interval of '{0}' ms", BoxingCache.GetBoxedValue(value.TotalMilliseconds));
 
                 _throttlingRate = value;
                 if (_throttlingRate.TotalMilliseconds.Equals(0d))
@@ -74,7 +75,7 @@
 
                     _throttlingTimer.Stop();
 
-                    Log.Debug("Throttling is disabled because the throttling rate is set to 0");
+                    Logger.LogDebug("Throttling is disabled because the throttling rate is set to 0");
                 }
                 else
                 {
@@ -84,7 +85,7 @@
                     _throttlingTimer.Interval = _throttlingRate;
                     _throttlingTimer.Start();
 
-                    Log.Debug("Throttling is enabled because the throttling rate is set to '{0}' ms", BoxingCache.GetBoxedValue(_throttlingRate.TotalMilliseconds));
+                    Logger.LogDebug("Throttling is enabled because the throttling rate is set to '{0}' ms", BoxingCache.GetBoxedValue(_throttlingRate.TotalMilliseconds));
                 }
             }
         }

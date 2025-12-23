@@ -5,30 +5,31 @@
     using System.Windows;
     using System.Windows.Threading;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     public partial class CommandManager
     {
         private readonly ConditionalWeakTable<FrameworkElement, CommandManagerWrapper> _subscribedViews = new ConditionalWeakTable<FrameworkElement, CommandManagerWrapper>();
 
-        private bool _subscribedToApplicationActivedEvent;
+        private bool _subscribedToApplicationActivatedEvent;
 
         partial void SubscribeToKeyboardEventsInternal()
         {
             var application = Application.Current;
             if (application is null)
             {
-                Log.Warning("Application.Current is null, cannot subscribe to keyboard events");
+                _logger.LogWarning("Application.Current is null, cannot subscribe to keyboard events");
                 return;
             }
 
             FrameworkElement mainView = application.MainWindow;
             if (mainView is null)
             {
-                if (!_subscribedToApplicationActivedEvent)
+                if (!_subscribedToApplicationActivatedEvent)
                 {
                     application.Activated += (sender, e) => SubscribeToKeyboardEvents();
-                    _subscribedToApplicationActivedEvent = true;
-                    Log.Info("Application.MainWindow is null, cannot subscribe to keyboard events, subscribed to Application.Activated event");
+                    _subscribedToApplicationActivatedEvent = true;
+                    _logger.LogInformation("Application.MainWindow is null, cannot subscribe to keyboard events, subscribed to Application.Activated event");
                 }
 
                 return;

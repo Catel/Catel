@@ -1,8 +1,9 @@
 ﻿namespace Catel.MVVM
 {
-    using Logging;
     using System;
     using System.Windows;
+    using Logging;
+    using Microsoft.Extensions.Logging;
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
     /// <summary>
@@ -10,7 +11,7 @@
     /// </summary>
     public class CommandManagerWrapper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CommandManagerWrapper));
 
         private readonly ICommandManager _commandManager;
 
@@ -31,14 +32,14 @@
 
             if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Loaded), OnViewLoaded, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
                 view.Loaded += OnViewLoaded;
             }
 
             if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Unloaded), OnViewUnloaded, false) is null)
             {
-                Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
+                Logger.LogDebug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 
                 view.Unloaded += OnViewUnloaded;
             }

@@ -3,22 +3,20 @@
     using System;
     using System.Threading.Tasks;
     using System.Windows;
-    using Views;
-    using Logging;
-    using MVVM;
-    using Reflection;
     using Catel.Data;
     using Catel.Windows;
+    using Logging;
+    using Microsoft.Extensions.Logging;
+    using MVVM;
+    using Reflection;
+    using Views;
 
     /// <summary>
     /// MVVM Provider behavior implementation for a window.
     /// </summary>
     public class WindowLogic : LogicBase
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(WindowLogic));
 
         private bool? _closeInitiatedByViewModel;
         private bool? _closeInitiatedByViewModelResult;
@@ -46,7 +44,7 @@
 
             _targetWindowClosedEventName = eventName;
 
-            Log.Debug("Using '{0}.{1}' event to determine window closing", targetWindowType.FullName, eventName);
+            Logger.LogDebug("Using '{0}.{1}' event to determine window closing", targetWindowType.FullName, eventName);
         }
 
         /// <summary>
@@ -144,7 +142,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning("Failed to set the 'DialogResult' exception: {0}", ex);
+                        Logger.LogWarning("Failed to set the 'DialogResult' exception: {0}", ex);
                         result = false;
                     }
                 }
@@ -154,7 +152,7 @@
                 {
                     if (canSetDialogResult)
                     {
-                        Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", targetWindow.GetType().Name);
+                        Logger.LogWarning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", targetWindow.GetType().Name);
                     }
 
                     InvokeCloseDynamically();
@@ -195,7 +193,7 @@
                 bool? dialogResult = null;
                 if (!PropertyHelper.TryGetPropertyValue(targetWindow, "DialogResult", out dialogResult))
                 {
-                    Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", targetWindow.GetType().Name);
+                    Logger.LogWarning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", targetWindow.GetType().Name);
                 }
 
                 if (dialogResult is null)
@@ -229,7 +227,7 @@
             var closeMethod = targetWindow.GetType().GetMethodEx("Close");
             if (closeMethod is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", targetWindow.GetType().Name);
+                throw Logger.LogErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", targetWindow.GetType().Name);
             }
 
             closeMethod.Invoke(TargetWindow, null);

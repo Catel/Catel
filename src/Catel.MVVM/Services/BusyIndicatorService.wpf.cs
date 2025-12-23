@@ -2,6 +2,7 @@
 {
     using System.Windows.Input;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     public partial class BusyIndicatorService
     {
@@ -23,7 +24,7 @@
             {
                 var overrideCursor = Mouse.OverrideCursor;
 
-                Log.Debug($"Storing cursor '{overrideCursor}' overriding it to 'Wait'");
+                _logger.LogDebug($"Storing cursor '{overrideCursor}' overriding it to 'Wait'");
 
                 if (_previousCursor is null)
                 {
@@ -38,7 +39,7 @@
         {
             _dispatcherService.BeginInvokeIfRequired(() =>
             {
-                Log.Debug($"Restoring cursor '{_previousCursor}'");
+                _logger.LogDebug($"Restoring cursor '{_previousCursor}'");
 
                 Mouse.OverrideCursor = _previousCursor;
 

@@ -2,11 +2,12 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Catel.Services;
     using Logging;
+    using Microsoft.Extensions.Logging;
+    using MVVM;
     using Navigation;
     using Views;
-    using MVVM;
-    using Catel.Services;
 
     /// <summary>
     /// Base class for pages or controls containing navigation logic.
@@ -15,7 +16,7 @@
     public abstract class NavigationLogicBase<T> : LogicBase
         where T : class, IView
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(NavigationLogicBase<T>));
 
         private readonly INavigationRootService _navigationRootService;
         private readonly IUrlLocator _urlLocator;
@@ -58,13 +59,13 @@
                 var navigationRoot = _navigationRootService.GetNavigationRoot();
                 if (navigationRoot is null)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>($"Navigation root is null, cannot create navigation adapter");
+                    throw Logger.LogErrorAndCreateException<CatelException>($"Navigation root is null, cannot create navigation adapter");
                 }
 
                 var targetPage = TargetPage;
                 if (targetPage is null)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>($"Target page is null, cannot create navigation adapter");
+                    throw Logger.LogErrorAndCreateException<CatelException>($"Target page is null, cannot create navigation adapter");
                 }
 
                 _navigationAdapter = new NavigationAdapter(targetPage, _urlLocator, navigationRoot);
@@ -77,7 +78,7 @@
                     var uri = _navigationAdapter.GetNavigationUriForTargetPage();
                     if (uri is null)
                     {
-                        throw Log.ErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
+                        throw Logger.LogErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
                     }
 
                     OnNavigatedTo(this, new NavigatedEventArgs(uri, NavigationMode.New));
@@ -116,7 +117,7 @@
             }
             else
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
             }
         }
 
@@ -135,7 +136,7 @@
                     var uri = navigationAdapter.GetNavigationUriForTargetPage();
                     if (uri is null)
                     {
-                        throw Log.ErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
+                        throw Logger.LogErrorAndCreateException<CatelException>($"Cannot retrieve navigation uri for target page");
                     }
 
                     OnNavigatingAway(this, new NavigatingEventArgs(uri, NavigationMode.New));
@@ -181,7 +182,7 @@
             }
             else
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on navigation event for '{TargetViewType?.Name}'");
+                Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on navigation event for '{TargetViewType?.Name}'");
             }
 
             var navigationViewModel = ViewModel as INavigationViewModel;
@@ -204,7 +205,7 @@
 
             if (ViewModelLifetimeManagement != ViewModelLifetimeManagement.Automatic)
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on navigation event for '{TargetViewType?.Name}'");
+                Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on navigation event for '{TargetViewType?.Name}'");
                 return;
             }
 
@@ -243,7 +244,7 @@
                 vm = ConstructViewModelUsingArgumentOrDefaultConstructor(null);
                 if (vm is null)
                 {
-                    throw Log.ErrorAndCreateException<InvalidViewModelException>("ViewModel cannot be null");
+                    throw Logger.LogErrorAndCreateException<InvalidViewModelException>("ViewModel cannot be null");
                 }
 
                 ViewModel = vm;

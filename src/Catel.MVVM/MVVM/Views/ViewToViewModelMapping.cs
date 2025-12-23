@@ -2,16 +2,14 @@
 {
     using System;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Holds the information for a view to viewmodel mapping. The information is based on the <see cref="ViewToViewModelAttribute"/>.
     /// </summary>
     internal class ViewToViewModelMapping
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ViewToViewModelMapping));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewToViewModelMapping"/> class.
@@ -30,7 +28,7 @@
             ViewModelPropertyName = viewModelPropertyName;
             MappingType = mapping;
 
-            Log.Debug("Created a '{0}' view to viewmodel mapping from '{1}' to '{2}'", Enum<ViewToViewModelMappingType>.ToString(mapping), viewPropertyName, viewModelPropertyName);
+            Logger.LogDebug("Created a '{0}' view to viewmodel mapping from '{1}' to '{2}'", Enum<ViewToViewModelMappingType>.ToString(mapping), viewPropertyName, viewModelPropertyName);
         }
 
         /// <summary>

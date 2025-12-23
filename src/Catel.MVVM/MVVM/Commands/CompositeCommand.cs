@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Logging;
     using System.Windows.Input;
+    using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -14,10 +15,7 @@
     public class CompositeCommand : TaskCommand<object?, object?, ITaskProgressReport>, ICompositeCommand
 #pragma warning restore CS1956 // Member implements interface member with multiple matches at run-time
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CompositeCommand));
 
         private readonly object _lock = new object();
         private readonly List<CommandInfo> _commandInfo = new List<CommandInfo>();
@@ -89,7 +87,7 @@
                 asyncActionsWithParameterToExecute.AddRange(_asyncActionsWithParameter);
             }
 
-            Log.Debug($"Executing '{commandsToExecute.Count}' command(s)");
+            Logger.LogDebug($"Executing '{commandsToExecute.Count}' command(s)");
 
             foreach (var command in commandsToExecute)
             {
@@ -105,11 +103,11 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to execute one of the commands in the composite commands, execution will continue");
+                    Logger.LogError(ex, "Failed to execute one of the commands in the composite commands, execution will continue");
                 }
             }
 
-            Log.Debug($"Executing '{actionsToExecute.Count}' action(s)");
+            Logger.LogDebug($"Executing '{actionsToExecute.Count}' action(s)");
 
             foreach (var action in actionsToExecute)
             {
@@ -122,11 +120,11 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
+                    Logger.LogError(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
                 }
             }
 
-            Log.Debug($"Executing '{actionsWithParameterToExecute.Count}' action(s) with parameter");
+            Logger.LogDebug($"Executing '{actionsWithParameterToExecute.Count}' action(s) with parameter");
 
             foreach (var actionWithParameter in actionsWithParameterToExecute)
             {
@@ -139,11 +137,11 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
+                    Logger.LogError(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
                 }
             }
 
-            Log.Debug($"Executing '{asyncActionsToExecute.Count}' async action(s)");
+            Logger.LogDebug($"Executing '{asyncActionsToExecute.Count}' async action(s)");
 
             foreach (var action in asyncActionsToExecute)
             {
@@ -156,11 +154,11 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to execute one of the async actions in the composite commands, execution will continue");
+                    Logger.LogError(ex, "Failed to execute one of the async actions in the composite commands, execution will continue");
                 }
             }
 
-            Log.Debug($"Executing '{asyncActionsWithParameterToExecute.Count}' async action(s) with parameter");
+            Logger.LogDebug($"Executing '{asyncActionsWithParameterToExecute.Count}' async action(s) with parameter");
 
             foreach (var action in asyncActionsWithParameterToExecute)
             {
@@ -173,7 +171,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to execute one of the async actions in the composite commands, execution will continue");
+                    Logger.LogError(ex, "Failed to execute one of the async actions in the composite commands, execution will continue");
                 }
             }
         }
@@ -312,7 +310,7 @@
                 _commandInfo.Add(commandInfo);
                 command.CanExecuteChanged += OnCommandCanExecuteChanged;
 
-                Log.Debug("Registered command in CompositeCommand");
+                Logger.LogDebug("Registered command in CompositeCommand");
             }
         }
 
@@ -336,7 +334,7 @@
                         command.CanExecuteChanged -= OnCommandCanExecuteChanged;
                         _commandInfo.RemoveAt(i);
 
-                        Log.Debug("Unregistered command from CompositeCommand");
+                        Logger.LogDebug("Unregistered command from CompositeCommand");
                     }
                 }
             }
@@ -355,7 +353,7 @@
             {
                 _actions.Add(action);
 
-                Log.Debug("Registered action in CompositeCommand");
+                Logger.LogDebug("Registered action in CompositeCommand");
             }
         }
 
@@ -377,7 +375,7 @@
                     {
                         _actions.RemoveAt(i);
 
-                        Log.Debug("Unregistered action from CompositeCommand");
+                        Logger.LogDebug("Unregistered action from CompositeCommand");
                     }
                 }
             }
@@ -396,7 +394,7 @@
             {
                 _actionsWithParameter.Add(action);
 
-                Log.Debug("Registered action<object> in CompositeCommand");
+                Logger.LogDebug("Registered action<object> in CompositeCommand");
             }
         }
 
@@ -417,7 +415,7 @@
                     {
                         _actionsWithParameter.RemoveAt(i);
 
-                        Log.Debug("Unregistered action<object> from CompositeCommand");
+                        Logger.LogDebug("Unregistered action<object> from CompositeCommand");
                     }
                 }
             }
@@ -436,7 +434,7 @@
             {
                 _asyncActions.Add(action);
 
-                Log.Debug("Registered async action in CompositeCommand");
+                Logger.LogDebug("Registered async action in CompositeCommand");
             }
         }
 
@@ -457,7 +455,7 @@
                     {
                         _asyncActions.RemoveAt(i);
 
-                        Log.Debug("Unregistered async action from CompositeCommand");
+                        Logger.LogDebug("Unregistered async action from CompositeCommand");
                     }
                 }
             }
@@ -476,7 +474,7 @@
             {
                 _asyncActionsWithParameter.Add(action);
 
-                Log.Debug("Registered async action<object> in CompositeCommand");
+                Logger.LogDebug("Registered async action<object> in CompositeCommand");
             }
         }
 
@@ -497,7 +495,7 @@
                     {
                         _asyncActionsWithParameter.RemoveAt(i);
 
-                        Log.Debug("Unregistered async action<object> from CompositeCommand");
+                        Logger.LogDebug("Unregistered async action<object> from CompositeCommand");
                     }
                 }
             }
@@ -530,7 +528,7 @@
 
             private Task OnViewModelClosedAsync(object? sender, ViewModelClosedEventArgs e)
             {
-                Log.Debug("ViewModel '{0}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
+                Logger.LogDebug("ViewModel '{0}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
 
                 _compositeCommand.UnregisterCommand(Command);
 

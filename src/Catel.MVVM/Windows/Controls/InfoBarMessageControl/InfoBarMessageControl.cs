@@ -3,12 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Data;
     using Catel.Services;
     using Logging;
-    using System.ComponentModel;
-    using System.Windows.Data;
+    using Microsoft.Extensions.Logging;
     using Exceptions = Properties.Exceptions;
 
     /// <summary>
@@ -29,10 +30,7 @@
         /// </summary>
         private const string ElementMessageBar = "PART_MessageBar";
 
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(InfoBarMessageControl));
 
         private readonly ILanguageService _languageService;
 
@@ -211,7 +209,7 @@
 
             if (GetTemplateChild(ElementMessageBar) is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
+                throw Logger.LogErrorAndCreateException<NotSupportedException>(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
             }
 
             OnModeChanged();
@@ -382,7 +380,7 @@
             {
                 if (!string.IsNullOrEmpty(bindingObjectAsIDataErrorInfo[bindingInErrorAsBindingExpression.ParentBinding.Path.Path]))
                 {
-                    Log.Debug("Received 'Remove' action for error '{0}', but it is invalid because the error still exists on the object", message);
+                    Logger.LogDebug("Received 'Remove' action for error '{0}', but it is invalid because the error still exists on the object", message);
                     return;
                 }
             }
@@ -446,13 +444,13 @@
         {
             if ((action != ValidationEventAction.ClearAll) && (bindingObject is null))
             {
-                Log.Warning("Null-values are not allowed when not using ValidationEventAction.ClearAll");
+                Logger.LogWarning("Null-values are not allowed when not using ValidationEventAction.ClearAll");
                 return;
             }
 
             if (_objectsToIgnore.Contains(bindingObject) && (action != ValidationEventAction.ClearAll))
             {
-                Log.Debug("Object '{0}' is in the ignore list, thus messages will not be handled", bindingObject);
+                Logger.LogDebug("Object '{0}' is in the ignore list, thus messages will not be handled", bindingObject);
                 return;
             }
 

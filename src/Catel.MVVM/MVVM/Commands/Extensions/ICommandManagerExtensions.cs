@@ -9,6 +9,7 @@
     using Catel.MVVM;
     using Catel.Reflection;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
     /// <summary>
@@ -16,7 +17,7 @@
     /// </summary>
     public static partial class ICommandManagerExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ICommandManagerExtensions));
 
         /// <summary>
         /// Finds the commands inside the <see cref="ICommandManager"/> by gesture.
@@ -65,26 +66,26 @@
             ArgumentNullException.ThrowIfNull(containerType);
             Argument.IsNotNullOrWhitespace("commandNameFieldName", commandNameFieldName);
 
-            Log.Debug($"Creating command '{commandNameFieldName}'");
+            Logger.LogDebug($"Creating command '{commandNameFieldName}'");
 
             // Note: we must store binding flags inside variable otherwise invalid IL will be generated
             var bindingFlags = BindingFlags.Public | BindingFlags.Static;
             var commandNameField = containerType.GetFieldEx(commandNameFieldName, bindingFlags);
             if (commandNameField is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
                     commandNameFieldName, containerType.GetSafeFullName(false));
             }
 
             var commandName = (string?)commandNameField.GetValue(null);
             if (commandName is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Command name is not valid on on container type '{containerType.GetSafeFullName()}'");
+                throw Logger.LogErrorAndCreateException<CatelException>($"Command name is not valid on on container type '{containerType.GetSafeFullName()}'");
             }
 
             if (commandManager.IsCommandCreated(commandName))
             {
-                Log.Debug("Command '{0}' is already created, skipping...", commandName);
+                Logger.LogDebug("Command '{0}' is already created, skipping...", commandName);
                 return;
             }
 
@@ -105,11 +106,11 @@
                                         select type).FirstOrDefault();
             if (commandContainerType is null)
             {
-                Log.Debug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
+                Logger.LogDebug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
                 return;
             }
 
-            Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
+            Logger.LogDebug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
 
             if (!serviceProvider.IsRegistered(commandContainerType))
             {
@@ -121,7 +122,7 @@
                 }
                 else
                 {
-                    Log.Warning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
+                    Logger.LogWarning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
                 }
             }
         }
@@ -138,7 +139,7 @@
             var command = commandManager.GetCommand(commandName);
             if (command is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Command '{commandName}' is not registered in the command manager");
+                throw Logger.LogErrorAndCreateException<CatelException>($"Command '{commandName}' is not registered in the command manager");
             }
 
             return command;

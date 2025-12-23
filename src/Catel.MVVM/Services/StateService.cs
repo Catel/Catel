@@ -3,15 +3,21 @@
     using System;
     using System.Collections.Generic;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// The state service which can store and restore states.
     /// </summary>
     public class StateService : IStateService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<StateService> _logger;
 
         private readonly Dictionary<string, IState?> _states = new Dictionary<string, IState?>();
+
+        public StateService(ILogger<StateService> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Stores the state.
@@ -24,7 +30,7 @@
 
             lock (_states)
             {
-                Log.Debug($"Storing state '{key}'");
+                _logger.LogDebug($"Storing state '{key}'");
 
                 _states[key] = state;
             }
@@ -43,12 +49,12 @@
             {
                 if (_states.TryGetValue(key, out var state))
                 {
-                    Log.Debug($"Loaded state '{key}'");
+                    _logger.LogDebug($"Loaded state '{key}'");
 
                     return state;
                 }
 
-                Log.Debug($"State '{key}' not found");
+                _logger.LogDebug($"State '{key}' not found");
 
                 return null;
             }

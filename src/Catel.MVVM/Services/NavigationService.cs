@@ -6,16 +6,19 @@
     using Catel.MVVM;
     using Catel.Reflection;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Service to navigate inside applications.
     /// </summary>
     public partial class NavigationService : NavigationServiceBase, INavigationService
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<NavigationService> _logger;
+
+#pragma warning disable IDE1006 // Naming Styles
+        protected readonly INavigationRootService NavigationRootService;
+        protected readonly IUrlLocator UrlLocator;
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// The registered uris.
@@ -25,15 +28,12 @@
         /// <summary>
         /// The navigation root service.
         /// </summary>
-#pragma warning disable IDE1006 // Naming Styles
-        protected readonly INavigationRootService NavigationRootService;
-        protected readonly IUrlLocator UrlLocator;
-#pragma warning restore IDE1006 // Naming Styles
-        public NavigationService(INavigationRootService navigationRootService, IUrlLocator urlLocator)
+        public NavigationService(ILogger<NavigationService> logger, INavigationRootService navigationRootService, IUrlLocator urlLocator)
         {
             ArgumentNullException.ThrowIfNull(navigationRootService);
             ArgumentNullException.ThrowIfNull(urlLocator);
 
+            _logger = logger;
             NavigationRootService = navigationRootService;
             UrlLocator = urlLocator;
 
@@ -62,7 +62,7 @@
             ApplicationClosing?.Invoke(this, eventArgs);
             if (eventArgs.Cancel)
             {
-                Log.Info("Closing of application is canceled");
+                _logger.LogInformation("Closing of application is canceled");
                 return false;
             }
 
@@ -155,7 +155,7 @@
 
             if (uri is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>($"Cannot navigate to '{viewModelType.GetSafeFullName()}', could not resolve the uri");
+                throw _logger.LogErrorAndCreateException<CatelException>($"Cannot navigate to '{viewModelType.GetSafeFullName()}', could not resolve the uri");
             }
 
             await NavigateAsync(uri, parameters);
@@ -195,12 +195,12 @@
             {
                 if (RegisteredUris.ContainsKey(name))
                 {
-                    throw Log.ErrorAndCreateException<Exception>("View model already registered");
+                    throw _logger.LogErrorAndCreateException<Exception>("View model already registered");
                 }
 
                 RegisteredUris.Add(name, uri.ToString());
 
-                Log.Debug("Registered view model '{0}' in combination with '{1}' in the NavigationService", name, uri);
+                _logger.LogDebug("Registered view model '{0}' in combination with '{1}' in the NavigationService", name, uri);
             }
         }
 
@@ -232,7 +232,7 @@
                 var result = RegisteredUris.Remove(name);
                 if (result)
                 {
-                    Log.Debug("Unregistered view model '{0}' in NavigationService", name);
+                    _logger.LogDebug("Unregistered view model '{0}' in NavigationService", name);
                 }
 
                 return result;

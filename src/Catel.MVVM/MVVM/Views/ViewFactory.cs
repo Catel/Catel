@@ -5,18 +5,16 @@
     using Catel.Logging;
     using Catel.Reflection;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     public class ViewFactory : IViewFactory
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+        private readonly ILogger<ViewFactory> _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        public ViewFactory(IServiceProvider serviceProvider)
+        public ViewFactory(ILogger<ViewFactory> logger, IServiceProvider serviceProvider)
         {
+            _logger = logger;
             _serviceProvider = serviceProvider;
         }
 
@@ -35,7 +33,7 @@
         {
             ArgumentNullException.ThrowIfNull(viewType);
 
-            Log.Debug("Constructing view for view type '{0}'", viewType.Name);
+            _logger.LogDebug("Constructing view for view type '{0}'", viewType.Name);
 
             FrameworkElement? view = null;
 
@@ -53,13 +51,13 @@
 
                 if (view is not null)
                 {
-                    Log.Debug("Constructed view using injection constructor");
+                    _logger.LogDebug("Constructed view using injection constructor");
 
                     return view;
                 }
             }
 
-            Log.Debug("No constructor with data (of type '{0}') injection found, trying default constructor", ObjectToStringHelper.ToTypeString(dataContext));
+            _logger.LogDebug("No constructor with data (of type '{0}') injection found, trying default constructor", ObjectToStringHelper.ToTypeString(dataContext));
 
             try
             {
@@ -67,12 +65,12 @@
             }
             catch (Exception ex)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{0}' with both injection and empty constructor", viewType.Name);
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{0}' with both injection and empty constructor", viewType.Name);
             }
 
             view!.DataContext = dataContext;
 
-            Log.Debug("Constructed view using default constructor and setting DataContext afterwards");
+            _logger.LogDebug("Constructed view using default constructor and setting DataContext afterwards");
 
             return view;
         }

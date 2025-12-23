@@ -5,6 +5,7 @@
     using Caching;
     using Logging;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -16,8 +17,7 @@
     /// </summary>
     public class ViewModelFactory : IViewModelFactory
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+        private readonly ILogger<ViewModelFactory> _logger;
         private readonly IServiceProvider _serviceProvider;
 
         private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
@@ -25,12 +25,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="serviceProvider">The service provider.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceProvider" /> is <c>null</c>.</exception>
-        public ViewModelFactory(IServiceProvider serviceProvider)
+        public ViewModelFactory(ILogger<ViewModelFactory> logger, IServiceProvider serviceProvider)
         {
             ArgumentNullException.ThrowIfNull(serviceProvider);
-
+            _logger = logger;
             _serviceProvider = serviceProvider;
         }
 
@@ -128,7 +129,7 @@
 
                 if (viewModel is not null)
                 {
-                    Log.Debug("Constructed view model '{0}' using injection of data context '{1}'", viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
+                    _logger.LogDebug("Constructed view model '{0}' using injection of data context '{1}'", viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
                     return viewModel;
                 }
             }
@@ -139,7 +140,7 @@
                 viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType) as IViewModel;
                 if (viewModel is not null)
                 {
-                    Log.Debug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
+                    _logger.LogDebug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
                     return viewModel;
                 }
             }
@@ -148,7 +149,7 @@
                 // ignore
             }
 
-            Log.Debug("Could not construct view model '{0}' using injection of data context '{1}'",
+            _logger.LogDebug("Could not construct view model '{0}' using injection of data context '{1}'",
                 viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
 
             return viewModel;

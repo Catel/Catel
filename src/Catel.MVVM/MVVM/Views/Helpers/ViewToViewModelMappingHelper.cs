@@ -5,16 +5,14 @@
     using System.ComponentModel;
     using Catel.Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Helper class to fix <see cref="ViewToViewModelMapping"/> for <see cref="IView"/>.
     /// </summary>
     internal class ViewToViewModelMappingHelper
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ViewToViewModelMappingHelper));
 
         /// <summary>
         /// Dictionary of <see cref="IViewModelContainer"/> instances managed by this helper class.
@@ -53,7 +51,7 @@
             ArgumentNullException.ThrowIfNull(viewModelContainer);
             ArgumentNullException.ThrowIfNull(objectAdapter);
 
-            Log.Debug("Initializing view model container to manage ViewToViewModel mappings");
+            Logger.LogDebug("Initializing view model container to manage ViewToViewModel mappings");
 
             ViewModelContainer = viewModelContainer;
             ObjectAdapter = objectAdapter;
@@ -70,7 +68,7 @@
 
             InitializeViewModel(ViewModelContainer.ViewModel);
 
-            Log.Debug("Initialized view model container to manage ViewToViewModel mappings");
+            Logger.LogDebug("Initialized view model container to manage ViewToViewModel mappings");
         }
 
         /// <summary>
@@ -142,14 +140,14 @@
         /// </summary>
         private void UninitializeViewToViewModelMappings()
         {
-            Log.Debug("Uninitializing view model container to manage ViewToViewModel mappings");
+            Logger.LogDebug("Uninitializing view model container to manage ViewToViewModel mappings");
 
             ViewModelContainer.ViewModelChanged -= OnViewModelChanged;
             ViewModelContainer.PropertyChanged -= OnViewModelContainerPropertyChanged;
 
             UninitializeViewModel(CurrentViewModel);
 
-            Log.Debug("Uninitialized view model container to manage ViewToViewModel mappings");
+            Logger.LogDebug("Uninitialized view model container to manage ViewToViewModel mappings");
         }
 
         /// <summary>
@@ -160,7 +158,7 @@
         {
             var viewModelType = ObjectToStringHelper.ToTypeString(viewModel);
 
-            Log.Debug("Initializing view model '{0}'", viewModelType);
+            Logger.LogDebug("Initializing view model '{0}'", viewModelType);
 
             UninitializeViewModel(_previousViewModel);
 
@@ -187,7 +185,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to transfer value from view property '{0}' to the view model property '{1}' for the ViewToViewModelMapping", 
+                        Logger.LogError(ex, "Failed to transfer value from view property '{0}' to the view model property '{1}' for the ViewToViewModelMapping", 
                             mapping.ViewPropertyName, mapping.ViewModelPropertyName);
                     }
                 }
@@ -195,7 +193,7 @@
                 viewModel.PropertyChanged += OnViewModelPropertyChanged;
             }
 
-            Log.Debug("Initialized view model '{0}'", viewModelType);
+            Logger.LogDebug("Initialized view model '{0}'", viewModelType);
         }
 
         /// <summary>
@@ -211,11 +209,11 @@
 
             var viewModelType = viewModel.GetType().Name;
 
-            Log.Debug("Uninitializing view model '{0}'", viewModelType);
+            Logger.LogDebug("Uninitializing view model '{0}'", viewModelType);
 
             viewModel.PropertyChanged -= OnViewModelPropertyChanged;
 
-            Log.Debug("Uninitialized view model '{0}'", viewModelType);
+            Logger.LogDebug("Uninitialized view model '{0}'", viewModelType);
         }
 
         /// <summary>
@@ -238,7 +236,7 @@
             if (string.IsNullOrWhiteSpace(e.PropertyName))
             {
                 return;
-                //throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
+                //throw Logger.LogErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
             }
 
             var viewModel = CurrentViewModel;
@@ -254,7 +252,7 @@
                 var mapping = viewToViewModelMappingContainer.GetViewModelToViewMapping(e.PropertyName);
                 if (_ignoredViewModelChanges.Contains(mapping.ViewPropertyName))
                 {
-                    Log.Debug("Ignored property changed event for ViewModel.'{0}'", mapping.ViewPropertyName);
+                    Logger.LogDebug("Ignored property changed event for ViewModel.'{0}'", mapping.ViewPropertyName);
                 }
                 else
                 {
@@ -279,7 +277,7 @@
             if (string.IsNullOrWhiteSpace(e.PropertyName))
             {
                 return;
-                //throw Log.ErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
+                //throw Logger.LogErrorAndCreateException<NotSupportedException>($"Handling string.Empty or null property change is not yet supported, all mappings should be updated in such case");
             }
 
             var viewModel = CurrentViewModel;
@@ -295,7 +293,7 @@
                 var mapping = viewToViewModelMappingContainer.GetViewToViewModelMapping(e.PropertyName);
                 if (_ignoredViewChanges.Contains(mapping.ViewPropertyName))
                 {
-                    Log.Debug("Ignored property changed event for view.'{0}'", mapping.ViewPropertyName);
+                    Logger.LogDebug("Ignored property changed event for view.'{0}'", mapping.ViewPropertyName);
                 }
                 else
                 {
@@ -331,11 +329,11 @@
 
             if (viewModel is null)
             {
-                Log.Warning("Cannot transfer value from view to view model because view model is null");
+                Logger.LogWarning("Cannot transfer value from view to view model because view model is null");
                 return;
             }
 
-            Log.Debug("Ignore next property changed event for view model.'{0}'", viewModelPropertyName);
+            Logger.LogDebug("Ignore next property changed event for view model.'{0}'", viewModelPropertyName);
 
             // Ignore this property (we will soon receive an event that it has changed)
             if (!_ignoredViewModelChanges.Contains(viewModelPropertyName))
@@ -345,7 +343,7 @@
 
             TransferValue(ViewModelContainer, viewPropertyName, viewModel, viewModelPropertyName);
 
-            Log.Debug("No longer ignoring next property changed event for view model.'{0}'", viewModelPropertyName);
+            Logger.LogDebug("No longer ignoring next property changed event for view model.'{0}'", viewModelPropertyName);
 
             _ignoredViewModelChanges.Remove(viewModelPropertyName);
         }
@@ -371,11 +369,11 @@
 
             if (viewModel is null)
             {
-                Log.Warning("Cannot transfer value from view model to view because view model is null");
+                Logger.LogWarning("Cannot transfer value from view model to view because view model is null");
                 return;
             }
 
-            Log.Debug("Ignore next property changed event for view.'{0}'", viewPropertyName);
+            Logger.LogDebug("Ignore next property changed event for view.'{0}'", viewPropertyName);
 
             if (!_ignoredViewChanges.Contains(viewPropertyName))
             {
@@ -384,7 +382,7 @@
 
             TransferValue(viewModel, viewModelPropertyName, ViewModelContainer, viewPropertyName);
 
-            Log.Debug("No longer ignoring next property changed event for view.'{0}'", viewPropertyName);
+            Logger.LogDebug("No longer ignoring next property changed event for view.'{0}'", viewPropertyName);
 
             _ignoredViewChanges.Remove(viewPropertyName);
         }
@@ -416,11 +414,11 @@
                 return;
             }
 
-            Log.Debug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
+            Logger.LogDebug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
 
             if (!ObjectAdapter.TrySetMemberValue(target, targetPropertyName, valueToTransfer))
             {
-                Log.Warning($"Failed to transfer value, is the property not writeable?");
+                Logger.LogWarning($"Failed to transfer value, is the property not writeable?");
                 return;
             }
         }

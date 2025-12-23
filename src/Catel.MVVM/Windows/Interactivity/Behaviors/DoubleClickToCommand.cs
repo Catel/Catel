@@ -3,12 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Logging;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Threading;
+    using Logging;
+    using Microsoft.Extensions.Logging;
     using TimerTickEventArgs = System.EventArgs;
 
     /// <summary>
@@ -17,10 +18,7 @@
     /// </summary>
     public partial class DoubleClickToCommand : CommandBehaviorBase<FrameworkElement>
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(DoubleClickToCommand));
 
         private readonly DispatcherTimer _timer;
         
@@ -127,7 +125,7 @@
                 var associatedObjectAsGrid = AssociatedObject as Grid;
                 if (associatedObjectAsGrid is null)
                 {
-                    Log.Debug("AutoFixListBoxItemTemplate is set to true, but AssociatedObject is not a grid so no action will be taken");
+                    Logger.LogDebug("AutoFixListBoxItemTemplate is set to true, but AssociatedObject is not a grid so no action will be taken");
                     return;
                 }
 
@@ -139,7 +137,7 @@
                 var contentPresenter = VisualTreeHelper.GetParent(associatedObjectAsGrid) as ContentPresenter;
                 if (contentPresenter is not null)
                 {
-                    Log.Debug("AutoFixListBoxItemTemplate is set to true, setting the HorizontalAlignment of the parent to Stretch");
+                    Logger.LogDebug("AutoFixListBoxItemTemplate is set to true, setting the HorizontalAlignment of the parent to Stretch");
                     contentPresenter.HorizontalAlignment = HorizontalAlignment.Stretch;
                 }
             }
@@ -182,7 +180,7 @@
             {
                 if (_action is not null)
                 {
-                    Log.Debug("Executing action");
+                    Logger.LogDebug("Executing action");
 
                     _action();
                 }

@@ -3,13 +3,14 @@
     using System;
     using System.Collections.Generic;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Class containing a view stack and whether the stack is currently loaded.
     /// </summary>
     public class ViewStack : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ViewStack));
 
         private readonly ViewStack? _parentViewStack;
         private readonly WeakViewInfo _viewInfo;
@@ -277,7 +278,7 @@
             var view = _viewInfo.View;
             if (view is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Cannot raise view loaded event, view is no longer alive (null)");
+                throw Logger.LogErrorAndCreateException<CatelException>("Cannot raise view loaded event, view is no longer alive (null)");
             }
 
             ViewLoaded?.Invoke(this, new ViewStackPartEventArgs(view));
@@ -290,7 +291,7 @@
             var view = _viewInfo.View;
             if (view is null)
             {
-                throw Log.ErrorAndCreateException<CatelException>("Cannot raise view unloaded event, view is no longer alive (null)");
+                throw Logger.LogErrorAndCreateException<CatelException>("Cannot raise view unloaded event, view is no longer alive (null)");
             }
 
             ViewUnloaded?.Invoke(this, new ViewStackPartEventArgs(view));

@@ -7,6 +7,7 @@
     using Logging;
     using Catel.Reflection;
     using Catel.MVVM.Views;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Service to show modal or non-modal popup windows.
@@ -15,10 +16,9 @@
     /// </summary>
     public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
 
+        private readonly ILogger<UIVisualizerService> _logger;
         private readonly IViewLocator _viewLocator;
         private readonly IViewFactory _viewFactory;
         private readonly IDispatcherService _dispatcherService;
@@ -27,18 +27,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="viewLocator">The view locator.</param>
         /// <param name="viewFactory">The view factory.</param>
         /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        public UIVisualizerService(IViewLocator viewLocator, IViewFactory viewFactory, IDispatcherService dispatcherService,
-            IViewModelFactory viewModelFactory)
+        public UIVisualizerService(ILogger<UIVisualizerService> logger, IViewLocator viewLocator, 
+            IViewFactory viewFactory, IDispatcherService dispatcherService, IViewModelFactory viewModelFactory)
         {
             ArgumentNullException.ThrowIfNull(viewLocator);
             ArgumentNullException.ThrowIfNull(dispatcherService);
 
+            _logger = logger;
             _viewLocator = viewLocator;
             _viewFactory = viewFactory;
             _dispatcherService = dispatcherService;
@@ -89,13 +91,13 @@
                 {
                     if (existingRegistration != windowType && throwExceptionIfExists)
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"View model '{name}' already registered");
+                        throw _logger.LogErrorAndCreateException<InvalidOperationException>($"View model '{name}' already registered");
                     }
                 }
 
                 RegisteredWindows[name] = windowType;
 
-                Log.Debug("Registered view model '{0}' in combination with '{1}' in the UIVisualizerService", name, windowType.FullName);
+                _logger.LogDebug("Registered view model '{0}' in combination with '{1}' in the UIVisualizerService", name, windowType.FullName);
             }
         }
 
@@ -113,7 +115,7 @@
                 var result = RegisteredWindows.Remove(name);
                 if (result)
                 {
-                    Log.Debug("Unregistered view model '{0}' in UIVisualizerService", name);
+                    _logger.LogDebug("Unregistered view model '{0}' in UIVisualizerService", name);
                 }
 
                 return result;
@@ -206,7 +208,7 @@
             {
                 if (!RegisteredWindows.ContainsKey(name))
                 {
-                    throw Log.ErrorAndCreateException<WindowNotRegisteredException>(name);
+                    throw _logger.LogErrorAndCreateException<WindowNotRegisteredException>(name);
                 }
             }
         }

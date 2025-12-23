@@ -2,17 +2,18 @@
 {
     using System;
     using System.Windows;
-    using Windows.Threading;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using MVVM;
     using Reflection;
+    using Windows.Threading;
 
     /// <summary>
     /// Extension methods for the <see cref="IUIVisualizerService" />.
     /// </summary>
     public static partial class IUIVisualizerServiceExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(IUIVisualizerServiceExtensions));
 
         /// <summary>
         /// Determines whether the specified view model type is registered.
@@ -109,7 +110,7 @@
             var activateMethodInfo = window.GetType().GetMethodEx("Activate");
             if (activateMethodInfo is null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>($"Method 'Activate' not found on '{window.GetType().Name}', cannot activate the window");
+                throw Logger.LogErrorAndCreateException<NotSupportedException>($"Method 'Activate' not found on '{window.GetType().Name}', cannot activate the window");
             }
 
             bool? result = false;

@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Reflection;
 
     /// <summary>
@@ -12,10 +13,7 @@
     /// </summary>
     internal class ViewToViewModelMappingContainer
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ViewToViewModelMappingContainer));
 
         /// <summary>
         /// Dictionary containing all the view to view model mappings.
@@ -43,7 +41,7 @@
                 var viewToViewModelAttributes = property.GetCustomAttributesEx(typeof(ViewToViewModelAttribute), false);
                 if (viewToViewModelAttributes.Length > 0)
                 {
-                    Log.Debug("Property '{0}' is decorated with the ViewToViewModelAttribute, creating a mapping", property.Name);
+                    Logger.LogDebug("Property '{0}' is decorated with the ViewToViewModelAttribute, creating a mapping", property.Name);
 
                     var viewToViewModelAttribute = (ViewToViewModelAttribute)viewToViewModelAttributes[0];
 

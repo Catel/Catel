@@ -6,6 +6,7 @@
     using System.Threading;
     using Catel.Data;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Threading;
 
     /// <summary>
@@ -14,11 +15,6 @@
     /// </summary>
     public class ViewModelManager : IViewModelManager
     {
-        /// <summary>
-        /// The <see cref="ILog">log</see> object.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// The lock for _instances
         /// </summary>
@@ -52,7 +48,7 @@
         /// Dictionary containing the unique identifiers of a all view models and their registered models.
         /// </summary>
         private readonly Dictionary<int, List<object>> _viewModelModels = new Dictionary<int, List<object>>();
-
+        private readonly ILogger<ViewModelManager> _logger;
         private bool _disposedValue;
 
         /// <summary>
@@ -70,8 +66,10 @@
         /// <remarks>
         /// The constructor is private because this is a singleton class.
         /// </remarks>
-        public ViewModelManager()
+        public ViewModelManager(ILogger<ViewModelManager> logger)
         {
+            _logger = logger;
+
             _managedViewModelsLock = new ReaderWriterLockSlim();
             _managedViewModels = new Dictionary<Type, ManagedViewModel>();
 
@@ -130,7 +128,7 @@
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
 
-            Log.Debug("Registering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _logger.LogDebug("Registering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             lock (_viewModelModelsLock)
             {
@@ -143,7 +141,7 @@
                 models.Add(model);
             }
 
-            Log.Debug("Registered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _logger.LogDebug("Registered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
 
         /// <summary>
@@ -161,7 +159,7 @@
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
 
-            Log.Debug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _logger.LogDebug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             var modelWasRemoved = false;
 
@@ -176,11 +174,11 @@
 
             if (modelWasRemoved)
             {
-                Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+                _logger.LogDebug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
             }
             else
             {
-                Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+                _logger.LogDebug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
             }
         }
 
@@ -196,7 +194,7 @@
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             int modelCount = 0;
 
-            Log.Debug("Unregistering all models of view model '{0}' (id = '{1}')", viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _logger.LogDebug("Unregistering all models of view model '{0}' (id = '{1}')", viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             lock (_viewModelModelsLock)
             {
@@ -207,7 +205,7 @@
                 }
             }
 
-            Log.Debug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", BoxingCache.GetBoxedValue(modelCount), viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _logger.LogDebug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", BoxingCache.GetBoxedValue(modelCount), viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
 
         /// <summary>
@@ -222,7 +220,7 @@
 
             var modelType = ObjectToStringHelper.ToTypeString(model);
 
-            Log.Debug("Getting all view models that are linked to model '{0}'", modelType);
+            _logger.LogDebug("Getting all view models that are linked to model '{0}'", modelType);
 
             var viewModels = new List<IViewModel>();
 
@@ -245,7 +243,7 @@
                 }
             }
 
-            Log.Debug("Found '{0}' view models that are linked to model '{1}'", BoxingCache.GetBoxedValue(viewModels.Count), modelType);
+            _logger.LogDebug("Found '{0}' view models that are linked to model '{1}'", BoxingCache.GetBoxedValue(viewModels.Count), modelType);
 
             return viewModels.ToArray();
         }
@@ -259,7 +257,7 @@
         {
             var boxedUniqueIdentifier = BoxingCache.GetBoxedValue(uniqueIdentifier);
 
-            Log.Debug("Searching for the instance of view model with unique identifier '{0}'", boxedUniqueIdentifier);
+            _logger.LogDebug("Searching for the instance of view model with unique identifier '{0}'", boxedUniqueIdentifier);
 
             return _managedViewModelsLock.PerformRead(() =>
             {
@@ -269,13 +267,13 @@
                     {
                         if (viewModel.UniqueIdentifier == uniqueIdentifier)
                         {
-                            Log.Debug("Found the instance of view model with unique identifier '{0}' as type '{1}'", boxedUniqueIdentifier, ObjectToStringHelper.ToTypeString(viewModel));
+                            _logger.LogDebug("Found the instance of view model with unique identifier '{0}' as type '{1}'", boxedUniqueIdentifier, ObjectToStringHelper.ToTypeString(viewModel));
 
                             return viewModel;
                         }
                     }
                 }
-                Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", boxedUniqueIdentifier);
+                _logger.LogDebug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", boxedUniqueIdentifier);
                 return null;
             });
         }

@@ -6,23 +6,23 @@
     using Logging;
     using System.Windows.Threading;
     using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
     /// </summary>
     public class DispatcherService : IDispatcherService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+        private readonly ILogger<DispatcherService> _logger;
         private readonly IDispatcherProviderService _dispatcherProviderService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DispatcherService"/> class.
         /// </summary>
-        public DispatcherService(IDispatcherProviderService dispatcherProviderService)
+        public DispatcherService(ILogger<DispatcherService> logger, IDispatcherProviderService dispatcherProviderService)
         {
             ArgumentNullException.ThrowIfNull(dispatcherProviderService);
-
+            _logger = logger;
             _dispatcherProviderService = dispatcherProviderService;
         }
 
@@ -36,7 +36,7 @@
                 var dispatcher = _dispatcherProviderService.GetApplicationDispatcher() as Dispatcher;
                 if (dispatcher is null)
                 {
-                    throw Log.ErrorAndCreateException<CatelException>($"Cannot find application dispatcher");
+                    throw _logger.LogErrorAndCreateException<CatelException>($"Cannot find application dispatcher");
                 }
 
                 return dispatcher;
