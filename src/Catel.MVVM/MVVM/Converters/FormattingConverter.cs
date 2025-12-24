@@ -6,7 +6,7 @@
     /// Converter for formatting values.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(object), typeof(string))]
-    public class FormattingConverter : ValueConverterBase
+    public partial class FormattingConverter : ValueConverterBase
     {
         private readonly string _defaultFormatString;
 

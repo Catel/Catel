@@ -7,7 +7,7 @@
     /// <summary>
     /// Debug converter that allows to debug bindings easily and writes the output to the log.
     /// </summary>
-    public class DebugConverter : ValueConverterBase
+    public partial class DebugConverter : ValueConverterBase
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(DebugConverter));
 

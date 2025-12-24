@@ -7,7 +7,7 @@
     /// ShortDateFormattingConverter
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(DateTime), typeof(string))]
-    public class ShortDateFormattingConverter : FormattingConverter
+    public partial class ShortDateFormattingConverter : FormattingConverter
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ShortDateFormattingConverter"/> class.

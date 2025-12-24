@@ -8,7 +8,7 @@
     /// </summary>
     /// <remarks>Currently only values of type bool are accepted.</remarks>
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(bool))]
-    public class BooleanToOppositeBooleanConverter : ValueConverterBase
+    public partial class BooleanToOppositeBooleanConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

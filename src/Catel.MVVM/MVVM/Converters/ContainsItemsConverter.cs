@@ -8,7 +8,7 @@
     /// Converter that converts whether a collection contains items or not.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(IEnumerable), typeof(bool))]
-    public class ContainsItemsConverter : ValueConverterBase
+    public partial class ContainsItemsConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

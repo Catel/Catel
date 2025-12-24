@@ -7,7 +7,7 @@
     /// Implementation of class ReferenceToBooleanConverter
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(object), typeof(bool))]
-    public class ReferenceToBooleanConverter : ValueConverterBase
+    public partial class ReferenceToBooleanConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

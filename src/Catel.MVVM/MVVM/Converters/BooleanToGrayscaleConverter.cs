@@ -8,7 +8,7 @@
     /// return <c>0</c>, otherwise <c>1</c>.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(double))]
-    public class BooleanToGrayscaleConverter : ValueConverterBase
+    public partial class BooleanToGrayscaleConverter : ValueConverterBase
     {
         /// <summary>
         /// Initializes the <see cref="BooleanToGrayscaleConverter"/>.

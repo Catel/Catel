@@ -17,7 +17,7 @@
     /// Original license: CC BY-SA 2.5, compatible with the MIT license.
     /// </remarks>
     [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
-    public class MethodToValueConverter : ValueConverterBase
+    public partial class MethodToValueConverter : ValueConverterBase
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(MethodToValueConverter));
 

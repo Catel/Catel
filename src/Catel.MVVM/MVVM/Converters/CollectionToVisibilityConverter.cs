@@ -7,7 +7,7 @@
     /// <summary>
     /// Converts the count of a collection to the visibility.
     /// </summary>
-    public class CollectionToCollapsingVisibilityConverter : VisibilityConverterBase
+    public partial class CollectionToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionToCollapsingVisibilityConverter"/> class.

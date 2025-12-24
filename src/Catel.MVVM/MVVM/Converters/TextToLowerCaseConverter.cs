@@ -6,7 +6,7 @@
     /// <summary>
     /// Converts string values to lower case.
     /// </summary>
-    public class TextToLowerCaseConverter : ValueConverterBase
+    public partial class TextToLowerCaseConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

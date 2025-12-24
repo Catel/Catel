@@ -10,7 +10,7 @@
     /// The bool value false will be converted to Visibility.Collapsed.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(Visibility))]
-    public class BooleanToCollapsingVisibilityConverter : VisibilityConverterBase
+    public partial class BooleanToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BooleanToCollapsingVisibilityConverter"/> class.

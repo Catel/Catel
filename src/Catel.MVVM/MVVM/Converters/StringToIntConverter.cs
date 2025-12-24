@@ -7,7 +7,7 @@
     /// Converts string to integer and back.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(string), typeof(int?))]
-    public class StringToIntConverter : ValueConverterBase
+    public partial class StringToIntConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

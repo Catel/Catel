@@ -6,7 +6,7 @@
     /// <summary>
     /// Returns a boolean whether the currently executing platform is available.
     /// </summary>
-    public class PlatformToBooleanConverter : ValueConverterBase
+    public partial class PlatformToBooleanConverter : ValueConverterBase
     {
         /// <summary>
         /// Converts the specified value.

@@ -11,7 +11,7 @@
     /// <summary>
     /// Converts elements to a display name. This supports classes, member info, enums, etc.
     /// </summary>
-    public class ObjectToDisplayNameConverter : ValueConverterBase
+    public partial class ObjectToDisplayNameConverter : ValueConverterBase
     {
         /// <summary>
         /// Gets or sets the language service. If this value is set, it will be used inside the <see cref="DisplayNameAttribute"/>.

@@ -10,7 +10,7 @@
     /// <para />
     /// If the <c>ConverterParameter</c> starts with a <c>!</c>, the element will not be visible for the specified enum values.
     /// </summary>
-    public class EnumToCollapsingVisibilityConverter : VisibilityConverterBase
+    public partial class EnumToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         private readonly char[] SplitChars = new[] { '|', ',' };
 

@@ -25,7 +25,7 @@
     /// BooleanToTextConverter.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(string))]
-    public class BooleanToTextConverter : ValueConverterBase
+    public partial class BooleanToTextConverter : ValueConverterBase
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(BooleanToTextConverter));
 

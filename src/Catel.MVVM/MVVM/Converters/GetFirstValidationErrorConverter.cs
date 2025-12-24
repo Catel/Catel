@@ -10,7 +10,7 @@
     /// or an empty string in case there are no errors.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(ICollection<ValidationError>), typeof(string))]
-    public class GetFirstValidationErrorConverter : ValueConverterBase
+    public partial class GetFirstValidationErrorConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

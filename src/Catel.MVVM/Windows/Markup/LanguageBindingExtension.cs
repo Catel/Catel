@@ -10,7 +10,7 @@
     /// <summary>
     /// Binding that uses the <see cref="ILanguageService" /> to retrieve the binding values.
     /// </summary>
-    public class LanguageBindingExtension : UpdatableMarkupExtension
+    public partial class LanguageBindingExtension : UpdatableMarkupExtension
     {
         private ILanguageService? _languageService;
 

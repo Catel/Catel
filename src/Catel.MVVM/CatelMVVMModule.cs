@@ -11,7 +11,7 @@
     /// <summary>
     /// MVVM module which allows the registration of default services in the service locator.
     /// </summary>
-    public static class MVVMModule
+    public static class CatelMVVMModule
     {
         public static IServiceCollection AddCatelMvvmServices(this IServiceCollection serviceCollection)
         {

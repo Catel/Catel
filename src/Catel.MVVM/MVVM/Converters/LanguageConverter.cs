@@ -7,7 +7,7 @@
     /// <summary>
     /// Converts the value (the resource name) to a language string.
     /// </summary>
-    public class LanguageConverter : ValueConverterBase<string>
+    public partial class LanguageConverter : ValueConverterBase<string>
     {
         private readonly ILanguageService _languageService;
 

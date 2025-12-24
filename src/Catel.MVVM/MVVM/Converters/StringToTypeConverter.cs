@@ -9,7 +9,7 @@
     /// <summary>
     /// Convert a string defining a .NET type into a <see cref="System.Type"/> value.
     /// </summary>
-    public class StringToTypeConverter : TypeConverter
+    public partial class StringToTypeConverter : TypeConverter
     {
         /// <summary>
         /// Returns whether this converter can convert an object of the given type to the type of this converter, using the specified context.

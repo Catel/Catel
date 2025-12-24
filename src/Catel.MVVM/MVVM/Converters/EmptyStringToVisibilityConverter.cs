@@ -9,7 +9,7 @@
     /// If the string is null or empty, Visibility.Collapsed will be returned.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(string), typeof(Visibility))]
-    public class EmptyStringToCollapsingVisibilityConverter : VisibilityConverterBase
+    public partial class EmptyStringToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EmptyStringToCollapsingVisibilityConverter"/> class.
@@ -22,7 +22,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="EmptyStringToCollapsingVisibilityConverter"/> class.
         /// </summary>
-        /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visibible should be returned.</param>
+        /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visible should be returned.</param>
         /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
         internal EmptyStringToCollapsingVisibilityConverter(Visibility notVisibleVisibility)
             : base(notVisibleVisibility)

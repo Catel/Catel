@@ -11,7 +11,7 @@
     /// Original code found at http://geekswithblogs.net/claraoscura/archive/2008/10/17/125901.aspx
     /// </remarks>
     [System.Windows.Data.ValueConversion(typeof(bool?), typeof(bool))]
-    public class IsSelectedConverter : ValueConverterBase
+    public partial class IsSelectedConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

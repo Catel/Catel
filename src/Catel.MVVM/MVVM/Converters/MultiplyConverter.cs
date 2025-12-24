@@ -7,7 +7,7 @@
     /// Calculate the product of given value and factor in parameter.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(int), typeof(int))]
-    public class MultiplyConverter : ValueConverterBase
+    public partial class MultiplyConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

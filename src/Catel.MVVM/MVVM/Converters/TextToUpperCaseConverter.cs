@@ -7,7 +7,7 @@
     /// <summary>
     /// Converts string values to upper case.
     /// </summary>
-    public class TextToUpperCaseConverter : ValueConverterBase
+    public partial class TextToUpperCaseConverter : ValueConverterBase
     {
         /// <summary>
         /// The cache storage.

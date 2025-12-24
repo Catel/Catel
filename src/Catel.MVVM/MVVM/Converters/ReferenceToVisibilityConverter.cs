@@ -9,7 +9,7 @@
     /// If the reference is null, Visibility.Collapsed will be returned.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof (object), typeof (Visibility))]
-    public class ReferenceToCollapsingVisibilityConverter : VisibilityConverterBase
+    public partial class ReferenceToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceToCollapsingVisibilityConverter"/> class.

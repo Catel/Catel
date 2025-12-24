@@ -7,7 +7,7 @@
     /// <summary>
     /// Converts the items inside a collection to the number of elements contained by the collection.
     /// </summary>
-    public class CollectionToCountConverter : ValueConverterBase
+    public partial class CollectionToCountConverter : ValueConverterBase
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

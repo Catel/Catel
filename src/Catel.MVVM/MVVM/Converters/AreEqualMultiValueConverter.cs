@@ -10,7 +10,7 @@
     /// objects are equal or not.
     /// </summary>
     [ValueConversion(typeof(object), typeof(object))]
-    public class AreEqualMultiValueConverter : MarkupExtension, IMultiValueConverter
+    public partial class AreEqualMultiValueConverter : MarkupExtension, IMultiValueConverter
     {
         /// <summary>
         /// Converts the comparison of 2 values to a boolean.

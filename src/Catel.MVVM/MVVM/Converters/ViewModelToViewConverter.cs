@@ -9,7 +9,7 @@
     /// view content.
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
-    public class ViewModelToViewConverter : ValueConverterBase
+    public partial class ViewModelToViewConverter : ValueConverterBase
     {
         private readonly IViewLocator _viewLocator;
         private readonly IViewFactory _viewFactory;

@@ -28,7 +28,7 @@
     /// Original license: CPOL, compatible with the MIT license.
     /// </remarks>
     [ContentProperty(nameof(Converters))]
-    public class ValueConverterGroup : IValueConverter
+    public partial class ValueConverterGroup : IValueConverter
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(ValueConverterGroup));
 

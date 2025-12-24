@@ -7,7 +7,7 @@
     /// ColorToBrushConverter
     /// </summary>
     [System.Windows.Data.ValueConversion(typeof(Color), typeof(Brush))]
-    public class ColorToBrushConverter : ValueConverterBase<Color, Brush>
+    public partial class ColorToBrushConverter : ValueConverterBase<Color, Brush>
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
