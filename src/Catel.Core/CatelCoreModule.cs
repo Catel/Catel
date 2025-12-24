@@ -12,10 +12,12 @@
     /// <summary>
     /// Core module which allows the registration of default services in the service collection.
     /// </summary>
-    public static class CoreModule
+    public static class CatelCoreModule
     {
         public static IServiceCollection AddCatelCoreServices(this IServiceCollection serviceCollection)
         {
+            serviceCollection.TryAddSingleton<ITimeProvider, TimeProvider>();
+
             serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
             serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();
             serviceCollection.TryAddSingleton<IMessageMediator, MessageMediator>();
