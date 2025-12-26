@@ -34,7 +34,7 @@
             var registrationInfo = serviceCollection.FirstOrDefault(x => x.ServiceType == typeof(IDispatcherService));
             if (registrationInfo is null || registrationInfo.ImplementationType == typeof(ShimDispatcherService))
             {
-                serviceCollection.TryAddSingleton<IDispatcherService, DispatcherService>();
+                serviceCollection.AddSingleton<IDispatcherService, DispatcherService>();
             }
 
             // Only register if not yet registered
