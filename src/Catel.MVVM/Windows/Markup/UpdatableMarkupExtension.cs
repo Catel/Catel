@@ -36,6 +36,13 @@
         protected bool AllowUpdatableStyleSetters { get; set; }
 
         /// <summary>
+        /// If set the <c>true</c>, the markup extension will try to update, even in design time mode.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        protected bool SupportDesignTimeMode { get; set; }
+
+        /// <summary>
         /// Gets the target object.
         /// </summary>
         /// <value>The target object.</value>
@@ -222,6 +229,11 @@
         /// </summary>
         protected void UpdateValue()
         {
+            if (CatelEnvironment.IsInDesignMode && !SupportDesignTimeMode)
+            {
+                return;
+            }
+
             var targetObject = TargetObject;
             if (targetObject is null)
             {
