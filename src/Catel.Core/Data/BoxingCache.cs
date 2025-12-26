@@ -37,15 +37,16 @@
 
         public BoxingCache()
         {
+            _cleanUpTimer = new Timer();
+            _cleanUpTimer.AutoReset = false;
+            _cleanUpTimer.Elapsed += OnCleanUpTimerElapsed; 
+            
             if (typeof(T) == typeof(bool))
             {
                 // Don't clean up small caches, default to zero
                 CleanUpInterval = TimeSpan.Zero;
             }
 
-            _cleanUpTimer = new Timer();
-            _cleanUpTimer.AutoReset = false;
-            _cleanUpTimer.Elapsed += OnCleanUpTimerElapsed;
         }
 
         /// <summary>
@@ -67,7 +68,7 @@
 
                 Logger.LogDebug($"Cleanup interval is set to '{value}'");
 
-                _cleanUpTimer.Stop();
+                _cleanUpTimer?.Stop();
 
                 StartTimerIfRequired();
             }
