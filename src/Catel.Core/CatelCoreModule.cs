@@ -14,7 +14,7 @@
     /// </summary>
     public static class CatelCoreModule
     {
-        public static IServiceCollection AddCatelCoreServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddCatelCore(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<ITimeProvider, TimeProvider>();
 

@@ -13,9 +13,9 @@
     /// </summary>
     public static class CatelMVVMModule
     {
-        public static IServiceCollection AddCatelMvvmServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddCatelMvvm(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddCatelCoreServices();
+            serviceCollection.AddCatelCore();
 
             serviceCollection.TryAddSingleton<IDataContextSubscriptionService, DataContextSubscriptionService>();
             serviceCollection.TryAddSingleton<ICommandManager, CommandManager>();

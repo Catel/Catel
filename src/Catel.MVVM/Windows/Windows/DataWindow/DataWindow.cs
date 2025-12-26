@@ -709,18 +709,21 @@
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.OK;
                 _buttons.Add(button);
             }
+
             if (IsCancelButtonAvailable)
             {
                 var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
+
             if (IsApplyButtonAvailable)
             {
                 var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Apply;
                 _buttons.Add(button);
             }
+
             if (IsCloseButtonAvailable)
             {
                 var button = DataWindowButton.FromSync(_serviceProvider, _languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
