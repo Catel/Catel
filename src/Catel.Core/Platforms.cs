@@ -47,7 +47,10 @@
                 case KnownPlatforms.NET:
                     return currentPlatform == SupportedPlatforms.NET6 ||
                            currentPlatform == SupportedPlatforms.NET7 ||
-                           currentPlatform == SupportedPlatforms.NET8;
+                           currentPlatform == SupportedPlatforms.NET8 ||
+                           currentPlatform == SupportedPlatforms.NET9 ||
+                           currentPlatform == SupportedPlatforms.NET10 ||
+                           currentPlatform == SupportedPlatforms.NET11;
 
                 case KnownPlatforms.NET6:
                     return currentPlatform == SupportedPlatforms.NET6;
@@ -57,6 +60,15 @@
 
                 case KnownPlatforms.NET8:
                     return currentPlatform == SupportedPlatforms.NET8;
+
+                case KnownPlatforms.NET9:
+                    return currentPlatform == SupportedPlatforms.NET9;
+
+                case KnownPlatforms.NET10:
+                    return currentPlatform == SupportedPlatforms.NET10;
+
+                case KnownPlatforms.NET11:
+                    return currentPlatform == SupportedPlatforms.NET11;
 
                 default:
                     throw new ArgumentOutOfRangeException("platformToCheck");
@@ -71,6 +83,12 @@
             return SupportedPlatforms.NET7;
 #elif NET8
             return SupportedPlatforms.NET8;
+#elif NET9
+            return SupportedPlatforms.NET9;
+#elif NET10
+            return SupportedPlatforms.NET10;
+#elif NET11
+            return SupportedPlatforms.NET11;
 #else
             throw new System.NotSupportedException("Unknown platform is not supported");
 #endif
@@ -95,7 +113,22 @@
         /// <summary>
         /// .NET 8
         /// </summary>
-        NET8
+        NET8,
+
+        /// <summary>
+        /// .NET 9
+        /// </summary>
+        NET9,
+
+        /// <summary>
+        /// .NET 10
+        /// </summary>
+        NET10,
+
+        /// <summary>
+        /// .NET 11
+        /// </summary>
+        NET11
     }
 
     /// <summary>
@@ -127,5 +160,20 @@
         /// .NET 8.
         /// </summary>
         NET8,
+
+        /// <summary>
+        /// .NET 9.
+        /// </summary>
+        NET9,
+
+        /// <summary>
+        /// .NET 10.
+        /// </summary>
+        NET10,
+
+        /// <summary>
+        /// .NET 11.
+        /// </summary>
+        NET11,
     }
 }
