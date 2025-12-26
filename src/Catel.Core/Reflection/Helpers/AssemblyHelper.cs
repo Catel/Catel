@@ -6,10 +6,12 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
+    using Catel.IoC;
     using Collections;
     using Data;
     using Logging;
     using MethodTimer;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -39,10 +41,10 @@
         /// Gets the entry assembly.
         /// </summary>
         /// <returns>Assembly.</returns>
-        [ObsoleteEx(Message = "Use IEntryAssemblyResolver instead", TreatAsErrorFromVersion = "7.0", RemoveInVersion = "8.0")]
         public static Assembly? GetEntryAssembly()
         {
-            throw new NotImplementedException();
+            var resolver = IoCContainer.ServiceProvider.GetRequiredService<IEntryAssemblyResolver>();
+            return resolver.Resolve();
         }
 
         /// <summary>
