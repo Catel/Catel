@@ -5,24 +5,26 @@
     /// </summary>
     public enum DataWindowDefaultButton
     {
-        /// <summary>
-        /// OK button.
-        /// </summary>
-        OK,
-
-        /// <summary>
-        /// Apply button.
-        /// </summary>
-        Apply,
-
-        /// <summary>
-        /// Close button.
-        /// </summary>
-        Close,
+        Default = OK,
 
         /// <summary>
         /// No button.
         /// </summary>
-        None
+        None = 0,
+
+        /// <summary>
+        /// OK button.
+        /// </summary>
+        OK = 1,
+
+        /// <summary>
+        /// Apply button.
+        /// </summary>
+        Apply = 2,
+
+        /// <summary>
+        /// Close button.
+        /// </summary>
+        Close = 3,
     }
 }

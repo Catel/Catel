@@ -91,8 +91,8 @@
             // For more info, see http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/3059c0e4-c372-4da2-b384-28f271feef05/
             SetResourceReference(StyleProperty, typeof(DataWindow));
 
-            Mode = DataWindowMode.OkCancel;
-            DefaultButton = DataWindowDefaultButton.OK;
+            Mode = DataWindowMode.Custom;
+            DefaultButton = DataWindowDefaultButton.Default;
             InfoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline;
 
             this.FixBlurriness();
