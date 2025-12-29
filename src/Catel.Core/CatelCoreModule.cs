@@ -5,6 +5,7 @@
     using Configuration;
     using Data;
     using Messaging;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Services;
@@ -21,6 +22,10 @@
 
             serviceCollection.TryAddSingleton<ITimeProvider, TimeProvider>();
 
+            // Configuration
+            serviceCollection.TryAddKeyedSingleton<IConfigurationBuilder, ConfigurationBuilder>("CatelConfiguration");
+            serviceCollection.TryAddSingleton<IConfigurationService, ConfigurationService>();
+
             serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
             serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();
             serviceCollection.TryAddSingleton<IMessageMediator, MessageMediator>();
@@ -33,7 +38,6 @@
             serviceCollection.TryAddSingleton<IEntryAssemblyResolver, EntryAssemblyResolver>();
 
             serviceCollection.TryAddSingleton<IModelEqualityComparer, ModelEqualityComparer>();
-            serviceCollection.TryAddSingleton<IConfigurationService, ConfigurationService>();
             serviceCollection.TryAddSingleton<IObjectConverterService, ObjectConverterService>();
 
             //serviceCollection.TryAddSingleton(typeof(IObjectIdGenerator<TObject,int>)  <IObjectIdGenerator<T, int>, IntegerObjectIdGenerator<T>();

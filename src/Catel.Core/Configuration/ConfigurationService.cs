@@ -2,12 +2,17 @@
 {
     using System;
     using System.Diagnostics;
+    using System.Dynamic;
     using System.Globalization;
     using System.IO;
     using System.Threading.Tasks;
     using System.Timers;
+    using System.Xml.Linq;
     using Catel.Logging;
     using Catel.Threading;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Configuration.Json;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Services;
 
@@ -25,13 +30,16 @@
         /// </summary>
         private const int IgnoreTimerThresholdInMilliseconds = 10;
 
+        private const string ConfigurationFileName = "configuration.json";
+
         private readonly ILogger<IConfigurationService> _logger;
         private readonly IObjectConverterService _objectConverterService;
         private readonly IAppDataService _appDataService;
         private readonly IDispatcherService _dispatcherService;
+        private readonly IConfigurationBuilder _configurationBuilder;
 
-        private DynamicConfiguration? _localConfiguration;
-        private DynamicConfiguration? _roamingConfiguration;
+        private IConfiguration? _localConfiguration;
+        private IConfiguration? _roamingConfiguration;
 
         private readonly AsyncLock _localConfigurationLock = new()
         {
@@ -52,22 +60,16 @@
         private bool _suspendNotifications = false;
         private bool _hasPendingNotifications = false;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="objectConverterService">The object converter service.</param>
-        /// <param name="appDataService">The application data service.</param>
-        /// <param name="dispatcherService">Dispatcher service.</param>
-        public ConfigurationService(ILogger<IConfigurationService> logger, 
+        public ConfigurationService(ILogger<IConfigurationService> logger,
             IObjectConverterService objectConverterService, IAppDataService appDataService,
-            IDispatcherService dispatcherService)
+            IDispatcherService dispatcherService,
+            [FromKeyedServices("CatelConfiguration")] IConfigurationBuilder configurationBuilder)
         {
             _logger = logger;
             _objectConverterService = objectConverterService;
             _appDataService = appDataService;
             _dispatcherService = dispatcherService;
-
+            _configurationBuilder = configurationBuilder;
             _localSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _localSaveConfigurationTimer.Elapsed += OnLocalSaveConfigurationTimerElapsed;
 
@@ -105,7 +107,7 @@
         /// <returns>Returns the full configuration filename for the specified application data target.</returns>
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget)
         {
-            var filename = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(applicationDataTarget), "configuration.xml");
+            var filename = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(applicationDataTarget), ConfigurationFileName);
             return filename;
         }
 
@@ -296,51 +298,76 @@
             }
         }
 
-        protected virtual async Task<DynamicConfiguration> LoadConfigurationAsync(string source)
+        protected virtual async Task<IConfiguration> LoadConfigurationAsync(string source)
         {
-            var stopwatch = Stopwatch.StartNew();
+            var configuration = (IConfiguration)_configurationBuilder
+                .AddJsonFile(source, true, false)
+                .Build();
 
-            if (!File.Exists(source))
+            // For backwards compatibility, we will only replace the extension
+            var oldConfigurationFile = Path.ChangeExtension(source, ".xml");
+            if (File.Exists(oldConfigurationFile))
             {
-                // No file, we can really start from scratch
-                return new DynamicConfiguration();
-            }
-
-            // Try for 5 seconds
-            while (stopwatch.ElapsedMilliseconds < 5000)
-            {
-                try
+                var stopwatch = Stopwatch.StartNew();
+                
+                // Try for 5 seconds
+                while (stopwatch.ElapsedMilliseconds < 5000)
                 {
-                    using (var fileStream = File.Open(source, FileMode.Open, FileAccess.Read, FileShare.None))
+                    try
                     {
-                        if (!fileStream.CanRead)
+                        _logger.LogInformation("Starting migration of xml configuration");
+
+                        using (var fileStream = File.Open(oldConfigurationFile, FileMode.Open, FileAccess.Read, FileShare.None))
                         {
-                            continue;
+                            if (!fileStream.CanRead)
+                            {
+                                continue;
+                            }
+
+                            if (fileStream.Length == 0)
+                            {
+                                continue;
+                            }
+
+                            using var streamReader = new StreamReader(fileStream);
+
+                            var fileContents = await streamReader.ReadToEndAsync();
+
+                            var xmlDocument = XDocument.Parse(fileContents);
+
+                            var rootElement = xmlDocument.Root;
+                            if (rootElement is not null)
+                            {
+                                foreach (var childElement in rootElement.Elements())
+                                {
+                                    var key = childElement.Name.LocalName;
+                                    var value = childElement.Value;
+
+                                    var finalKey = GetFinalKey(key);
+
+                                    configuration[finalKey] = value;
+                                }
+                            }
+
+                            _logger.LogInformation("Storing migrated configuration as json");
+
+                            await SaveConfigurationAsync(configuration, source);
                         }
 
-                        if (fileStream.Length == 0)
-                        {
-                            return new DynamicConfiguration();
-                        }
+                        _logger.LogInformation("Changing extension of migrated configuration to 'xml.bak'");
 
-                        throw _logger.LogErrorAndCreateException<NotImplementedException>("Need to implement loading of configuration");
+                        File.Move(oldConfigurationFile, $"{oldConfigurationFile}.bak");
 
-                        //var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _xmlSerializer);
-                        //if (configuration is null)
-                        //{
-                        //    return new DynamicConfiguration(_xmlSerializer);
-                        //}
-
-                        //return configuration;
+                        break;
+                    }
+                    catch (IOException)
+                    {
+                        // allow
                     }
                 }
-                catch (IOException)
-                {
-                    // allow
-                }
             }
 
-            throw _logger.LogErrorAndCreateException<InvalidOperationException>($"File '{source}' could not be used to load the configuration, it was locked for too long");
+            return configuration;
         }
 
         /// <summary>
@@ -351,16 +378,18 @@
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
         protected virtual bool ValueExists(ConfigurationContainer container, string key)
         {
+            var finalKey = GetFinalKey(key);
+
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
             {
-                var settings = GetSettingsContainer(container);
-                if (settings is null)
+                var configuration = GetSettingsContainer(container);
+                if (configuration is null)
                 {
                     return false;
                 }
 
-                return settings.IsConfigurationValueSet(key);
+                return configuration[finalKey] is not null;
             }
         }
 
@@ -372,6 +401,8 @@
         /// <returns>The value.</returns>
         protected virtual object? GetValueFromStore(ConfigurationContainer container, string key)
         {
+            var finalKey = GetFinalKey(key);
+
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
             {
@@ -381,7 +412,7 @@
                     return null;
                 }
 
-                return settings.GetConfigurationValue(key);
+                return settings[finalKey];
             }
         }
 
@@ -393,6 +424,8 @@
         /// <param name="value">The value.</param>
         protected virtual void SetValueToStore(ConfigurationContainer container, string key, object? value)
         {
+            var finalKey = GetFinalKey(key);
+
             var lockObject = GetLockObject(container);
             using (lockObject.Lock())
             {
@@ -402,12 +435,7 @@
                     return;
                 }
 
-                if (!settings.IsConfigurationValueSet(key))
-                {
-                    settings.RegisterConfigurationKey(key);
-                }
-
-                settings.SetConfigurationValue(key, value);
+                settings[finalKey] = ObjectToStringHelper.ToString(value);
 
                 ScheduleSaveConfiguration(container);
             }
@@ -421,6 +449,9 @@
         protected virtual string GetFinalKey(string key)
         {
             key = key.Replace(" ", "_");
+
+            // Convert . to : for section support
+            key = key.Replace(".", ":");
 
             return key;
         }

@@ -2,10 +2,11 @@
 {
     using System;
     using System.IO;
+    using System.Text.Json.Nodes;
     using System.Threading.Tasks;
     using System.Timers;
-    using Catel.Data;
     using Catel.Logging;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
     public partial class ConfigurationService
@@ -15,9 +16,9 @@
         /// </summary>
         /// <param name="container">The settings container.</param>
         /// <returns>The settings container.</returns>
-        protected virtual DynamicConfiguration GetSettingsContainer(ConfigurationContainer container)
+        protected virtual IConfiguration GetSettingsContainer(ConfigurationContainer container)
         {
-            DynamicConfiguration? settings = null;
+            IConfiguration? settings = null;
 
             switch (container)
             {
@@ -46,7 +47,7 @@
             _localSaveConfigurationTimer.Stop();
 
             // Important: dispatch to prevent deadlocks, see ctor explanation
-            _dispatcherService.BeginInvoke(async ()=> await SaveLocalConfigurationAsync());
+            _dispatcherService.BeginInvoke(async () => await SaveLocalConfigurationAsync());
         }
 
         private async void OnRoamingSaveConfigurationTimerElapsed(object? sender, ElapsedEventArgs e)
@@ -122,7 +123,7 @@
 
                 try
                 {
-                    await SaveConfigurationAsync(container, settings, fileName);
+                    await SaveConfigurationAsync(settings, fileName);
                 }
                 catch (Exception ex)
                 {
@@ -154,7 +155,7 @@
 
                 try
                 {
-                    await SaveConfigurationAsync(container, settings, fileName);
+                    await SaveConfigurationAsync(settings, fileName);
                 }
                 catch (Exception ex)
                 {
@@ -163,14 +164,44 @@
             }
         }
 
-        protected virtual async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+        protected virtual async Task SaveConfigurationAsync(IConfiguration configuration, string fileName)
         {
-            throw _logger.LogErrorAndCreateException<NotImplementedException>("Need to implement");
+            var jsonNode = SerializeConfiguration(configuration)!;
 
-            //using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            //{
-            //    configuration.Save(fileStream, _xmlSerializer);
-            //}
+            await File.WriteAllTextAsync(fileName, jsonNode.ToString());
+        }
+
+        protected virtual JsonNode? SerializeConfiguration(IConfiguration configuration)
+        {
+            var jsonObject = new JsonObject
+            {
+            };
+
+            foreach (var child in configuration.GetChildren())
+            {
+                if (child.Path.EndsWith(":0"))
+                {
+                    var array = new JsonArray();
+
+                    foreach (var arrayChild in configuration.GetChildren())
+                    {
+                        array.Add(SerializeConfiguration(arrayChild));
+                    }
+
+                    return array;
+                }
+
+                jsonObject.Add(child.Key, SerializeConfiguration(child));
+            }
+
+            if (jsonObject.Count > 0 ||
+                configuration is not IConfigurationSection section)
+            {
+                return jsonObject;
+            }
+
+            var jsonValue = JsonValue.Create(section.Value);
+            return jsonValue ?? null;
         }
     }
 }
