@@ -4,12 +4,12 @@
     using Catel.Configuration;
 
     using NUnit.Framework;
-    using Catel.Runtime.Serialization;
     using Catel.Services;
-    using Catel.Runtime.Serialization.Xml;
     using Catel.IO;
     using System.IO;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     public partial class ConfigurationServiceFacts
     {
@@ -17,8 +17,11 @@
         {
             private readonly string _name;
 
-            public TestConfigurationService(string name, IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
-                : base(objectConverterService, serializer, appDataService, new DispatcherService(new DispatcherProviderService()))
+            public TestConfigurationService(string name, IObjectConverterService objectConverterService, IAppDataService appDataService)
+                : base(new NullLogger<ConfigurationService>(), objectConverterService, appDataService, 
+                      new DispatcherService(new NullLogger<DispatcherService>(), 
+                          new DispatcherProviderService(new NullLogger<DispatcherProviderService>())),
+                      new ConfigurationBuilder())
             {
                 _name = name;
             }
@@ -39,11 +42,11 @@
                 return configFileName;
             }
 
-            protected override async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+            protected override async Task SaveConfigurationAsync(IConfiguration configuration, string fileName)
             {
                 SaveConfigurationCallCount++;
 
-                await base.SaveConfigurationAsync(container, configuration, fileName);
+                await base.SaveConfigurationAsync(configuration, fileName);
 
                 if (CreateDelayDuringSave)
                 {
@@ -54,7 +57,7 @@
                 }
             }
 
-            public async Task<DynamicConfiguration> PublicLoadConfigurationAsync(string fileName)
+            public async Task<IConfiguration> PublicLoadConfigurationAsync(string fileName)
             {
                 return await base.LoadConfigurationAsync(fileName);
             }
@@ -62,7 +65,7 @@
 
         private static async Task<TestConfigurationService> GetConfigurationServiceAsync(string name = null)
         {
-            var configurationService = new TestConfigurationService(name, new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService());
+            var configurationService = new TestConfigurationService(name, new ObjectConverterService(), new AppDataService());
 
             await configurationService.LoadAsync();
 
@@ -129,48 +132,11 @@
 
             [TestCase(ConfigurationContainer.Local)]
             [TestCase(ConfigurationContainer.Roaming)]
-            public async Task Returns_Existing_Complex_Value(ConfigurationContainer container)
-            {
-                var configurationService = await GetConfigurationServiceAsync();
-
-                var testObject = new ComplexObject
-                {
-                    ValueA = "Test83123",
-                    ValueB = 42
-                };
-
-                configurationService.SetValue(container, "myComplexKey", testObject);
-
-                var result = configurationService.GetValue<ComplexObject>(container, "myComplexKey");
-                Assert.Multiple(() =>
-                {
-                    Assert.That(testObject.ValueA, Is.EqualTo(result.ValueA));
-                    Assert.That(testObject.ValueB, Is.EqualTo(result.ValueB));
-                });
-            }
-
-            [TestCase(ConfigurationContainer.Local)]
-            [TestCase(ConfigurationContainer.Roaming)]
             public async Task Returns_Default_Value_For_Non_Existing_Value(ConfigurationContainer container)
             {
                 var configurationService = await GetConfigurationServiceAsync();
 
                 Assert.That(configurationService.GetValue(container, "nonExistingKey", "nonExistingValue"), Is.EqualTo("nonExistingValue"));
-            }
-
-            [TestCase(ConfigurationContainer.Local)]
-            [TestCase(ConfigurationContainer.Roaming)]
-            public async Task Returns_Default_Value_For_Non_Existing_Complex_Value(ConfigurationContainer container)
-            {
-                var configurationService = await GetConfigurationServiceAsync();
-
-                var defaultValue = new ComplexObject
-                {
-                    ValueA = "Test8312",
-                    ValueB = 5421
-                };
-
-                Assert.That(configurationService.GetValue(container, "nonExistingKey", defaultValue), Is.EqualTo(defaultValue));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -215,28 +181,6 @@
                 configurationService.SetValue(container, "myKey", "myValue");
 
                 Assert.That(configurationService.GetValue<string>(container, "myKey"), Is.EqualTo("myValue"));
-            }
-
-            [TestCase(ConfigurationContainer.Local)]
-            [TestCase(ConfigurationContainer.Roaming)]
-            public async Task Sets_Complex_Value_Correctly(ConfigurationContainer container)
-            {
-                var configurationService = await GetConfigurationServiceAsync();
-
-                var testObject = new ComplexObject
-                {
-                    ValueA = "Test83123",
-                    ValueB = 42
-                };
-
-                configurationService.SetValue(container, "myComplexKey", testObject);
-
-                var result = configurationService.GetValue<ComplexObject>(container, "myComplexKey");
-                Assert.Multiple(() =>
-                {
-                    Assert.That(testObject.ValueA, Is.EqualTo(result.ValueA));
-                    Assert.That(testObject.ValueB, Is.EqualTo(result.ValueB));
-                });
             }
 
             [TestCase(ConfigurationContainer.Local)]

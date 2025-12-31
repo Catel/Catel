@@ -29,5 +29,10 @@
         }
 
         public static readonly IPropertyData IsEnabledProperty = RegisterProperty("IsEnabled", false);
+
+        public T GetValueWrapper<T>(string propertyName)
+        {
+            return GetValue<T>(propertyName);
+        }
     }
 }

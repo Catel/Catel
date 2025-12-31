@@ -2,7 +2,6 @@
 {
     using System.Diagnostics;
     using System.IO;
-    using Catel.Runtime.Serialization;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
     using NUnit.Framework;
@@ -12,28 +11,6 @@
 
     public class InputGestureFacts
     {
-        [TestFixture]
-        public class TheSerializationFunctionality
-        {
-            [TestCase]
-            public void CorrectlySerializesAndDeserializes()
-            {
-                var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
-
-                var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                using (var memoryStream = new MemoryStream())
-                {
-                    xmlSerializer.Serialize(inputGesture, memoryStream, null);
-
-                    memoryStream.Position = 0L;
-
-                    var finalInputGesture = xmlSerializer.Deserialize(typeof(InputGesture), memoryStream, null);
-
-                    Assert.That(finalInputGesture, Is.EqualTo(inputGesture));
-                }
-            }
-        }
-
         [TestFixture]
         public class TheToStringMethod
         {

@@ -8,7 +8,7 @@
     using Catel.MVVM;
     using Catel.MVVM.Auditing;
     using NUnit.Framework;
-    using TestViewModel = TestClasses.TestViewModel;
+    using TestFeaturedViewModel = TestClasses.TestFeaturedViewModel;
 
     [TestFixture]
     public partial class ViewModelBaseFacts
@@ -24,7 +24,7 @@
         [TestCase]
         public async Task ProtectPropertiesAfterClosingAsync()
         {
-            var vm = new TestViewModel();
+            var vm = new TestFeaturedViewModel();
             var freezable = (IFreezable)vm;
 
             await vm.InitializeViewModelAsync();
@@ -124,16 +124,16 @@
             const int threadAmount = 10;
             var threads = new Thread[threadAmount];
 
-            var allViewModels = new TestViewModel[threadAmount][];
+            var allViewModels = new TestFeaturedViewModel[threadAmount][];
 
             for (var i = 0; i < threadAmount; i++)
             {
                 threads[i] = new Thread(index =>
                 {
-                    var localViewModels = new TestViewModel[personsPerThread];
+                    var localViewModels = new TestFeaturedViewModel[personsPerThread];
                     for (var j = 0; j < personsPerThread; j++)
                     {
-                        localViewModels[j] = new TestViewModel();
+                        localViewModels[j] = new TestFeaturedViewModel();
                     }
 
                     lock (allViewModels)
@@ -155,16 +155,16 @@
                 threads[i].Join();
             }
 
-            var flatenSortedIdentifiers =
+            var flattenSortedIdentifiers =
                 allViewModels
                     .SelectMany(o => o)
                     .Select(o => o.UniqueIdentifier)
                     .OrderBy(o => o)
                     .ToArray();
 
-            var firstId = flatenSortedIdentifiers[0];
+            var firstId = flattenSortedIdentifiers[0];
 
-            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
+            Assert.That(flattenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
         }
 
         [Test]
@@ -174,17 +174,17 @@
             const int threadAmount = 10;
             var threads = new Thread[threadAmount];
 
-            var allViewModels = new TestViewModel[threadAmount][];
+            var allViewModels = new TestFeaturedViewModel[threadAmount][];
 
             for (int i = 0; i < threadAmount; i++)
             {
                 threads[i] = new Thread((index) =>
                 {
-                    var localViewModels = new TestViewModel[personsPerThread];
+                    var localViewModels = new TestFeaturedViewModel[personsPerThread];
 
                     for (int j = 0; j < personsPerThread; j++)
                     {
-                        var viewModel = new TestViewModel
+                        var viewModel = new TestFeaturedViewModel
                         {
                             Age = 18
                         };
@@ -210,16 +210,16 @@
                 threads[i].Join();
             }
 
-            var flatenSortedIdentifiers =
+            var flattenSortedIdentifiers =
                 allViewModels
                     .SelectMany(o => o)
                     .Select(o => o.UniqueIdentifier)
                     .OrderBy(o => o)
                     .ToArray();
 
-            var firstId = flatenSortedIdentifiers[0];
+            var firstId = flattenSortedIdentifiers[0];
 
-            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
+            Assert.That(flattenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
         }
 
         [Test]
@@ -229,13 +229,13 @@
             const int threadAmount = 10;
             var threads = new Thread[threadAmount];
 
-            var allViewModels = new TestViewModel[threadAmount][];
+            var allViewModels = new TestFeaturedViewModel[threadAmount][];
 
             for (int i = 0; i < threadAmount; i++)
             {
                 threads[i] = new Thread((index) =>
                 {
-                    var localViewModels = new TestViewModel[personsPerThread];
+                    var localViewModels = new TestFeaturedViewModel[personsPerThread];
 
                     for (int j = 0; j < personsPerThread; j++)
                     {

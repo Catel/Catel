@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using System.Collections.Generic;
     using Catel.Data;
     using Catel.MVVM;
@@ -7,14 +8,14 @@
     /// <summary>
     /// Test view model with validation tags.
     /// </summary>
-    public class TestViewModelWithValidationTags : ViewModelBase
+    public class TestViewModelWithValidationTags : FeaturedViewModelBase
     {
-        public TestViewModelWithValidationTags()
+        public TestViewModelWithValidationTags(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             DeferValidationUntilFirstSaveCall = false;
         }
 
-        #region Methods
         /// <summary>
         /// Validates the field values of this object. Override this method to enable
         /// validation of field values.
@@ -32,9 +33,7 @@
                 validationResults.Add(new FieldValidationResult(LastNameProperty, ValidationResultType.Error, "Last name is required") { Tag = "PersonValidation" });
             }
         }
-        #endregion
 
-        #region Constants
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
@@ -49,9 +48,7 @@
         /// Register the LastName property so it is known in the class.
         /// </summary>
         public static readonly IPropertyData LastNameProperty = RegisterProperty<string>("LastName");
-        #endregion
-
-        #region Properties
+ 
         /// <summary>
         /// Gets or sets the first name.
         /// </summary>
@@ -79,6 +76,5 @@
             set { SetValue(LastNameProperty, value); }
         }
 
-        #endregion
     }
 }

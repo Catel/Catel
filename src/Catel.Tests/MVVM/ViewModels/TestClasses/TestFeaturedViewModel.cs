@@ -3,37 +3,34 @@
     using System;
     using Catel.Data;
     using Catel.MVVM;
-    using Catel.Services;
-    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Test view model.
     /// </summary>
-    public class TestViewModel : ViewModelBase
+    public class TestFeaturedViewModel : FeaturedViewModelBase
     {
-        public TestViewModel(IServiceProvider serviceProvider)
+        public TestFeaturedViewModel(IServiceProvider serviceProvider)
             : this(null, null, serviceProvider)
         {
         }
 
-        public TestViewModel(IPerson person, IServiceProvider serviceProvider)
+        public TestFeaturedViewModel(IPerson person, IServiceProvider serviceProvider)
             : this(person, null, serviceProvider)
         {
         }
 
-        public TestViewModel(SpecialValidationModel specialValidationModel, IServiceProvider serviceProvider)
+        public TestFeaturedViewModel(SpecialValidationModel specialValidationModel, IServiceProvider serviceProvider)
             : this(null, specialValidationModel, serviceProvider)
         {
         }
 
-        private TestViewModel(IPerson person, SpecialValidationModel specialValidationModel, IServiceProvider serviceProvider)
-            : base(serviceProvider, serviceProvider.GetRequiredService<IObjectAdapter>(), serviceProvider.GetRequiredService<Catel.Runtime.Serialization.ISerializer>(),
-                  serviceProvider.GetRequiredService<IDispatcherService>(), serviceProvider.GetRequiredService<IViewModelManager>())
+        private TestFeaturedViewModel(IPerson person, SpecialValidationModel specialValidationModel, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Person = person;
             SpecialValidationModel = specialValidationModel;
 
-            GenerateData = new Command<object, object>(OnGenerateDataExecute, OnGenerateDataCanExecute);
+            GenerateData = new Command<object, object>(serviceProvider, OnGenerateDataExecute, OnGenerateDataCanExecute);
             GenerateData.AutomaticallyDispatchEvents = false;
 
             DeferValidationUntilFirstSaveCall = false;
@@ -127,7 +124,7 @@
         public static readonly IPropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty<string>("BusinessRuleWarningWhenEmpty");
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly IPropertyData AgeProperty = RegisterProperty<TestViewModel, uint>(model => model.Age);
+        public static readonly IPropertyData AgeProperty = RegisterProperty<TestFeaturedViewModel, uint>(model => model.Age);
         #endregion
 
         #region Properties
@@ -253,28 +250,16 @@
 
         #endregion
 
-        #region Methods
-        /// <summary>
-        /// Test wrapper for the protected <see cref="ViewModelBase.ParentViewModel"/> property.
-        /// </summary>
-        /// <returns></returns>
         public IViewModel GetParentViewModelForTest()
         {
             return ParentViewModel;
         }
 
-        /// <summary>
-        /// Test wrapper for the protected <see cref="ViewModelBase.GetAllModels"/> method.
-        /// </summary>
-        /// <returns></returns>
         public object[] GetAllModelsForTest()
         {
             return GetAllModels();
         }
 
-        /// <summary>
-        /// Test wrapper for the protected <see cref="ViewModelBase.IsModelRegistered"/> method.
-        /// </summary>
         public bool IsModelRegisteredForTest(string name)
         {
             return IsModelRegistered(name);
@@ -287,6 +272,5 @@
         {
             InvalidateCommandsOnPropertyChanged = value;
         }
-        #endregion
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
     using Catel.Services;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public class LanguageServiceFacts
@@ -12,7 +13,11 @@
             [TestCase]
             public void ThrowsArgumentExceptionForNullLanguageSource()
             {
-                var languageService = new LanguageService();
+                var languageService = new LanguageService(new NullLogger<LanguageService>(),
+                    new[]
+                    {
+                        new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources")
+                    });
 
                 Assert.Throws<ArgumentNullException>(() => languageService.RegisterLanguageSource(null));
             }
@@ -24,7 +29,11 @@
             [TestCase]
             public void ThrowsArgumentExceptionForNullResourceName()
             {
-                var languageService = new LanguageService();
+                var languageService = new LanguageService(new NullLogger<LanguageService>(),
+                    new[]
+                    {
+                        new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources")
+                    });
 
                 Assert.Throws<ArgumentException>(() => languageService.GetString(null));
             }
@@ -32,7 +41,11 @@
             [TestCase]
             public void ReturnsNullForNonExistingResource()
             {
-                var languageService = new LanguageService();
+                var languageService = new LanguageService(new NullLogger<LanguageService>(),
+                    new[]
+                    {
+                        new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources")
+                    });
 
                 Assert.That(languageService.GetString("NonExistingResourceName"), Is.EqualTo(null));
             }
@@ -40,18 +53,26 @@
             //[TestCase]
             //public void ReturnsStringForCoreAssembly()
             //{
-            //    var languageService = new LanguageService();
+            //var languageService = new LanguageService(new NullLogger<LanguageService>(),
+            //    new[]
+            //    {
+            //            new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources")
+            //    });
 
             //    Assert.AreEqual("{0} has the following warnings:", languageService.GetString("WarningsFound"));
             //}
 
-            //[TestCase]
-            //public void ReturnsStringForMvvmAssembly()
-            //{
-            //    var languageService = new LanguageService();
+            [TestCase]
+            public void ReturnsStringForMvvmAssembly()
+            {
+                var languageService = new LanguageService(new NullLogger<LanguageService>(),
+                    new[]
+                    {
+                        new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources")
+                    });
 
-            //    Assert.AreEqual("Warning", languageService.GetString("WarningTitle"));
-            //}
+                Assert.That(languageService.GetString("WarningTitle"), Is.EqualTo("Warning"));
+            }
         }
     }
 }

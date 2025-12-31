@@ -1,21 +1,19 @@
 ﻿namespace Catel.Tests.MVVM
 {
+    using System;
     using Catel.MVVM;
 
     public class CompositeCommandViewModel : ViewModelBase
     {
-        #region Constructors
-        public CompositeCommandViewModel()
+        public CompositeCommandViewModel(IServiceProvider serviceProvider)
         {
-            TestCommand1 = new Command(OnTestCommand1Execute, OnTestCommand1CanExecute);
-            TestCommand2 = new Command(OnTestCommand2Execute, OnTestCommand2CanExecute);
+            TestCommand1 = new Command(serviceProvider, OnTestCommand1Execute, OnTestCommand1CanExecute);
+            TestCommand2 = new Command(serviceProvider, OnTestCommand2Execute, OnTestCommand2CanExecute);
 
             AllowTestCommand1Execution = true;
             AllowTestCommand2Execution = true;
         }
-        #endregion
-
-        #region Properties
+       
         public bool AllowTestCommand1Execution { get; private set; }
         public bool AllowTestCommand2Execution { get; private set; }
 
@@ -24,9 +22,8 @@
 
         public Command TestCommand1 { get; private set; }
         public Command TestCommand2 { get; private set; }
-        #endregion
+  
 
-        #region Methods
         private bool OnTestCommand1CanExecute()
         {
             return AllowTestCommand1Execution;
@@ -46,6 +43,5 @@
         {
             IsTestCommand2Executed = true;
         }
-        #endregion
     }
 }

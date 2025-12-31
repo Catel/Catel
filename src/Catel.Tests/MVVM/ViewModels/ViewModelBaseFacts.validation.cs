@@ -3,6 +3,7 @@
     using System.ComponentModel;
     using System.Threading.Tasks;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
@@ -11,9 +12,13 @@
         [TestCase]
         public async Task CanSaveViewModelWithSuspendedValidationAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var person = new Person();
-            var vm = new TestViewModel(person);
+            var vm = new TestFeaturedViewModel(person, serviceProvider);
 
             vm.Validate();
 
@@ -30,7 +35,12 @@
         [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
         {
-            var testViewModel = new TestViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var testViewModel = new TestFeaturedViewModel(serviceProvider);
 
             Assert.That(testViewModel.HasErrors, Is.False);
 
@@ -51,7 +61,12 @@
         [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_BusinessErrors()
         {
-            var testViewModel = new TestViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var testViewModel = new TestFeaturedViewModel(serviceProvider);
 
             Assert.That(testViewModel.HasErrors, Is.False);
 
@@ -72,7 +87,12 @@
         [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_FieldWarnings()
         {
-            var testViewModel = new TestViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var testViewModel = new TestFeaturedViewModel(serviceProvider);
             var validation = testViewModel;
 
             Assert.That(validation.HasWarnings, Is.False);
@@ -94,7 +114,12 @@
         [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_BusinessWarnings()
         {
-            var testViewModel = new TestViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var testViewModel = new TestFeaturedViewModel(serviceProvider);
             var validation = testViewModel;
 
             Assert.That(validation.HasWarnings, Is.False);
@@ -116,7 +141,12 @@
         [TestCase]
         public void GetValidationSummary_WithoutTagFiltering()
         {
-            var viewModel = new TestViewModelWithValidationTags();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestViewModelWithValidationTags(serviceProvider);
             viewModel.Validate();
 
             var summary = viewModel.GetValidationSummary(true);
@@ -129,7 +159,12 @@
         [TestCase]
         public void GetValidationSummary_NullTag()
         {
-            var viewModel = new TestViewModelWithValidationTags();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestViewModelWithValidationTags(serviceProvider);
             viewModel.Validate();
 
             var summary = viewModel.GetValidationSummary(true, null);
@@ -142,7 +177,12 @@
         [TestCase]
         public void GetValidationSummary_NonExistingTag()
         {
-            var viewModel = new TestViewModelWithValidationTags();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestViewModelWithValidationTags(serviceProvider);
             viewModel.Validate();
 
             var summary = viewModel.GetValidationSummary(true, "NonExistingTag");
@@ -155,7 +195,12 @@
         [TestCase]
         public void GetValidationSummary_ExistingTag()
         {
-            var viewModel = new TestViewModelWithValidationTags();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestViewModelWithValidationTags(serviceProvider);
             viewModel.Validate();
 
             var summary = viewModel.GetValidationSummary(true, "PersonValidation");

@@ -5,21 +5,24 @@
     using System.Threading.Tasks;
 
     using Catel.MVVM;
-
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
     [TestFixture]
     public class TaskCommandFacts
     {
-        #region Constants
         private static readonly TimeSpan TaskDelay = TimeSpan.FromSeconds(5);
-        #endregion
 
-        #region Methods
         [TestCase]
         public void TestCommandCancellation()
         {
-            var taskCommand = new TaskCommand(TestExecuteAsync);
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var taskCommand = new TaskCommand(serviceProvider, TestExecuteAsync);
 
             Assert.That(taskCommand.IsExecuting, Is.False);
             Assert.That(taskCommand.IsCancellationRequested, Is.False);
@@ -41,7 +44,13 @@
         [TestCase]
         public async Task TestCommandExceptions_SwallowExceptionsAsync()
         {
-            var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var taskCommand = new TaskCommand(serviceProvider, TestExecuteWithExceptionAsync)
             {
                 SwallowExceptions = true
             };
@@ -68,7 +77,13 @@
         [TestCase, Explicit]
         public async Task TestCommandExceptions_DontSwallowExceptionsAsync()
         {
-            var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var taskCommand = new TaskCommand(serviceProvider, TestExecuteWithExceptionAsync)
             {
                 SwallowExceptions = false
             };
@@ -134,18 +149,17 @@
 
             throw new Exception("This is an expected exception");
         }
-        #endregion
     }
 
     public class PercentProgress : ITaskProgressReport
     {
-        public PercentProgress(int percents, string status = "")
+        public PercentProgress(int percentage, string status = "")
         {
-            Percents = percents;
+            Percentage = percentage;
             Status = status;
         }
 
-        public int Percents { get; private set; }
+        public int Percentage { get; private set; }
 
         public string Status { get; private set; }
     }

@@ -20,6 +20,11 @@
 
         protected readonly object _lock = new object();
 
+        public TUniqueIdentifier GetUniqueIdentifier(bool reuse = false)
+        {
+            return GetUniqueIdentifier(typeof(TObjectType), reuse);
+        }
+
         /// <inheritdoc />
         public TUniqueIdentifier GetUniqueIdentifier(Type objectType, bool reuse = false)
         {
@@ -35,6 +40,11 @@
             }
 
             return GenerateUniqueIdentifier();
+        }
+
+        public void ReleaseIdentifier(TUniqueIdentifier identifier)
+        {
+            ReleaseIdentifier(typeof(TObjectType), identifier);
         }
 
         /// <inheritdoc />

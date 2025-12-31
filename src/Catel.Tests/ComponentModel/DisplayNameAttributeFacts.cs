@@ -14,9 +14,8 @@
                 var languageService = new LanguageServiceFixture();
                 languageService.RegisterValue("MyDisplayName", "It works");
 
-                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyDisplayName");
-                displayAttribute.LanguageService = languageService;
-
+                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageService, "MyDisplayName");
+ 
                 Assert.That(displayAttribute.DisplayName, Is.EqualTo("It works"));
             }
 
@@ -26,8 +25,7 @@
                 var languageService = new LanguageServiceFixture();
                 languageService.RegisterValue("MyDisplayName", "It works");
 
-                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyNonExistingDisplayName");
-                displayAttribute.LanguageService = languageService;
+                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageService, "MyNonExistingDisplayName");
 
                 Assert.That(displayAttribute.DisplayName, Is.EqualTo("MyNonExistingDisplayName"));
             }

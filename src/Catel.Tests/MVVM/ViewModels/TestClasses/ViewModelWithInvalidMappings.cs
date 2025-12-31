@@ -7,7 +7,6 @@
     /// </summary>
     public class ViewModelWithInvalidMappings : ViewModelBase
     {
-        #region Properties
         /// <summary>
         /// Gets the title of the view model.
         /// </summary>
@@ -16,6 +15,5 @@
         {
             get { return "View model with invalid mappings"; }
         }
-        #endregion
     }
 }

@@ -1,9 +1,10 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
 
-    public class TestViewModelWithEnabledModelValidation : ViewModelBase
+    public class TestViewModelWithEnabledModelValidation : FeaturedViewModelBase
     {
         /// <summary>
         /// Register the FirstName property so it is known in the class.
@@ -25,7 +26,8 @@
         /// </summary>
         public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
 
-        public TestViewModelWithEnabledModelValidation(Person person)
+        public TestViewModelWithEnabledModelValidation(Person person, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             ValidateModelsOnInitialization = true;
             Person = person;

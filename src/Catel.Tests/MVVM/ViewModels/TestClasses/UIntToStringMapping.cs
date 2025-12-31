@@ -1,18 +1,15 @@
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using System;
     using Catel.MVVM;
 
     public class UIntToStringMapping : DefaultViewModelToModelMappingConverter
     {
-        #region Constructors
         public UIntToStringMapping(string[] propertyNames)
             : base(propertyNames)
         {
         }
-        #endregion
 
-        #region Methods
         public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
         {
             return types.Length == 1 && types[0] == typeof(uint) && outType == typeof(string);
@@ -34,6 +31,5 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
             uint.TryParse((string)value, out res);
             return new object[] { res };
         }
-        #endregion
     }
 }

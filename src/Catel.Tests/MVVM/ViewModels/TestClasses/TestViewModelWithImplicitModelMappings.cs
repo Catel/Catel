@@ -1,15 +1,17 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
 
-    public class TestViewModelWithImplicitModelMappings : ViewModelBase
+    public class TestViewModelWithImplicitModelMappings : FeaturedViewModelBase
     {
         public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
 
         public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName");
 
-        public TestViewModelWithImplicitModelMappings(IPerson person)
+        public TestViewModelWithImplicitModelMappings(IPerson person, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Person = person;
         }

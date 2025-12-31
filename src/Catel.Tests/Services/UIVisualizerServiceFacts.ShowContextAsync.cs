@@ -3,11 +3,13 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Castle.Core.Logging;
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Tests.ViewModels;
     using Catel.Tests.Views;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging.Abstractions;
     using Moq;
     using NUnit.Framework;
 
@@ -23,7 +25,8 @@
             {
                 var serviceCollection = new ServiceCollection();
 
-                serviceCollection.AddCatelMvvmServices();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
@@ -43,8 +46,8 @@
 
                     var viewModelFactoryMock = new Mock<IViewModelFactory>();
 
-                    var uiVisualizerService = new UIVisualizerService(viewLocatorMock.Object, dispatcherServiceMock.Object,
-                        viewModelFactoryMock.Object);
+                    var uiVisualizerService = new UIVisualizerService(new NullLogger<UIVisualizerService>(), 
+                        viewLocatorMock.Object, dispatcherServiceMock.Object, viewModelFactoryMock.Object);
 
                     uiVisualizerService.Register(typeof(AutoClosingViewModel), typeof(AutoClosingView));
 

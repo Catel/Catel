@@ -2,8 +2,8 @@
 {
     using System;
     using System.Linq;
+    using Catel.Data;
     using Catel.Reflection;
-    using Catel.Runtime.Serialization;
     using Catel.Windows;
     using NUnit.Framework;
 
@@ -36,7 +36,7 @@
             }
 
             [TestCase]
-            public void ReturnsTrueForTypeDerivetiveImplementingInterface()
+            public void ReturnsTrueForTypeDerivativeImplementingInterface()
             {
                 var type = typeof(B);
 
@@ -49,8 +49,8 @@
         {
             [TestCase(typeof(string), false, "System.String")]
             [TestCase(typeof(string), true, "System.String, System")]
-            [TestCase(typeof(ISerializer), false, "Catel.Runtime.Serialization.ISerializer")]
-            [TestCase(typeof(ISerializer), true, "Catel.Runtime.Serialization.ISerializer, Catel.Core")]
+            [TestCase(typeof(IModel), false, "Catel.Data.IModel")]
+            [TestCase(typeof(IModel), true, "Catel.Data.IModel, Catel.Core")]
             public void ReturnsFullName(Type type, bool includeAssembly, string expected)
             {
 

@@ -5,16 +5,23 @@
     using System.Threading.Tasks;
     using Catel.Data;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
     public partial class ViewModelBaseFacts
     {
         [TestCase]
-        public void SetParentviewModel()
+        public void SetParentViewModel()
         {
-            var viewModel = new TestViewModel();
-            var parentViewModel = new TestViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestFeaturedViewModel(serviceProvider);
+            var parentViewModel = new TestFeaturedViewModel(serviceProvider);
 
             Assert.That(viewModel.GetParentViewModelForTest(), Is.Null);
             ((IRelationalViewModel)viewModel).SetParentViewModel(parentViewModel);
@@ -24,7 +31,13 @@
         [TestCase]
         public void RegisterChildViewModel_Null()
         {
-            var viewModel = new TestViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestFeaturedViewModel(serviceProvider);
 
             Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
         }
@@ -36,6 +49,12 @@
         [TestCase]
         public async Task RegisterChildViewModel_RemovedViaClosingChildViewModelAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             bool validationTriggered = false;
             using (var validatedEvent = new ManualResetEvent(false))
             {
@@ -43,8 +62,8 @@
                 person.FirstName = "first name";
                 person.LastName = "last name";
 
-                var viewModel = new TestViewModel();
-                var childViewModel = new TestViewModel(person);
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
+                var childViewModel = new TestFeaturedViewModel(person, serviceProvider);
 
                 Assert.That(childViewModel.HasErrors, Is.False);
 
@@ -82,12 +101,18 @@
             bool validationTriggered = false;
             using (ManualResetEvent validatedEvent = new ManualResetEvent(false))
             {
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 Person person = new Person();
                 person.FirstName = "first_name";
                 person.LastName = "last_name";
 
-                var viewModel = new TestViewModel();
-                var childViewModel = new TestViewModel(person);
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
+                var childViewModel = new TestFeaturedViewModel(person, serviceProvider);
 
                 Assert.That(childViewModel.HasErrors, Is.False);
 
@@ -118,11 +143,17 @@
         [TestCase]
         public void ChildViewModelUpdatesValidation()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var person = new Person();
             person.FirstName = "first_name";
 
-            var viewModel = new TestViewModel();
-            var childViewModel = new TestViewModel(person);
+            var viewModel = new TestFeaturedViewModel(serviceProvider);
+            var childViewModel = new TestFeaturedViewModel(person, serviceProvider);
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
 
@@ -146,7 +177,13 @@
             [Test]
             public void Throws_ArgumentNullException_For_Null_ChildViewModel()
             {
-                var viewModel = new TestViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
 
                 Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
             }
@@ -154,8 +191,14 @@
             [Test]
             public async Task Revalidates_Parent_After_Adding_ChildViewModel_Async()
             {
-                var parentViewModel = new TestViewModel(new SpecialValidationModel());
-                var childViewModel = new TestViewModel(new SpecialValidationModel());
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var parentViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
+                var childViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
 
                 await parentViewModel.InitializeViewModelAsync();
                 await childViewModel.InitializeViewModelAsync();
@@ -177,7 +220,13 @@
             [Test]
             public void Throws_ArgumentNullException_For_Null_ChildViewModel()
             {
-                var viewModel = new TestViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
 
                 Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).UnregisterChildViewModel(null));
             }
@@ -185,8 +234,14 @@
             [Test]
             public async Task Revalidates_Parent_After_Removing_ChildViewModel_Async()
             {
-                var parentViewModel = new TestViewModel(new SpecialValidationModel());
-                var childViewModel = new TestViewModel(new SpecialValidationModel());
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var parentViewModel = new TestFeaturedViewModel(new SpecialValidationModel(serviceProvider));
+                var childViewModel = new TestFeaturedViewModel(new SpecialValidationModel(serviceProvider));
 
                 await parentViewModel.InitializeViewModelAsync();
                 await childViewModel.InitializeViewModelAsync();
@@ -209,8 +264,14 @@
         [TestFixture]
         public class DeferValidationUntilFirstSaveCallWithChildViewModels
         {
-            public class DeferViewModelBase : ViewModelBase
+            public class DeferViewModelBase : FeaturedViewModelBase
             {
+                public DeferViewModelBase(IServiceProvider serviceProvider)
+                    : base(serviceProvider)
+                {
+                    
+                }
+
                 public bool DeferValidationUntilFirstSaveValue
                 {
                     get { return base.DeferValidationUntilFirstSaveCall; }
@@ -220,25 +281,44 @@
 
             public class GrantParentViewModel : DeferViewModelBase
             {
+                public GrantParentViewModel(IServiceProvider serviceProvider)
+                    : base(serviceProvider)
+                {
+
+                }
 
             }
 
             public class ParentViewModel : DeferViewModelBase
             {
+                public ParentViewModel(IServiceProvider serviceProvider)
+                    : base(serviceProvider)
+                {
 
+                }
             }
 
             public class ChildViewModel : DeferViewModelBase
             {
+                public ChildViewModel(IServiceProvider serviceProvider)
+                    : base(serviceProvider)
+                {
 
+                }
             }
 
             [TestCase]
             public void RetrievesFromParentWhenAttachingViewModelToTree()
             {
-                var grantParentVm = new GrantParentViewModel();
-                var parentVm = new ParentViewModel();
-                var childVm = new ChildViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var grantParentVm = new GrantParentViewModel(serviceProvider);
+                var parentVm = new ParentViewModel(serviceProvider);
+                var childVm = new ChildViewModel(serviceProvider);
 
                 grantParentVm.DeferValidationUntilFirstSaveValue = true;
 
@@ -255,9 +335,15 @@
             [TestCase]
             public void UpdatesChildsWhenUpdatingDeferValidationUntilFirstSave()
             {
-                var grantParentVm = new GrantParentViewModel();
-                var parentVm = new ParentViewModel();
-                var childVm = new ChildViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var grantParentVm = new GrantParentViewModel(serviceProvider);
+                var parentVm = new ParentViewModel(serviceProvider);
+                var childVm = new ChildViewModel(serviceProvider);
 
                 grantParentVm.DeferValidationUntilFirstSaveValue = false;
                 parentVm.DeferValidationUntilFirstSaveValue = false;

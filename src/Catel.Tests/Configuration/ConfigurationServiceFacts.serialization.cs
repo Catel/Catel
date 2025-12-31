@@ -2,11 +2,12 @@
 {
     using System.IO;
     using System.Threading.Tasks;
+    using Castle.Core.Logging;
     using Catel.Configuration;
-    using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Xml;
     using Catel.Services;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public partial class ConfigurationServiceFacts
@@ -28,9 +29,11 @@
 
             private class SerializationConfigurationService : ConfigurationService
             {
-                public SerializationConfigurationService(IXmlSerializer xmlSerializer)
-                    : base(new ObjectConverterService(), xmlSerializer, 
-                        new AppDataService(), new DispatcherService(new DispatcherProviderService()))
+                public SerializationConfigurationService()
+                    : base(new NullLogger<ConfigurationService>(), new ObjectConverterService(), 
+                        new AppDataService(), new DispatcherService(new NullLogger<DispatcherService>(), 
+                            new DispatcherProviderService(new NullLogger<DispatcherProviderService>())),
+                        new ConfigurationBuilder())
                 {
                 }
 
@@ -50,19 +53,19 @@
                     }
                 }
 
-                protected override async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
-                {
-                    switch (container)
-                    {
-                        case ConfigurationContainer.Local:
-                            LocalSaveCount++;
-                            break;
+                //protected override async Task SaveConfigurationAsync(IConfiguration configuration, string fileName)
+                //{
+                //    switch (container)
+                //    {
+                //        case ConfigurationContainer.Local:
+                //            LocalSaveCount++;
+                //            break;
 
-                        case ConfigurationContainer.Roaming:
-                            RoamingSaveCount++;
-                            break;
-                    }
-                }
+                //        case ConfigurationContainer.Roaming:
+                //            RoamingSaveCount++;
+                //            break;
+                //    }
+                //}
 
                 public int LocalChangeCount { get; private set; }
 
@@ -108,13 +111,11 @@
             {
                 var serviceCollection = new ServiceCollection();
 
-                serviceCollection.AddCatelCoreServices();
+                serviceCollection.AddCatelCore();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    var xmlSerializer = serviceProvider.GetRequiredService<IXmlSerializer>();
-
-                    var configurationService = new SerializationConfigurationService(xmlSerializer);
+                    var configurationService = new SerializationConfigurationService();
 
                     await configurationService.LoadAsync();
 
@@ -139,13 +140,11 @@
             {
                 var serviceCollection = new ServiceCollection();
 
-                serviceCollection.AddCatelCoreServices();
+                serviceCollection.AddCatelCore();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    var xmlSerializer = serviceProvider.GetRequiredService<IXmlSerializer>();
-
-                    var configurationService = new SerializationConfigurationService(xmlSerializer);
+                    var configurationService = new SerializationConfigurationService();
 
                     await configurationService.LoadAsync();
 
@@ -174,13 +173,11 @@
             {
                 var serviceCollection = new ServiceCollection();
 
-                serviceCollection.AddCatelCoreServices();
+                serviceCollection.AddCatelCore();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    var xmlSerializer = serviceProvider.GetRequiredService<IXmlSerializer>();
-
-                    var configurationService = new SerializationConfigurationService(xmlSerializer);
+                    var configurationService = new SerializationConfigurationService();
 
                     await configurationService.LoadAsync();
 

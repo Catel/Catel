@@ -2,6 +2,8 @@
 {
     using System.Linq;
     using System.Windows.Input;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
     using CommandManager = Catel.MVVM.CommandManager;
     using InputGesture = Catel.Windows.Input.InputGesture;
@@ -17,7 +19,13 @@
             [TestCase(Key.B, ModifierKeys.Control, false)]
             public void Returns_Correct_Value(Key key, ModifierKeys modifierKeys, bool expectedToBeAvailable)
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("CtrlA", new InputGesture(Key.A, ModifierKeys.Control));
 
@@ -34,7 +42,13 @@
             [Test]
             public void Throws_Exception_When_Not_Registered()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("CtrlA", new InputGesture(Key.A, ModifierKeys.Control));
 
@@ -44,7 +58,13 @@
             [Test]
             public void Returns_Command_When_Registered()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("CtrlA", new InputGesture(Key.A, ModifierKeys.Control));
 

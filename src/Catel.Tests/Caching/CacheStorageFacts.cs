@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
     using Catel.Caching;
     using Catel.Caching.Policies;
-    using Catel.Logging;
 
     using NUnit.Framework;
 
@@ -15,7 +14,6 @@
         [TestFixture]
         public class The_ThreadSafe_Functionality
         {
-            private static readonly ILog Log = LogManager.GetCurrentClassLogger();
             private readonly List<Guid> _randomGuids = new List<Guid>();
 
             public The_ThreadSafe_Functionality()

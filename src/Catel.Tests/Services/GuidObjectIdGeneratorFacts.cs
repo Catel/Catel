@@ -14,8 +14,8 @@
             [Test]
             public void Returns_New_UniqueIdentifier_Even_If_Are_Generated_By_Different_Instances()
             {
-                IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel1>();
-                IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<PersonViewModel1>();
+                var generator1 = new GuidObjectIdGenerator<PersonViewModel1>();
+                var generator2 = new GuidObjectIdGenerator<PersonViewModel1>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }
@@ -23,7 +23,7 @@
             [Test]
             public void Returns_A_Released_Identifier_If_Requested()
             {
-                IObjectIdGenerator<Guid> generator = new GuidObjectIdGenerator<PersonViewModel2>();
+                var generator = new GuidObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifier = generator.GetUniqueIdentifier();
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
@@ -34,8 +34,8 @@
             [Test]
             public void Returns_Unique_Identifier_For_DifferentTypes()
             {
-                IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel3>();
-                IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<PersonViewModel4>();
+                var generator1 = new GuidObjectIdGenerator<PersonViewModel3>();
+                var generator2 = new GuidObjectIdGenerator<PersonViewModel4>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }

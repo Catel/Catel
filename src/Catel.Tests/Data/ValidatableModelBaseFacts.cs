@@ -9,7 +9,6 @@
 
     using Catel.Data;
     using Catel.Reflection;
-    using Catel.Runtime.Serialization;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
@@ -23,7 +22,7 @@
             public void DoesNotCauseValidationWhenKnownModelBasePropertiesChange(string propertyName, object propertyValue)
             {
                 var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCoreServices();
+                serviceCollection.AddCatelCore();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
@@ -519,8 +518,7 @@
             [ValidateModel(typeof(TestValidator))]
             public class TestValidatorModel : ValidatableModelBase
             {
-                public TestValidatorModel(IServiceProvider serviceProvider, IObjectAdapter objectAdapter, ISerializer serializer)
-                    : base(serviceProvider, objectAdapter, serviceProvider)
+                public TestValidatorModel()
                 {
                     
                 }
@@ -573,7 +571,6 @@
             [TestCase]
             public void AutomaticallyCreatesValidator()
             {
-                ServiceLocator.Default.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
                 var testValidatorModel = (IValidatable)new TestValidatorModel();
 
                 Assert.That(testValidatorModel.Validator, Is.Not.Null);

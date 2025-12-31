@@ -6,7 +6,6 @@
     using Catel.Collections;
     using Catel.Data;
     using Catel.Reflection;
-    using Catel.Tests.Runtime.Serialization;
 
     using NUnit.Framework;
 
@@ -15,7 +14,7 @@
     {
         [TestCase(typeof(int), true)]
         [TestCase(typeof(int?), true)]
-        [TestCase(typeof(FastObservableCollection<TestModel>), false)]
+        [TestCase(typeof(FastObservableCollection<object>), false)]
         public void TheIsBasicTypeMethod(Type type, bool expectedValue)
         {
             Assert.That(type.IsBasicType(), Is.EqualTo(expectedValue));

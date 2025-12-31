@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels
 {
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
@@ -9,7 +10,12 @@
         [Test]
         public void UpdatesMappedValidationAfterChangingMappedViewModelProperty()
         {
-            var vm = new TestViewModelWithMappings(new Person());
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithMappings(new Person(), serviceProvider);
             vm.DeferValidationUntilFirstSaveCallWrapper = false;
 
             vm.FirstNameAsTwoWay = "John";
@@ -23,12 +29,17 @@
         {
             // Test case for https://github.com/Catel/Catel/issues/1615
 
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var model = new Person();
             model.Validate();
 
             Assert.That(model.HasErrors, Is.True);
 
-            var vm = new TestViewModelWithMappings(model);
+            var vm = new TestViewModelWithMappings(model, serviceProvider);
             vm.DeferValidationUntilFirstSaveCallWrapper = false;
 
             Assert.That(vm.HasErrors, Is.True);
@@ -40,9 +51,14 @@
         }
 
         [Test]
-        public void HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
+        public void HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var vm = new TestViewModelWithSuspendedModelValidation(new Person());
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithSuspendedModelValidation(new Person(), serviceProvider);
 
             vm.Validate();
 
@@ -50,9 +66,14 @@
         }
 
         [Test]
-        public void HasErrors_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
+        public void HasErrors_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var vm = new TestViewModelWithEnabledModelValidation(new Person());
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithEnabledModelValidation(new Person(), serviceProvider);
 
             vm.Validate();
 
@@ -60,9 +81,14 @@
         }
 
         [Test]
-        public void HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
+        public void HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var vm = new TestViewModelWithSuspendedModelValidation(new Person());
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithSuspendedModelValidation(new Person(), serviceProvider);
 
             vm.Validate();
 
@@ -70,9 +96,14 @@
         }
 
         [Test]
-        public void HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
+        public void HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var vm = new TestViewModelWithEnabledModelValidation(new Person());
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithEnabledModelValidation(new Person(), serviceProvider);
 
             vm.Validate();
 

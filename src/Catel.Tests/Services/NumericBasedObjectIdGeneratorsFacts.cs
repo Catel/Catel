@@ -14,8 +14,8 @@
             [Test]
             public void Returns_New_UniqueIdentifier_Even_If_Are_Generated_By_Different_Instances()
             {
-                IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel1>();
-                IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<PersonViewModel1>();
+                var  generator1 = new IntegerObjectIdGenerator<PersonViewModel1>();
+                var  generator2 = new IntegerObjectIdGenerator<PersonViewModel1>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }
@@ -23,7 +23,7 @@
             [Test]
             public void Returns_A_Released_Identifier_If_Requested()
             {
-                IObjectIdGenerator<int> generator = new IntegerObjectIdGenerator<PersonViewModel2>();
+                var generator = new IntegerObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifier = generator.GetUniqueIdentifier();
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
@@ -34,8 +34,8 @@
             [Test]
             public void Returns_Unique_Identifier_For_DifferentTypes()
             {
-                IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel3>();
-                IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<PersonViewModel4>();
+                var generator1 = new IntegerObjectIdGenerator<PersonViewModel3>();
+                var generator2 = new IntegerObjectIdGenerator<PersonViewModel4>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.EqualTo(generator1.GetUniqueIdentifier()));
             }
@@ -131,8 +131,8 @@
             [Test]
             public void Returns_New_UniqueIdentifier_Even_If_Are_Generated_By_Different_Instances()
             {
-                IObjectIdGenerator<long> generator1 = new LongObjectIdGenerator<PersonViewModel1>();
-                IObjectIdGenerator<long> generator2 = new LongObjectIdGenerator<PersonViewModel1>();
+                var generator1 = new LongObjectIdGenerator<PersonViewModel1>();
+                var generator2 = new LongObjectIdGenerator<PersonViewModel1>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }
@@ -140,7 +140,7 @@
             [Test]
             public void Returns_A_Released_Identifier_If_Requested()
             {
-                IObjectIdGenerator<long> generator = new LongObjectIdGenerator<PersonViewModel2>();
+                var generator = new LongObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifier = generator.GetUniqueIdentifier();
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
@@ -151,8 +151,8 @@
             [Test]
             public void Returns_Unique_Identifier_For_DifferentTypes()
             {
-                IObjectIdGenerator<long> generator1 = new LongObjectIdGenerator<PersonViewModel3>();
-                IObjectIdGenerator<long> generator2 = new LongObjectIdGenerator<PersonViewModel4>();
+                var generator1 = new LongObjectIdGenerator<PersonViewModel3>();
+                var generator2 = new LongObjectIdGenerator<PersonViewModel4>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.EqualTo(generator1.GetUniqueIdentifier()));
             }
@@ -233,8 +233,8 @@
             [Test]
             public void Returns_New_UniqueIdentifier_Even_If_Are_Generated_By_Different_Instances()
             {
-                IObjectIdGenerator<ulong> generator1 = new ULongObjectIdGenerator<PersonViewModel1>();
-                IObjectIdGenerator<ulong> generator2 = new ULongObjectIdGenerator<PersonViewModel1>();
+                var generator1 = new ULongObjectIdGenerator<PersonViewModel1>();
+                var generator2 = new ULongObjectIdGenerator<PersonViewModel1>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.Not.EqualTo(generator1.GetUniqueIdentifier()));
             }
@@ -242,7 +242,7 @@
             [Test]
             public void Returns_A_Released_Identifier_If_Requested()
             {
-                IObjectIdGenerator<ulong> generator = new ULongObjectIdGenerator<PersonViewModel2>();
+                var generator = new ULongObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifier = generator.GetUniqueIdentifier();
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
@@ -253,8 +253,8 @@
             [Test]
             public void Returns_Unique_Identifier_For_DifferentTypes()
             {
-                IObjectIdGenerator<ulong> generator1 = new ULongObjectIdGenerator<PersonViewModel3>();
-                IObjectIdGenerator<ulong> generator2 = new ULongObjectIdGenerator<PersonViewModel4>();
+                var generator1 = new ULongObjectIdGenerator<PersonViewModel3>();
+                var generator2 = new ULongObjectIdGenerator<PersonViewModel4>();
 
                 Assert.That(generator2.GetUniqueIdentifier(), Is.EqualTo(generator1.GetUniqueIdentifier()));
             }

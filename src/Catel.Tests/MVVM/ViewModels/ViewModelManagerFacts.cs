@@ -3,9 +3,10 @@
     using System;
     using System.Linq;
     using Catel.MVVM;
-    using TestClasses;
-
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
+    using TestClasses;
 
     [TestFixture]
     public class ViewModelManagerFacts
@@ -17,7 +18,8 @@
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 var model = new Person();
-                using (var vmManager = new ViewModelManager())
+
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     Assert.Throws<ArgumentNullException>(() => vmManager.RegisterModel(null, model));
                 }
@@ -26,9 +28,15 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullModel()
             {
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var model = new Person();
-                var vm = new TestViewModel(model);
-                using (var vmManager = new ViewModelManager())
+                var vm = new TestFeaturedViewModel(model, serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     Assert.Throws<ArgumentNullException>(() => vmManager.RegisterModel(vm, null));
                 }
@@ -37,9 +45,15 @@
             [TestCase]
             public void RegistersModelForViewModel()
             {
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var model = new Person();
-                var vm = new TestViewModel(model);
-                using (var vmManager = new ViewModelManager())
+                var vm = new TestFeaturedViewModel(model, serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(vm);
                     vmManager.RegisterModel(vm, model);
@@ -58,7 +72,7 @@
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 var model = new Person();
-                using (var vmManager = new ViewModelManager())
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterModel(null, model));
                 }
@@ -67,9 +81,15 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullModel()
             {
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var model = new Person();
-                var vm = new TestViewModel(model);
-                using (var vmManager = new ViewModelManager())
+                var vm = new TestFeaturedViewModel(model, serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterModel(vm, null));
                 }
@@ -78,9 +98,15 @@
             [TestCase]
             public void UnregistersModelForViewModel()
             {
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var model = new Person();
-                var vm = new TestViewModel(model);
-                using (var vmManager = new ViewModelManager())
+                var vm = new TestFeaturedViewModel(model, serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(vm);
                     vmManager.RegisterModel(vm, model);
@@ -104,7 +130,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
-                using (var vmManager = new ViewModelManager())
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     Assert.Throws<ArgumentNullException>(() => vmManager.UnregisterAllModels(null));
                 }
@@ -113,9 +139,15 @@
             [TestCase]
             public void UnregistersAllModelForViewModel()
             {
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var model = new Person();
-                var vm = new TestViewModel(model);
-                using (var vmManager = new ViewModelManager())
+                var vm = new TestFeaturedViewModel(model, serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(vm);
                     vmManager.RegisterModel(vm, model);
@@ -140,7 +172,7 @@
             public void ReturnsNullForUnregisteredModel()
             {
                 var model = new Person();
-                using (var vmManager = new ViewModelManager())
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     var foundVm = vmManager.GetViewModelsOfModel(model).FirstOrDefault();
 
@@ -151,9 +183,15 @@
             [TestCase]
             public void ReturnsViewModelOfRegisteredModel()
             {
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var model = new Person();
-                var vm = new TestViewModel(model);
-                using (var vmManager = new ViewModelManager())
+                var vm = new TestFeaturedViewModel(model, serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(vm);
                     vmManager.RegisterModel(vm, model);
@@ -171,7 +209,7 @@
             [TestCase]
             public void ReturnsNullForUnregisteredViewModel()
             {
-                using (var vmManager = new ViewModelManager())
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     var foundvm = vmManager.GetViewModel(42);
 
@@ -182,8 +220,14 @@
             [TestCase]
             public void ReturnsViewModelForRegisteredViewModel()
             {
-                var vm = new TestViewModel();
-                using (var vmManager = new ViewModelManager())
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var vm = new TestFeaturedViewModel(serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(vm);
                     var foundvm = vmManager.GetViewModel(vm.UniqueIdentifier);
@@ -199,7 +243,7 @@
             [TestCase]
             public void ReturnsNullForUnregisteredChildViewModels()
             {
-                using (var viewModelManager = new ViewModelManager())
+                using (var viewModelManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     var foundViewModels = viewModelManager.GetChildViewModels(42);
 
@@ -210,9 +254,15 @@
             [TestCase]
             public void ReturnsChildViewModelsUsingParentInstance()
             {
-                var parentViewModel = new TestViewModel() as IRelationalViewModel;
-                var childViewModel = new TestViewModel() as IRelationalViewModel;
-                using (var viewModelManager = new ViewModelManager())
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var parentViewModel = new TestFeaturedViewModel(serviceProvider) as IRelationalViewModel;
+                var childViewModel = new TestFeaturedViewModel(serviceProvider) as IRelationalViewModel;
+                using (var viewModelManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     parentViewModel.RegisterChildViewModel(childViewModel as IViewModel);
                     childViewModel.SetParentViewModel(parentViewModel as IViewModel);
@@ -234,9 +284,9 @@
             [TestCase]
             public void ReturnsNullForUnregisteredViewModel()
             {
-                using (var vmManager = new ViewModelManager())
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
-                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
+                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestFeaturedViewModel>();
 
                     Assert.That(foundvm, Is.Null);
                 }
@@ -245,11 +295,17 @@
             [TestCase]
             public void ReturnsViewModelForRegisteredViewModel()
             {
-                var vm = new TestViewModel();
-                using (var vmManager = new ViewModelManager())
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var vm = new TestFeaturedViewModel(serviceProvider);
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(vm);
-                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
+                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestFeaturedViewModel>();
 
                     Assert.That(foundvm, Is.EqualTo(vm));
                 }
@@ -258,19 +314,25 @@
             [TestCase]
             public void ReturnsViewModelForMultiRegisteredViewModel()
             {
-                var firstvm = new TestViewModel()
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var firstvm = new TestFeaturedViewModel(serviceProvider)
                 {
                     FirstName = "John",
                     LastName = "Doe"
                 };
 
-                var secondvm = new TestViewModel();
+                var secondvm = new TestFeaturedViewModel(serviceProvider);
 
-                using (var vmManager = new ViewModelManager())
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(firstvm);
                     vmManager.RegisterViewModelInstance(secondvm);
-                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestViewModel>();
+                    var foundvm = vmManager.GetFirstOrDefaultInstance<TestFeaturedViewModel>();
 
                     Assert.That(foundvm, Is.EqualTo(firstvm));
                 }
@@ -279,7 +341,7 @@
             [TestCase]
             public void ShouldFailsDueToANonIViewModelType()
             {
-                using (var viewModelManager = new ViewModelManager())
+                using (var viewModelManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     Assert.Throws<ArgumentException>(() => viewModelManager.GetFirstOrDefaultInstance(typeof(Type)));
                 }
@@ -292,7 +354,7 @@
             [TestCase]
             public void MustBeNotNullAfterConstructed()
             {
-                using (var vmManager = new ViewModelManager())
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     Assert.That(vmManager.ActiveViewModels, Is.Not.Null);
                 }
@@ -301,10 +363,16 @@
             [TestCase]
             public void MustExistsForRegisteredViewModels()
             {
-                var firstvm = new TestViewModel();
-                var secondvm = new TestViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
 
-                using (var vmManager = new ViewModelManager())
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var firstvm = new TestFeaturedViewModel(serviceProvider);
+                var secondvm = new TestFeaturedViewModel(serviceProvider);
+
+                using (var vmManager = new ViewModelManager(new NullLogger<ViewModelManager>()))
                 {
                     vmManager.RegisterViewModelInstance(firstvm);
                     vmManager.RegisterViewModelInstance(secondvm);
@@ -320,7 +388,7 @@
         [TestCase]
         public void RegisterViewModelInstance_Null()
         {
-            using (var manager = new ViewModelManager())
+            using (var manager = new ViewModelManager(new NullLogger<ViewModelManager>()))
             {
                 Assert.Throws<ArgumentNullException>(() => manager.RegisterViewModelInstance(null));
             }
@@ -329,16 +397,22 @@
         [TestCase]
         public void RegisterViewModelInstance_ViewModel()
         {
-            using (var manager = new ViewModelManager())
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            using (var manager = new ViewModelManager(new NullLogger<ViewModelManager>()))
             {
-                manager.RegisterViewModelInstance(new TestViewModel());
+                manager.RegisterViewModelInstance(new TestFeaturedViewModel(serviceProvider));
             }
         }
 
         [TestCase]
         public void UnregisterViewModelInstance_Null()
         {
-            using (var manager = new ViewModelManager())
+            using (var manager = new ViewModelManager(new NullLogger<ViewModelManager>()))
             {
                 Assert.Throws<ArgumentNullException>(() => manager.UnregisterViewModelInstance(null));
             }
@@ -347,9 +421,15 @@
         [TestCase]
         public void UnregisterViewModelInstance_ExistingViewModel()
         {
-            using (var manager = new ViewModelManager())
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            using (var manager = new ViewModelManager(new NullLogger<ViewModelManager>()))
             {
-                var viewModel = new TestViewModel();
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
 
                 manager.RegisterViewModelInstance(viewModel);
                 manager.UnregisterViewModelInstance(viewModel);
@@ -359,9 +439,15 @@
         [TestCase]
         public void UnregisterViewModelInstance_NotExistingViewModel()
         {
-            using (var manager = new ViewModelManager())
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            using (var manager = new ViewModelManager(new NullLogger<ViewModelManager>()))
             {
-                manager.UnregisterViewModelInstance(new TestViewModel());
+                manager.UnregisterViewModelInstance(new TestFeaturedViewModel(serviceProvider));
             }
         }
     }

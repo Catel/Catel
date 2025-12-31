@@ -1,11 +1,13 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
 
-    public class TestViewModelWithMultipleModelMappings : ViewModelBase
+    public class TestViewModelWithMultipleModelMappings : FeaturedViewModelBase
     {
-        public TestViewModelWithMultipleModelMappings(IPerson person)
+        public TestViewModelWithMultipleModelMappings(IPerson person, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Person = person;
         }

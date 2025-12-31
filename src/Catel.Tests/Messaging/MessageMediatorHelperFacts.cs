@@ -2,6 +2,8 @@
 {
     using System;
     using Catel.Messaging;
+    using Microsoft.Extensions.Logging.Abstractions;
+    using Moq;
     using NUnit.Framework;
 
     public class MessageMediatorHelperFacts
@@ -12,13 +14,15 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.SubscribeRecipient(null));
+                var messageMediatorMock = new Mock<IMessageMediator>();
+
+                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.SubscribeRecipient(null, messageMediatorMock.Object));
             }
 
             [TestCase]
             public void SubscribesToMessagesWithoutTagsCorrectly()
             {
-                var messageMediator = new MessageMediator();
+                var messageMediator = new MessageMediator(new NullLogger<MessageMediator>());
                 var recipient = new MessageRecipient();
 
                 Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
@@ -36,7 +40,7 @@
             [TestCase]
             public void SubscribesToMessagesWithTagsCorrectly()
             {
-                var messageMediator = new MessageMediator();
+                var messageMediator = new MessageMediator(new NullLogger<MessageMediator>());
                 var recipient = new MessageRecipient();
 
                 Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
@@ -58,13 +62,15 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.UnsubscribeRecipient(null));
+                var messageMediatorMock = new Mock<IMessageMediator>();
+
+                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.UnsubscribeRecipient(null, messageMediatorMock.Object));
             }
 
             [TestCase]
             public void UnsubscribesToMessagesWithoutTagsCorrectly()
             {
-                var messageMediator = new MessageMediator();
+                var messageMediator = new MessageMediator(new NullLogger<MessageMediator>());
                 var recipient = new MessageRecipient();
 
                 Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));
@@ -90,7 +96,7 @@
             [TestCase]
             public void UnsubscribesToMessagesWithTagsCorrectly()
             {
-                var messageMediator = new MessageMediator();
+                var messageMediator = new MessageMediator(new NullLogger<MessageMediator>());
                 var recipient = new MessageRecipient();
 
                 Assert.That(recipient.MessagesReceivedViaMessageMediatorWithoutTag, Is.EqualTo(0));

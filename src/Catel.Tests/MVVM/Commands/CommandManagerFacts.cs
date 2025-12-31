@@ -3,6 +3,8 @@
     using System;
     using System.Threading.Tasks;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public class CommandManagerFacts
@@ -13,7 +15,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(null));
             }
@@ -21,7 +29,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(" "));
             }
@@ -29,7 +43,13 @@
             [TestCase]
             public void ThrowsInvalidOperationExceptionForAlreadyCreatedCommand()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("MyCommand");
 
@@ -39,7 +59,13 @@
             [TestCase]
             public void CorrectlyCreatesTheCommand()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider); 
 
                 commandManager.CreateCommand("MyCommand");
 
@@ -53,7 +79,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
             }
@@ -61,7 +93,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
             }
@@ -69,7 +107,13 @@
             [TestCase]
             public void ReturnsTrueForCreatedCommand()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("MyCommand");
 
@@ -79,7 +123,13 @@
             [TestCase]
             public void ReturnsFalseForNotCreatedCommand()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.False);
             }
@@ -91,7 +141,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.GetCommand(null));
             }
@@ -99,7 +155,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.GetCommand(" "));
             }
@@ -107,7 +169,13 @@
             [TestCase]
             public void ReturnsNullForNotCreatedCommand()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.That(commandManager.GetCommand("MyCommand"), Is.Null);
             }
@@ -115,7 +183,13 @@
             [TestCase]
             public void ReturnsCommandForCreatedCommand()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("MyCommand");
 
@@ -129,7 +203,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(null));
             }
@@ -137,7 +217,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(" "));
             }
@@ -145,8 +231,14 @@
             [TestCase]
             public void ExecutesRegisteredCommands()
             {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+                var vm = new CompositeCommandViewModel(serviceProvider);
 
                 commandManager.CreateCommand("MyCommand");
                 commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
@@ -159,8 +251,14 @@
             [TestCase]
             public void DoesNotExecuteUnregisteredCommands()
             {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+                var vm = new CompositeCommandViewModel(serviceProvider);
 
                 commandManager.CreateCommand("MyCommand");
                 commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
@@ -181,8 +279,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommandName()
             {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+                var vm = new CompositeCommandViewModel(serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(null, vm.TestCommand1));
             }
@@ -190,8 +294,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
             {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+                var vm = new CompositeCommandViewModel(serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(" ", vm.TestCommand1));
             }
@@ -199,8 +309,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommand()
             {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+                var vm = new CompositeCommandViewModel(serviceProvider);
 
                 Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
             }
@@ -212,7 +328,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
             }
@@ -220,7 +342,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
             }
@@ -228,8 +356,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommand()
             {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+                var vm = new CompositeCommandViewModel(serviceProvider);
 
                 Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
             }
@@ -244,7 +378,13 @@
                 var invoked = false;
                 Action action = () => invoked = true;
 
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("TestAction");
 
@@ -261,7 +401,13 @@
                 var invoked = false;
                 Action action = () => invoked = true;
 
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("TestAction");
 
@@ -276,7 +422,13 @@
             [TestCase]
             public void RegisteredActionsCanBeUnregistered_DynamicAction()
             {
-                var commandManager = new CommandManager();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
                 commandManager.CreateCommand("TestAction");
 

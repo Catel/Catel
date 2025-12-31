@@ -2,10 +2,9 @@
 {
     using System;
     using Catel.MVVM;
-
-    using TestClasses;
-
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
+    using TestClasses;
 
     [TestFixture]
     public class ManagedViewModelTest
@@ -13,8 +12,8 @@
         [TestCase]
         public void Constructor()
         {
-            var viewModel = new ManagedViewModel(typeof(TestViewModel));
-            Assert.That(viewModel.ViewModelType, Is.EqualTo(typeof(TestViewModel)));
+            var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
+            Assert.That(viewModel.ViewModelType, Is.EqualTo(typeof(TestFeaturedViewModel)));
         }
 
         [TestCase]
@@ -22,7 +21,7 @@
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof(TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
 
             Assert.Throws<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
         }
@@ -32,18 +31,24 @@
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof(TestViewModel));
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
 
             try
             {
-                viewModel.AddViewModelInstance(new TestViewModelWithDeferredValidation());
+                viewModel.AddViewModelInstance(new TestViewModelWithDeferredValidation(serviceProvider));
 
                 Assert.Fail("Expected WrongViewModelTypeException");
             }
             catch (WrongViewModelTypeException ex)
             {
                 Assert.That(ex.ActualType, Is.EqualTo(typeof(TestViewModelWithDeferredValidation)));
-                Assert.That(ex.ExpectedType, Is.EqualTo(typeof(TestViewModel)));
+                Assert.That(ex.ExpectedType, Is.EqualTo(typeof(TestFeaturedViewModel)));
             }
         }
 
@@ -52,8 +57,14 @@
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof(TestViewModel));
-            viewModel.AddViewModelInstance(new TestViewModel());
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
+            viewModel.AddViewModelInstance(new TestFeaturedViewModel(serviceProvider));
         }
 
         [TestCase]
@@ -61,7 +72,7 @@
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof(TestViewModel));
+            var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
 
             Assert.Throws<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
         }
@@ -71,8 +82,14 @@
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof(TestViewModel));
-            viewModel.RemoveViewModelInstance(new TestViewModel());
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
+            viewModel.RemoveViewModelInstance(new TestFeaturedViewModel(serviceProvider));
         }
 
         [TestCase]
@@ -80,9 +97,15 @@
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof(TestViewModel));
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
 
-            var interestingViewModel = new TestViewModel();
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
+
+            var interestingViewModel = new TestFeaturedViewModel(serviceProvider);
             viewModel.AddViewModelInstance(interestingViewModel);
             viewModel.RemoveViewModelInstance(interestingViewModel);
         }

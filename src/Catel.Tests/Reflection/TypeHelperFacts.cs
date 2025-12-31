@@ -500,7 +500,7 @@
             [TestCase]
             public void ReturnsFalseForNonDerivingClass()
             {
-                var genericType = typeof(SavableModelBase<>);
+                var genericType = typeof(Comparer<>);
                 var toCheck = new List<string>();
 
                 Assert.That(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()), Is.False);

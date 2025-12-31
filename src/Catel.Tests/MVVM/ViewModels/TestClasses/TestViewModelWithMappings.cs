@@ -1,11 +1,14 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
 
-    public class TestViewModelWithMappings : ViewModelBase
+    public class TestViewModelWithMappings : FeaturedViewModelBase
     {
-        public TestViewModelWithMappings(IPerson person)
+        public TestViewModelWithMappings(IPerson person, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Person = person;
         }

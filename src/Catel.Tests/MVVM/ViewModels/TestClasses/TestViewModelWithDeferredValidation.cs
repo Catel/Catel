@@ -1,12 +1,13 @@
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
+
     public class TestViewModelWithDeferredValidation : TestViewModelWithValidationTags
     {
-        #region Constructors
-        public TestViewModelWithDeferredValidation()
+        public TestViewModelWithDeferredValidation(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             DeferValidationUntilFirstSaveCall = true;
         }
-        #endregion
     }
 }

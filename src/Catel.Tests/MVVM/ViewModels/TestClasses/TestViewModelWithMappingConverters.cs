@@ -1,11 +1,13 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
 
-    public class TestViewModelWithMappingConverters : ViewModelBase
+    public class TestViewModelWithMappingConverters : FeaturedViewModelBase
     {
-        public TestViewModelWithMappingConverters(Person person = null)
+        public TestViewModelWithMappingConverters(Person person, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Person = person;
         }

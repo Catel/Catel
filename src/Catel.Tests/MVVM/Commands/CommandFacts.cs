@@ -3,7 +3,7 @@
     using System;
     using Catel.Data;
     using Catel.MVVM;
-
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
     public class CommandFacts
@@ -14,14 +14,26 @@
             [Test]
             public void ExecuteThrowsException()
             {
-                var command = new Command(() => { throw new Exception(); }, () => true);
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var command = new Command(serviceProvider, () => { throw new Exception(); }, () => true);
                 Assert.Throws<Exception>(() => command.Execute());
             }
 
             [Test]
             public void CanExecuteThrowsException()
             {
-                var command = new Command(() => { }, () => { throw new Exception(); });
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var command = new Command(serviceProvider, () => { }, () => { throw new Exception(); });
                 Assert.Throws<Exception>(() => command.Execute());
             }
         }
@@ -34,11 +46,10 @@
         {
             public class TestDisplayClassViewModel : ViewModelBase
             {
-                public TestDisplayClassViewModel(IServiceProvider serviceProvider, IObjectAdapter objectAdapter)
-                    : base()
+                public TestDisplayClassViewModel(IServiceProvider serviceProvider)
                 {
                     int localVariable = 1;
-                    TestCommand = new Command(TestFunction, () =>
+                    TestCommand = new Command(serviceProvider, TestFunction, () =>
                     {
                         Console.WriteLine("CanExecute called " + BoxingCache.GetBoxedValue(localVariable++));
                         return false;
@@ -55,7 +66,13 @@
             [Test]
             public void CanExecuteWeakRefLostTest()
             {
-                var vm = new TestDisplayClassViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var vm = new TestDisplayClassViewModel(serviceProvider);
 
                 var canExecuteBefore = vm.TestCommand.CanExecute();
                 Console.WriteLine("CanExecute before: " + canExecuteBefore);

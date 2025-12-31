@@ -4,7 +4,6 @@
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using Catel.MVVM;
-    using Catel.Runtime.Serialization.Json;
     using NUnit.Framework;
     using PublicApiGenerator;
     using VerifyNUnit;
@@ -24,14 +23,6 @@
         public async Task Catel_MVVM_HasNoBreakingChanges_Async()
         {
             var assembly = typeof(ViewModelBase).Assembly;
-
-            await PublicApiApprover.ApprovePublicApiAsync(assembly);
-        }
-
-        [Test, MethodImpl(MethodImplOptions.NoInlining)]
-        public async Task Catel_Serialization_Json_HasNoBreakingChanges_Async()
-        {
-            var assembly = typeof(JsonSerializer).Assembly;
 
             await PublicApiApprover.ApprovePublicApiAsync(assembly);
         }

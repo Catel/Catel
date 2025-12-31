@@ -6,6 +6,7 @@
     using System.ComponentModel;
     using Catel.Data;
     using NUnit.Framework;
+    using Catel.Tests.Data.TestClasses;
 
     [TestFixture]
     public class ModelBaseTest
@@ -30,50 +31,6 @@
                 _filesHelper = null;
             }
         }
-
-        #region Multiple inheritance tests
-        /// <summary>
-        /// Creates the and verify properties on inherited class. This test is used to determine
-        /// if the properties defined in a derived class are also registered properly.
-        /// </summary>
-        [TestCase]
-        public void CreateAndVerifyPropertiesOnInheritedClass()
-        {
-            // Create extend ini entry
-            var extendedIniEntry = new ExtendedIniEntry();
-
-            // Try to set original properties
-            extendedIniEntry.Value = "MyValue";
-
-            // Try to set new properties
-            extendedIniEntry.DefaultValue = "DefaultValue";
-        }
-        #endregion
-
-        #region Read-only tests
-        [TestCase]
-        public void ReadOnlyTest()
-        {
-            // Declare variables
-            const string testValue = "new value that shouldn't exist";
-            string originalValue, actualValue;
-
-            IniEntry iniEntry = ModelBaseTestHelper.CreateIniEntryObject();
-
-            // Test whether the object can be set to read-only
-            originalValue = iniEntry.Value;
-            iniEntry.SetReadOnly(true);
-            iniEntry.Value = testValue;
-            actualValue = iniEntry.Value;
-            Assert.That(actualValue, Is.EqualTo(originalValue));
-
-            // Test whether the object can be set to edit mode again
-            iniEntry.SetReadOnly(false);
-            iniEntry.Value = testValue;
-            actualValue = iniEntry.Value;
-            Assert.That(actualValue, Is.EqualTo(testValue));
-        }
-        #endregion
 
         #region Default values
         [TestCase]
@@ -149,7 +106,7 @@
         [TestCase]
         public void NotifyPropertyChanged_Automatic()
         {
-            var obj = ModelBaseTestHelper.CreateIniEntryObject();
+            var obj = new Child();
 
             bool isInvoked = false;
 
@@ -157,7 +114,7 @@
                                     {
                                         if (!isInvoked)
                                         {
-                                            if (string.Compare(e.PropertyName, "Value") != 0)
+                                            if (string.Compare(e.PropertyName, nameof(Child.Name)) != 0)
                                             {
                                                 Assert.Fail("Wrong PropertyChanged property name");
                                             }
@@ -166,7 +123,7 @@
                                         isInvoked = true;
                                     };
 
-            obj.Value = "MyNewValue";
+            obj.Name = "MyNewValue";
 
             if (!isInvoked)
             {
@@ -177,15 +134,15 @@
         [TestCase]
         public void NotifyPropertyChanged_ManualByExpression()
         {
-            var obj = ModelBaseTestHelper.CreateIniEntryObject();
+            var model = new Child();
 
             bool isInvoked = false;
 
-            obj.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            model.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (!isInvoked)
                 {
-                    if (string.Compare(e.PropertyName, "Value") != 0)
+                    if (string.Compare(e.PropertyName, nameof(Child.Name)) != 0)
                     {
                         Assert.Fail("Wrong PropertyChanged property name");
                     }
@@ -194,7 +151,7 @@
                 isInvoked = true;
             };
 
-            obj.RaisePropertyChanged((() => obj.Value));
+            model.RaisePropertyChanged((() => model.Name));
 
             if (!isInvoked)
             {
@@ -205,15 +162,15 @@
         [TestCase]
         public void NotifyPropertyChanged_ManualByStringLiteral()
         {
-            var obj = ModelBaseTestHelper.CreateIniEntryObject();
+            var model = new Child();
 
             bool isInvoked = false;
 
-            obj.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            model.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (!isInvoked)
                 {
-                    if (string.Compare(e.PropertyName, "Value") != 0)
+                    if (string.Compare(e.PropertyName, nameof(Child.Name)) != 0)
                     {
                         Assert.Fail("Wrong PropertyChanged property name");
                     }
@@ -222,7 +179,7 @@
                 isInvoked = true;
             };
 
-            obj.RaisePropertyChanged("Value");
+            model.RaisePropertyChanged(nameof(Child.Name));
 
             if (!isInvoked)
             {
@@ -233,21 +190,19 @@
         [TestCase]
         public void InvokePropertyChangedForAllRegisteredProperties()
         {
-            List<string> expectedProperties = new List<string>();
-            List<string> actualProperties = new List<string>();
+            var expectedProperties = new List<string>();
+            var actualProperties = new List<string>();
 
-            expectedProperties.Add(IniEntry.GroupProperty.Name);
-            expectedProperties.Add(IniEntry.KeyProperty.Name);
-            expectedProperties.Add(IniEntry.ValueProperty.Name);
-            expectedProperties.Add(IniEntry.IniEntryTypeProperty.Name);
+            expectedProperties.Add(PersonTestModel.FirstNameProperty.Name);
+            expectedProperties.Add(PersonTestModel.LastNameProperty.Name);
 
-            var obj = ModelBaseTestHelper.CreateIniEntryObject();
-            obj.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
-                                       {
-                                           actualProperties.Add(e.PropertyName);
-                                       };
+            var model = new PersonTestModel();
+            model.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            {
+                actualProperties.Add(e.PropertyName);
+            };
 
-            obj.RaisePropertyChangedForAllRegisteredProperties();
+            model.RaisePropertyChangedForAllRegisteredProperties();
 
             Assert.That(actualProperties.Count, Is.EqualTo(expectedProperties.Count));
             foreach (string property in expectedProperties)
@@ -285,25 +240,25 @@
         [TestCase]
         public void GetValue_Null()
         {
-            var entry = new IniEntry();
+            var entry = new PersonTestModel();
 
-            Assert.Throws<ArgumentException>(() => entry.GetValue<string>(null));
+            Assert.Throws<ArgumentException>(() => entry.GetValueWrapper<string>(null));
         }
 
         [TestCase]
         public void GetValue_NonExistingProperty()
         {
-            var entry = new IniEntry();
+            var entry = new PersonTestModel();
 
-            Assert.Throws<PropertyNotRegisteredException>(() => entry.GetValue<string>("Non-existing property"));
+            Assert.Throws<PropertyNotRegisteredException>(() => entry.GetValueWrapper<string>("Non-existing property"));
         }
 
         [TestCase]
         public void GetValue_ExistingProperty()
         {
-            var entry = new IniEntry();
-            entry.Key = "key value";
-            var value = entry.GetValue<string>(IniEntry.KeyProperty.Name);
+            var entry = new PersonTestModel();
+            entry.FirstName = "key value";
+            var value = entry.GetValueWrapper<string>(PersonTestModel.FirstNameProperty.Name);
             Assert.That(value, Is.EqualTo("key value"));
         }
         #endregion

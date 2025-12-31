@@ -1,9 +1,11 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
 
-    public class TestViewModelWithSuspendedModelValidation : ViewModelBase
+    public class TestViewModelWithSuspendedModelValidation : FeaturedViewModelBase
     {
         /// <summary>
         /// Register the FirstName property so it is known in the class.
@@ -25,7 +27,8 @@
         /// </summary>
         public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
 
-        public TestViewModelWithSuspendedModelValidation(Person person)
+        public TestViewModelWithSuspendedModelValidation(Person person, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             ValidateModelsOnInitialization = true;
             Person = person;

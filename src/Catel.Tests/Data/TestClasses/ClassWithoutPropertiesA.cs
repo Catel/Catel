@@ -10,6 +10,7 @@
         ///   Initializes a new object from scratch.
         /// </summary>
         public ClassWithoutPropertiesA()
+            : base(new ModelEqualityComparer())
         {
         }
     }

@@ -20,9 +20,9 @@
             Boolean = boolean;
         }
 
-        public ViewModelFactoryTestViewModel(string stringvalue)
+        public ViewModelFactoryTestViewModel(string stringValue)
         {
-            throw new NotSupportedException(stringvalue);
+            throw new NotSupportedException(stringValue);
         }
 
         public ViewModelFactoryTestViewModel(int integer, IDummyDependency dependency)

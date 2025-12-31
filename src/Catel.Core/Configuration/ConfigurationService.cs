@@ -60,7 +60,7 @@
         private bool _suspendNotifications = false;
         private bool _hasPendingNotifications = false;
 
-        public ConfigurationService(ILogger<IConfigurationService> logger,
+        public ConfigurationService(ILogger<ConfigurationService> logger,
             IObjectConverterService objectConverterService, IAppDataService appDataService,
             IDispatcherService dispatcherService,
             [FromKeyedServices("CatelConfiguration")] IConfigurationBuilder configurationBuilder)
