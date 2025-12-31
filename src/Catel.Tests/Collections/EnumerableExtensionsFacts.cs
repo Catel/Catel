@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using Catel.Collections;
+    using Catel.Services;
+    using Moq;
     using NUnit.Framework;
 
     public class EnumerableExtensionsFacts
@@ -20,7 +22,9 @@
                     }
                 };
 
-                var observableDictionary = items.ToObservableDictionary(d => d.Key, d => d.Value);
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var observableDictionary = items.ToObservableDictionary(d => d.Key, d => d.Value, dispatcherServiceMock.Object);
 
                 var success = observableDictionary.Contains(items[0]);
 
@@ -37,7 +41,9 @@
                     }
                 };
 
-                var observableDictionary = items.ToObservableDictionary(d => d.Key);
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var observableDictionary = items.ToObservableDictionary(d => d.Key, dispatcherServiceMock.Object);
 
                 var success = observableDictionary.Contains(new KeyValuePair<int, KeyValuePair<int, int>>(1, items[0]));
 
@@ -54,7 +60,10 @@
                     }
                 };
 
-                var observableDictionary = items.ToObservableDictionary(d => d.Key, d => d.Value, StringComparer.OrdinalIgnoreCase);
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var observableDictionary = items.ToObservableDictionary(d => d.Key, d => d.Value, 
+                    dispatcherServiceMock.Object, StringComparer.OrdinalIgnoreCase);
 
                 var hasItem = observableDictionary.Contains(items[0]);
                 var comparerWorks = observableDictionary.ContainsKey("foo");

@@ -5,6 +5,7 @@
     using Catel;
     using Catel.Services;
     using Catel.Windows.Threading;
+    using Microsoft.Extensions.Logging.Abstractions;
     using Moq;
     using NUnit.Framework;
 
@@ -65,7 +66,8 @@
         [Test]
         public async Task Runs_Dispatcher_Methods_With_Implementation()
         {
-            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(new DispatcherProviderService()))
+            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(NullLogger<DispatcherService>.Instance, 
+                new DispatcherProviderService(NullLogger<DispatcherProviderService>.Instance)))
             {
                 Interval = TimeSpan.FromMilliseconds(50)
             };
@@ -92,7 +94,8 @@
         [TestCase(800, 4)]
         public async Task Does_Prevent_Duplicate_Ticks(int durationInMilliseconds, int expectedInvocationCount)
         {
-            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(new DispatcherProviderService()))
+            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(NullLogger<DispatcherService>.Instance,
+                new DispatcherProviderService(NullLogger<DispatcherProviderService>.Instance)))
             {
                 Interval = TimeSpan.FromMilliseconds(50),
                 PreventDuplicateTicks = true
@@ -150,7 +153,8 @@
         [Test]
         public async Task Keeps_Invoking_When_Exception_Occurs()
         {
-            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(new DispatcherProviderService()))
+            var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(NullLogger<DispatcherService>.Instance,
+                new DispatcherProviderService(NullLogger<DispatcherProviderService>.Instance)))
             {
                 Interval = TimeSpan.FromMilliseconds(50),
                 PreventDuplicateTicks = true

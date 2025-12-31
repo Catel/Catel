@@ -36,8 +36,14 @@
             [TestCase]
             public void ReturnsTrueForEqualInstances()
             {
-                var firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
-                var secondEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
+                var firstEntry = new PersonTestModel
+                {
+                    FirstName = "test"
+                };
+                var secondEntry = new PersonTestModel
+                {
+                    FirstName = "test"
+                };
 
                 // References equal
                 Assert.That(TagHelper.AreTagsEqual(firstEntry, firstEntry), Is.True);
@@ -49,8 +55,14 @@
             [TestCase]
             public void ReturnsFalseForDifferentInstances()
             {
-                var firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
-                var secondEntry = ModelBaseTestHelper.CreateIniEntryObject("D", "E", "F");
+                var firstEntry = new PersonTestModel
+                {
+                    FirstName = "test"
+                };
+                var secondEntry = new PersonTestModel
+                {
+                    FirstName = "test b"
+                };
 
                 Assert.That(TagHelper.AreTagsEqual(firstEntry, secondEntry), Is.False);
             }

@@ -6,6 +6,8 @@
     using Tests.ViewModels;
 
     using NUnit.Framework;
+    using Castle.Core.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     public class UrlLocatorFacts
     {
@@ -15,14 +17,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => urlLocator.Register(null, "/Views/PersonView.xaml"));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
                 Assert.Throws<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), null));
                 Assert.Throws<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), string.Empty));
             }
@@ -30,7 +32,7 @@
             [TestCase]
             public void RegistersNonExistingViewType()
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
 
                 Assert.That(urlLocator.ResolveUrl(typeof(FollowingNoNamingConventionView)), Is.Null);
 
@@ -43,7 +45,7 @@
             [TestCase]
             public void OverwritesExistingViewType()
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
                 urlLocator.Register(typeof(NoNamingConventionViewModel2), "/Views/NoNaming1.xaml");
                 urlLocator.Register(typeof(NoNamingConventionViewModel2), "/App.xaml");
 
@@ -58,14 +60,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => urlLocator.ResolveUrl(null));
             }
 
             [TestCase(typeof(PersonViewModel), "/Views/Person.xaml")]
             public void ReturnsViewForViewEndingWithViewModel(Type viewModelType, string expectedValue)
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
                 var resolvedType = urlLocator.ResolveUrl(viewModelType, false);
 
                 Assert.That(resolvedType, Is.Not.Null);
@@ -75,7 +77,7 @@
             [TestCase]
             public void ResolvesViewFromCache()
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
                 var resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
                 Assert.That(resolvedType, Is.Not.Null);
@@ -97,7 +99,7 @@
             [TestCase]
             public void ClearsTheCache()
             {
-                var urlLocator = new UrlLocator();
+                var urlLocator = new UrlLocator(NullLogger<UrlLocator>.Instance);
                 var resolvedUrl = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
 
                 Assert.That(resolvedUrl, Is.Not.Null);

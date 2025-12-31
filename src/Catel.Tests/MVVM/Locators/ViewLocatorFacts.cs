@@ -4,11 +4,11 @@
     using Catel.MVVM;
     using Locators.Fixtures.ViewModels;
     using Locators.Fixtures.Views;
-    using SpecialTest;
-    using Tests.Views;
-    using Tests.ViewModels;
-
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
+    using SpecialTest;
+    using Tests.ViewModels;
+    using Tests.Views;
 
     public class ViewLocatorFacts
     {
@@ -18,21 +18,21 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewLocator.Register(null, typeof(FollowingNoNamingConventionView)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewLocator.Register(typeof(NoNamingConventionViewModel), null));
             }
 
             [TestCase]
             public void RegistersNonExistingViewType()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
 
                 Assert.That(viewLocator.ResolveView(typeof(FollowingNoNamingConventionView)), Is.Null);
 
@@ -45,7 +45,7 @@
             [TestCase]
             public void OverwritesExistingViewType()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 viewLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel));
                 viewLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel2));
 
@@ -60,14 +60,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewLocator.IsCompatible(null, typeof(FollowingNoNamingConventionView)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewLocator.IsCompatible(typeof(NoNamingConventionViewModel), null));
             }
 
@@ -76,7 +76,7 @@
             [TestCase(typeof(NonCompatibleView), false)]
             public void ReturnsCompatibleValues(Type viewType, bool expectedValue)
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
 
                 viewLocator.Register(typeof(MyNameViewerViewModel), typeof(MyNameViewer));
                 viewLocator.Register(typeof(MyNameViewerViewModel), typeof(MyNameViewer2));
@@ -92,7 +92,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewLocator.ResolveView(null));
             }
 
@@ -102,7 +102,7 @@
             [TestCase(typeof(SameNamespacePersonViewModel), typeof(SameNamespacePersonView), "[CURRENT].[VM]View")]
             public void ReturnsViewForViewModel(Type viewModelType, Type viewType, string? convention)
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
 
                 if (!string.IsNullOrEmpty(convention))
                 {
@@ -119,7 +119,7 @@
             [TestCase]
             public void ResolvesViewFromCache()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
                 Assert.That(resolvedType, Is.Not.Null);
@@ -141,7 +141,7 @@
             [TestCase]
             public void ClearsTheCache()
             {
-                var viewLocator = new ViewLocator();
+                var viewLocator = new ViewLocator(NullLogger<ViewLocator>.Instance);
                 var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
 
                 Assert.That(resolvedType, Is.Not.Null);

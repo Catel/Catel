@@ -9,6 +9,8 @@
     using System.Reflection;
     using Catel.Collections;
     using Catel.Reflection;
+    using Catel.Services;
+    using Moq;
     using NUnit.Framework;
 
     public class FastBindingListFacts
@@ -19,7 +21,9 @@
             [TestCase]
             public void ReturnsFalseWhenChangesAreNotSuspended()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 Assert.That(fastCollection.IsDirty, Is.False);
             }
@@ -27,7 +31,9 @@
             [TestCase]
             public void ReturnsTrueWhenChangesAreSuspended()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications())
                 {
@@ -44,7 +50,9 @@
             [TestCase]
             public void ReturnsFalseAfterDisposing()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications())
                 {
@@ -59,7 +67,9 @@
             [TestCase]
             public void ReturnsFalseAfterChangedDisposing()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 var firstToken = fastCollection.SuspendChangeNotifications();
                 var secondToken = fastCollection.SuspendChangeNotifications();
@@ -79,10 +89,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
+
                 Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null));
             }
 
@@ -91,10 +104,13 @@
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
+
                 fastCollection.ListChanged += (sender, e) => counter++;
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
@@ -113,10 +129,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
+
                 Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
             }
 
@@ -125,10 +144,13 @@
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
+
                 fastCollection.ListChanged += (sender, e) => counter++;
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
@@ -147,10 +169,13 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
+
                 Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null));
             }
 
@@ -159,10 +184,13 @@
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>(new[] { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 })
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object, new[] { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 })
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
+
                 fastCollection.ListChanged += (sender, e) => counter++;
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 });
@@ -183,7 +211,9 @@
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -214,7 +244,9 @@
             [TestCase]
             public void ReturnsSingleElementUsingLinq()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 for (int i = 0; i < 43; i++)
                 {
@@ -236,7 +268,10 @@
             public void ResetWithoutSuspendChangeNotifications()
             {
                 var collectionChanged = false;
-                var fastCollection = new FastBindingList<int>
+
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -256,7 +291,9 @@
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -300,7 +337,9 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -323,7 +362,9 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -369,7 +410,10 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestIntProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object);
+
                 var tm0 = new TestModel() { TestIntProperty = 1, TestStringProperty = "Test1", TestTypeProperty = null };
                 var tm1 = new TestModel() { TestIntProperty = 2, TestStringProperty = "Test2", TestTypeProperty = null };
                 var tm2 = new TestModel() { TestIntProperty = 3, TestStringProperty = "Test3", TestTypeProperty = null };
@@ -389,7 +433,10 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestStringProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object);
+
                 var tm0 = new TestModel() { TestIntProperty = 1, TestStringProperty = "Test1", TestTypeProperty = null };
                 var tm1 = new TestModel() { TestIntProperty = 2, TestStringProperty = "Test2", TestTypeProperty = null };
                 var tm2 = new TestModel() { TestIntProperty = 3, TestStringProperty = "Test3", TestTypeProperty = null };
@@ -411,7 +458,10 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestTypeProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object);
+
                 var tm0 = new TestModel() { TestIntProperty = 1, TestStringProperty = "Test1", TestTypeProperty = new TestType() { TestIntProperty = 1 } };
                 var tm1 = new TestModel() { TestIntProperty = 2, TestStringProperty = "Test2", TestTypeProperty = new TestType() { TestIntProperty = 2 } };
                 var tm2 = new TestModel() { TestIntProperty = 3, TestStringProperty = "Test3", TestTypeProperty = new TestType() { TestIntProperty = 3 } };
@@ -433,7 +483,10 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestIntProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object);
+
                 var tm0 = new TestModel() { TestIntProperty = 1, TestStringProperty = "Test1", TestTypeProperty = null };
                 var tm1 = new TestModel() { TestIntProperty = 2, TestStringProperty = "Test2", TestTypeProperty = null };
                 var tm2 = new TestModel() { TestIntProperty = 3, TestStringProperty = "Test3", TestTypeProperty = null };
@@ -453,7 +506,10 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestStringProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object);
+
                 var tm0 = new TestModel() { TestIntProperty = 1, TestStringProperty = "Test1", TestTypeProperty = null };
                 var tm1 = new TestModel() { TestIntProperty = 2, TestStringProperty = "Test2", TestTypeProperty = null };
                 var tm2 = new TestModel() { TestIntProperty = 3, TestStringProperty = "Test3", TestTypeProperty = null };
@@ -475,7 +531,10 @@
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestTypeProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object);
+
                 var tm0 = new TestModel() { TestIntProperty = 1, TestStringProperty = "Test1", TestTypeProperty = new TestType() { TestIntProperty = 1 } };
                 var tm1 = new TestModel() { TestIntProperty = 2, TestStringProperty = "Test2", TestTypeProperty = new TestType() { TestIntProperty = 2 } };
                 var tm2 = new TestModel() { TestIntProperty = 3, TestStringProperty = "Test3", TestTypeProperty = new TestType() { TestIntProperty = 3 } };
@@ -500,7 +559,9 @@
                 var counter = 0;
                 var eventArgs = (NotifyListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<TestModel>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<TestModel>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -529,7 +590,9 @@
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -560,7 +623,9 @@
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -599,7 +664,9 @@
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -639,7 +706,9 @@
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int> { 1, 2, 3, 4, 5 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object, new int[]{ 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.ListChanged += (sender, e) =>
                 {
@@ -674,7 +743,9 @@
             [TestCase]
             public void CleanedUpSuspensionContextAfterAdding()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -688,7 +759,9 @@
             [TestCase]
             public void CleanedUpSuspensionContextAfterDoingNothing()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -701,7 +774,9 @@
             [TestCase]
             public void ThrowsInvalidOperationExceptionForAddingInRemovingMode()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Removing))
                 {
@@ -712,7 +787,9 @@
             [TestCase]
             public void ThrowsInvalidOperationExceptionForClearingInAddingMode()
             {
-                var fastCollection = new FastBindingList<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -723,7 +800,9 @@
             [TestCase]
             public void ThrowsInvalidOperationExceptionForRemovingInAddingMode()
             {
-                var fastCollection = new FastBindingList<int> { 0 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -734,7 +813,9 @@
             [TestCase]
             public void ThrowsInvalidOperationExceptionForSettingInAddingMode()
             {
-                var fastCollection = new FastBindingList<int> { 0 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -746,7 +827,9 @@
             [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:StatementMustNotBeOnSingleLine", Justification = "Reviewed. Suppression is OK here.")]
             public void ThrowsInvalidOperationExceptionForChangingMode()
             {
-                var fastCollection = new FastBindingList<int> { 0 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -763,7 +846,9 @@
             {
                 var count = 0;
                 NotifyRangedListChangedEventArgs eventArgs = null;
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -790,7 +875,9 @@
             {
                 var count = 0;
                 NotifyRangedListChangedEventArgs eventArgs = null;
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -817,7 +904,9 @@
             public void RaisesTwoEvents()
             {
                 var eventArgsList = new List<NotifyRangedListChangedEventArgs>();
-                var fastCollection = new FastBindingList<int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };

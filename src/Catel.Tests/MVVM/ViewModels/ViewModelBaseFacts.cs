@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -7,6 +8,7 @@
     using Catel.Data;
     using Catel.MVVM;
     using Catel.MVVM.Auditing;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestFeaturedViewModel = TestClasses.TestFeaturedViewModel;
 
@@ -24,7 +26,13 @@
         [TestCase]
         public async Task ProtectPropertiesAfterClosingAsync()
         {
-            var vm = new TestFeaturedViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestFeaturedViewModel(serviceProvider);
             var freezable = (IFreezable)vm;
 
             await vm.InitializeViewModelAsync();
@@ -49,8 +57,16 @@
         [TestCase]
         public async Task CancelAfterCloseProtectionAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
+
             var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
 
@@ -74,8 +90,16 @@
         [TestCase]
         public async Task SaveAfterCloseProtectionAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
+
             var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
 
@@ -99,8 +123,16 @@
         [TestCase]
         public async Task CloseAfterCloseProtectionAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
+
             var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
 
@@ -120,6 +152,12 @@
         [Test]
         public async Task MultipleViewModelsCanBeCreatedConcurrentlyAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             const int personsPerThread = 50;
             const int threadAmount = 10;
             var threads = new Thread[threadAmount];
@@ -133,7 +171,7 @@
                     var localViewModels = new TestFeaturedViewModel[personsPerThread];
                     for (var j = 0; j < personsPerThread; j++)
                     {
-                        localViewModels[j] = new TestFeaturedViewModel();
+                        localViewModels[j] = new TestFeaturedViewModel(serviceProvider);
                     }
 
                     lock (allViewModels)
@@ -170,6 +208,12 @@
         [Test]
         public async Task PropertiesCanBeSetConcurrentlyWithObjectCreationAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             const int personsPerThread = 50;
             const int threadAmount = 10;
             var threads = new Thread[threadAmount];
@@ -184,7 +228,7 @@
 
                     for (int j = 0; j < personsPerThread; j++)
                     {
-                        var viewModel = new TestFeaturedViewModel
+                        var viewModel = new TestFeaturedViewModel(serviceProvider)
                         {
                             Age = 18
                         };
@@ -225,6 +269,12 @@
         [Test]
         public async Task CommandsCanBeCalledConcurrentlyWithObjectCreationAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             const int personsPerThread = 50;
             const int threadAmount = 10;
             var threads = new Thread[threadAmount];
@@ -239,7 +289,7 @@
 
                     for (int j = 0; j < personsPerThread; j++)
                     {
-                        var viewModel = new TestViewModel();
+                        var viewModel = new TestFeaturedViewModel(serviceProvider);
                         viewModel.GenerateData.Execute();
                         localViewModels[j] = viewModel;
                     }

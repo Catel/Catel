@@ -11,6 +11,9 @@
             [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET6)]
             [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET7)]
             [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET8)]
+            [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET9)]
+            [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET10)]
+            [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET11)]
             public void ReturnsTrueForSupportedPlatform(KnownPlatforms platformToCheck, SupportedPlatforms currentPlatform)
             {
                 Assert.That(Platforms.IsPlatformSupported(platformToCheck, currentPlatform), Is.True);

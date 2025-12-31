@@ -7,7 +7,6 @@
     [TestFixture]
     public class WindowNotRegisteredExceptionTest
     {
-        #region Methods
         [TestCase]
         public void Constructor()
         {
@@ -20,6 +19,5 @@
                 Assert.That(ex.Name, Is.EqualTo("windowName"));
             }
         }
-        #endregion
     }
 }

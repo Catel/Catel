@@ -18,7 +18,8 @@
         {
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddCatelMvvmServices();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
 
             using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {

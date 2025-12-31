@@ -1,7 +1,8 @@
 ﻿namespace Catel.Tests.ComponentModel
 {
+    using Catel.Services;
+    using Moq;
     using NUnit.Framework;
-    using Services.Fixtures;
 
     public class DisplayNameAttributeFacts
     {
@@ -11,10 +12,11 @@
             [TestCase]
             public void ReturnsTranslatedResourceName()
             {
-                var languageService = new LanguageServiceFixture();
-                languageService.RegisterValue("MyDisplayName", "It works");
+                var languageServiceMock = new Mock<ILanguageService>();
+                languageServiceMock.Setup(x => x.GetString(It.IsAny<string>()))
+                    .Returns<string>(x => "It works");
 
-                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageService, "MyDisplayName");
+                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageServiceMock.Object, "MyDisplayName");
  
                 Assert.That(displayAttribute.DisplayName, Is.EqualTo("It works"));
             }
@@ -22,10 +24,11 @@
             [TestCase]
             public void ReturnsResourceNameIfTranslationCannotBeFound()
             {
-                var languageService = new LanguageServiceFixture();
-                languageService.RegisterValue("MyDisplayName", "It works");
+                var languageServiceMock = new Mock<ILanguageService>();
+                languageServiceMock.Setup(x => x.GetString(It.IsAny<string>()))
+                    .Returns<string>(x => "It works");
 
-                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageService, "MyNonExistingDisplayName");
+                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageServiceMock.Object, "MyNonExistingDisplayName");
 
                 Assert.That(displayAttribute.DisplayName, Is.EqualTo("MyNonExistingDisplayName"));
             }

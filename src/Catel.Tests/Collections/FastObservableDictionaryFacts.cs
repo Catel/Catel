@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using Catel.Collections;
+    using Catel.Services;
+    using Moq;
     using NUnit.Framework;
 
     public class FastObservableDictionaryFacts
@@ -14,7 +16,9 @@
             [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                Assert.That(() => new FastObservableDictionary<object, object>(null, null), Throws.ArgumentNullException);
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+
+                Assert.That(() => new FastObservableDictionary<object, object>(dispatcherServiceMock.Object, null, null), Throws.ArgumentNullException);
             }
 
             [Test]
@@ -22,7 +26,8 @@
             {
                 var defaultComparer = EqualityComparer<int>.Default;
 
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -37,7 +42,8 @@
             {
                 var customComparer = StringComparer.OrdinalIgnoreCase;
 
-                var observableDictionary = new FastObservableDictionary<string, int>(customComparer)
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<string, int>(dispatcherServiceMock.Object, customComparer)
                 {
                     {
                         "1", 1
@@ -54,7 +60,8 @@
             [Test]
             public void ThrowsInvalidCastExceptionForAddObject()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object);
 
                 Assert.That(() => observableDictionary.Add((object)"1", 1), Throws.TypeOf<InvalidCastException>());
             }
@@ -62,7 +69,8 @@
             [Test]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var observableDictionary = new FastObservableDictionary<object, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<object, int>(dispatcherServiceMock.Object);
 
                 Assert.That(() => observableDictionary.Add(null, 1), Throws.ArgumentNullException);
             }
@@ -70,7 +78,8 @@
             [Test]
             public void AllowsNullValues()
             {
-                var observableDictionary = new FastObservableDictionary<int, object>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, object>(dispatcherServiceMock.Object);
 
                 observableDictionary.Add(1, null);
 
@@ -81,7 +90,8 @@
             public void RaisesEventWhileAddingKvp()
             {
                 var counter = 0;
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object);
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -103,7 +113,8 @@
             public void RaisesEventWhileAddingObject()
             {
                 var counter = 0;
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object);
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -125,7 +136,8 @@
             public void RaiseEventWhileAddingStronglyTyped()
             {
                 var counter = 0;
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object);
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -151,7 +163,8 @@
             public void RaisesEventWhileClearing()
             {
                 bool wasRaised = false;
-                var observableDictionary = new FastObservableDictionary<int, int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -173,7 +186,8 @@
             [Test]
             public void ContainsKvpSuccess()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 2
@@ -188,7 +202,8 @@
             [Test]
             public void ContainsObjectTrue()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 2
@@ -203,7 +218,8 @@
             [Test]
             public void ContainsObjectFalse()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 2
@@ -218,7 +234,8 @@
             [Test]
             public void ContainsObjectInvalidTypeFalse()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 2
@@ -237,7 +254,8 @@
             [Test]
             public void ContainsKeyTrue()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -252,7 +270,8 @@
             [Test]
             public void ContainsKeyFalse()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -273,7 +292,8 @@
             {
                 Array arr = new KeyValuePair<int, int>[2];
 
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -290,9 +310,10 @@
             [Test]
             public void PopulatesKvpArray()
             {
-                KeyValuePair<int, int>[] arr = new KeyValuePair<int, int>[2];
+                var arr = new KeyValuePair<int, int>[2];
 
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -314,7 +335,8 @@
             [Test]
             public void ThrowsInvalidCastExceptionForAddingObject()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object);
 
                 Assert.That(() => observableDictionary[(object)"1"] = 1, Throws.TypeOf<InvalidCastException>());
             }
@@ -323,7 +345,8 @@
             public void RaisesEventWhileAddingObject()
             {
                 var counter = 0;
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object);
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -345,7 +368,8 @@
             public void RaisesEventWhileAddingStronglyTyped()
             {
                 var counter = 0;
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object);
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -367,7 +391,8 @@
             public void RaisesEventWhileUpdatingObject()
             {
                 var isUpdated = false;
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -386,7 +411,8 @@
             public void RaisesEventWhileUpdatingStronglyTyped()
             {
                 var isUpdated = false;
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object  )
                 {
                     {
                         1, 1
@@ -404,7 +430,8 @@
             [Test]
             public void ReturnsNullForInvalidTypedObject()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>()
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object  )
                 {
                     {
                         1, 1
@@ -424,7 +451,8 @@
             public void RaiseEventWhileRemovingStronglyTyped()
             {
                 var counter = 1;
-                var observableDictionary = new FastObservableDictionary<int, int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -445,7 +473,8 @@
             [Test]
             public void ReturnsValueFromValidKey()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1
@@ -460,7 +489,8 @@
             [Test]
             public void ReturnsDefaultFromInvalidKey()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var observableDictionary = new FastObservableDictionary<int, int>(dispatcherServiceMock.Object)
                 {
                     {
                         1, 1

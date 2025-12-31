@@ -10,7 +10,8 @@
 
     using Catel.Collections;
     using Catel.Reflection;
-
+    using Catel.Services;
+    using Moq;
     using NUnit.Framework;
 
     public class FastObservableCollectionFacts
@@ -76,7 +77,8 @@
             [Test]
             public void ReturnsFalseWhenNoPendingNotificationsAreListed()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
 
                 fastCollection.Add(1);
 
@@ -86,7 +88,8 @@
             [Test]
             public void ReturnsTrueWhenPendingNotificationsAreListed()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications())
                 {
@@ -105,7 +108,8 @@
             [Test]
             public void ReturnsFalseAfterDisposing()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
 
                 using (fastCollection.SuspendChangeNotifications())
                 {
@@ -120,7 +124,8 @@
             [Test]
             public void ReturnsFalseAfterChangedDisposing()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
 
                 using (var firstToken = fastCollection.SuspendChangeNotifications())
                 {
@@ -139,7 +144,8 @@
             [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null));
                 Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null, SuspensionMode.Adding));
@@ -148,7 +154,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForInvalidSuspensionMode()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 Assert.Throws<InvalidOperationException>(() => fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing));
             }
@@ -158,7 +165,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { counter++; };
 
@@ -185,7 +193,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -201,7 +210,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -218,7 +228,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -234,7 +245,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -251,7 +263,8 @@
             [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
                 Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0, SuspensionMode.Adding));
@@ -260,7 +273,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForInvalidSuspensionMode()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 Assert.Throws<InvalidOperationException>(() => fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Removing));
             }
@@ -270,7 +284,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
@@ -297,7 +312,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -313,7 +329,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -329,7 +346,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -345,7 +363,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -362,7 +381,8 @@
             [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null));
                 Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null, SuspensionMode.Removing));
@@ -371,7 +391,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForInvalidSuspensionMode()
             {
-                var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object, new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 Assert.Throws<InvalidOperationException>(() => fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding));
             }
@@ -381,7 +402,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 });
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object, new[] { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
@@ -408,7 +430,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object, new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -424,7 +447,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object, new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -440,7 +464,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object, new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -456,7 +481,8 @@
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
                 var count = 0;
 
-                var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object, new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
@@ -475,7 +501,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object)  { 1, 2, 3, 4, 5 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
@@ -493,7 +520,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
@@ -511,7 +539,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
@@ -527,7 +556,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
@@ -547,7 +577,8 @@
             [Test]
             public void ReturnsSingleElementUsingLinq()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
 
                 for (var i = 0; i < 43; i++) fastCollection.Add(i);
 
@@ -564,7 +595,8 @@
             public void ResetWithoutSuspendChangeNotifications()
             {
                 var collectionChanged = false;
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { collectionChanged = true; };
 
@@ -579,7 +611,8 @@
                 var counter = 0;
                 var eventArgs = (NotifyCollectionChangedEventArgs)null;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) =>
                     {
@@ -615,7 +648,8 @@
                 var counter = 0;
                 var eventArgs = (NotifyCollectionChangedEventArgs)null;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
@@ -639,7 +673,8 @@
                 var counter = 0;
                 var eventArgs = (NotifyCollectionChangedEventArgs)null;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
@@ -673,7 +708,8 @@
                 var counter = 0;
                 var eventArgs = (NotifyCollectionChangedEventArgs)null;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
@@ -707,7 +743,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
@@ -734,7 +771,8 @@
                 var counter = 0;
                 var eventArgs = (NotifyCollectionChangedEventArgs)null;
 
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) =>
                     {
@@ -768,7 +806,8 @@
             [Test]
             public void CleanedUpSuspensionContextAfterAdding()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     fastCollection.Add(1);
@@ -781,7 +820,8 @@
             [Test]
             public void CleanedUpSuspensionContextAfterDoingNothing()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                 }
@@ -793,7 +833,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForAddingInRemovingMode()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Removing))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection.Add(0));
@@ -803,7 +844,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForClearingInAddingMode()
             {
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection.Clear());
@@ -813,7 +855,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForMovingInAddingMode()
             {
-                var fastCollection = new FastObservableCollection<int> { 0 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 0 };
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection.Move(0, 1));
@@ -823,7 +866,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForRemovingInAddingMode()
             {
-                var fastCollection = new FastObservableCollection<int> { 0 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 0 };
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection.Remove(0));
@@ -833,7 +877,8 @@
             [Test]
             public void ThrowsInvalidOperationExceptionForSettingInAddingMode()
             {
-                var fastCollection = new FastObservableCollection<int> { 0 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 0 };
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection[0] = 0);
@@ -844,7 +889,8 @@
             [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:StatementMustNotBeOnSingleLine", Justification = "Reviewed. Suppression is OK here.")]
             public void ThrowsInvalidOperationExceptionForChangingMode()
             {
-                var fastCollection = new FastObservableCollection<int> { 0 };
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 0 };
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(
@@ -864,8 +910,9 @@
             [Test]
             public void ModeIsMixed()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -882,8 +929,9 @@
             [Test]
             public void EventArgsContainMixedItemsAfterClearing()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -899,8 +947,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChanges()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -924,8 +973,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -944,8 +994,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithSimulatedMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -965,8 +1016,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithReplacingItem()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -985,8 +1037,9 @@
             [Test]
             public void RaisesSingleEventForMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1002,8 +1055,9 @@
             [Test]
             public void RaisesSingleEventForSimulatedMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1020,8 +1074,9 @@
             [Test]
             public void RaisesSingleEventForAddingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1038,8 +1093,9 @@
             [Test]
             public void RaisesSingleEventForInsertingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1056,8 +1112,9 @@
             [Test]
             public void RaisesSingleEventForAddingAndMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1079,8 +1136,9 @@
             [Test]
             public void EventArgsContainMixedItemsAfterClearing()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1097,8 +1155,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChanges()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1127,8 +1186,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithReplacingItem()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1149,8 +1209,9 @@
             [Test]
             public void RaisesTwoEventForMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1171,8 +1232,9 @@
             [Test]
             public void RaisesTwoEventForSimulatedMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1194,8 +1256,9 @@
             [Test]
             public void RaisesSingleEventForAddingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1216,8 +1279,9 @@
             [Test]
             public void RaisesThreeEventsForAddingAndMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1241,8 +1305,9 @@
             [Test]
             public void RaisesSingleEventForInsertingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1263,8 +1328,9 @@
             [Test]
             public void RaisesSingleEventWithSingleItemWithMixedBashModeAndAddAction()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1283,8 +1349,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithAddingAndRemovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1312,8 +1379,9 @@
             [Test]
             public void EventArgsContainMixedItemsAfterClearing()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1330,8 +1398,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChanges()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1360,8 +1429,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithReplacingItem()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1382,8 +1452,9 @@
             [Test]
             public void RaisesTwoEventForMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1404,8 +1475,9 @@
             [Test]
             public void RaisesTwoEventForSimulatedMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { 1, 2, 3, 4, 5 };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1427,8 +1499,9 @@
             [Test]
             public void RaisesSingleEventForAddingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1449,8 +1522,9 @@
             [Test]
             public void RaisesSingleEventForInsertingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1471,8 +1545,9 @@
             [Test]
             public void RaisesSingleEventsForAddingAndMovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int>();
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1494,8 +1569,9 @@
             [Test]
             public void RaisesSingleEventForAddAndRemoveActions()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var fastCollection = new FastObservableCollection<int> { };
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1519,8 +1595,9 @@
             [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithAddingAndRemovingItems()
             {
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { };
+                var sourceCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object) { };
                 sourceCollection.AutomaticallyDispatchChangeNotifications = false;
                 sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
@@ -1550,7 +1627,8 @@
             {
                 var counter = 0;
 
-                var fastCollection = new FastObservableCollection<int>();
+                var dispatcherServiceMock = new Mock<IDispatcherService>();
+                var fastCollection = new FastObservableCollection<int>(dispatcherServiceMock.Object);
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 

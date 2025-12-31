@@ -14,6 +14,8 @@ namespace Catel.Tests
 
     using NUnit.Framework;
     using Moq;
+    using Castle.Core.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     public partial class ArgumentFacts
     {
@@ -405,7 +407,7 @@ namespace Catel.Tests
             [TestCase]
             public void SucceedsForInstanceNotImplementingNotRequiredType()
             {
-                Argument.IsNotOfType("myParam", new ViewLocator(), typeof(ViewModelLocator));
+                Argument.IsNotOfType("myParam", new ViewLocator(NullLogger<ViewLocator>.Instance), typeof(ViewModelLocator));
             }
 
             [TestCase]

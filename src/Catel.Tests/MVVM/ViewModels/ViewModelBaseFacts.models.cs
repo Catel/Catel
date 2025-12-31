@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using Catel.Data;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
@@ -11,11 +12,16 @@
         [TestCase]
         public void GetAllModels_With_Null()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var person = new Person();
             person.FirstName = "first_name";
             person.LastName = "last_name";
 
-            var viewModel = new TestViewModel(person);
+            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
             var models = viewModel.GetAllModelsForTest();
 
@@ -26,11 +32,16 @@
         [TestCase]
         public void GetAllModels()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var person = new Person();
             person.FirstName = "first_name";
             person.LastName = "last_name";
 
-            var viewModel = new TestViewModel(person);
+            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
             var specialValidationModel = new SpecialValidationModel();
             viewModel.SpecialValidationModel = specialValidationModel;
@@ -45,49 +56,62 @@
         [TestCase]
         public async Task ModelsSavedBySaveAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            var model = person as IModel;
-            var viewModel = new TestViewModel(person);
-            Assert.That(model.IsInEditSession, Is.True);
+            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+            Assert.That(person.IsInEditSession, Is.True);
 
             viewModel.FirstName = "new";
 
             await viewModel.SaveAndCloseViewModelAsync();
 
-            Assert.That(model.IsInEditSession, Is.False);
+            Assert.That(person.IsInEditSession, Is.False);
             Assert.That(person.FirstName, Is.EqualTo("new"));
         }
 
         [TestCase]
         public async Task ModelsCanceledByCancelAsync()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            var model = person as IModel;
-            var viewModel = new TestViewModel(person);
-            Assert.That(model.IsInEditSession, Is.True);
+            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+            Assert.That(person.IsInEditSession, Is.True);
 
             viewModel.FirstName = "new first name";
 
             await viewModel.CancelAndCloseViewModelAsync();
 
-            Assert.That(model.IsInEditSession, Is.False);
+            Assert.That(person.IsInEditSession, Is.False);
             Assert.That(person.FirstName, Is.EqualTo("first name"));
         }
 
         [TestCase]
         public void IsModelRegistered_ExistingModel()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            var viewModel = new TestViewModel(person);
+            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
             Assert.That(viewModel.IsModelRegisteredForTest("Person"), Is.True);
         }
@@ -95,11 +119,16 @@
         [TestCase]
         public void IsModelRegistered_NonExistingModel()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var person = new Person();
             person.FirstName = "first_name";
             person.LastName = "last_name";
 
-            var viewModel = new TestViewModel(person);
+            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
             Assert.That(viewModel.IsModelRegisteredForTest("SecondPerson"), Is.False);
         }

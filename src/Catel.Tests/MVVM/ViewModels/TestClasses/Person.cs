@@ -29,7 +29,7 @@
     /// backwards compatibility and error checking.
     /// </summary>
     [Serializable]
-    public class Person : ValidatableModelBase, IPerson
+    public class Person : ValidatableModelBase, IPerson, IEditableObject
     {
         private int _firstNameChangedCounter;
 
@@ -39,6 +39,8 @@
         public Person()
         {
         }
+
+        public bool IsInEditSession { get; private set; }
 
         public int FirstNameChangedCounter { get => _firstNameChangedCounter; }
 
@@ -160,6 +162,21 @@
             {
                 validationResults.Add(BusinessRuleValidationResult.CreateWarning("No middle name"));
             }
+        }
+
+        public void BeginEdit()
+        {
+            IsInEditSession = true;
+        }
+
+        public void CancelEdit()
+        {
+            IsInEditSession = false;
+        }
+
+        public void EndEdit()
+        {
+            IsInEditSession = false;
         }
     }
 

@@ -4,11 +4,11 @@
     using Catel.MVVM;
     using Locators.Fixtures.ViewModels;
     using Locators.Fixtures.Views;
+    using Microsoft.Extensions.Logging.Abstractions;
+    using NUnit.Framework;
     using SpecialTest;
     using Tests.ViewModels;
     using Tests.Views;
-
-    using NUnit.Framework;
 
     public class ViewModelLocatorFacts
     {
@@ -18,21 +18,21 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewModelLocator.Register(null, typeof(NoNamingConventionViewModel)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewModelLocator.Register(typeof(FollowingNoNamingConventionView), null));
             }
 
             [TestCase]
             public void RegistersNonExistingViewType()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
 
                 Assert.That(viewModelLocator.ResolveViewModel(typeof(FollowingNoNamingConventionView)), Is.Null);
 
@@ -45,7 +45,7 @@
             [TestCase]
             public void OverwritesExistingViewType()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel));
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(NoNamingConventionViewModel2));
 
@@ -60,14 +60,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewModelLocator.IsCompatible(null, typeof(MyNameViewerViewModel)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewModelLocator.IsCompatible(typeof(MyNameViewer), null));
             }
 
@@ -76,7 +76,7 @@
             [TestCase(typeof(NonCompatibleViewModel), false)]
             public void ReturnsCompatibleValues(Type viewModelType, bool expectedValue)
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
 
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(MyNameViewerViewModel));
                 viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(MyNameViewerViewModel2));
@@ -92,14 +92,14 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 Assert.Throws<ArgumentNullException>(() => viewModelLocator.ResolveViewModel(null));
             }
 
             [TestCase(Description = "Fixes https://github.com/Catel/Catel/issues/2355")]
             public void Caches_Invalid_Value_Correctly()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
 
                 var resolvedType1 = viewModelLocator.ResolveViewModel(typeof(object));
 
@@ -117,7 +117,7 @@
             [TestCase(typeof(SameNamespacePersonView), typeof(SameNamespacePersonViewModel))]
             public void ReturnsViewModelForView(Type viewType, Type viewModelType)
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 var resolvedType = viewModelLocator.ResolveViewModel(viewType);
 
                 Assert.That(resolvedType, Is.Not.Null);
@@ -127,7 +127,7 @@
             [TestCase]
             public void ReturnsViewModelForNamingConventionWithUp()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 viewModelLocator.NamingConventions.Clear();
                 viewModelLocator.NamingConventions.Add("[UP].ViewModels.[VW]ViewModel");
 
@@ -140,7 +140,7 @@
             [TestCase]
             public void ResolvesViewModelFromCache()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
                 Assert.That(resolvedType, Is.Not.Null);
@@ -158,7 +158,7 @@
             [TestCase]
             public void ResolvesMyNameViewerViewModelFromMyNameViewer()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(MyNameViewer));
 
                 Assert.That(resolvedType, Is.Not.Null);
@@ -172,7 +172,7 @@
             [TestCase]
             public void ClearsTheCache()
             {
-                var viewModelLocator = new ViewModelLocator();
+                var viewModelLocator = new ViewModelLocator(NullLogger<ViewModelLocator>.Instance);
                 var resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
 
                 Assert.That(resolvedType, Is.Not.Null);

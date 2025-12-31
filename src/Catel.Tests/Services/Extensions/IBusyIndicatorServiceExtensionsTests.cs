@@ -3,28 +3,33 @@
     using System;
     using System.Threading;
     using Catel.Services;
+    using Microsoft.Extensions.Logging.Abstractions;
+    using Moq;
     using NUnit.Framework;
 
     [TestFixture, Apartment(ApartmentState.STA), Explicit]
-    public class IPleaseWaitServiceExtensionsTests
+    public class IBusyIndicatorServiceExtensionsTests
     {
         private IBusyIndicatorService _target;
         private IBusyIndicatorService Target
         {
-            get { return _target ?? (_target = new BusyIndicatorService(FakeLanguageService, new DispatcherService(new DispatcherProviderService()))); }
+            get 
+            {
+                var target = _target;
+                if (target is null)
+                {
+                    var languageServiceMock = new Mock<ILanguageService>();
+                    languageServiceMock.Setup(x => x.GetString(It.IsAny<string>()))
+                        .Returns<string>(x => x);
+
+                    target = _target = new BusyIndicatorService(NullLogger<BusyIndicatorService>.Instance,
+                        languageServiceMock.Object, new DispatcherService(NullLogger<DispatcherService>.Instance,
+                        new DispatcherProviderService(NullLogger<DispatcherProviderService>.Instance)));
+                }
+
+                return target;
+            }
             set { _target = value; }
-        }
-
-        private ILanguageService FakeLanguageService { get; set; }
-
-        /// <summary>
-        /// Use Test_Initialize to run code before running each test.
-        /// </summary>
-        [SetUp]
-        public void Test_Initialize()
-        {
-            // TODO: use mocking framework to stub out the ILanguageService
-            FakeLanguageService = new LanguageService();
         }
 
         /// <summary>

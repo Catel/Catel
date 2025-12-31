@@ -240,8 +240,8 @@
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                var parentViewModel = new TestFeaturedViewModel(new SpecialValidationModel(serviceProvider));
-                var childViewModel = new TestFeaturedViewModel(new SpecialValidationModel(serviceProvider));
+                var parentViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
+                var childViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
 
                 await parentViewModel.InitializeViewModelAsync();
                 await childViewModel.InitializeViewModelAsync();

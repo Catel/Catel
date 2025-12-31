@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Castle.Core.Logging;
     using Catel.MVVM;
+    using Catel.MVVM.Views;
     using Catel.Services;
     using Catel.Tests.ViewModels;
     using Catel.Tests.Views;
@@ -37,6 +38,8 @@
                             return typeof(AutoClosingView);
                         });
 
+                    var viewFactoryMock = new Mock<IViewFactory>();
+
                     var dispatcherServiceMock = new Mock<IDispatcherService>();
                     dispatcherServiceMock.Setup(x => x.BeginInvoke(It.IsAny<Action>(), It.IsAny<bool>()))
                         .Callback<Action, bool>((action, whenRequired) =>
@@ -47,7 +50,8 @@
                     var viewModelFactoryMock = new Mock<IViewModelFactory>();
 
                     var uiVisualizerService = new UIVisualizerService(new NullLogger<UIVisualizerService>(), 
-                        viewLocatorMock.Object, dispatcherServiceMock.Object, viewModelFactoryMock.Object);
+                        viewLocatorMock.Object, viewFactoryMock.Object, 
+                        dispatcherServiceMock.Object, viewModelFactoryMock.Object);
 
                     uiVisualizerService.Register(typeof(AutoClosingViewModel), typeof(AutoClosingView));
 

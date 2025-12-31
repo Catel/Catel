@@ -1,4 +1,4 @@
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using System;
     using System.Linq;
@@ -6,11 +6,8 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
 
     public class CollapsMapping : DefaultViewModelToModelMappingConverter
     {
-        #region Fields
         private readonly char _separator;
-        #endregion
 
-        #region Constructors
         // Note: keep the constructor, it's used in the tests
         public CollapsMapping(string[] propertyNames)
             : this(propertyNames, ' ')
@@ -22,16 +19,12 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
             _separator = separator;
         }
-        #endregion
 
-        #region Properties
         public char Separator
         {
             get { return _separator; }
         }
-        #endregion
 
-        #region Methods
         public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
         {
             return types.All(x => x == typeof(string)) && outType == typeof(string);
@@ -51,6 +44,5 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
             return ((string)value).Split(Separator);
         }
-        #endregion
     }
 }

@@ -7,7 +7,6 @@
     [TestFixture]
     public class UICompletedEventArgsTest
     {
-        #region Methods
         [TestCase]
         public void UICompletedEventArgs_Constructor()
         {
@@ -19,6 +18,5 @@
             Assert.That(completedEventArgs.Context.Data, Is.EqualTo(15));
             Assert.That(completedEventArgs.Result.DialogResult, Is.EqualTo(true));
         }
-        #endregion
     }
 }

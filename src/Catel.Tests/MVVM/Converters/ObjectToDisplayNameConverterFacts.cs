@@ -7,7 +7,6 @@
     using Catel.MVVM;
     using Catel.Reflection;
     using Catel.Services;
-    using Services.Fixtures;
 
 #if !FINISHED_MIGRATION
     [TestFixture]

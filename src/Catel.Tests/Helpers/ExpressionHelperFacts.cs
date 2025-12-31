@@ -19,11 +19,10 @@
             [TestCase]
             public void ReturnsRightPropertyNameUsingExpression()
             {
-                var iniEntry = new IniEntry();
+                var model = new PersonTestModel();
 
-                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Group), Is.EqualTo("Group"));
-                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Key), Is.EqualTo("Key"));
-                Assert.That(ExpressionHelper.GetPropertyName(() => iniEntry.Value), Is.EqualTo("Value"));
+                Assert.That(ExpressionHelper.GetPropertyName(() => model.FirstName), Is.EqualTo(nameof(PersonTestModel.FirstName)));
+                Assert.That(ExpressionHelper.GetPropertyName(() => model.LastName), Is.EqualTo(nameof(PersonTestModel.LastName)));
             }
         }
 
