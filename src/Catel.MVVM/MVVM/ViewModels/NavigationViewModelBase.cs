@@ -8,6 +8,12 @@
     {
         private readonly NavigationContext _navigationContext = new NavigationContext();
 
+        public NavigationViewModelBase(IServiceProvider serviceProvider)
+            : base(serviceProvider)
+        {
+            
+        }
+
         /// <summary>
         /// Gets the navigation context.
         /// </summary>

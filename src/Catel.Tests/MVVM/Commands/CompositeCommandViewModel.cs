@@ -6,6 +6,7 @@
     public class CompositeCommandViewModel : ViewModelBase
     {
         public CompositeCommandViewModel(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             TestCommand1 = new Command(serviceProvider, OnTestCommand1Execute, OnTestCommand1CanExecute);
             TestCommand2 = new Command(serviceProvider, OnTestCommand2Execute, OnTestCommand2CanExecute);

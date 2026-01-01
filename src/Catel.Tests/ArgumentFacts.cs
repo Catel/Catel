@@ -6,16 +6,14 @@ namespace Catel.Tests
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-
-    using Catel.MVVM;
-    using Catel.Data;
-
-    using ViewModels;
-
-    using NUnit.Framework;
-    using Moq;
     using Castle.Core.Logging;
+    using Catel.Data;
+    using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging.Abstractions;
+    using Moq;
+    using NUnit.Framework;
+    using ViewModels;
 
     public partial class ArgumentFacts
     {
@@ -367,7 +365,12 @@ namespace Catel.Tests
             [TestCase]
             public void SucceedsForInstanceImplementingRequiredType()
             {
-                Argument.IsOfType("myParam", new PersonViewModel(), typeof(ViewModelBase));
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                Argument.IsOfType("myParam", new PersonViewModel(serviceProvider), typeof(ViewModelBase));
             }
 
             [TestCase]

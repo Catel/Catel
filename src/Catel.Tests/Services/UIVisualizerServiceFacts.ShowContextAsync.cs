@@ -60,7 +60,7 @@
                     var uiVisualizerContext = new UIVisualizerContext
                     {
                         IsModal = isModal,
-                        Data = new AutoClosingViewModel(),
+                        Data = new AutoClosingViewModel(serviceProvider),
                         CompletedCallback = (sender, e) =>
                         {
                             callbackExecutionCount++;

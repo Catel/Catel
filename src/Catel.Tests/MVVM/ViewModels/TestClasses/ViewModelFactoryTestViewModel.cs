@@ -5,33 +5,39 @@
 
     public class ViewModelFactoryTestViewModel : ViewModelBase
     {
-        public ViewModelFactoryTestViewModel()
+        public ViewModelFactoryTestViewModel(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             EmptyConstructorCalled = true;
         }
 
-        public ViewModelFactoryTestViewModel(int integer)
+        public ViewModelFactoryTestViewModel(int integer, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Integer = integer;
         }
 
-        public ViewModelFactoryTestViewModel(bool boolean)
+        public ViewModelFactoryTestViewModel(bool boolean, IServiceProvider serviceProvider) 
+            : base(serviceProvider)
         {
             Boolean = boolean;
         }
 
-        public ViewModelFactoryTestViewModel(string stringValue)
+        public ViewModelFactoryTestViewModel(string stringValue, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             throw new NotSupportedException(stringValue);
         }
 
-        public ViewModelFactoryTestViewModel(int integer, IDummyDependency dependency)
+        public ViewModelFactoryTestViewModel(int integer, IServiceProvider serviceProvider, IDummyDependency dependency)
+            : base(serviceProvider)
         {
             Integer = integer;
             Dependency = dependency;
         }
 
-        public ViewModelFactoryTestViewModel(IDummyDependency dependency)
+        public ViewModelFactoryTestViewModel(IServiceProvider serviceProvider, IDummyDependency dependency)
+            : base(serviceProvider)
         {
             Dependency = dependency;
         }

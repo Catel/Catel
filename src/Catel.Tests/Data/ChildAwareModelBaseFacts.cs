@@ -6,6 +6,7 @@
     using System.Windows.Data;
     using Catel.Data;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
@@ -26,7 +27,12 @@
         [TestCase]
         public void Allows_Registration_Of_CollectionViewSource()
         {
-            var model = new ModelWithCollectionViewSource();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var model = new ModelWithCollectionViewSource(serviceProvider);
             model.Collection = new CollectionView(new List<int>() { 1, 2, 3 });
         }
 

@@ -43,6 +43,7 @@
         /// Initializes a new instance of the <see cref="TestViewModel"/> class.
         /// </summary>
         public TestViewModel(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             TestCommand = new Command<string>(serviceProvider, OnTestCommandExecute);
             TestCommand.AutomaticallyDispatchEvents = false;

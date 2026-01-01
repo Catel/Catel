@@ -89,7 +89,7 @@
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
         protected FeaturedViewModelBase(IServiceProvider serviceProvider)
-            : base()
+            : base(serviceProvider)
         {
             ServiceProvider = serviceProvider;
 

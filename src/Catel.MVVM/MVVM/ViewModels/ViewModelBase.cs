@@ -33,11 +33,11 @@
         /// </summary>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase()
+        protected ViewModelBase(IServiceProvider serviceProvider)
             : base()
         {
             // Hack for now, we need to get rid of this
-            _viewModelManager = IoC.IoCContainer.ServiceProvider.GetRequiredService<IViewModelManager>();
+            _viewModelManager = serviceProvider.GetRequiredService<IViewModelManager>();
 
             if (CatelEnvironment.IsInDesignMode)
             {

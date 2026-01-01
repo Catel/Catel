@@ -1,7 +1,9 @@
 ﻿namespace Catel.Tests.CTL1669
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
     [TestFixture]
@@ -10,6 +12,11 @@
         [Test]
         public void ViewModelInit_DoesNotThrows()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             Assert.DoesNotThrow(() =>
             {
                 var dogModel = new DogModel
@@ -17,7 +24,7 @@
                     Name = "name"
                 };
 
-                var vm = new DogViewModel(dogModel);
+                var vm = new DogViewModel(dogModel, serviceProvider);
 
                 Assert.That(dogModel.Name, Is.EqualTo(vm.Name));
             });
@@ -41,7 +48,8 @@
 
     public abstract class AnimalViewModelBase : ViewModelBase
     {
-        public AnimalViewModelBase(AnimalModelBase model)
+        public AnimalViewModelBase(AnimalModelBase model, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Animal = model;
         }
@@ -58,8 +66,8 @@
 
     public class DogViewModel : AnimalViewModelBase
     {
-        public DogViewModel(DogModel model)
-            : base(model)
+        public DogViewModel(DogModel model, IServiceProvider serviceProvider)
+            : base(model, serviceProvider)
         {
         }
 

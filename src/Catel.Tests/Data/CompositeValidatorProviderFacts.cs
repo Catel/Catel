@@ -53,7 +53,10 @@
         {
             public class FooViewModel : ViewModelBase
             {
-
+                public FooViewModel(IServiceProvider serviceProvider) 
+                    : base(serviceProvider)
+                {
+                }
             }
 
             [TestCase]
@@ -105,7 +108,10 @@
         {
             public class FooViewModel : ViewModelBase
             {
-
+                public FooViewModel(IServiceProvider serviceProvider) 
+                    : base(serviceProvider)
+                {
+                }
             }
 
             [TestCase]

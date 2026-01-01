@@ -802,7 +802,7 @@
             {
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
 
-                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object) { 0, 1, 2 };
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -815,7 +815,7 @@
             {
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
 
-                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object);
+                var fastCollection = new FastBindingList<int>(dispatcherServiceMock.Object) { 0, 1, 2 };
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {

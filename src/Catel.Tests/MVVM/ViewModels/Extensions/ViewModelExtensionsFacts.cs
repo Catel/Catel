@@ -5,7 +5,7 @@
 
     using Catel.Data;
     using Catel.MVVM;
-
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
     public class ViewModelExtensionsFacts
@@ -15,6 +15,11 @@
         {
             public class ValidatingViewModel : ViewModelBase
             {
+                public ValidatingViewModel(IServiceProvider serviceProvider) 
+                    : base(serviceProvider)
+                {
+                }
+
                 [Required]
                 public string FirstName
                 {
@@ -28,7 +33,12 @@
             [TestCase]
             public void ReturnsFalseForNotOutdatedValidationContext()
             {
-                var vm = new ValidatingViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var vm = new ValidatingViewModel(serviceProvider);
 
                 vm.FirstName = "some value";
 
@@ -41,7 +51,12 @@
             [TestCase]
             public void ReturnsTrueForOutdatedValidationContext()
             {
-                var vm = new ValidatingViewModel();
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var vm = new ValidatingViewModel(serviceProvider);
 
                 vm.FirstName = "some value";
 

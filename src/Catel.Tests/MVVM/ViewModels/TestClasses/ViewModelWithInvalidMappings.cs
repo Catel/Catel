@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
+    using System;
     using Catel.MVVM;
 
     /// <summary>
@@ -7,6 +8,11 @@
     /// </summary>
     public class ViewModelWithInvalidMappings : ViewModelBase
     {
+        public ViewModelWithInvalidMappings(IServiceProvider serviceProvider) 
+            : base(serviceProvider)
+        {
+        }
+
         /// <summary>
         /// Gets the title of the view model.
         /// </summary>

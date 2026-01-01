@@ -1,18 +1,16 @@
 ﻿namespace Catel.Tests
 {
     using System;
-
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq.Expressions;
-
     using Catel.Data;
     using Catel.MVVM;
     using Catel.Tests.ViewModels;
-
-    using NUnit.Framework;
+    using Microsoft.Extensions.DependencyInjection;
     using Moq;
+    using NUnit.Framework;
 
     public partial class ArgumentFacts
     {
@@ -313,7 +311,12 @@
             [TestCase]
             public void SucceedsForIsOfTypeInvokation()
             {
-                IsOfTypeInvokation(new PersonViewModel(), typeof(ViewModelBase));
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                IsOfTypeInvokation(new PersonViewModel(serviceProvider), typeof(ViewModelBase));
                 IsOfTypeInvokation(typeof(PersonViewModel), typeof(ViewModelBase));
             }
 

@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
@@ -11,7 +12,12 @@
         [TestCase]
         public void ViewModelBase_ActionsTimeout_SetsDefaultValue()
         {
-            var vm = new TestViewModelWithActionTimeout();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithActionTimeout(serviceProvider);
 
             Assert.That(vm.ViewModelActionAwaitTimeoutInMilliseconds, Is.EqualTo(IViewModelExtensions.ViewModelActionAwaitTimeoutInMilliseconds));
         }
@@ -19,7 +25,12 @@
         [Test]
         public async Task ViewModelBase_ActionsTimeout_ExpectedException_SaveAsync()
         {
-            var vm = new TestViewModelWithActionTimeout();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithActionTimeout(serviceProvider);
 
             await vm.InitializeViewModelAsync();
 
@@ -34,7 +45,12 @@
         [TestCase]
         public async Task ViewModelBase_ActionsTimeout_SaveAsync()
         {
-            var vm = new TestViewModelWithActionTimeout();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithActionTimeout(serviceProvider);
 
             await vm.InitializeViewModelAsync();
 
@@ -49,7 +65,12 @@
         [Test]
         public async Task ViewModelBase_ActionsTimeout_ExpectedException_CancelAsync()
         {
-            var vm = new TestViewModelWithActionTimeout();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithActionTimeout(serviceProvider);
 
             await vm.InitializeViewModelAsync();
 
@@ -64,7 +85,12 @@
         [TestCase]
         public async Task ViewModelBase_ActionsTimeout_CancelAsync()
         {
-            var vm = new TestViewModelWithActionTimeout();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModelWithActionTimeout(serviceProvider);
 
             await vm.InitializeViewModelAsync();
 

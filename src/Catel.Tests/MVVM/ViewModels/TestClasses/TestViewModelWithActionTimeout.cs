@@ -6,6 +6,11 @@
 
     public class TestViewModelWithActionTimeout : ViewModelBase
     {
+        public TestViewModelWithActionTimeout(IServiceProvider serviceProvider) 
+            : base(serviceProvider)
+        {
+        }
+
         public int ActionDuration { get; set; }
 
         protected override async Task<bool> CancelAsync()

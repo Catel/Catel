@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Windows.Data;
     using Catel.Data;
@@ -7,6 +8,11 @@
 
     public class ModelWithCollectionViewSource : ViewModelBase
     {
+        public ModelWithCollectionViewSource(IServiceProvider serviceProvider) 
+            : base(serviceProvider)
+        {
+        }
+
         /// <summary>
         /// Register the Collection property so it is known in the class.
         /// </summary>

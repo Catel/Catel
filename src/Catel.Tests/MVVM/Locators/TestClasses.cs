@@ -15,11 +15,17 @@
 
 namespace Catel.Tests.ViewModels
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
 
     public class PersonViewModel : ViewModelBase
     {
+        public PersonViewModel(IServiceProvider serviceProvider) 
+            : base(serviceProvider)
+        {
+        }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -38,11 +44,17 @@ namespace Catel.Tests.ViewModels
 
 namespace Catel.Tests
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
 
     public class SameNamespacePersonViewModel : ViewModelBase
     {
+        public SameNamespacePersonViewModel(IServiceProvider serviceProvider) 
+            : base(serviceProvider)
+        {
+        }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

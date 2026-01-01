@@ -66,7 +66,7 @@
             /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
             /// </summary>
             public MainWindowViewModel(IServiceProvider serviceProvider)
-                : base()
+                : base(serviceProvider)
             {
                 CurrentDummy = new Dummy(444);
                 Reset = new Command(serviceProvider, OnResetExecute);

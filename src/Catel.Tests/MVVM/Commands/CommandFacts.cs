@@ -47,6 +47,7 @@
             public class TestDisplayClassViewModel : ViewModelBase
             {
                 public TestDisplayClassViewModel(IServiceProvider serviceProvider)
+                    : base(serviceProvider)
                 {
                     int localVariable = 1;
                     TestCommand = new Command(serviceProvider, TestFunction, () =>
