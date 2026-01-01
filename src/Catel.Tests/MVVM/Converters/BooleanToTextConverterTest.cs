@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Globalization;
     using Catel.MVVM.Converters;
+    using Catel.Services;
+    using Moq;
     using NUnit.Framework;
 
     [TestFixture]
@@ -30,14 +32,30 @@
         [TestCaseSource(nameof(TestCases))]
         public object Convert(object value, object parameter)
         {
-            var converter = new BooleanToTextConverter();
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock.Setup(ls => ls.GetString("Yes"))
+                .Returns("Yes");
+            languageServiceMock.Setup(ls => ls.GetString("No"))
+                .Returns("No");
+            languageServiceMock.Setup(ls => ls.GetString("Failed"))
+                .Returns("Failed");
+
+            var converter = new BooleanToTextConverter(languageServiceMock.Object);
             return converter.Convert(value, typeof(string), parameter, null);
         }
 
         [Test]
         public void ConvertBack()
         {
-            var converter = new BooleanToTextConverter();
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock.Setup(ls => ls.GetString("Yes"))
+                .Returns("Yes");
+            languageServiceMock.Setup(ls => ls.GetString("No"))
+                .Returns("No");
+            languageServiceMock.Setup(ls => ls.GetString("Failed"))
+                .Returns("Failed");
+
+            var converter = new BooleanToTextConverter(languageServiceMock.Object);
             Assert.That(converter.ConvertBack(null, typeof(bool), null, (CultureInfo)null), Is.EqualTo(ConverterHelper.UnsetValue));
         }
 

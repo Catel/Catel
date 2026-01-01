@@ -545,15 +545,15 @@
             }
 
             [TestCase]
-            public void Automatically_Creates_Validator()
+            public void Does_Not_Automatically_Create_Validator()
             {
                 var testValidatorModel = (IValidatable)new TestValidatorModel();
 
-                Assert.That(testValidatorModel.Validator, Is.Not.Null);
+                Assert.That(testValidatorModel.Validator, Is.Null);
 
                 testValidatorModel.Validate(true);
 
-                Assert.That(testValidatorModel.HasErrors, Is.True);
+                Assert.That(testValidatorModel.HasErrors, Is.False);
             }
         }
 

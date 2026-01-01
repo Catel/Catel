@@ -1,6 +1,7 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
+    using System.Collections.ObjectModel;
     using Catel.Collections;
     using Catel.Data;
     using Catel.IoC;
@@ -31,14 +32,14 @@
 
             public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
 
-            public FastObservableCollection<Preset> Presets
+            public ObservableCollection<Preset> Presets
             {
-                get { return GetValue<FastObservableCollection<Preset>>(PresetsProperty); }
+                get { return GetValue<ObservableCollection<Preset>>(PresetsProperty); }
                 set { SetValue(PresetsProperty, value); }
             }
 
-            public static readonly IPropertyData PresetsProperty = RegisterProperty<FastObservableCollection<Preset>>(nameof(Presets), 
-                () => new FastObservableCollection<Preset>(IoCContainer.ServiceProvider.GetService<IDispatcherService>()));
+            public static readonly IPropertyData PresetsProperty = RegisterProperty<ObservableCollection<Preset>>(nameof(Presets), 
+                () => new ObservableCollection<Preset>());
 
             public void ClearDirty()
             {
@@ -56,21 +57,21 @@
 
             public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
 
-            public FastObservableCollection<Plugin> Plugins
+            public ObservableCollection<Plugin> Plugins
             {
-                get { return GetValue<FastObservableCollection<Plugin>>(PluginsProperty); }
+                get { return GetValue<ObservableCollection<Plugin>>(PluginsProperty); }
                 set { SetValue(PluginsProperty, value); }
             }
 
             public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins),
-                () => new FastObservableCollection<Preset>(IoCContainer.ServiceProvider.GetService<IDispatcherService>()));
+                () => new ObservableCollection<Preset>());
         }
 
         [TestFixture]
         public class TheClearIsDirtyOnAllChildrenMethod
         {
             [Test]
-            public void DoesNotSuspendNotifications()
+            public void Does_Not_Suspend_Notifications()
             {
                 var pluginChangeNotifications = 0;
                 var presetChangeNotifications = 0;
@@ -142,7 +143,7 @@
             }
 
             [Test]
-            public void DoesSuspendNotifications()
+            public void Does_Suspend_Notifications()
             {
                 var pluginChangeNotifications = 0;
                 var presetChangeNotifications = 0;

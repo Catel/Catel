@@ -499,6 +499,16 @@
 
                     value = GetValue<object>(catelPropertyData);
                 }
+                else
+                {
+                    // Non-catel property, could be a read-only property
+                    var propertyInfo = type.GetProperty(propertyName);
+                    var getMethod = propertyInfo?.GetMethod;
+                    if (getMethod is not null)
+                    {
+                        value = getMethod.Invoke(this, null);
+                    }
+                }
 
                 if (!_dataAnnotationsValidationContext.TryGetValue(propertyName, out var validationContext))
                 {

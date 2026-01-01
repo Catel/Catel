@@ -298,9 +298,18 @@
 
         protected virtual async Task<IConfiguration> LoadConfigurationAsync(string source)
         {
-            var configuration = (IConfiguration)_configurationBuilder
-                .AddJsonFile(source, true, false)
-                .Build();
+            var builder = _configurationBuilder;
+
+            if (File.Exists(source))
+            {
+                var fileInfo = new FileInfo(source);
+                if (fileInfo.Length > 0)
+                {
+                    builder = builder.AddJsonFile(source, true, false);
+                }
+            }
+
+            var configuration = (IConfiguration)builder.Build();
 
             // For backwards compatibility, we will only replace the extension
             var oldConfigurationFile = Path.ChangeExtension(source, ".xml");

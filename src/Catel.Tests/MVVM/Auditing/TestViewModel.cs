@@ -7,15 +7,8 @@
     /// <summary>
     /// Test view model.
     /// </summary>
-    public class TestViewModel : ViewModelBase
+    public class TestViewModel : FeaturedViewModelBase
     {
-        #region Constants
-        /// <summary>
-        /// Register the TestProperty property so it is known in the class.
-        /// </summary>
-        public static readonly IPropertyData TestPropertyProperty = RegisterProperty("TestProperty", "defaultvalue");
-        #endregion
-
         #region Commands
 
         #region Properties
@@ -38,7 +31,6 @@
 
         #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TestViewModel"/> class.
         /// </summary>
@@ -52,9 +44,7 @@
             InitializeViewModelAsync();
 #pragma warning restore 4014
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the title of the view model.
         /// </summary>
@@ -72,6 +62,11 @@
             get { return GetValue<string>(TestPropertyProperty); }
             set { SetValue(TestPropertyProperty, value); }
         }
-        #endregion
+
+        /// <summary>
+        /// Register the TestProperty property so it is known in the class.
+        /// </summary>
+        public static readonly IPropertyData TestPropertyProperty = RegisterProperty("TestProperty", "defaultvalue");
+
     }
 }

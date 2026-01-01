@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
     using Catel.MVVM.Auditing;
+    using Catel.Tests.MVVM.ViewModels.TestClasses;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
@@ -15,7 +16,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -33,7 +34,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -51,7 +52,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -70,7 +71,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -91,7 +92,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditor.PropertiesToIgnore.Add("TestProperty");
@@ -113,7 +114,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -135,7 +136,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -154,7 +155,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -173,7 +174,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -192,7 +193,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -211,7 +212,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -230,7 +231,7 @@
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
