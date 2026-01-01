@@ -311,8 +311,7 @@
             [TestCase]
             public void SucceedsForIsOfTypeInvokation()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

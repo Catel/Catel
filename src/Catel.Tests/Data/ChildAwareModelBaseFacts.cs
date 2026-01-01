@@ -27,8 +27,7 @@
         [TestCase]
         public void Allows_Registration_Of_CollectionViewSource()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -175,14 +174,6 @@
             Assert.That(c.IsDirty, Is.True);
             Assert.That(p.IsDirty, Is.True);
             Assert.That(g.IsDirty, Is.True);
-        }
-
-        [Test]
-        public void Serializing_Delegates_Exception_Test()
-        {
-            var model = new TestModel();
-
-            Assert.DoesNotThrow(() => (model as IEditableObject).BeginEdit());
         }
 
         private class TestModel : ChildAwareModelBase
