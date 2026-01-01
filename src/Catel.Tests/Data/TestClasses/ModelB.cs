@@ -7,7 +7,6 @@
     /// ModelB Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    [Serializable]
     public class ModelB : Model
     {
         /// <summary>

@@ -16,7 +16,6 @@
     /// can be suspended.
     /// </summary>
     /// <typeparam name="T">Type of the elements contained by this collection.</typeparam>
-    [Serializable]
     public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(FastObservableCollection<T>));

@@ -28,7 +28,6 @@
     /// Person Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    [Serializable]
     public class Person : ValidatableModelBase, IPerson, IEditableObject
     {
         private int _firstNameChangedCounter;
@@ -184,7 +183,6 @@
     /// PersonWithDataAnnotations Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    [Serializable]
     public class PersonWithDataAnnotations : ValidatableModelBase, IPerson
     {
         /// <summary>
@@ -266,7 +264,6 @@
     /// ContactInfo Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    [Serializable]
     public class ContactInfo : ModelBase, IContactInfo
     {
         /// <summary>

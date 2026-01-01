@@ -9,7 +9,6 @@
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
     /// </summary>
-    [Serializable]
     public abstract partial class ModelBase : ObservableObject, IModel
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(ModelBase));

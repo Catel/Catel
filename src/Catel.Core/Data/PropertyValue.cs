@@ -8,7 +8,6 @@
     /// <summary>
     /// Class holding a property value to serialize using the <see cref="ModelBase"/>.
     /// </summary>
-    [Serializable]
     public class PropertyValue : ISerializable
     {
         /// <summary>

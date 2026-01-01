@@ -64,7 +64,7 @@
             }
 
             public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins),
-                () => new ObservableCollection<Preset>());
+                () => new ObservableCollection<Plugin>());
         }
 
         [TestFixture]

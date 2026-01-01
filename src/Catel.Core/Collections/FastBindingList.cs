@@ -14,7 +14,6 @@
     /// can be suspended.
     /// </summary>
     /// <typeparam name="T">Type of the elements contained by this collection.</typeparam>
-    [Serializable]
     public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCollection
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(FastBindingList<T>));

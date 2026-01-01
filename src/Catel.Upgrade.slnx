@@ -14,21 +14,40 @@
   <Folder Name="/src/Orc.Controls/">
     <Project Path="../../Orc.Controls/src/Orc.Controls/Orc.Controls.csproj" Id="84e22240-d816-4b43-ac37-92b805a2bee3" />
   </Folder>
+  <Folder Name="/src/Orc.Controls/Tests/">
+    <Project Path="../../Orc.Controls/src/Orc.Controls.Tests/Orc.Controls.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.FileSystem/">
     <Project Path="../../Orc.FileSystem/src/Orc.FileSystem/Orc.FileSystem.csproj" Id="360c62c6-7905-46d0-8b93-abd90857e478" />
   </Folder>
+  <Folder Name="/src/Orc.FileSystem/Tests/">
+    <Project Path="../../Orc.FileSystem/src/Orc.FileSystem.Tests/Orc.FileSystem.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.Notifications/">
     <Project Path="../../Orc.Notifications/src/Orc.Notifications/Orc.Notifications.csproj" Id="4b76ca3b-37ab-4b3b-9eb7-efe9d65bb09c" />
+  </Folder>
+  <Folder Name="/src/Orc.Notifications/Tests/">
+    <Project Path="../../Orc.Notifications/src/Orc.Notifications.Tests/Orc.Notifications.Tests.csproj" />
   </Folder>
   <Folder Name="/src/Orc.Serialization/">
     <Project Path="../../Orc.Serialization/src/Orc.Serialization.Json/Orc.Serialization.Json.csproj" Id="3c144956-6635-48c9-ab59-de6d96f1bb48" />
     <Project Path="../../Orc.Serialization/src/Orc.Serialization.Yaml/Orc.Serialization.Yaml.csproj" Id="6607793b-c15e-4fe3-bc84-8e202c4e5183" />
   </Folder>
+  <Folder Name="/src/Orc.Serialization/Tests/">
+    <Project Path="../../Orc.Serialization/src/Orc.Serialization.Json.Tests/Orc.Serialization.Json.Tests.csproj" />
+    <Project Path="../../Orc.Serialization/src/Orc.Serialization.Yaml.Tests/Orc.Serialization.Yaml.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.SystemInfo/">
     <Project Path="../../Orc.SystemInfo/src/Orc.SystemInfo/Orc.SystemInfo.csproj" Id="80a0d499-6ec4-49e5-b7be-1e9f196ba7fa" />
   </Folder>
+  <Folder Name="/src/Orc.SystemInfo/Tests/">
+    <Project Path="../../Orc.SystemInfo/src/Orc.SystemInfo.Tests/Orc.SystemInfo.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.Theming/">
     <Project Path="../../Orc.Theming/src/Orc.Theming/Orc.Theming.csproj" Id="fcd588fc-6acc-4658-893f-0ecb2d8de620" />
+  </Folder>
+  <Folder Name="/src/Orc.Theming/Tests/">
+    <Project Path="../../Orc.Theming/src/Orc.Theming.Tests/Orc.Theming.Tests.csproj" />
   </Folder>
   <Folder Name="/src/Orchestra.Example/">
     <Project Path="../../Orchestra/src/Orchestra.Examples.Ribbon.Fluent/Orchestra.Examples.Ribbon.Fluent.csproj" />

@@ -3,7 +3,6 @@
     using System;
     using Catel.Data;
 
-    [Serializable]
     public class ObjectWithCustomType : ComparableModelBase
     {
         /// <summary>

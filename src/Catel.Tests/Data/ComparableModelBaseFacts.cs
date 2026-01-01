@@ -40,7 +40,7 @@
         }
 
         [TestCase]
-        public void Equals_DifferentClassesEqualProperties()
+        public void Equals_Different_Classes_Equal_Properties()
         {
             var a = new ClassWithoutPropertiesA();
             var b = new ClassWithoutPropertiesB();

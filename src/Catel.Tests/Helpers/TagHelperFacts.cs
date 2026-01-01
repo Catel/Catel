@@ -10,31 +10,31 @@
         public class TheAreTagsEqualMethod
         {
             [TestCase]
-            public void ReturnsTrueForBothNull()
+            public void Returns_True_For_Both_Null()
             {
                 Assert.That(TagHelper.AreTagsEqual(null, null), Is.True);
             }
 
             [TestCase]
-            public void ReturnsTrueForEqualStrings()
+            public void Returns_True_For_Equal_Strings()
             {
                 Assert.That(TagHelper.AreTagsEqual("Catel", "Catel"), Is.True);
             }
 
             [TestCase]
-            public void ReturnsFalseForDifferentStrings()
+            public void Returns_False_For_Different_Strings()
             {
                 Assert.That(TagHelper.AreTagsEqual("Catel", "mvvm"), Is.False);
             }
 
             [TestCase]
-            public void ReturnsFalseForDifferentCasingStrings()
+            public void Returns_False_For_Different_Casing_Strings()
             {
                 Assert.That(TagHelper.AreTagsEqual("Catel", "catel"), Is.False);
             }
 
             [TestCase]
-            public void ReturnsTrueForEqualInstances()
+            public void Returns_True_For_Equal_Instances()
             {
                 var firstEntry = new PersonTestModel
                 {
@@ -53,7 +53,7 @@
             }
 
             [TestCase]
-            public void ReturnsFalseForDifferentInstances()
+            public void Returns_False_For_Different_Instances()
             {
                 var firstEntry = new PersonTestModel
                 {

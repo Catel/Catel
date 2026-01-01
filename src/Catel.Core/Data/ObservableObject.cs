@@ -7,7 +7,6 @@
     /// <summary>
     /// Very basic class implementing the <see cref="INotifyPropertyChanged"/> interfaces.
     /// </summary>
-    [Serializable]
     public class ObservableObject : INotifyPropertyChanged
     {
         /// <summary>

@@ -8,8 +8,6 @@
     /// ModelC Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    [Serializable]
-    [KnownType(typeof(ModelA)), KnownType(typeof(ModelB))]
     public class ModelC : ComparableModelBase
     {
         /// <summary>
