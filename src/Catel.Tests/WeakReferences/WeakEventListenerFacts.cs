@@ -5,11 +5,10 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
-
-    using Catel.MVVM;
-    using MVVM.Auditing;
-
     using System.Windows.Data;
+    using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
+    using MVVM.Auditing;
     using NUnit.Framework;
 
     public class WeakEventListenerFacts
@@ -105,12 +104,24 @@
 
             public static void RaiseStaticEvent()
             {
-                StaticEvent?.Invoke(null, new ViewModelClosedEventArgs(new TestViewModel(), true));
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                StaticEvent?.Invoke(null, new ViewModelClosedEventArgs(new TestViewModel(serviceProvider), true));
             }
 
             public void RaisePublicEvent()
             {
-                PublicEvent?.Invoke(this, new ViewModelClosedEventArgs(new TestViewModel(), true));
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddCatelCore();
+                serviceCollection.AddCatelMvvm();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                PublicEvent?.Invoke(this, new ViewModelClosedEventArgs(new TestViewModel(serviceProvider), true));
             }
 
             public void RaisePrivateEvent()

@@ -26,7 +26,7 @@
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    var validationObject = (IValidatable)ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
+                    var validationObject = (IValidatable)ActivatorUtilities.CreateInstance<ValidationTestModel>(serviceProvider);
 
                     validationObject.Validate();
 
@@ -42,11 +42,11 @@
             [Test]
             public void PropertyData_Contains_True_For_Validation_Attributes_Value()
             {
-                var validationObject = new ObjectWithValidation();
+                var validationObject = new ValidationTestModel();
 
-                var propertyDataManager = PropertyDataManager.Default.GetCatelTypeInfo(typeof(ObjectWithValidation));
+                var propertyDataManager = PropertyDataManager.Default.GetCatelTypeInfo(typeof(ValidationTestModel));
 
-                var propertyData = propertyDataManager.GetPropertyData(nameof(ObjectWithValidation.ValueWithAnnotations));
+                var propertyData = propertyDataManager.GetPropertyData(nameof(ValidationTestModel.ValueWithAnnotations));
 
                 Assert.That(propertyData.IsDecoratedWithValidationAttributes, Is.True);
             }
@@ -54,11 +54,11 @@
             [Test]
             public void PropertyData_Contains_False_For_Non_Validation_Attributes_Value()
             {
-                var validationObject = new ObjectWithValidation();
+                var validationObject = new ValidationTestModel();
 
-                var propertyDataManager = PropertyDataManager.Default.GetCatelTypeInfo(typeof(ObjectWithValidation));
+                var propertyDataManager = PropertyDataManager.Default.GetCatelTypeInfo(typeof(ValidationTestModel));
 
-                var propertyData = propertyDataManager.GetPropertyData(nameof(ObjectWithValidation.ValueWithoutAnnotations));
+                var propertyData = propertyDataManager.GetPropertyData(nameof(ValidationTestModel.ValueWithoutAnnotations));
 
                 Assert.That(propertyData.IsDecoratedWithValidationAttributes, Is.False);
             }
@@ -66,12 +66,12 @@
             [Test, Explicit]
             public void Skips_Data_Annotation_For_Values_Not_Decorated_With_Attributes()
             {
-                var validationObject = new ObjectWithValidation();
+                var validationObject = new ValidationTestModel();
 
                 validationObject.Validate(true);
 
                 // Note: there is no good way to validate, so this test is set to explicit
-                Assert.That(ValidatableModelBase.PropertiesNotCausingValidation[typeof(ObjectWithValidation)].Contains(nameof(ObjectWithValidation.ValueWithoutAnnotations)));
+                Assert.That(ValidatableModelBase.PropertiesNotCausingValidation[typeof(ValidationTestModel)].Contains(nameof(ValidationTestModel.ValueWithoutAnnotations)));
             }
 
             #region Validation
@@ -79,11 +79,11 @@
             public void ValidationWithWarnings()
             {
                 var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCoreServices();
+                serviceCollection.AddCatelCore();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    var validationObject = ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
+                    var validationObject = new ValidationTestModel();
                     var validation = (IValidatableModel)validationObject;
 
                     // Check if the object now has warnings
@@ -91,17 +91,17 @@
                     Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                     // Now set a field warning and check it
-                    validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesFieldWarning;
+                    validationObject.ValueToValidate = ValidationTestModel.ValueThatCausesFieldWarning;
                     Assert.That(validation.HasWarnings, Is.EqualTo(true));
                     Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                     // Now set a business warning and check it
-                    validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesBusinessWarning;
+                    validationObject.ValueToValidate = ValidationTestModel.ValueThatCausesBusinessWarning;
                     Assert.That(validation.HasWarnings, Is.EqualTo(true));
                     Assert.That(validation.HasErrors, Is.EqualTo(false));
 
                     // Clear warning
-                    validationObject.ValueToValidate = ObjectWithValidation.ValueThatHasNoWarningsOrErrors;
+                    validationObject.ValueToValidate = ValidationTestModel.ValueThatHasNoWarningsOrErrors;
                     Assert.That(validation.HasWarnings, Is.EqualTo(false));
                     Assert.That(validation.HasErrors, Is.EqualTo(false));
                 }
@@ -111,11 +111,11 @@
             public void ValidationUsingAnnotationsForCatelProperties()
             {
                 var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCoreServices();
+                serviceCollection.AddCatelCore();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
-                    var validationObject = ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
+                    var validationObject = new ValidationTestModel();
                     var validation = (IValidatableModel)validationObject;
 
                     Assert.That(validation.HasErrors, Is.False);
@@ -133,7 +133,7 @@
             //[TestCase]
             //public void ValidationUsingAnnotationsForNonCatelProperties()
             //{
-            //    var validationObject = new ObjectWithValidation();
+            //    var validationObject = new ValidationTestModel();
 
             //    Assert.IsFalse(validationObject.HasErrors);
 
@@ -151,16 +151,10 @@
             [TestCase]
             public void ValidationUsingAnnotationsForNonCatelCalculatedProperties()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCoreServices();
+                var validationObject = new ValidationTestModel();
+                var validation = (IValidatableModel)validationObject;
 
-                using (var serviceProvider = serviceCollection.BuildServiceProvider())
-                {
-                    var validationObject = ActivatorUtilities.CreateInstance<ObjectWithValidation>(serviceProvider);
-                    var validation = (IValidatableModel)validationObject;
-
-                    Assert.That(validationObject.HasErrors, Is.False);
-                }
+                Assert.That(validationObject.HasErrors, Is.False);
             }
             #endregion
 
@@ -520,7 +514,7 @@
             {
                 public TestValidatorModel()
                 {
-                    
+
                 }
 
                 /// <summary>

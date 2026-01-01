@@ -1,7 +1,11 @@
 ﻿namespace Catel.Tests.Data
 {
+    using System;
     using Catel.Collections;
     using Catel.Data;
+    using Catel.IoC;
+    using Catel.Services;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
     public class IModelExtensionsFacts
@@ -33,7 +37,8 @@
                 set { SetValue(PresetsProperty, value); }
             }
 
-            public static readonly IPropertyData PresetsProperty = RegisterProperty<FastObservableCollection<Preset>>(nameof(Presets), () => new FastObservableCollection<Preset>());
+            public static readonly IPropertyData PresetsProperty = RegisterProperty<FastObservableCollection<Preset>>(nameof(Presets), 
+                () => new FastObservableCollection<Preset>(IoCContainer.ServiceProvider.GetService<IDispatcherService>()));
 
             public void ClearDirty()
             {
@@ -57,8 +62,8 @@
                 set { SetValue(PluginsProperty, value); }
             }
 
-            public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins), () => new FastObservableCollection<Plugin>());
-
+            public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins),
+                () => new FastObservableCollection<Preset>(IoCContainer.ServiceProvider.GetService<IDispatcherService>()));
         }
 
         [TestFixture]

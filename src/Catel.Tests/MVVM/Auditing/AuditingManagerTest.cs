@@ -2,6 +2,7 @@
 {
     using System;
     using Catel.MVVM.Auditing;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
 
     [TestFixture]
@@ -10,94 +11,146 @@
         [TestCase]
         public void Clear_ValidAuditor()
         {
-            AuditingManager.Clear();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
 
             var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
-            AuditingManager.Clear();
+            auditingManager.Clear();
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
         public void RegisterAuditor_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AuditingManager.RegisterAuditor(null));
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => auditingManager.RegisterAuditor(null));
         }
 
         [TestCase]
         public void RegisterAuditor_ValidAuditor()
         {
-            AuditingManager.Clear();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
 
             var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
         }
 
         [TestCase]
         public void RegisterAuditor_SameAuditorTwice()
         {
-            AuditingManager.Clear();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
 
             var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
-            AuditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
         }
 
         [TestCase]
         public void UnregisterAuditor_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AuditingManager.UnregisterAuditor(null));
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => auditingManager.UnregisterAuditor(null));
         }
 
         [TestCase]
         public void UnregisterAuditor_UnregisterExisting()
         {
-            AuditingManager.Clear();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
 
             var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+            auditingManager.RegisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
-            AuditingManager.UnregisterAuditor(auditor);
+            auditingManager.UnregisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
         public void UnregisterAuditor_UnregisterNotExisting()
         {
-            AuditingManager.Clear();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
 
             var auditor = new TestAuditor();
-            AuditingManager.UnregisterAuditor(auditor);
+            auditingManager.UnregisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
         }
 
         [TestCase]
         public void UnregisterAuditor_UnregisterNotExistingWithAnotherRegistered()
         {
-            AuditingManager.Clear();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var auditingManager = new AuditingManager(serviceProvider);
 
             var auditor1 = new TestAuditor();
             var auditor2 = new TestAuditor();
 
-            AuditingManager.RegisterAuditor(auditor1);
+            auditingManager.RegisterAuditor(auditor1);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
-            AuditingManager.UnregisterAuditor(auditor2);
+            auditingManager.UnregisterAuditor(auditor2);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1), "Count should still be 1");
+            Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1), "Count should still be 1");
         }
     }
 }

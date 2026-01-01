@@ -2,6 +2,7 @@
 {
     using System;
     using Catel.Messaging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public partial class MessageMediatorFacts
@@ -13,7 +14,7 @@
             public void ReturnsTrueAfterRegistration()
             {
                 var recipient = new MessageRecipient();
-                var messageMediator = new MessageMediator();
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 messageMediator.Register<string>(recipient, recipient.OnMessage);
                 Assert.That(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
             }
@@ -22,7 +23,7 @@
             public void ReturnsFalseAfterGarbageCollected()
             {
                 var recipient = new MessageRecipient();
-                var messageMediator = new MessageMediator();
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 messageMediator.Register<string>(recipient, recipient.OnMessage);
 
                 recipient = null;

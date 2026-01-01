@@ -1,7 +1,7 @@
 ﻿namespace Catel.Tests.Messaging
 {
-    using System;
     using Catel.Messaging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     [TestFixture]
@@ -13,13 +13,14 @@
             var a = new ReceiverA();
             var b = new ReceiverB();
 
-            var m = new MessageMediator();
+            var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
 
-            m.Register<Message>(a, a.OnMessageReceived);
-            m.Register<Message>(b, b.OnMessageReceived);
-            m.Unregister<Message>(b, b.OnMessageReceived); // this actually unregisters a's handler, not b's handler.
+            messageMediator.Register<Message>(a, a.OnMessageReceived);
+            messageMediator.Register<Message>(b, b.OnMessageReceived);
+            messageMediator.Unregister<Message>(b, b.OnMessageReceived); // this actually unregisters a's handler, not b's handler.
 
-            m.SendMessage(new Message { Text = "hello" });
+            messageMediator.SendMessage(new Message { Text = "hello" });
+
             Assert.That(a.Received, Is.EqualTo("hello"));
         }
     }

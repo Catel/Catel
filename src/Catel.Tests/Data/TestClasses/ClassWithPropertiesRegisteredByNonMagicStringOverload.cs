@@ -8,7 +8,7 @@
 
         public static readonly IPropertyData StringPropertyWithSpecifiedDefaultValueProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, string>(instance => instance.StringPropertyWithSpecifiedDefaultValue, "NonNullOrEmptyDefaultValue");
 
-        public static readonly IPropertyData IntPropertyWithPropertyChangeNoticationProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyWithPropertyChangeNotication, default(int), (s, e) => s.OnIntPropertyWithPropertyChangeNoticationChanged());
+        public static readonly IPropertyData IntPropertyWithPropertyChangeNoticationProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyWithPropertyChangeNotification, default(int), (s, e) => s.OnIntPropertyWithPropertyChangeNotificationChanged());
 
         public static readonly IPropertyData IntPropertyExcludedFromSerializationAndBackupProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyExcludedFromSerializationAndBackup, default(int), null, false, false);
 
@@ -30,17 +30,17 @@
             set { SetValue(StringPropertyProperty, value); }
         }
 
-        public int IntPropertyWithPropertyChangeNotication
+        public int IntPropertyWithPropertyChangeNotification
         {
             get { return GetValue<int>(IntPropertyWithPropertyChangeNoticationProperty); }
             set { SetValue(IntPropertyWithPropertyChangeNoticationProperty, value); }
         }
 
-        public int IntPropertyWithPropertyChangeNoticationsCount { get; private set; }
+        public int IntPropertyWithPropertyChangeNotificationsCount { get; private set; }
 
-        private void OnIntPropertyWithPropertyChangeNoticationChanged()
+        private void OnIntPropertyWithPropertyChangeNotificationChanged()
         {
-            this.IntPropertyWithPropertyChangeNoticationsCount++;
+            IntPropertyWithPropertyChangeNotificationsCount++;
         }
     }
 }

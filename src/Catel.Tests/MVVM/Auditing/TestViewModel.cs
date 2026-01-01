@@ -1,5 +1,6 @@
 ﻿namespace Catel.Tests.MVVM.Auditing
 {
+    using System;
     using Catel.Data;
     using Catel.MVVM;
 
@@ -41,9 +42,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TestViewModel"/> class.
         /// </summary>
-        public TestViewModel()
+        public TestViewModel(IServiceProvider serviceProvider)
         {
-            TestCommand = new Command<string>(OnTestCommandExecute);
+            TestCommand = new Command<string>(serviceProvider, OnTestCommandExecute);
             TestCommand.AutomaticallyDispatchEvents = false;
 
 #pragma warning disable 4014

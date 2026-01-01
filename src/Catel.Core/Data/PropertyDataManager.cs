@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Xml.Serialization;
     using Catel.Reflection;
     using Logging;
     using Microsoft.Extensions.Logging;
@@ -25,9 +24,6 @@
         /// </summary>
         private readonly object _propertyDataLock = new object();
 
-        private readonly XmlNameMapper<XmlElementAttribute> _xmlElementMappings;
-        private readonly XmlNameMapper<XmlAttributeAttribute> _xmlAttributeMappings;
-
         /// <summary>
         /// Initializes static members of the <see cref="PropertyDataManager" /> class.
         /// </summary>
@@ -41,8 +37,6 @@
         /// </summary>
         public PropertyDataManager()
         {
-            _xmlElementMappings = new XmlNameMapper<XmlElementAttribute>(this);
-            _xmlAttributeMappings = new XmlNameMapper<XmlAttributeAttribute>(this);
         }
 
         /// <summary>
@@ -217,122 +211,6 @@
 
                 return propertyDataOfType.TryGetPropertyData(name, out propertyData);
             }
-        }
-
-        /// <summary>
-        /// Determines whether the specified XML attribute is mapped to a property name.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="xmlName">Name of the XML.</param>
-        /// <returns>
-        /// <c>true</c> if the XML attribute is mapped to a property name; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="xmlName"/> is <c>null</c> or whitespace.</exception>
-        public bool IsXmlAttributeNameMappedToProperty(Type type, string xmlName)
-        {
-            return _xmlAttributeMappings.IsXmlNameMappedToProperty(type, xmlName);
-        }
-
-        /// <summary>
-        /// Determines whether the specified property is mapped to an XML attribute.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>
-        ///   <c>true</c> if the property name is mapped to an XML attribute; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public bool IsPropertyNameMappedToXmlAttribute(Type type, string propertyName)
-        {
-            return _xmlAttributeMappings.IsPropertyNameMappedToXmlName(type, propertyName);
-        }
-
-        /// <summary>
-        /// Maps the name of the XML attribute to a property name.
-        /// </summary>
-        /// <param name="type">The type for which to make the xml name.</param>
-        /// <param name="xmlName">Name of the XML attribute.</param>
-        /// <returns>
-        /// Name of the property that represents the xml value.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="xmlName"/> is <c>null</c> or whitespace.</exception>
-        public string MapXmlAttributeNameToPropertyName(Type type, string xmlName)
-        {
-            return _xmlAttributeMappings.MapXmlNameToPropertyName(type, xmlName);
-        }
-
-        /// <summary>
-        /// Maps the name of the property name to an XML attribute name.
-        /// </summary>
-        /// <param name="type">The type for which to make the xml name.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>
-        /// Name of the XML attribute that represents the property value.
-        /// </returns>
-        public string MapPropertyNameToXmlAttributeName(Type type, string propertyName)
-        {
-            return _xmlAttributeMappings.MapPropertyNameToXmlName(type, propertyName);
-        }
-
-        /// <summary>
-        /// Determines whether the specified XML element is mapped to a property name.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="xmlName">Name of the XML.</param>
-        /// <returns>
-        /// <c>true</c> if the XML element is mapped to a property name; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="xmlName"/> is <c>null</c> or whitespace.</exception>
-        public bool IsXmlElementNameMappedToProperty(Type type, string xmlName)
-        {
-            return _xmlElementMappings.IsXmlNameMappedToProperty(type, xmlName);
-        }
-
-        /// <summary>
-        /// Determines whether the specified property is mapped to an XML element.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>
-        /// <c>true</c> if the property name is mapped to an XML element; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public bool IsPropertyNameMappedToXmlElement(Type type, string propertyName)
-        {
-            return _xmlElementMappings.IsPropertyNameMappedToXmlName(type, propertyName);
-        }
-
-        /// <summary>
-        /// Maps the name of the XML element to a property name.
-        /// </summary>
-        /// <param name="type">The type for which to make the xml name.</param>
-        /// <param name="xmlName">Name of the XML element.</param>
-        /// <returns>
-        /// Name of the property that represents the xml value.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="xmlName"/> is <c>null</c> or whitespace.</exception>
-        public string MapXmlElementNameToPropertyName(Type type, string xmlName)
-        {
-            return _xmlElementMappings.MapXmlNameToPropertyName(type, xmlName);
-        }
-
-        /// <summary>
-        /// Maps the name of the property name to an XML element name.
-        /// </summary>
-        /// <param name="type">The type for which to make the xml name.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>
-        /// Name of the XML element that represents the property value.
-        /// </returns>
-        public string MapPropertyNameToXmlElementName(Type type, string propertyName)
-        {
-            return _xmlElementMappings.MapPropertyNameToXmlName(type, propertyName);
         }
     }
 }

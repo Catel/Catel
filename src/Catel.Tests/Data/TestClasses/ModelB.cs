@@ -13,7 +13,10 @@
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
-        public ModelB() { }
+        public ModelB(IModelEqualityComparer modelEqualityComparer)
+            : base(modelEqualityComparer)
+        {
+        }
 
         /// <summary>
         /// Gets or sets property C.

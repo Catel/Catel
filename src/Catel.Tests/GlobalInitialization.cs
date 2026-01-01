@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using Catel.Data;
-using Catel.Logging;
+﻿using System.Globalization;
 using Catel.Reflection;
 using NUnit.Framework;
 
@@ -15,11 +12,6 @@ public class GlobalInitialization
     [OneTimeSetUp]
     public static void SetUp()
     {
-        if (Debugger.IsAttached)
-        {
-            LogManager.AddDebugListener();
-        }
-
         //// For testing purposes, enable features we disabled for CTL-234
         //var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
         //modelEqualityComparer.CompareProperties = true;

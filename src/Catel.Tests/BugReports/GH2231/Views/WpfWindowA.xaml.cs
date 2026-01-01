@@ -4,9 +4,6 @@
     using System.Threading.Tasks;
     using System.Windows;
 
-    /// <summary>
-    /// Interaction logic for WpfWindowA.xaml
-    /// </summary>
     public partial class WpfWindowA : Window
     {
         public WpfWindowA()

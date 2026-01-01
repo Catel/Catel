@@ -6,7 +6,8 @@
     using System.Collections.Specialized;
     using Catel.Collections;
     using Catel.Data;
-
+    using Catel.Services;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public class ChangeNotificationWrapperFacts
@@ -215,7 +216,10 @@
             [TestCase]
             public void HandlesCollectionChangesCorrectlyInSuspensionModeMixedConsolidate()
             {
-                var collection = new FastObservableCollection<TestModel>
+                var dispatcherService = new DispatcherService(NullLogger<DispatcherService>.Instance,
+                    new DispatcherProviderService(NullLogger<DispatcherProviderService>.Instance));
+
+                var collection = new FastObservableCollection<TestModel>(dispatcherService)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -305,7 +309,10 @@
             [TestCase]
             public void HandlesChangesOfSuspendedFastObservableCollectionCorrectly()
             {
-                var collection = new FastObservableCollection<TestModel>
+                var dispatcherService = new DispatcherService(NullLogger<DispatcherService>.Instance,
+                    new DispatcherProviderService(NullLogger<DispatcherProviderService>.Instance));
+
+                var collection = new FastObservableCollection<TestModel>(dispatcherService)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -337,7 +344,10 @@
             [TestCase]
             public void HandlesClearOfSuspendedFastObservableCollectionCorrectly()
             {
-                var collection = new FastObservableCollection<TestModel>
+                var dispatcherService = new DispatcherService(NullLogger<DispatcherService>.Instance,
+                    new DispatcherProviderService(NullLogger<DispatcherProviderService>.Instance));
+
+                var collection = new FastObservableCollection<TestModel>(dispatcherService)
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };

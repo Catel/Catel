@@ -55,6 +55,8 @@
 
         private bool _firstAnnotationValidation = true;
 
+        private IValidator? _validator;
+
         /// <summary>
         /// A dictionary containing the annotation (attribute) validation results of properties of this class.
         /// </summary>
@@ -111,7 +113,17 @@
         [XmlIgnore]
         IValidator? IValidatable.Validator
         {
-            get { return GetValidator(); }
+            get
+            {
+                var validator = _validator;
+                if (validator is null)
+                {
+                    validator = _validator = GetValidator();
+                }
+
+                return validator;
+            }
+            set { _validator = value; }
         }
 
         /// <summary>

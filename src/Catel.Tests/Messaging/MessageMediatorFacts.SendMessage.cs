@@ -1,9 +1,8 @@
 ﻿namespace Catel.Tests.Messaging
 {
     using System;
-    using System.Diagnostics;
-    using System.Threading.Tasks;
     using Catel.Messaging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public partial class MessageMediatorFacts
@@ -14,7 +13,7 @@
             [TestCase]
             public void ReturnsFalseForUnregisteredHandlers()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var sender = new MessageSender();
 
                 Assert.That(sender.SendMessage(mediator, "test"), Is.False);
@@ -23,7 +22,7 @@
             [TestCase]
             public void ReturnsFalseForUnregisteredHandlersWithTag()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var sender = new MessageSender();
                 var recipient = new MessageRecipient();
 
@@ -35,7 +34,7 @@
             [TestCase]
             public void ReturnsTrueForRegisteredHandlers()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var sender = new MessageSender();
                 var recipient = new MessageRecipient();
 
@@ -48,7 +47,7 @@
             [TestCase]
             public void ReturnsTrueForRegisteredHandlersWithTag()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var sender = new MessageSender();
                 var recipient = new MessageRecipient();
 
@@ -63,7 +62,7 @@
             [TestCase, Explicit]
             public void ReturnsFalseForHandlersClearedByGarbageCollector()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var sender = new MessageSender();
                 var recipient = new MessageRecipient();
 
@@ -80,7 +79,7 @@
             [TestCase]
             public void Sends_Message_Using_Instance_Function()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var recipient = new MessageRecipient();
 
                 mediator.Register<string>(this, recipient.OnMessage);
@@ -92,7 +91,7 @@
             [TestCase]
             public void Sends_Message_Using_Local_Function()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
 
                 var isCalled = false;
 
@@ -110,7 +109,7 @@
             [TestCase]
             public void Sends_Message_Using_Lambda_Expression()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
 
                 var isCalled = false;
 

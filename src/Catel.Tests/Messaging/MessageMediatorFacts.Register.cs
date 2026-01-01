@@ -2,6 +2,7 @@
 {
     using System;
     using Catel.Messaging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public partial class MessageMediatorFacts
@@ -12,7 +13,7 @@
             [TestCase]
             public void RegistersHandler()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var recipient = new MessageRecipient();
 
                 Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
@@ -25,7 +26,7 @@
             [TestCase]
             public void RegistersHandlerWithTag()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var recipient = new MessageRecipient();
 
                 Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.False);
@@ -39,7 +40,7 @@
             [TestCase]
             public void ReturnsFalseForDoubleRegistration()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var recipient = new MessageRecipient();
 
                 Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.True);

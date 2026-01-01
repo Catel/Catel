@@ -5,6 +5,12 @@
     <Project Path="Catel.Core/Catel.Core.csproj" />
     <Project Path="Catel.MVVM/Catel.MVVM.csproj" />
   </Folder>
+  <Folder Name="/src/Catel/Tests/">
+    <Project Path="Catel.Tests.TestReferenceA/Catel.Tests.TestReferenceA.csproj" />
+    <Project Path="Catel.Tests.TestReferenceB/Catel.Tests.TestReferenceB.csproj" />
+    <Project Path="Catel.Tests.TestReferenceC/Catel.Tests.TestReferenceC.csproj" />
+    <Project Path="Catel.Tests/Catel.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.Automation/">
     <Project Path="../../Orc.Automation/src/Orc.Automation/Orc.Automation.csproj" Id="8946028d-a6f7-4a64-98cc-71f1669e1d8e" />
   </Folder>

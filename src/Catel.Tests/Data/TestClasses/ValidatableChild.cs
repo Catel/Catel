@@ -20,7 +20,7 @@
 
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
         {
-            if (string.IsNullOrWhiteSpace(this.Name))
+            if (string.IsNullOrWhiteSpace(Name))
             {
                 validationResults.Add(BusinessRuleValidationResult.CreateError("B: There is no name"));
             }
@@ -28,7 +28,7 @@
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if (string.IsNullOrWhiteSpace(this.Name))
+            if (string.IsNullOrWhiteSpace(Name))
             {
                 validationResults.Add(FieldValidationResult.CreateError(nameof(Name), "F: There is no name"));
             }

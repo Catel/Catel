@@ -11,7 +11,7 @@
         /// <summary>
         /// Gets or sets the validator to use.
         /// </summary>
-        IValidator? Validator { get; }
+        IValidator? Validator { get; set; }
 
         /// <summary>
         /// Gets the validation context which contains all information about the validation.

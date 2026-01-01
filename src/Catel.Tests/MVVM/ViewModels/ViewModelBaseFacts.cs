@@ -18,7 +18,13 @@
         [TestCase]
         public async Task IsNotDirtyAtStartupAsync()
         {
-            var vm = new TestViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestViewModel(serviceProvider);
 
             Assert.That(vm.IsDirty, Is.False);
         }
@@ -68,7 +74,7 @@
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
 
-            var vm = new TestViewModel();
+            var vm = new TestViewModel(serviceProvider);
 
             Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(false));
             Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
@@ -101,7 +107,7 @@
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
 
-            var vm = new TestViewModel();
+            var vm = new TestViewModel(serviceProvider);
 
             Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(false));
             Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
@@ -134,7 +140,7 @@
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
 
-            var vm = new TestViewModel();
+            var vm = new TestViewModel(serviceProvider);
 
             Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
 

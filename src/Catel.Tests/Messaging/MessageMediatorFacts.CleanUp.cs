@@ -2,6 +2,7 @@
 {
     using System;
     using Catel.Messaging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public partial class MessageMediatorFacts
@@ -12,7 +13,7 @@
             [TestCase]
             public void CleanUpWorksWhenNoHandlersRegistered()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
 
                 mediator.CleanUp();
             }
@@ -20,7 +21,7 @@
             [TestCase]
             public void CleanUpKeepsNonGarbageCollectedHandlersRegistered()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var recipient = new MessageRecipient();
 
                 mediator.Register<string>(recipient, recipient.OnMessage);
@@ -33,7 +34,7 @@
             [TestCase, Explicit]
             public void CleanUpClearsGarbageCollectedHandlers()
             {
-                var mediator = new MessageMediator();
+                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 var recipient = new MessageRecipient();
 
                 mediator.Register<string>(recipient, recipient.OnMessage);

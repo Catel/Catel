@@ -2,15 +2,21 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
     /// <summary>
     /// ValidationTest Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    [Serializable]
     public class ValidationTestModel : ValidatableModelBase
     {
+        public const string ValueThatHasNoWarningsOrErrors = "NoWarningsOrErrors";
+        public const string ValueThatCausesFieldWarning = "FieldWarning";
+        public const string ValueThatCausesBusinessWarning = "BusinessWarning";
+        public const string ValueThatCausesFieldError = "FieldError";
+        public const string ValueThatCausesBusinessError = "BusinessError";
+
         /// <summary>
         ///   Initializes a new object from scratch.
         /// </summary>
@@ -27,6 +33,49 @@
             get { return base.AutomaticallyValidateOnPropertyChanged; }
             set { base.AutomaticallyValidateOnPropertyChanged = value; }
         }
+
+        /// <summary>
+        ///   Gets or sets the value to validate.
+        /// </summary>
+        public string ValueToValidate
+        {
+            get { return GetValue<string>(ValueToValidateProperty); }
+            set { SetValue(ValueToValidateProperty, value); }
+        }
+
+        /// <summary>
+        ///   Register the ValueToValidate property so it is known in the class.
+        /// </summary>
+        public static readonly IPropertyData ValueToValidateProperty = RegisterProperty("ValueToValidate", ValueThatHasNoWarningsOrErrors);
+
+        /// <summary>
+        /// Gets or sets the object with annotation validation.
+        /// </summary>
+        [Required(ErrorMessage = "Field is required")]
+        public string ValueWithAnnotations
+        {
+            get { return GetValue<string>(ValueWithAnnotationsProperty); }
+            set { SetValue(ValueWithAnnotationsProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the ValueWithAnnotations property so it is known in the class.
+        /// </summary>
+        public static readonly IPropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", "value");
+
+        /// <summary>
+        /// Gets or sets the object with annotation validation.
+        /// </summary>
+        public string ValueWithoutAnnotations
+        {
+            get { return GetValue<string>(ValueWithoutAnnotations); }
+            set { SetValue(ValueWithoutAnnotations, value); }
+        }
+
+        /// <summary>
+        /// Register the ValueWithAnnotations property so it is known in the class.
+        /// </summary>
+        public static readonly IPropertyData ValueWithoutAnnotationsProperty = RegisterProperty("ValueWithoutAnnotations", "value");
 
         /// <summary>
         ///   Gets or sets field that returns an error when empty.

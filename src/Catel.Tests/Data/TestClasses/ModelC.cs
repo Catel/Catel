@@ -15,7 +15,10 @@
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
-        public ModelC() { }
+        public ModelC(IModelEqualityComparer modelEqualityComparer)
+            : base(modelEqualityComparer)
+        {
+        }
 
         /// <summary>
         /// Gets or sets the D property.

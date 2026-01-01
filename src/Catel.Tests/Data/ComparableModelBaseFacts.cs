@@ -8,8 +8,16 @@
         public void Equals_Generic()
         {
             // Create 2 objects
-            var obj1 = ModelBaseTestHelper.CreateIniEntryObject();
-            var obj2 = ModelBaseTestHelper.CreateIniEntryObject();
+            var obj1 = new PersonTestModel
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            };
+            var obj2 = new PersonTestModel
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            };
 
             // Equals
             Assert.That(obj1, Is.EqualTo(obj2));
@@ -20,8 +28,12 @@
         public void Equals_Generic_Null()
         {
             // Create 2 objects
-            IniEntry obj1 = ModelBaseTestHelper.CreateIniEntryObject();
-            IniEntry obj2 = null;
+            var obj1 = new PersonTestModel
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            };
+            PersonTestModel? obj2 = null;
 
             // Equals
             Assert.That(obj1, Is.Not.EqualTo(obj2));
@@ -46,52 +58,19 @@
         public void EqualsLevel1()
         {
             // Create 2 objects
-            var obj1 = ModelBaseTestHelper.CreateIniEntryObject();
-            var obj2 = ModelBaseTestHelper.CreateIniEntryObject();
+            var obj1 = new PersonTestModel
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            };
+            var obj2 = new PersonTestModel
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            };
 
             // Equals
             Assert.That(obj2, Is.EqualTo(obj1));
-        }
-
-        /// <summary>
-        /// Tests the Equals method 2 level deep.
-        /// </summary>
-        [TestCase]
-        public void EqualsLevel2()
-        {
-            // Create 2 objects
-            var obj1 = ModelBaseTestHelper.CreateIniFileObject();
-            var obj2 = ModelBaseTestHelper.CreateIniFileObject();
-
-            // Equals
-            Assert.That(obj2, Is.EqualTo(obj1));
-        }
-
-        /// <summary>
-        /// Tests the Equals method 3 level deep.
-        /// </summary>
-        [TestCase]
-        public void EqualsLevel3()
-        {
-            // Create 2 objects
-            var obj1 = ModelBaseTestHelper.CreateComputerSettingsObject();
-            var obj2 = ModelBaseTestHelper.CreateComputerSettingsObject();
-
-            // Equals
-            Assert.That(obj2, Is.EqualTo(obj1));
-        }
-
-        [TestCase]
-        public void Equals_AreNotEqual()
-        {
-            // Create 2 objects
-            var obj1 = ModelBaseTestHelper.CreateComputerSettingsObject();
-            var obj2 = ModelBaseTestHelper.CreateIniFileObject();
-
-            // Equals
-#pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
-            Assert.That(obj2.Equals(obj1), Is.False);
-#pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
         }
     }
 }

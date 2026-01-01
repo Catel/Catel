@@ -5,9 +5,6 @@
     using System.Windows;
     using Catel.Windows;
 
-    /// <summary>
-    /// Interaction logic for WpfWindowB.xaml
-    /// </summary>
     public partial class WpfWindowB : System.Windows.Window
     {
         public WpfWindowB()

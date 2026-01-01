@@ -25,18 +25,18 @@
 
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
         {
-            if (this.Child is not null)
+            if (Child is not null)
             {
-                var errors = this.Child.GetErrorMessage();
+                var errors = Child.GetErrorMessage();
                 if (errors.Length != 0)
                 {
                     validationResults.Add(BusinessRuleValidationResult.CreateError(errors));
                 }
             }
 
-            if (this.Collection is not null && this.Collection.Count != 0)
+            if (Collection is not null && Collection.Count != 0)
             {
-                var errors = this.Collection[0].GetErrorMessage();
+                var errors = Collection[0].GetErrorMessage();
                 if (errors.Length != 0)
                 {
                     validationResults.Add(BusinessRuleValidationResult.CreateError(errors));

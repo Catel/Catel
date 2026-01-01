@@ -320,7 +320,7 @@
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
             Assert.That(instance.StringPropertyWithSpecifiedDefaultValue, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.GetDefaultValue<string>()));
             Assert.That(instance.StringProperty, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.GetDefaultValue<string>()));
-            Assert.That(instance.IntPropertyWithPropertyChangeNotication, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.GetDefaultValue<int>()));
+            Assert.That(instance.IntPropertyWithPropertyChangeNotification, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.GetDefaultValue<int>()));
             Assert.That(instance.IntPropertyExcludedFromSerializationAndBackup, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.GetDefaultValue<int>()));
         }
 
@@ -349,10 +349,10 @@
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
             for (int i = 0; i < maxPropertyChanges; i++)
             {
-                instance.IntPropertyWithPropertyChangeNotication = random.Next(1000);
+                instance.IntPropertyWithPropertyChangeNotification = random.Next(1000);
             }
 
-            Assert.That(0 <= instance.IntPropertyWithPropertyChangeNoticationsCount && instance.IntPropertyWithPropertyChangeNoticationsCount <= maxPropertyChanges, Is.True);
+            Assert.That(0 <= instance.IntPropertyWithPropertyChangeNotificationsCount && instance.IntPropertyWithPropertyChangeNotificationsCount <= maxPropertyChanges, Is.True);
         }
 
         public class TestModelWithGenericPropertyRegistrations : ModelBase

@@ -1,13 +1,16 @@
 ﻿namespace Catel.Tests.Messaging
 {
     using Catel.Messaging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public class MessageBaseFacts
     {
         public class TestMessage : MessageBase<TestMessage, string>
         {
-            public TestMessage() { }
+            public TestMessage()
+            {
+            }
 
             public TestMessage(string content)
                 : base(content)
@@ -36,7 +39,7 @@
             [TestCase]
             public void RunsInitializerIfSpecified()
             {
-                var messageMediator = MessageMediator.Default;
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 messageMediator.Register<TestMessage>(this, OnTestMessage);
 
                 _messageSent = false;
@@ -44,7 +47,7 @@
 
                 var ranInitializer = false;
 
-                TestMessage.SendWith("test", x =>
+                TestMessage.SendWith(messageMediator, "test", x =>
                 {
                     ranInitializer = true;
                 });
@@ -59,13 +62,13 @@
             [TestCase]
             public void SendsMessageWithDataWithoutTag()
             {
-                var messageMediator = MessageMediator.Default;
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 messageMediator.Register<TestMessage>(this, OnTestMessage);
 
                 _messageSent = false;
                 _messageData = null;
 
-                TestMessage.SendWith("test");
+                TestMessage.SendWith(messageMediator, "test");
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage);
 
@@ -76,13 +79,13 @@
             [TestCase]
             public void SendsMessageWithDataWithTag()
             {
-                var messageMediator = MessageMediator.Default;
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
                 messageMediator.Register<TestMessage>(this, OnTestMessage, "mytag");
 
                 _messageSent = false;
                 _messageData = null;
 
-                TestMessage.SendWith("test", "mytag");
+                TestMessage.SendWith(messageMediator, "test", "mytag");
 
                 messageMediator.Unregister<TestMessage>(this, OnTestMessage, "mytag");
 
@@ -105,13 +108,15 @@
             [TestCase]
             public void RegistersHandlerForMessageWithoutTag()
             {
-                TestMessage.Register(this, OnTestMessage);
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+
+                TestMessage.Register(messageMediator, this, OnTestMessage);
 
                 _messageSent = false;
 
-                TestMessage.SendWith("test");
+                TestMessage.SendWith(messageMediator, "test");
 
-                TestMessage.Unregister(this, OnTestMessage);
+                TestMessage.Unregister(messageMediator, this, OnTestMessage);
 
                 Assert.That(_messageSent, Is.True);
             }
@@ -119,13 +124,15 @@
             [TestCase]
             public void RegistersHandlerForMessageWithTag()
             {
-                TestMessage.Register(this, OnTestMessage, "mytag");
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+
+                TestMessage.Register(messageMediator, this, OnTestMessage, "mytag");
 
                 _messageSent = false;
 
-                TestMessage.SendWith("test", "mytag");
+                TestMessage.SendWith(messageMediator, "test", "mytag");
 
-                TestMessage.Unregister(this, OnTestMessage, "mytag");
+                TestMessage.Unregister(messageMediator, this, OnTestMessage, "mytag");
 
                 Assert.That(_messageSent, Is.True);
             }
@@ -144,19 +151,21 @@
             [TestCase]
             public void UnregistersHandlerForMessageWithoutTag()
             {
-                TestMessage.Register(this, OnTestMessage);
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+
+                TestMessage.Register(messageMediator, this, OnTestMessage);
 
                 _messageSent = false;
 
-                TestMessage.SendWith("test");
+                TestMessage.SendWith(messageMediator, "test");
 
-                TestMessage.Unregister(this, OnTestMessage);
+                TestMessage.Unregister(messageMediator, this, OnTestMessage);
 
                 Assert.That(_messageSent, Is.True);
 
                 _messageSent = false;
 
-                TestMessage.SendWith("test");
+                TestMessage.SendWith(messageMediator, "test");
 
                 Assert.That(_messageSent, Is.False);
             }
@@ -164,19 +173,21 @@
             [TestCase]
             public void UnregistersHandlerForMessageWithTag()
             {
-                TestMessage.Register(this, OnTestMessage, "mytag");
+                var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+
+                TestMessage.Register(messageMediator, this, OnTestMessage, "mytag");
 
                 _messageSent = false;
 
-                TestMessage.SendWith("test", "mytag");
+                TestMessage.SendWith(messageMediator, "test", "mytag");
 
-                TestMessage.Unregister(this, OnTestMessage, "mytag");
+                TestMessage.Unregister(messageMediator, this, OnTestMessage, "mytag");
 
                 Assert.That(_messageSent, Is.True);
 
                 _messageSent = false;
 
-                TestMessage.SendWith("test", "mytag");
+                TestMessage.SendWith(messageMediator, "test", "mytag");
 
                 Assert.That(_messageSent, Is.False);
             }

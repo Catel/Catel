@@ -2,6 +2,7 @@
 {
     using System.Threading;
     using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using TestClasses;
 
@@ -10,10 +11,16 @@
         [TestCase]
         public void InvalidateCommands_Manual()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             bool canExecuteChangedTriggered = false;
             using (var canExecuteChangedEvent = new ManualResetEvent(false))
             {
-                var viewModel = new TestViewModel();
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
                 viewModel.SetInvalidateCommandsOnPropertyChanged(false);
 
                 ICatelCommand command = viewModel.GenerateData;
@@ -39,10 +46,16 @@
         [TestCase]
         public void InvalidateCommands_AutomaticByPropertyChange()
         {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             bool canExecuteChangedTriggered = false;
             using (var canExecuteChangedEvent = new ManualResetEvent(false))
             {
-                var viewModel = new TestViewModel();
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
                 viewModel.SetInvalidateCommandsOnPropertyChanged(true);
 
                 ICatelCommand command = viewModel.GenerateData;

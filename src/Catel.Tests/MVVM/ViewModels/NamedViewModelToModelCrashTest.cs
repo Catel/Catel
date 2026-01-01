@@ -1,9 +1,10 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels
 {
-    using Catel.MVVM;
-
-    using NUnit.Framework;
+    using System;
     using Catel.Data;
+    using Catel.MVVM;
+    using Microsoft.Extensions.DependencyInjection;
+    using NUnit.Framework;
 
     [TestFixture]
     public class NamedViewModelToModelCrashTest
@@ -19,9 +20,9 @@
             public static readonly IPropertyData IdProperty = RegisterProperty<Dummy, int>(model => model.Id);
             public static readonly IPropertyData CommentProperty = RegisterProperty<Dummy, string>(model => model.Comment);
 
-            public Dummy(int I)
+            public Dummy(int id)
             {
-                Id = I;
+                Id = id;
             }
 
             public int Id
@@ -64,12 +65,12 @@
             /// <summary>
             /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
             /// </summary>
-            public MainWindowViewModel()
+            public MainWindowViewModel(IServiceProvider serviceProvider)
                 : base()
             {
                 CurrentDummy = new Dummy(444);
-                Reset = new Command(OnResetExecute);
-                Create = new Command(OnCreateExecute);
+                Reset = new Command(serviceProvider, OnResetExecute);
+                Create = new Command(serviceProvider, OnCreateExecute);
             }
 
             private void OnCreateExecute()
@@ -166,11 +167,18 @@
             // TODO: Create your methods here
             #endregion
         }
+
         #region Methods
         [TestCase]
         public void OnSetModelToNullShouldSetDefaultValueForMappedProperties()
         {
-            var vm = new MainWindowViewModel();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCatelCore();
+            serviceCollection.AddCatelMvvm();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new MainWindowViewModel(serviceProvider);
             Assert.That(vm.Identifier, Is.EqualTo(444));
 
             vm.Reset.Execute();
