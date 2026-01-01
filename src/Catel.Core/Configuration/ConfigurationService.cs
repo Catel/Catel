@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Dynamic;
     using System.Globalization;
     using System.IO;
     using System.Threading.Tasks;
@@ -11,7 +10,6 @@
     using Catel.Logging;
     using Catel.Threading;
     using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Configuration.Json;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Services;

@@ -24,10 +24,7 @@
             [TestCase(false)]
             public async Task Does_Not_Subscribe_More_Than_Once_To_Close_Handler_Async(bool isModal)
             {
-                var serviceCollection = new ServiceCollection();
-
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
@@ -37,8 +34,6 @@
                         {
                             return typeof(AutoClosingView);
                         });
-
-                    var viewFactoryMock = new Mock<IViewFactory>();
 
                     var dispatcherServiceMock = new Mock<IDispatcherService>();
                     dispatcherServiceMock.Setup(x => x.BeginInvoke(It.IsAny<Action>(), It.IsAny<bool>()))
@@ -50,7 +45,7 @@
                     var viewModelFactoryMock = new Mock<IViewModelFactory>();
 
                     var uiVisualizerService = new UIVisualizerService(new NullLogger<UIVisualizerService>(), 
-                        viewLocatorMock.Object, viewFactoryMock.Object, 
+                        viewLocatorMock.Object, serviceProvider.GetRequiredService<IViewFactory>(), 
                         dispatcherServiceMock.Object, viewModelFactoryMock.Object);
 
                     uiVisualizerService.Register(typeof(AutoClosingViewModel), typeof(AutoClosingView));

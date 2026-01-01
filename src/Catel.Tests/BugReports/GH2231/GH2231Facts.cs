@@ -16,10 +16,7 @@
         [Test, Apartment(System.Threading.ApartmentState.STA)]
         public async Task Closes_Windows_When_Child_Window_Closes_Parent_Window_First_Async()
         {
-            var serviceCollection = new ServiceCollection();
-
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {

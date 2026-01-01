@@ -365,10 +365,7 @@ namespace Catel.Tests
             [TestCase]
             public void SucceedsForInstanceImplementingRequiredType()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddLogging();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

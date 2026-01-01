@@ -21,22 +21,16 @@
             [TestCase("IsDirty", true)]
             public void DoesNotCauseValidationWhenKnownModelBasePropertiesChange(string propertyName, object propertyValue)
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
+                var validationObject = (IValidatable)new ValidationTestModel();
 
-                using (var serviceProvider = serviceCollection.BuildServiceProvider())
-                {
-                    var validationObject = (IValidatable)ActivatorUtilities.CreateInstance<ValidationTestModel>(serviceProvider);
+                validationObject.Validate();
 
-                    validationObject.Validate();
+                Assert.That(validationObject.IsValidated, Is.True);
 
-                    Assert.That(validationObject.IsValidated, Is.True);
+                var modelEditor = (IModelEditor)validationObject;
+                modelEditor.SetValue(propertyName, propertyValue);
 
-                    var modelEditor = (IModelEditor)validationObject;
-                    modelEditor.SetValue(propertyName, propertyValue);
-
-                    Assert.That(validationObject.IsValidated, Is.True);
-                }
+                Assert.That(validationObject.IsValidated, Is.True);
             }
 
             [Test]
@@ -76,58 +70,46 @@
 
             #region Validation
             [TestCase]
-            public void ValidationWithWarnings()
+            public void Validation_With_Warnings()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
+                var validationObject = new ValidationTestModel();
+                var validation = (IValidatableModel)validationObject;
 
-                using (var serviceProvider = serviceCollection.BuildServiceProvider())
-                {
-                    var validationObject = new ValidationTestModel();
-                    var validation = (IValidatableModel)validationObject;
+                // Check if the object now has warnings
+                Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
-                    // Check if the object now has warnings
-                    Assert.That(validation.HasWarnings, Is.EqualTo(false));
-                    Assert.That(validation.HasErrors, Is.EqualTo(false));
+                // Now set a field warning and check it
+                validationObject.ValueToValidate = ValidationTestModel.ValueThatCausesFieldWarning;
+                Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
-                    // Now set a field warning and check it
-                    validationObject.ValueToValidate = ValidationTestModel.ValueThatCausesFieldWarning;
-                    Assert.That(validation.HasWarnings, Is.EqualTo(true));
-                    Assert.That(validation.HasErrors, Is.EqualTo(false));
+                // Now set a business warning and check it
+                validationObject.ValueToValidate = ValidationTestModel.ValueThatCausesBusinessWarning;
+                Assert.That(validation.HasWarnings, Is.EqualTo(true));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
 
-                    // Now set a business warning and check it
-                    validationObject.ValueToValidate = ValidationTestModel.ValueThatCausesBusinessWarning;
-                    Assert.That(validation.HasWarnings, Is.EqualTo(true));
-                    Assert.That(validation.HasErrors, Is.EqualTo(false));
-
-                    // Clear warning
-                    validationObject.ValueToValidate = ValidationTestModel.ValueThatHasNoWarningsOrErrors;
-                    Assert.That(validation.HasWarnings, Is.EqualTo(false));
-                    Assert.That(validation.HasErrors, Is.EqualTo(false));
-                }
+                // Clear warning
+                validationObject.ValueToValidate = ValidationTestModel.ValueThatHasNoWarningsOrErrors;
+                Assert.That(validation.HasWarnings, Is.EqualTo(false));
+                Assert.That(validation.HasErrors, Is.EqualTo(false));
             }
 
             [TestCase]
-            public void ValidationUsingAnnotationsForCatelProperties()
+            public void Validation_Using_Annotations_For_Catel_Properties()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
+                var validationObject = new ValidationTestModel();
+                var validation = (IValidatableModel)validationObject;
 
-                using (var serviceProvider = serviceCollection.BuildServiceProvider())
-                {
-                    var validationObject = new ValidationTestModel();
-                    var validation = (IValidatableModel)validationObject;
+                Assert.That(validation.HasErrors, Is.False);
 
-                    Assert.That(validation.HasErrors, Is.False);
+                validationObject.ValueWithAnnotations = string.Empty;
 
-                    validationObject.ValueWithAnnotations = string.Empty;
+                Assert.That(validation.HasErrors, Is.True);
 
-                    Assert.That(validation.HasErrors, Is.True);
+                validationObject.ValueWithAnnotations = "value";
 
-                    validationObject.ValueWithAnnotations = "value";
-
-                    Assert.That(validation.HasErrors, Is.False);
-                }
+                Assert.That(validation.HasErrors, Is.False);
             }
 
             //[TestCase]
@@ -149,7 +131,7 @@
             //}  
 
             [TestCase]
-            public void ValidationUsingAnnotationsForNonCatelCalculatedProperties()
+            public void Validation_Using_Annotations_For_Non_Catel_Calculated_Properties()
             {
                 var validationObject = new ValidationTestModel();
                 var validation = (IValidatableModel)validationObject;
@@ -563,7 +545,7 @@
             }
 
             [TestCase]
-            public void AutomaticallyCreatesValidator()
+            public void Automatically_Creates_Validator()
             {
                 var testValidatorModel = (IValidatable)new TestValidatorModel();
 
@@ -579,7 +561,7 @@
         public class TheHideValidationResultsProperty
         {
             [TestCase]
-            public void HidesTheFieldErrorsWhenTrue()
+            public void Hides_The_Field_Errors_When_True()
             {
                 var obj = new ValidationTestModel();
                 var validation = obj;
@@ -596,7 +578,7 @@
             }
 
             [TestCase]
-            public void HidesTheBusinessRuleErrorsWhenTrue()
+            public void Hides_The_Business_Rule_Errors_When_True()
             {
                 var obj = new ValidationTestModel();
                 var validation = obj;
@@ -613,7 +595,7 @@
             }
 
             [TestCase]
-            public void HidesTheFieldWarningsWhenTrue()
+            public void Hides_The_Field_Warnings_When_True()
             {
                 var obj = new ValidationTestModel();
                 var validation = obj;
@@ -630,7 +612,7 @@
             }
 
             [TestCase]
-            public void HidesTheBusinessRuleWarningsWhenTrue()
+            public void Hides_The_Business_Rule_Warnings_When_True()
             {
                 var obj = new ValidationTestModel();
                 var validation = obj;
@@ -663,7 +645,7 @@
             }
 
             [TestCase]
-            public void PreventsAttributeBasedValidation()
+            public void Prevents_Attribute_Based_Validation()
             {
                 var model = new SuspendValidationModel();
                 var validation = model as IValidatable;
@@ -679,7 +661,7 @@
             }
 
             [TestCase]
-            public void CorrectlyValidatesUnvalidatedPropertiesWhenSetToTrue()
+            public void Correctly_Validates_Unvalidated_Properties_When_Set_To_True()
             {
                 var model = new SuspendValidationModel();
                 var validation = model;
@@ -701,7 +683,7 @@
         public class TheSuspendValidationsFacts
         {
             [TestCase]
-            public void CorrectlyValidates()
+            public void Correctly_Validates()
             {
                 var model = new SuspendableTestModel();
 
@@ -716,7 +698,7 @@
             }
 
             [TestCase]
-            public void SuspendsValidationsAndValidatesOnResume()
+            public void Suspends_Validations_And_Validates_On_Resume()
             {
                 var model = new SuspendableTestModel();
 
@@ -738,7 +720,7 @@
             }
 
             [TestCase]
-            public void SuspendsValidationsAndValidatesOnResumeWithScopes()
+            public void Suspends_Validations_And_Validates_On_Resume_With_Scopes()
             {
                 var model = new SuspendableTestModel();
 
@@ -781,7 +763,7 @@
             }
 
             [TestCase]
-            public void CorrectlyValidatesNonCatelProperties()
+            public void Correctly_Validates_Non_Catel_Properties()
             {
                 var model = new ModelWithCalculatedPropertiesValidation();
                 model.Validate(true);
@@ -840,7 +822,7 @@
             [TestCase]
             public void OnInstancePropertyIgnoreDataAnnotationSkipAnnotationValidation()
             {
-                // Set intance property to skip data annotations validation
+                // Set instance property to skip data annotations validation
                 var model = new ModelWithoutAnnotation();
                 model.SetValidateUsingDataAnnotations(false);
 

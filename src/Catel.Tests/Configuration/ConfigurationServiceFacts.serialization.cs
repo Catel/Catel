@@ -2,7 +2,6 @@
 {
     using System.IO;
     using System.Threading.Tasks;
-    using Castle.Core.Logging;
     using Catel.Configuration;
     using Catel.Services;
     using Microsoft.Extensions.Configuration;
@@ -77,7 +76,7 @@
             }
 
             [Test]
-            public async Task DuplicateProcessesDoNotResetConfigurationAsync()
+            public async Task Duplicate_Processes_Do_Not_Reset_Configuration()
             {
                 // See https://github.com/Catel/Catel/issues/1840 for details:
                 // 
@@ -107,11 +106,9 @@
             }
 
             [Test]
-            public async Task DoesNotCallSaveMultipleTimesAsync()
+            public async Task Does_Not_Call_Save_Multiple_Times()
             {
-                var serviceCollection = new ServiceCollection();
-
-                serviceCollection.AddCatelCore();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
@@ -136,11 +133,9 @@
             }
 
             [Test]
-            public async Task CorrectlySchedulesLocalSerializationAsync()
+            public async Task Correctly_Schedules_Local_Serialization()
             {
-                var serviceCollection = new ServiceCollection();
-
-                serviceCollection.AddCatelCore();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {
@@ -169,11 +164,9 @@
             }
 
             [Test]
-            public async Task CorrectlySchedulesRoamingSerializationAsync()
+            public async Task Correctly_Schedules_Roaming_Serialization()
             {
-                var serviceCollection = new ServiceCollection();
-
-                serviceCollection.AddCatelCore();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using (var serviceProvider = serviceCollection.BuildServiceProvider())
                 {

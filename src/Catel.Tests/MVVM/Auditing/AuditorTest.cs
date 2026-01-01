@@ -11,9 +11,7 @@
         [TestCase]
         public void OnViewModelCreating()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -31,9 +29,7 @@
         [TestCase]
         public void OnViewModelCreated()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -51,9 +47,7 @@
         [TestCase]
         public async Task OnViewModelInitializedAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -72,9 +66,7 @@
         [TestCase]
         public void OnPropertyChanged()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -95,9 +87,7 @@
         [TestCase]
         public void OnPropertyChanged_IgnoredProperties()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -119,9 +109,7 @@
         [TestCase]
         public void OnCommandExecuted()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -143,9 +131,7 @@
         [TestCase]
         public async Task OnViewModelSavingAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -164,9 +150,7 @@
         [TestCase]
         public async Task OnViewModelSavedAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -185,9 +169,7 @@
         [TestCase]
         public async Task OnViewModelCancelingAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -206,9 +188,7 @@
         [TestCase]
         public async Task OnViewModelCanceledAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -227,9 +207,7 @@
         [TestCase]
         public async Task OnViewModelClosingAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -248,9 +226,7 @@
         [TestCase]
         public async Task OnViewModelClosedAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

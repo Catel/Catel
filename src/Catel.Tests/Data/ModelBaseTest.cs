@@ -188,13 +188,14 @@
         }
 
         [TestCase]
-        public void InvokePropertyChangedForAllRegisteredProperties()
+        public void Invoke_PropertyChanged_For_All_Registered_Properties()
         {
             var expectedProperties = new List<string>();
             var actualProperties = new List<string>();
 
             expectedProperties.Add(PersonTestModel.FirstNameProperty.Name);
             expectedProperties.Add(PersonTestModel.LastNameProperty.Name);
+            expectedProperties.Add(PersonTestModel.IsEnabledProperty.Name);
 
             var model = new PersonTestModel();
             model.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
@@ -205,6 +206,7 @@
             model.RaisePropertyChangedForAllRegisteredProperties();
 
             Assert.That(actualProperties.Count, Is.EqualTo(expectedProperties.Count));
+
             foreach (string property in expectedProperties)
             {
                 if (!actualProperties.Contains(property))
@@ -283,7 +285,7 @@
         }
 
         [TestCase]
-        public void InitializePropertyAfterConstruction_DoubleInstanceConstruction()
+        public void Initialize_Property_After_Construction_Double_Instance_Construction()
         {
             // Added because of a bug where double instantiation would not initialize the properties correctly
             // the 2nd time
@@ -305,17 +307,17 @@
 
         #region Non magic string property registration overload
         [TestCase]
-        public void PropertiesAreActuallyRegistered()
+        public void Properties_Are_Actually_Registered()
         {
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
             Assert.That(instance.IsPropertyRegistered("StringProperty"), Is.True);
             Assert.That(instance.IsPropertyRegistered("StringPropertyWithSpecifiedDefaultValue"), Is.True);
-            Assert.That(instance.IsPropertyRegistered("IntPropertyWithPropertyChangeNotication"), Is.True);
+            Assert.That(instance.IsPropertyRegistered("IntPropertyWithPropertyChangeNotification"), Is.True);
             Assert.That(instance.IsPropertyRegistered("IntPropertyExcludedFromSerializationAndBackup"), Is.True);
         }
 
         [TestCase]
-        public void PropertiesAreActuallyRegisteredWithDefaultValues()
+        public void Properties_Are_Actually_Registered_With_Default_Values()
         {
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
             Assert.That(instance.StringPropertyWithSpecifiedDefaultValue, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.GetDefaultValue<string>()));
@@ -325,7 +327,7 @@
         }
 
         [TestCase]
-        public void PropertiesAreActuallyRegisteredWithTheSpecifiedConfigurationForSerializationAndBackup()
+        public void Properties_Are_Actually_Registered_With_The_Specified_Configuration_For_Serialization_And_Backup()
         {
             Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInSerialization, Is.EqualTo(true));
             Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInSerialization, Is.EqualTo(true));
@@ -340,7 +342,7 @@
         }
 
         [TestCase]
-        public void PropertiesAreRegisteredWithPropertyChangeNotification()
+        public void Properties_Are_Registered_With_Property_Change_Notification()
         {
             Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.PropertyChangedEventHandler, Is.Not.Null);
 

@@ -14,17 +14,15 @@
         public class TheCreateMethod
         {
             [TestCase]
-            public void ThrowsArgumentNullExceptionForNullViewModel()
+            public void Throws_ArgumentNullException_For_Null_ViewModel()
             {
                 Assert.Throws<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
             }
 
             [TestCase]
-            public void ReturnsViewModelCommandManagerForViewModel()
+            public void Returns_ViewModelCommandManager_For_ViewModel()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -39,11 +37,9 @@
         public class TheAddHandlerMethod
         {
             [TestCase]
-            public void ThrowsArgumentNullExceptionForNullHandler()
+            public void Throws_ArgumentNullException_For_Null_Handler()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -54,11 +50,9 @@
             }
 
             [TestCase]
-            public async Task RegisteredHandlerGetsCalledAsync()
+            public async Task Registered_Handler_Gets_Called()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

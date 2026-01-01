@@ -104,9 +104,7 @@
 
             public static void RaiseStaticEvent()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -115,9 +113,7 @@
 
             public void RaisePublicEvent()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

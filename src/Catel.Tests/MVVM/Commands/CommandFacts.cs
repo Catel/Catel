@@ -12,11 +12,9 @@
         public class TheExecuteCommand
         {
             [Test]
-            public void ExecuteThrowsException()
+            public void Execute_Throws_Exception()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -25,11 +23,9 @@
             }
 
             [Test]
-            public void CanExecuteThrowsException()
+            public void CanExecute_Throws_Exception()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -65,11 +61,9 @@
             }
 
             [Test]
-            public void CanExecuteWeakRefLostTest()
+            public void CanExecute_Weak_Ref_Lost_Test()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

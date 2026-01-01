@@ -11,9 +11,7 @@
         [TestCase]
         public void Clear_ValidAuditor()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -32,9 +30,7 @@
         [TestCase]
         public void RegisterAuditor_Null()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -46,9 +42,7 @@
         [TestCase]
         public void RegisterAuditor_ValidAuditor()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -63,9 +57,7 @@
         [TestCase]
         public void RegisterAuditor_SameAuditorTwice()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -81,9 +73,7 @@
         [TestCase]
         public void UnregisterAuditor_Null()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -95,9 +85,7 @@
         [TestCase]
         public void UnregisterAuditor_UnregisterExisting()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -116,9 +104,7 @@
         [TestCase]
         public void UnregisterAuditor_UnregisterNotExisting()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -133,9 +119,7 @@
         [TestCase]
         public void UnregisterAuditor_UnregisterNotExistingWithAnotherRegistered()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

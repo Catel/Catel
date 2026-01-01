@@ -12,8 +12,7 @@
         [TestCase]
         public async Task CanSaveViewModelWithSuspendedValidationAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -35,8 +34,7 @@
         [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -61,8 +59,7 @@
         [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_BusinessErrors()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -87,8 +84,7 @@
         [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_FieldWarnings()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -114,8 +110,7 @@
         [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_BusinessWarnings()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -141,8 +136,7 @@
         [TestCase]
         public void GetValidationSummary_WithoutTagFiltering()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -159,8 +153,7 @@
         [TestCase]
         public void GetValidationSummary_NullTag()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -177,8 +170,7 @@
         [TestCase]
         public void GetValidationSummary_NonExistingTag()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -195,8 +187,7 @@
         [TestCase]
         public void GetValidationSummary_ExistingTag()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

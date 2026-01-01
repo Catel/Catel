@@ -14,9 +14,7 @@
         [TestCase]
         public void SetParentViewModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -31,9 +29,7 @@
         [TestCase]
         public void RegisterChildViewModel_Null()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -49,9 +45,7 @@
         [TestCase]
         public async Task RegisterChildViewModel_RemovedViaClosingChildViewModelAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -101,9 +95,7 @@
             bool validationTriggered = false;
             using (ManualResetEvent validatedEvent = new ManualResetEvent(false))
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -143,9 +135,7 @@
         [TestCase]
         public void ChildViewModelUpdatesValidation()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -177,9 +167,7 @@
             [Test]
             public void Throws_ArgumentNullException_For_Null_ChildViewModel()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -191,9 +179,7 @@
             [Test]
             public async Task Revalidates_Parent_After_Adding_ChildViewModel_Async()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -220,9 +206,7 @@
             [Test]
             public void Throws_ArgumentNullException_For_Null_ChildViewModel()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -234,9 +218,7 @@
             [Test]
             public async Task Revalidates_Parent_After_Removing_ChildViewModel_Async()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -310,9 +292,7 @@
             [TestCase]
             public void RetrievesFromParentWhenAttachingViewModelToTree()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -335,9 +315,7 @@
             [TestCase]
             public void UpdatesChildsWhenUpdatingDeferValidationUntilFirstSave()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

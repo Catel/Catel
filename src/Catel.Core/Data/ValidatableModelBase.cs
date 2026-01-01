@@ -658,7 +658,7 @@
             var validationContext = new ValidationContext();
             var changes = new List<ValidationContextChange>();
 
-            var validator = GetValidator();
+            var validator = ((IValidatable)this).Validator;
             if (validator is not null)
             {
                 validator.BeforeValidation(this, existingValidationContext.GetFieldValidations(), existingValidationContext.GetBusinessRuleValidations());

@@ -330,42 +330,6 @@
         }
 
         /// <summary>
-        /// Clears all the current view model managers.
-        /// </summary>
-        /// <remarks>
-        /// This method should only be called during unit testing.
-        /// </remarks>
-        internal static void ClearAll()
-        {
-            _instancesLock.PerformRead(() =>
-            {
-                foreach (var manager in _instances)
-                {
-                    manager.Clear();
-                }
-            });
-        }
-
-        /// <summary>
-        /// Clears all the view models in the manager.
-        /// </summary>
-        /// <remarks>
-        /// This method should only be called during unit testing.
-        /// </remarks>
-        internal void Clear()
-        {
-            _managedViewModelsLock.PerformWrite(() =>
-            {
-                foreach (var viewModel in _managedViewModels)
-                {
-                    viewModel.Value.Clear();
-                }
-
-                _managedViewModels.Clear();
-            });
-        }
-
-        /// <summary>
         /// Registers a view model instance with the manager. All view models must register themselves to the manager.
         /// </summary>
         /// <param name="viewModel">The view model to register.</param>

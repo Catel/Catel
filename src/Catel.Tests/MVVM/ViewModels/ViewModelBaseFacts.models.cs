@@ -12,8 +12,7 @@
         [TestCase]
         public void GetAllModels_With_Null()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -32,8 +31,7 @@
         [TestCase]
         public void GetAllModels()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -56,8 +54,7 @@
         [TestCase]
         public async Task ModelsSavedBySaveAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -79,8 +76,7 @@
         [TestCase]
         public async Task ModelsCanceledByCancelAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -102,8 +98,7 @@
         [TestCase]
         public void IsModelRegistered_ExistingModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -119,8 +114,7 @@
         [TestCase]
         public void IsModelRegistered_NonExistingModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

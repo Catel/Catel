@@ -14,11 +14,9 @@
         private static readonly TimeSpan TaskDelay = TimeSpan.FromSeconds(5);
 
         [TestCase]
-        public void TestCommandCancellation()
+        public void Test_Command_Cancellation()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -42,11 +40,9 @@
         }
 
         [TestCase]
-        public async Task TestCommandExceptions_SwallowExceptionsAsync()
+        public async Task Test_Command_Exceptions_Swallow_Exceptions()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -75,11 +71,9 @@
         }
 
         [TestCase, Explicit]
-        public async Task TestCommandExceptions_DontSwallowExceptionsAsync()
+        public async Task Test_Command_Exceptions_Dont_Swallow_Exceptions()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

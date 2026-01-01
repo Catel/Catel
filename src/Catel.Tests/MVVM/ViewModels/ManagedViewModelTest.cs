@@ -19,8 +19,6 @@
         [TestCase]
         public void AddViewModelInstance_Null()
         {
-            ViewModelManager.ClearAll();
-
             var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
 
             Assert.Throws<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
@@ -29,11 +27,7 @@
         [TestCase]
         public void AddViewModelInstance_WrongType()
         {
-            ViewModelManager.ClearAll();
-
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -55,11 +49,7 @@
         [TestCase]
         public void AddViewModelInstance_NewInstance()
         {
-            ViewModelManager.ClearAll();
-
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -70,8 +60,6 @@
         [TestCase]
         public void RemoveViewModelInstance_Null()
         {
-            ViewModelManager.ClearAll();
-
             var viewModel = new ManagedViewModel(typeof(TestFeaturedViewModel));
 
             Assert.Throws<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
@@ -80,11 +68,7 @@
         [TestCase]
         public void RemoveViewModelInstance_NotRegisteredViewModel()
         {
-            ViewModelManager.ClearAll();
-
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -95,11 +79,7 @@
         [TestCase]
         public void RemoveViewModelInstance_RegisteredViewModel()
         {
-            ViewModelManager.ClearAll();
-
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
-            serviceCollection.AddCatelMvvm();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

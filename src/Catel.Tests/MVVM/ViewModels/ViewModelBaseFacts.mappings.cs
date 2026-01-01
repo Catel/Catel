@@ -13,8 +13,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoubleModels()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -48,8 +47,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_MissingModelName_WorksWithSingleModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -71,8 +69,7 @@
         {
             // Written for https://github.com/Catel/Catel/issues/2164
 
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -94,8 +91,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_MissingModelName_ThrowsExceptionWithMultipleModels()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -112,8 +108,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_PropertyChanges()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -155,8 +150,7 @@
         [TestCase]
         public void ViewModelWithMappingConverters()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -203,8 +197,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_FieldErrors()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -228,8 +221,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_FieldWarnings()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -260,8 +252,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_BusinessErrors()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -286,8 +277,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_BusinessWarnings()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -312,8 +302,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_ValidateModelsOnInitialization()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -331,8 +320,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaViewModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -354,8 +342,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -377,8 +364,7 @@
         [TestCase]
         public async Task ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosedAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -401,8 +387,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -422,8 +407,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromViewModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -443,8 +427,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -464,8 +447,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromViewModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -485,8 +467,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -506,8 +487,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromViewModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -527,8 +507,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -548,8 +527,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromViewModel()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -569,8 +547,7 @@
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedManually()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

@@ -45,7 +45,7 @@
         public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
     }
 
-    public abstract class AnimalViewModelBase : ViewModelBase
+    public abstract class AnimalViewModelBase : FeaturedViewModelBase
     {
         public AnimalViewModelBase(AnimalModelBase model, IServiceProvider serviceProvider)
             : base(serviceProvider)

@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using Catel.MVVM;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging.Abstractions;
     using NUnit.Framework;
 
     public class CompositeCommandFacts
@@ -16,9 +15,7 @@
             [TestCase(true, false)]
             public void CanExecuteEmptyCommandWithAtLeastOneMustBeExecutable(bool atLeastOneMustBeExecutable, bool expectedValue)
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -33,9 +30,7 @@
             [TestCase(true, false)]
             public void PreventsExecutionOfPartiallyExecutableCommand(bool checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand, bool expectedValue)
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -56,9 +51,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommand()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -70,9 +63,7 @@
             [TestCase]
             public void RegistersCommandForExecution()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -93,9 +84,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommand()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -107,9 +96,7 @@
             [TestCase]
             public void UnregistersCommandForExecution()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -135,9 +122,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullAction()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -149,9 +134,7 @@
             [TestCase]
             public void RegistersActionForExecution()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -173,9 +156,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullAction()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -187,9 +168,7 @@
             [TestCase]
             public void UnregistersCommandForExecution()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -216,9 +195,7 @@
                 var invoked = false;
                 Action action = () => invoked = true;
 
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -237,9 +214,7 @@
                 var invoked = false;
                 Action action = () => invoked = true;
 
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -256,9 +231,7 @@
             [TestCase]
             public void RegisteredActionsCanBeUnregistered_DynamicAction()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -286,9 +259,7 @@
             [TestCase]
             public async Task AutomaticallyUnsubscribesCommandOnViewModelClosedAsync()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
-                serviceCollection.AddCatelMvvm();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

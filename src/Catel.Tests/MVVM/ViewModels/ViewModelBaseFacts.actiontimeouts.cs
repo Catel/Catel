@@ -12,8 +12,7 @@
         [TestCase]
         public void ViewModelBase_ActionsTimeout_SetsDefaultValue()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -25,8 +24,7 @@
         [Test]
         public async Task ViewModelBase_ActionsTimeout_ExpectedException_SaveAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -45,8 +43,7 @@
         [TestCase]
         public async Task ViewModelBase_ActionsTimeout_SaveAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -65,8 +62,7 @@
         [Test]
         public async Task ViewModelBase_ActionsTimeout_ExpectedException_CancelAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -85,8 +81,7 @@
         [TestCase]
         public async Task ViewModelBase_ActionsTimeout_CancelAsync()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

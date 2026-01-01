@@ -10,8 +10,7 @@
         [Test]
         public void UpdatesMappedValidationAfterChangingMappedViewModelProperty()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -29,8 +28,7 @@
         {
             // Test case for https://github.com/Catel/Catel/issues/1615
 
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -53,8 +51,7 @@
         [Test]
         public void HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -68,8 +65,7 @@
         [Test]
         public void HasErrors_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -83,8 +79,7 @@
         [Test]
         public void HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -98,8 +93,7 @@
         [Test]
         public void HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCatelCore();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 

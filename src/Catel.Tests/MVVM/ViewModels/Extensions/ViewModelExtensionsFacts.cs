@@ -31,10 +31,9 @@
             }
 
             [TestCase]
-            public void ReturnsFalseForNotOutdatedValidationContext()
+            public void Returns_False_For_Not_Outdated_ValidationContext()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -49,10 +48,9 @@
             }
 
             [TestCase]
-            public void ReturnsTrueForOutdatedValidationContext()
+            public void Returns_True_For_Outdated_ValidationContext()
             {
-                var serviceCollection = new ServiceCollection();
-                serviceCollection.AddCatelCore();
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 

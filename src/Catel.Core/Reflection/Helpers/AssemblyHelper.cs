@@ -43,8 +43,21 @@
         /// <returns>Assembly.</returns>
         public static Assembly? GetEntryAssembly()
         {
-            var resolver = IoCContainer.ServiceProvider.GetRequiredService<IEntryAssemblyResolver>();
-            return resolver.Resolve();
+            // Note: this could be considered bad practice, but it's a reasonable way to make a static
+            // context class "customizable".
+            //
+            // The service provider will only not be available during unit test scenarios
+            var serviceProvider = IoCContainer.GetServiceProvider();
+            if (serviceProvider is not null)
+            {
+                var entryAssemblyResolver = serviceProvider.GetService<IEntryAssemblyResolver>();
+                if (entryAssemblyResolver is not null)
+                {
+                    return entryAssemblyResolver.Resolve();
+                }
+            }
+
+            return Assembly.GetEntryAssembly();
         }
 
         /// <summary>
