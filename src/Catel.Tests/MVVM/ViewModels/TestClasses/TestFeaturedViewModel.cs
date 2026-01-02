@@ -36,12 +36,6 @@
             DeferValidationUntilFirstSaveCall = false;
         }
 
-        public bool ValidateModelsOnInitializationWrapper
-        {
-            get { return ValidateModelsOnInitialization; }
-            set { ValidateModelsOnInitialization = value; }
-        }
-
         public override string Title
         {
             get { return "View model title"; }

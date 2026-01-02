@@ -16,7 +16,7 @@
     public partial class ViewModelBaseFacts
     {
         [TestCase]
-        public async Task IsNotDirtyAtStartupAsync()
+        public async Task Is_Not_Dirty_At_Startup()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -28,7 +28,7 @@
         }
 
         [TestCase]
-        public async Task ProtectPropertiesAfterClosingAsync()
+        public async Task Protect_Properties_After_Closing()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -57,13 +57,13 @@
         }
 
         [TestCase]
-        public async Task CancelAfterCloseProtectionAsync()
+        public async Task Cancel_After_Close_Protection()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -88,13 +88,13 @@
         }
 
         [TestCase]
-        public async Task SaveAfterCloseProtectionAsync()
+        public async Task Save_After_Close_Protection()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -119,13 +119,13 @@
         }
 
         [TestCase]
-        public async Task CloseAfterCloseProtectionAsync()
+        public async Task Close_After_Close_Protection()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var auditingManager = new AuditingManager(serviceProvider);
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
             var auditor = new TestAuditor();
             auditingManager.RegisterAuditor(auditor);
@@ -146,7 +146,7 @@
         }
 
         [Test]
-        public async Task MultipleViewModelsCanBeCreatedConcurrentlyAsync()
+        public async Task Multiple_ViewModels_Can_Be_Created_Concurrently()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -200,7 +200,7 @@
         }
 
         [Test]
-        public async Task PropertiesCanBeSetConcurrentlyWithObjectCreationAsync()
+        public async Task Properties_Can_Be_Set_Concurrently_With_Object_Creation()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -259,7 +259,7 @@
         }
 
         [Test]
-        public async Task CommandsCanBeCalledConcurrentlyWithObjectCreationAsync()
+        public async Task Commands_Can_Be_Called_Concurrently_With_Object_Creation()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 

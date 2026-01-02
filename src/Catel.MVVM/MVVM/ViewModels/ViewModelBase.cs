@@ -2,8 +2,10 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Runtime.Serialization;
     using System.Threading.Tasks;
     using Catel.Logging;
+    using Catel.Services;
     using Data;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -28,6 +30,8 @@
         /// </summary>
         private string _title = string.Empty;
 
+        private readonly IObjectIdGenerator<IViewModel, int> _objectIdGenerator;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
@@ -42,10 +46,14 @@
             if (CatelEnvironment.IsInDesignMode)
             {
                 ViewModelCommandManager = default!;
+                _objectIdGenerator = default!;
                 return;
             }
 
             var type = GetType();
+
+            _objectIdGenerator = serviceProvider.GetRequiredService<IObjectIdGenerator<IViewModel, int>>();
+            UniqueIdentifier = GetObjectId(_objectIdGenerator);
 
             Logger.LogDebug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
@@ -472,6 +480,18 @@
             Logger.LogDebug("Closed view model '{0}'", type);
 
             _viewModelManager.UnregisterViewModelInstance(this);
+
+            _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
+        }
+
+        /// <summary>
+        /// Gets the object id. 
+        /// </summary>
+        /// <param name="objectIdGenerator">The object id generator</param>
+        /// <returns>The object id</returns>
+        protected virtual int GetObjectId(IObjectIdGenerator<IViewModel, int> objectIdGenerator)
+        {
+            return objectIdGenerator.GetUniqueIdentifier();
         }
     }
 }

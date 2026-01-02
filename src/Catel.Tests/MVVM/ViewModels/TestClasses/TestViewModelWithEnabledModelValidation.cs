@@ -29,7 +29,6 @@
         public TestViewModelWithEnabledModelValidation(Person person, IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            ValidateModelsOnInitialization = true;
             Person = person;
             DeferValidationUntilFirstSaveCall = false;
         }

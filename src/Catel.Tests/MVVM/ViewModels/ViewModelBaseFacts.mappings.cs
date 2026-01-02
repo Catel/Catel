@@ -307,81 +307,11 @@
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var person = new PersonWithDataAnnotations();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider)
-            {
-                ValidateModelsOnInitializationWrapper = true
-            };
+            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
             ((IValidatableModel)person).Validate(true);
 
             Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
-        }
-
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaViewModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
-
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            var person = new PersonWithDataAnnotations();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider)
-            {
-                ValidateModelsOnInitializationWrapper = false
-            };
-
-            Assert.That(person.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
-            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
-
-            viewModel.FirstName = null;
-
-            Assert.That(person.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
-            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
-        }
-
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
-
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            var person = new PersonWithDataAnnotations();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider)
-            {
-                ValidateModelsOnInitializationWrapper = false
-            };
-
-            Assert.That(person.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
-            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.EqualTo(0));
-
-            person.FirstName = null;
-
-            Assert.That(person.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
-            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
-        }
-
-        [TestCase]
-        public async Task ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosedAsync()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
-
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            var person = new Person();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider)
-            {
-                ValidateModelsOnInitializationWrapper = false
-            };
-
-            Assert.That(person.FirstName, Is.Not.EqualTo("test1"));
-            viewModel.FirstName = "test1";
-            Assert.That(person.FirstName, Is.EqualTo("test1"));
-
-            await viewModel.CloseViewModelAsync(true);
-            viewModel.FirstName = "test2";
-
-            Assert.That(person.FirstName, Is.EqualTo("test1"));
         }
 
         [TestCase]

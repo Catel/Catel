@@ -11,7 +11,7 @@
     public class ViewModelCommandManagerFacts
     {
         [TestFixture]
-        public class TheCreateMethod
+        public class The_Create_Method
         {
             [TestCase]
             public void Throws_ArgumentNullException_For_Null_ViewModel()
@@ -34,7 +34,7 @@
         }
 
         [TestFixture]
-        public class TheAddHandlerMethod
+        public class The_AddHandler_Method
         {
             [TestCase]
             public void Throws_ArgumentNullException_For_Null_Handler()

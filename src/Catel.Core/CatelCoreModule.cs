@@ -40,9 +40,10 @@
             serviceCollection.TryAddSingleton<IModelEqualityComparer, ModelEqualityComparer>();
             serviceCollection.TryAddSingleton<IObjectConverterService, ObjectConverterService>();
 
-            //serviceCollection.TryAddSingleton(typeof(IObjectIdGenerator<TObject,int>)  <IObjectIdGenerator<T, int>, IntegerObjectIdGenerator<T>();
-            //serviceCollection.TryAddSingleton<IObjectIdGenerator<T, long>, LongObjectIdGenerator<T>();
-            //serviceCollection.TryAddSingleton<IObjectIdGenerator<T, ulong>, ULongObjectIdGenerator<T>();
+            serviceCollection.TryAddSingleton(typeof(IObjectIdGenerator<>), typeof(IntegerObjectIdGenerator<>));
+            serviceCollection.TryAddSingleton(typeof(IObjectIdGenerator<,>), typeof(IntegerObjectIdGenerator<,>));
+            //serviceCollection.TryAddSingleton < IObjectIdGenerator<T, long>, LongObjectIdGenerator<T>();
+            //serviceCollection.TryAddSingleton < IObjectIdGenerator<T, ulong>, ULongObjectIdGenerator<T>();
 
             // Note: we don't have resources in Catel.Core at the moment
             //serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));

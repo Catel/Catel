@@ -29,7 +29,7 @@
     /// </summary>
     /// <typeparam name="TObjectType">The object type</typeparam>
     /// <typeparam name="TUniqueIdentifier">The unique identifier type</typeparam>
-    public interface IObjectIdGenerator<in TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TUniqueIdentifier>
+    public interface IObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TUniqueIdentifier>
         where TObjectType : class
     {
         /// <summary>
@@ -46,5 +46,11 @@
         /// <param name="reuse">Indicates whether the id will be returned from released id pool.</param>
         /// <returns></returns>
         TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = false);
+
+        /// <summary>
+        /// Release the unique identifier for the specified type.
+        /// </summary>
+        /// <param name="identifier">The identifier.</param>
+        void ReleaseIdentifier(TUniqueIdentifier identifier);
     }
 }

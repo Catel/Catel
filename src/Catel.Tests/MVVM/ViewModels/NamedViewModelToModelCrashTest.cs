@@ -56,12 +56,8 @@
         /// <summary>
         /// MainWindow view model.
         /// </summary>
-        public class MainWindowViewModel : ViewModelBase
+        public class MainWindowViewModel : FeaturedViewModelBase
         {
-            #region Fields
-            #endregion
-
-            #region Constructors
             /// <summary>
             /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
             /// </summary>
@@ -83,9 +79,6 @@
                 CurrentDummy = null;
             }
 
-            #endregion
-
-            #region Properties
             /// <summary>
             /// Gets the title of the view model.
             /// </summary>
@@ -124,6 +117,7 @@
                     SetValue(IdentifierProperty, value);
                 }
             }
+
             [ViewModelToModel("CurrentDummy")]
             public string Comment
             {
@@ -137,35 +131,8 @@
                 }
             }
 
-            ///// <summary>Register the Id property so it is known in the class.</summary>
-            //public static readonly IPropertyData IdProperty = RegisterProperty<MainWindowViewModel, int>(model => model.Id, default(int));
-            //
-            //[ViewModelToModel("CurrentDummy")]
-            //public int Id
-            //{
-            //    get {
-            //        return GetValue<int>(IdProperty);
-            //    }
-            //    set {
-            //        SetValue(IdProperty, value);
-            //    }
-            //}
-
-
-            // TODO: Register models with the vmpropmodel codesnippet
-            // TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
-            #endregion
-
-            #region Commands
-
             public Command Reset { get; private set; }
             public Command Create { get; private set; }
-            // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
-            #endregion
-
-            #region Methods
-            // TODO: Create your methods here
-            #endregion
         }
 
         #region Methods

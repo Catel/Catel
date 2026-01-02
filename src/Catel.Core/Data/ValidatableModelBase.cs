@@ -255,7 +255,9 @@
                         nameof(HasWarnings),
                         nameof(HasErrors),
                         nameof(IsValidating),
-                        "IsValidated"
+                        "IsValidated",
+                        "IDataWarningInfo.Warning",
+                        "IDataErrorInfo.Error"
                     };
 
                     var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
@@ -268,7 +270,7 @@
                         }
                     }
 
-                    PropertiesNotCausingValidation.Add(type, hashSet);
+                    PropertiesNotCausingValidation[type] = hashSet;
                 }
             }
         }
@@ -458,7 +460,8 @@
 
             var type = GetType();
 
-            if (PropertiesNotCausingValidation[type].Contains(propertyName))
+            var propertiesNotCausingValidationForType = PropertiesNotCausingValidation[type];
+            if (propertiesNotCausingValidationForType.Contains(propertyName))
             {
                 return true;
             }
@@ -488,7 +491,7 @@
                     var propertyInfo = catelPropertyData.GetPropertyInfo(type);
                     if (propertyInfo is null || !propertyInfo.HasPublicGetter)
                     {
-                        PropertiesNotCausingValidation[type].Add(propertyName);
+                        propertiesNotCausingValidationForType.Add(propertyName);
                         return false;
                     }
 
@@ -530,7 +533,7 @@
             }
             catch (Exception ex)
             {
-                PropertiesNotCausingValidation[type].Add(propertyName);
+                propertiesNotCausingValidationForType.Add(propertyName);
 
                 Logger.LogWarning(ex, "Failed to validate property '{0}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
             }

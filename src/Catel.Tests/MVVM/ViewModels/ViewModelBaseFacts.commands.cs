@@ -49,9 +49,10 @@
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
             bool canExecuteChangedTriggered = false;
+
             using (var canExecuteChangedEvent = new ManualResetEvent(false))
             {
-                var viewModel = new TestFeaturedViewModel(serviceProvider);
+                var viewModel = new TestFeaturedViewModel(new Person(), serviceProvider);
                 viewModel.SetInvalidateCommandsOnPropertyChanged(true);
 
                 ICatelCommand command = viewModel.GenerateData;

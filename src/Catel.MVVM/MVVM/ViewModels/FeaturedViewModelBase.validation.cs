@@ -46,21 +46,6 @@
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to validate the models as soon as they are initialized. This means that
-        /// as soon as a model value is set, the view model checks whether the entity already contains errors.
-        /// <para />
-        /// If this value is <c>true</c>, the errors will immediately be returned for mappings on the model. Otherwise, the errors
-        /// will only become available when a value is entered and then being undone.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the models should be validated on initialization; otherwise, <c>false</c>.
-        /// </value>
-        [ExcludeFromValidation]
-        protected bool ValidateModelsOnInitialization { get; set; }
-
-        /// <summary>
         /// Validates the current object for field and business rule errors.
         /// </summary>
         /// <param name="force">If set to <c>true</c>, a validation is forced. When the validation is not forced, it means 

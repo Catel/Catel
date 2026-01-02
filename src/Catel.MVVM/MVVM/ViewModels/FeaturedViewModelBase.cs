@@ -108,8 +108,6 @@
 
             Logger.LogDebug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
-            ValidateModelsOnInitialization = true;
-
             DeferValidationUntilFirstSaveCall = true;
             InvalidateCommandsOnPropertyChanged = true;
             SupportIEditableObject = true;
@@ -308,7 +306,7 @@
                     {
                         Logger.LogWarning("Mapped viewmodel property '{ViewModelProperty}' to model property '{ValueProperty}' is invalid because property '{ValueProperty}' is not found on the model '{ModelProperty}'.\n\n" +
                                 "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
-                            mapping.ViewModelProperty, valueProperty, valueProperty,mapping.ModelProperty);
+                            mapping.ViewModelProperty, valueProperty, valueProperty, mapping.ModelProperty);
 
                         modelPropertyPropertyTypes[i] = typeof(object);
                     }
@@ -885,16 +883,13 @@
 
             _modelErrorInfo[modelProperty] = modelErrorInfo;
 
-            if (ValidateModelsOnInitialization)
+            if (modelInfo.SupportValidation)
             {
-                if (modelInfo.SupportValidation)
-                {
-                    var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-                    var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(model, null, null);
+                var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+                var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(model, null, null);
 
-                    System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, validationContext, validationResults, true);
-                    modelErrorInfo.InitializeDefaultErrors(validationResults);
-                }
+                System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, validationContext, validationResults, true);
+                modelErrorInfo.InitializeDefaultErrors(validationResults);
             }
 
             if (SupportIEditableObject)

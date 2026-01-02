@@ -12,6 +12,7 @@
     <Project Path="../../Orc.Automation/src/Orc.Automation/Orc.Automation.csproj" Id="8946028d-a6f7-4a64-98cc-71f1669e1d8e" />
   </Folder>
   <Folder Name="/src/Orc.Controls/">
+    <Project Path="../../Orc.Controls/src/Orc.Controls.Settings/Orc.Controls.Settings.csproj" Id="f5fed560-415b-4197-a7cb-a1513b72fdc2" />
     <Project Path="../../Orc.Controls/src/Orc.Controls/Orc.Controls.csproj" Id="84e22240-d816-4b43-ac37-92b805a2bee3" />
   </Folder>
   <Folder Name="/src/Orc.Controls/Tests/">
@@ -57,5 +58,6 @@
     <Project Path="../../Orchestra/src/Orchestra.Core/Orchestra.Core.csproj" Id="c7049e9c-d258-4e3f-8de3-17d8c50145ca" />
     <Project Path="../../Orchestra/src/Orchestra.Shell.Ribbon.Fluent/Orchestra.Shell.Ribbon.Fluent.csproj" Id="bd65929c-36c0-4935-8d03-9ab82684c56d" />
   </Folder>
+  <Folder Name="/src/Orchestra/Tests/" />
 
 </Solution>
