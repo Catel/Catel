@@ -123,7 +123,7 @@
 
                 try
                 {
-                    await SaveConfigurationAsync(settings, fileName);
+                    await SaveConfigurationAsync(ConfigurationContainer.Local, settings, fileName);
                 }
                 catch (Exception ex)
                 {
@@ -155,7 +155,7 @@
 
                 try
                 {
-                    await SaveConfigurationAsync(settings, fileName);
+                    await SaveConfigurationAsync(ConfigurationContainer.Roaming, settings, fileName);
                 }
                 catch (Exception ex)
                 {
@@ -164,7 +164,8 @@
             }
         }
 
-        protected virtual async Task SaveConfigurationAsync(IConfiguration configuration, string fileName)
+        protected virtual async Task SaveConfigurationAsync(ConfigurationContainer container, 
+            IConfiguration configuration, string fileName)
         {
             var jsonNode = SerializeConfiguration(configuration)!;
 

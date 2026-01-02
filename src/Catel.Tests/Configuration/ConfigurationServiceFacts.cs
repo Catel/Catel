@@ -42,11 +42,11 @@
                 return configFileName;
             }
 
-            protected override async Task SaveConfigurationAsync(IConfiguration configuration, string fileName)
+            protected override async Task SaveConfigurationAsync(ConfigurationContainer container, IConfiguration configuration, string fileName)
             {
                 SaveConfigurationCallCount++;
 
-                await base.SaveConfigurationAsync(configuration, fileName);
+                await base.SaveConfigurationAsync(container, configuration, fileName);
 
                 if (CreateDelayDuringSave)
                 {
@@ -57,9 +57,9 @@
                 }
             }
 
-            public async Task<IConfiguration> PublicLoadConfigurationAsync(string fileName)
+            public async Task<IConfiguration> PublicLoadConfigurationAsync(ConfigurationContainer container, string fileName)
             {
-                return await base.LoadConfigurationAsync(fileName);
+                return await base.LoadConfigurationAsync(container, fileName);
             }
         }
 
@@ -87,7 +87,7 @@
                     {
                     }
 
-                    var config = await configurationService.PublicLoadConfigurationAsync(fileName);
+                    var config = await configurationService.PublicLoadConfigurationAsync(ConfigurationContainer.Roaming, fileName);
 
                     Assert.That(config, Is.Not.Null);
                 }

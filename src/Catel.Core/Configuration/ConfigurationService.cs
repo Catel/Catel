@@ -239,7 +239,7 @@
             using (await lockObject.LockAsync())
             {
                 _roamingConfigFilePath = filePath;
-                _roamingConfiguration = await LoadConfigurationAsync(filePath);
+                _roamingConfiguration = await LoadConfigurationAsync(ConfigurationContainer.Roaming, filePath);
             }
         }
 
@@ -254,7 +254,7 @@
             using (await lockObject.LockAsync())
             {
                 _localConfigFilePath = filePath;
-                _localConfiguration = await LoadConfigurationAsync(filePath);
+                _localConfiguration = await LoadConfigurationAsync(ConfigurationContainer.Local, filePath);
             }
         }
 
@@ -296,7 +296,7 @@
             }
         }
 
-        protected virtual async Task<IConfiguration> LoadConfigurationAsync(string source)
+        protected virtual async Task<IConfiguration> LoadConfigurationAsync(ConfigurationContainer configurationContainer, string source)
         {
             var builder = _configurationBuilder;
 
@@ -358,7 +358,7 @@
 
                             _logger.LogInformation("Storing migrated configuration as json");
 
-                            await SaveConfigurationAsync(configuration, source);
+                            await SaveConfigurationAsync(configurationContainer, configuration, source);
                         }
 
                         _logger.LogInformation("Changing extension of migrated configuration to 'xml.bak'");

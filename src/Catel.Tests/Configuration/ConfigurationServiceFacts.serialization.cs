@@ -14,7 +14,7 @@
         [TestFixture]
         public class Serialization
         {
-            [SetUp()]
+            [SetUp]
             public void Setup()
             {
                 var appDataService = new AppDataService();
@@ -52,19 +52,19 @@
                     }
                 }
 
-                //protected override async Task SaveConfigurationAsync(IConfiguration configuration, string fileName)
-                //{
-                //    switch (container)
-                //    {
-                //        case ConfigurationContainer.Local:
-                //            LocalSaveCount++;
-                //            break;
+                protected override async Task SaveConfigurationAsync(ConfigurationContainer container, IConfiguration configuration, string fileName)
+                {
+                    switch (container)
+                    {
+                        case ConfigurationContainer.Local:
+                            LocalSaveCount++;
+                            break;
 
-                //        case ConfigurationContainer.Roaming:
-                //            RoamingSaveCount++;
-                //            break;
-                //    }
-                //}
+                        case ConfigurationContainer.Roaming:
+                            RoamingSaveCount++;
+                            break;
+                    }
+                }
 
                 public int LocalChangeCount { get; private set; }
 
