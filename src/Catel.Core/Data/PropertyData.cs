@@ -3,7 +3,6 @@
     using System;
     using System.ComponentModel;
     using System.Reflection;
-    using System.Xml.Serialization;
     using Catel.Reflection;
 
     /// <summary>
@@ -85,13 +84,11 @@
         /// <summary>
         /// Gets the type of the property.
         /// </summary>
-        [XmlIgnore]
         public Type Type { get; private set; }
 
         /// <summary>
         /// Gets the default value of the property.
         /// </summary>
-        [XmlIgnore]
         private T DefaultValue
         {
             get { return _createDefaultValue(); }
@@ -101,7 +98,6 @@
         /// Gets a value indicating the property changed event handler.
         /// </summary>
         /// <value>The property changed event handler.</value>
-        [XmlIgnore]
         public EventHandler<PropertyChangedEventArgs>? PropertyChangedEventHandler { get; private set; }
 
         /// <summary>
@@ -110,14 +106,12 @@
         /// <value>
         /// <c>true</c> if the property is declared by the <see cref="ModelBase"/>; otherwise, <c>false</c>.
         /// </value>
-        [XmlIgnore]
         public bool IsModelBaseProperty { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this is a calculated property.
         /// </summary>
         /// <value><c>true</c> if this is a calculated property; otherwise, <c>false</c>.</value>
-        [XmlIgnore]
         public bool IsCalculatedProperty { get; set; }
 
         /// <summary>
@@ -126,7 +120,6 @@
         /// If this value is <c>null</c>, the state is unknown and needs to be determined.
         /// </summary>
         /// <value><c>true</c> if this property has validation attributes; otherwise, <c>false</c>.</value>
-        [XmlIgnore]
         public bool? IsDecoratedWithValidationAttributes { get; set; }
 
         /// <summary>

@@ -45,8 +45,7 @@
             }
 
             return assemblyName.StartsWith("Catel.Core") ||
-                assemblyName.StartsWith("Catel.MVVM") ||
-                assemblyName.StartsWith("Catel.Serialization");
+                assemblyName.StartsWith("Catel.MVVM");
         }
 
         /// <summary>

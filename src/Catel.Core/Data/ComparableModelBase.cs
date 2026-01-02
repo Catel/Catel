@@ -1,6 +1,5 @@
 ﻿namespace Catel.Data
 {
-    using System.Xml.Serialization;
     using System.ComponentModel;
 
     /// <summary>
@@ -50,7 +49,6 @@
         /// </summary>
         /// <value>The equality comparer.</value>
         [Browsable(false)]
-        [XmlIgnore]
         protected IModelEqualityComparer EqualityComparer { get; set; }
 
         /// <summary>

@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Xml.Serialization;
     using Logging;
     using Microsoft.Extensions.Logging;
 
@@ -96,21 +95,18 @@
         /// <c>true</c> if the object is validating; otherwise, <c>false</c>.
         /// </value>
         [Browsable(false)]
-        [XmlIgnore]
         protected bool IsValidating { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this object is validated or not.
         /// </summary>
         [Browsable(false)]
-        [XmlIgnore]
         bool IValidatable.IsValidated { get { return _isValidated; } }
 
         /// <summary>
         /// Gets or sets the validator to use.
         /// </summary>
         [Browsable(false)]
-        [XmlIgnore]
         IValidator? IValidatable.Validator
         {
             get
@@ -131,7 +127,6 @@
         /// </summary>
         /// <value>The validation context.</value>
         [Browsable(false)]
-        [XmlIgnore]
         IValidationContext IValidatable.ValidationContext
         {
             get { return _validationContext; }
@@ -1116,7 +1111,6 @@
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         [Browsable(false)]
-        [XmlIgnore]
         public virtual bool HasErrors
         {
             get
@@ -1188,7 +1182,6 @@
         /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
         /// </value>
         [Browsable(false)]
-        [XmlIgnore]
         public virtual bool HasWarnings
         {
             get

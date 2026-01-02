@@ -2,12 +2,11 @@
 {
     using System;
     using System.ComponentModel;
-    using System.Xml.Serialization;
     using Logging;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Abstract class that serves as a base class for serializable objects.
+    /// Abstract class that serves as a base class for models.
     /// </summary>
     public abstract partial class ModelBase : ObservableObject, IModel
     {
@@ -49,7 +48,6 @@
         /// </summary>
         /// <value><c>true</c> if property change notifications should be disabled for all instances; otherwise, <c>false</c>.</value>
         [Browsable(false)]
-        [XmlIgnore]
         internal static bool DisablePropertyChangeNotifications { get; set; }
 
         /// <summary>
@@ -57,7 +55,6 @@
         /// </summary>
         /// <value>The property data manager.</value>
         [Browsable(false)]
-        [XmlIgnore]
         internal static PropertyDataManager PropertyDataManager { get; private set; }
 
         /// <summary>
@@ -77,7 +74,6 @@
         /// </summary>
         /// <value>The name of the key.</value>
         [Browsable(false)]
-        [XmlIgnore]
         string IModel.KeyName
         {
             get { return GetHashCode().ToString(); }
@@ -88,7 +84,6 @@
         /// </summary>
         /// <value><c>true</c> if this instance is dirty; otherwise, <c>false</c>.</value>
         [Browsable(false)]
-        [XmlIgnore]
         public bool IsDirty
         {
             // Note: we know what we are doing, use GetValueFromPropertyBag (but not SetValueFast)
@@ -105,7 +100,6 @@
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
         /// </summary>
         [Browsable(false)]
-        [XmlIgnore]
         public bool IsReadOnly
         {
             // Note: we know what we are doing, use GetValueFromPropertyBag (but not SetValueFast)

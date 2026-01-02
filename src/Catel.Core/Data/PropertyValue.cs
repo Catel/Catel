@@ -2,13 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
-    using System.Xml.Serialization;
 
     /// <summary>
     /// Class holding a property value to serialize using the <see cref="ModelBase"/>.
     /// </summary>
-    public class PropertyValue : ISerializable
+    public class PropertyValue
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
@@ -58,56 +56,18 @@
         /// Gets the property data.
         /// </summary>
         /// <value>The property data.</value>
-        [XmlIgnore]
         public IPropertyData? PropertyData { get; internal set; }
 
         /// <summary>
         /// Gets or sets the graph identifier.
         /// </summary>
         /// <value>The graph identifier.</value>
-        [XmlIgnore]
         public int GraphId { get; set; }
 
         /// <summary>
         /// Gets or sets the graph reference identifier.
         /// </summary>
         /// <value>The graph reference identifier.</value>
-        [XmlIgnore]
         public int GraphRefId { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyValue"/> class.
-        /// </summary>
-        public PropertyValue(SerializationInfo info, StreamingContext context)
-        {
-            Name = info.GetString("Name");
-            Value = info.GetValue("Value", typeof(object));
-
-            try
-            {
-                GraphId = (int)info.GetValue("GraphId", typeof(int))!;
-                GraphRefId = (int)info.GetValue("GraphRefId", typeof(int))!;
-            }
-            catch (Exception)
-            {
-                // Required for backwards compatibility
-            }
-        }
-
-        /// <summary>
-        /// Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
-        /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
-        /// <param name="context">The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext"/>) for this serialization.</param>
-        /// <exception cref="T:System.Security.SecurityException">
-        /// The caller does not have the required permission.
-        /// </exception>
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("Name", Name);
-            info.AddValue("Value", Value);
-            info.AddValue("GraphId", GraphId);
-            info.AddValue("GraphRefId", GraphRefId);
-        }
     }
 }

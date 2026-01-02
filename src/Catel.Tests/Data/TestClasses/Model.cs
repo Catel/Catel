@@ -1,14 +1,11 @@
 ﻿namespace Catel.Tests.Data
 {
-    using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
     /// <summary>
     /// ModelBase Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    [KnownType(typeof(ModelA)), KnownType(typeof(ModelB)), Serializable]
     public class Model : ComparableModelBase
     {
         /// <summary>
