@@ -369,8 +369,6 @@ namespace Catel.MVVM
         protected bool SupportIEditableObject { get; set; }
         [Catel.Data.ExcludeFromValidation]
         protected System.TimeSpan ThrottlingRate { get; set; }
-        [Catel.Data.ExcludeFromValidation]
-        protected bool ValidateModelsOnInitialization { get; set; }
         protected override System.Threading.Tasks.Task<bool> CancelAsync() { }
         protected override System.Threading.Tasks.Task CloseAsync() { }
         protected object[] GetAllModels() { }
@@ -775,6 +773,7 @@ namespace Catel.MVVM
         public System.Threading.Tasks.Task<bool> CancelViewModelAsync() { }
         protected virtual System.Threading.Tasks.Task CloseAsync() { }
         public System.Threading.Tasks.Task CloseViewModelAsync(bool? result) { }
+        protected virtual int GetObjectId(Catel.Services.IObjectIdGenerator<Catel.MVVM.IViewModel, int> objectIdGenerator) { }
         protected virtual System.Threading.Tasks.Task InitializeAsync() { }
         public System.Threading.Tasks.Task InitializeViewModelAsync() { }
         protected virtual System.Threading.Tasks.Task OnClosedAsync(bool? result) { }

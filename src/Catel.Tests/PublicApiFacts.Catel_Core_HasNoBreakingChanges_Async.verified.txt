@@ -991,7 +991,7 @@ namespace Catel.Configuration
     }
     public class ConfigurationService : Catel.Configuration.IConfigurationService
     {
-        public ConfigurationService(Microsoft.Extensions.Logging.ILogger<Catel.Configuration.ConfigurationService> logger, Catel.Services.IObjectConverterService objectConverterService, Catel.Services.IAppDataService appDataService, Catel.Services.IDispatcherService dispatcherService, [Microsoft.Extensions.DependencyInjection.FromKeyedServices("CatelConfiguration")] Microsoft.Extensions.Configuration.IConfigurationBuilder configurationBuilder) { }
+        public ConfigurationService(Microsoft.Extensions.Logging.ILogger<Catel.Configuration.ConfigurationService> logger, Catel.Services.IObjectConverterService objectConverterService, Catel.Services.IAppDataService appDataService, [Microsoft.Extensions.DependencyInjection.FromKeyedServices("CatelConfiguration")] Microsoft.Extensions.Configuration.IConfigurationBuilder configurationBuilder) { }
         public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs>? ConfigurationChanged;
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
@@ -1162,6 +1162,7 @@ namespace Catel.Data
     }
     public abstract class ComparableModelBase : Catel.Data.ModelBase
     {
+        protected ComparableModelBase() { }
         protected ComparableModelBase(Catel.Data.IModelEqualityComparer equalityComparer) { }
         [System.ComponentModel.Browsable(false)]
         protected Catel.Data.IModelEqualityComparer EqualityComparer { get; set; }
@@ -1247,7 +1248,7 @@ namespace Catel.Data
         void Freeze();
         void Unfreeze();
     }
-    public interface IModel : Catel.Data.IFreezable, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel>
+    public interface IModel : Catel.Data.IFreezable, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged
     {
         string KeyName { get; }
         object? GetDefaultValue(string name);
@@ -1319,7 +1320,7 @@ namespace Catel.Data
         public static Catel.Data.IValidationContext GetValidationContext(this Catel.Data.IValidatable validatable) { }
         public static string GetWarningMessage(this Catel.Data.IValidatable validatable, string? userFriendlyObjectName = null) { }
     }
-    public interface IValidatableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel> { }
+    public interface IValidatableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged { }
     public static class IValidatableModelExtensions
     {
         public static Catel.Data.IValidationContext GetValidationContextForObjectGraph(this Catel.Data.IValidatableModel model) { }
@@ -1436,7 +1437,7 @@ namespace Catel.Data
         public System.Type ExpectedType { get; }
         public string PropertyName { get; }
     }
-    public abstract class ModelBase : Catel.Data.ObservableObject, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel>
+    public abstract class ModelBase : Catel.Data.ObservableObject, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged
     {
         public static readonly Catel.Data.IPropertyData IsDirtyProperty;
         public static readonly Catel.Data.IPropertyData IsReadOnlyProperty;
@@ -1448,9 +1449,6 @@ namespace Catel.Data
         [System.ComponentModel.Browsable(false)]
         public bool IsReadOnly { get; protected set; }
         protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
-        public virtual bool Equals(Catel.Data.IModel? other) { }
-        public override bool Equals(object? obj) { }
-        public override int GetHashCode() { }
         protected Catel.Data.IPropertyData GetPropertyData(string name) { }
         protected System.Func<object, TValue>? GetPropertyGetterExpression<TValue>(string propertyName) { }
         protected TValue GetValue<TValue>(Catel.Data.IPropertyData property) { }
@@ -1488,6 +1486,7 @@ namespace Catel.Data
         public bool CompareCollections { get; set; }
         public bool CompareProperties { get; set; }
         public bool CompareValues { get; set; }
+        public new static Catel.Data.ModelEqualityComparer Default { get; }
         public override bool Equals(Catel.Data.ModelBase? x, Catel.Data.ModelBase? y) { }
         public override int GetHashCode(Catel.Data.ModelBase obj) { }
     }
@@ -1643,7 +1642,7 @@ namespace Catel.Data
         public override bool IsAvailable(string name) { }
         public override void SetValue<TValue>(string name, TValue value) { }
     }
-    public abstract class ValidatableModelBase : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, Catel.Data.IValidatableModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel>
+    public abstract class ValidatableModelBase : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, Catel.Data.IValidatableModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
         protected static readonly System.Collections.Generic.Dictionary<System.Type, System.Collections.Generic.HashSet<string>> PropertiesNotCausingValidation;
         protected ValidatableModelBase() { }
@@ -2569,17 +2568,23 @@ namespace Catel.Services
         TUniqueIdentifier GetUniqueIdentifier(System.Type objectType, bool reuse = false);
         void ReleaseIdentifier(System.Type objectType, TUniqueIdentifier identifier);
     }
-    public interface IObjectIdGenerator<in TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>
-        where in TObjectType :  class
+    public interface IObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>
+        where TObjectType :  class
     {
         TUniqueIdentifier GetUniqueIdentifier(bool reuse = false);
         TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = false);
+        void ReleaseIdentifier(TUniqueIdentifier identifier);
     }
     public interface IService
     {
         string Name { get; }
     }
-    public sealed class IntegerObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, int>
+    public sealed class IntegerObjectIdGenerator<TObjectType> : Catel.Services.IntegerObjectIdGenerator<TObjectType, int>
+        where TObjectType :  class
+    {
+        public IntegerObjectIdGenerator() { }
+    }
+    public class IntegerObjectIdGenerator<TObjectType, TInt> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, int>
         where TObjectType :  class
     {
         public IntegerObjectIdGenerator() { }
@@ -2625,7 +2630,12 @@ namespace Catel.Services
         public abstract string? GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo);
         protected abstract void PreloadLanguageSource(Catel.Services.ILanguageSource languageSource);
     }
-    public sealed class LongObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, long>
+    public sealed class LongObjectIdGenerator<TObjectType> : Catel.Services.LongObjectIdGenerator<TObjectType, long>
+        where TObjectType :  class
+    {
+        public LongObjectIdGenerator() { }
+    }
+    public class LongObjectIdGenerator<TObjectType, TLong> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, long>
         where TObjectType :  class
     {
         public LongObjectIdGenerator() { }
@@ -2678,7 +2688,12 @@ namespace Catel.Services
         public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
         public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
     }
-    public sealed class ULongObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, ulong>
+    public sealed class ULongObjectIdGenerator<TObjectType> : Catel.Services.ULongObjectIdGenerator<TObjectType, ulong>
+        where TObjectType :  class
+    {
+        public ULongObjectIdGenerator() { }
+    }
+    public class ULongObjectIdGenerator<TObjectType, TLong> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, ulong>
         where TObjectType :  class
     {
         public ULongObjectIdGenerator() { }
