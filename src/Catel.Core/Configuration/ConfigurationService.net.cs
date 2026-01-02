@@ -46,16 +46,14 @@
         {
             _localSaveConfigurationTimer.Stop();
 
-            // Important: dispatch to prevent deadlocks, see ctor explanation
-            _dispatcherService.BeginInvoke(async () => await SaveLocalConfigurationAsync());
+            await SaveLocalConfigurationAsync();
         }
 
         private async void OnRoamingSaveConfigurationTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _roamingSaveConfigurationTimer.Stop();
 
-            // Important: dispatch to prevent deadlocks, see ctor explanation
-            _dispatcherService.BeginInvoke(async () => await SaveRoamingConfigurationAsync());
+            await SaveRoamingConfigurationAsync();
         }
 
         protected virtual void ScheduleSaveConfiguration(ConfigurationContainer container)

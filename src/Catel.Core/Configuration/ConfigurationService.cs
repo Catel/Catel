@@ -17,8 +17,6 @@
     /// <summary>
     /// Configuration service implementation that allows customization how configuration values
     /// are being used inside an application.
-    /// <para />
-    /// This default implementation writes to the
     /// </summary>
     public partial class ConfigurationService : IConfigurationService
     {
@@ -33,7 +31,6 @@
         private readonly ILogger<IConfigurationService> _logger;
         private readonly IObjectConverterService _objectConverterService;
         private readonly IAppDataService _appDataService;
-        private readonly IDispatcherService _dispatcherService;
         private readonly IConfigurationBuilder _configurationBuilder;
 
         private IConfiguration? _localConfiguration;
@@ -60,13 +57,11 @@
 
         public ConfigurationService(ILogger<ConfigurationService> logger,
             IObjectConverterService objectConverterService, IAppDataService appDataService,
-            IDispatcherService dispatcherService,
             [FromKeyedServices("CatelConfiguration")] IConfigurationBuilder configurationBuilder)
         {
             _logger = logger;
             _objectConverterService = objectConverterService;
             _appDataService = appDataService;
-            _dispatcherService = dispatcherService;
             _configurationBuilder = configurationBuilder;
             _localSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _localSaveConfigurationTimer.Elapsed += OnLocalSaveConfigurationTimerElapsed;
@@ -78,19 +73,6 @@
             _localConfigurationLock.EnableExtremeLogging = true;
             _roamingConfigurationLock.EnableExtremeLogging = true;
 #endif
-
-            // To prevent any deadlocks (when saving from timer tick), make sure to
-            // dispatch on timer ticks.
-            // 
-            // 1. Create a type in the type factory, that tries to read a value inside INeedCustomInitialization
-            // 2. At the *same* time, because other values were stored before, the timer in this class ticks
-            //    to save for the very first time, causing the modifiers to be constructed in a timer thread
-            //
-            // Since the TypeFactory is still creating the type, it cannot construct the newly required type thus
-            // causing a deadlock.
-            //
-            // For this reason, we have decided to dispatcher the timer tick events back to the 
-            // "main" thread
         }
 
         /// <summary>
@@ -300,13 +282,13 @@
         {
             var builder = _configurationBuilder;
 
-            if (File.Exists(source))
+            // At least 1 provider is required so always add 1
+            builder = builder.AddInMemoryCollection();
+
+            if (File.Exists(source) &&
+                new FileInfo(source).Length > 0)
             {
-                var fileInfo = new FileInfo(source);
-                if (fileInfo.Length > 0)
-                {
-                    builder = builder.AddJsonFile(source, true, false);
-                }
+                builder = builder.AddJsonFile(source, true, false);
             }
 
             var configuration = (IConfiguration)builder.Build();
@@ -316,7 +298,7 @@
             if (File.Exists(oldConfigurationFile))
             {
                 var stopwatch = Stopwatch.StartNew();
-                
+
                 // Try for 5 seconds
                 while (stopwatch.ElapsedMilliseconds < 5000)
                 {

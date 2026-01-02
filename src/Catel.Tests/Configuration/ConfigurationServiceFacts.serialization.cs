@@ -30,9 +30,7 @@
             {
                 public SerializationConfigurationService()
                     : base(new NullLogger<ConfigurationService>(), new ObjectConverterService(), 
-                        new AppDataService(), new DispatcherService(new NullLogger<DispatcherService>(), 
-                            new DispatcherProviderService(new NullLogger<DispatcherProviderService>())),
-                        new ConfigurationBuilder())
+                        new AppDataService(), new ConfigurationBuilder())
                 {
                 }
 

@@ -18,10 +18,7 @@
             private readonly string _name;
 
             public TestConfigurationService(string name, IObjectConverterService objectConverterService, IAppDataService appDataService)
-                : base(new NullLogger<ConfigurationService>(), objectConverterService, appDataService, 
-                      new DispatcherService(new NullLogger<DispatcherService>(), 
-                          new DispatcherProviderService(new NullLogger<DispatcherProviderService>())),
-                      new ConfigurationBuilder())
+                : base(new NullLogger<ConfigurationService>(), objectConverterService, appDataService, new ConfigurationBuilder())
             {
                 _name = name;
             }
@@ -36,7 +33,10 @@
 
                 if (!string.IsNullOrWhiteSpace(_name))
                 {
-                    configFileName = $"{System.IO.Path.GetFileNameWithoutExtension(configFileName)}.{_name}.xml";
+                    var directory = System.IO.Path.GetDirectoryName(configFileName);
+                    var fileName = $"{System.IO.Path.GetFileNameWithoutExtension(configFileName)}.{_name}.json";
+
+                    configFileName = System.IO.Path.Combine(directory, fileName);
                 }
 
                 return configFileName;

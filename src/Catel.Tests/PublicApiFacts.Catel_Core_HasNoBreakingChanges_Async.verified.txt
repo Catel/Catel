@@ -1,6 +1,5 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.MVVM")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Serialization.Json")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
 namespace Catel
@@ -211,10 +210,6 @@ namespace Catel
     {
         public static System.DateTime Now { get; }
         public static System.DateTime UtcNow { get; }
-    }
-    public static class HashHelper
-    {
-        public static int CombineHash(params int[] hashCodes) { }
     }
     public interface IBindableEnum<TEnum> : System.IComparable<Catel.IBindableEnum<TEnum>>, System.IEquatable<Catel.IBindableEnum<TEnum>>
         where TEnum :  struct, System.IComparable, System.IFormattable
@@ -721,7 +716,6 @@ namespace Catel.Collections
         public bool? TryRemoveItemFromNewItems(int index, T item) { }
         public bool TryRemoveItemFromOldItems(int index, T item) { }
     }
-    [System.Serializable]
     public class FastBindingList<T> : System.ComponentModel.BindingList<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
     {
         public FastBindingList(Catel.Services.IDispatcherService dispatcherService) { }
@@ -754,7 +748,6 @@ namespace Catel.Collections
         public System.IDisposable SuspendChangeNotifications() { }
         public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
     }
-    [System.Serializable]
     public class FastObservableCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
     {
         public FastObservableCollection(Catel.Services.IDispatcherService dispatcherService) { }
@@ -1010,10 +1003,10 @@ namespace Catel.Configuration
         public virtual void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object? defaultValue) { }
         public virtual bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
         public virtual System.Threading.Tasks.Task LoadAsync(Catel.Configuration.ConfigurationContainer configuration) { }
-        protected virtual System.Threading.Tasks.Task<Microsoft.Extensions.Configuration.IConfiguration> LoadConfigurationAsync(string source) { }
+        protected virtual System.Threading.Tasks.Task<Microsoft.Extensions.Configuration.IConfiguration> LoadConfigurationAsync(Catel.Configuration.ConfigurationContainer configurationContainer, string source) { }
         protected void RaiseConfigurationChanged(Catel.Configuration.ConfigurationContainer container, string key, object? value) { }
         public virtual System.Threading.Tasks.Task SaveAsync(Catel.Configuration.ConfigurationContainer configuration) { }
-        protected virtual System.Threading.Tasks.Task SaveConfigurationAsync(Microsoft.Extensions.Configuration.IConfiguration configuration, string fileName) { }
+        protected virtual System.Threading.Tasks.Task SaveConfigurationAsync(Catel.Configuration.ConfigurationContainer container, Microsoft.Extensions.Configuration.IConfiguration configuration, string fileName) { }
         protected void ScheduleLocalConfigurationSave() { }
         protected void ScheduleRoamingConfigurationSave() { }
         protected virtual void ScheduleSaveConfiguration(Catel.Configuration.ConfigurationContainer container) { }
@@ -1171,7 +1164,6 @@ namespace Catel.Data
     {
         protected ComparableModelBase(Catel.Data.IModelEqualityComparer equalityComparer) { }
         [System.ComponentModel.Browsable(false)]
-        [System.Xml.Serialization.XmlIgnore]
         protected Catel.Data.IModelEqualityComparer EqualityComparer { get; set; }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
@@ -1255,7 +1247,7 @@ namespace Catel.Data
         void Freeze();
         void Unfreeze();
     }
-    public interface IModel : Catel.Data.IFreezable, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged
+    public interface IModel : Catel.Data.IFreezable, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel>
     {
         string KeyName { get; }
         object? GetDefaultValue(string name);
@@ -1295,12 +1287,9 @@ namespace Catel.Data
     }
     public interface IPropertyData
     {
-        bool IncludeInBackup { get; }
-        bool IncludeInSerialization { get; }
         bool IsCalculatedProperty { get; set; }
         bool? IsDecoratedWithValidationAttributes { get; set; }
         bool IsModelBaseProperty { get; }
-        bool IsSerializable { get; }
         string Name { get; }
         System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? PropertyChangedEventHandler { get; }
         System.Type Type { get; }
@@ -1330,7 +1319,7 @@ namespace Catel.Data
         public static Catel.Data.IValidationContext GetValidationContext(this Catel.Data.IValidatable validatable) { }
         public static string GetWarningMessage(this Catel.Data.IValidatable validatable, string? userFriendlyObjectName = null) { }
     }
-    public interface IValidatableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged { }
+    public interface IValidatableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel> { }
     public static class IValidatableModelExtensions
     {
         public static Catel.Data.IValidationContext GetValidationContextForObjectGraph(this Catel.Data.IValidatableModel model) { }
@@ -1447,8 +1436,7 @@ namespace Catel.Data
         public System.Type ExpectedType { get; }
         public string PropertyName { get; }
     }
-    [System.Serializable]
-    public abstract class ModelBase : Catel.Data.ObservableObject, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged
+    public abstract class ModelBase : Catel.Data.ObservableObject, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel>
     {
         public static readonly Catel.Data.IPropertyData IsDirtyProperty;
         public static readonly Catel.Data.IPropertyData IsReadOnlyProperty;
@@ -1456,12 +1444,13 @@ namespace Catel.Data
         [System.ComponentModel.Browsable(false)]
         protected bool AlwaysInvokeNotifyChanged { get; set; }
         [System.ComponentModel.Browsable(false)]
-        [System.Xml.Serialization.XmlIgnore]
         public bool IsDirty { get; protected set; }
         [System.ComponentModel.Browsable(false)]
-        [System.Xml.Serialization.XmlIgnore]
         public bool IsReadOnly { get; protected set; }
         protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
+        public virtual bool Equals(Catel.Data.IModel? other) { }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
         protected Catel.Data.IPropertyData GetPropertyData(string name) { }
         protected System.Func<object, TValue>? GetPropertyGetterExpression<TValue>(string propertyName) { }
         protected TValue GetValue<TValue>(Catel.Data.IPropertyData property) { }
@@ -1484,12 +1473,12 @@ namespace Catel.Data
         public override string? ToString() { }
         protected static object? GetObjectValue<TValue>(TValue value) { }
         protected static bool IsPropertyRegistered(System.Type type, string name) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, System.Func<TValue>? createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue>? createDefaultValue = null, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, TValue defaultValue, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, System.Func<object?>? createDefaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
-        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, object? defaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, System.Func<TValue>? createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue>? createDefaultValue = null, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null) { }
+        public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, TValue defaultValue, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null) { }
+        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, System.Func<object?>? createDefaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false) { }
+        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, object? defaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false) { }
         protected static void UnregisterProperty(System.Type modelType, string name) { }
     }
     public static class ModelBaseExtensions { }
@@ -1502,7 +1491,6 @@ namespace Catel.Data
         public override bool Equals(Catel.Data.ModelBase? x, Catel.Data.ModelBase? y) { }
         public override int GetHashCode(Catel.Data.ModelBase obj) { }
     }
-    [System.Serializable]
     public class ObservableObject : System.ComponentModel.INotifyPropertyChanged
     {
         public ObservableObject() { }
@@ -1577,22 +1565,11 @@ namespace Catel.Data
     }
     public class PropertyData<T> : Catel.Data.IPropertyData
     {
-        [System.Xml.Serialization.XmlIgnore]
-        public bool IncludeInBackup { get; }
-        [System.Xml.Serialization.XmlIgnore]
-        public bool IncludeInSerialization { get; }
-        [System.Xml.Serialization.XmlIgnore]
         public bool IsCalculatedProperty { get; set; }
-        [System.Xml.Serialization.XmlIgnore]
         public bool? IsDecoratedWithValidationAttributes { get; set; }
-        [System.Xml.Serialization.XmlIgnore]
         public bool IsModelBaseProperty { get; }
-        [System.Xml.Serialization.XmlIgnore]
-        public bool IsSerializable { get; }
         public string Name { get; }
-        [System.Xml.Serialization.XmlIgnore]
         public System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? PropertyChangedEventHandler { get; }
-        [System.Xml.Serialization.XmlIgnore]
         public System.Type Type { get; }
         public object? GetDefaultValue() { }
         public TValue GetDefaultValue<TValue>() { }
@@ -1611,22 +1588,16 @@ namespace Catel.Data
         public System.Type ObjectType { get; }
         public string PropertyName { get; }
     }
-    [System.Serializable]
-    public class PropertyValue : System.Runtime.Serialization.ISerializable
+    public class PropertyValue
     {
         public PropertyValue() { }
         public PropertyValue(Catel.Data.IPropertyData propertyData, System.Collections.Generic.KeyValuePair<string, object> keyValuePair) { }
-        public PropertyValue(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public PropertyValue(Catel.Data.IPropertyData propertyData, string name, object value) { }
-        [System.Xml.Serialization.XmlIgnore]
         public int GraphId { get; set; }
-        [System.Xml.Serialization.XmlIgnore]
         public int GraphRefId { get; set; }
         public string? Name { get; set; }
-        [System.Xml.Serialization.XmlIgnore]
         public Catel.Data.IPropertyData? PropertyData { get; }
         public object? Value { get; set; }
-        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public class ReflectionObjectAdapter : Catel.Data.IObjectAdapter
     {
@@ -1672,22 +1643,19 @@ namespace Catel.Data
         public override bool IsAvailable(string name) { }
         public override void SetValue<TValue>(string name, TValue value) { }
     }
-    public abstract class ValidatableModelBase : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, Catel.Data.IValidatableModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
+    public abstract class ValidatableModelBase : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IValidatable, Catel.Data.IValidatableModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged, System.IEquatable<Catel.Data.IModel>
     {
         protected static readonly System.Collections.Generic.Dictionary<System.Type, System.Collections.Generic.HashSet<string>> PropertiesNotCausingValidation;
         protected ValidatableModelBase() { }
         [System.ComponentModel.Browsable(false)]
         protected bool AutomaticallyValidateOnPropertyChanged { get; set; }
         [System.ComponentModel.Browsable(false)]
-        [System.Xml.Serialization.XmlIgnore]
         public virtual bool HasErrors { get; }
         [System.ComponentModel.Browsable(false)]
-        [System.Xml.Serialization.XmlIgnore]
         public virtual bool HasWarnings { get; }
         [System.ComponentModel.Browsable(false)]
         protected bool HideValidationResults { get; set; }
         [System.ComponentModel.Browsable(false)]
-        [System.Xml.Serialization.XmlIgnore]
         protected bool IsValidating { get; }
         protected virtual bool IsValidationSuspended { get; }
         protected bool ValidateUsingDataAnnotations { get; set; }
@@ -1862,13 +1830,6 @@ namespace Catel.Data
         protected ValidatorProviderBase() { }
         public bool UseCache { get; set; }
         protected abstract Catel.Data.IValidator? GetValidator(System.Type targetType);
-    }
-    public class XmlNameMapper<T>
-    {
-        public bool IsPropertyNameMappedToXmlName(System.Type type, string propertyName) { }
-        public bool IsXmlNameMappedToProperty(System.Type type, string xmlName) { }
-        public string MapPropertyNameToXmlName(System.Type type, string propertyName) { }
-        public string MapXmlNameToPropertyName(System.Type type, string xmlName) { }
     }
 }
 namespace Catel.IO
@@ -2502,32 +2463,6 @@ namespace Catel.Reflection
         public static System.Reflection.MethodInfo[] GetMethods(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.PropertyInfo[] GetProperties(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.PropertyInfo? GetProperty(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
-    }
-}
-namespace Catel.Runtime
-{
-    public class ReferenceEqualityComparer<TObject> : System.Collections.Generic.IEqualityComparer<TObject>
-        where TObject :  class
-    {
-        public ReferenceEqualityComparer() { }
-        public bool Equals(TObject? x, TObject? y) { }
-        public int GetHashCode(TObject? obj) { }
-    }
-    public class ReferenceInfo
-    {
-        public ReferenceInfo(object instance, int? id, bool isFirstUsage) { }
-        public int? Id { get; }
-        public object Instance { get; }
-        public bool IsFirstUsage { get; }
-    }
-    public class ReferenceManager
-    {
-        public ReferenceManager() { }
-        public int Count { get; }
-        public Catel.Runtime.ReferenceInfo? GetInfo(object instance, bool autoAssignId = true) { }
-        public Catel.Runtime.ReferenceInfo GetInfoAt(int index) { }
-        public Catel.Runtime.ReferenceInfo? GetInfoById(int id) { }
-        public void RegisterManually(int id, object? instance) { }
     }
 }
 namespace Catel.Scoping
