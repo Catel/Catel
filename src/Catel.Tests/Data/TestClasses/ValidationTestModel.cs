@@ -48,6 +48,13 @@
         /// </summary>
         public static readonly IPropertyData ValueToValidateProperty = RegisterProperty("ValueToValidate", ValueThatHasNoWarningsOrErrors);
 
+
+        [Required(ErrorMessage = "Non-catel is required")]
+        public string NonCatelPropertyWithAnnotations { get; set; }
+
+        [Required(ErrorMessage = "Non-catel is required")]
+        public string NonCatelCalculatedPropertyWithAnnotations { get { return "default value"; } }
+
         /// <summary>
         /// Gets or sets the object with annotation validation.
         /// </summary>
@@ -150,6 +157,16 @@
             {
                 validationResults.Add(FieldValidationResult.CreateWarning(WarningWhenEmptyProperty, "Should not be empty"));
             }
+
+            if (ValueToValidate == ValueThatCausesFieldWarning)
+            {
+                validationResults.Add(FieldValidationResult.CreateWarning(ValueToValidateProperty, "Field warning"));
+            }
+
+            if (ValueToValidate == ValueThatCausesFieldError)
+            {
+                validationResults.Add(FieldValidationResult.CreateError(ValueToValidateProperty, "Field error"));
+            }
         }
 
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
@@ -162,6 +179,16 @@
             if (string.IsNullOrEmpty(BusinessRuleWarningWhenEmpty))
             {
                 validationResults.Add(BusinessRuleValidationResult.CreateWarning("BusinessRuleWarningWhenEmpty should not be empty"));
+            }
+
+            if (ValueToValidate == ValueThatCausesBusinessWarning)
+            {
+                validationResults.Add(BusinessRuleValidationResult.CreateWarning("Business rule warning"));
+            }
+
+            if (ValueToValidate == ValueThatCausesBusinessError)
+            {
+                validationResults.Add(BusinessRuleValidationResult.CreateError("Business rule error"));
             }
         }
     }

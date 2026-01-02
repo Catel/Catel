@@ -9,7 +9,7 @@
     /// <remarks>
     /// This interface defines all the non-generic interfaces that the <see cref="ModelBase"/> class implements.
     /// </remarks>
-    public interface IModel : INotifyPropertyChanged, IModelEditor, IFreezable, IEquatable<IModel>
+    public interface IModel : INotifyPropertyChanged, IModelEditor, IFreezable
     {
         /// <summary>
         /// Gets the name of the object. By default, this is the name of the inherited class.

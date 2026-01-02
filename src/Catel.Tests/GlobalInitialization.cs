@@ -1,5 +1,8 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
+using Catel.Logging;
 using Catel.Reflection;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 /// <summary>
@@ -12,6 +15,18 @@ public class GlobalInitialization
     [OneTimeSetUp]
     public static void SetUp()
     {
+        LogManager.FallbackLoggerFactory = LoggerFactory.Create(x =>
+        {
+            if (Debugger.IsAttached)
+            {
+                x.AddFilter(x => x == LogLevel.Debug);
+
+                x.AddDebug();
+            }
+
+            x.AddConsole();
+        });
+
         //// For testing purposes, enable features we disabled for CTL-234
         //var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
         //modelEqualityComparer.CompareProperties = true;

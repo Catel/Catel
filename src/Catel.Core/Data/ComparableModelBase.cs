@@ -12,6 +12,12 @@
         /// </summary>
         private int? _hashCode;
 
+        protected ComparableModelBase()
+            : this(ModelEqualityComparer.Default)
+        {
+            // Leave empty
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
         /// </summary>

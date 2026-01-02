@@ -2,7 +2,7 @@
 {
     using Catel.Data;
 
-    public class PersonTestModel : ModelBase
+    public class PersonTestModel : ComparableModelBase
     {
         public string FirstName
         {

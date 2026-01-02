@@ -10,22 +10,22 @@
     public static partial class IModelExtensions
     {
         /// <summary>
-        /// Clears the <see cref="ModelBase.IsDirty" /> on all childs.
+        /// Clears the <see cref="ModelBase.IsDirty" /> on all children.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
         public static void ClearIsDirtyOnAllChildren(this IModel model, bool suspendNotifications = false)
         {
-            ClearIsDirtyOnAllChildren(model, new HashSet<object>(), suspendNotifications);
+            ClearIsDirtyOnAllChildren(model, new HashSet<IModelEditor>(), suspendNotifications);
         }
 
         /// <summary>
-        /// Clears the <see cref="ModelBase.IsDirty"/> on all childs.
+        /// Clears the <see cref="ModelBase.IsDirty"/> on all children.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="handledReferences">The already handled references, required to prevent circular stackoverflows.</param>
         /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
-        private static void ClearIsDirtyOnAllChildren(object obj, HashSet<object> handledReferences, bool suspendNotifications)
+        private static void ClearIsDirtyOnAllChildren(object obj, HashSet<IModelEditor> handledReferences, bool suspendNotifications)
         {
             var modelEditor = obj as IModelEditor;
             var objAsIEnumerable = obj as IEnumerable;
@@ -34,7 +34,7 @@
                 objAsIEnumerable = null;
             }
 
-            if (!(modelEditor is null))
+            if (modelEditor is not null)
             {
                 if (handledReferences.Contains(modelEditor))
                 {
@@ -49,9 +49,25 @@
                 var catelTypeInfo = ModelBase.PropertyDataManager.GetCatelTypeInfo(obj.GetType());
                 foreach (var property in catelTypeInfo.GetCatelProperties())
                 {
-                    var value = modelEditor.GetValue<object>(property.Value.Name);
+                    if (property.Value.IsCalculatedProperty ||
+                        property.Value.IsModelBaseProperty)
+                    {
+                        continue;
+                    }
 
-                    ClearIsDirtyOnAllChildren(value, handledReferences, suspendNotifications);
+                    var value = modelEditor.GetValueFastButUnsecure<object?>(property.Value.Name);
+                    if (value is IModel model)
+                    {
+                        ClearIsDirtyOnAllChildren(model, handledReferences, suspendNotifications);
+                    }
+                    else if (value is string)
+                    {
+                        // ignore
+                    }
+                    else if (value is IEnumerable enumerableValue)
+                    {
+                        ClearIsDirtyOnAllChildren(enumerableValue, handledReferences, suspendNotifications);
+                    }
                 }
 
                 if (suspendNotifications)

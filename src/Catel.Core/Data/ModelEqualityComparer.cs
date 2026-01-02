@@ -1,5 +1,6 @@
 ﻿namespace Catel.Data
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using Catel.Collections;
@@ -32,6 +33,12 @@
             CompareValues = false;
             CompareCollections = false;
         }
+
+        public new static ModelEqualityComparer Default { get; } = new ModelEqualityComparer
+        {
+            CompareProperties = true,
+            CompareValues = true
+        };
 
         /// <summary>
         /// Gets or sets a value indicating whether properties should be compared.
@@ -156,8 +163,30 @@
                 return 0;
             }
 
-            var objType = obj.GetType();
-            return objType.GetSafeFullName().GetHashCode();
+            //var objType = obj.GetType();
+            //return objType.GetSafeFullName().GetHashCode();
+
+            var hashCode = new HashCode();
+
+            var propertyDataManager = PropertyDataManager.Default.GetCatelTypeInfo(GetType());
+            var properties = propertyDataManager.GetCatelProperties();
+
+            var modelEditor = (IModelEditor)obj;
+
+            foreach (var property in properties)
+            {
+                // Note: we must include ModelBase properties here to ensure proper equality comparison
+                //if (property.Value.IsModelBaseProperty)
+                //{
+                //    continue;
+                //}
+
+                var propertyValue = modelEditor.GetValueFastButUnsecure<object?>(property.Key);
+                hashCode.Add(propertyValue);
+            }
+
+            var finalHashCode = hashCode.ToHashCode();
+            return finalHashCode;
         }
     }
 }

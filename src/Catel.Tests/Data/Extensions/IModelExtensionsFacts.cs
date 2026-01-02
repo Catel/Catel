@@ -81,11 +81,15 @@
                     Name = "test"
                 };
 
+                var totalCount = 0;
+
                 for (int i = 0; i < 100; i++)
                 {
                     var plugin = new Plugin
                     {
                     };
+
+                    totalCount++;
 
                     plugin.PropertyChanged += (sender, e) =>
                     {
@@ -98,6 +102,8 @@
                         {
                             Foo = (j + 1).ToString()
                         };
+
+                        totalCount++;
 
                         preset.PropertyChanged += (sender, e) =>
                         {
