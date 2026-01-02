@@ -99,7 +99,7 @@
         /// <summary>
         /// Register the IsDirty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData IsDirtyProperty = RegisterProperty<bool>(nameof(IsDirty), false, null, false, true, true);
+        public static readonly IPropertyData IsDirtyProperty = RegisterProperty<bool>(nameof(IsDirty), false, null, true);
 
         /// <summary>
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
@@ -116,7 +116,7 @@
         /// <summary>
         /// Register the IsReadOnly property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData IsReadOnlyProperty = RegisterProperty<bool>(nameof(IsReadOnly), false, null, false, true, true);
+        public static readonly IPropertyData IsReadOnlyProperty = RegisterProperty<bool>(nameof(IsReadOnly), false, null, true);
 
         /// <summary>
         /// Allows the initialization of custom properties. This is a virtual method that is called

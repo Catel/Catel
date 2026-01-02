@@ -322,29 +322,14 @@
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
             Assert.That(instance.StringPropertyWithSpecifiedDefaultValue, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.GetDefaultValue<string>()));
             Assert.That(instance.StringProperty, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.GetDefaultValue<string>()));
-            Assert.That(instance.IntPropertyWithPropertyChangeNotification, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.GetDefaultValue<int>()));
+            Assert.That(instance.IntPropertyWithPropertyChangeNotification, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNotificationProperty.GetDefaultValue<int>()));
             Assert.That(instance.IntPropertyExcludedFromSerializationAndBackup, Is.EqualTo(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.GetDefaultValue<int>()));
-        }
-
-        [TestCase]
-        public void Properties_Are_Actually_Registered_With_The_Specified_Configuration_For_Serialization_And_Backup()
-        {
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInSerialization, Is.EqualTo(true));
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInSerialization, Is.EqualTo(true));
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInSerialization, Is.EqualTo(true));
-
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInBackup, Is.EqualTo(true));
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInBackup, Is.EqualTo(true));
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInBackup, Is.EqualTo(true));
-
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInSerialization, Is.EqualTo(false));
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInBackup, Is.EqualTo(false));
         }
 
         [TestCase]
         public void Properties_Are_Registered_With_Property_Change_Notification()
         {
-            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.PropertyChangedEventHandler, Is.Not.Null);
+            Assert.That(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNotificationProperty.PropertyChangedEventHandler, Is.Not.Null);
 
             var random = new Random();
             int maxPropertyChanges = random.Next(0, 15);

@@ -69,7 +69,7 @@
         private static void RegisterProperty<T>(PropertyDataManager propertyDataManager, string name, T defaultValue)
         {
             propertyDataManager.RegisterProperty(typeof(PropertyDataManagerFacts), name,
-                new PropertyData<T>(name, defaultValue, null, false, false, false, false, false));
+                new PropertyData<T>(name, defaultValue, null, false, false));
         }
         #endregion
 

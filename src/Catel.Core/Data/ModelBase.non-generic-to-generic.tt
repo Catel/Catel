@@ -38,18 +38,15 @@ namespace Catel.Data
         /// <param name="type">Type of the property.</param>
         /// <param name="defaultValue">Default value of the property.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
-        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
-        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
         /// <returns>
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, object? defaultValue = null,
-            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
-            bool includeInBackup = true, bool isModelBaseProperty = false)
+            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false)
         {
-            return RegisterPropertyNonGeneric(name, type, () => defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty);
+            return RegisterPropertyNonGeneric(name, type, () => defaultValue, propertyChangedEventHandler, isModelBaseProperty);
         }
 
         /// <summary>
@@ -59,16 +56,13 @@ namespace Catel.Data
         /// <param name="type">Type of the property.</param>
         /// <param name="createDefaultValue">Default value of the property.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
-        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
-        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
         /// <returns>
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, Func<object?>? createDefaultValue,
-            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
-            bool includeInBackup = true, bool isModelBaseProperty = false)
+            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false)
         {
 <# 
 foreach (TypeCode typeCode in typeCodes) 
@@ -108,8 +102,7 @@ foreach (TypeCode typeCode in typeCodes)
                     });
                 }
 
-                return RegisterProperty<<#= typeCode.ToString() #>>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<<#= typeCode.ToString() #>>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
 <#
@@ -118,8 +111,7 @@ foreach (TypeCode typeCode in typeCodes)
             // Backwards compatibility, slow but required. Uses this method:
 
             // private static IPropertyData RegisterProperty<TValue>(string name, Func<TValue>? createDefaultValue = null,
-            //    EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
-            //    bool includeInBackup = true, bool isModelBaseProperty = false)
+            //    EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false)
 
             MethodInfo? registerPropertyMethod = null;
 
@@ -152,7 +144,7 @@ foreach (TypeCode typeCode in typeCodes)
             }
 
             var finalMethod = registerPropertyMethod!.MakeGenericMethod(type);
-            var propertyData = (IPropertyData)finalMethod!.Invoke(null, new object?[] { name, createDefaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty })!;
+            var propertyData = (IPropertyData)finalMethod!.Invoke(null, new object?[] { name, createDefaultValue, propertyChangedEventHandler, isModelBaseProperty })!;
             return propertyData!;
         }
 

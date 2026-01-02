@@ -9,11 +9,8 @@
     /// </summary>
     public interface IPropertyData
     {
-        bool IncludeInBackup { get; }
-        bool IncludeInSerialization { get; }
         bool IsCalculatedProperty { get; set; }
         bool IsModelBaseProperty { get; }
-        bool IsSerializable { get; }
         bool? IsDecoratedWithValidationAttributes { get; set; }
 
         string Name { get; }

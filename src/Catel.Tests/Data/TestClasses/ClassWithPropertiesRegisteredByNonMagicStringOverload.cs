@@ -8,9 +8,9 @@
 
         public static readonly IPropertyData StringPropertyWithSpecifiedDefaultValueProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, string>(instance => instance.StringPropertyWithSpecifiedDefaultValue, "NonNullOrEmptyDefaultValue");
 
-        public static readonly IPropertyData IntPropertyWithPropertyChangeNoticationProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyWithPropertyChangeNotification, default(int), (s, e) => s.OnIntPropertyWithPropertyChangeNotificationChanged());
+        public static readonly IPropertyData IntPropertyWithPropertyChangeNotificationProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyWithPropertyChangeNotification, default(int), (s, e) => s.OnIntPropertyWithPropertyChangeNotificationChanged());
 
-        public static readonly IPropertyData IntPropertyExcludedFromSerializationAndBackupProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyExcludedFromSerializationAndBackup, default(int), null, false, false);
+        public static readonly IPropertyData IntPropertyExcludedFromSerializationAndBackupProperty = RegisterProperty<ClassWithPropertiesRegisteredByNonMagicStringOverload, int>(instance => instance.IntPropertyExcludedFromSerializationAndBackup, default(int), null);
 
         public int IntPropertyExcludedFromSerializationAndBackup
         {
@@ -32,8 +32,8 @@
 
         public int IntPropertyWithPropertyChangeNotification
         {
-            get { return GetValue<int>(IntPropertyWithPropertyChangeNoticationProperty); }
-            set { SetValue(IntPropertyWithPropertyChangeNoticationProperty, value); }
+            get { return GetValue<int>(IntPropertyWithPropertyChangeNotificationProperty); }
+            set { SetValue(IntPropertyWithPropertyChangeNotificationProperty, value); }
         }
 
         public int IntPropertyWithPropertyChangeNotificationsCount { get; private set; }

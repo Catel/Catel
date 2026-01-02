@@ -29,18 +29,15 @@ namespace Catel.Data
         /// <param name="type">Type of the property.</param>
         /// <param name="defaultValue">Default value of the property.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
-        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
-        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
         /// <returns>
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, object? defaultValue = null,
-            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
-            bool includeInBackup = true, bool isModelBaseProperty = false)
+            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false)
         {
-            return RegisterPropertyNonGeneric(name, type, () => defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty);
+            return RegisterPropertyNonGeneric(name, type, () => defaultValue, propertyChangedEventHandler, isModelBaseProperty);
         }
 
         /// <summary>
@@ -50,16 +47,13 @@ namespace Catel.Data
         /// <param name="type">Type of the property.</param>
         /// <param name="createDefaultValue">Default value of the property.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
-        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
-        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
         /// <returns>
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, Func<object?>? createDefaultValue,
-            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
-            bool includeInBackup = true, bool isModelBaseProperty = false)
+            EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false)
         {
             if (type == typeof(Boolean))
             {
@@ -87,8 +81,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Boolean>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Boolean>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Char))
@@ -117,8 +110,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Char>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Char>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(SByte))
@@ -147,8 +139,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<SByte>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<SByte>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Byte))
@@ -177,8 +168,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Byte>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Byte>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Int16))
@@ -207,8 +197,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Int16>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Int16>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(UInt16))
@@ -237,8 +226,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<UInt16>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<UInt16>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Int32))
@@ -267,8 +255,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Int32>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Int32>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(UInt32))
@@ -297,8 +284,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<UInt32>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<UInt32>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Int64))
@@ -327,8 +313,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Int64>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Int64>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(UInt64))
@@ -357,8 +342,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<UInt64>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<UInt64>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Single))
@@ -387,8 +371,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Single>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Single>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Double))
@@ -417,8 +400,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Double>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Double>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(Decimal))
@@ -447,8 +429,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<Decimal>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<Decimal>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(DateTime))
@@ -477,8 +458,7 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<DateTime>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<DateTime>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             if (type == typeof(String))
@@ -507,15 +487,13 @@ namespace Catel.Data
                     });
                 }
 
-                return RegisterProperty<String>(name, createTypedDefaultValue, propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
+                return RegisterProperty<String>(name, createTypedDefaultValue, propertyChangedEventHandler, isModelBaseProperty);
             }
 
             // Backwards compatibility, slow but required. Uses this method:
 
             // private static IPropertyData RegisterProperty<TValue>(string name, Func<TValue>? createDefaultValue = null,
-            //    EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool includeInSerialization = true,
-            //    bool includeInBackup = true, bool isModelBaseProperty = false)
+            //    EventHandler<PropertyChangedEventArgs>? propertyChangedEventHandler = null, bool isModelBaseProperty = false)
 
             MethodInfo? registerPropertyMethod = null;
 
@@ -548,7 +526,7 @@ namespace Catel.Data
             }
 
             var finalMethod = registerPropertyMethod!.MakeGenericMethod(type);
-            var propertyData = (IPropertyData)finalMethod!.Invoke(null, new object?[] { name, createDefaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty })!;
+            var propertyData = (IPropertyData)finalMethod!.Invoke(null, new object?[] { name, createDefaultValue, propertyChangedEventHandler, isModelBaseProperty })!;
             return propertyData!;
         }
 
