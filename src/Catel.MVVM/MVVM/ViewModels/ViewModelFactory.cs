@@ -144,8 +144,15 @@
                     return viewModel;
                 }
             }
+#if DEBUG
+            catch (Exception ex)
+#else
             catch (Exception)
+#endif
             {
+#if DEBUG
+                _logger.LogDebug(ex, "Failed to create viewmodel");
+#endif
                 // ignore
             }
 

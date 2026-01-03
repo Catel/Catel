@@ -2757,6 +2757,45 @@ namespace Catel.Text
         public static void AppendLine(this System.Text.StringBuilder sb, string format, object arg0, object arg1, object arg2) { }
     }
 }
+namespace Catel.ThirdPartyNotices
+{
+    public class FileBasedThirdPartyNotice : Catel.ThirdPartyNotices.ThirdPartyNotice
+    {
+        public FileBasedThirdPartyNotice(string title, string url, string fileName) { }
+    }
+    public class FontThirdPartyNotice : Catel.ThirdPartyNotices.ThirdPartyNotice
+    {
+        public FontThirdPartyNotice(string fontName, string fontUrl) { }
+    }
+    public interface IThirdPartyNotice
+    {
+        string Content { get; }
+        string Title { get; }
+        string Url { get; }
+    }
+    public class LibraryThirdPartyNotice : Catel.ThirdPartyNotices.ResourceBasedThirdPartyNotice
+    {
+        public LibraryThirdPartyNotice(string title, string url) { }
+        public LibraryThirdPartyNotice(string title, string url, string assemblyName) { }
+        public LibraryThirdPartyNotice(string title, string url, string assemblyName, string rootNamespace) { }
+    }
+    public class ResourceBasedThirdPartyNotice : Catel.ThirdPartyNotices.ThirdPartyNotice
+    {
+        protected ResourceBasedThirdPartyNotice() { }
+        public ResourceBasedThirdPartyNotice(string title, string url, System.Reflection.Assembly assembly, string relativeResourceName) { }
+        public ResourceBasedThirdPartyNotice(string title, string url, string assemblyName, string relativeResourceName) { }
+        public ResourceBasedThirdPartyNotice(string title, string url, System.Reflection.Assembly assembly, string rootNamespace, string relativeResourceName) { }
+        public ResourceBasedThirdPartyNotice(string title, string url, string assemblyName, string rootNamespace, string relativeResourceName) { }
+        protected void Initialize(string title, string url, System.Reflection.Assembly assembly, string rootNamespace, string relativeResourceName) { }
+    }
+    public class ThirdPartyNotice : Catel.ThirdPartyNotices.IThirdPartyNotice
+    {
+        public ThirdPartyNotice() { }
+        public string Content { get; protected set; }
+        public string Title { get; protected set; }
+        public string Url { get; protected set; }
+    }
+}
 namespace Catel.Threading
 {
     [System.Diagnostics.DebuggerDisplay("Id = {Id}, Taken = {_taken}")]

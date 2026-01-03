@@ -1,0 +1,57 @@
+The MIT License (MIT)
+
+Copyright (c) 2008 - 2018 CatenaLogic
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+==============================================================================
+
+Additional licenses / components
+--------------------------------
+
+Some components in Catel are based on other open-source components. Each component
+that is based on another component has a reference to the original component including
+the original license the code was delivered upon. Below is a list of these components:
+
+* DynamicEventListener
+  http://stackoverflow.com/questions/8122085/calling-an-instance-method-when-event-occurs/8122242#8122242
+  Original license: CC BY-SA 2.5, compatible with the MIT license.
+
+* TypeHelper.IsSubclassOfRawGeneric
+  http://stackoverflow.com/questions/457676/c-reflection-check-if-a-class-is-derived-from-a-generic-class
+  Original license: CC BY-SA 2.5, compatible with the MIT license.
+
+* MethodToValueConverter
+  http://stackoverflow.com/questions/502250/bind-to-a-method-in-wpf
+  Original license: CC BY-SA 2.5, compatible with the MIT license.
+
+* ObjectExtensions.IsSentinelBindingObject
+  http://stackoverflow.com/questions/3868786/wpf-sentinel-objects-and-how-to-check-for-an-internal-type
+  Original license: CC BY-SA 2.5, compatible with the MIT license.
+  
+* DragDrop
+  http://wpfbehaviorlibrary.codeplex.com/, which is based on http://gallery.expression.microsoft.com/DragDropBehavior/
+  Original license: Ms-Pl, compatible with the MIT license.
+
+* ValueConverterGroup
+  http://www.codeproject.com/KB/WPF/PipingValueConverters_WPF.aspx
+  Original license: CPOL, compatible with the MIT license.
+  
+If you think that this list is incomplete, let us know.

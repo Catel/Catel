@@ -2,6 +2,7 @@
 {
     using Catel.Logging;
     using Catel.Reflection;
+    using Catel.ThirdPartyNotices;
     using Configuration;
     using Data;
     using Messaging;
@@ -54,6 +55,8 @@
             // Note: we don't have resources in Catel.Core at the moment
             //serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
             //serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
+            
+            serviceCollection.AddSingleton<IThirdPartyNotice>((x) => new LibraryThirdPartyNotice("Catel", "https://www.catelproject.com", "Catel.Core", "Catel"));
 
             return serviceCollection;
         }
