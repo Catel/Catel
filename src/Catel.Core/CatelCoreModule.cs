@@ -28,9 +28,9 @@
             serviceCollection.TryAddSingleton<IConfigurationService, ConfigurationService>();
 
             // Logging
-            serviceCollection.AddSingleton<ILogger, InMemoryLogger>();
-            serviceCollection.AddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
-            serviceCollection.AddSingleton<IInMemoryLoggingContainer, InMemoryLoggingContainer>();
+            serviceCollection.TryAddSingleton<ILogger, InMemoryLogger>();
+            serviceCollection.TryAddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
+            serviceCollection.TryAddSingleton<IInMemoryLoggingContainer, InMemoryLoggingContainer>();
 
             serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
             serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();

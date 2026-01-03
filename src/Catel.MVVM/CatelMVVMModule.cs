@@ -15,8 +15,6 @@
     {
         public static IServiceCollection AddCatelMvvm(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddCatelCore();
-
             serviceCollection.TryAddSingleton<IDataContextSubscriptionService, DataContextSubscriptionService>();
             serviceCollection.TryAddSingleton<ICommandManager, CommandManager>();
             serviceCollection.TryAddSingleton<IViewLoadManager, ViewLoadManager>();
