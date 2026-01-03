@@ -3,7 +3,6 @@
     using System;
     using System.Windows;
     using Catel.Logging;
-    using Catel.Reflection;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
@@ -16,6 +15,28 @@
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
+        }
+
+        public virtual FrameworkElement? CreateView(Type viewType)
+        {
+            ArgumentNullException.ThrowIfNull(viewType);
+
+            _logger.LogDebug("Constructing view for view type '{0}'", viewType.Name);
+
+            FrameworkElement? view = null;
+
+            try
+            {
+                view = ActivatorUtilities.CreateInstance(_serviceProvider, viewType) as FrameworkElement;
+            }
+            catch (Exception ex)
+            {
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{0}' using default constructor", viewType.Name);
+            }
+
+            _logger.LogDebug("Constructed view using default constructor");
+
+            return view;
         }
 
         /// <summary>

@@ -47,7 +47,9 @@
   <Folder Name="/src/Orc.Skia/">
     <Project Path="../../Orc.Skia/src/Orc.Skia/Orc.Skia.csproj" Id="9a158429-3dc0-4eae-99ef-82362cd4eae0" />
   </Folder>
-  <Folder Name="/src/Orc.Skia/Tests/" />
+  <Folder Name="/src/Orc.Skia/Tests/">
+    <Project Path="../../Orc.Skia/src/Orc.Skia.Tests/Orc.Skia.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.SystemInfo/">
     <Project Path="../../Orc.SystemInfo/src/Orc.SystemInfo/Orc.SystemInfo.csproj" Id="80a0d499-6ec4-49e5-b7be-1e9f196ba7fa" />
   </Folder>
@@ -59,6 +61,15 @@
   </Folder>
   <Folder Name="/src/Orc.Theming/Tests/">
     <Project Path="../../Orc.Theming/src/Orc.Theming.Tests/Orc.Theming.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Wizard/">
+    <Project Path="../../Orc.Wizard/src/Orc.Wizard/Orc.Wizard.csproj" Id="b5bf9f67-3ca7-4728-ab3e-08a54bdb33dc" />
+  </Folder>
+  <Folder Name="/src/Orc.Wizard/Example/">
+    <Project Path="../../Orc.Wizard/src/Orc.Wizard.Example/Orc.Wizard.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Wizard/Tests/">
+    <Project Path="../../Orc.Wizard/src/Orc.Wizard.Tests/Orc.Wizard.Tests.csproj" />
   </Folder>
   <Folder Name="/src/Orchestra.Example/">
     <Project Path="../../Orchestra/src/Orchestra.Examples.Ribbon.Fluent/Orchestra.Examples.Ribbon.Fluent.csproj" />

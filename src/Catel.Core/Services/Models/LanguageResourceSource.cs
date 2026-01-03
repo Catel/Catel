@@ -12,6 +12,27 @@
         /// Initializes a new instance of the <see cref="LanguageResourceSource" /> class.
         /// </summary>
         /// <param name="assemblyName">Name of the assembly.</param>
+        public LanguageResourceSource(string assemblyName)
+            : this(assemblyName, $"{assemblyName}.Properties")
+        {
+            // Leave empty
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LanguageResourceSource" /> class.
+        /// </summary>
+        /// <param name="assemblyName">Name of the assembly.</param>
+        /// <param name="namespaceName">Name of the namespace.</param>
+        public LanguageResourceSource(string assemblyName, string namespaceName)
+            : this(assemblyName, namespaceName, "Resources")
+        {
+            // Leave empty
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LanguageResourceSource" /> class.
+        /// </summary>
+        /// <param name="assemblyName">Name of the assembly.</param>
         /// <param name="namespaceName">Name of the namespace.</param>
         /// <param name="resourceFileName">Name of the resource file.</param>
         public LanguageResourceSource(string assemblyName, string namespaceName, string resourceFileName)

@@ -5,6 +5,12 @@
 
     public static class IViewFactoryExtensions
     {
+        public static T? CreateView<T>(this IViewFactory viewFactory)
+            where T : FrameworkElement
+        {
+            return viewFactory.CreateView(typeof(T)) as T;
+        }
+
         /// <summary>
         /// Constructs the view with the view model. First, this method tries to inject the specified DataContext into the
         /// view. If the view does not contain a constructor with this parameter type, it will try to use the default constructor
