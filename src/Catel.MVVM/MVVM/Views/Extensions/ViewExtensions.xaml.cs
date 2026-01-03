@@ -20,6 +20,11 @@
         /// <param name="viewPropertySelector">The view property selector.</param>
         public static void AutoDetectViewPropertiesToSubscribe(this Type viewType, IViewPropertySelector viewPropertySelector)
         {
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
+
             ArgumentNullException.ThrowIfNull(viewType);
 
             lock (_autoDetectedViewtypes)

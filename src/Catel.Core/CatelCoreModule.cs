@@ -1,6 +1,6 @@
 ﻿namespace Catel
 {
-    using System;
+    using Catel.Logging;
     using Catel.Reflection;
     using Configuration;
     using Data;
@@ -8,6 +8,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Microsoft.Extensions.Logging;
     using Services;
 
     /// <summary>
@@ -25,6 +26,11 @@
             // Configuration
             serviceCollection.TryAddKeyedSingleton<IConfigurationBuilder, ConfigurationBuilder>("CatelConfiguration");
             serviceCollection.TryAddSingleton<IConfigurationService, ConfigurationService>();
+
+            // Logging
+            serviceCollection.AddSingleton<ILogger, InMemoryLogger>();
+            serviceCollection.AddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
+            serviceCollection.AddSingleton<IInMemoryLoggingContainer, InMemoryLoggingContainer>();
 
             serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
             serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();
@@ -50,6 +56,13 @@
             //serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
 
             return serviceCollection;
+        }
+
+        public static ILoggingBuilder AddInMemory(this ILoggingBuilder loggingBuilder)
+        {
+            loggingBuilder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, InMemoryLoggerProvider>());
+
+            return loggingBuilder;
         }
     }
 }
