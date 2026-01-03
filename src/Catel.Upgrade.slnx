@@ -47,6 +47,9 @@
   <Folder Name="/src/Orc.Skia/">
     <Project Path="../../Orc.Skia/src/Orc.Skia/Orc.Skia.csproj" Id="9a158429-3dc0-4eae-99ef-82362cd4eae0" />
   </Folder>
+  <Folder Name="/src/Orc.Skia/Example/">
+    <Project Path="../../Orc.Skia/src/Orc.Skia.Example/Orc.Skia.Example.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.Skia/Tests/">
     <Project Path="../../Orc.Skia/src/Orc.Skia.Tests/Orc.Skia.Tests.csproj" />
   </Folder>
