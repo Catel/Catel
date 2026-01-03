@@ -97,6 +97,7 @@ namespace Catel
     public static class CatelCoreModule
     {
         public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddCatelCore(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
+        public static Microsoft.Extensions.Logging.ILoggingBuilder AddInMemory(this Microsoft.Extensions.Logging.ILoggingBuilder loggingBuilder) { }
     }
     public class CatelException : System.Exception
     {
@@ -1925,6 +1926,15 @@ namespace Catel.Logging
     {
         public FallbackLoggerFactory() { }
     }
+    public interface IInMemoryLogger : Microsoft.Extensions.Logging.ILogger { }
+    public interface IInMemoryLoggerProvider : Microsoft.Extensions.Logging.ILoggerProvider, System.IDisposable { }
+    public interface IInMemoryLoggingContainer
+    {
+        System.Collections.Generic.IReadOnlyList<Catel.Logging.LogEntry> LogEntries { get; }
+        int MaxCount { get; set; }
+        event System.EventHandler<Catel.Logging.LogEntryEventArgs>? LogEntryAdded;
+        void Add(Catel.Logging.LogEntry logEntry);
+    }
     public static class ILoggerExtensions
     {
         public static void LogDebugHeading(this Microsoft.Extensions.Logging.ILogger log, string headingContent, string messageFormat, params object[] args) { }
@@ -1972,6 +1982,43 @@ namespace Catel.Logging
         public static void LogWarningHeading1(this Microsoft.Extensions.Logging.ILogger log, string messageFormat, params object[] args) { }
         public static void LogWarningHeading2(this Microsoft.Extensions.Logging.ILogger log, string messageFormat, params object[] args) { }
         public static void LogWarningHeading3(this Microsoft.Extensions.Logging.ILogger log, string messageFormat, params object[] args) { }
+    }
+    public class InMemoryLogger : Catel.Logging.IInMemoryLogger, Microsoft.Extensions.Logging.ILogger
+    {
+        public InMemoryLogger(Catel.Logging.IInMemoryLoggingContainer inMemoryLoggingContainer, Catel.ITimeProvider timeProvider) { }
+        public required string Category { get; set; }
+        public System.IDisposable? BeginScope<TState>(TState state)
+            where TState :  notnull { }
+        public bool IsEnabled(Microsoft.Extensions.Logging.LogLevel logLevel) { }
+        public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, Microsoft.Extensions.Logging.EventId eventId, TState state, System.Exception? exception, System.Func<TState, System.Exception?, string> formatter) { }
+    }
+    public sealed class InMemoryLoggerProvider : Catel.Logging.IInMemoryLoggerProvider, Microsoft.Extensions.Logging.ILoggerProvider, System.IDisposable
+    {
+        public InMemoryLoggerProvider(Catel.Logging.IInMemoryLoggingContainer inMemoryLoggingContainer, Catel.ITimeProvider timeProvider) { }
+        public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName) { }
+        public void Dispose() { }
+    }
+    public class InMemoryLoggingContainer : Catel.Logging.IInMemoryLoggingContainer
+    {
+        public InMemoryLoggingContainer() { }
+        public System.Collections.Generic.IReadOnlyList<Catel.Logging.LogEntry> LogEntries { get; }
+        public int MaxCount { get; set; }
+        public event System.EventHandler<Catel.Logging.LogEntryEventArgs>? LogEntryAdded;
+        public void Add(Catel.Logging.LogEntry logEntry) { }
+    }
+    public class LogEntry
+    {
+        public LogEntry() { }
+        public required string Category { get; init; }
+        public required System.DateTimeOffset DateTime { get; init; }
+        public required Microsoft.Extensions.Logging.LogLevel LogLevel { get; init; }
+        public required string Message { get; init; }
+        public override string ToString() { }
+    }
+    public class LogEntryEventArgs : System.EventArgs
+    {
+        public LogEntryEventArgs(Catel.Logging.LogEntry logEntry) { }
+        public Catel.Logging.LogEntry LogEntry { get; }
     }
     public static class LogManager
     {

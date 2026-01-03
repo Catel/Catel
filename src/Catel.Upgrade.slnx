@@ -24,6 +24,12 @@
   <Folder Name="/src/Orc.FileSystem/Tests/">
     <Project Path="../../Orc.FileSystem/src/Orc.FileSystem.Tests/Orc.FileSystem.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.LogViewer/">
+    <Project Path="../../Orc.LogViewer/src/Orc.LogViewer/Orc.LogViewer.csproj" Id="a420ca39-3b44-4dac-b66a-d12960aac025" />
+  </Folder>
+  <Folder Name="/src/Orc.LogViewer/Tests/">
+    <Project Path="../../Orc.LogViewer/src/Orc.LogViewer.Tests/Orc.LogViewer.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.Notifications/">
     <Project Path="../../Orc.Notifications/src/Orc.Notifications/Orc.Notifications.csproj" Id="4b76ca3b-37ab-4b3b-9eb7-efe9d65bb09c" />
   </Folder>
@@ -53,11 +59,16 @@
   <Folder Name="/src/Orchestra.Example/">
     <Project Path="../../Orchestra/src/Orchestra.Examples.Ribbon.Fluent/Orchestra.Examples.Ribbon.Fluent.csproj" />
     <Project Path="../../Orchestra/src/Orchestra.Examples.Shared/Orchestra.Examples.Shared.shproj" Id="0f4ee33d-8e27-43ba-bcf7-1c61cdca09ec" />
+    <Project Path="../../Orchestra/src/Orchestra.Examples.TaskRunner/Orchestra.Examples.TaskRunner.csproj" />
   </Folder>
   <Folder Name="/src/Orchestra/">
     <Project Path="../../Orchestra/src/Orchestra.Core/Orchestra.Core.csproj" Id="c7049e9c-d258-4e3f-8de3-17d8c50145ca" />
     <Project Path="../../Orchestra/src/Orchestra.Shell.Ribbon.Fluent/Orchestra.Shell.Ribbon.Fluent.csproj" Id="bd65929c-36c0-4935-8d03-9ab82684c56d" />
+    <Project Path="../../Orchestra/src/Orchestra.Shell.Shared/Orchestra.Shell.Shared.shproj" Id="bc10fce0-c843-4592-802d-bb800a514ca0" />
+    <Project Path="../../Orchestra/src/Orchestra.Shell.TaskRunner/Orchestra.Shell.TaskRunner.csproj" Id="d93a4322-36e1-4f2e-851a-ff2c7f6373c7" />
   </Folder>
-  <Folder Name="/src/Orchestra/Tests/" />
+  <Folder Name="/src/Orchestra/Tests/">
+    <Project Path="../../Orchestra/src/Orchestra.Tests/Orchestra.Tests.csproj" />
+  </Folder>
 
 </Solution>
