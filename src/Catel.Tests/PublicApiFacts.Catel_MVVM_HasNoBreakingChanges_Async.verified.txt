@@ -1442,10 +1442,13 @@ namespace Catel.MVVM.Views
     }
     public interface IViewFactory
     {
+        System.Windows.FrameworkElement? CreateView(System.Type viewType);
         System.Windows.FrameworkElement? CreateViewWithViewModel(System.Type viewType, object? dataContext);
     }
     public static class IViewFactoryExtensions
     {
+        public static T? CreateView<T>(this Catel.MVVM.Views.IViewFactory viewFactory)
+            where T : System.Windows.FrameworkElement { }
         public static T? CreateViewWithViewModel<T>(this Catel.MVVM.Views.IViewFactory viewFactory, object? dataContext)
             where T : System.Windows.FrameworkElement { }
     }
@@ -1502,6 +1505,7 @@ namespace Catel.MVVM.Views
     public class ViewFactory : Catel.MVVM.Views.IViewFactory
     {
         public ViewFactory(Microsoft.Extensions.Logging.ILogger<Catel.MVVM.Views.ViewFactory> logger, System.IServiceProvider serviceProvider) { }
+        public virtual System.Windows.FrameworkElement? CreateView(System.Type viewType) { }
         public virtual System.Windows.FrameworkElement? CreateViewWithViewModel(System.Type viewType, object? dataContext) { }
     }
     public class ViewLoadEventArgs : System.EventArgs

@@ -2650,6 +2650,8 @@ namespace Catel.Services
     [System.Diagnostics.DebuggerDisplay("{GetSource()}")]
     public class LanguageResourceSource : Catel.Services.ILanguageSource
     {
+        public LanguageResourceSource(string assemblyName) { }
+        public LanguageResourceSource(string assemblyName, string namespaceName) { }
         public LanguageResourceSource(string assemblyName, string namespaceName, string resourceFileName) { }
         public string AssemblyName { get; }
         public string NamespaceName { get; }
