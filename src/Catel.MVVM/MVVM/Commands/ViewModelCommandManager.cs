@@ -20,11 +20,6 @@
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(ViewModelCommandManager));
 
         /// <summary>
-        /// Dictionary containing all instances of all view model command managers.
-        /// </summary>
-        private static readonly Dictionary<int, ViewModelCommandManager> _instances = new Dictionary<int, ViewModelCommandManager>();
-
-        /// <summary>
         /// The lock object.
         /// </summary>
         private readonly object _lock = new object();
@@ -68,7 +63,7 @@
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        private ViewModelCommandManager(IViewModel viewModel)
+        public ViewModelCommandManager(IViewModel viewModel)
         {
             ArgumentNullException.ThrowIfNull(viewModel);
 
@@ -93,38 +88,6 @@
             RegisterCommands(false);
 
             Logger.LogDebug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
-        }
-
-        /// <summary>
-        /// Registers the commands in a specific <see cref="IViewModel" /> instance. By subscribing
-        /// to all commands, the <see cref="IViewModel.CommandExecutedAsync" /> can be intercepted.
-        /// <para />
-        /// This method will automatically subscribe to the <see cref="IViewModel.ClosedAsync"/> event and unsubscribe all commands
-        /// at that time.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        public static IViewModelCommandManager Create(IViewModel viewModel)
-        {
-            ArgumentNullException.ThrowIfNull(viewModel);
-
-            lock (_instances)
-            {
-                // Event the check for closed is done inside the lock. It might be that the lock has awaited the removal because the vm was being closed
-                // in the meantime
-                if (viewModel.IsClosed)
-                {
-                    throw Logger.LogErrorAndCreateException<CatelException>($"View model '{viewModel.GetType().GetSafeFullName()}' with unique identifier '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}' is already closed, cannot manage commands of a closed view model");
-                }
-
-                if (!_instances.TryGetValue(viewModel.UniqueIdentifier, out var commandManager))
-                {
-                    commandManager = new ViewModelCommandManager(viewModel);
-                    _instances[viewModel.UniqueIdentifier] = commandManager;
-                }
-
-                return commandManager;
-            }
         }
 
         /// <summary>
@@ -300,11 +263,6 @@
         {
             lock (_lock)
             {
-                lock (_instances)
-                {
-                    _instances.Remove(_viewModel.UniqueIdentifier);
-                }
-
                 _commandHandlers.Clear();
 
                 UnregisterCommands();

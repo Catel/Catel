@@ -397,6 +397,7 @@ namespace Catel.MVVM
     }
     public interface ICatelCommand : System.Windows.Input.ICommand
     {
+        bool AutomaticallyDispatchEvents { get; set; }
         object? Tag { get; }
         event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs> Executed;
         bool CanExecute();
@@ -791,9 +792,9 @@ namespace Catel.MVVM
     }
     public class ViewModelCommandManager : Catel.MVVM.IViewModelCommandManager
     {
+        public ViewModelCommandManager(Catel.MVVM.IViewModel viewModel) { }
         public void AddHandler(System.Func<Catel.MVVM.IViewModel, string, System.Windows.Input.ICommand, object?, System.Threading.Tasks.Task> handler) { }
         public void InvalidateCommands(bool force = false) { }
-        public static Catel.MVVM.IViewModelCommandManager Create(Catel.MVVM.IViewModel viewModel) { }
     }
     public static class ViewModelExtensions
     {

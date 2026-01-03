@@ -11,12 +11,12 @@
     public class ViewModelCommandManagerFacts
     {
         [TestFixture]
-        public class The_Create_Method
+        public class The_Constructor
         {
             [TestCase]
             public void Throws_ArgumentNullException_For_Null_ViewModel()
             {
-                Assert.Throws<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
+                Assert.Throws<ArgumentNullException>(() => new ViewModelCommandManager(null));
             }
 
             [TestCase]
@@ -27,7 +27,7 @@
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
                 var viewModel = new TestFeaturedViewModel(serviceProvider);
-                var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
+                var viewModelCommandManager = new ViewModelCommandManager(viewModel);
 
                 Assert.That(viewModelCommandManager, Is.Not.Null);
             }
@@ -44,7 +44,7 @@
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
                 var viewModel = new TestFeaturedViewModel(serviceProvider);
-                var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
+                var viewModelCommandManager = new ViewModelCommandManager(viewModel);
 
                 Assert.Throws<ArgumentNullException>(() => viewModelCommandManager.AddHandler((Func<IViewModel, string, ICommand, object, Task>)null));
             }
@@ -57,7 +57,7 @@
                 using var serviceProvider = serviceCollection.BuildServiceProvider();
 
                 var viewModel = new TestFeaturedViewModel(serviceProvider);
-                var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
+                var viewModelCommandManager = new ViewModelCommandManager(viewModel);
                 await viewModel.InitializeViewModelAsync();
 
                 var called = false;

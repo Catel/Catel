@@ -57,7 +57,7 @@
 
             Logger.LogDebug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
-            ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
+            ViewModelCommandManager = new MVVM.ViewModelCommandManager(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
                 {
                     var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);

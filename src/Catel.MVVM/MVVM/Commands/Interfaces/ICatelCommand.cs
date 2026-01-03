@@ -18,6 +18,13 @@
         object? Tag { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        bool AutomaticallyDispatchEvents { get; set; }
+
+        /// <summary>
         /// Occurs when the command has just been executed successfully.
         /// </summary>
         event EventHandler<CommandExecutedEventArgs> Executed;
