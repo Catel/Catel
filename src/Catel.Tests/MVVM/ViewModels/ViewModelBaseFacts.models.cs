@@ -73,7 +73,7 @@
             Assert.That(person.FirstName, Is.EqualTo("new"));
         }
 
-        [TestCase, Explicit("Need to write a model implementing IEditableObject support")]
+        [TestCase]
         public async Task ModelsCanceledByCancelAsync()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
@@ -92,7 +92,8 @@
             await viewModel.CancelAndCloseViewModelAsync();
 
             Assert.That(person.IsInEditSession, Is.False);
-            Assert.That(person.FirstName, Is.EqualTo("first name"));
+            Assert.That(person.CalledCancelEdit, Is.True);
+            Assert.That(person.CalledEndEdit, Is.False);
         }
 
         [TestCase]

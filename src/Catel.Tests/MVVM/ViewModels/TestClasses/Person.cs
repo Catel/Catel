@@ -41,6 +41,10 @@
 
         public bool IsInEditSession { get; private set; }
 
+        public bool CalledEndEdit { get; private set; }
+
+        public bool CalledCancelEdit { get; private set; }
+
         public int FirstNameChangedCounter { get => _firstNameChangedCounter; }
 
         /// <summary>
@@ -171,11 +175,13 @@
         public void CancelEdit()
         {
             IsInEditSession = false;
+            CalledCancelEdit = true;
         }
 
         public void EndEdit()
         {
             IsInEditSession = false;
+            CalledEndEdit = true;
         }
     }
 
