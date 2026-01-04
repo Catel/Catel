@@ -1,6 +1,8 @@
 ﻿namespace Catel.ComponentModel
 {
     using System;
+    using Catel.IoC;
+    using Microsoft.Extensions.DependencyInjection;
     using Services;
 
     /// <summary>
@@ -10,6 +12,15 @@
     public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
     {
         private readonly string _resourceName;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
+        /// </summary>
+        public DisplayNameAttribute(string resourceName)
+            : this(IoCContainer.ServiceProvider.GetRequiredService<ILanguageService>(), resourceName)
+        {
+            // leave empty
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.

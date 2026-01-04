@@ -37,6 +37,12 @@
   <Folder Name="/src/Orc.Csv/Tests/">
     <Project Path="../../Orc.Csv/src/Orc.Csv.Tests/Orc.Csv.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.CsvTextEditor/">
+    <Project Path="../../Orc.CsvTextEditor/src/Orc.CsvTextEditor/Orc.CsvTextEditor.csproj" Id="a97b1b48-88b2-47dc-bc78-9af835dcf2a0" />
+  </Folder>
+  <Folder Name="/src/Orc.CsvTextEditor/Tests/">
+    <Project Path="../../Orc.CsvTextEditor/src/Orc.CsvTextEditor.Tests/Orc.CsvTextEditor.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.DynamicObjects/">
     <Project Path="../../Orc.DynamicObjects/src/Orc.DynamicObjects/Orc.DynamicObjects.csproj" Id="c363c62a-3dd3-46bb-9711-c8891d6c4c53" />
   </Folder>
@@ -56,11 +62,24 @@
   <Folder Name="/src/Orc.Feedback/Tests/">
     <Project Path="../../Orc.Feedback/src/Orc.Feedback.Tests/Orc.Feedback.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.FileAssociation/">
+    <Project Path="../../Orc.FileAssociation/src/Orc.FileAssociation/Orc.FileAssociation.csproj" Id="cc56aeaf-3f95-471f-9b81-af600d0cfa7e" />
+  </Folder>
+  <Folder Name="/src/Orc.FileAssociation/Tests/">
+    <Project Path="../../Orc.FileAssociation/src/Orc.FileAssociation.Tests/Orc.FileAssociation.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.FileSystem/">
     <Project Path="../../Orc.FileSystem/src/Orc.FileSystem/Orc.FileSystem.csproj" Id="360c62c6-7905-46d0-8b93-abd90857e478" />
   </Folder>
   <Folder Name="/src/Orc.FileSystem/Tests/">
     <Project Path="../../Orc.FileSystem/src/Orc.FileSystem.Tests/Orc.FileSystem.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FilterBuilder/">
+    <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder.Xaml/Orc.FilterBuilder.Xaml.csproj" Id="e276e661-3ddb-47e2-8030-d87dbf0361fd" />
+    <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder/Orc.FilterBuilder.csproj" Id="cb68f51c-2a87-4945-a220-722bec604789" />
+  </Folder>
+  <Folder Name="/src/Orc.FilterBuilder/Tests/">
+    <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder.Tests/Orc.FilterBuilder.Tests.csproj" />
   </Folder>
   <Folder Name="/src/Orc.LogViewer/">
     <Project Path="../../Orc.LogViewer/src/Orc.LogViewer/Orc.LogViewer.csproj" Id="a420ca39-3b44-4dac-b66a-d12960aac025" />
