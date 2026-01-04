@@ -117,6 +117,13 @@
   <Folder Name="/src/Orc.Scheduling/Tests/">
     <Project Path="../../Orc.Scheduling/src/Orc.Scheduling.Tests/Orc.Scheduling.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.Search/">
+    <Project Path="../../Orc.Search/src/Orc.Search.Xaml/Orc.Search.Xaml.csproj" Id="c0f595e1-b7da-4358-96dc-a49c63cac724" />
+    <Project Path="../../Orc.Search/src/Orc.Search/Orc.Search.csproj" Id="50dba6e6-31d3-43c8-9d74-0c711185d2ba" />
+  </Folder>
+  <Folder Name="/src/Orc.Search/Tests/">
+    <Project Path="../../Orc.Search/src/Orc.Search.Tests/Orc.Search.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.SelectionManagement/">
     <Project Path="../../Orc.SelectionManagement/src/Orc.SelectionManagement/Orc.SelectionManagement.csproj" Id="4886595e-c108-4ddd-a6c0-5850f275333e" />
   </Folder>
