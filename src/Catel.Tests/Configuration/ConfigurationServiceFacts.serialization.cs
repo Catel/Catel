@@ -19,10 +19,10 @@
             {
                 var appDataService = new AppDataService();
 
-                var localConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
+                var localConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.json");
                 File.Delete(localConfigurationFile);
 
-                var roamingConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
+                var roamingConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.json");
                 File.Delete(roamingConfigurationFile);
             }
 

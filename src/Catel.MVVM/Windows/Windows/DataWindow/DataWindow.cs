@@ -31,7 +31,6 @@
     {
         private static readonly ILogger Logger = LogManager.GetLogger(typeof(DataWindow));
 
-        private readonly IServiceProvider _serviceProvider;
         private readonly IWrapControlService _wrapControlService;
         private readonly ILanguageService _languageService;
 
@@ -77,7 +76,7 @@
         /// </remarks>
         public DataWindow(IViewModel? viewModel, IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
         {
-            _serviceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
             _wrapControlService = wrapControlService;
             _languageService = languageService;
 
@@ -169,6 +168,11 @@
                 Closing += OnDataWindowClosing;
             });
         }
+
+        /// <summary>
+        /// Gets the service provider tied to this window.
+        /// </summary>
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         /// If set to true, the parent window (owner) will be set.
@@ -705,28 +709,28 @@
 
             if (IsOKButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
+                var button = DataWindowButton.FromAsync(ServiceProvider, _languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.OK;
                 _buttons.Add(button);
             }
 
             if (IsCancelButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
+                var button = DataWindowButton.FromAsync(ServiceProvider, _languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
 
             if (IsApplyButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(_serviceProvider, _languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
+                var button = DataWindowButton.FromAsync(ServiceProvider, _languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Apply;
                 _buttons.Add(button);
             }
 
             if (IsCloseButtonAvailable)
             {
-                var button = DataWindowButton.FromSync(_serviceProvider, _languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
+                var button = DataWindowButton.FromSync(ServiceProvider, _languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Close;
                 _buttons.Add(button);
             }
