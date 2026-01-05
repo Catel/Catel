@@ -188,6 +188,13 @@
   <Folder Name="/src/Orc.Wizard/Tests/">
     <Project Path="../../Orc.Wizard/src/Orc.Wizard.Tests/Orc.Wizard.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.WorkspaceManagement/">
+    <Project Path="../../Orc.WorkspaceManagement/src/Orc.WorkspaceManagement.Xaml/Orc.WorkspaceManagement.Xaml.csproj" Id="2805d052-5f85-4cc2-bd3d-7ad822d171bb" />
+    <Project Path="../../Orc.WorkspaceManagement/src/Orc.WorkspaceManagement/Orc.WorkspaceManagement.csproj" Id="c51392cb-513f-4155-914b-063a8e0893e1" />
+  </Folder>
+  <Folder Name="/src/Orc.WorkspaceManagement/Tests/">
+    <Project Path="../../Orc.WorkspaceManagement/src/Orc.WorkspaceManagement.Tests/Orc.WorkspaceManagement.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orchestra.Example/">
     <Project Path="../../Orchestra/src/Orchestra.Examples.Ribbon.Fluent/Orchestra.Examples.Ribbon.Fluent.csproj" />
     <Project Path="../../Orchestra/src/Orchestra.Examples.Shared/Orchestra.Examples.Shared.shproj" Id="0f4ee33d-8e27-43ba-bcf7-1c61cdca09ec" />
