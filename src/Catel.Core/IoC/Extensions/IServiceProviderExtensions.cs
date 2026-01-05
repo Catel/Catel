@@ -34,14 +34,21 @@
 
                 if (service.ImplementationType?.ImplementsInterfaceEx<IConstructAtStartup>() ?? false)
                 {
+                    IConstructAtStartup? instance = null;
+
                     var key = service.ServiceKey;
                     if (key is null)
                     {
-                        _ = serviceProvider.GetRequiredService(service.ServiceType);
+                        instance = serviceProvider.GetRequiredService(service.ServiceType) as IConstructAtStartup;
                     }
                     else
                     {
-                        _ = serviceProvider.GetRequiredKeyedService(service.ServiceType, key);
+                        instance = serviceProvider.GetRequiredKeyedService(service.ServiceType, key) as IConstructAtStartup;
+                    }
+
+                    if (instance is IInitializeAtStartup initializeAtStartup)
+                    {
+                        initializeAtStartup.Initialize();
                     }
                 }
             }
