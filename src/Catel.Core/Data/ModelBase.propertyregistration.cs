@@ -1,8 +1,10 @@
 ﻿namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -377,6 +379,11 @@
             return PropertyDataManager.GetPropertyData(GetType(), name);
         }
 
+        protected bool TryGetPropertyData(string name, [NotNullWhen(true)]out IPropertyData? propertyData)
+        {
+            return PropertyDataManager.TryGetPropertyData(GetType(), name, out propertyData);
+        }
+
         /// <summary>
         /// Returns the type of a specific property.
         /// </summary>
@@ -386,6 +393,11 @@
         Type IModel.GetPropertyType(string name)
         {
             return GetPropertyData(name).Type;
+        }
+
+        protected IReadOnlyList<string> GetPropertyBagPropertyNames()
+        {
+            return _propertyBag.GetAllNames();
         }
     }
 }
