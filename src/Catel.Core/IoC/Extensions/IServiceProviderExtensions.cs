@@ -1,6 +1,7 @@
 ﻿namespace Catel
 {
     using System;
+    using System.Collections.Generic;
     using Catel.IoC;
     using Catel.Reflection;
     using Microsoft.Extensions.DependencyInjection;
@@ -21,31 +22,64 @@
 
         public static void CreateTypesThatMustBeConstructedAtStartup(this IServiceProvider serviceProvider)
         {
-            var serviceCollection = serviceProvider.GetKeyedService<IServiceCollection>("ConstructAtStartup");
-            if (serviceCollection is not null)
-            {
-                foreach (var service in serviceCollection)
-                {
-                    // Only singletons make sense
-                    if (service.Lifetime != ServiceLifetime.Singleton)
-                    {
-                        continue;
-                    }
+            var serviceCollection = serviceProvider.GetServiceCollection();
 
-                    if (service.ImplementationType?.ImplementsInterfaceEx<IConstructAtStartup>() ?? false)
+            foreach (var service in serviceCollection)
+            {
+                // Only singletons make sense
+                if (service.Lifetime != ServiceLifetime.Singleton)
+                {
+                    continue;
+                }
+
+                if (service.ImplementationType?.ImplementsInterfaceEx<IConstructAtStartup>() ?? false)
+                {
+                    var key = service.ServiceKey;
+                    if (key is null)
                     {
-                        var key = service.ServiceKey;
-                        if (key is null)
-                        {
-                            _ = serviceProvider.GetRequiredService(service.ServiceType);
-                        }
-                        else
-                        {
-                            _ = serviceProvider.GetRequiredKeyedService(service.ServiceType, key);
-                        }
+                        _ = serviceProvider.GetRequiredService(service.ServiceType);
+                    }
+                    else
+                    {
+                        _ = serviceProvider.GetRequiredKeyedService(service.ServiceType, key);
                     }
                 }
             }
+        }
+
+        public static IReadOnlyList<ServiceDescriptor> GetServiceDescriptors<T>(this IServiceProvider serviceProvider)
+        {
+            return GetServiceDescriptors(serviceProvider, typeof(T));
+        }
+
+        public static IReadOnlyList<ServiceDescriptor> GetServiceDescriptors(this IServiceProvider serviceProvider, Type type)
+        {
+            var serviceCollection = serviceProvider.GetServiceCollection();
+
+            var serviceDescriptors = new List<ServiceDescriptor>();
+
+            foreach (var service in serviceCollection)
+            {
+                if (service.ServiceType != type)
+                {
+                    continue;
+                }
+
+                serviceDescriptors.Add(service);
+            }
+
+            return serviceDescriptors;
+        }
+
+        public static IServiceCollection GetServiceCollection(this IServiceProvider serviceProvider)
+        {
+            var serviceCollection = serviceProvider.GetKeyedService<IServiceCollection>("CatelServiceCollection");
+            if (serviceCollection is not null)
+            {
+                return serviceCollection;
+            }
+
+            return new ServiceCollection();
         }
     }
 }

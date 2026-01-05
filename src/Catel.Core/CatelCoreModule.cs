@@ -20,7 +20,7 @@
         public static IServiceCollection AddCatelCore(this IServiceCollection serviceCollection)
         {
             // Store the collection itself
-            serviceCollection.TryAddKeyedSingleton<IServiceCollection>("ConstructAtStartup", serviceCollection);
+            serviceCollection.TryAddKeyedSingleton<IServiceCollection>("CatelServiceCollection", serviceCollection);
 
             serviceCollection.TryAddSingleton<ITimeProvider, TimeProvider>();
 
