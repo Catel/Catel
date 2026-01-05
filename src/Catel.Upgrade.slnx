@@ -94,6 +94,13 @@
   <Folder Name="/src/Orc.FilterBuilder/Tests/">
     <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder.Tests/Orc.FilterBuilder.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.LicenseManager/">
+    <Project Path="../../Orc.LicenseManager/src/Orc.LicenseManager.Client.WPF/Orc.LicenseManager.Client.WPF.csproj" Id="3c2f09ac-f23f-439f-bb6f-a502241ca829" />
+    <Project Path="../../Orc.LicenseManager/src/Orc.LicenseManager.Client/Orc.LicenseManager.Client.csproj" Id="673e6fb6-2042-44d0-9767-a41b45dad42e" />
+  </Folder>
+  <Folder Name="/src/Orc.LicenseManager/Tests/">
+    <Project Path="../../Orc.LicenseManager/src/Orc.LicenseManager.Tests/Orc.LicenseManager.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.LogViewer/">
     <Project Path="../../Orc.LogViewer/src/Orc.LogViewer/Orc.LogViewer.csproj" Id="a420ca39-3b44-4dac-b66a-d12960aac025" />
   </Folder>
@@ -123,6 +130,12 @@
   </Folder>
   <Folder Name="/src/Orc.Plot/Tests/">
     <Project Path="../../Orc.Plot/src/Orc.Plot.Tests/Orc.Plot.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.ProjectManagement/">
+    <Project Path="../../Orc.ProjectManagement/src/Orc.ProjectManagement/Orc.ProjectManagement.csproj" Id="49323bb6-1208-4760-a989-27bb6f43cd49" />
+  </Folder>
+  <Folder Name="/src/Orc.ProjectManagement/Tests/">
+    <Project Path="../../Orc.ProjectManagement/src/Orc.ProjectManagement.Tests/Orc.ProjectManagement.Tests.csproj" />
   </Folder>
   <Folder Name="/src/Orc.Scheduling/">
     <Project Path="../../Orc.Scheduling/src/Orc.Scheduling/Orc.Scheduling.csproj" Id="285de889-2065-4de5-97eb-35ff3fbcd44a" />
