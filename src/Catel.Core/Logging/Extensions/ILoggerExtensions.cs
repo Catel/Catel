@@ -1,7 +1,7 @@
 ﻿namespace Catel.Logging
 {
     using System;
-    using Catel.Data;
+    using System.Diagnostics;
     using Microsoft.Extensions.Logging;
     using Reflection;
 
@@ -10,10 +10,28 @@
     /// </summary>
     public static partial class ILoggerExtensions
     {
-        /// <summary>
-        /// Exception data key used to indicates whether the exception was already processed by Catel log system.
-        /// </summary>
-        private const string AlreadyProcessedByCatelLogSystemExceptionDataKey = "AlreadyProcessedByCatelLogSystem";
+        private static readonly bool IsDebuggerAttached;
+
+        static ILoggerExtensions()
+        {
+            IsDebuggerAttached = Debugger.IsAttached;
+        }
+
+        public static void LogDebugIfAttached(this ILogger log, string message)
+        {
+            if (IsDebuggerAttached)
+            {
+                log.LogDebug(message);
+            }
+        }
+
+        public static void LogDebugIfAttached(this ILogger log, string message, params object?[] args)
+        {
+            if (IsDebuggerAttached)
+            {
+                log.LogDebug(message, args);
+            }
+        }
 
         /// <summary>
         /// Logs the product info with version information.
