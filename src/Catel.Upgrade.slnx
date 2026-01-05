@@ -180,6 +180,13 @@
   <Folder Name="/src/Orc.Squirrel/Tests/">
     <Project Path="../../Orc.Squirrel/src/Orc.Squirrel.Tests/Orc.Squirrel.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.SupportPackage/">
+    <Project Path="../../Orc.SupportPackage/src/Orc.SupportPackage.Xaml/Orc.SupportPackage.Xaml.csproj" Id="db4d196a-3133-4fb0-9ffd-31e62e36a362" />
+    <Project Path="../../Orc.SupportPackage/src/Orc.SupportPackage/Orc.SupportPackage.csproj" Id="5f124337-a439-4d73-bf24-199cdcd60bc7" />
+  </Folder>
+  <Folder Name="/src/Orc.SupportPackage/Tests/">
+    <Project Path="../../Orc.SupportPackage/src/Orc.SupportPackage.Tests/Orc.SupportPackage.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.SystemInfo/">
     <Project Path="../../Orc.SystemInfo/src/Orc.SystemInfo/Orc.SystemInfo.csproj" Id="80a0d499-6ec4-49e5-b7be-1e9f196ba7fa" />
   </Folder>
