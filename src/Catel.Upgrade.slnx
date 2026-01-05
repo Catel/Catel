@@ -43,11 +43,24 @@
   <Folder Name="/src/Orc.CsvTextEditor/Tests/">
     <Project Path="../../Orc.CsvTextEditor/src/Orc.CsvTextEditor.Tests/Orc.CsvTextEditor.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.DependencyGraph/">
+    <Project Path="../../Orc.DependencyGraph/src/Orc.DependencyGraph/Orc.DependencyGraph.csproj" Id="4d453cc5-bf49-4af1-bc25-99fff818af79" />
+  </Folder>
+  <Folder Name="/src/Orc.DependencyGraph/Tests/">
+    <Project Path="../../Orc.DependencyGraph/src/Orc.DependencyGraph.Tests/Orc.DependencyGraph.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.DynamicObjects/">
     <Project Path="../../Orc.DynamicObjects/src/Orc.DynamicObjects/Orc.DynamicObjects.csproj" Id="c363c62a-3dd3-46bb-9711-c8891d6c4c53" />
   </Folder>
   <Folder Name="/src/Orc.DynamicObjects/Tests/">
     <Project Path="../../Orc.DynamicObjects/src/Orc.DynamicObjects.Tests/Orc.DynamicObjects.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.EntityFramework/">
+    <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6/Orc.EntityFramework6.csproj" Id="be45a653-6ff3-4634-bbd3-b68435fe10f3" />
+  </Folder>
+  <Folder Name="/src/Orc.EntityFramework/Tests/">
+    <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6.Tests.DbContext/Orc.EntityFramework6.Tests.DbContext.csproj" />
+    <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6.Tests/Orc.EntityFramework6.Tests.csproj" />
   </Folder>
   <Folder Name="/src/Orc.FeatureToggles/">
     <Project Path="../../Orc.FeatureToggles/src/Orc.FeatureToggles.Xaml/Orc.FeatureToggles.Xaml.csproj" Id="9a55f5cf-a1a7-446f-9d22-8f72c6ee1577" />
