@@ -40,6 +40,8 @@
         protected ViewModelBase(IServiceProvider serviceProvider)
             : base()
         {
+            ServiceProvider = serviceProvider;
+
             // Hack for now, we need to get rid of this
             _viewModelManager = serviceProvider.GetRequiredService<IViewModelManager>();
 
@@ -69,6 +71,12 @@
 
             _viewModelManager.RegisterViewModelInstance(this);
         }
+
+        /// <summary>
+        /// Gets the service provider for this object.
+        /// </summary>
+        [ExcludeFromValidation]
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         /// Occurs when the view model has been initialized.

@@ -91,8 +91,6 @@
         protected FeaturedViewModelBase(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            ServiceProvider = serviceProvider;
-
             _objectAdapter = serviceProvider.GetRequiredService<IObjectAdapter>();
             _dispatcherService = serviceProvider.GetRequiredService<IDispatcherService>();
 
@@ -129,12 +127,6 @@
                 _auditingWrapper = new AuditingWrapper(auditingManager, serviceProvider.GetRequiredService<IObjectAdapter>(), this);
             }
         }
-
-        /// <summary>
-        /// Gets the service provider for this object.
-        /// </summary>
-        [ExcludeFromValidation]
-        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         /// Gets the parent view model.

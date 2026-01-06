@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Catel.Fody" Version="4.12.0-alpha0121" PrivateAssets="all" />
-    <PackageReference Include="Catel.SourceGenerators" Version="1.0.0-alpha0032" PrivateAssets="all" />
+    <PackageReference Include="Catel.SourceGenerators" Version="1.0.0-alpha0033" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
