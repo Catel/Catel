@@ -52,10 +52,6 @@
         }
 
 
-
-        /// <summary>
-        /// MainWindow view model.
-        /// </summary>
         public class MainWindowViewModel : FeaturedViewModelBase
         {
             /// <summary>
