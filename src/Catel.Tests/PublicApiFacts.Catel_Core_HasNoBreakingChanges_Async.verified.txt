@@ -250,6 +250,9 @@ namespace Catel
     public static class IServiceProviderExtensions
     {
         public static void CreateTypesThatMustBeConstructedAtStartup(this System.IServiceProvider serviceProvider) { }
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection GetServiceCollection(this System.IServiceProvider serviceProvider) { }
+        public static System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.DependencyInjection.ServiceDescriptor> GetServiceDescriptors(this System.IServiceProvider serviceProvider, System.Type type) { }
+        public static System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.DependencyInjection.ServiceDescriptor> GetServiceDescriptors<T>(this System.IServiceProvider serviceProvider) { }
         public static bool IsRegistered(this System.IServiceProvider serviceProvider, System.Type serviceType) { }
         public static bool IsRegistered<TService>(this System.IServiceProvider serviceProvider) { }
     }
@@ -965,6 +968,7 @@ namespace Catel.ComponentModel
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Enum | System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Event)]
     public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
     {
+        public DisplayNameAttribute(string resourceName) { }
         public DisplayNameAttribute(Catel.Services.ILanguageService languageService, string resourceName) { }
         public override string DisplayName { get; }
         public Catel.Services.ILanguageService LanguageService { get; set; }
@@ -1450,6 +1454,7 @@ namespace Catel.Data
         [System.ComponentModel.Browsable(false)]
         public bool IsReadOnly { get; protected set; }
         protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
+        protected System.Collections.Generic.IReadOnlyList<string> GetPropertyBagPropertyNames() { }
         protected Catel.Data.IPropertyData GetPropertyData(string name) { }
         protected System.Func<object, TValue>? GetPropertyGetterExpression<TValue>(string propertyName) { }
         protected TValue GetValue<TValue>(Catel.Data.IPropertyData property) { }
@@ -1470,6 +1475,7 @@ namespace Catel.Data
         public System.IDisposable SuspendChangeCallbacks() { }
         public System.IDisposable SuspendChangeNotifications(bool raiseOnResume = true) { }
         public override string? ToString() { }
+        protected bool TryGetPropertyData(string name, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Catel.Data.IPropertyData? propertyData) { }
         protected static object? GetObjectValue<TValue>(TValue value) { }
         protected static bool IsPropertyRegistered(System.Type type, string name) { }
         public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, System.Func<TValue>? createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs>? propertyChangedEventHandler = null) { }
@@ -1870,6 +1876,10 @@ namespace Catel.IO
 namespace Catel.IoC
 {
     public interface IConstructAtStartup { }
+    public interface IInitializeAtStartup : Catel.IoC.IConstructAtStartup
+    {
+        void Initialize();
+    }
     public static class IoCContainer
     {
         public static System.IServiceProvider ServiceProvider { get; set; }
@@ -1941,6 +1951,8 @@ namespace Catel.Logging
         public static void LogDebugHeading1(this Microsoft.Extensions.Logging.ILogger log, string messageFormat, params object[] args) { }
         public static void LogDebugHeading2(this Microsoft.Extensions.Logging.ILogger log, string messageFormat, params object[] args) { }
         public static void LogDebugHeading3(this Microsoft.Extensions.Logging.ILogger log, string messageFormat, params object[] args) { }
+        public static void LogDebugIfAttached(this Microsoft.Extensions.Logging.ILogger log, string message) { }
+        public static void LogDebugIfAttached(this Microsoft.Extensions.Logging.ILogger log, string message, params object?[] args) { }
         public static void LogDeviceInfo(this Microsoft.Extensions.Logging.ILogger logger) { }
         public static System.Exception LogErrorAndCreateException<TException>(this Microsoft.Extensions.Logging.ILogger logger, string messageFormat, params object[] args)
             where TException : System.Exception { }

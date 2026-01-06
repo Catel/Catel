@@ -364,8 +364,6 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidation]
         public Catel.MVVM.IViewModel? ParentViewModel { get; }
         [Catel.Data.ExcludeFromValidation]
-        protected System.IServiceProvider ServiceProvider { get; }
-        [Catel.Data.ExcludeFromValidation]
         protected bool SupportIEditableObject { get; set; }
         [Catel.Data.ExcludeFromValidation]
         protected System.TimeSpan ThrottlingRate { get; set; }
@@ -754,6 +752,8 @@ namespace Catel.MVVM
         public bool IsSaved { get; }
         [Catel.Data.ExcludeFromValidation]
         protected bool IsSaving { get; }
+        [Catel.Data.ExcludeFromValidation]
+        protected System.IServiceProvider ServiceProvider { get; }
         [Catel.Data.ExcludeFromValidation]
         public virtual string Title { get; protected set; }
         [Catel.Data.ExcludeFromValidation]
@@ -1615,7 +1615,7 @@ namespace Catel.Services
     public class AutoCompletionService : Catel.Services.IAutoCompletionService
     {
         public AutoCompletionService(Catel.Data.IObjectAdapter objectAdapter) { }
-        public virtual string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source) { }
+        public virtual System.Collections.Generic.IReadOnlyList<string> GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source) { }
     }
     public class BusyIndicatorService : Catel.Services.IBusyIndicatorService
     {
@@ -1719,7 +1719,7 @@ namespace Catel.Services
     }
     public interface IAutoCompletionService
     {
-        string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source);
+        System.Collections.Generic.IReadOnlyList<string> GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source);
     }
     public interface IBusyIndicatorService
     {
@@ -2157,6 +2157,7 @@ namespace Catel.Windows
         protected bool FocusFirstControl { get; set; }
         protected Catel.Windows.InfoBarMessageControlGenerationMode InfoBarMessageControlGenerationMode { get; set; }
         protected Catel.Windows.DataWindowMode Mode { get; set; }
+        protected System.IServiceProvider ServiceProvider { get; }
         protected bool SetOwner { get; set; }
         public Catel.MVVM.IViewModel? ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
@@ -2355,6 +2356,7 @@ namespace Catel.Windows.Controls
         public UserControl(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public bool CreateWarningAndErrorValidatorForViewModel { get; set; }
         public bool DisableWhenNoViewModel { get; set; }
+        protected System.IServiceProvider ServiceProvider { get; }
         public bool SkipSearchingForInfoBarMessageControl { get; set; }
         public bool SupportParentViewModelContainers { get; set; }
         public Catel.MVVM.Providers.UnloadBehavior UnloadBehavior { get; set; }
