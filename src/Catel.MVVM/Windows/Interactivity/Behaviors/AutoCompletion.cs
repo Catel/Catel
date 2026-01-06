@@ -8,6 +8,7 @@
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
+    using System;
 
     /// <summary>
     /// Auto complete behavior to support auto complete on a <c>TextBox</c> control.
@@ -22,7 +23,7 @@
 
         private bool _subscribed;
         private string? _valueAtSuggestionBoxOpen;
-        private string[]? _availableSuggestions;
+        private IReadOnlyList<string> _availableSuggestions = Array.Empty<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoCompletion"/> class.
@@ -196,7 +197,7 @@
             }
 
             var text = AssociatedObject.Text;
-            string[]? availableSuggestions = null;
+            IReadOnlyList<string> availableSuggestions = Array.Empty<string>();
 
             if (ItemsSource is not null)
             {
@@ -265,7 +266,7 @@
 
             UpdateSuggestions();
 
-            if (_availableSuggestions is null || _availableSuggestions.Length == 0)
+            if (_availableSuggestions is null || _availableSuggestions.Count == 0)
             {
                 UpdateSuggestionBox(false);
             }

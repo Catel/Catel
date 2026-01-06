@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Service to implement auto completion features.
@@ -16,6 +17,6 @@
         /// <param name="source">The source.</param>
         /// <returns>System.String[].</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        string[] GetAutoCompleteValues(string property, string filter, IEnumerable source);
+        IReadOnlyList<string> GetAutoCompleteValues(string property, string filter, IEnumerable source);
     }
 }

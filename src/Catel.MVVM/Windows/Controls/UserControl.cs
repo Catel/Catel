@@ -64,6 +64,8 @@
                 return;
             }
 
+            ServiceProvider = serviceProvider;
+
             this.FixBlurriness();
 
             _logic = new UserControlLogic(serviceProvider, viewModelWrapperService, this, null, viewModel);
@@ -106,6 +108,8 @@
             this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)),
                 dataContextSubscriptionService);
         }
+
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         /// Gets the type of the view model that this user control uses.

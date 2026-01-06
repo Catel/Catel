@@ -33,7 +33,7 @@
         /// <param name="source">The source.</param>
         /// <returns>System.String[].</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        public virtual string[] GetAutoCompleteValues(string property, string filter, IEnumerable source)
+        public virtual IReadOnlyList<string> GetAutoCompleteValues(string property, string filter, IEnumerable source)
         {
             ArgumentNullException.ThrowIfNull(source);
 
