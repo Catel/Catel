@@ -510,7 +510,7 @@ namespace Catel.Data
                 }
 
                 var parameters = methodInfo.GetParameters();
-                if (parameters.Length != 6)
+                if (parameters.Length != 4)
                 {
                     continue;
                 }
