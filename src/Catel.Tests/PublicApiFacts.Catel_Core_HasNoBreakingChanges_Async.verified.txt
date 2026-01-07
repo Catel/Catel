@@ -139,8 +139,8 @@ namespace Catel
         public static TEnum Parse(string input, bool ignoreCase = false) { }
         public static System.Collections.Generic.List<TEnum> ToList() { }
         public static string ToString(TEnum value) { }
-        public static bool TryParse(string input, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TEnum? result) { }
-        public static bool TryParse(string input, bool ignoreCase, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TEnum? result) { }
+        public static bool TryParse(string input, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TEnum result) { }
+        public static bool TryParse(string input, bool ignoreCase, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TEnum result) { }
         public static class DataBinding
         {
             public static System.Collections.Generic.IList<Catel.IBindableEnum<TEnum>> CreateList(Catel.Enum<TEnum>.DataBinding.FormatEnumName? formatName = null) { }

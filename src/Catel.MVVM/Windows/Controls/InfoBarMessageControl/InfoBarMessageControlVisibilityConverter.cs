@@ -27,9 +27,9 @@
 
             if (parameter is string)
             {
-                if (Enum<InfoBarMessageControlMode>.TryParse((string)parameter, out InfoBarMessageControlMode? parsedMode))
+                if (Enum<InfoBarMessageControlMode>.TryParse((string)parameter, out var parsedMode))
                 {
-                    mode = parsedMode.Value;
+                    mode = parsedMode;
                 }
             }
 

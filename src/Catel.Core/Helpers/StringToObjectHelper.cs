@@ -631,7 +631,7 @@
                 enumValue = defaultValue;
             }
 
-            return enumValue.Value;
+            return enumValue;
         }
 
         /// <summary>

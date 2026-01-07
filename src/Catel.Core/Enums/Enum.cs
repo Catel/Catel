@@ -187,7 +187,7 @@
         /// <param name="input">The input.</param>
         /// <param name="result">The result.</param>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static bool TryParse(string input, [NotNullWhen(true)]out TEnum? result)
+        public static bool TryParse(string input, [NotNullWhen(true)]out TEnum result)
         {
             return TryParse(input, true, out result);
         }
@@ -199,19 +199,9 @@
         /// <param name="ignoreCase">if set to <c>true</c>, the case will be ignored.</param>
         /// <param name="result">The result.</param>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static bool TryParse(string input, bool ignoreCase, [NotNullWhen(true)] out TEnum? result)
+        public static bool TryParse(string input, bool ignoreCase, [NotNullWhen(true)] out TEnum result)
         {
-            try
-            {
-                result = (TEnum)Enum.Parse(typeof(TEnum), input, ignoreCase);
-            }
-            catch (Exception)
-            {
-                result = null;
-                return false;
-            }
-
-            return true;
+            return Enum.TryParse<TEnum>(input, true, out result);
         }
 
         /// <summary>

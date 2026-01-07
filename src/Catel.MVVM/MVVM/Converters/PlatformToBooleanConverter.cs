@@ -26,7 +26,7 @@
             {
                 if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out var platform))
                 {
-                    if (Platforms.IsPlatformSupported(platform.Value))
+                    if (Platforms.IsPlatformSupported(platform))
                     {
                         isSupported = true;
                         break;
