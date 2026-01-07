@@ -554,13 +554,18 @@ namespace Catel.MVVM
     public interface IViewModelFactory
     {
         bool CanReuseViewModel(System.Type viewType, System.Type expectedViewModelType, System.Type actualViewModelType, Catel.MVVM.IViewModel? viewModelAsDataContext);
+        Catel.MVVM.IViewModel? CreateViewModel(System.Type viewModelType, params object?[] args);
         Catel.MVVM.IViewModel? CreateViewModel(System.Type viewModelType, object? dataContext);
         bool IsViewModelWithModelInjection(System.Type viewModelType);
     }
     public static class IViewModelFactoryExtensions
     {
         public static Catel.MVVM.IViewModel CreateRequiredViewModel(this Catel.MVVM.IViewModelFactory viewModelFactory, System.Type viewModelType, object? dataContext) { }
+        public static TViewModel CreateRequiredViewModel<TViewModel>(this Catel.MVVM.IViewModelFactory viewModelFactory, params object?[] args)
+            where TViewModel : Catel.MVVM.IViewModel { }
         public static TViewModel CreateRequiredViewModel<TViewModel>(this Catel.MVVM.IViewModelFactory viewModelFactory, object? dataContext)
+            where TViewModel : Catel.MVVM.IViewModel { }
+        public static TViewModel? CreateViewModel<TViewModel>(this Catel.MVVM.IViewModelFactory viewModelFactory, params object?[] args)
             where TViewModel : Catel.MVVM.IViewModel { }
         public static TViewModel? CreateViewModel<TViewModel>(this Catel.MVVM.IViewModelFactory viewModelFactory, object? dataContext)
             where TViewModel : Catel.MVVM.IViewModel { }
@@ -804,6 +809,7 @@ namespace Catel.MVVM
     {
         public ViewModelFactory(Microsoft.Extensions.Logging.ILogger<Catel.MVVM.ViewModelFactory> logger, System.IServiceProvider serviceProvider) { }
         public virtual bool CanReuseViewModel(System.Type viewType, System.Type expectedViewModelType, System.Type actualViewModelType, Catel.MVVM.IViewModel? viewModelAsDataContext) { }
+        public Catel.MVVM.IViewModel? CreateViewModel(System.Type viewModelType, params object?[] args) { }
         public virtual Catel.MVVM.IViewModel? CreateViewModel(System.Type viewModelType, object? dataContext) { }
         public virtual bool IsViewModelWithModelInjection(System.Type viewModelType) { }
     }
