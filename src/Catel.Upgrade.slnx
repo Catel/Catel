@@ -1,6 +1,10 @@
 <Solution>
 
   <Folder Name="/src/" />
+  <Folder Name="/src/App.CsvTextEditor/">
+    <Project Path="../../CsvTextEditor/src/CsvTextEditor/CsvTextEditor.csproj" Id="70261f8b-6554-4c72-bc0b-cfbd7a7dd94c" />
+  </Folder>
+  <Folder Name="/src/App.LogViewer/" />
   <Folder Name="/src/Catel/">
     <Project Path="Catel.Core/Catel.Core.csproj" />
     <Project Path="Catel.MVVM/Catel.MVVM.csproj" />
