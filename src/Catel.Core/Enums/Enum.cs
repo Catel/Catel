@@ -201,7 +201,7 @@
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static bool TryParse(string input, bool ignoreCase, [NotNullWhen(true)] out TEnum result)
         {
-            return Enum.TryParse<TEnum>(input, true, out result);
+            return Enum.TryParse<TEnum>(input, ignoreCase, out result);
         }
 
         /// <summary>
