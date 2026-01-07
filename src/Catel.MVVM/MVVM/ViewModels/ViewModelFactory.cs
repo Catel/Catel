@@ -101,6 +101,29 @@
         /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
         public virtual IViewModel? CreateViewModel(Type viewModelType, object? dataContext)
         {
+            if (dataContext is null)
+            {
+                return CreateViewModel(viewModelType, Array.Empty<object?>());
+            }
+
+            if (dataContext is object[] args)
+            {
+                return CreateViewModel(viewModelType, args);
+            }
+
+            return CreateViewModel(viewModelType, new object?[] { dataContext });
+        }
+
+        /// <summary>
+        /// Creates a new view model.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model that needs to be created.</param>
+        /// <param name="args">The arguments to pass to the view model.</param>
+        /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
+        public IViewModel? CreateViewModel(Type viewModelType, params object?[] args)
+        {
             ArgumentNullException.ThrowIfNull(viewModelType);
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
 
@@ -110,17 +133,11 @@
             // view model can be constructed with a nullable object. If a user wants a view model to be constructed
             // without any datacontext or injection, he/she should use an empty default constructor which will only
             // be used when injection is not possible
-            if (dataContext is not null)
+            if (args.Length > 0)
             {
-                var parameters = dataContext as object[];
-                if (parameters is null)
-                {
-                    parameters = new object[] { dataContext };
-                }
-
                 try
                 {
-                    viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, parameters) as IViewModel;
+                    viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, (object[])args) as IViewModel;
                 }
                 catch (Exception)
                 {
@@ -129,7 +146,7 @@
 
                 if (viewModel is not null)
                 {
-                    _logger.LogDebug("Constructed view model '{0}' using injection of data context '{1}'", viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
+                    _logger.LogDebug("Constructed view model '{0}' using injection of data context", viewModelType.FullName);
                     return viewModel;
                 }
             }
@@ -151,13 +168,12 @@
 #endif
             {
 #if DEBUG
-                _logger.LogDebug(ex, "Failed to create viewmodel");
+                _logger.LogDebug(ex, "Failed to create view model");
 #endif
                 // ignore
             }
 
-            _logger.LogDebug("Could not construct view model '{0}' using injection of data context '{1}'",
-                viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
+            _logger.LogDebug("Could not construct view model '{0}' using injection of data context'", viewModelType.FullName);
 
             return viewModel;
         }

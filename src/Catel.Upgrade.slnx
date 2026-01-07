@@ -53,6 +53,16 @@
   <Folder Name="/src/Orc.CsvTextEditor/Tests/">
     <Project Path="../../Orc.CsvTextEditor/src/Orc.CsvTextEditor.Tests/Orc.CsvTextEditor.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.DataAccess/">
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess.Xaml/Orc.DataAccess.Xaml.csproj" Id="431ef206-5dfd-49c3-8597-371a01e76ab5" />
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess/Orc.DataAccess.csproj" Id="5fb38c9c-a74b-46d3-b297-2de0274f952c" />
+  </Folder>
+  <Folder Name="/src/Orc.DataAccess/Example/">
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess.Example/Orc.DataAccess.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.DataAccess/Tests/">
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess.Tests/Orc.DataAccess.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.DependencyGraph/">
     <Project Path="../../Orc.DependencyGraph/src/Orc.DependencyGraph/Orc.DependencyGraph.csproj" Id="4d453cc5-bf49-4af1-bc25-99fff818af79" />
   </Folder>

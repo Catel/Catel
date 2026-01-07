@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// Interface which allows custom instantation of view models. This way, if a view model contains a complex constructor or needs 
+    /// Interface which allows custom instantiation of view models. This way, if a view model contains a complex constructor or needs 
     /// caching, this factory can be used.
     /// </summary>
     public interface IViewModelFactory
@@ -43,5 +43,15 @@
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
         IViewModel? CreateViewModel(Type viewModelType, object? dataContext);
+
+        /// <summary>
+        /// Creates a new view model.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model that needs to be created.</param>
+        /// <param name="args">The arguments to pass to the view model.</param>
+        /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
+        IViewModel? CreateViewModel(Type viewModelType, params object?[] args);
     }
 }
