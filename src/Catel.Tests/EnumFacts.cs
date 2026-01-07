@@ -243,9 +243,7 @@
             [TestCase("MYSECONDVALUE", true, Enum1.MySecondValue)]
             public void ReturnsCorrectValueForTryParseMethod(string input, bool ignoreCase, Enum1? expectedResult)
             {
-                Enum1 result;
-
-                var parseResult = Enum<Enum1>.TryParse(input, ignoreCase, out result);
+                var parseResult = Enum<Enum1>.TryParse(input, ignoreCase, out var result);
 
                 if (!expectedResult.HasValue && !parseResult)
                 {

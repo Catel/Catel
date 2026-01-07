@@ -24,10 +24,9 @@
 
             foreach (var supportedPlatform in supportedPlatforms)
             {
-                var platform = KnownPlatforms.Unknown;
-                if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out platform))
+                if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out var platform))
                 {
-                    if (Platforms.IsPlatformSupported(platform))
+                    if (Platforms.IsPlatformSupported(platform.Value))
                     {
                         isSupported = true;
                         break;

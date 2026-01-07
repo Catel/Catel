@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -186,18 +187,7 @@
         /// <param name="input">The input.</param>
         /// <param name="result">The result.</param>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static bool TryParse(string input, out TEnum? result)
-        {
-            return TryParse(input, true, out result);
-        }
-
-        /// <summary>
-        /// Tries to parse an enum value name.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <param name="result">The result.</param>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static bool TryParse(string input, out TEnum result)
+        public static bool TryParse(string input, [NotNullWhen(true)]out TEnum? result)
         {
             return TryParse(input, true, out result);
         }
@@ -209,7 +199,7 @@
         /// <param name="ignoreCase">if set to <c>true</c>, the case will be ignored.</param>
         /// <param name="result">The result.</param>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static bool TryParse(string input, bool ignoreCase, out TEnum? result)
+        public static bool TryParse(string input, bool ignoreCase, [NotNullWhen(true)] out TEnum? result)
         {
             try
             {
@@ -221,26 +211,6 @@
                 return false;
             }
 
-            return true;
-        }
-
-        /// <summary>
-        /// Tries to parse an enum value name.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <param name="ignoreCase">if set to <c>true</c>, the case will be ignored.</param>
-        /// <param name="result">The result.</param>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static bool TryParse(string input, bool ignoreCase, out TEnum result)
-        {
-            TEnum? temp;
-            if (!TryParse(input, ignoreCase, out temp))
-            {
-                result = default;
-                return false;
-            }
-
-            result = temp!.Value;
             return true;
         }
 

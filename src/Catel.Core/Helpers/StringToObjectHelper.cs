@@ -626,13 +626,12 @@
                 return defaultValue;
             }
 
-            TEnumValue enumValue;
-            if (!Enum<TEnumValue>.TryParse(value, out enumValue))
+            if (!Enum<TEnumValue>.TryParse(value, out var enumValue))
             {
                 enumValue = defaultValue;
             }
 
-            return enumValue;
+            return enumValue.Value;
         }
 
         /// <summary>

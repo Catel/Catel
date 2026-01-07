@@ -4,7 +4,9 @@
   <Folder Name="/src/App.CsvTextEditor/">
     <Project Path="../../CsvTextEditor/src/CsvTextEditor/CsvTextEditor.csproj" Id="70261f8b-6554-4c72-bc0b-cfbd7a7dd94c" />
   </Folder>
-  <Folder Name="/src/App.LogViewer/" />
+  <Folder Name="/src/App.LogViewer/">
+    <Project Path="../../LogViewer/src/LogViewer/LogViewer.csproj" Id="a396337f-fe94-454e-9bc7-369a5b140fe5" />
+  </Folder>
   <Folder Name="/src/Catel/">
     <Project Path="Catel.Core/Catel.Core.csproj" />
     <Project Path="Catel.MVVM/Catel.MVVM.csproj" />
