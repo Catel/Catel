@@ -32,6 +32,12 @@
                     continue;
                 }
 
+                if (service.ImplementationInstance is not null)
+                {
+                    // Already instantiated
+                    continue;
+                }
+
                 if (service.ImplementationType?.ImplementsInterfaceEx<IConstructAtStartup>() ?? false)
                 {
                     IConstructAtStartup? instance = null;
