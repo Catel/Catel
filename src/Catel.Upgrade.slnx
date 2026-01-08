@@ -94,6 +94,18 @@
     <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6.Tests.DbContext/Orc.EntityFramework6.Tests.DbContext.csproj" />
     <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6.Tests/Orc.EntityFramework6.Tests.csproj" />
   </Folder>
+  <Folder Name="/src/Orc.Extensibility/">
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility/Orc.Extensibility.csproj" Id="504f9e8e-1463-4a1a-bb66-a1b791abccf8" />
+  </Folder>
+  <Folder Name="/src/Orc.Extensibility/Example/">
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.Api/Orc.Extensibility.Example.Api.csproj" />
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionA/Orc.Extensibility.Example.ExtensionA.csproj" />
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionB/Orc.Extensibility.Example.ExtensionB.csproj" />
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example/Orc.Extensibility.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Extensibility/Tests/">
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Tests/Orc.Extensibility.Tests.csproj" />
+  </Folder>
   <Folder Name="/src/Orc.FeatureToggles/">
     <Project Path="../../Orc.FeatureToggles/src/Orc.FeatureToggles.Xaml/Orc.FeatureToggles.Xaml.csproj" Id="9a55f5cf-a1a7-446f-9d22-8f72c6ee1577" />
     <Project Path="../../Orc.FeatureToggles/src/Orc.FeatureToggles/Orc.FeatureToggles.csproj" Id="82e9cef6-4793-49b0-94fe-bf3bc243741c" />
