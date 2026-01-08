@@ -101,7 +101,10 @@
     <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.Api/Orc.Extensibility.Example.Api.csproj" />
     <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionA/Orc.Extensibility.Example.ExtensionA.csproj" />
     <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionB/Orc.Extensibility.Example.ExtensionB.csproj" />
-    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example/Orc.Extensibility.Example.csproj" />
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example/Orc.Extensibility.Example.csproj">
+      <BuildDependency Project="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionA/Orc.Extensibility.Example.ExtensionA.csproj" />
+      <BuildDependency Project="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionB/Orc.Extensibility.Example.ExtensionB.csproj" />
+    </Project>
   </Folder>
   <Folder Name="/src/Orc.Extensibility/Tests/">
     <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Tests/Orc.Extensibility.Tests.csproj" />
