@@ -129,6 +129,16 @@
 
             IViewModel? viewModel = null;
 
+            // If this is a parent vm, we can skip the dependency injection
+            if (args.Length == 1)
+            {
+                var parentViewModel = args[0] as IViewModel;
+                if (parentViewModel is not null)
+                {
+                    args = Array.Empty<object?>();
+                }
+            }
+
             // Only try to construct the view model when the injection object is not null, otherwise every
             // view model can be constructed with a nullable object. If a user wants a view model to be constructed
             // without any datacontext or injection, he/she should use an empty default constructor which will only

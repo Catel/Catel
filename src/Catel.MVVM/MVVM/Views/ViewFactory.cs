@@ -10,11 +10,13 @@
     {
         private readonly ILogger<ViewFactory> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IViewModelLocator _viewModelLocator;
 
-        public ViewFactory(ILogger<ViewFactory> logger, IServiceProvider serviceProvider)
+        public ViewFactory(ILogger<ViewFactory> logger, IServiceProvider serviceProvider, IViewModelLocator viewModelLocator)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
+            _viewModelLocator = viewModelLocator;
         }
 
         public virtual FrameworkElement? CreateView(Type viewType)
@@ -58,9 +60,27 @@
 
             FrameworkElement? view = null;
 
+            // Double check that *if* a view model is injected, it's the right / expected one
+            if (dataContext is IViewModel viewModel)
+            {
+                // Ensure this is the right vm
+                var expectedViewModelType = _viewModelLocator.ResolveViewModel(viewType);
+                if (expectedViewModelType is not null)
+                {
+                    if (expectedViewModelType != dataContext.GetType())
+                    {
+                        _logger.LogDebug("The provided data context is of type '{0}', but the expected view model type for view '{1}' is '{2}'",
+                            ObjectToStringHelper.ToTypeString(dataContext), viewType.Name, ObjectToStringHelper.ToTypeString(expectedViewModelType));
+
+                        dataContext = null;
+                    }
+                }
+            }
+
             // First, try to constructor directly with the data context
             if (dataContext is not null)
             {
+
                 try
                 {
                     view = ActivatorUtilities.CreateInstance(_serviceProvider, viewType, dataContext) as FrameworkElement;
