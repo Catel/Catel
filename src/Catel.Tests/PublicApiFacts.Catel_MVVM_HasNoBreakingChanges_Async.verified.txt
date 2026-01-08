@@ -1510,7 +1510,7 @@ namespace Catel.MVVM.Views
     }
     public class ViewFactory : Catel.MVVM.Views.IViewFactory
     {
-        public ViewFactory(Microsoft.Extensions.Logging.ILogger<Catel.MVVM.Views.ViewFactory> logger, System.IServiceProvider serviceProvider) { }
+        public ViewFactory(Microsoft.Extensions.Logging.ILogger<Catel.MVVM.Views.ViewFactory> logger, System.IServiceProvider serviceProvider, Catel.MVVM.IViewModelLocator viewModelLocator) { }
         public virtual System.Windows.FrameworkElement? CreateView(System.Type viewType) { }
         public virtual System.Windows.FrameworkElement? CreateViewWithViewModel(System.Type viewType, object? dataContext) { }
     }

@@ -243,6 +243,8 @@ namespace Catel
     }
     public static class IServiceCollectionExtensions
     {
+        public static void AddServiceCollectionRegistrations(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, Microsoft.Extensions.DependencyInjection.IServiceCollection otherServiceCollection) { }
+        public static void AddServiceProviderRegistrations(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.IServiceProvider serviceProvider) { }
         public static bool IsRegistered<TService>(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
     public static class IServiceProviderExtensions
