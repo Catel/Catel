@@ -107,6 +107,11 @@
         }
 
         /// <summary>
+        /// Gets the service provider bound to this command container.
+        /// </summary>
+        protected IServiceProvider ServiceProvider => _serviceProvider;
+
+        /// <summary>
         /// Gets the name of the command.
         /// </summary>
         /// <value>The name of the command.</value>
