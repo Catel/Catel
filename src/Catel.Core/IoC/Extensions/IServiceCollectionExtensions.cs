@@ -2,13 +2,11 @@
 {
     using System;
     using System.Linq;
-    using Catel.Collections;
-    using Catel.Reflection;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class IServiceCollectionExtensions
     {
-        public static void AddServiceProviderRegistrations(this IServiceCollection serviceCollection, IServiceProvider serviceProvider)
+        public static void AddParentServiceProviderRegistrations(this IServiceCollection serviceCollection, IServiceProvider serviceProvider)
         {
             var serviceProviderServiceCollection = serviceProvider.GetServiceCollection();
 
@@ -17,7 +15,7 @@
                 // Note: open generics are not supported, the validation of the service collection will fail (not sure why),
                 // but we need to skip in that case
                 var serviceType = serviceDescriptor.ServiceType;
-                if (serviceType.IsGenericTypeDefinitionEx())
+                if (serviceType.IsGenericTypeDefinition)
                 {
                     // Register as-is
                     serviceCollection.Add(serviceDescriptor);
@@ -42,7 +40,7 @@
                             break;
                     }
                 }
-                else 
+                else
                 {
                     switch (serviceDescriptor.Lifetime)
                     {
@@ -61,9 +59,13 @@
                 }
             }
         }
+
         public static void AddServiceCollectionRegistrations(this IServiceCollection serviceCollection, IServiceCollection otherServiceCollection)
         {
-            otherServiceCollection.ForEach(x => serviceCollection.Add(x));
+            foreach (var serviceDescriptor in otherServiceCollection)
+            {
+                serviceCollection.Add(serviceDescriptor);
+            }
         }
 
         public static bool IsRegistered<TService>(this IServiceCollection serviceCollection)

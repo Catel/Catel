@@ -84,9 +84,9 @@
             return serviceDescriptors;
         }
 
-        public static IServiceCollection GetServiceCollection(this IServiceProvider serviceProvider)
+        public static IServiceCollection GetServiceCollection(this IServiceProvider serviceProvider, string key = "CatelServiceCollection")
         {
-            var serviceCollection = serviceProvider.GetKeyedService<IServiceCollection>("CatelServiceCollection");
+            var serviceCollection = serviceProvider.GetKeyedService<IServiceCollection>(key);
             if (serviceCollection is not null)
             {
                 return serviceCollection;
