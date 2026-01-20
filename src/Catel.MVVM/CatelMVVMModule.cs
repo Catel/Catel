@@ -17,6 +17,7 @@
         {
             serviceCollection.TryAddSingleton<IDataContextSubscriptionService, DataContextSubscriptionService>();
             serviceCollection.TryAddSingleton<ICommandManager, CommandManager>();
+            serviceCollection.TryAddSingleton<ICommandFactory, CommandFactory>();
             serviceCollection.TryAddSingleton<IViewLoadManager, ViewLoadManager>();
             serviceCollection.TryAddSingleton<IViewModelWrapperService, ViewModelWrapperService>();
             serviceCollection.TryAddSingleton<IViewManager, ViewManager>();
