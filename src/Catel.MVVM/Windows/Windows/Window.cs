@@ -2,6 +2,7 @@
 {
     using System;
     using System.Windows;
+    using Catel.MVVM;
     using Catel.Services;
 
     /// <summary>
@@ -13,8 +14,16 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Window"/> class.
         /// </summary>
-        public Window(IServiceProvider serviceProvider, IWrapControlService wrapControlService, ILanguageService languageService)
-            : base(serviceProvider, wrapControlService, languageService)
+        public Window(IServiceProvider serviceProvider, IWrapControlService wrapControlService, 
+            ILanguageService languageService)
+            : this(null, serviceProvider, wrapControlService, languageService)
+        {
+            // Leave empty!
+        }
+
+        public Window(IViewModel? viewModel, IServiceProvider serviceProvider, 
+            IWrapControlService wrapControlService, ILanguageService languageService)
+            : base(viewModel, serviceProvider, wrapControlService, languageService)
         {
             Mode = DataWindowMode.Custom;
             SizeToContent = SizeToContent.Manual;
