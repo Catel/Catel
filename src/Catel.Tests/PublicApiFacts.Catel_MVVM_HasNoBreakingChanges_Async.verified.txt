@@ -220,6 +220,7 @@ namespace Catel.MVVM
     {
         protected CommandContainerBase(string commandName, Catel.MVVM.ICommandManager commandManager, System.IServiceProvider serviceProvider) { }
         public string CommandName { get; }
+        protected System.IServiceProvider ServiceProvider { get; }
         public virtual bool CanExecute(TCanExecuteParameter? parameter) { }
         public virtual void Execute(TExecuteParameter? parameter) { }
         public virtual System.Threading.Tasks.Task ExecuteAsync(TExecuteParameter? parameter) { }
@@ -242,6 +243,12 @@ namespace Catel.MVVM
         public Catel.MVVM.ICatelCommand Command { get; }
         public object? CommandParameter { get; }
         public string? CommandPropertyName { get; }
+    }
+    public class CommandFactory : Catel.MVVM.ICommandFactory
+    {
+        public CommandFactory(System.IServiceProvider serviceProvider) { }
+        public virtual Catel.MVVM.ICatelCommand CreateCommand(System.Action executeAction, System.Func<bool>? canExecute, object? tag = null) { }
+        public virtual Catel.MVVM.ICatelTaskCommand CreateCommand(System.Func<System.Threading.Tasks.Task> executeAction, System.Func<bool>? canExecute, object? tag = null) { }
     }
     public static class CommandHelper
     {
@@ -425,6 +432,11 @@ namespace Catel.MVVM
     public static class ICommandExtensions
     {
         public static System.Threading.Tasks.Task GetTask(this System.Windows.Input.ICommand command) { }
+    }
+    public interface ICommandFactory
+    {
+        Catel.MVVM.ICatelCommand CreateCommand(System.Action executeAction, System.Func<bool>? canExecute, object? tag = null);
+        Catel.MVVM.ICatelTaskCommand CreateCommand(System.Func<System.Threading.Tasks.Task> executeAction, System.Func<bool>? canExecute, object? tag = null);
     }
     public interface ICommandManager
     {
@@ -2291,6 +2303,7 @@ namespace Catel.Windows
     public class Window : Catel.Windows.DataWindow
     {
         public Window(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
+        public Window(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
     }
     public static class WindowExtensions
     {

@@ -243,14 +243,14 @@ namespace Catel
     }
     public static class IServiceCollectionExtensions
     {
+        public static void AddParentServiceProviderRegistrations(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.IServiceProvider serviceProvider) { }
         public static void AddServiceCollectionRegistrations(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, Microsoft.Extensions.DependencyInjection.IServiceCollection otherServiceCollection) { }
-        public static void AddServiceProviderRegistrations(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.IServiceProvider serviceProvider) { }
         public static bool IsRegistered<TService>(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
     public static class IServiceProviderExtensions
     {
         public static void CreateTypesThatMustBeConstructedAtStartup(this System.IServiceProvider serviceProvider) { }
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection GetServiceCollection(this System.IServiceProvider serviceProvider) { }
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection GetServiceCollection(this System.IServiceProvider serviceProvider, string key = "CatelServiceCollection") { }
         public static System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.DependencyInjection.ServiceDescriptor> GetServiceDescriptors(this System.IServiceProvider serviceProvider, System.Type type) { }
         public static System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.DependencyInjection.ServiceDescriptor> GetServiceDescriptors<T>(this System.IServiceProvider serviceProvider) { }
         public static bool IsRegistered(this System.IServiceProvider serviceProvider, System.Type serviceType) { }
