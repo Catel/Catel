@@ -84,7 +84,7 @@
         /// </summary>
         /// <value><c>true</c> if this instance is dirty; otherwise, <c>false</c>.</value>
         [Browsable(false)]
-        public bool IsDirty
+        public virtual bool IsDirty
         {
             // Note: we know what we are doing, use GetValueFromPropertyBag (but not SetValueFast)
             get { return GetValueFromPropertyBag<bool>(IsDirtyProperty.Name); }
@@ -100,7 +100,7 @@
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
         /// </summary>
         [Browsable(false)]
-        public bool IsReadOnly
+        public virtual bool IsReadOnly
         {
             // Note: we know what we are doing, use GetValueFromPropertyBag (but not SetValueFast)
             get { return GetValueFromPropertyBag<bool>(IsReadOnlyProperty.Name); }

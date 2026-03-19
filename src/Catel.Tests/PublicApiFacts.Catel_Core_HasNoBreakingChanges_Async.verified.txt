@@ -1450,9 +1450,9 @@ namespace Catel.Data
         [System.ComponentModel.Browsable(false)]
         protected bool AlwaysInvokeNotifyChanged { get; set; }
         [System.ComponentModel.Browsable(false)]
-        public bool IsDirty { get; protected set; }
+        public virtual bool IsDirty { get; protected set; }
         [System.ComponentModel.Browsable(false)]
-        public bool IsReadOnly { get; protected set; }
+        public virtual bool IsReadOnly { get; protected set; }
         protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
         protected System.Collections.Generic.IReadOnlyList<string> GetPropertyBagPropertyNames() { }
         protected Catel.Data.IPropertyData GetPropertyData(string name) { }
