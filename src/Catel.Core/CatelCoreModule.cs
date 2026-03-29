@@ -1,5 +1,6 @@
 ﻿namespace Catel
 {
+    using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.ThirdPartyNotices;
@@ -33,6 +34,10 @@
             serviceCollection.TryAddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
             serviceCollection.TryAddSingleton<IInMemoryLoggingContainer, InMemoryLoggingContainer>();
 
+            // IoC
+            serviceCollection.TryAddSingleton<IServiceScopeManager, ServiceScopeManager>();
+
+            // Services
             serviceCollection.TryAddSingleton<ILanguageService, LanguageService>();
             serviceCollection.TryAddSingleton<IAppDataService, AppDataService>();
             serviceCollection.TryAddSingleton<IMessageMediator, MessageMediator>();

@@ -1880,10 +1880,47 @@ namespace Catel.IoC
     {
         void Initialize();
     }
+    public interface IScopeServiceCollectionProvider
+    {
+        Microsoft.Extensions.DependencyInjection.IServiceCollection AddServices(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, string? scopeId);
+    }
+    public interface IServiceScopeManager
+    {
+        Catel.IoC.ServiceScope AddScope(Catel.IoC.ServiceScopeContext scopeContext);
+        Catel.IoC.ServiceScope? GetScope(string id);
+        bool RemoveScope(string id);
+    }
     public static class IoCContainer
     {
         public static System.IServiceProvider ServiceProvider { get; set; }
         public static System.IServiceProvider? GetServiceProvider() { }
+    }
+    public class ServiceScope
+    {
+        public ServiceScope() { }
+        public string? Id { get; init; }
+        public required System.IServiceProvider ServiceProvider { get; init; }
+    }
+    public class ServiceScopeContext
+    {
+        public ServiceScopeContext() { }
+        public bool DisposeScopeServices { get; set; }
+        public bool DisposeServiceProvider { get; set; }
+        public required string Id { get; init; }
+        public bool IsIsolated { get; set; }
+    }
+    public class ServiceScopeManager : Catel.IoC.IServiceScopeManager
+    {
+        public ServiceScopeManager(Microsoft.Extensions.Logging.ILogger<Catel.IoC.ServiceScopeManager> logger, System.IServiceProvider serviceProvider, System.Collections.Generic.IEnumerable<Catel.IoC.IScopeServiceCollectionProvider> serviceCollectionProviders) { }
+        public Catel.IoC.ServiceScope AddScope(Catel.IoC.ServiceScopeContext scopeContext) { }
+        public Catel.IoC.ServiceScope? GetScope(string id) { }
+        public bool RemoveScope(string id) { }
+    }
+    public class ServiceScopeState
+    {
+        public ServiceScopeState() { }
+        public required Catel.IoC.ServiceScope Scope { get; init; }
+        public required Catel.IoC.ServiceScopeContext ScopeContext { get; init; }
     }
 }
 namespace Catel.Linq

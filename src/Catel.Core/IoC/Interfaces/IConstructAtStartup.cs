@@ -1,6 +1,5 @@
-﻿namespace Catel.IoC
+﻿namespace Catel.IoC;
+
+public interface IConstructAtStartup
 {
-    public interface IConstructAtStartup
-    {
-    }
 }
