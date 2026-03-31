@@ -1,4 +1,4 @@
-﻿namespace Catel.Windows
+namespace Catel.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -716,25 +716,25 @@
 
             if (IsOKButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
+                var button = DataWindowButton.FromAsync(_languageService.GetString("OK") ?? "[OK]", OnOkExecuteAsync, OnOkCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.OK;
                 _buttons.Add(button);
             }
             if (IsCancelButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
+                var button = DataWindowButton.FromAsync(_languageService.GetString("Cancel") ?? "[CANCEL]", OnCancelExecuteAsync, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
             if (IsApplyButtonAvailable)
             {
-                var button = DataWindowButton.FromAsync(languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
+                var button = DataWindowButton.FromAsync(_languageService.GetString("Apply") ?? "[APPLY]", OnApplyExecuteAsync, OnApplyCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Apply;
                 _buttons.Add(button);
             }
             if (IsCloseButtonAvailable)
             {
-                var button = DataWindowButton.FromSync(languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
+                var button = DataWindowButton.FromSync(_languageService.GetString("Close") ?? "[CLOSE]", OnCloseExecute, OnCloseCanExecute);
                 button.IsDefault = DefaultButton == DataWindowDefaultButton.Close;
                 _buttons.Add(button);
             }

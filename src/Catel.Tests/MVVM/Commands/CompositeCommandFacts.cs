@@ -1,4 +1,4 @@
-﻿namespace Catel.Tests.MVVM
+namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
@@ -14,7 +14,12 @@
             [TestCase(true, false)]
             public void CanExecuteEmptyCommandWithAtLeastOneMustBeExecutable(bool atLeastOneMustBeExecutable, bool expectedValue)
             {
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var compositeCommand = new CompositeCommand();
+
                 compositeCommand.AtLeastOneMustBeExecutable = atLeastOneMustBeExecutable;
 
                 Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
@@ -24,6 +29,11 @@
             [TestCase(true, false)]
             public void PreventsExecutionOfPartiallyExecutableCommand(bool checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand, bool expectedValue)
             {
+                var compositeCommand = new CompositeCommand();
+
+                compositeCommand.RegisterCommand(new Command(() => { }, () => false));
+                compositeCommand.RegisterCommand(new Command(() => { }, () => true));
+
                 var compositeCommand = new CompositeCommand();
 
                 compositeCommand.RegisterCommand(new Command(() => { }, () => false));
@@ -43,6 +53,10 @@
             {
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
                 Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
             }
 
@@ -52,6 +66,11 @@
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
+                var vm = new CompositeCommandViewModel(serviceProvider);
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
 
                 compositeCommand.Execute();
@@ -68,6 +87,10 @@
             {
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
                 Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
             }
 
@@ -77,6 +100,12 @@
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
+                var vm = new CompositeCommandViewModel(serviceProvider); 
+                
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
                 compositeCommand.RegisterCommand(vm.TestCommand2, vm);
 
@@ -97,12 +126,20 @@
             {
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
                 Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
             }
 
             [TestCase]
             public void RegistersActionForExecution()
             {
+                var compositeCommand = new CompositeCommand();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var compositeCommand = new CompositeCommand();
 
                 bool executed = false;
@@ -123,12 +160,20 @@
             {
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
                 Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
             }
 
             [TestCase]
             public void UnregistersCommandForExecution()
             {
+                var compositeCommand = new CompositeCommand();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var compositeCommand = new CompositeCommand();
 
                 bool executed = false;
@@ -154,6 +199,10 @@
 
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
                 compositeCommand.RegisterAction(action);
 
                 compositeCommand.Execute(null);
@@ -169,6 +218,10 @@
 
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
                 compositeCommand.RegisterAction(action);
                 compositeCommand.UnregisterAction(action);
 
@@ -180,6 +233,10 @@
             [TestCase]
             public void RegisteredActionsCanBeUnregistered_DynamicAction()
             {
+                var compositeCommand = new CompositeCommand();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var compositeCommand = new CompositeCommand();
 
                 compositeCommand.RegisterAction(RegisteredActionsCanBeUnregistered_TestMethod);
@@ -207,6 +264,11 @@
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var compositeCommand = new CompositeCommand();
+
+                var vm = new CompositeCommandViewModel(serviceProvider);
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
 
                 Assert.That(vm.IsTestCommand1Executed, Is.False);

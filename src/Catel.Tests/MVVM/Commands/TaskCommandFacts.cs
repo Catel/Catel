@@ -1,4 +1,4 @@
-﻿namespace Catel.Tests.MVVM.Commands
+namespace Catel.Tests.MVVM.Commands
 {
     using System;
     using System.Threading;
@@ -21,6 +21,10 @@
         {
             var taskCommand = new TaskCommand(TestExecuteAsync);
 
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var taskCommand = new TaskCommand(TestExecuteAsync);
+
             Assert.That(taskCommand.IsExecuting, Is.False);
             Assert.That(taskCommand.IsCancellationRequested, Is.False);
 
@@ -41,6 +45,10 @@
         [TestCase]
         public async Task TestCommandExceptions_SwallowExceptionsAsync()
         {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
             {
                 SwallowExceptions = true
@@ -68,6 +76,10 @@
         [TestCase, Explicit]
         public async Task TestCommandExceptions_DontSwallowExceptionsAsync()
         {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
             var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
             {
                 SwallowExceptions = false

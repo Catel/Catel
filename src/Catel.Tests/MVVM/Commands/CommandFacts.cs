@@ -1,4 +1,4 @@
-﻿namespace Catel.Tests.MVVM.Commands
+namespace Catel.Tests.MVVM.Commands
 {
     using System;
     using Catel.Data;
@@ -14,6 +14,10 @@
             [Test]
             public void ExecuteThrowsException()
             {
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var command = new Command(() => { throw new Exception(); }, () => true);
                 Assert.Throws<Exception>(() => command.Execute());
             }
@@ -21,6 +25,10 @@
             [Test]
             public void CanExecuteThrowsException()
             {
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 var command = new Command(() => { }, () => { throw new Exception(); });
                 Assert.Throws<Exception>(() => command.Execute());
             }

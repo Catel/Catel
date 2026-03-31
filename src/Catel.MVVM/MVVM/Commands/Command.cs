@@ -1,10 +1,11 @@
-﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable 1956 // Both Command and CompositeCommand implement ICommand
 #pragma warning disable 3021 // 'type' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 
 namespace Catel.MVVM
 {
     using System;
+    using System.Security.Cryptography;
     using System.Windows.Input;
 
     using Services;
@@ -14,24 +15,19 @@ namespace Catel.MVVM
 
     /// <summary>
     /// Base class for generic command classes. Contains protected static services for using in derived classes.
+    /// Services are injected after construction via <see cref="ICommandServiceInjector"/> when commands are
+    /// attached to a ViewModel or created via a factory.
     /// </summary>
-    public abstract class CommandBase
+    public abstract class CommandBase : ICommandServiceInjector
     {
-        private static IAuthenticationProvider? _authenticationProvider;
-        private static IDispatcherService? _dispatcherService;
+        protected CommandBase()
+        {
+        }
 
         /// <summary>
         /// Authentication provider.
         /// </summary>
-        protected static IAuthenticationProvider? AuthenticationProvider
-        {
-            get
-            {
-                if (_authenticationProvider is null)
-                {
-                    var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-                    _authenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
-                }
+        protected IAuthenticationProvider? AuthenticationProvider { get; private set; }
 
                 return _authenticationProvider;
             }
@@ -44,22 +40,12 @@ namespace Catel.MVVM
         /// <summary>
         /// Dispatcher service.
         /// </summary>
-        protected static IDispatcherService? DispatcherService
-        {
-            get
-            {
-                if (_dispatcherService is null)
-                {
-                    var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-                    _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
-                }
+        protected IDispatcherService? DispatcherService { get; private set; }
 
-                return _dispatcherService;
-            }
-            set
-            {
-                _dispatcherService = value;
-            }
+        void ICommandServiceInjector.InjectServices(IServiceProvider serviceProvider)
+        {
+            AuthenticationProvider ??= serviceProvider.GetRequiredService<IAuthenticationProvider>();
+            DispatcherService ??= serviceProvider.GetRequiredService<IDispatcherService>();
         }
     }
 
@@ -104,8 +90,8 @@ namespace Catel.MVVM
         /// <param name="canExecuteWithoutParameter">The function to call to determine whether the command can be executed without parameter.</param>
         /// <param name="tag">The tag of the command.</param>
         internal Command(Action<TExecuteParameter?>? executeWithParameter, Action? executeWithoutParameter,
-            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter,
-            object? tag)
+            Func<TCanExecuteParameter?, bool>? canExecuteWithParameter, Func<bool>? canExecuteWithoutParameter, object? tag)
+            : base()
         {
             InitializeActions(executeWithParameter, executeWithoutParameter, canExecuteWithParameter, canExecuteWithoutParameter);
 

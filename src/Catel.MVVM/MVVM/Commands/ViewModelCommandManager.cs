@@ -1,4 +1,4 @@
-﻿namespace Catel.MVVM
+namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -56,6 +56,11 @@
         private readonly IViewModel _viewModel;
 
         /// <summary>
+        /// The service provider for injecting services into commands.
+        /// </summary>
+        private readonly IServiceProvider _serviceProvider;
+
+        /// <summary>
         /// The view model type;
         /// </summary>
         private readonly Type _viewModelType;
@@ -69,12 +74,16 @@
         /// Initializes a new instance of the <see cref="ViewModelCommandManager" /> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        private ViewModelCommandManager(IViewModel viewModel)
+        public ViewModelCommandManager(IViewModel viewModel, IServiceProvider serviceProvider)
         {
             ArgumentNullException.ThrowIfNull(viewModel);
+            ArgumentNullException.ThrowIfNull(serviceProvider);
 
-            Log.Debug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+            _serviceProvider = serviceProvider;
+
+            Logger.LogDebug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             _viewModel = viewModel;
             _viewModelType = viewModel.GetType();
@@ -173,6 +182,11 @@
                             if (!_commands.ContainsKey(command))
                             {
                                 Log.Debug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
+
+                                if (command is ICommandServiceInjector injector)
+                                {
+                                    injector.InjectServices(_serviceProvider);
+                                }
 
                                 var commandAsICatelCommand = command as ICatelCommand;
                                 if (commandAsICatelCommand is not null)

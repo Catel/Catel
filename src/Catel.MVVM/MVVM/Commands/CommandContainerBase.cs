@@ -1,4 +1,4 @@
-﻿namespace Catel.MVVM
+namespace Catel.MVVM
 {
     using System;
     using System.Threading.Tasks;
@@ -91,7 +91,8 @@
             }
 
             _compositeCommand = compositeCommand;
-            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteInternalAsync, CanExecute);
+            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress>(ExecuteInternalAsync, CanExecute);
+            ((ICommandServiceInjector)_command).InjectServices(serviceProvider);
 
             _commandManager.RegisterCommand(commandName, _command);
         }

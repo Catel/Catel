@@ -1,4 +1,4 @@
-﻿namespace Catel.Tests.MVVM
+namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
@@ -15,7 +15,7 @@
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
-                Assert.Throws<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
+                Assert.Throws<ArgumentNullException>(() => new ViewModelCommandManager(null, null));
             }
 
             [TestCase]
@@ -23,6 +23,11 @@
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
+                var viewModelCommandManager = new ViewModelCommandManager(viewModel, serviceProvider);
 
                 Assert.That(viewModelCommandManager, Is.Not.Null);
             }
@@ -37,14 +42,23 @@
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
 
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
+                var viewModelCommandManager = new ViewModelCommandManager(viewModel, serviceProvider);
+
                 Assert.Throws<ArgumentNullException>(() => viewModelCommandManager.AddHandler((Func<IViewModel, string, ICommand, object, Task>)null));
             }
 
             [TestCase]
             public async Task RegisteredHandlerGetsCalledAsync()
             {
-                var viewModel = new TestViewModel();
-                var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
+                var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+                using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var viewModel = new TestFeaturedViewModel(serviceProvider);
+                var viewModelCommandManager = new ViewModelCommandManager(viewModel, serviceProvider);
                 await viewModel.InitializeViewModelAsync();
 
                 var called = false;

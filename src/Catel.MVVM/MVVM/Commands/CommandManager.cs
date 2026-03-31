@@ -1,4 +1,4 @@
-﻿namespace Catel.MVVM
+namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
@@ -101,6 +101,7 @@
                 if (compositeCommand is null)
                 {
                     compositeCommand = new CompositeCommand();
+                    ((ICommandServiceInjector)compositeCommand).InjectServices(_serviceProvider);
                 }
 
                 _commands.Add(commandName, compositeCommand);

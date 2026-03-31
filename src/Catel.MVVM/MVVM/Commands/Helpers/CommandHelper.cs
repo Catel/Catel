@@ -1,4 +1,4 @@
-﻿namespace Catel.MVVM
+namespace Catel.MVVM
 {
     using System;
     using System.Linq.Expressions;
@@ -21,7 +21,7 @@
         /// <exception cref="ArgumentNullException">The <paramref name="execute"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validationSummaryPropertyExpression"/> is <c>null</c>.</exception>
         public static Command CreateCommand(Action execute, Expression<Func<IValidationSummary>> validationSummaryPropertyExpression, object? tag = null)
-        {    
+        {
             ArgumentNullException.ThrowIfNull(execute);
             ArgumentNullException.ThrowIfNull(validationSummaryPropertyExpression);
 
@@ -47,7 +47,8 @@
         /// <returns>The created command.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="execute"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validationSummaryPropertyExpression"/> is <c>null</c>.</exception>
-        public static Command<TExecuteParameter> CreateCommand<TExecuteParameter>(Action<TExecuteParameter?> execute, Expression<Func<IValidationSummary>> validationSummaryPropertyExpression, object? tag = null)
+        public static Command<TExecuteParameter> CreateCommand<TExecuteParameter>(
+            Action<TExecuteParameter?> execute, Expression<Func<IValidationSummary>> validationSummaryPropertyExpression, object? tag = null)
         {
             ArgumentNullException.ThrowIfNull(execute);
             ArgumentNullException.ThrowIfNull(validationSummaryPropertyExpression);
@@ -73,7 +74,8 @@
         /// <returns>The created command.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="execute"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validationSummaryPropertyExpression"/> is <c>null</c>.</exception>
-        public static TaskCommand CreateTaskCommand(Func<Task> execute, Expression<Func<IValidationSummary>> validationSummaryPropertyExpression, object? tag = null)
+        public static TaskCommand CreateTaskCommand(
+            Func<Task> execute, Expression<Func<IValidationSummary>> validationSummaryPropertyExpression, object? tag = null)
         {
             ArgumentNullException.ThrowIfNull(execute);
             ArgumentNullException.ThrowIfNull(validationSummaryPropertyExpression);
@@ -100,7 +102,8 @@
         /// <returns>The created command.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="execute"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validationSummaryPropertyExpression"/> is <c>null</c>.</exception>
-        public static TaskCommand<TExecuteParameter> CreateTaskCommand<TExecuteParameter>(Func<TExecuteParameter?, Task> execute, Expression<Func<IValidationSummary>> validationSummaryPropertyExpression, object? tag = null)
+        public static TaskCommand<TExecuteParameter> CreateTaskCommand<TExecuteParameter>(
+            Func<TExecuteParameter?, Task> execute, Expression<Func<IValidationSummary>> validationSummaryPropertyExpression, object? tag = null)
         {
             ArgumentNullException.ThrowIfNull(execute);
             ArgumentNullException.ThrowIfNull(validationSummaryPropertyExpression);

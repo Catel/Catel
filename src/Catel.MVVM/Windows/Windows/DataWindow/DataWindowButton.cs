@@ -1,4 +1,4 @@
-﻿namespace Catel.Windows
+namespace Catel.Windows
 {
     using System;
     using System.Threading.Tasks;
@@ -33,10 +33,11 @@
         /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
-        public static DataWindowButton FromSync(string text, Action execute, Func<bool>? canExecute = null, string? contentBindingPath = null, 
+        public static DataWindowButton FromSync(string text, Action execute, Func<bool>? canExecute = null, string? contentBindingPath = null,
             IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
         {
-            return new DataWindowButton(text, new Command(execute, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
+            return new DataWindowButton(text, new Command(execute, canExecute),
+                contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
 
         /// <summary>
@@ -64,11 +65,12 @@
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
 #pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
-        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool>? canExecute = null, string? contentBindingPath = null, 
+        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool>? canExecute = null, string? contentBindingPath = null,
             IValueConverter? contentValueConverter = null, string? visibilityBindingPath = null, IValueConverter? visibilityValueConverter = null)
 #pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
-            return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
+            return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute),
+                contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
 
         /// <summary>

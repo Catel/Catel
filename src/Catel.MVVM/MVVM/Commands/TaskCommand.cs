@@ -1,4 +1,4 @@
-﻿namespace Catel.MVVM
+namespace Catel.MVVM
 {
     using System;
     using System.Threading;
