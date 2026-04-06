@@ -130,7 +130,13 @@ public class ServiceScopeManager : IServiceScopeManager
                         continue;
                     }
 
-                    if (trackingProvider.ResolvedServices.TryGetValue(serviceDescriptor.ServiceType, out var service) &&
+                    var key = new TrackedServiceKey
+                    {
+                        ServiceType = serviceDescriptor.ServiceType,
+                        ServiceKey = serviceDescriptor.ServiceKey
+                    };
+
+                    if (trackingProvider.ResolvedServices.TryGetValue(key, out var service) &&
                         service is IDisposable disposable)
                     {
                         disposable.Dispose();
