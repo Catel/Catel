@@ -7,6 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if NET9_0_OR_GREATER
+using System.Threading;
+#endif
+
 public class ServiceScopeManager : IServiceScopeManager
 {
     private const string ScopeServiceCollectionKey = "ScopeServiceCollection";
@@ -14,6 +18,12 @@ public class ServiceScopeManager : IServiceScopeManager
     private readonly ILogger<ServiceScopeManager> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly IReadOnlyList<IScopeServiceCollectionProvider> _serviceCollectionProviders;
+
+#if NET9_0_OR_GREATER
+    private readonly Lock _scopesLock = new();
+#else
+    private readonly object _scopesLock = new();
+#endif
 
     private readonly Dictionary<string, ServiceScopeState> _scopes = new();
 
@@ -27,66 +37,77 @@ public class ServiceScopeManager : IServiceScopeManager
 
     public ServiceScope? GetScope(string id)
     {
-        if (!_scopes.TryGetValue(id, out var scopeState))
+        lock (_scopesLock)
         {
-            _logger.LogDebug("ScopeContext with ID {ScopeId} not found.", id);
-            return null;
-        }
+            if (!_scopes.TryGetValue(id, out var scopeState))
+            {
+                _logger.LogDebug("ScopeContext with ID {ScopeId} not found.", id);
+                return null;
+            }
 
-        return scopeState.Scope;
+            return scopeState.Scope;
+        }
     }
 
     public ServiceScope AddScope(ServiceScopeContext scopeContext)
     {
-        if (_scopes.TryGetValue(scopeContext.Id, out var scopeState))
+        lock (_scopesLock)
         {
-            _logger.LogDebug("Returning existing scope");
-            return scopeState.Scope;
+            if (_scopes.TryGetValue(scopeContext.Id, out var scopeState))
+            {
+                _logger.LogDebug("Returning existing scope");
+                return scopeState.Scope;
+            }
+
+            _logger.LogDebug("Creating scope '{ScopeId}'", scopeContext.Id);
+
+            var serviceCollection = new ServiceCollection();
+
+            foreach (var serviceCollectionProvider in _serviceCollectionProviders)
+            {
+                serviceCollectionProvider.AddServices(serviceCollection, scopeContext.Id);
+            }
+
+            // Register a cloned service collection before adding parent registrations
+            var explicitServices = new ServiceCollection();
+            explicitServices.AddServiceCollectionRegistrations(serviceCollection);
+
+            serviceCollection.AddKeyedSingleton<IServiceCollection>(ScopeServiceCollectionKey, explicitServices);
+
+            if (!scopeContext.IsIsolated)
+            {
+                serviceCollection.AddParentServiceProviderRegistrations(_serviceProvider);
+            }
+
+            var scope = new ServiceScope
+            {
+                Id = scopeContext.Id,
+                ServiceProvider = new TrackingServiceProvider(serviceCollection.BuildServiceProvider())
+            };
+
+            scopeState = new ServiceScopeState
+            {
+                Scope = scope,
+                ScopeContext = scopeContext,
+            };
+
+            _scopes[scopeContext.Id] = scopeState;
+
+            return scope;
         }
-
-        _logger.LogDebug("Creating scope '{ScopeId}'", scopeContext.Id);
-
-        var serviceCollection = new ServiceCollection();
-
-        foreach (var serviceCollectionProvider in _serviceCollectionProviders)
-        {
-            serviceCollectionProvider.AddServices(serviceCollection, scopeContext.Id);
-        }
-
-        // Register a cloned service collection before adding parent registrations
-        var explicitServices = new ServiceCollection();
-        explicitServices.AddServiceCollectionRegistrations(serviceCollection);
-
-        serviceCollection.AddKeyedSingleton<IServiceCollection>(ScopeServiceCollectionKey, explicitServices);
-
-        if (!scopeContext.IsIsolated)
-        {
-            serviceCollection.AddParentServiceProviderRegistrations(_serviceProvider);
-        }
-
-        var scope = new ServiceScope
-        {
-            Id = scopeContext.Id,
-            ServiceProvider = serviceCollection.BuildServiceProvider()
-        };
-
-        scopeState = new ServiceScopeState
-        {
-            Scope = scope,
-            ScopeContext = scopeContext,
-        };
-
-        _scopes[scopeContext.Id] = scopeState;
-
-        return scope;
     }
 
     public bool RemoveScope(string id)
     {
-        if (!_scopes.TryGetValue(id, out var scopeState))
+        ServiceScopeState scopeState;
+
+        lock (_scopesLock)
         {
-            _logger.LogDebug("Cannot remove scope '{ScopeId}', scope does not exist", id);
-            return false;
+            if (!_scopes.Remove(id, out scopeState!))
+            {
+                _logger.LogDebug("Cannot remove scope '{ScopeId}', scope does not exist", id);
+                return false;
+            }
         }
 
         _logger.LogDebug("Removing scope '{ScopeId}'", id);
@@ -95,23 +116,25 @@ public class ServiceScopeManager : IServiceScopeManager
         if (scopeState.ScopeContext.DisposeScopeServices &&
             !scopeState.ScopeContext.DisposeServiceProvider)
         {
-            // Note: this might instantiate services that were not yet instantiated before
-
             var serviceProvider = scopeState.Scope.ServiceProvider;
 
-            var serviceCollection = serviceProvider.GetServiceCollection(ScopeServiceCollectionKey);
-
-            foreach (var serviceDescriptor in serviceCollection)
+            if (serviceProvider is TrackingServiceProvider trackingProvider)
             {
-                if (serviceDescriptor.ServiceType.IsGenericTypeDefinition)
-                {
-                    continue;
-                }
+                var serviceCollection = trackingProvider.GetServiceCollection(ScopeServiceCollectionKey);
 
-                var service = serviceProvider.GetService(serviceDescriptor.ServiceType) as IDisposable;
-                if (service is not null)
+                // Only dispose explicitly registered services that were actually resolved
+                foreach (var serviceDescriptor in serviceCollection)
                 {
-                    service.Dispose();
+                    if (serviceDescriptor.ServiceType.IsGenericTypeDefinition)
+                    {
+                        continue;
+                    }
+
+                    if (trackingProvider.ResolvedServices.TryGetValue(serviceDescriptor.ServiceType, out var service) &&
+                        service is IDisposable disposable)
+                    {
+                        disposable.Dispose();
+                    }
                 }
             }
         }
