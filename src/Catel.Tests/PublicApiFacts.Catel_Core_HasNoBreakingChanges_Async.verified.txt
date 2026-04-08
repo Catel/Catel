@@ -1922,6 +1922,18 @@ namespace Catel.IoC
         public required Catel.IoC.ServiceScope Scope { get; init; }
         public required Catel.IoC.ServiceScopeContext ScopeContext { get; init; }
     }
+    public class TrackedServiceKey : System.IEquatable<Catel.IoC.TrackedServiceKey>
+    {
+        public TrackedServiceKey() { }
+        public required object? ServiceKey { get; init; }
+        public required System.Type ServiceType { get; init; }
+    }
+    public class TrackedServiceMetadata
+    {
+        public TrackedServiceMetadata() { }
+        public required Catel.IoC.TrackedServiceKey Key { get; init; }
+        public required object ServiceInstance { get; init; }
+    }
 }
 namespace Catel.Linq
 {
