@@ -1,6 +1,5 @@
-﻿namespace Catel.Tests.Services
+﻿namespace Catel.Tests.Services;
+
+public partial class UIVisualizerServiceFacts
 {
-    public partial class UIVisualizerServiceFacts
-    {
-    }
 }

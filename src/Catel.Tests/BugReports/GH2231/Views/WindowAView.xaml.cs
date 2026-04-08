@@ -1,15 +1,14 @@
-﻿namespace Catel.Tests.BugReports.GH2231.Views
-{
-    using System;
-    using Catel.Services;
+﻿namespace Catel.Tests.BugReports.GH2231.Views;
 
-    public partial class WindowAView
+using System;
+using Catel.Services;
+
+public partial class WindowAView
+{
+    public WindowAView(IServiceProvider serviceProvider, IWrapControlService wrapControlService,
+        ILanguageService languageService)
+        : base(serviceProvider, wrapControlService, languageService)
     {
-        public WindowAView(IServiceProvider serviceProvider, IWrapControlService wrapControlService,
-            ILanguageService languageService)
-            : base(serviceProvider, wrapControlService, languageService)
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,27 +1,26 @@
-﻿namespace Catel.Tests.BugReports.GH2231.ViewModels
+﻿namespace Catel.Tests.BugReports.GH2231.ViewModels;
+
+using System;
+using System.Threading.Tasks;
+using Catel.MVVM;
+using Catel.Services;
+
+public class WindowAViewModel : ViewModelBase
 {
-    using System;
-    using System.Threading.Tasks;
-    using Catel.MVVM;
-    using Catel.Services;
+    private readonly IUIVisualizerService _uiVisualizerService;
 
-    public class WindowAViewModel : ViewModelBase
+    public WindowAViewModel(IServiceProvider serviceProvider, IUIVisualizerService uiVisualizerService)
+        : base(serviceProvider)
     {
-        private readonly IUIVisualizerService _uiVisualizerService;
+        _uiVisualizerService = uiVisualizerService;
+    }
 
-        public WindowAViewModel(IServiceProvider serviceProvider, IUIVisualizerService uiVisualizerService)
-            : base(serviceProvider)
-        {
-            _uiVisualizerService = uiVisualizerService;
-        }
+    protected override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
+        await Task.Delay(1000);
 
-            await Task.Delay(1000);
-
-            _ = _uiVisualizerService.ShowDialogAsync<WindowBViewModel>();
-        }
+        _ = _uiVisualizerService.ShowDialogAsync<WindowBViewModel>();
     }
 }

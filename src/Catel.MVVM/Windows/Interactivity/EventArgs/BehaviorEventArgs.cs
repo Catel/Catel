@@ -1,27 +1,26 @@
-﻿namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity;
+
+using System;
+
+/// <summary>
+/// Behavior event args.
+/// </summary>
+public class BehaviorEventArgs : EventArgs
 {
-    using System;
+    /// <summary>
+    /// Creates the event args.
+    /// </summary>
+    /// <param name="behavior">The behavior.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="behavior"/> is <c>null</c>.</exception>
+    public BehaviorEventArgs(IBehavior behavior)
+    {
+        ArgumentNullException.ThrowIfNull(behavior);
+
+        Behavior = behavior;
+    }
 
     /// <summary>
-    /// Behavior event args.
+    /// Gets the behavior.
     /// </summary>
-    public class BehaviorEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Creates the event args.
-        /// </summary>
-        /// <param name="behavior">The behavior.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="behavior"/> is <c>null</c>.</exception>
-        public BehaviorEventArgs(IBehavior behavior)
-        {
-            ArgumentNullException.ThrowIfNull(behavior);
-
-            Behavior = behavior;
-        }
-
-        /// <summary>
-        /// Gets the behavior.
-        /// </summary>
-        public IBehavior Behavior { get; private set; }
-    }
+    public IBehavior Behavior { get; private set; }
 }

@@ -1,22 +1,21 @@
-﻿namespace Catel.Services
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
+﻿namespace Catel.Services;
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+/// <summary>
+/// Service to implement auto completion features.
+/// </summary>
+public interface IAutoCompletionService
+{
     /// <summary>
-    /// Service to implement auto completion features.
+    /// Gets the auto complete values.
     /// </summary>
-    public interface IAutoCompletionService
-    {
-        /// <summary>
-        /// Gets the auto complete values.
-        /// </summary>
-        /// <param name="property">The property.</param>
-        /// <param name="filter">The filter.</param>
-        /// <param name="source">The source.</param>
-        /// <returns>System.String[].</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        IReadOnlyList<string> GetAutoCompleteValues(string property, string filter, IEnumerable source);
-    }
+    /// <param name="property">The property.</param>
+    /// <param name="filter">The filter.</param>
+    /// <param name="source">The source.</param>
+    /// <returns>System.String[].</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
+    IReadOnlyList<string> GetAutoCompleteValues(string property, string filter, IEnumerable source);
 }

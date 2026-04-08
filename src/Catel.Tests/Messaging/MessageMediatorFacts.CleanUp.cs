@@ -1,51 +1,50 @@
-﻿namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging;
+
+using System;
+using Catel.Messaging;
+using Microsoft.Extensions.Logging.Abstractions;
+using NUnit.Framework;
+
+public partial class MessageMediatorFacts
 {
-    using System;
-    using Catel.Messaging;
-    using Microsoft.Extensions.Logging.Abstractions;
-    using NUnit.Framework;
-
-    public partial class MessageMediatorFacts
+    [TestFixture]
+    public class The_CleanUp_Method
     {
-        [TestFixture]
-        public class The_CleanUp_Method
+        [TestCase]
+        public void CleanUpWorksWhenNoHandlersRegistered()
         {
-            [TestCase]
-            public void CleanUpWorksWhenNoHandlersRegistered()
-            {
-                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+            var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
 
-                mediator.CleanUp();
-            }
+            mediator.CleanUp();
+        }
 
-            [TestCase]
-            public void CleanUpKeepsNonGarbageCollectedHandlersRegistered()
-            {
-                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
-                var recipient = new MessageRecipient();
+        [TestCase]
+        public void CleanUpKeepsNonGarbageCollectedHandlersRegistered()
+        {
+            var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+            var recipient = new MessageRecipient();
 
-                mediator.Register<string>(recipient, recipient.OnMessage);
+            mediator.Register<string>(recipient, recipient.OnMessage);
 
-                mediator.CleanUp();
+            mediator.CleanUp();
 
-                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
-            }
+            Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
+        }
 
-            [TestCase, Explicit]
-            public void CleanUpClearsGarbageCollectedHandlers()
-            {
-                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
-                var recipient = new MessageRecipient();
+        [TestCase, Explicit]
+        public void CleanUpClearsGarbageCollectedHandlers()
+        {
+            var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+            var recipient = new MessageRecipient();
 
-                mediator.Register<string>(recipient, recipient.OnMessage);
+            mediator.Register<string>(recipient, recipient.OnMessage);
 
-                recipient = null;
-                GC.Collect();
+            recipient = null;
+            GC.Collect();
 
-                mediator.CleanUp();
+            mediator.CleanUp();
 
-                Assert.That(mediator.GetRegisteredHandlers<string>().Count, Is.EqualTo(0));
-            }
+            Assert.That(mediator.GetRegisteredHandlers<string>().Count, Is.EqualTo(0));
         }
     }
 }

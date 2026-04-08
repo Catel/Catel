@@ -1,30 +1,29 @@
-﻿namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers;
+
+using System;
+
+/// <summary>
+/// EventArgs class which allows late-time dynamic view model determination.
+/// </summary>
+public class DetermineViewModelTypeEventArgs : EventArgs
 {
-    using System;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DetermineViewModelTypeEventArgs"/> class.
+    /// </summary>
+    /// <param name="dataContext">The data context.</param>
+    public DetermineViewModelTypeEventArgs(object? dataContext)
+    {
+        DataContext = dataContext;
+    }
 
     /// <summary>
-    /// EventArgs class which allows late-time dynamic view model determination.
+    /// Gets the data context.
     /// </summary>
-    public class DetermineViewModelTypeEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DetermineViewModelTypeEventArgs"/> class.
-        /// </summary>
-        /// <param name="dataContext">The data context.</param>
-        public DetermineViewModelTypeEventArgs(object? dataContext)
-        {
-            DataContext = dataContext;
-        }
+    public object? DataContext { get; private set; }
 
-        /// <summary>
-        /// Gets the data context.
-        /// </summary>
-        public object? DataContext { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the type of the view model.
-        /// </summary>
-        /// <value>The type of the view model.</value>
-        public Type? ViewModelType { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the type of the view model.
+    /// </summary>
+    /// <value>The type of the view model.</value>
+    public Type? ViewModelType { get; set; }
 }

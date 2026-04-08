@@ -1,72 +1,71 @@
 ﻿// Required since we are testing obsolete attribute retrievals
 #pragma warning disable 612
 
-namespace Catel.Tests.Reflection
+namespace Catel.Tests.Reflection;
+
+using System;
+using System.Reflection;
+using Catel.Reflection;
+using NUnit.Framework;
+
+public partial class ReflectionExtensionsFacts
 {
-    using System;
-    using System.Reflection;
-    using Catel.Reflection;
-    using NUnit.Framework;
-
-    public partial class ReflectionExtensionsFacts
+    public class ClassWithoutAttributeDecorations
     {
-        public class ClassWithoutAttributeDecorations
-        {
-            public string Property { get; set; }
-        }
+        public string Property { get; set; }
+    }
 
+    [Obsolete]
+    public class ClassWithAttributeDecorations
+    {
         [Obsolete]
-        public class ClassWithAttributeDecorations
-        {
-            [Obsolete]
-            public string Property { get; set; }
-        }
+        public string Property { get; set; }
+    }
 
-        public class TheGetAttributeMethod
+    public class TheGetAttributeMethod
+    {
+        [TestCase(typeof(ClassWithoutAttributeDecorations), typeof(ObsoleteAttribute), false)]
+        [TestCase(typeof(ClassWithAttributeDecorations), typeof(ObsoleteAttribute), true)]
+        public void ReturnsAttributeForTypes(Type type, Type expectedAttributeType, bool isNotNull)
         {
-            [TestCase(typeof(ClassWithoutAttributeDecorations), typeof(ObsoleteAttribute), false)]
-            [TestCase(typeof(ClassWithAttributeDecorations), typeof(ObsoleteAttribute), true)]
-            public void ReturnsAttributeForTypes(Type type, Type expectedAttributeType, bool isNotNull)
+            var attribute = type.GetAttribute(expectedAttributeType);
+
+            if (isNotNull)
             {
-                var attribute = type.GetAttribute(expectedAttributeType);
-
-                if (isNotNull)
-                {
-                    Assert.That(attribute, Is.Not.Null);
-                }
-                else
-                {
-                    Assert.That(attribute, Is.Null);
-                }
+                Assert.That(attribute, Is.Not.Null);
             }
-
-            [TestCase(typeof(ClassWithoutAttributeDecorations), typeof(ObsoleteAttribute), false)]
-            [TestCase(typeof(ClassWithAttributeDecorations), typeof(ObsoleteAttribute), true)]
-            public void ReturnsAttributeForMembers(Type type, Type expectedAttributeType, bool isNotNull)
+            else
             {
-                var member = type.GetPropertyEx("Property");
-                var attribute = member.GetAttribute(expectedAttributeType);
-
-                if (isNotNull)
-                {
-                    Assert.That(attribute, Is.Not.Null);
-                }
-                else
-                {
-                    Assert.That(attribute, Is.Null);
-                }
+                Assert.That(attribute, Is.Null);
             }
         }
 
-        [TestFixture]
-        public class TheTryGetAttributeMethod
+        [TestCase(typeof(ClassWithoutAttributeDecorations), typeof(ObsoleteAttribute), false)]
+        [TestCase(typeof(ClassWithAttributeDecorations), typeof(ObsoleteAttribute), true)]
+        public void ReturnsAttributeForMembers(Type type, Type expectedAttributeType, bool isNotNull)
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullPropertyInfo()
+            var member = type.GetPropertyEx("Property");
+            var attribute = member.GetAttribute(expectedAttributeType);
+
+            if (isNotNull)
             {
-                ObsoleteAttribute attribute;
-                Assert.Throws<ArgumentNullException>(() => ((MemberInfo)null).TryGetAttribute(out attribute));
+                Assert.That(attribute, Is.Not.Null);
             }
+            else
+            {
+                Assert.That(attribute, Is.Null);
+            }
+        }
+    }
+
+    [TestFixture]
+    public class TheTryGetAttributeMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullPropertyInfo()
+        {
+            ObsoleteAttribute attribute;
+            Assert.Throws<ArgumentNullException>(() => ((MemberInfo)null).TryGetAttribute(out attribute));
         }
     }
 }

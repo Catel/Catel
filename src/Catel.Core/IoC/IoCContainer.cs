@@ -1,40 +1,39 @@
-﻿namespace Catel.IoC
+﻿namespace Catel.IoC;
+
+using System;
+
+/// <summary>
+/// Serves as a container for dependency injection for components that do not support
+/// dependency injection natively.
+/// </summary>
+public static class IoCContainer
 {
-    using System;
+    private static IServiceProvider? _serviceProvider;
+
+    public static IServiceProvider ServiceProvider
+    {
+        get
+        {
+            var serviceProvider = _serviceProvider;
+            if (serviceProvider is null)
+            {
+                throw new CatelException("The ServiceProvider is not set by the app host. Make sure to set it at app startup.");
+            }
+
+            return serviceProvider;
+        }
+        set 
+        {
+            _serviceProvider = value;
+        }
+    }
 
     /// <summary>
-    /// Serves as a container for dependency injection for components that do not support
-    /// dependency injection natively.
+    /// Gets the service provider or returns <c>null</c> if the service provider is not registered.
     /// </summary>
-    public static class IoCContainer
+    /// <returns></returns>
+    public static IServiceProvider? GetServiceProvider()
     {
-        private static IServiceProvider? _serviceProvider;
-
-        public static IServiceProvider ServiceProvider
-        {
-            get
-            {
-                var serviceProvider = _serviceProvider;
-                if (serviceProvider is null)
-                {
-                    throw new CatelException("The ServiceProvider is not set by the app host. Make sure to set it at app startup.");
-                }
-
-                return serviceProvider;
-            }
-            set 
-            {
-                _serviceProvider = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the service provider or returns <c>null</c> if the service provider is not registered.
-        /// </summary>
-        /// <returns></returns>
-        public static IServiceProvider? GetServiceProvider()
-        {
-            return _serviceProvider;
-        }
+        return _serviceProvider;
     }
 }

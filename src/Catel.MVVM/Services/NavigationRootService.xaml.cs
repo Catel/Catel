@@ -1,41 +1,40 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System.Windows;
+using System.Windows.Controls;
+using Windows;
+
+public partial class NavigationRootService
 {
-    using System.Windows;
-    using System.Windows.Controls;
-    using Windows;
+    private object? _rootFrame;
 
-    public partial class NavigationRootService
+    /// <summary>
+    /// Gets the navigation root.
+    /// </summary>
+    /// <returns>System.Object.</returns>
+    public virtual object? GetNavigationRoot()
     {
-        private object? _rootFrame;
+        return GetApplicationRootFrame();
+    }
 
-        /// <summary>
-        /// Gets the navigation root.
-        /// </summary>
-        /// <returns>System.Object.</returns>
-        public virtual object? GetNavigationRoot()
+    /// <summary>
+    /// Gets the application root frame.
+    /// </summary>
+    protected virtual Frame? GetApplicationRootFrame()
+    {
+        if (_rootFrame is null)
         {
-            return GetApplicationRootFrame();
-        }
-
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        protected virtual Frame? GetApplicationRootFrame()
-        {
-            if (_rootFrame is null)
+            var application = Application.Current;
+            if (application is not null)
             {
-                var application = Application.Current;
-                if (application is not null)
+                var mainWindow = application.MainWindow;
+                if (mainWindow is not null)
                 {
-                    var mainWindow = application.MainWindow;
-                    if (mainWindow is not null)
-                    {
-                        _rootFrame = mainWindow.FindVisualDescendant(e => e is Frame) as Frame;
-                    }
+                    _rootFrame = mainWindow.FindVisualDescendant(e => e is Frame) as Frame;
                 }
             }
-
-            return _rootFrame as Frame;
         }
+
+        return _rootFrame as Frame;
     }
 }

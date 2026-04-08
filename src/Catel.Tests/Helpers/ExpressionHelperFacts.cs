@@ -1,95 +1,94 @@
-﻿namespace Catel.Tests
+﻿namespace Catel.Tests;
+
+using System;
+using Data;
+
+using NUnit.Framework;
+
+public class ExpressionHelperFacts
 {
-    using System;
-    using Data;
-
-    using NUnit.Framework;
-
-    public class ExpressionHelperFacts
+    [TestFixture]
+    public class TheGetPropertyNameMethod
     {
-        [TestFixture]
-        public class TheGetPropertyNameMethod
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullPropertyExpression()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullPropertyExpression()
-            {
-                Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
-            }
-
-            [TestCase]
-            public void ReturnsRightPropertyNameUsingExpression()
-            {
-                var model = new PersonTestModel();
-
-                Assert.That(ExpressionHelper.GetPropertyName(() => model.FirstName), Is.EqualTo(nameof(PersonTestModel.FirstName)));
-                Assert.That(ExpressionHelper.GetPropertyName(() => model.LastName), Is.EqualTo(nameof(PersonTestModel.LastName)));
-            }
+            Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
         }
 
-        [TestFixture]
-        public class TheGetOwnerMethod
+        [TestCase]
+        public void ReturnsRightPropertyNameUsingExpression()
         {
-            public class TestModel
+            var model = new PersonTestModel();
+
+            Assert.That(ExpressionHelper.GetPropertyName(() => model.FirstName), Is.EqualTo(nameof(PersonTestModel.FirstName)));
+            Assert.That(ExpressionHelper.GetPropertyName(() => model.LastName), Is.EqualTo(nameof(PersonTestModel.LastName)));
+        }
+    }
+
+    [TestFixture]
+    public class TheGetOwnerMethod
+    {
+        public class TestModel
+        {
+            public TestModel()
             {
-                public TestModel()
-                {
-                    InnerModel = new InnerTestModel();
-                }
-
-                public string StringProperty { get; set; }
-
-                public int IntProperty { get; set; }
-
-                public InnerTestModel InnerModel { get; private set; }
+                InnerModel = new InnerTestModel();
             }
 
-            public class InnerTestModel
-            {
-                public string InnerProperty { get; set; }
-            }
+            public string StringProperty { get; set; }
 
-            public string MyProperty { get; set; }
+            public int IntProperty { get; set; }
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullPropertyExpression()
-            {
-                Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
-            }
+            public InnerTestModel InnerModel { get; private set; }
+        }
 
-            [TestCase]
-            public void ReturnsRightOwnerUsingExpression()
-            {
-                var owner = ExpressionHelper.GetOwner(() => MyProperty);
+        public class InnerTestModel
+        {
+            public string InnerProperty { get; set; }
+        }
 
-                Assert.That(ReferenceEquals(this, owner), Is.True);
-            }
+        public string MyProperty { get; set; }
 
-            [TestCase]
-            public void ReturnsRightOwnerWhenUsingAdditionalParent()
-            {
-                var testModel = new TestModel();
-                var owner = ExpressionHelper.GetOwner(() => testModel.StringProperty);
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullPropertyExpression()
+        {
+            Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
+        }
 
-                Assert.That(ReferenceEquals(testModel, owner), Is.True);
-            }
+        [TestCase]
+        public void ReturnsRightOwnerUsingExpression()
+        {
+            var owner = ExpressionHelper.GetOwner(() => MyProperty);
 
-            [TestCase]
-            public void ReturnsRightOwnerWhenUsingAdditionalParentWithIntProperty()
-            {
-                var testModel = new TestModel();
-                var owner = ExpressionHelper.GetOwner(() => testModel.IntProperty);
+            Assert.That(ReferenceEquals(this, owner), Is.True);
+        }
 
-                Assert.That(ReferenceEquals(testModel, owner), Is.True);
-            }
+        [TestCase]
+        public void ReturnsRightOwnerWhenUsingAdditionalParent()
+        {
+            var testModel = new TestModel();
+            var owner = ExpressionHelper.GetOwner(() => testModel.StringProperty);
 
-            [TestCase]
-            public void ReturnsRightOwnerWhenUsingInnerModel()
-            {
-                var testModel = new TestModel();
-                var owner = ExpressionHelper.GetOwner(() => testModel.InnerModel.InnerProperty);
+            Assert.That(ReferenceEquals(testModel, owner), Is.True);
+        }
 
-                Assert.That(ReferenceEquals(testModel.InnerModel, owner), Is.True);
-            }
+        [TestCase]
+        public void ReturnsRightOwnerWhenUsingAdditionalParentWithIntProperty()
+        {
+            var testModel = new TestModel();
+            var owner = ExpressionHelper.GetOwner(() => testModel.IntProperty);
+
+            Assert.That(ReferenceEquals(testModel, owner), Is.True);
+        }
+
+        [TestCase]
+        public void ReturnsRightOwnerWhenUsingInnerModel()
+        {
+            var testModel = new TestModel();
+            var owner = ExpressionHelper.GetOwner(() => testModel.InnerModel.InnerProperty);
+
+            Assert.That(ReferenceEquals(testModel.InnerModel, owner), Is.True);
         }
     }
 }

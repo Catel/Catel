@@ -1,141 +1,140 @@
-﻿namespace Catel.MVVM.Navigation
+﻿namespace Catel.MVVM.Navigation;
+
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
+using Catel.Logging;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+
+public partial class NavigationAdapter
 {
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Navigation;
-    using Catel.Logging;
-    using System.Collections.Generic;
-    using Microsoft.Extensions.Logging;
+    private static Dictionary<string, object>? _lastGlobalNavigationContext;
+    private Dictionary<string, object>? _lastNavigationContext;
 
-    public partial class NavigationAdapter
+    partial void Initialize()
     {
-        private static Dictionary<string, object>? _lastGlobalNavigationContext;
-        private Dictionary<string, object>? _lastNavigationContext;
+        HandleNavigatedOnLoaded = false;
 
-        partial void Initialize()
+        var navigationFrame = NavigationRoot as Frame;
+        if (navigationFrame is not null)
         {
-            HandleNavigatedOnLoaded = false;
+            Logger.LogDebug("Initializing navigation adapter using frame");
 
-            var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame is not null)
-            {
-                Logger.LogDebug("Initializing navigation adapter using frame");
-
-                navigationFrame.Navigating += OnNavigatingEvent;
-                navigationFrame.Navigated += OnNavigatedEvent;
-            }
-            else
-            {
-                Logger.LogDebug("Initializing navigation adapter using application");
-
-                var app = Application.Current;
-
-                app.Navigating += OnNavigatingEvent;
-                app.Navigated += OnNavigatedEvent;
-            }
+            navigationFrame.Navigating += OnNavigatingEvent;
+            navigationFrame.Navigated += OnNavigatedEvent;
         }
-
-        partial void Uninitialize()
+        else
         {
-            var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame is not null)
-            {
-                Logger.LogDebug("Uninitializing navigation adapter using frame");
+            Logger.LogDebug("Initializing navigation adapter using application");
 
-                navigationFrame.Navigating -= OnNavigatingEvent;
-                navigationFrame.Navigated -= OnNavigatedEvent;
-            }
-            else
-            {
-                Logger.LogDebug("Uninitializing navigation adapter using application");
+            var app = Application.Current;
 
-                var app = Application.Current;
-
-                app.Navigating -= OnNavigatingEvent;
-                app.Navigated -= OnNavigatedEvent;
-            }
+            app.Navigating += OnNavigatingEvent;
+            app.Navigated += OnNavigatedEvent;
         }
+    }
 
-        partial void DetermineNavigationContext()
+    partial void Uninitialize()
+    {
+        var navigationFrame = NavigationRoot as Frame;
+        if (navigationFrame is not null)
         {
-            if (_lastNavigationContext is null)
-            {
-                _lastNavigationContext = new Dictionary<string, object>();
+            Logger.LogDebug("Uninitializing navigation adapter using frame");
 
-                if (_lastGlobalNavigationContext is not null)
+            navigationFrame.Navigating -= OnNavigatingEvent;
+            navigationFrame.Navigated -= OnNavigatedEvent;
+        }
+        else
+        {
+            Logger.LogDebug("Uninitializing navigation adapter using application");
+
+            var app = Application.Current;
+
+            app.Navigating -= OnNavigatingEvent;
+            app.Navigated -= OnNavigatedEvent;
+        }
+    }
+
+    partial void DetermineNavigationContext()
+    {
+        if (_lastNavigationContext is null)
+        {
+            _lastNavigationContext = new Dictionary<string, object>();
+
+            if (_lastGlobalNavigationContext is not null)
+            {
+                foreach (var value in _lastGlobalNavigationContext)
                 {
-                    foreach (var value in _lastGlobalNavigationContext)
-                    {
-                        _lastNavigationContext[value.Key] = value.Value;
-                    }
+                    _lastNavigationContext[value.Key] = value.Value;
                 }
             }
-
-            foreach (var value in _lastNavigationContext)
-            {
-                NavigationContext.Values[value.Key] = value.Value;
-            }
         }
 
-        /// <summary>
-        /// Determines whether the navigation can be handled by this adapter.
-        /// </summary>
-        /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
-        protected override bool CanHandleNavigation()
+        foreach (var value in _lastNavigationContext)
         {
-            object? content = null;
-
-            var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame is not null)
-            {
-                content = navigationFrame.Content;
-            }
-            else
-            {
-                content = Application.Current.MainWindow.Content;
-            }
-
-            return ReferenceEquals(content, NavigationTarget);
+            NavigationContext.Values[value.Key] = value.Value;
         }
+    }
 
-        /// <summary>
-        /// Gets the navigation URI for the target page.
-        /// </summary>
-        /// <param name="target">The target.</param>
-        /// <returns>System.String.</returns>
-        protected override string? GetNavigationUri(object target)
+    /// <summary>
+    /// Determines whether the navigation can be handled by this adapter.
+    /// </summary>
+    /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
+    protected override bool CanHandleNavigation()
+    {
+        object? content = null;
+
+        var navigationFrame = NavigationRoot as Frame;
+        if (navigationFrame is not null)
         {
-            return _urlLocator.ResolveUrl(NavigationTargetType);
+            content = navigationFrame.Content;
         }
-
-        private void OnNavigatingEvent(object? sender, NavigatingCancelEventArgs e)
+        else
         {
-            // We are navigating away
-            var eventArgs = new NavigatingEventArgs(e.Uri.ToString(), e.NavigationMode.Convert());
-            RaiseNavigatingAway(eventArgs);
-
-            e.Cancel = eventArgs.Cancel;
+            content = Application.Current.MainWindow.Content;
         }
 
-        private void OnNavigatedEvent(object? sender, NavigationEventArgs e)
+        return ReferenceEquals(content, NavigationTarget);
+    }
+
+    /// <summary>
+    /// Gets the navigation URI for the target page.
+    /// </summary>
+    /// <param name="target">The target.</param>
+    /// <returns>System.String.</returns>
+    protected override string? GetNavigationUri(object target)
+    {
+        return _urlLocator.ResolveUrl(NavigationTargetType);
+    }
+
+    private void OnNavigatingEvent(object? sender, NavigatingCancelEventArgs e)
+    {
+        // We are navigating away
+        var eventArgs = new NavigatingEventArgs(e.Uri.ToString(), e.NavigationMode.Convert());
+        RaiseNavigatingAway(eventArgs);
+
+        e.Cancel = eventArgs.Cancel;
+    }
+
+    private void OnNavigatedEvent(object? sender, NavigationEventArgs e)
+    {
+        // CTL-906: clear current navigation context if (re) navigating to the same view
+        if (e.IsNavigationForView(NavigationTargetType))
         {
-            // CTL-906: clear current navigation context if (re) navigating to the same view
-            if (e.IsNavigationForView(NavigationTargetType))
-            {
-                _lastNavigationContext = null;
-            }
-
-            var sourceDictionary = e.ExtraData as Dictionary<string, object>;
-            if (sourceDictionary is null)
-            {
-                sourceDictionary = new Dictionary<string, object>();
-                sourceDictionary["context"] = e.ExtraData;
-            }
-
-            _lastGlobalNavigationContext = sourceDictionary;
-
-            var eventArgs = new NavigatedEventArgs(e.Uri.ToString(), NavigationMode.Unknown);
-            HandleNavigatedEvent(eventArgs);
+            _lastNavigationContext = null;
         }
+
+        var sourceDictionary = e.ExtraData as Dictionary<string, object>;
+        if (sourceDictionary is null)
+        {
+            sourceDictionary = new Dictionary<string, object>();
+            sourceDictionary["context"] = e.ExtraData;
+        }
+
+        _lastGlobalNavigationContext = sourceDictionary;
+
+        var eventArgs = new NavigatedEventArgs(e.Uri.ToString(), NavigationMode.Unknown);
+        HandleNavigatedEvent(eventArgs);
     }
 }

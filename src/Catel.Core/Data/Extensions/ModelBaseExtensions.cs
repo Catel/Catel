@@ -1,6 +1,5 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+public static partial class ModelBaseExtensions
 {
-    public static partial class ModelBaseExtensions
-    {
-    }
 }

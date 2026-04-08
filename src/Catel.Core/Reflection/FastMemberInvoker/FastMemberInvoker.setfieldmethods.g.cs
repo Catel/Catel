@@ -7,59 +7,58 @@
 // </auto-generated> 
 //------------------------------------------------------------------------------
 
-namespace Catel.Reflection
+namespace Catel.Reflection;
+
+using System;
+
+public partial class FastMemberInvoker<TEntity>
 {
-    using System;
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Object value) =>
+        TrySetFieldValue<Object>(entity, fieldName, value);
 
-    public partial class FastMemberInvoker<TEntity>
-    {
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Object value) =>
-            TrySetFieldValue<Object>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Boolean value) =>
+        TrySetFieldValue<Boolean>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Boolean value) =>
-            TrySetFieldValue<Boolean>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Char value) =>
+        TrySetFieldValue<Char>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Char value) =>
-            TrySetFieldValue<Char>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, SByte value) =>
+        TrySetFieldValue<SByte>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, SByte value) =>
-            TrySetFieldValue<SByte>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Byte value) =>
+        TrySetFieldValue<Byte>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Byte value) =>
-            TrySetFieldValue<Byte>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Int16 value) =>
+        TrySetFieldValue<Int16>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Int16 value) =>
-            TrySetFieldValue<Int16>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, UInt16 value) =>
+        TrySetFieldValue<UInt16>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, UInt16 value) =>
-            TrySetFieldValue<UInt16>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Int32 value) =>
+        TrySetFieldValue<Int32>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Int32 value) =>
-            TrySetFieldValue<Int32>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, UInt32 value) =>
+        TrySetFieldValue<UInt32>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, UInt32 value) =>
-            TrySetFieldValue<UInt32>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Int64 value) =>
+        TrySetFieldValue<Int64>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Int64 value) =>
-            TrySetFieldValue<Int64>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, UInt64 value) =>
+        TrySetFieldValue<UInt64>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, UInt64 value) =>
-            TrySetFieldValue<UInt64>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Single value) =>
+        TrySetFieldValue<Single>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Single value) =>
-            TrySetFieldValue<Single>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Double value) =>
+        TrySetFieldValue<Double>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Double value) =>
-            TrySetFieldValue<Double>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, Decimal value) =>
+        TrySetFieldValue<Decimal>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, Decimal value) =>
-            TrySetFieldValue<Decimal>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, DateTime value) =>
+        TrySetFieldValue<DateTime>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, DateTime value) =>
-            TrySetFieldValue<DateTime>(entity, fieldName, value);
+    public bool TrySetFieldValue(TEntity entity, string fieldName, String value) =>
+        TrySetFieldValue<String>(entity, fieldName, value);
 
-        public bool TrySetFieldValue(TEntity entity, string fieldName, String value) =>
-            TrySetFieldValue<String>(entity, fieldName, value);
-
-    }
 }

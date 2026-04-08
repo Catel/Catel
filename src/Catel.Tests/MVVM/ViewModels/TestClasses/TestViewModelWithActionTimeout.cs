@@ -1,30 +1,29 @@
-﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses;
+
+using System;
+using System.Threading.Tasks;
+using Catel.MVVM;
+
+public class TestViewModelWithActionTimeout : ViewModelBase
 {
-    using System;
-    using System.Threading.Tasks;
-    using Catel.MVVM;
-
-    public class TestViewModelWithActionTimeout : ViewModelBase
+    public TestViewModelWithActionTimeout(IServiceProvider serviceProvider) 
+        : base(serviceProvider)
     {
-        public TestViewModelWithActionTimeout(IServiceProvider serviceProvider) 
-            : base(serviceProvider)
-        {
-        }
+    }
 
-        public int ActionDuration { get; set; }
+    public int ActionDuration { get; set; }
 
-        protected override async Task<bool> CancelAsync()
-        {
-            await Task.Delay(TimeSpan.FromMilliseconds(ActionDuration));
+    protected override async Task<bool> CancelAsync()
+    {
+        await Task.Delay(TimeSpan.FromMilliseconds(ActionDuration));
 
-            return await base.CancelAsync();
-        }
+        return await base.CancelAsync();
+    }
 
-        protected override async Task<bool> SaveAsync()
-        {
-            await Task.Delay(TimeSpan.FromMilliseconds(ActionDuration));
+    protected override async Task<bool> SaveAsync()
+    {
+        await Task.Delay(TimeSpan.FromMilliseconds(ActionDuration));
 
-            return await base.SaveAsync();
-        }
+        return await base.SaveAsync();
     }
 }

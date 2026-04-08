@@ -1,11 +1,10 @@
-﻿namespace Catel.Data
-{
-    using System;
-    using System.Linq;
-    using MethodTimer;
+﻿namespace Catel.Data;
 
-    public partial class ModelBase
-    {
-        // Note: not implemented for performance reasons, see ComparableModelBase
-    }
+using System;
+using System.Linq;
+using MethodTimer;
+
+public partial class ModelBase
+{
+    // Note: not implemented for performance reasons, see ComparableModelBase
 }

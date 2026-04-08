@@ -1,9 +1,8 @@
-﻿namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views;
+
+/// <summary>
+/// Interface defining functionality for a page.
+/// </summary>
+public interface IPage : INavigationView
 {
-    /// <summary>
-    /// Interface defining functionality for a page.
-    /// </summary>
-    public interface IPage : INavigationView
-    {
-    }
 }

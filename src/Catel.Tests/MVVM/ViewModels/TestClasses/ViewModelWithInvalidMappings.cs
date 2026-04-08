@@ -1,25 +1,24 @@
-﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses;
+
+using System;
+using Catel.MVVM;
+
+/// <summary>
+/// View model with invalid mappings.
+/// </summary>
+public class ViewModelWithInvalidMappings : ViewModelBase
 {
-    using System;
-    using Catel.MVVM;
+    public ViewModelWithInvalidMappings(IServiceProvider serviceProvider) 
+        : base(serviceProvider)
+    {
+    }
 
     /// <summary>
-    /// View model with invalid mappings.
+    /// Gets the title of the view model.
     /// </summary>
-    public class ViewModelWithInvalidMappings : ViewModelBase
+    /// <value>The title.</value>
+    public override string Title
     {
-        public ViewModelWithInvalidMappings(IServiceProvider serviceProvider) 
-            : base(serviceProvider)
-        {
-        }
-
-        /// <summary>
-        /// Gets the title of the view model.
-        /// </summary>
-        /// <value>The title.</value>
-        public override string Title
-        {
-            get { return "View model with invalid mappings"; }
-        }
+        get { return "View model with invalid mappings"; }
     }
 }

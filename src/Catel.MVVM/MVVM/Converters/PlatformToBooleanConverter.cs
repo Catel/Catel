@@ -1,45 +1,44 @@
-﻿namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters;
+
+using System;
+using Catel.Data;
+
+/// <summary>
+/// Returns a boolean whether the currently executing platform is available.
+/// </summary>
+public partial class PlatformToBooleanConverter : ValueConverterBase
 {
-    using System;
-    using Catel.Data;
-
     /// <summary>
-    /// Returns a boolean whether the currently executing platform is available.
+    /// Converts the specified value.
     /// </summary>
-    public partial class PlatformToBooleanConverter : ValueConverterBase
+    /// <param name="value">The value.</param>
+    /// <param name="targetType">Type of the target.</param>
+    /// <param name="parameter">The parameter.</param>
+    /// <returns>System.Object.</returns>
+    protected override object? Convert(object? value, Type targetType, object? parameter)
     {
-        /// <summary>
-        /// Converts the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="targetType">Type of the target.</param>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>System.Object.</returns>
-        protected override object? Convert(object? value, Type targetType, object? parameter)
+        var parameterAsString = ObjectToStringHelper.ToString(parameter);
+
+        var isSupported = false;
+        var supportedPlatforms = parameterAsString.Split(new[] { '|' });
+
+        foreach (var supportedPlatform in supportedPlatforms)
         {
-            var parameterAsString = ObjectToStringHelper.ToString(parameter);
-
-            var isSupported = false;
-            var supportedPlatforms = parameterAsString.Split(new[] { '|' });
-
-            foreach (var supportedPlatform in supportedPlatforms)
+            if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out var platform))
             {
-                if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out var platform))
+                if (Platforms.IsPlatformSupported(platform))
                 {
-                    if (Platforms.IsPlatformSupported(platform))
-                    {
-                        isSupported = true;
-                        break;
-                    }
+                    isSupported = true;
+                    break;
                 }
             }
-
-            if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
-            {
-                isSupported = !isSupported;
-            }
-
-            return BoxingCache.GetBoxedValue(isSupported);
         }
+
+        if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
+        {
+            isSupported = !isSupported;
+        }
+
+        return BoxingCache.GetBoxedValue(isSupported);
     }
 }

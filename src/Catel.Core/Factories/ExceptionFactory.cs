@@ -1,95 +1,94 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System;
+
+/// <summary>
+/// Exception factory.
+/// </summary>
+public static class ExceptionFactory
 {
-    using System;
+    /// <summary>
+    /// Creates the exception with the message and inner exception. If the exception does not support creation with
+    /// inner exceptions, it will use the message only.
+    /// </summary>
+    /// <typeparam name="TException">The type of the exception.</typeparam>
+    /// <param name="message">The message.</param>
+    /// <param name="innerException">The inner exception.</param>
+    /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
+    public static TException? CreateException<TException>(string message, Exception? innerException = null)
+        where TException : Exception
+    {
+        return (TException?)CreateException(typeof(TException), message, innerException);
+    }
 
     /// <summary>
-    /// Exception factory.
+    /// Creates the exception with the message and inner exception. If the exception does not support creation with
+    /// inner exceptions, it will use the message only.
     /// </summary>
-    public static class ExceptionFactory
+    /// <param name="exceptionType">Type of the exception.</param>
+    /// <param name="message">The message.</param>
+    /// <param name="innerException">The inner exception.</param>
+    /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
+    public static Exception? CreateException(Type exceptionType, string message, Exception? innerException = null)
     {
-        /// <summary>
-        /// Creates the exception with the message and inner exception. If the exception does not support creation with
-        /// inner exceptions, it will use the message only.
-        /// </summary>
-        /// <typeparam name="TException">The type of the exception.</typeparam>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
-        /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static TException? CreateException<TException>(string message, Exception? innerException = null)
-            where TException : Exception
+        // Try 1: with inner exception
+        if (innerException is not null)
         {
-            return (TException?)CreateException(typeof(TException), message, innerException);
+            var argsWithInnerException = new object[] { message, innerException };
+            var exceptionWithInnerException = CreateException(exceptionType, argsWithInnerException);
+            if (exceptionWithInnerException is not null)
+            {
+                return exceptionWithInnerException;
+            }
         }
 
-        /// <summary>
-        /// Creates the exception with the message and inner exception. If the exception does not support creation with
-        /// inner exceptions, it will use the message only.
-        /// </summary>
-        /// <param name="exceptionType">Type of the exception.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
-        /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static Exception? CreateException(Type exceptionType, string message, Exception? innerException = null)
+        // try 2: without inner exception
+        var args = new object[] { message };
+        var exception = CreateException(exceptionType, args);
+        if (exception is not null)
         {
-            // Try 1: with inner exception
-            if (innerException is not null)
-            {
-                var argsWithInnerException = new object[] { message, innerException };
-                var exceptionWithInnerException = CreateException(exceptionType, argsWithInnerException);
-                if (exceptionWithInnerException is not null)
-                {
-                    return exceptionWithInnerException;
-                }
-            }
-
-            // try 2: without inner exception
-            var args = new object[] { message };
-            var exception = CreateException(exceptionType, args);
-            if (exception is not null)
-            {
-                return exception;
-            }
-
-            // try 3: without anything
-            exception = CreateException(exceptionType, Array.Empty<object>());
-            if (exception is not null)
-            {
-                return exception;
-            }
-
-            return null;
+            return exception;
         }
 
-        /// <summary>
-        /// Creates the exception with the specified arguments.
-        /// </summary>
-        /// <typeparam name="TException">The type of the exception.</typeparam>
-        /// <param name="args">The arguments.</param>
-        /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static TException? CreateException<TException>(object[] args)
-            where TException : Exception
+        // try 3: without anything
+        exception = CreateException(exceptionType, Array.Empty<object>());
+        if (exception is not null)
         {
-            return (TException?)CreateException(typeof(TException), args);
+            return exception;
         }
 
-        /// <summary>
-        /// Creates the exception with the specified arguments.
-        /// </summary>
-        /// <param name="exceptionType">Type of the exception.</param>
-        /// <param name="args">The arguments.</param>
-        /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
-        public static Exception? CreateException(Type exceptionType, object[] args)
-        {
-            try
-            {
-                return (Exception?)Activator.CreateInstance(exceptionType, args);
-            }
-            catch (Exception)
-            {
-                // Ignore
-            }
+        return null;
+    }
 
-            return null;
+    /// <summary>
+    /// Creates the exception with the specified arguments.
+    /// </summary>
+    /// <typeparam name="TException">The type of the exception.</typeparam>
+    /// <param name="args">The arguments.</param>
+    /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
+    public static TException? CreateException<TException>(object[] args)
+        where TException : Exception
+    {
+        return (TException?)CreateException(typeof(TException), args);
+    }
+
+    /// <summary>
+    /// Creates the exception with the specified arguments.
+    /// </summary>
+    /// <param name="exceptionType">Type of the exception.</param>
+    /// <param name="args">The arguments.</param>
+    /// <returns>The created exception or <c>null</c> if there was no valid constructor available.</returns>
+    public static Exception? CreateException(Type exceptionType, object[] args)
+    {
+        try
+        {
+            return (Exception?)Activator.CreateInstance(exceptionType, args);
         }
+        catch (Exception)
+        {
+            // Ignore
+        }
+
+        return null;
     }
 }

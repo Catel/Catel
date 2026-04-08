@@ -1,21 +1,20 @@
-﻿namespace Catel.Tests
+﻿namespace Catel.Tests;
+
+using System;
+using System.Runtime.InteropServices;
+
+public static class GCHelper
 {
-    using System;
-    using System.Runtime.InteropServices;
+    [DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize", ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern int SetProcessWorkingSetSize(IntPtr process, int minimumWorkingSetSize, int maximumWorkingSetSize);
 
-    public static class GCHelper
+    public static void CollectAndFreeMemory()
     {
-        [DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize", ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern int SetProcessWorkingSetSize(IntPtr process, int minimumWorkingSetSize, int maximumWorkingSetSize);
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
 
-        public static void CollectAndFreeMemory()
-        {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+        //GC.WaitForFullGCComplete();
 
-            //GC.WaitForFullGCComplete();
-
-            SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
-        }
+        SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
     }
 }

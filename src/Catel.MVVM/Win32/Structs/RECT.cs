@@ -1,28 +1,27 @@
-﻿namespace Catel.Win32
+﻿namespace Catel.Win32;
+
+using System.Runtime.InteropServices;
+
+[StructLayout(LayoutKind.Sequential)]
+internal struct RECT
 {
-    using System.Runtime.InteropServices;
+    /// <summary>
+    /// Left.
+    /// </summary>
+    public int Left;
 
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct RECT
-    {
-        /// <summary>
-        /// Left.
-        /// </summary>
-        public int Left;
+    /// <summary>
+    /// Top.
+    /// </summary>
+    public int Top;
 
-        /// <summary>
-        /// Top.
-        /// </summary>
-        public int Top;
+    /// <summary>
+    /// Right.
+    /// </summary>
+    public int Right;
 
-        /// <summary>
-        /// Right.
-        /// </summary>
-        public int Right;
-
-        /// <summary>
-        /// Bottom.
-        /// </summary>
-        public int Bottom;
-    }
+    /// <summary>
+    /// Bottom.
+    /// </summary>
+    public int Bottom;
 }

@@ -1,498 +1,497 @@
-﻿namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels;
+
+using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using Catel.Data;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+using TestClasses;
+
+public partial class ViewModelBaseFacts
 {
-    using System;
-    using System.ComponentModel;
-    using System.Threading.Tasks;
-    using Catel.Data;
-    using Microsoft.Extensions.DependencyInjection;
-    using NUnit.Framework;
-    using TestClasses;
-
-    public partial class ViewModelBaseFacts
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_DoubleModels()
     {
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_DoubleModels()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var firstPerson = new Person();
-            firstPerson.FirstName = "John";
-            firstPerson.LastName = "Doe";
-            firstPerson.ContactInfo.Street = "Unknown street";
-            firstPerson.ContactInfo.City = "Unknown city";
-            firstPerson.ContactInfo.Email = "john@doe.com";
+        var firstPerson = new Person();
+        firstPerson.FirstName = "John";
+        firstPerson.LastName = "Doe";
+        firstPerson.ContactInfo.Street = "Unknown street";
+        firstPerson.ContactInfo.City = "Unknown city";
+        firstPerson.ContactInfo.Email = "john@doe.com";
 
-            var secondPerson = new Person();
-            secondPerson.FirstName = "Second";
-            secondPerson.LastName = "Person";
-            secondPerson.ContactInfo.Street = "Another street";
-            secondPerson.ContactInfo.City = "Another city";
-            secondPerson.ContactInfo.Email = "Another email";
+        var secondPerson = new Person();
+        secondPerson.FirstName = "Second";
+        secondPerson.LastName = "Person";
+        secondPerson.ContactInfo.Street = "Another street";
+        secondPerson.ContactInfo.City = "Another city";
+        secondPerson.ContactInfo.Email = "Another email";
 
-            var viewModel = new TestViewModelWithMultipleModelMappings(firstPerson, serviceProvider);
+        var viewModel = new TestViewModelWithMultipleModelMappings(firstPerson, serviceProvider);
 
-            Assert.That(viewModel.Person, Is.Not.Null);
-            Assert.That(viewModel.ContactInfo, Is.Not.Null);
-            Assert.That(viewModel.Email, Is.EqualTo("john@doe.com"));
+        Assert.That(viewModel.Person, Is.Not.Null);
+        Assert.That(viewModel.ContactInfo, Is.Not.Null);
+        Assert.That(viewModel.Email, Is.EqualTo("john@doe.com"));
 
-            viewModel.Person = secondPerson;
+        viewModel.Person = secondPerson;
 
-            Assert.That(viewModel.Person, Is.Not.Null);
-            Assert.That(viewModel.ContactInfo, Is.Not.Null);
-            Assert.That(viewModel.Email, Is.EqualTo("Another email"));
-        }
+        Assert.That(viewModel.Person, Is.Not.Null);
+        Assert.That(viewModel.ContactInfo, Is.Not.Null);
+        Assert.That(viewModel.Email, Is.EqualTo("Another email"));
+    }
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_MissingModelName_WorksWithSingleModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_MissingModelName_WorksWithSingleModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var person = new Person();
-            person.FirstName = "John";
-            person.LastName = "Doe";
-            person.ContactInfo.Street = "Unknown street";
-            person.ContactInfo.City = "Unknown city";
-            person.ContactInfo.Email = "john@doe.com";
+        var person = new Person();
+        person.FirstName = "John";
+        person.LastName = "Doe";
+        person.ContactInfo.Street = "Unknown street";
+        person.ContactInfo.City = "Unknown city";
+        person.ContactInfo.Email = "john@doe.com";
 
-            var viewModel = new TestViewModelWithImplicitModelMappings(person, serviceProvider);
+        var viewModel = new TestViewModelWithImplicitModelMappings(person, serviceProvider);
 
-            Assert.That(viewModel.Person, Is.Not.Null);
-            Assert.That(viewModel.FirstName, Is.EqualTo("John"));
-        }
+        Assert.That(viewModel.Person, Is.Not.Null);
+        Assert.That(viewModel.FirstName, Is.EqualTo("John"));
+    }
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_Prevents_Duplicate_ObservableObject_Update()
-        {
-            // Written for https://github.com/Catel/Catel/issues/2164
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_Prevents_Duplicate_ObservableObject_Update()
+    {
+        // Written for https://github.com/Catel/Catel/issues/2164
 
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var person = new PersonObservableObject();
-            person.FirstName = "John";
+        var person = new PersonObservableObject();
+        person.FirstName = "John";
 
-            Assert.That(person.FirstNameChangedCounter, Is.EqualTo(1));
+        Assert.That(person.FirstNameChangedCounter, Is.EqualTo(1));
 
-            var viewModel = new TestViewModelWithImplicitModelMappings(person, serviceProvider);
+        var viewModel = new TestViewModelWithImplicitModelMappings(person, serviceProvider);
 
-            Assert.That(person.FirstNameChangedCounter, Is.EqualTo(1));
+        Assert.That(person.FirstNameChangedCounter, Is.EqualTo(1));
 
-            person.FirstName = "test";
+        person.FirstName = "test";
 
-            Assert.That(viewModel.FirstName, Is.EqualTo("test"));
-            Assert.That(person.FirstNameChangedCounter, Is.EqualTo(2));
-        }
+        Assert.That(viewModel.FirstName, Is.EqualTo("test"));
+        Assert.That(person.FirstNameChangedCounter, Is.EqualTo(2));
+    }
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_MissingModelName_ThrowsExceptionWithMultipleModels()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_MissingModelName_ThrowsExceptionWithMultipleModels()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var person = new Person();
-            person.FirstName = "John";
-            person.LastName = "Doe";
-            person.ContactInfo.Street = "Unknown street";
-            person.ContactInfo.City = "Unknown city";
-            person.ContactInfo.Email = "john@doe.com";
+        var person = new Person();
+        person.FirstName = "John";
+        person.LastName = "Doe";
+        person.ContactInfo.Street = "Unknown street";
+        person.ContactInfo.City = "Unknown city";
+        person.ContactInfo.Email = "john@doe.com";
 
-            Assert.Throws<InvalidOperationException>(() => new TestViewModelWithImplicitModelMappingsWithMultipleModels(person, serviceProvider));
-        }
+        Assert.Throws<InvalidOperationException>(() => new TestViewModelWithImplicitModelMappingsWithMultipleModels(person, serviceProvider));
+    }
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_PropertyChanges()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_PropertyChanges()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            const string FirstName = "first name";
-            const string LastName = "last name";
-            const uint Age1 = 1;
-            const uint Age2 = 2;
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var person = new Person();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        const string FirstName = "first name";
+        const string LastName = "last name";
+        const uint Age1 = 1;
+        const uint Age2 = 2;
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(person.LastName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.LastName, Is.EqualTo(string.Empty));
+        var person = new Person();
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-            Assert.That(person.Age, Is.EqualTo(0));
-            Assert.That(viewModel.Age, Is.EqualTo(0));
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(person.LastName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.LastName, Is.EqualTo(string.Empty));
 
-            // Model to view model mapping
-            person.FirstName = FirstName;
-            Assert.That(person.FirstName, Is.EqualTo(FirstName));
-            Assert.That(viewModel.FirstName, Is.EqualTo(FirstName));
+        Assert.That(person.Age, Is.EqualTo(0));
+        Assert.That(viewModel.Age, Is.EqualTo(0));
 
-            // View model to model mapping
-            viewModel.LastName = LastName;
-            Assert.That(person.LastName, Is.EqualTo(LastName));
-            Assert.That(viewModel.LastName, Is.EqualTo(LastName));
+        // Model to view model mapping
+        person.FirstName = FirstName;
+        Assert.That(person.FirstName, Is.EqualTo(FirstName));
+        Assert.That(viewModel.FirstName, Is.EqualTo(FirstName));
 
-            person.Age = Age1;
-            Assert.That(person.Age, Is.EqualTo(Age1));
-            Assert.That(viewModel.Age, Is.EqualTo(Age1));
+        // View model to model mapping
+        viewModel.LastName = LastName;
+        Assert.That(person.LastName, Is.EqualTo(LastName));
+        Assert.That(viewModel.LastName, Is.EqualTo(LastName));
 
-            viewModel.Age = Age2;
-            Assert.That(person.Age, Is.EqualTo(Age2));
-            Assert.That(viewModel.Age, Is.EqualTo(Age2));
-        }
+        person.Age = Age1;
+        Assert.That(person.Age, Is.EqualTo(Age1));
+        Assert.That(viewModel.Age, Is.EqualTo(Age1));
 
-        [TestCase]
-        public void ViewModelWithMappingConverters()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        viewModel.Age = Age2;
+        Assert.That(person.Age, Is.EqualTo(Age2));
+        Assert.That(viewModel.Age, Is.EqualTo(Age2));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithMappingConverters()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            const string FirstName = "first_name";
-            const string LastName = "last_name";
-            const uint Age1 = 1;
-            const uint Age2 = 2;
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappingConverters(person, serviceProvider);
+        const string FirstName = "first_name";
+        const string LastName = "last_name";
+        const uint Age1 = 1;
+        const uint Age2 = 2;
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(person.LastName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.LastName, Is.EqualTo(string.Empty));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappingConverters(person, serviceProvider);
 
-            Assert.That(viewModel.FullName, Is.EqualTo(string.Empty));
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(person.LastName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.LastName, Is.EqualTo(string.Empty));
 
-            Assert.That(person.Age, Is.EqualTo(0));
-            Assert.That(viewModel.Age, Is.EqualTo("0"));
+        Assert.That(viewModel.FullName, Is.EqualTo(string.Empty));
 
-            // Model to view model mapping
-            person.FirstName = FirstName;
-            Assert.That(person.FirstName, Is.EqualTo(FirstName));
-            Assert.That(viewModel.FirstName, Is.EqualTo(FirstName));
-            Assert.That(viewModel.FullName, Is.EqualTo(FirstName));
+        Assert.That(person.Age, Is.EqualTo(0));
+        Assert.That(viewModel.Age, Is.EqualTo("0"));
 
-            // View model to model mapping
-            viewModel.LastName = LastName;
-            Assert.That(person.LastName, Is.EqualTo(LastName));
-            Assert.That(viewModel.LastName, Is.EqualTo(LastName));
-            Assert.That(viewModel.FullName, Is.EqualTo(FirstName + " " + LastName));
-            Assert.That(viewModel.FullNameWithCustomSeparator, Is.EqualTo(FirstName + ";" + LastName));
+        // Model to view model mapping
+        person.FirstName = FirstName;
+        Assert.That(person.FirstName, Is.EqualTo(FirstName));
+        Assert.That(viewModel.FirstName, Is.EqualTo(FirstName));
+        Assert.That(viewModel.FullName, Is.EqualTo(FirstName));
 
-            person.Age = Age1;
-            Assert.That(person.Age, Is.EqualTo(Age1));
-            Assert.That(viewModel.Age, Is.EqualTo(Age1.ToString()));
+        // View model to model mapping
+        viewModel.LastName = LastName;
+        Assert.That(person.LastName, Is.EqualTo(LastName));
+        Assert.That(viewModel.LastName, Is.EqualTo(LastName));
+        Assert.That(viewModel.FullName, Is.EqualTo(FirstName + " " + LastName));
+        Assert.That(viewModel.FullNameWithCustomSeparator, Is.EqualTo(FirstName + ";" + LastName));
 
-            viewModel.Age = Age2.ToString();
-            Assert.That(person.Age, Is.EqualTo(Age2));
-            Assert.That(viewModel.Age, Is.EqualTo(Age2.ToString()));
-        }
+        person.Age = Age1;
+        Assert.That(person.Age, Is.EqualTo(Age1));
+        Assert.That(viewModel.Age, Is.EqualTo(Age1.ToString()));
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_FieldErrors()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        viewModel.Age = Age2.ToString();
+        Assert.That(person.Age, Is.EqualTo(Age2));
+        Assert.That(viewModel.Age, Is.EqualTo(Age2.ToString()));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_FieldErrors()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var personAsError = (IDataErrorInfo)person;
-            var viewModelAsError = (IDataErrorInfo)viewModel;
+        var person = new Person();
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-            person.FirstName = "first name";
+        var personAsError = (IDataErrorInfo)person;
+        var viewModelAsError = (IDataErrorInfo)viewModel;
 
-            Assert.That(personAsError[Person.FirstNameProperty.Name], Is.EqualTo(string.Empty));
-            Assert.That(viewModelAsError[TestFeaturedViewModel.FirstNameProperty.Name], Is.EqualTo(string.Empty));
+        person.FirstName = "first name";
 
-            person.FirstName = string.Empty;
+        Assert.That(personAsError[Person.FirstNameProperty.Name], Is.EqualTo(string.Empty));
+        Assert.That(viewModelAsError[TestFeaturedViewModel.FirstNameProperty.Name], Is.EqualTo(string.Empty));
 
-            Assert.That(personAsError[Person.FirstNameProperty.Name], Is.Not.EqualTo(string.Empty));
-            Assert.That(viewModelAsError[TestFeaturedViewModel.FirstNameProperty.Name], Is.Not.EqualTo(string.Empty));
-        }
+        person.FirstName = string.Empty;
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_FieldWarnings()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        Assert.That(personAsError[Person.FirstNameProperty.Name], Is.Not.EqualTo(string.Empty));
+        Assert.That(viewModelAsError[TestFeaturedViewModel.FirstNameProperty.Name], Is.Not.EqualTo(string.Empty));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_FieldWarnings()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var personAsWarning = (IDataWarningInfo)person;
-            var viewModelAsWarning = (IDataWarningInfo)viewModel;
+        var person = new Person();
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-            person.FirstName = "first name";
-            person.LastName = "last name";
+        var personAsWarning = (IDataWarningInfo)person;
+        var viewModelAsWarning = (IDataWarningInfo)viewModel;
 
-            var validation = (IValidatableModel)viewModel;
+        person.FirstName = "first name";
+        person.LastName = "last name";
 
-            Assert.That(validation.HasErrors, Is.False);
-            Assert.That(validation.HasWarnings, Is.True);
-            Assert.That(personAsWarning[Person.MiddleNameProperty.Name], Is.Not.EqualTo(string.Empty));
-            Assert.That(viewModelAsWarning[TestFeaturedViewModel.MiddleNameProperty.Name], Is.Not.EqualTo(string.Empty));
+        var validation = (IValidatableModel)viewModel;
 
-            person.MiddleName = "middle name";
+        Assert.That(validation.HasErrors, Is.False);
+        Assert.That(validation.HasWarnings, Is.True);
+        Assert.That(personAsWarning[Person.MiddleNameProperty.Name], Is.Not.EqualTo(string.Empty));
+        Assert.That(viewModelAsWarning[TestFeaturedViewModel.MiddleNameProperty.Name], Is.Not.EqualTo(string.Empty));
 
-            Assert.That(validation.HasErrors, Is.False);
-            Assert.That(validation.HasWarnings, Is.False);
-            Assert.That(personAsWarning[Person.MiddleNameProperty.Name], Is.EqualTo(string.Empty));
-            Assert.That(viewModelAsWarning[TestFeaturedViewModel.MiddleNameProperty.Name], Is.EqualTo(string.Empty));
-        }
+        person.MiddleName = "middle name";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_BusinessErrors()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        Assert.That(validation.HasErrors, Is.False);
+        Assert.That(validation.HasWarnings, Is.False);
+        Assert.That(personAsWarning[Person.MiddleNameProperty.Name], Is.EqualTo(string.Empty));
+        Assert.That(viewModelAsWarning[TestFeaturedViewModel.MiddleNameProperty.Name], Is.EqualTo(string.Empty));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_BusinessErrors()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var personAsError = (IDataErrorInfo)person;
-            var viewModelAsError = (IDataErrorInfo)viewModel;
+        var person = new Person();
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-            person.FirstName = "first name";
-            person.LastName = "last name";
+        var personAsError = (IDataErrorInfo)person;
+        var viewModelAsError = (IDataErrorInfo)viewModel;
 
-            Assert.That(personAsError.Error, Is.EqualTo(string.Empty));
-            Assert.That(viewModelAsError.Error, Is.EqualTo(string.Empty));
+        person.FirstName = "first name";
+        person.LastName = "last name";
 
-            person.FirstName = string.Empty;
+        Assert.That(personAsError.Error, Is.EqualTo(string.Empty));
+        Assert.That(viewModelAsError.Error, Is.EqualTo(string.Empty));
 
-            Assert.That(personAsError.Error, Is.Not.EqualTo(string.Empty));
-            Assert.That(viewModelAsError.Error, Is.Not.EqualTo(string.Empty));
-        }
+        person.FirstName = string.Empty;
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_BusinessWarnings()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        Assert.That(personAsError.Error, Is.Not.EqualTo(string.Empty));
+        Assert.That(viewModelAsError.Error, Is.Not.EqualTo(string.Empty));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_BusinessWarnings()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var personAsWarning = (IDataWarningInfo)person;
-            var viewModelAsWarning = (IDataWarningInfo)viewModel;
+        var person = new Person();
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-            person.FirstName = "first name";
-            person.LastName = "last name";
+        var personAsWarning = (IDataWarningInfo)person;
+        var viewModelAsWarning = (IDataWarningInfo)viewModel;
 
-            Assert.That(personAsWarning.Warning, Is.Not.EqualTo(string.Empty));
-            Assert.That(viewModelAsWarning.Warning, Is.Not.EqualTo(string.Empty));
+        person.FirstName = "first name";
+        person.LastName = "last name";
 
-            person.MiddleName = "middle name";
+        Assert.That(personAsWarning.Warning, Is.Not.EqualTo(string.Empty));
+        Assert.That(viewModelAsWarning.Warning, Is.Not.EqualTo(string.Empty));
 
-            Assert.That(personAsWarning.Warning, Is.EqualTo(string.Empty));
-            Assert.That(viewModelAsWarning.Warning, Is.EqualTo(string.Empty));
-        }
+        person.MiddleName = "middle name";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_ValidateModelsOnInitialization()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        Assert.That(personAsWarning.Warning, Is.EqualTo(string.Empty));
+        Assert.That(viewModelAsWarning.Warning, Is.EqualTo(string.Empty));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_ValidateModelsOnInitialization()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new PersonWithDataAnnotations();
-            var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            ((IValidatableModel)person).Validate(true);
+        var person = new PersonWithDataAnnotations();
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-            Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
-        }
+        ((IValidatableModel)person).Validate(true);
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        Assert.That(viewModel.GetValidationContext().GetValidationCount(), Is.Not.EqualTo(0));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            person.FirstName = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
 
-            // Both must have changed
-            Assert.That(person.FirstName, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
-        }
+        person.FirstName = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromViewModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // Both must have changed
+        Assert.That(person.FirstName, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromViewModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            viewModel.FirstNameAsTwoWay = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
 
-            // Both must have changed
-            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
-        }
+        viewModel.FirstNameAsTwoWay = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // Both must have changed
+        Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsTwoWay, Is.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            person.FirstName = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
 
-            // Both must have changed
-            Assert.That(person.FirstName, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
-        }
+        person.FirstName = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromViewModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // Both must have changed
+        Assert.That(person.FirstName, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromViewModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            viewModel.FirstNameAsOneWay = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo(person.FirstName));
 
-            // Only view model must have changed
-            Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsOneWay, Is.Not.EqualTo(person.FirstName));
-        }
+        viewModel.FirstNameAsOneWay = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // Only view model must have changed
+        Assert.That(viewModel.FirstNameAsOneWay, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsOneWay, Is.Not.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            person.FirstName = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
 
-            // Only model must have changed
-            Assert.That(person.FirstName, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.Not.EqualTo(person.FirstName));
-        }
+        person.FirstName = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromViewModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // Only model must have changed
+        Assert.That(person.FirstName, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsOneWayToSource, Is.Not.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromViewModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            viewModel.FirstNameAsOneWayToSource = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
 
-            // Both must have changed
-            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
-        }
+        viewModel.FirstNameAsOneWayToSource = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // Both must have changed
+        Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsOneWayToSource, Is.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            person.FirstName = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
 
-            // When initiated from model => VM should change
-            Assert.That(person.FirstName, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
-        }
+        person.FirstName = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromViewModel()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // When initiated from model => VM should change
+        Assert.That(person.FirstName, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromViewModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            viewModel.FirstNameAsExplicit = "geert";
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
 
-            // When initiated from VM => nothing should change
-            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsExplicit, Is.Not.EqualTo(person.FirstName));
-        }
+        viewModel.FirstNameAsExplicit = "geert";
 
-        [TestCase]
-        public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedManually()
-        {
-            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+        // When initiated from VM => nothing should change
+        Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsExplicit, Is.Not.EqualTo(person.FirstName));
+    }
 
-            using var serviceProvider = serviceCollection.BuildServiceProvider();
+    [TestCase]
+    public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedManually()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var person = new Person();
-            var viewModel = new TestViewModelWithMappings(person, serviceProvider);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(person.FirstName, Is.EqualTo(string.Empty));
-            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
+        var person = new Person();
+        var viewModel = new TestViewModelWithMappings(person, serviceProvider);
 
-            viewModel.FirstNameAsExplicit = "geert";
-            viewModel.UpdateExplicitMappings();
+        Assert.That(person.FirstName, Is.EqualTo(string.Empty));
+        Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
 
-            // Both must have changed
-            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo("geert"));
-            Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
-        }
+        viewModel.FirstNameAsExplicit = "geert";
+        viewModel.UpdateExplicitMappings();
+
+        // Both must have changed
+        Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo("geert"));
+        Assert.That(viewModel.FirstNameAsExplicit, Is.EqualTo(person.FirstName));
     }
 }

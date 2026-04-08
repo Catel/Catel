@@ -1,11 +1,10 @@
-﻿namespace Catel.Services
-{
-    using Logging;
+﻿namespace Catel.Services;
 
-    /// <summary>
-    /// Service to save files.
-    /// </summary>
-    public partial class SaveFileService : FileServiceBase, ISaveFileService
-    {
-    }
+using Logging;
+
+/// <summary>
+/// Service to save files.
+/// </summary>
+public partial class SaveFileService : FileServiceBase, ISaveFileService
+{
 }

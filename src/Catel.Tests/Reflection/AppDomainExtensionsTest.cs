@@ -1,10 +1,9 @@
-﻿namespace Catel.Tests.Reflection
-{
-    using NUnit.Framework;
+﻿namespace Catel.Tests.Reflection;
 
-    [TestFixture]
-    public class AppDomainExtensionsTest
-    {
-        // TODO: write unit tests in a generated appdomain
-    }
+using NUnit.Framework;
+
+[TestFixture]
+public class AppDomainExtensionsTest
+{
+    // TODO: write unit tests in a generated appdomain
 }

@@ -1,51 +1,50 @@
-﻿namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging;
+
+using System;
+using Catel.Messaging;
+using Microsoft.Extensions.Logging.Abstractions;
+using NUnit.Framework;
+
+public partial class MessageMediatorFacts
 {
-    using System;
-    using Catel.Messaging;
-    using Microsoft.Extensions.Logging.Abstractions;
-    using NUnit.Framework;
-
-    public partial class MessageMediatorFacts
+    [TestFixture]
+    public class The_Register_Method
     {
-        [TestFixture]
-        public class The_Register_Method
+        [TestCase]
+        public void RegistersHandler()
         {
-            [TestCase]
-            public void RegistersHandler()
-            {
-                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
-                var recipient = new MessageRecipient();
+            var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+            var recipient = new MessageRecipient();
 
-                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
+            Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.False);
 
-                mediator.Register<string>(recipient, recipient.OnMessage);
+            mediator.Register<string>(recipient, recipient.OnMessage);
 
-                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
-            }
+            Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage), Is.True);
+        }
 
-            [TestCase]
-            public void RegistersHandlerWithTag()
-            {
-                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
-                var recipient = new MessageRecipient();
+        [TestCase]
+        public void RegistersHandlerWithTag()
+        {
+            var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+            var recipient = new MessageRecipient();
 
-                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.False);
+            Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.False);
 
-                mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
+            mediator.Register<string>(recipient, recipient.OnMessage, "myTag");
 
-                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
-                Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "anotherTag"), Is.False);
-            }
+            Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"), Is.True);
+            Assert.That(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "anotherTag"), Is.False);
+        }
 
-            [TestCase]
-            public void ReturnsFalseForDoubleRegistration()
-            {
-                var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
-                var recipient = new MessageRecipient();
+        [TestCase]
+        public void ReturnsFalseForDoubleRegistration()
+        {
+            var mediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+            var recipient = new MessageRecipient();
 
-                Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.True);
-                Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.False);
-            }
+            Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.True);
+            Assert.That(mediator.Register<string>(recipient, recipient.OnMessage), Is.False);
         }
     }
 }

@@ -1,201 +1,200 @@
-﻿namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views;
+
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using Catel.Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Manager that handles top =&gt; bottom loaded events for all views inside an application.
+/// <para>
+/// </para>
+/// The reason this class is built is that in non-WPF technologies, the visual tree is loaded from
+/// bottom =&gt; top. However, Catel heavily relies on the order to be top =&gt; bottom.
+/// <para />
+/// This manager subscribes to both the <c>Loaded</c> and <c>LayoutUpdated</c>
+/// events. This is because in a nested scenario this will happen:
+/// <para />
+/// <code>
+/// <![CDATA[
+/// - UserControl 1
+///   |- UserControl 2
+///      |- UserControl 3
+/// ]]>
+/// </code>
+/// Will be executed in the following order:
+/// <para />
+/// <list type="number">
+///   <item><description>Loaded (UC 3).</description></item>
+///   <item><description>Loaded (UC 2).</description></item>
+///   <item><description>Loaded (UC 1).</description></item>
+///   <item><description>LayoutUpdated (UC 1).</description></item>
+///   <item><description>LayoutUpdated (UC 2).</description></item>
+///   <item><description>LayoutUpdated (UC 3).</description></item>
+/// </list>
+/// </summary>
+public class ViewLoadManager : IViewLoadManager
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using Catel.Logging;
-    using Microsoft.Extensions.Logging;
+    private readonly ILogger<ViewLoadManager> _logger;
 
-    /// <summary>
-    /// Manager that handles top =&gt; bottom loaded events for all views inside an application.
-    /// <para>
-    /// </para>
-    /// The reason this class is built is that in non-WPF technologies, the visual tree is loaded from
-    /// bottom =&gt; top. However, Catel heavily relies on the order to be top =&gt; bottom.
-    /// <para />
-    /// This manager subscribes to both the <c>Loaded</c> and <c>LayoutUpdated</c>
-    /// events. This is because in a nested scenario this will happen:
-    /// <para />
-    /// <code>
-    /// <![CDATA[
-    /// - UserControl 1
-    ///   |- UserControl 2
-    ///      |- UserControl 3
-    /// ]]>
-    /// </code>
-    /// Will be executed in the following order:
-    /// <para />
-    /// <list type="number">
-    ///   <item><description>Loaded (UC 3).</description></item>
-    ///   <item><description>Loaded (UC 2).</description></item>
-    ///   <item><description>Loaded (UC 1).</description></item>
-    ///   <item><description>LayoutUpdated (UC 1).</description></item>
-    ///   <item><description>LayoutUpdated (UC 2).</description></item>
-    ///   <item><description>LayoutUpdated (UC 3).</description></item>
-    /// </list>
-    /// </summary>
-    public class ViewLoadManager : IViewLoadManager
-    {
-        private readonly ILogger<ViewLoadManager> _logger;
+    private readonly List<WeakViewInfo> _views = new List<WeakViewInfo>();
 
-        private readonly List<WeakViewInfo> _views = new List<WeakViewInfo>();
-
-        private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
+    private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
 
 #pragma warning disable IDISP006 // Implement IDisposable.
-        private readonly Timer _cleanUpTimer;
+    private readonly Timer _cleanUpTimer;
 #pragma warning restore IDISP006 // Implement IDisposable.
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewLoadManager"/> class.
-        /// </summary>
-        public ViewLoadManager(ILogger<ViewLoadManager> logger)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ViewLoadManager"/> class.
+    /// </summary>
+    public ViewLoadManager(ILogger<ViewLoadManager> logger)
+    {
+        _cleanUpTimer = new Timer(x => CleanUp(), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+        _logger = logger;
+    }
+
+    /// <summary>
+    /// Occurs when any of the subscribed views are about to be loaded.
+    /// </summary>
+    public event EventHandler<ViewLoadEventArgs>? ViewLoading;
+
+    /// <summary>
+    /// Occurs when any of the subscribed views are loaded.
+    /// </summary>
+    public event EventHandler<ViewLoadEventArgs>? ViewLoaded;
+
+    /// <summary>
+    /// Occurs when any of the subscribed views are about to be unloaded.
+    /// </summary>
+    public event EventHandler<ViewLoadEventArgs>? ViewUnloading;
+
+    /// <summary>
+    /// Occurs when any of the subscribed views are unloaded.
+    /// </summary>
+    public event EventHandler<ViewLoadEventArgs>? ViewUnloaded;
+
+    /// <summary>
+    /// Adds the view load state.
+    /// </summary>
+    /// <param name="viewLoadState">The view load state.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
+    public void AddView(IViewLoadState viewLoadState)
+    {
+        ArgumentNullException.ThrowIfNull(viewLoadState);
+        ArgumentNullException.ThrowIfNull(viewLoadState.View);
+
+        var viewInfo = new WeakViewInfo(viewLoadState.View);
+        viewInfo.Loaded += OnViewInfoLoaded;
+        viewInfo.Unloaded += OnViewInfoUnloaded;
+
+        _views.Add(viewInfo);
+    }
+
+    private void OnViewInfoLoaded(object? sender, EventArgs e)
+    {
+        var weakViewInfo = sender as WeakViewInfo;
+        if (weakViewInfo is null || weakViewInfo.View is null)
         {
-            _cleanUpTimer = new Timer(x => CleanUp(), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
-            _logger = logger;
+            throw _logger.LogErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
         }
 
-        /// <summary>
-        /// Occurs when any of the subscribed views are about to be loaded.
-        /// </summary>
-        public event EventHandler<ViewLoadEventArgs>? ViewLoading;
+        // Just forward
+        RaiseLoaded(weakViewInfo.View);
+    }
 
-        /// <summary>
-        /// Occurs when any of the subscribed views are loaded.
-        /// </summary>
-        public event EventHandler<ViewLoadEventArgs>? ViewLoaded;
-
-        /// <summary>
-        /// Occurs when any of the subscribed views are about to be unloaded.
-        /// </summary>
-        public event EventHandler<ViewLoadEventArgs>? ViewUnloading;
-
-        /// <summary>
-        /// Occurs when any of the subscribed views are unloaded.
-        /// </summary>
-        public event EventHandler<ViewLoadEventArgs>? ViewUnloaded;
-
-        /// <summary>
-        /// Adds the view load state.
-        /// </summary>
-        /// <param name="viewLoadState">The view load state.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
-        public void AddView(IViewLoadState viewLoadState)
+    private void OnViewInfoUnloaded(object? sender, EventArgs e)
+    {
+        var weakViewInfo = sender as WeakViewInfo;
+        if (weakViewInfo is null || weakViewInfo.View is null)
         {
-            ArgumentNullException.ThrowIfNull(viewLoadState);
-            ArgumentNullException.ThrowIfNull(viewLoadState.View);
-
-            var viewInfo = new WeakViewInfo(viewLoadState.View);
-            viewInfo.Loaded += OnViewInfoLoaded;
-            viewInfo.Unloaded += OnViewInfoUnloaded;
-
-            _views.Add(viewInfo);
+            throw _logger.LogErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
         }
 
-        private void OnViewInfoLoaded(object? sender, EventArgs e)
+        // Just forward
+        RaiseUnloaded(weakViewInfo.View);
+    }
+
+    /// <summary>
+    /// Cleans up the dead links.
+    /// </summary>
+    public void CleanUp()
+    {
+        for (var i = 0; i < _views.Count; i++)
         {
-            var weakViewInfo = sender as WeakViewInfo;
-            if (weakViewInfo is null || weakViewInfo.View is null)
+            var view = _views[i];
+            if (!view.IsAlive)
             {
-                throw _logger.LogErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
+                view.Loaded -= OnViewInfoLoaded;
+                view.Unloaded -= OnViewInfoUnloaded;
+
+                _views.RemoveAt(i--);
             }
-
-            // Just forward
-            RaiseLoaded(weakViewInfo.View);
         }
+    }
 
-        private void OnViewInfoUnloaded(object? sender, EventArgs e)
+    private void RaiseLoaded(IView view)
+    {
+        // Yes, invoke events right after each other
+        InvokeViewLoadEvent(view, ViewLoadStateEvent.Loading);
+        InvokeViewLoadEvent(view, ViewLoadStateEvent.Loaded);
+    }
+
+    private void RaiseUnloaded(IView view)
+    {
+        // Yes, invoke events right after each other
+        InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloading);
+        InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloaded);
+    }
+
+    /// <summary>
+    /// Invokes the specific view load event and makes sure that it isn't double invoked.
+    /// </summary>
+    /// <param name="view">The view.</param>
+    /// <param name="viewLoadStateEvent">The view load state event.</param>
+    /// <exception cref="System.ArgumentOutOfRangeException">viewLoadStateEvent</exception>
+    protected void InvokeViewLoadEvent(IView view, ViewLoadStateEvent viewLoadStateEvent)
+    {
+        if (_lastInvokedViewLoadStateEvent == viewLoadStateEvent)
         {
-            var weakViewInfo = sender as WeakViewInfo;
-            if (weakViewInfo is null || weakViewInfo.View is null)
-            {
-                throw _logger.LogErrorAndCreateException<CatelException>($"Received event from WeakViewInfo without valid sender, cannot handle view events correctly");
-            }
-
-            // Just forward
-            RaiseUnloaded(weakViewInfo.View);
+            return;
         }
 
-        /// <summary>
-        /// Cleans up the dead links.
-        /// </summary>
-        public void CleanUp()
+        if (view is null)
         {
-            for (var i = 0; i < _views.Count; i++)
-            {
-                var view = _views[i];
-                if (!view.IsAlive)
-                {
-                    view.Loaded -= OnViewInfoLoaded;
-                    view.Unloaded -= OnViewInfoUnloaded;
-
-                    _views.RemoveAt(i--);
-                }
-            }
+            return;
         }
 
-        private void RaiseLoaded(IView view)
+        EventHandler<ViewLoadEventArgs>? handler;
+
+        switch (viewLoadStateEvent)
         {
-            // Yes, invoke events right after each other
-            InvokeViewLoadEvent(view, ViewLoadStateEvent.Loading);
-            InvokeViewLoadEvent(view, ViewLoadStateEvent.Loaded);
+            case ViewLoadStateEvent.Loading:
+                handler = ViewLoading;
+                break;
+
+            case ViewLoadStateEvent.Loaded:
+                handler = ViewLoaded;
+                break;
+
+            case ViewLoadStateEvent.Unloading:
+                handler = ViewUnloading;
+                break;
+
+            case ViewLoadStateEvent.Unloaded:
+                handler = ViewUnloaded;
+                break;
+
+            default:
+                throw _logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(viewLoadStateEvent));
         }
 
-        private void RaiseUnloaded(IView view)
+        if (handler is not null)
         {
-            // Yes, invoke events right after each other
-            InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloading);
-            InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloaded);
+            handler(this, new ViewLoadEventArgs(view));
         }
 
-        /// <summary>
-        /// Invokes the specific view load event and makes sure that it isn't double invoked.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        /// <param name="viewLoadStateEvent">The view load state event.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">viewLoadStateEvent</exception>
-        protected void InvokeViewLoadEvent(IView view, ViewLoadStateEvent viewLoadStateEvent)
-        {
-            if (_lastInvokedViewLoadStateEvent == viewLoadStateEvent)
-            {
-                return;
-            }
-
-            if (view is null)
-            {
-                return;
-            }
-
-            EventHandler<ViewLoadEventArgs>? handler;
-
-            switch (viewLoadStateEvent)
-            {
-                case ViewLoadStateEvent.Loading:
-                    handler = ViewLoading;
-                    break;
-
-                case ViewLoadStateEvent.Loaded:
-                    handler = ViewLoaded;
-                    break;
-
-                case ViewLoadStateEvent.Unloading:
-                    handler = ViewUnloading;
-                    break;
-
-                case ViewLoadStateEvent.Unloaded:
-                    handler = ViewUnloaded;
-                    break;
-
-                default:
-                    throw _logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(viewLoadStateEvent));
-            }
-
-            if (handler is not null)
-            {
-                handler(this, new ViewLoadEventArgs(view));
-            }
-
-            _lastInvokedViewLoadStateEvent = viewLoadStateEvent;
-        }
+        _lastInvokedViewLoadStateEvent = viewLoadStateEvent;
     }
 }

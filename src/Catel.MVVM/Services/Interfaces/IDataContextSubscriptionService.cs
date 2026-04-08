@@ -1,39 +1,38 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+using System;
+
+/// <summary>
+/// Data context subscription mode.
+/// </summary>
+public enum DataContextSubscriptionMode
 {
-    using System;
+    /// <summary>
+    /// The direct data context only.
+    /// </summary>
+    DirectDataContext,
 
     /// <summary>
-    /// Data context subscription mode.
+    /// Tee direct data context and the inherited data context.
     /// </summary>
-    public enum DataContextSubscriptionMode
-    {
-        /// <summary>
-        /// The direct data context only.
-        /// </summary>
-        DirectDataContext,
+    InheritedDataContext
+}
 
-        /// <summary>
-        /// Tee direct data context and the inherited data context.
-        /// </summary>
-        InheritedDataContext
-    }
+/// <summary>
+/// Service that determines how to subscribe to a data context.
+/// </summary>
+public interface IDataContextSubscriptionService
+{
+    /// <summary>
+    /// Gets or sets the default data context subscription mode.
+    /// </summary>
+    /// <value>The default data context subscription mode.</value>
+    DataContextSubscriptionMode DefaultDataContextSubscriptionMode { get; set; }
 
     /// <summary>
-    /// Service that determines how to subscribe to a data context.
+    /// Gets the data context subscription mode for the specific view.
     /// </summary>
-    public interface IDataContextSubscriptionService
-    {
-        /// <summary>
-        /// Gets or sets the default data context subscription mode.
-        /// </summary>
-        /// <value>The default data context subscription mode.</value>
-        DataContextSubscriptionMode DefaultDataContextSubscriptionMode { get; set; }
-
-        /// <summary>
-        /// Gets the data context subscription mode for the specific view.
-        /// </summary>
-        /// <param name="viewType">Type of the view.</param>
-        /// <returns>The data context subscription mode.</returns>
-        DataContextSubscriptionMode GetDataContextSubscriptionMode(Type viewType);
-    }
+    /// <param name="viewType">Type of the view.</param>
+    /// <returns>The data context subscription mode.</returns>
+    DataContextSubscriptionMode GetDataContextSubscriptionMode(Type viewType);
 }

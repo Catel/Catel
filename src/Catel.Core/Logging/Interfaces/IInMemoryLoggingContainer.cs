@@ -1,16 +1,15 @@
-﻿namespace Catel.Logging
+﻿namespace Catel.Logging;
+
+using System;
+using System.Collections.Generic;
+
+public interface IInMemoryLoggingContainer
 {
-    using System;
-    using System.Collections.Generic;
+    int MaxCount { get; set; }
 
-    public interface IInMemoryLoggingContainer
-    {
-        int MaxCount { get; set; }
+    IReadOnlyList<LogEntry> LogEntries { get; }
 
-        IReadOnlyList<LogEntry> LogEntries { get; }
+    event EventHandler<LogEntryEventArgs>? LogEntryAdded;
 
-        event EventHandler<LogEntryEventArgs>? LogEntryAdded;
-
-        void Add(LogEntry logEntry);
-    }
+    void Add(LogEntry logEntry);
 }

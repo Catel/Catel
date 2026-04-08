@@ -1,79 +1,78 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+using System;
+using System.Text;
+using Catel.Logging;
+using Microsoft.Extensions.Logging;
+using Text;
+
+/// <summary>
+/// Extension methods for the validation context.
+/// </summary>
+public static class IValidationContextExtensions
 {
-    using System;
-    using System.Text;
-    using Catel.Logging;
-    using Microsoft.Extensions.Logging;
-    using Text;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(IValidationContextExtensions));
 
     /// <summary>
-    /// Extension methods for the validation context.
+    /// Checks whether the validation context contains warnings or errors.
     /// </summary>
-    public static class IValidationContextExtensions
+    /// <param name="validationContext">The validation context.</param>
+    /// <returns>
+    /// String representing the output of all items in the fields an business object.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
+    public static bool HasWarningsOrErrors(this IValidationContext validationContext)
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(IValidationContextExtensions));
+        return validationContext.HasWarnings || validationContext.HasErrors;
+    }
 
-        /// <summary>
-        /// Checks whether the validation context contains warnings or errors.
-        /// </summary>
-        /// <param name="validationContext">The validation context.</param>
-        /// <returns>
-        /// String representing the output of all items in the fields an business object.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
-        public static bool HasWarningsOrErrors(this IValidationContext validationContext)
+    /// <summary>
+    /// Gets the list messages.
+    /// </summary>
+    /// <param name="validationContext">The validation context.</param>
+    /// <param name="validationResult">The validation result.</param>
+    /// <returns>
+    /// String representing the output of all items in the fields an business object.
+    /// </returns>
+    /// <remarks>
+    /// This method is used to create a message string for field warnings or errors and business warnings
+    /// or errors. Just pass the right dictionary and list to this method.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
+    public static string GetValidationsAsStringList(this IValidationContext validationContext, ValidationResultType validationResult)
+    {
+        var messageBuilder = new StringBuilder();
+
+        switch (validationResult)
         {
-            return validationContext.HasWarnings || validationContext.HasErrors;
+            case ValidationResultType.Warning:
+                foreach (var field in validationContext.GetFieldWarnings())
+                {
+                    messageBuilder.AppendLine("* {0}", field.Message);
+                }
+
+                foreach (var businessItem in validationContext.GetBusinessRuleWarnings())
+                {
+                    messageBuilder.AppendLine("* {0}", businessItem.Message);
+                }
+                break;
+
+            case ValidationResultType.Error:
+                foreach (var field in validationContext.GetFieldErrors())
+                {
+                    messageBuilder.AppendLine("* {0}", field.Message);
+                }
+
+                foreach (var businessItem in validationContext.GetBusinessRuleErrors())
+                {
+                    messageBuilder.AppendLine("* {0}", businessItem.Message);
+                }
+                break;
+
+            default:
+                throw Logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(validationResult));
         }
 
-        /// <summary>
-        /// Gets the list messages.
-        /// </summary>
-        /// <param name="validationContext">The validation context.</param>
-        /// <param name="validationResult">The validation result.</param>
-        /// <returns>
-        /// String representing the output of all items in the fields an business object.
-        /// </returns>
-        /// <remarks>
-        /// This method is used to create a message string for field warnings or errors and business warnings
-        /// or errors. Just pass the right dictionary and list to this method.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
-        public static string GetValidationsAsStringList(this IValidationContext validationContext, ValidationResultType validationResult)
-        {
-            var messageBuilder = new StringBuilder();
-
-            switch (validationResult)
-            {
-                case ValidationResultType.Warning:
-                    foreach (var field in validationContext.GetFieldWarnings())
-                    {
-                        messageBuilder.AppendLine("* {0}", field.Message);
-                    }
-
-                    foreach (var businessItem in validationContext.GetBusinessRuleWarnings())
-                    {
-                        messageBuilder.AppendLine("* {0}", businessItem.Message);
-                    }
-                    break;
-
-                case ValidationResultType.Error:
-                    foreach (var field in validationContext.GetFieldErrors())
-                    {
-                        messageBuilder.AppendLine("* {0}", field.Message);
-                    }
-
-                    foreach (var businessItem in validationContext.GetBusinessRuleErrors())
-                    {
-                        messageBuilder.AppendLine("* {0}", businessItem.Message);
-                    }
-                    break;
-
-                default:
-                    throw Logger.LogErrorAndCreateException<ArgumentOutOfRangeException>(nameof(validationResult));
-            }
-
-            return messageBuilder.ToString();
-        }
+        return messageBuilder.ToString();
     }
 }

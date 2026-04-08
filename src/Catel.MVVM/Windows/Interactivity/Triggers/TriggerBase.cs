@@ -1,224 +1,223 @@
-﻿namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity;
+
+using System.Windows;
+using UIEventArgs = System.EventArgs;
+
+/// <summary>
+/// Trigger base class that handles a safe unsubscribe and clean up because the default
+/// Trigger class does not always call <see cref="OnDetaching"/>.
+/// <para />
+/// This class also adds some specific features such as <see cref="ValidateRequiredProperties"/>
+/// which is automatically called when the trigger is attached.
+/// </summary>
+/// <typeparam name="T">The <see cref="FrameworkElement"/> this trigger should attach to.</typeparam>
+public abstract class TriggerBase<T> : Microsoft.Xaml.Behaviors.TriggerBase<T>, ITrigger
+    where T : FrameworkElement
 {
-    using System.Windows;
-    using UIEventArgs = System.EventArgs;
+    private bool _isClean = true;
+    private int _loadCounter;
+
+    private bool _isSubscribedToLoadedEvent = false;
+    private bool _isSubscribedToUnloadedEvent = false;
 
     /// <summary>
-    /// Trigger base class that handles a safe unsubscribe and clean up because the default
-    /// Trigger class does not always call <see cref="OnDetaching"/>.
-    /// <para />
-    /// This class also adds some specific features such as <see cref="ValidateRequiredProperties"/>
-    /// which is automatically called when the trigger is attached.
+    /// Gets a value indicating whether the <c>TriggerBase{T}.AssociatedObject</c> is loaded.
     /// </summary>
-    /// <typeparam name="T">The <see cref="FrameworkElement"/> this trigger should attach to.</typeparam>
-    public abstract class TriggerBase<T> : Microsoft.Xaml.Behaviors.TriggerBase<T>, ITrigger
-        where T : FrameworkElement
+    /// <value>
+    /// <c>true</c> if the <c>TriggerBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
+    /// </value>
+    public bool IsAssociatedObjectLoaded { get { return _loadCounter > 0; } }
+
+    /// <summary>
+    /// Gets a value indicating whether this instance is in design mode.
+    /// </summary>
+    /// <value><c>true</c> if this instance is in design mode; otherwise, <c>false</c>.</value>
+    protected bool IsInDesignMode
     {
-        private bool _isClean = true;
-        private int _loadCounter;
+        get { return CatelEnvironment.IsInDesignMode; }
+    }
 
-        private bool _isSubscribedToLoadedEvent = false;
-        private bool _isSubscribedToUnloadedEvent = false;
+    /// <summary>
+    /// Gets or sets a value indicating whether this trigger is enabled.
+    /// </summary>
+    /// <value><c>true</c> if this trigger is enabled; otherwise, <c>false</c>.</value>
+    public bool IsEnabled
+    {
+        get { return (bool)GetValue(IsEnabledProperty); }
+        set { SetValue(IsEnabledProperty, value); }
+    }
 
-        /// <summary>
-        /// Gets a value indicating whether the <c>TriggerBase{T}.AssociatedObject</c> is loaded.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the <c>TriggerBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsAssociatedObjectLoaded { get { return _loadCounter > 0; } }
+    /// <summary>
+    /// The IsEnabled property registration.
+    /// </summary>
+    public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register(nameof(IsEnabled), typeof(bool),
+        typeof(TriggerBase<T>), new PropertyMetadata(true, (sender, e) => ((TriggerBase<T>)sender).OnIsEnabledChanged()));
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is in design mode.
-        /// </summary>
-        /// <value><c>true</c> if this instance is in design mode; otherwise, <c>false</c>.</value>
-        protected bool IsInDesignMode
+    /// <summary>
+    /// Called when the <see cref="IsEnabled" /> property has changed.
+    /// </summary>
+    protected virtual void OnIsEnabledChanged()
+    {
+    }
+
+    /// <summary>
+    /// Called after the action is attached to an AssociatedObject.
+    /// </summary>
+    protected override void OnAttached()
+    {
+        if (IsInDesignMode)
         {
-            get { return CatelEnvironment.IsInDesignMode; }
+            return;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this trigger is enabled.
-        /// </summary>
-        /// <value><c>true</c> if this trigger is enabled; otherwise, <c>false</c>.</value>
-        public bool IsEnabled
+        base.OnAttached();
+
+        if (!_isSubscribedToLoadedEvent)
         {
-            get { return (bool)GetValue(IsEnabledProperty); }
-            set { SetValue(IsEnabledProperty, value); }
+            AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
+            _isSubscribedToLoadedEvent = true;
         }
 
-        /// <summary>
-        /// The IsEnabled property registration.
-        /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register(nameof(IsEnabled), typeof(bool),
-            typeof(TriggerBase<T>), new PropertyMetadata(true, (sender, e) => ((TriggerBase<T>)sender).OnIsEnabledChanged()));
+        _isClean = false;
 
-        /// <summary>
-        /// Called when the <see cref="IsEnabled" /> property has changed.
-        /// </summary>
-        protected virtual void OnIsEnabledChanged()
+        ValidateRequiredProperties();
+
+        Initialize();
+    }
+
+    /// <summary>
+    /// Called when the action is being detached from its AssociatedObject, but before it has actually occurred.
+    /// </summary>
+    protected override void OnDetaching()
+    {
+        if (IsInDesignMode)
         {
+            return;
         }
 
-        /// <summary>
-        /// Called after the action is attached to an AssociatedObject.
-        /// </summary>
-        protected override void OnAttached()
+        CleanUp();
+
+        if (AssociatedObject is not null)
         {
-            if (IsInDesignMode)
-            {
-                return;
-            }
-
-            base.OnAttached();
-
-            if (!_isSubscribedToLoadedEvent)
-            {
-                AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
-                _isSubscribedToLoadedEvent = true;
-            }
-
-            _isClean = false;
-
-            ValidateRequiredProperties();
-
-            Initialize();
+            AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
+            _isSubscribedToLoadedEvent = false;
         }
 
-        /// <summary>
-        /// Called when the action is being detached from its AssociatedObject, but before it has actually occurred.
-        /// </summary>
-        protected override void OnDetaching()
+        base.OnDetaching();
+    }
+
+    /// <summary>
+    /// Validates the required properties. This method is called when the object is attached, but before
+    /// the <see cref="Initialize"/> is invoked.
+    /// </summary>
+    protected virtual void ValidateRequiredProperties()
+    {
+    }
+
+    /// <summary>
+    /// Initializes the trigger action. This method is called instead of the <see cref="OnAttached"/> which is sealed
+    /// to protect the additional trigger action.
+    /// </summary>
+    protected virtual void Initialize()
+    {
+
+    }
+
+    /// <summary>
+    /// Uninitializes the behavior. This method is called when <see cref="OnDetaching"/> is called, or when the
+    /// <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is unloaded.
+    /// <para />
+    /// If dependency properties are used, it is very important to use <see cref="DependencyObject.ClearValue(System.Windows.DependencyProperty)"/> 
+    /// to clear the value of the dependency properties in this method.
+    /// </summary>
+    protected virtual void Uninitialize()
+    {
+
+    }
+
+    /// <summary>
+    /// Called when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is loaded. This method is introduced to prevent
+    /// double initialization when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is already loaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    private void OnAssociatedObjectLoadedInternal(object? sender, UIEventArgs e)
+    {
+        _loadCounter++;
+
+        // Yes, 1, because we just increased the counter
+        if (_loadCounter != 1)
         {
-            if (IsInDesignMode)
-            {
-                return;
-            }
-
-            CleanUp();
-
-            if (AssociatedObject is not null)
-            {
-                AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
-                _isSubscribedToLoadedEvent = false;
-            }
-
-            base.OnDetaching();
+            return;
         }
 
-        /// <summary>
-        /// Validates the required properties. This method is called when the object is attached, but before
-        /// the <see cref="Initialize"/> is invoked.
-        /// </summary>
-        protected virtual void ValidateRequiredProperties()
+        if (!_isSubscribedToUnloadedEvent)
         {
+            AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+            _isSubscribedToUnloadedEvent = true;
         }
 
-        /// <summary>
-        /// Initializes the trigger action. This method is called instead of the <see cref="OnAttached"/> which is sealed
-        /// to protect the additional trigger action.
-        /// </summary>
-        protected virtual void Initialize()
-        {
+        OnAssociatedObjectLoaded();
+    }
 
+    /// <summary>
+    /// Called when the AssociatedObject is loaded.
+    /// </summary>
+    protected virtual void OnAssociatedObjectLoaded()
+    {
+    }
+
+    /// <summary>
+    /// Called when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is unloaded. This 
+    /// method is introduced to prevent double uninitialization when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is already unloaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    private void OnAssociatedObjectUnloadedInternal(object? sender, UIEventArgs e)
+    {
+        _loadCounter--;
+
+        if (_loadCounter < 0)
+        {
+            _loadCounter = 0;
+            return;
         }
 
-        /// <summary>
-        /// Uninitializes the behavior. This method is called when <see cref="OnDetaching"/> is called, or when the
-        /// <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is unloaded.
-        /// <para />
-        /// If dependency properties are used, it is very important to use <see cref="DependencyObject.ClearValue(System.Windows.DependencyProperty)"/> 
-        /// to clear the value of the dependency properties in this method.
-        /// </summary>
-        protected virtual void Uninitialize()
+        if (_loadCounter != 0)
         {
-
+            return;
         }
 
-        /// <summary>
-        /// Called when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is loaded. This method is introduced to prevent
-        /// double initialization when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is already loaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectLoadedInternal(object? sender, UIEventArgs e)
+        OnAssociatedObjectUnloaded();
+
+        CleanUp();
+    }
+
+    /// <summary>
+    /// Called when the AssociatedObject is unloaded.
+    /// </summary>
+    protected virtual void OnAssociatedObjectUnloaded()
+    {
+    }
+
+    /// <summary>
+    /// Actually cleans up the trigger action because <see cref="OnDetaching"/> is not always called.
+    /// </summary>
+    private void CleanUp()
+    {
+        if (_isClean)
         {
-            _loadCounter++;
-
-            // Yes, 1, because we just increased the counter
-            if (_loadCounter != 1)
-            {
-                return;
-            }
-
-            if (!_isSubscribedToUnloadedEvent)
-            {
-                AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
-                _isSubscribedToUnloadedEvent = true;
-            }
-
-            OnAssociatedObjectLoaded();
+            return;
         }
 
-        /// <summary>
-        /// Called when the AssociatedObject is loaded.
-        /// </summary>
-        protected virtual void OnAssociatedObjectLoaded()
+        _isClean = true;
+
+        if (AssociatedObject is not null)
         {
+            AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
+            _isSubscribedToUnloadedEvent = false;
         }
 
-        /// <summary>
-        /// Called when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is unloaded. This 
-        /// method is introduced to prevent double uninitialization when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is already unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectUnloadedInternal(object? sender, UIEventArgs e)
-        {
-            _loadCounter--;
-
-            if (_loadCounter < 0)
-            {
-                _loadCounter = 0;
-                return;
-            }
-
-            if (_loadCounter != 0)
-            {
-                return;
-            }
-
-            OnAssociatedObjectUnloaded();
-
-            CleanUp();
-        }
-
-        /// <summary>
-        /// Called when the AssociatedObject is unloaded.
-        /// </summary>
-        protected virtual void OnAssociatedObjectUnloaded()
-        {
-        }
-
-        /// <summary>
-        /// Actually cleans up the trigger action because <see cref="OnDetaching"/> is not always called.
-        /// </summary>
-        private void CleanUp()
-        {
-            if (_isClean)
-            {
-                return;
-            }
-
-            _isClean = true;
-
-            if (AssociatedObject is not null)
-            {
-                AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
-                _isSubscribedToUnloadedEvent = false;
-            }
-
-            Uninitialize();
-        }
+        Uninitialize();
     }
 }

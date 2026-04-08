@@ -1,204 +1,203 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+using System;
+using System.Collections.Generic;
+using System.Timers;
+using Catel.Logging;
+using Catel.Reflection;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Boxing cache helper.
+/// </summary>
+public static partial class BoxingCache
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Timers;
-    using Catel.Logging;
-    using Catel.Reflection;
-    using Microsoft.Extensions.Logging;
+    // Partial class, see T4 template
+}
+
+/// <summary>
+/// Caches boxed objects to minimize the memory footprint for boxed value types.
+/// </summary>
+public class BoxingCache<T>
+    where T : notnull
+{
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(BoxingCache<T>));
+
+    private readonly Dictionary<T, object?> _boxedValues = new();
+    private TimeSpan _cleanUpInterval = TimeSpan.FromMinutes(5);
+
+#pragma warning disable IDISP006 // Implement IDisposable.
+    private readonly Timer _cleanUpTimer;
+#pragma warning restore IDISP006 // Implement IDisposable.
 
     /// <summary>
-    /// Boxing cache helper.
+    /// Gets the default instance of the boxing cache.
     /// </summary>
-    public static partial class BoxingCache
+    public static BoxingCache<T> Default { get; private set; } = new BoxingCache<T>();
+
+    public BoxingCache()
     {
-        // Partial class, see T4 template
+        _cleanUpTimer = new Timer();
+        _cleanUpTimer.AutoReset = false;
+        _cleanUpTimer.Elapsed += OnCleanUpTimerElapsed; 
+        
+        if (typeof(T) == typeof(bool))
+        {
+            // Don't clean up small caches, default to zero
+            CleanUpInterval = TimeSpan.Zero;
+        }
+
     }
 
     /// <summary>
-    /// Caches boxed objects to minimize the memory footprint for boxed value types.
+    /// Gets or sets the clean up interval.
+    /// <para />
+    /// The default value is 5 minutes.
+    /// <para />
+    /// To disable automatic clean up, set a value of 0.
     /// </summary>
-    public class BoxingCache<T>
-        where T : notnull
+    public TimeSpan CleanUpInterval
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(BoxingCache<T>));
-
-        private readonly Dictionary<T, object?> _boxedValues = new();
-        private TimeSpan _cleanUpInterval = TimeSpan.FromMinutes(5);
-
-#pragma warning disable IDISP006 // Implement IDisposable.
-        private readonly Timer _cleanUpTimer;
-#pragma warning restore IDISP006 // Implement IDisposable.
-
-        /// <summary>
-        /// Gets the default instance of the boxing cache.
-        /// </summary>
-        public static BoxingCache<T> Default { get; private set; } = new BoxingCache<T>();
-
-        public BoxingCache()
+        get
         {
-            _cleanUpTimer = new Timer();
-            _cleanUpTimer.AutoReset = false;
-            _cleanUpTimer.Elapsed += OnCleanUpTimerElapsed; 
-            
-            if (typeof(T) == typeof(bool))
-            {
-                // Don't clean up small caches, default to zero
-                CleanUpInterval = TimeSpan.Zero;
-            }
-
+            return _cleanUpInterval;
         }
-
-        /// <summary>
-        /// Gets or sets the clean up interval.
-        /// <para />
-        /// The default value is 5 minutes.
-        /// <para />
-        /// To disable automatic clean up, set a value of 0.
-        /// </summary>
-        public TimeSpan CleanUpInterval
+        set
         {
-            get
-            {
-                return _cleanUpInterval;
-            }
-            set
-            {
-                _cleanUpInterval = value;
+            _cleanUpInterval = value;
 
-                Logger.LogDebug($"Cleanup interval is set to '{value}'");
+            Logger.LogDebug($"Cleanup interval is set to '{value}'");
 
-                _cleanUpTimer?.Stop();
-
-                StartTimerIfRequired();
-            }
-        }
-
-        /// <summary>
-        /// Adds the value to the cache.
-        /// </summary>
-        /// <param name="value">The value to add to the cache.</param>
-        protected object? AddUnboxedValue(T value)
-        {
-            var boxedValue = (object?)value;
-
-            lock (_boxedValues)
-            {
-                _boxedValues[value] = boxedValue;
-            }
-
-            //lock (_unboxedValues)
-            //{
-            //    _unboxedValues[boxedValue] = value;
-            //}
+            _cleanUpTimer?.Stop();
 
             StartTimerIfRequired();
+        }
+    }
+
+    /// <summary>
+    /// Adds the value to the cache.
+    /// </summary>
+    /// <param name="value">The value to add to the cache.</param>
+    protected object? AddUnboxedValue(T value)
+    {
+        var boxedValue = (object?)value;
+
+        lock (_boxedValues)
+        {
+            _boxedValues[value] = boxedValue;
+        }
+
+        //lock (_unboxedValues)
+        //{
+        //    _unboxedValues[boxedValue] = value;
+        //}
+
+        StartTimerIfRequired();
+
+        return boxedValue;
+    }
+
+    /// <summary>
+    /// Adds the value to the cache.
+    /// </summary>
+    /// <param name="boxedValue">The value to add to the cache.</param>
+    protected T AddBoxedValue(object? boxedValue)
+    {
+        if (boxedValue is null)
+        {
+            // Don't store
+            return default!;
+        }
+
+        var unboxedValue = (T)boxedValue;
+
+        lock (_boxedValues)
+        {
+            _boxedValues[unboxedValue] = boxedValue;
+        }
+
+        //lock (_unboxedValues)
+        //{
+        //    _unboxedValues[boxedValue] = unboxedValue;
+        //}
+
+        StartTimerIfRequired();
+
+        return unboxedValue;
+    }
+
+    /// <summary>
+    /// Gets the boxed value representing the specified value.
+    /// </summary>
+    /// <param name="value">The value to box.</param>
+    /// <returns>The boxed value.</returns>
+    public object? GetBoxedValue(T value)
+    {
+        lock (_boxedValues)
+        {
+            if (!_boxedValues.TryGetValue(value, out var boxedValue))
+            {
+                boxedValue = AddUnboxedValue(value);
+            }
 
             return boxedValue;
         }
+    }
 
-        /// <summary>
-        /// Adds the value to the cache.
-        /// </summary>
-        /// <param name="boxedValue">The value to add to the cache.</param>
-        protected T AddBoxedValue(object? boxedValue)
+    /// <summary>
+    /// Gets the unboxed value representing the specified value.
+    /// </summary>
+    /// <param name="boxedValue">The value to unbox.</param>
+    /// <returns>The unboxed value.</returns>
+    public T GetUnboxedValue(object boxedValue)
+    {
+        return (T)boxedValue;
+
+        //lock (_unboxedValues)
+        //{
+        //    if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
+        //    {
+        //        unboxedValue = AddBoxedValue(boxedValue);
+        //    }
+
+        //    return unboxedValue;
+        //}
+    }
+
+    /// <summary>
+    /// Invokes a clean up on the cache to release boxed objects from memory allowing them to be garbage collected.
+    /// </summary>
+    public void CleanUp()
+    {
+        Logger.LogDebug("Cleaning up boxed values from the cache to decrease memory pressure");
+
+        lock (_boxedValues)
         {
-            if (boxedValue is null)
-            {
-                // Don't store
-                return default!;
-            }
-
-            var unboxedValue = (T)boxedValue;
-
-            lock (_boxedValues)
-            {
-                _boxedValues[unboxedValue] = boxedValue;
-            }
-
-            //lock (_unboxedValues)
-            //{
-            //    _unboxedValues[boxedValue] = unboxedValue;
-            //}
-
-            StartTimerIfRequired();
-
-            return unboxedValue;
+            _boxedValues.Clear();
         }
 
-        /// <summary>
-        /// Gets the boxed value representing the specified value.
-        /// </summary>
-        /// <param name="value">The value to box.</param>
-        /// <returns>The boxed value.</returns>
-        public object? GetBoxedValue(T value)
+        //lock (_unboxedValues)
+        //{
+        //    _unboxedValues.Clear();
+        //}
+    }
+
+    private void OnCleanUpTimerElapsed(object? sender, ElapsedEventArgs e)
+    {
+        _cleanUpTimer.Stop();
+
+        CleanUp();
+    }
+
+    private void StartTimerIfRequired()
+    {
+        if (!_cleanUpTimer.Enabled)
         {
-            lock (_boxedValues)
+            var totalMilliseconds = _cleanUpInterval.TotalMilliseconds;
+            if (totalMilliseconds > 0)
             {
-                if (!_boxedValues.TryGetValue(value, out var boxedValue))
-                {
-                    boxedValue = AddUnboxedValue(value);
-                }
-
-                return boxedValue;
-            }
-        }
-
-        /// <summary>
-        /// Gets the unboxed value representing the specified value.
-        /// </summary>
-        /// <param name="boxedValue">The value to unbox.</param>
-        /// <returns>The unboxed value.</returns>
-        public T GetUnboxedValue(object boxedValue)
-        {
-            return (T)boxedValue;
-
-            //lock (_unboxedValues)
-            //{
-            //    if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
-            //    {
-            //        unboxedValue = AddBoxedValue(boxedValue);
-            //    }
-
-            //    return unboxedValue;
-            //}
-        }
-
-        /// <summary>
-        /// Invokes a clean up on the cache to release boxed objects from memory allowing them to be garbage collected.
-        /// </summary>
-        public void CleanUp()
-        {
-            Logger.LogDebug("Cleaning up boxed values from the cache to decrease memory pressure");
-
-            lock (_boxedValues)
-            {
-                _boxedValues.Clear();
-            }
-
-            //lock (_unboxedValues)
-            //{
-            //    _unboxedValues.Clear();
-            //}
-        }
-
-        private void OnCleanUpTimerElapsed(object? sender, ElapsedEventArgs e)
-        {
-            _cleanUpTimer.Stop();
-
-            CleanUp();
-        }
-
-        private void StartTimerIfRequired()
-        {
-            if (!_cleanUpTimer.Enabled)
-            {
-                var totalMilliseconds = _cleanUpInterval.TotalMilliseconds;
-                if (totalMilliseconds > 0)
-                {
-                    _cleanUpTimer.Interval = totalMilliseconds;
-                    _cleanUpTimer.Start();
-                }
+                _cleanUpTimer.Interval = totalMilliseconds;
+                _cleanUpTimer.Start();
             }
         }
     }

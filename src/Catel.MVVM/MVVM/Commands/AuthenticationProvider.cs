@@ -1,17 +1,16 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+using System.Windows;
+
+public class AuthenticationProvider : IAuthenticationProvider
 {
-    using System.Windows;
-
-    public class AuthenticationProvider : IAuthenticationProvider
+    public bool CanCommandBeExecuted(ICatelCommand command, object? commandParameter)
     {
-        public bool CanCommandBeExecuted(ICatelCommand command, object? commandParameter)
-        {
-            return true;
-        }
+        return true;
+    }
 
-        public bool HasAccessToUIElement(FrameworkElement element, object? tag, object? authenticationTag)
-        {
-            return true;
-        }
+    public bool HasAccessToUIElement(FrameworkElement element, object? tag, object? authenticationTag)
+    {
+        return true;
     }
 }

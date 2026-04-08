@@ -1,6 +1,5 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+public class TimeProvider : System.TimeProvider, ITimeProvider
 {
-    public class TimeProvider : System.TimeProvider, ITimeProvider
-    {
-    }
 }

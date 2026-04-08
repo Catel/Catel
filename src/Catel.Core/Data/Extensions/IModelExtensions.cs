@@ -1,92 +1,91 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+/// <summary>
+/// IModel extensions.
+/// </summary>
+public static partial class IModelExtensions
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
+    /// <summary>
+    /// Clears the <see cref="ModelBase.IsDirty" /> on all children.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
+    public static void ClearIsDirtyOnAllChildren(this IModel model, bool suspendNotifications = false)
+    {
+        ClearIsDirtyOnAllChildren(model, new HashSet<IModelEditor>(), suspendNotifications);
+    }
 
     /// <summary>
-    /// IModel extensions.
+    /// Clears the <see cref="ModelBase.IsDirty"/> on all children.
     /// </summary>
-    public static partial class IModelExtensions
+    /// <param name="obj">The object.</param>
+    /// <param name="handledReferences">The already handled references, required to prevent circular stackoverflows.</param>
+    /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
+    private static void ClearIsDirtyOnAllChildren(object obj, HashSet<IModelEditor> handledReferences, bool suspendNotifications)
     {
-        /// <summary>
-        /// Clears the <see cref="ModelBase.IsDirty" /> on all children.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
-        public static void ClearIsDirtyOnAllChildren(this IModel model, bool suspendNotifications = false)
+        var modelEditor = obj as IModelEditor;
+        var objAsIEnumerable = obj as IEnumerable;
+        if (objAsIEnumerable is string)
         {
-            ClearIsDirtyOnAllChildren(model, new HashSet<IModelEditor>(), suspendNotifications);
+            objAsIEnumerable = null;
         }
 
-        /// <summary>
-        /// Clears the <see cref="ModelBase.IsDirty"/> on all children.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="handledReferences">The already handled references, required to prevent circular stackoverflows.</param>
-        /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
-        private static void ClearIsDirtyOnAllChildren(object obj, HashSet<IModelEditor> handledReferences, bool suspendNotifications)
+        if (modelEditor is not null)
         {
-            var modelEditor = obj as IModelEditor;
-            var objAsIEnumerable = obj as IEnumerable;
-            if (objAsIEnumerable is string)
+            if (handledReferences.Contains(modelEditor))
             {
-                objAsIEnumerable = null;
+                return;
             }
 
-            if (modelEditor is not null)
+            // Note 1: we need to add it first (to prevent circular references)
+            handledReferences.Add(modelEditor);
+
+            // Note 2: handle children first so we can clear the parent last to prevent
+            // it from changing back to dirty again
+            var catelTypeInfo = ModelBase.PropertyDataManager.GetCatelTypeInfo(obj.GetType());
+            foreach (var property in catelTypeInfo.GetCatelProperties())
             {
-                if (handledReferences.Contains(modelEditor))
+                if (property.Value.IsCalculatedProperty ||
+                    property.Value.IsModelBaseProperty)
                 {
-                    return;
+                    continue;
                 }
 
-                // Note 1: we need to add it first (to prevent circular references)
-                handledReferences.Add(modelEditor);
-
-                // Note 2: handle children first so we can clear the parent last to prevent
-                // it from changing back to dirty again
-                var catelTypeInfo = ModelBase.PropertyDataManager.GetCatelTypeInfo(obj.GetType());
-                foreach (var property in catelTypeInfo.GetCatelProperties())
+                var value = modelEditor.GetValueFastButUnsecure<object?>(property.Value.Name);
+                if (value is IModel model)
                 {
-                    if (property.Value.IsCalculatedProperty ||
-                        property.Value.IsModelBaseProperty)
-                    {
-                        continue;
-                    }
-
-                    var value = modelEditor.GetValueFastButUnsecure<object?>(property.Value.Name);
-                    if (value is IModel model)
-                    {
-                        ClearIsDirtyOnAllChildren(model, handledReferences, suspendNotifications);
-                    }
-                    else if (value is string)
-                    {
-                        // ignore
-                    }
-                    else if (value is IEnumerable enumerableValue)
-                    {
-                        ClearIsDirtyOnAllChildren(enumerableValue, handledReferences, suspendNotifications);
-                    }
+                    ClearIsDirtyOnAllChildren(model, handledReferences, suspendNotifications);
                 }
-
-                if (suspendNotifications)
+                else if (value is string)
                 {
-                    modelEditor.SetValueFastButUnsecure(nameof(ModelBase.IsDirty), false);
+                    // ignore
                 }
-                else
+                else if (value is IEnumerable enumerableValue)
                 {
-                    modelEditor.SetValue(nameof(ModelBase.IsDirty), false);
+                    ClearIsDirtyOnAllChildren(enumerableValue, handledReferences, suspendNotifications);
                 }
             }
-            else if (objAsIEnumerable is not null)
+
+            if (suspendNotifications)
             {
-                foreach (var childItem in objAsIEnumerable)
+                modelEditor.SetValueFastButUnsecure(nameof(ModelBase.IsDirty), false);
+            }
+            else
+            {
+                modelEditor.SetValue(nameof(ModelBase.IsDirty), false);
+            }
+        }
+        else if (objAsIEnumerable is not null)
+        {
+            foreach (var childItem in objAsIEnumerable)
+            {
+                if (childItem is IModel)
                 {
-                    if (childItem is IModel)
-                    {
-                        ClearIsDirtyOnAllChildren(childItem, handledReferences, suspendNotifications);
-                    }
+                    ClearIsDirtyOnAllChildren(childItem, handledReferences, suspendNotifications);
                 }
             }
         }

@@ -7,60 +7,59 @@
 // </auto-generated> 
 //------------------------------------------------------------------------------
 
-namespace Catel.Reflection
+namespace Catel.Reflection;
+
+using System;
+using Catel.Data;
+
+public partial class FastMemberInvoker<TEntity>
 {
-    using System;
-    using Catel.Data;
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item) =>
+        TryGetPropertyValue<Object>(entity, propertyName, out item);
 
-    public partial class FastMemberInvoker<TEntity>
-    {
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item) =>
-            TryGetPropertyValue<Object>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item) =>
+        TryGetPropertyValue<Boolean>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item) =>
-            TryGetPropertyValue<Boolean>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item) =>
+        TryGetPropertyValue<Char>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item) =>
-            TryGetPropertyValue<Char>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item) =>
+        TryGetPropertyValue<SByte>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item) =>
-            TryGetPropertyValue<SByte>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item) =>
+        TryGetPropertyValue<Byte>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item) =>
-            TryGetPropertyValue<Byte>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item) =>
+        TryGetPropertyValue<Int16>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item) =>
-            TryGetPropertyValue<Int16>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item) =>
+        TryGetPropertyValue<UInt16>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item) =>
-            TryGetPropertyValue<UInt16>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item) =>
+        TryGetPropertyValue<Int32>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item) =>
-            TryGetPropertyValue<Int32>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item) =>
+        TryGetPropertyValue<UInt32>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item) =>
-            TryGetPropertyValue<UInt32>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item) =>
+        TryGetPropertyValue<Int64>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item) =>
-            TryGetPropertyValue<Int64>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item) =>
+        TryGetPropertyValue<UInt64>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item) =>
-            TryGetPropertyValue<UInt64>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item) =>
+        TryGetPropertyValue<Single>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item) =>
-            TryGetPropertyValue<Single>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item) =>
+        TryGetPropertyValue<Double>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item) =>
-            TryGetPropertyValue<Double>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item) =>
+        TryGetPropertyValue<Decimal>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item) =>
-            TryGetPropertyValue<Decimal>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item) =>
+        TryGetPropertyValue<DateTime>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item) =>
-            TryGetPropertyValue<DateTime>(entity, propertyName, out item);
+    public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item) =>
+        TryGetPropertyValue<String>(entity, propertyName, out item);
 
-        public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item) =>
-            TryGetPropertyValue<String>(entity, propertyName, out item);
-
-    }
 }

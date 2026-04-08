@@ -1,12 +1,11 @@
-﻿namespace Catel.Logging
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+﻿namespace Catel.Logging;
 
-    public class FallbackLoggerFactory
-    {
-    }
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+public class FallbackLoggerFactory
+{
 }

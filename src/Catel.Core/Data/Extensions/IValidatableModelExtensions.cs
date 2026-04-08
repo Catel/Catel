@@ -1,65 +1,64 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+/// <summary>
+/// Validatable model extensions.
+/// </summary>
+public static class IValidatableModelExtensions
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-
     /// <summary>
-    /// Validatable model extensions.
+    /// Gets the validation context for a complete object graph by also checking the properties and recursive 
     /// </summary>
-    public static class IValidatableModelExtensions
+    /// <param name="model">The model.</param>
+    /// <returns>The validation context for the whole object graph.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+    public static IValidationContext GetValidationContextForObjectGraph(this IValidatableModel model)
     {
-        /// <summary>
-        /// Gets the validation context for a complete object graph by also checking the properties and recursive 
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns>The validation context for the whole object graph.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        public static IValidationContext GetValidationContextForObjectGraph(this IValidatableModel model)
+        var validationContext = new ValidationContext();
+
+        validationContext.AddModelValidation(model, new List<IValidatableModel>());
+
+        return validationContext;
+    }
+
+    private static void AddModelValidation(this ValidationContext validationContext, IValidatableModel model, List<IValidatableModel> handledModels)
+    {
+        if (handledModels.Any(x => ReferenceEquals(x, model)))
         {
-            var validationContext = new ValidationContext();
-
-            validationContext.AddModelValidation(model, new List<IValidatableModel>());
-
-            return validationContext;
+            return;
         }
 
-        private static void AddModelValidation(this ValidationContext validationContext, IValidatableModel model, List<IValidatableModel> handledModels)
+        handledModels.Add(model);
+
+        validationContext.SynchronizeWithContext(model.ValidationContext, true);
+
+        var propertyDataManager = PropertyDataManager.Default;
+        var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(model.GetType());
+
+        foreach (var property in catelTypeInfo.GetCatelProperties())
         {
-            if (handledModels.Any(x => ReferenceEquals(x, model)))
+            var propertyValue = model.GetValue<object>(property.Key);
+            var enumerable = propertyValue as IEnumerable;
+            if (enumerable is not null && !(propertyValue is string))
             {
-                return;
-            }
-
-            handledModels.Add(model);
-
-            validationContext.SynchronizeWithContext(model.ValidationContext, true);
-
-            var propertyDataManager = PropertyDataManager.Default;
-            var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(model.GetType());
-
-            foreach (var property in catelTypeInfo.GetCatelProperties())
-            {
-                var propertyValue = model.GetValue<object>(property.Key);
-                var enumerable = propertyValue as IEnumerable;
-                if (enumerable is not null && !(propertyValue is string))
+                foreach (var item in enumerable)
                 {
-                    foreach (var item in enumerable)
+                    var modelItem = item as IValidatableModel;
+                    if (modelItem is not null)
                     {
-                        var modelItem = item as IValidatableModel;
-                        if (modelItem is not null)
-                        {
-                            validationContext.AddModelValidation(modelItem, handledModels);
-                        }
+                        validationContext.AddModelValidation(modelItem, handledModels);
                     }
                 }
+            }
 
-                var propertyModel = propertyValue as IValidatableModel;
-                if (propertyModel is not null)
-                {
-                    validationContext.AddModelValidation(propertyModel, handledModels);
-                }
+            var propertyModel = propertyValue as IValidatableModel;
+            if (propertyModel is not null)
+            {
+                validationContext.AddModelValidation(propertyModel, handledModels);
             }
         }
     }

@@ -1,30 +1,29 @@
-﻿namespace Catel.Logging
+﻿namespace Catel.Logging;
+
+using Catel;
+using Microsoft.Extensions.Logging;
+
+public sealed class InMemoryLoggerProvider : IInMemoryLoggerProvider
 {
-    using Catel;
-    using Microsoft.Extensions.Logging;
+    private readonly IInMemoryLoggingContainer _inMemoryLoggingContainer;
+    private readonly ITimeProvider _timeProvider;
 
-    public sealed class InMemoryLoggerProvider : IInMemoryLoggerProvider
+    public InMemoryLoggerProvider(IInMemoryLoggingContainer inMemoryLoggingContainer, ITimeProvider timeProvider)
     {
-        private readonly IInMemoryLoggingContainer _inMemoryLoggingContainer;
-        private readonly ITimeProvider _timeProvider;
+        _inMemoryLoggingContainer = inMemoryLoggingContainer;
+        _timeProvider = timeProvider;
+    }
 
-        public InMemoryLoggerProvider(IInMemoryLoggingContainer inMemoryLoggingContainer, ITimeProvider timeProvider)
-        {
-            _inMemoryLoggingContainer = inMemoryLoggingContainer;
-            _timeProvider = timeProvider;
-        }
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new InMemoryLogger(_inMemoryLoggingContainer, _timeProvider)
+        { 
+            Category = categoryName
+        };
+    }
 
-        public ILogger CreateLogger(string categoryName)
-        {
-            return new InMemoryLogger(_inMemoryLoggingContainer, _timeProvider)
-            { 
-                Category = categoryName
-            };
-        }
-
-        public void Dispose()
-        {
-            
-        }
+    public void Dispose()
+    {
+        
     }
 }

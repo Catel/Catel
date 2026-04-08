@@ -1,44 +1,43 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System.Windows.Threading;
+using Catel.Logging;
+using Microsoft.Extensions.Logging;
+
+public class DispatcherProviderService : IDispatcherProviderService
 {
-    using System.Windows.Threading;
-    using Catel.Logging;
-    using Microsoft.Extensions.Logging;
+    private readonly ILogger<DispatcherProviderService> _logger;
 
-    public class DispatcherProviderService : IDispatcherProviderService
+    private object? _appDispatcher;
+
+    public DispatcherProviderService(ILogger<DispatcherProviderService> logger)
     {
-        private readonly ILogger<DispatcherProviderService> _logger;
+        _logger = logger;
+    }
 
-        private object? _appDispatcher;
-
-        public DispatcherProviderService(ILogger<DispatcherProviderService> logger)
+    public virtual object GetApplicationDispatcher()
+    {
+        var dispatcher = _appDispatcher;
+        if (dispatcher is null)
         {
-            _logger = logger;
-        }
+            var app = System.Windows.Application.Current;
+            dispatcher = _appDispatcher = app?.Dispatcher;
 
-        public virtual object GetApplicationDispatcher()
-        {
-            var dispatcher = _appDispatcher;
             if (dispatcher is null)
             {
-                var app = System.Windows.Application.Current;
-                dispatcher = _appDispatcher = app?.Dispatcher;
+                _logger.LogWarning("No application dispatcher found, creating temporary dispatcher");
 
-                if (dispatcher is null)
-                {
-                    _logger.LogWarning("No application dispatcher found, creating temporary dispatcher");
-
-                    // Dispatcher.CurrentDispatcher is not useful, but we use it as fallback value, 
-                    // see https://github.com/Catel/Catel/issues/1762, but never store it in the field
-                    dispatcher = GetCurrentDispatcher();
-                }
+                // Dispatcher.CurrentDispatcher is not useful, but we use it as fallback value, 
+                // see https://github.com/Catel/Catel/issues/1762, but never store it in the field
+                dispatcher = GetCurrentDispatcher();
             }
-
-            return dispatcher;
         }
 
-        public virtual object GetCurrentDispatcher()
-        {
-            return Dispatcher.CurrentDispatcher;
-        }
+        return dispatcher;
+    }
+
+    public virtual object GetCurrentDispatcher()
+    {
+        return Dispatcher.CurrentDispatcher;
     }
 }

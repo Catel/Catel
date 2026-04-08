@@ -1,76 +1,75 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using NUnit.Framework;
+
+public partial class ComparableModelBaseFacts
 {
-    using NUnit.Framework;
-
-    public partial class ComparableModelBaseFacts
+    [TestCase]
+    public void Equals_Generic()
     {
-        [TestCase]
-        public void Equals_Generic()
+        // Create 2 objects
+        var obj1 = new PersonTestModel
         {
-            // Create 2 objects
-            var obj1 = new PersonTestModel
-            {
-                FirstName = "John",
-                LastName = "Doe"
-            };
-            var obj2 = new PersonTestModel
-            {
-                FirstName = "John",
-                LastName = "Doe"
-            };
-
-            // Equals
-            Assert.That(obj1, Is.EqualTo(obj2));
-            Assert.That(obj2, Is.EqualTo(obj1));
-        }
-
-        [TestCase]
-        public void Equals_Generic_Null()
+            FirstName = "John",
+            LastName = "Doe"
+        };
+        var obj2 = new PersonTestModel
         {
-            // Create 2 objects
-            var obj1 = new PersonTestModel
-            {
-                FirstName = "John",
-                LastName = "Doe"
-            };
-            PersonTestModel? obj2 = null;
+            FirstName = "John",
+            LastName = "Doe"
+        };
 
-            // Equals
-            Assert.That(obj1, Is.Not.EqualTo(obj2));
-        }
+        // Equals
+        Assert.That(obj1, Is.EqualTo(obj2));
+        Assert.That(obj2, Is.EqualTo(obj1));
+    }
 
-        [TestCase]
-        public void Equals_Different_Classes_Equal_Properties()
+    [TestCase]
+    public void Equals_Generic_Null()
+    {
+        // Create 2 objects
+        var obj1 = new PersonTestModel
         {
-            var a = new ClassWithoutPropertiesA();
-            var b = new ClassWithoutPropertiesB();
+            FirstName = "John",
+            LastName = "Doe"
+        };
+        PersonTestModel? obj2 = null;
+
+        // Equals
+        Assert.That(obj1, Is.Not.EqualTo(obj2));
+    }
+
+    [TestCase]
+    public void Equals_Different_Classes_Equal_Properties()
+    {
+        var a = new ClassWithoutPropertiesA();
+        var b = new ClassWithoutPropertiesB();
 
 #pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
-            Assert.That(b.Equals(a), Is.False);
-            Assert.That(a.Equals(b), Is.False);
+        Assert.That(b.Equals(a), Is.False);
+        Assert.That(a.Equals(b), Is.False);
 #pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
-        }
+    }
 
-        /// <summary>
-        /// Tests the Equals method 1 level deep.
-        /// </summary>
-        [TestCase]
-        public void EqualsLevel1()
+    /// <summary>
+    /// Tests the Equals method 1 level deep.
+    /// </summary>
+    [TestCase]
+    public void EqualsLevel1()
+    {
+        // Create 2 objects
+        var obj1 = new PersonTestModel
         {
-            // Create 2 objects
-            var obj1 = new PersonTestModel
-            {
-                FirstName = "John",
-                LastName = "Doe"
-            };
-            var obj2 = new PersonTestModel
-            {
-                FirstName = "John",
-                LastName = "Doe"
-            };
+            FirstName = "John",
+            LastName = "Doe"
+        };
+        var obj2 = new PersonTestModel
+        {
+            FirstName = "John",
+            LastName = "Doe"
+        };
 
-            // Equals
-            Assert.That(obj2, Is.EqualTo(obj1));
-        }
+        // Equals
+        Assert.That(obj2, Is.EqualTo(obj1));
     }
 }

@@ -1,43 +1,42 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+/// <summary>
+/// Object extensions class.
+/// </summary>
+public static class ObjectExtensions
 {
     /// <summary>
-    /// Object extensions class.
+    /// Determines whether the specified object is a sentinel.
+    /// <para />
+    /// For more information, see http://stackoverflow.com/questions/3868786/wpf-sentinel-objects-and-how-to-check-for-an-internal-type.
+    /// <para />
+    /// Original license: CC BY-SA 2.5, compatible with the MIT license.
     /// </summary>
-    public static class ObjectExtensions
+    /// <param name="dataContext">The data context.</param>
+    /// <returns><c>true</c> if the data context is a sentinel; otherwise, <c>false</c>.</returns>
+    public static bool IsSentinelBindingObject(this object? dataContext)
     {
-        /// <summary>
-        /// Determines whether the specified object is a sentinel.
-        /// <para />
-        /// For more information, see http://stackoverflow.com/questions/3868786/wpf-sentinel-objects-and-how-to-check-for-an-internal-type.
-        /// <para />
-        /// Original license: CC BY-SA 2.5, compatible with the MIT license.
-        /// </summary>
-        /// <param name="dataContext">The data context.</param>
-        /// <returns><c>true</c> if the data context is a sentinel; otherwise, <c>false</c>.</returns>
-        public static bool IsSentinelBindingObject(this object? dataContext)
+        if (dataContext is null)
         {
-            if (dataContext is null)
-            {
-                return false;
-            }
-
-            var type = dataContext.GetType();
-            if (string.CompareOrdinal(type.FullName, "MS.Internal.NamedObject") == 0)
-            {
-                return true;
-            }
-            
-            if (string.CompareOrdinal(dataContext.ToString(), "{DisconnectedObject}") == 0)
-            {
-                return true;
-            }
-
-            if (string.CompareOrdinal(dataContext.ToString(), "{DisconnectedItem}") == 0)
-            {
-                return true;
-            }
-
             return false;
         }
+
+        var type = dataContext.GetType();
+        if (string.CompareOrdinal(type.FullName, "MS.Internal.NamedObject") == 0)
+        {
+            return true;
+        }
+        
+        if (string.CompareOrdinal(dataContext.ToString(), "{DisconnectedObject}") == 0)
+        {
+            return true;
+        }
+
+        if (string.CompareOrdinal(dataContext.ToString(), "{DisconnectedItem}") == 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

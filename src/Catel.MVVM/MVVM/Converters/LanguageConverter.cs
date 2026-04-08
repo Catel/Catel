@@ -1,46 +1,45 @@
-﻿namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters;
+
+using System;
+using System.Globalization;
+using Services;
+
+/// <summary>
+/// Converts the value (the resource name) to a language string.
+/// </summary>
+public partial class LanguageConverter : ValueConverterBase<string>
 {
-    using System;
-    using System.Globalization;
-    using Services;
+    private readonly ILanguageService _languageService;
 
     /// <summary>
-    /// Converts the value (the resource name) to a language string.
+    /// Initializes a new instance of the <see cref="LanguageConverter"/> class.
     /// </summary>
-    public partial class LanguageConverter : ValueConverterBase<string>
+    public LanguageConverter(ILanguageService languageService)
     {
-        private readonly ILanguageService _languageService;
+        _languageService = languageService;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LanguageConverter"/> class.
-        /// </summary>
-        public LanguageConverter(ILanguageService languageService)
+    /// <summary>
+    /// Converts the specified value.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <param name="targetType">Type of the target.</param>
+    /// <param name="parameter">The parameter.</param>
+    /// <returns>System.Object.</returns>
+    protected override object? Convert(string? value, Type targetType, object? parameter)
+    {
+        var translatedValue = string.Empty;
+
+        var culture = parameter as CultureInfo;
+        if (culture is not null)
         {
-            _languageService = languageService;
+            translatedValue = _languageService.GetString(value ?? string.Empty, culture);
+        }
+        else
+        {
+            translatedValue = _languageService.GetString(value ?? string.Empty);
         }
 
-        /// <summary>
-        /// Converts the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="targetType">Type of the target.</param>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>System.Object.</returns>
-        protected override object? Convert(string? value, Type targetType, object? parameter)
-        {
-            var translatedValue = string.Empty;
-
-            var culture = parameter as CultureInfo;
-            if (culture is not null)
-            {
-                translatedValue = _languageService.GetString(value ?? string.Empty, culture);
-            }
-            else
-            {
-                translatedValue = _languageService.GetString(value ?? string.Empty);
-            }
-
-            return translatedValue;
-        }
+        return translatedValue;
     }
 }

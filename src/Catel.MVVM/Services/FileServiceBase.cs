@@ -1,68 +1,67 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Win32;
+
+/// <summary>
+/// Base class for file services.
+/// </summary>
+public abstract class FileServiceBase : ViewModelServiceBase, IFileSupport
 {
-    using System;
-    using System.IO;
-    using System.Threading.Tasks;
-    using Microsoft.Win32;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FileServiceBase"/> class.
+    /// </summary>
+    protected FileServiceBase()
+    {
+    }
 
     /// <summary>
-    /// Base class for file services.
+    /// Gets the initial directory used for the file dialog.
     /// </summary>
-    public abstract class FileServiceBase : ViewModelServiceBase, IFileSupport
+    /// <returns>The initial directory.</returns>
+    protected virtual string? GetInitialDirectory(DetermineFileContext context)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileServiceBase"/> class.
-        /// </summary>
-        protected FileServiceBase()
+        ArgumentNullException.ThrowIfNull(context);
+
+        var initialDirectory = context.InitialDirectory;
+
+        if (!string.IsNullOrWhiteSpace(initialDirectory))
         {
-        }
-
-        /// <summary>
-        /// Gets the initial directory used for the file dialog.
-        /// </summary>
-        /// <returns>The initial directory.</returns>
-        protected virtual string? GetInitialDirectory(DetermineFileContext context)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            var initialDirectory = context.InitialDirectory;
-
-            if (!string.IsNullOrWhiteSpace(initialDirectory))
+            if (!Directory.Exists(initialDirectory))
             {
-                if (!Directory.Exists(initialDirectory))
-                {
-                    initialDirectory = null;
-                }
-                else
-                {
-                    initialDirectory = IO.Path.AppendTrailingSlash(initialDirectory);
-                }
+                initialDirectory = null;
             }
-
-            return initialDirectory;
+            else
+            {
+                initialDirectory = IO.Path.AppendTrailingSlash(initialDirectory);
+            }
         }
 
-        /// <summary>
-        /// Configures the file dialog.
-        /// </summary>
-        /// <param name="fileDialog">The file dialog.</param>
-        /// <param name="context">The determine file context.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="fileDialog"/> is <c>null</c>.</exception>
-        protected virtual async Task ConfigureFileDialogAsync(FileDialog fileDialog, DetermineFileContext context)
-        {
-            ArgumentNullException.ThrowIfNull(fileDialog);
-            ArgumentNullException.ThrowIfNull(context);
+        return initialDirectory;
+    }
 
-            fileDialog.Filter = context.Filter;
-            fileDialog.FileName = context.FileName;
+    /// <summary>
+    /// Configures the file dialog.
+    /// </summary>
+    /// <param name="fileDialog">The file dialog.</param>
+    /// <param name="context">The determine file context.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="fileDialog"/> is <c>null</c>.</exception>
+    protected virtual async Task ConfigureFileDialogAsync(FileDialog fileDialog, DetermineFileContext context)
+    {
+        ArgumentNullException.ThrowIfNull(fileDialog);
+        ArgumentNullException.ThrowIfNull(context);
 
-            fileDialog.AddExtension = context.AddExtension;
-            fileDialog.CheckFileExists = context.CheckFileExists;
-            fileDialog.CheckPathExists = context.CheckPathExists;
-            fileDialog.FilterIndex = context.FilterIndex;
-            fileDialog.InitialDirectory = GetInitialDirectory(context);
-            fileDialog.Title = context.Title;
-            fileDialog.ValidateNames = context.ValidateNames;
-        }
+        fileDialog.Filter = context.Filter;
+        fileDialog.FileName = context.FileName;
+
+        fileDialog.AddExtension = context.AddExtension;
+        fileDialog.CheckFileExists = context.CheckFileExists;
+        fileDialog.CheckPathExists = context.CheckPathExists;
+        fileDialog.FilterIndex = context.FilterIndex;
+        fileDialog.InitialDirectory = GetInitialDirectory(context);
+        fileDialog.Title = context.Title;
+        fileDialog.ValidateNames = context.ValidateNames;
     }
 }

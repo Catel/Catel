@@ -1,13 +1,12 @@
-﻿namespace Catel.Services
-{
-    using Catel.IO;
+﻿namespace Catel.Services;
 
-    public class AppDataService : IAppDataService
+using Catel.IO;
+
+public class AppDataService : IAppDataService
+{
+    public virtual string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget)
     {
-        public virtual string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget)
-        {
-            var applicationDataDirectory = Catel.IO.Path.GetApplicationDataDirectory(applicationDataTarget);
-            return applicationDataDirectory;
-        }
+        var applicationDataDirectory = Catel.IO.Path.GetApplicationDataDirectory(applicationDataTarget);
+        return applicationDataDirectory;
     }
 }

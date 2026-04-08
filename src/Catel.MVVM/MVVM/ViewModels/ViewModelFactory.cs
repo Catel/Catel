@@ -1,191 +1,190 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+using System;
+using System.Linq;
+using Caching;
+using Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Reflection;
+
+/// <summary>
+/// Default implementation of the <see cref="IViewModelFactory"/> which allows custom instantiation of view models. This way,
+/// if a view model contains a complex constructor or needs caching, this factory can be used.
+/// <para />
+/// This default implementation will first try to inject the data context into the view model constructor. If that is not possible,
+/// it will try to call the empty or default constructor.
+/// </summary>
+public class ViewModelFactory : IViewModelFactory
 {
-    using System;
-    using System.Linq;
-    using Caching;
-    using Logging;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Reflection;
+    private readonly ILogger<ViewModelFactory> _logger;
+    private readonly IServiceProvider _serviceProvider;
+
+    private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
 
     /// <summary>
-    /// Default implementation of the <see cref="IViewModelFactory"/> which allows custom instantiation of view models. This way,
-    /// if a view model contains a complex constructor or needs caching, this factory can be used.
-    /// <para />
-    /// This default implementation will first try to inject the data context into the view model constructor. If that is not possible,
-    /// it will try to call the empty or default constructor.
+    /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
     /// </summary>
-    public class ViewModelFactory : IViewModelFactory
+    /// <param name="logger">The logger.</param>
+    /// <param name="serviceProvider">The service provider.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="serviceProvider" /> is <c>null</c>.</exception>
+    public ViewModelFactory(ILogger<ViewModelFactory> logger, IServiceProvider serviceProvider)
     {
-        private readonly ILogger<ViewModelFactory> _logger;
-        private readonly IServiceProvider _serviceProvider;
+        ArgumentNullException.ThrowIfNull(serviceProvider);
+        _logger = logger;
+        _serviceProvider = serviceProvider;
+    }
 
-        private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceProvider" /> is <c>null</c>.</exception>
-        public ViewModelFactory(ILogger<ViewModelFactory> logger, IServiceProvider serviceProvider)
+    /// <summary>
+    /// Determines whether the specified view model is a view model with model inject. A view model is
+    /// considered a model injection if the first parameter of one of the constructors is not registered inside
+    /// the dependency resolver.
+    /// </summary>
+    /// <param name="viewModelType">Type of the view model.</param>
+    /// <returns>
+    ///   <c>true</c> if the view model is a view model with model injection; otherwise, <c>false</c>.
+    /// </returns>
+    public virtual bool IsViewModelWithModelInjection(Type viewModelType)
+    {
+        var isViewModelWithModelInjection = _viewModelInjectionCache.GetFromCacheOrFetch(viewModelType, () =>
         {
-            ArgumentNullException.ThrowIfNull(serviceProvider);
-            _logger = logger;
-            _serviceProvider = serviceProvider;
-        }
+            var constructors = viewModelType.GetConstructorsEx();
 
-        /// <summary>
-        /// Determines whether the specified view model is a view model with model inject. A view model is
-        /// considered a model injection if the first parameter of one of the constructors is not registered inside
-        /// the dependency resolver.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model.</param>
-        /// <returns>
-        ///   <c>true</c> if the view model is a view model with model injection; otherwise, <c>false</c>.
-        /// </returns>
-        public virtual bool IsViewModelWithModelInjection(Type viewModelType)
-        {
-            var isViewModelWithModelInjection = _viewModelInjectionCache.GetFromCacheOrFetch(viewModelType, () =>
+            foreach (var constructor in constructors)
             {
-                var constructors = viewModelType.GetConstructorsEx();
-
-                foreach (var constructor in constructors)
+                var firstParameter = constructor.GetParameters().FirstOrDefault();
+                if (firstParameter is not null)
                 {
-                    var firstParameter = constructor.GetParameters().FirstOrDefault();
-                    if (firstParameter is not null)
+                    if (!_serviceProvider.IsRegistered(firstParameter.ParameterType))
                     {
-                        if (!_serviceProvider.IsRegistered(firstParameter.ParameterType))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
+            }
 
-                return false;
-            });
+            return false;
+        });
 
-            return isViewModelWithModelInjection;
+        return isViewModelWithModelInjection;
+    }
+
+    /// <summary>
+    /// Determines whether the specified view model as data context can be reused and allow the view to set itself as
+    /// owner of the inherited view model.
+    /// <para />
+    /// By default a view model is allowed to be inherited when it is of the same type as the expected view model type.
+    /// </summary>
+    /// <param name="viewType">Type of the view.</param>
+    /// <param name="expectedViewModelType">The expected view model type according to the view.</param>
+    /// <param name="actualViewModelType">The actual view model type which is the type of the <paramref name="viewModelAsDataContext"/>.</param>
+    /// <param name="viewModelAsDataContext">The view model as data context which must be checked.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified view model instance ben be reused by the view; otherwise, <c>false</c>.
+    /// </returns>
+    public virtual bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel? viewModelAsDataContext)
+    {
+        if (viewModelAsDataContext is null)
+        {
+            return false;
         }
 
-        /// <summary>
-        /// Determines whether the specified view model as data context can be reused and allow the view to set itself as
-        /// owner of the inherited view model.
-        /// <para />
-        /// By default a view model is allowed to be inherited when it is of the same type as the expected view model type.
-        /// </summary>
-        /// <param name="viewType">Type of the view.</param>
-        /// <param name="expectedViewModelType">The expected view model type according to the view.</param>
-        /// <param name="actualViewModelType">The actual view model type which is the type of the <paramref name="viewModelAsDataContext"/>.</param>
-        /// <param name="viewModelAsDataContext">The view model as data context which must be checked.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified view model instance ben be reused by the view; otherwise, <c>false</c>.
-        /// </returns>
-        public virtual bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel? viewModelAsDataContext)
-        {
-            if (viewModelAsDataContext is null)
-            {
-                return false;
-            }
+        return expectedViewModelType.IsInstanceOfTypeEx(viewModelAsDataContext);
+    }
 
-            return expectedViewModelType.IsInstanceOfTypeEx(viewModelAsDataContext);
+    /// <summary>
+    /// Creates a new view model.
+    /// </summary>
+    /// <param name="viewModelType">Type of the view model that needs to be created.</param>
+    /// <param name="dataContext">The data context of the view model.</param>
+    /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
+    public virtual IViewModel? CreateViewModel(Type viewModelType, object? dataContext)
+    {
+        if (dataContext is null)
+        {
+            return CreateViewModel(viewModelType, Array.Empty<object?>());
         }
 
-        /// <summary>
-        /// Creates a new view model.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model that needs to be created.</param>
-        /// <param name="dataContext">The data context of the view model.</param>
-        /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
-        public virtual IViewModel? CreateViewModel(Type viewModelType, object? dataContext)
+        if (dataContext is object[] args)
         {
-            if (dataContext is null)
-            {
-                return CreateViewModel(viewModelType, Array.Empty<object?>());
-            }
-
-            if (dataContext is object[] args)
-            {
-                return CreateViewModel(viewModelType, args);
-            }
-
-            return CreateViewModel(viewModelType, new object?[] { dataContext });
+            return CreateViewModel(viewModelType, args);
         }
 
-        /// <summary>
-        /// Creates a new view model.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model that needs to be created.</param>
-        /// <param name="args">The arguments to pass to the view model.</param>
-        /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
-        public IViewModel? CreateViewModel(Type viewModelType, params object?[] args)
+        return CreateViewModel(viewModelType, new object?[] { dataContext });
+    }
+
+    /// <summary>
+    /// Creates a new view model.
+    /// </summary>
+    /// <param name="viewModelType">Type of the view model that needs to be created.</param>
+    /// <param name="args">The arguments to pass to the view model.</param>
+    /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
+    public IViewModel? CreateViewModel(Type viewModelType, params object?[] args)
+    {
+        ArgumentNullException.ThrowIfNull(viewModelType);
+        Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
+
+        IViewModel? viewModel = null;
+
+        // If this is a parent vm, we can skip the dependency injection
+        if (args.Length == 1)
         {
-            ArgumentNullException.ThrowIfNull(viewModelType);
-            Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
-
-            IViewModel? viewModel = null;
-
-            // If this is a parent vm, we can skip the dependency injection
-            if (args.Length == 1)
+            var parentViewModel = args[0] as IViewModel;
+            if (parentViewModel is not null)
             {
-                var parentViewModel = args[0] as IViewModel;
-                if (parentViewModel is not null)
-                {
-                    args = Array.Empty<object?>();
-                }
+                args = Array.Empty<object?>();
             }
+        }
 
-            // Only try to construct the view model when the injection object is not null, otherwise every
-            // view model can be constructed with a nullable object. If a user wants a view model to be constructed
-            // without any datacontext or injection, he/she should use an empty default constructor which will only
-            // be used when injection is not possible
-            if (args.Length > 0)
-            {
-                try
-                {
-                    viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, (object[])args) as IViewModel;
-                }
-                catch (Exception)
-                {
-                    // Ignore since this probably does not support injection
-                }
-
-                if (viewModel is not null)
-                {
-                    _logger.LogDebug("Constructed view model '{0}' using injection of data context", viewModelType.FullName);
-                    return viewModel;
-                }
-            }
-
+        // Only try to construct the view model when the injection object is not null, otherwise every
+        // view model can be constructed with a nullable object. If a user wants a view model to be constructed
+        // without any datacontext or injection, he/she should use an empty default constructor which will only
+        // be used when injection is not possible
+        if (args.Length > 0)
+        {
             try
             {
-                // Try to construct view model using dependency injection
-                viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType) as IViewModel;
-                if (viewModel is not null)
-                {
-                    _logger.LogDebug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
-                    return viewModel;
-                }
+                viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, (object[])args) as IViewModel;
             }
-#if DEBUG
-            catch (Exception ex)
-#else
             catch (Exception)
-#endif
             {
-#if DEBUG
-                _logger.LogDebug(ex, "Failed to create view model");
-#endif
-                // ignore
+                // Ignore since this probably does not support injection
             }
 
-            _logger.LogDebug("Could not construct view model '{0}' using injection of data context'", viewModelType.FullName);
-
-            return viewModel;
+            if (viewModel is not null)
+            {
+                _logger.LogDebug("Constructed view model '{0}' using injection of data context", viewModelType.FullName);
+                return viewModel;
+            }
         }
+
+        try
+        {
+            // Try to construct view model using dependency injection
+            viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType) as IViewModel;
+            if (viewModel is not null)
+            {
+                _logger.LogDebug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
+                return viewModel;
+            }
+        }
+#if DEBUG
+        catch (Exception ex)
+#else
+        catch (Exception)
+#endif
+        {
+#if DEBUG
+            _logger.LogDebug(ex, "Failed to create view model");
+#endif
+            // ignore
+        }
+
+        _logger.LogDebug("Could not construct view model '{0}' using injection of data context'", viewModelType.FullName);
+
+        return viewModel;
     }
 }

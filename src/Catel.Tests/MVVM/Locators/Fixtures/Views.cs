@@ -1,14 +1,13 @@
-﻿namespace Catel.Tests.MVVM.Locators.Fixtures.Views
+﻿namespace Catel.Tests.MVVM.Locators.Fixtures.Views;
+
+public class MyNameViewer
 {
-    public class MyNameViewer
-    {
-    }
+}
 
-    public class MyNameViewer2
-    {
-    }
+public class MyNameViewer2
+{
+}
 
-    public class NonCompatibleView
-    {
-    }
+public class NonCompatibleView
+{
 }

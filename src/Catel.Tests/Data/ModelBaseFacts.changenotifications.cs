@@ -1,53 +1,84 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System.Collections.Generic;
+using NUnit.Framework;
+using TestClasses;
+
+public partial class ModelBaseFacts
 {
-    using System.Collections.Generic;
-    using NUnit.Framework;
-    using TestClasses;
-
-    public partial class ModelBaseFacts
+    [TestFixture]
+    public class SuspendChangeNotificationFacts
     {
-        [TestFixture]
-        public class SuspendChangeNotificationFacts
+        [TestCase]
+        public void CorrectlyRaisesChangeNotifications()
         {
-            [TestCase]
-            public void CorrectlyRaisesChangeNotifications()
+            var model = new SuspendableTestModel();
+
+            // First change without change notifications so IsDirty = true
+            model.FirstName = "1";
+
+            var changedProperties = new List<string>();
+
+            model.PropertyChanged += (sender, e) =>
             {
-                var model = new SuspendableTestModel();
+                changedProperties.Add(e.PropertyName);
+            };
 
-                // First change without change notifications so IsDirty = true
-                model.FirstName = "1";
+            model.FirstName = "A";
+            model.LastName = "B";
 
-                var changedProperties = new List<string>();
+            Assert.That(changedProperties.Count, Is.EqualTo(2));
 
-                model.PropertyChanged += (sender, e) =>
-                {
-                    changedProperties.Add(e.PropertyName);
-                };
+            Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
+            Assert.That(changedProperties[1], Is.EqualTo("LastName"));
+        }
 
+        [TestCase]
+        public void SuspendsChangeNotificationsAndRaisesPropertiesOnResume()
+        {
+            var model = new SuspendableTestModel();
+
+            // First change without change notifications so IsDirty = true
+            model.FirstName = "1";
+
+            var changedProperties = new List<string>();
+
+            model.PropertyChanged += (sender, e) =>
+            {
+                changedProperties.Add(e.PropertyName);
+            };
+
+            using (model.SuspendChangeNotifications())
+            {
                 model.FirstName = "A";
                 model.LastName = "B";
 
-                Assert.That(changedProperties.Count, Is.EqualTo(2));
-
-                Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
-                Assert.That(changedProperties[1], Is.EqualTo("LastName"));
+                Assert.That(changedProperties.Count, Is.EqualTo(0));
             }
 
-            [TestCase]
-            public void SuspendsChangeNotificationsAndRaisesPropertiesOnResume()
+            Assert.That(changedProperties.Count, Is.EqualTo(2));
+
+            Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
+            Assert.That(changedProperties[1], Is.EqualTo("LastName"));
+        }
+
+        [TestCase]
+        public void SuspendsChangeNotificationsAndRaisesPropertiesOnResumeWithScopes()
+        {
+            var model = new SuspendableTestModel();
+
+            // First change without change notifications so IsDirty = true
+            model.FirstName = "1";
+
+            var changedProperties = new List<string>();
+
+            model.PropertyChanged += (sender, e) =>
             {
-                var model = new SuspendableTestModel();
+                changedProperties.Add(e.PropertyName);
+            };
 
-                // First change without change notifications so IsDirty = true
-                model.FirstName = "1";
-
-                var changedProperties = new List<string>();
-
-                model.PropertyChanged += (sender, e) =>
-                {
-                    changedProperties.Add(e.PropertyName);
-                };
-
+            using (model.SuspendChangeNotifications())
+            {
                 using (model.SuspendChangeNotifications())
                 {
                     model.FirstName = "A";
@@ -56,68 +87,60 @@
                     Assert.That(changedProperties.Count, Is.EqualTo(0));
                 }
 
-                Assert.That(changedProperties.Count, Is.EqualTo(2));
-
-                Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
-                Assert.That(changedProperties[1], Is.EqualTo("LastName"));
+                // We still haven't released all scopes
+                Assert.That(changedProperties.Count, Is.EqualTo(0));
             }
 
-            [TestCase]
-            public void SuspendsChangeNotificationsAndRaisesPropertiesOnResumeWithScopes()
-            {
-                var model = new SuspendableTestModel();
+            Assert.That(changedProperties.Count, Is.EqualTo(2));
 
-                // First change without change notifications so IsDirty = true
-                model.FirstName = "1";
+            Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
+            Assert.That(changedProperties[1], Is.EqualTo("LastName"));
+        }
+    }
 
-                var changedProperties = new List<string>();
+    [TestFixture]
+    public class SuspendChangeCallbacksFacts
+    {
+        [TestCase]
+        public void CorrectlyInvokesCallbacks()
+        {
+            var model = new SuspendableTestModel();
 
-                model.PropertyChanged += (sender, e) =>
-                {
-                    changedProperties.Add(e.PropertyName);
-                };
+            model.FirstName = "A";
+            model.LastName = "B";
 
-                using (model.SuspendChangeNotifications())
-                {
-                    using (model.SuspendChangeNotifications())
-                    {
-                        model.FirstName = "A";
-                        model.LastName = "B";
-
-                        Assert.That(changedProperties.Count, Is.EqualTo(0));
-                    }
-
-                    // We still haven't released all scopes
-                    Assert.That(changedProperties.Count, Is.EqualTo(0));
-                }
-
-                Assert.That(changedProperties.Count, Is.EqualTo(2));
-
-                Assert.That(changedProperties[0], Is.EqualTo("FirstName"));
-                Assert.That(changedProperties[1], Is.EqualTo("LastName"));
-            }
+            Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
+            Assert.That(model.IsLastNameCallbackInvoked, Is.True);
         }
 
-        [TestFixture]
-        public class SuspendChangeCallbacksFacts
+        [TestCase]
+        public void SuspendsCallbacks()
         {
-            [TestCase]
-            public void CorrectlyInvokesCallbacks()
-            {
-                var model = new SuspendableTestModel();
+            var model = new SuspendableTestModel();
 
+            using (model.SuspendChangeCallbacks())
+            {
                 model.FirstName = "A";
                 model.LastName = "B";
 
-                Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
-                Assert.That(model.IsLastNameCallbackInvoked, Is.True);
+                Assert.That(model.IsFirstNameCallbackInvoked, Is.False);
+                Assert.That(model.IsLastNameCallbackInvoked, Is.False);
             }
 
-            [TestCase]
-            public void SuspendsCallbacks()
-            {
-                var model = new SuspendableTestModel();
+            model.FirstName = "A1";
+            model.LastName = "B1";
 
+            Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
+            Assert.That(model.IsLastNameCallbackInvoked, Is.True);
+        }
+
+        [TestCase]
+        public void SuspendsCallbacksWithScopes()
+        {
+            var model = new SuspendableTestModel();
+
+            using (model.SuspendChangeCallbacks())
+            {
                 using (model.SuspendChangeCallbacks())
                 {
                     model.FirstName = "A";
@@ -130,39 +153,15 @@
                 model.FirstName = "A1";
                 model.LastName = "B1";
 
-                Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
-                Assert.That(model.IsLastNameCallbackInvoked, Is.True);
+                Assert.That(model.IsFirstNameCallbackInvoked, Is.False);
+                Assert.That(model.IsLastNameCallbackInvoked, Is.False);
             }
 
-            [TestCase]
-            public void SuspendsCallbacksWithScopes()
-            {
-                var model = new SuspendableTestModel();
+            model.FirstName = "A2";
+            model.LastName = "B2";
 
-                using (model.SuspendChangeCallbacks())
-                {
-                    using (model.SuspendChangeCallbacks())
-                    {
-                        model.FirstName = "A";
-                        model.LastName = "B";
-
-                        Assert.That(model.IsFirstNameCallbackInvoked, Is.False);
-                        Assert.That(model.IsLastNameCallbackInvoked, Is.False);
-                    }
-
-                    model.FirstName = "A1";
-                    model.LastName = "B1";
-
-                    Assert.That(model.IsFirstNameCallbackInvoked, Is.False);
-                    Assert.That(model.IsLastNameCallbackInvoked, Is.False);
-                }
-
-                model.FirstName = "A2";
-                model.LastName = "B2";
-
-                Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
-                Assert.That(model.IsLastNameCallbackInvoked, Is.True);
-            }
+            Assert.That(model.IsFirstNameCallbackInvoked, Is.True);
+            Assert.That(model.IsLastNameCallbackInvoked, Is.True);
         }
     }
 }

@@ -1,80 +1,79 @@
-﻿namespace Catel.Tests
+﻿namespace Catel.Tests;
+
+using System;
+using System.IO;
+using Catel.Logging;
+using Microsoft.Extensions.Logging;
+
+public sealed class TemporaryFilesContext : IDisposable
 {
-    using System;
-    using System.IO;
-    using Catel.Logging;
-    using Microsoft.Extensions.Logging;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(TemporaryFilesContext));
 
-    public sealed class TemporaryFilesContext : IDisposable
+    private readonly Guid _randomGuid = Guid.NewGuid();
+    private readonly string _rootDirectory;
+
+    public TemporaryFilesContext(string? name = null)
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(TemporaryFilesContext));
-
-        private readonly Guid _randomGuid = Guid.NewGuid();
-        private readonly string _rootDirectory;
-
-        public TemporaryFilesContext(string? name = null)
+        if (string.IsNullOrWhiteSpace(name))
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                name = _randomGuid.ToString();
-            }
-
-            _rootDirectory = Path.Combine(Path.GetTempPath(), "Catel.Tests", name);
-
-            Directory.CreateDirectory(_rootDirectory);
+            name = _randomGuid.ToString();
         }
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Logger.LogInformation("Deleting temporary files from '{0}'", _rootDirectory);
+        _rootDirectory = Path.Combine(Path.GetTempPath(), "Catel.Tests", name);
 
-            try
+        Directory.CreateDirectory(_rootDirectory);
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Logger.LogInformation("Deleting temporary files from '{0}'", _rootDirectory);
+
+        try
+        {
+            if (Directory.Exists(_rootDirectory))
             {
-                if (Directory.Exists(_rootDirectory))
-                {
-                    Directory.Delete(_rootDirectory, true);
-                }
+                Directory.Delete(_rootDirectory, true);
             }
-            catch (Exception ex)
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to delete temporary files");
+        }
+    }
+
+    public string GetDirectory(string relativeDirectoryName)
+    {
+        var fullPath = Path.Combine(_rootDirectory, relativeDirectoryName);
+
+        if (!Directory.Exists(fullPath))
+        {
+            Directory.CreateDirectory(fullPath);
+        }
+
+        return fullPath;
+    }
+
+    public string GetFile(string relativeFilePath, bool deleteIfExists = false)
+    {
+        var fullPath = Path.Combine(_rootDirectory, relativeFilePath);
+
+        var directory = Path.GetDirectoryName(fullPath);
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        if (deleteIfExists)
+        {
+            if (File.Exists(fullPath))
             {
-                Logger.LogError(ex, "Failed to delete temporary files");
+                File.Delete(fullPath);
             }
         }
 
-        public string GetDirectory(string relativeDirectoryName)
-        {
-            var fullPath = Path.Combine(_rootDirectory, relativeDirectoryName);
-
-            if (!Directory.Exists(fullPath))
-            {
-                Directory.CreateDirectory(fullPath);
-            }
-
-            return fullPath;
-        }
-
-        public string GetFile(string relativeFilePath, bool deleteIfExists = false)
-        {
-            var fullPath = Path.Combine(_rootDirectory, relativeFilePath);
-
-            var directory = Path.GetDirectoryName(fullPath);
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            if (deleteIfExists)
-            {
-                if (File.Exists(fullPath))
-                {
-                    File.Delete(fullPath);
-                }
-            }
-
-            return fullPath;
-        }
+        return fullPath;
     }
 }

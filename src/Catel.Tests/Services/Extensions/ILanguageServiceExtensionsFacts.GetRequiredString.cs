@@ -1,120 +1,119 @@
-﻿namespace Catel.Tests.Services
+﻿namespace Catel.Tests.Services;
+
+using System;
+using System.Globalization;
+using Catel.Services;
+using Moq;
+using NUnit.Framework;
+
+public partial class ILanguageServiceExtensionsFacts
 {
-    using System;
-    using System.Globalization;
-    using Catel.Services;
-    using Moq;
-    using NUnit.Framework;
-
-    public partial class ILanguageServiceExtensionsFacts
+    [TestFixture]
+    public class The_GetRequiredString_Method
     {
-        [TestFixture]
-        public class The_GetRequiredString_Method
+        [Test]
+        public void ThrowsArgumentNullException_WhenLanguageServiceIsNull()
         {
-            [Test]
-            public void ThrowsArgumentNullException_WhenLanguageServiceIsNull()
+            Assert.Throws<ArgumentNullException>(() =>
             {
-                Assert.Throws<ArgumentNullException>(() =>
-                {
-                    ILanguageService languageService = null;
-                    languageService.GetRequiredString("ResourceName");
-                });
-            }
+                ILanguageService languageService = null;
+                languageService.GetRequiredString("ResourceName");
+            });
+        }
 
-            [Test]
-            public void ThrowsCatelException_WhenResourceNotFound()
+        [Test]
+        public void ThrowsCatelException_WhenResourceNotFound()
+        {
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock
+                .Setup(ls => ls.GetString(It.IsAny<string>()))
+                .Returns((string)null);
+
+            Assert.Throws<CatelException>(() =>
             {
-                var languageServiceMock = new Mock<ILanguageService>();
-                languageServiceMock
-                    .Setup(ls => ls.GetString(It.IsAny<string>()))
-                    .Returns((string)null);
+                languageServiceMock.Object.GetRequiredString("NonExistentResource");
+            });
+        }
 
-                Assert.Throws<CatelException>(() =>
-                {
-                    languageServiceMock.Object.GetRequiredString("NonExistentResource");
-                });
-            }
+        [Test]
+        public void ReturnsString_WhenResourceIsFound()
+        {
+            const string expectedString = "Hello, World!";
 
-            [Test]
-            public void ReturnsString_WhenResourceIsFound()
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock
+                .Setup(ls => ls.GetString("Greeting"))
+                .Returns(expectedString);
+
+            var result = languageServiceMock.Object.GetRequiredString("Greeting");
+
+            Assert.That(result, Is.EqualTo(expectedString));
+        }
+
+        [Test]
+        public void ReturnsString_WithCultureInfo_WhenResourceIsFound()
+        {
+            const string expectedString = "Bonjour, le monde!";
+            var cultureInfo = new CultureInfo("fr-FR");
+
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock
+                .Setup(ls => ls.GetString("Greeting", cultureInfo))
+                .Returns(expectedString);
+
+            var result = languageServiceMock.Object.GetRequiredString("Greeting", cultureInfo);
+
+            Assert.That(result, Is.EqualTo(expectedString));
+        }
+
+        [Test]
+        public void ThrowsCatelException_WithCultureInfo_WhenResourceNotFound()
+        {
+            var cultureInfo = new CultureInfo("fr-FR");
+
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock
+                .Setup(ls => ls.GetString(It.IsAny<string>(), cultureInfo))
+                .Returns((string)null);
+
+            Assert.Throws<CatelException>(() =>
             {
-                const string expectedString = "Hello, World!";
+                languageServiceMock.Object.GetRequiredString("NonExistentResource", cultureInfo);
+            });
+        }
 
-                var languageServiceMock = new Mock<ILanguageService>();
-                languageServiceMock
-                    .Setup(ls => ls.GetString("Greeting"))
-                    .Returns(expectedString);
+        [Test]
+        public void ReturnsString_WithLanguageSourceAndCultureInfo_WhenResourceIsFound()
+        {
+            const string expectedString = "Hola, Mundo!";
+            var cultureInfo = new CultureInfo("es-ES");
+            var languageSourceMock = new Mock<ILanguageSource>();
 
-                var result = languageServiceMock.Object.GetRequiredString("Greeting");
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock
+                .Setup(ls => ls.GetString(languageSourceMock.Object, "Greeting", cultureInfo))
+                .Returns(expectedString);
 
-                Assert.That(result, Is.EqualTo(expectedString));
-            }
+            var result = languageServiceMock.Object.GetRequiredString(languageSourceMock.Object, "Greeting", cultureInfo);
 
-            [Test]
-            public void ReturnsString_WithCultureInfo_WhenResourceIsFound()
+            Assert.That(result, Is.EqualTo(expectedString));
+        }
+
+        [Test]
+        public void ThrowsCatelException_WithLanguageSourceAndCultureInfo_WhenResourceNotFound()
+        {
+            var cultureInfo = new CultureInfo("es-ES");
+            var languageSourceMock = new Mock<ILanguageSource>();
+
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock
+                .Setup(ls => ls.GetString(languageSourceMock.Object, It.IsAny<string>(), cultureInfo))
+                .Returns((string)null);
+
+            Assert.Throws<CatelException>(() =>
             {
-                const string expectedString = "Bonjour, le monde!";
-                var cultureInfo = new CultureInfo("fr-FR");
-
-                var languageServiceMock = new Mock<ILanguageService>();
-                languageServiceMock
-                    .Setup(ls => ls.GetString("Greeting", cultureInfo))
-                    .Returns(expectedString);
-
-                var result = languageServiceMock.Object.GetRequiredString("Greeting", cultureInfo);
-
-                Assert.That(result, Is.EqualTo(expectedString));
-            }
-
-            [Test]
-            public void ThrowsCatelException_WithCultureInfo_WhenResourceNotFound()
-            {
-                var cultureInfo = new CultureInfo("fr-FR");
-
-                var languageServiceMock = new Mock<ILanguageService>();
-                languageServiceMock
-                    .Setup(ls => ls.GetString(It.IsAny<string>(), cultureInfo))
-                    .Returns((string)null);
-
-                Assert.Throws<CatelException>(() =>
-                {
-                    languageServiceMock.Object.GetRequiredString("NonExistentResource", cultureInfo);
-                });
-            }
-
-            [Test]
-            public void ReturnsString_WithLanguageSourceAndCultureInfo_WhenResourceIsFound()
-            {
-                const string expectedString = "Hola, Mundo!";
-                var cultureInfo = new CultureInfo("es-ES");
-                var languageSourceMock = new Mock<ILanguageSource>();
-
-                var languageServiceMock = new Mock<ILanguageService>();
-                languageServiceMock
-                    .Setup(ls => ls.GetString(languageSourceMock.Object, "Greeting", cultureInfo))
-                    .Returns(expectedString);
-
-                var result = languageServiceMock.Object.GetRequiredString(languageSourceMock.Object, "Greeting", cultureInfo);
-
-                Assert.That(result, Is.EqualTo(expectedString));
-            }
-
-            [Test]
-            public void ThrowsCatelException_WithLanguageSourceAndCultureInfo_WhenResourceNotFound()
-            {
-                var cultureInfo = new CultureInfo("es-ES");
-                var languageSourceMock = new Mock<ILanguageSource>();
-
-                var languageServiceMock = new Mock<ILanguageService>();
-                languageServiceMock
-                    .Setup(ls => ls.GetString(languageSourceMock.Object, It.IsAny<string>(), cultureInfo))
-                    .Returns((string)null);
-
-                Assert.Throws<CatelException>(() =>
-                {
-                    languageServiceMock.Object.GetRequiredString(languageSourceMock.Object, "NonExistentResource", cultureInfo);
-                });
-            }
+                languageServiceMock.Object.GetRequiredString(languageSourceMock.Object, "NonExistentResource", cultureInfo);
+            });
         }
     }
 }

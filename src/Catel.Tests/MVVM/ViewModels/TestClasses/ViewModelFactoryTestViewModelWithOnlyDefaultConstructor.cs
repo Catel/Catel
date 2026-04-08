@@ -1,12 +1,11 @@
-﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
-{
-    using System;
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses;
 
-    public class ViewModelFactoryTestViewModelWithOnlyDefaultConstructor : ViewModelFactoryTestViewModel
+using System;
+
+public class ViewModelFactoryTestViewModelWithOnlyDefaultConstructor : ViewModelFactoryTestViewModel
+{
+    public ViewModelFactoryTestViewModelWithOnlyDefaultConstructor(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        public ViewModelFactoryTestViewModelWithOnlyDefaultConstructor(IServiceProvider serviceProvider)
-            : base(serviceProvider)
-        {
-        }
     }
 }

@@ -1,311 +1,310 @@
-﻿namespace Catel.Windows.Data
+﻿namespace Catel.Windows.Data;
+
+using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Data;
+
+/// <summary>
+/// Dependency property changed helper. This helper class allows to subscribe to any dependency property
+/// changed of any framework element element.
+/// </summary>
+public static class DependencyPropertyChangedHelper
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Data;
+    private const string InheritedDataContextName = "InheritedDataContext";
 
     /// <summary>
-    /// Dependency property changed helper. This helper class allows to subscribe to any dependency property
-    /// changed of any framework element element.
+    /// Cache containing already registered dependency properties.
     /// </summary>
-    public static class DependencyPropertyChangedHelper
+    private static readonly Dictionary<string, DependencyProperty> _dependencyProperties = new Dictionary<string, DependencyProperty>();
+
+    /// <summary>
+    /// Dictionary containing a dependency to real dependency name mapping.
+    /// </summary>
+    private static readonly Dictionary<DependencyProperty, string> _wrapperDependencyProperties = new Dictionary<DependencyProperty, string>();
+
+    /// <summary>
+    /// Dictionary containing values whether a property is a real dependency property.
+    /// </summary>
+    private static readonly Dictionary<string, bool> _realDependencyPropertiesCache = new Dictionary<string, bool>();
+
+    //private static readonly ILog Log = LogManager.GetLogger(typeof(DependencyPropertyChangedHelper));
+
+    /// <summary>
+    /// Determines whether the specified dependency property is a real dependency or a wrapper or handler one for internal usage.
+    /// </summary>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="propertyName">Name of the property.</param>
+    /// <returns><c>true</c> if the property is a real dependency property; otherwise, <c>false</c>.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
+    public static bool IsRealDependencyProperty(this FrameworkElement frameworkElement, string propertyName)
     {
-        private const string InheritedDataContextName = "InheritedDataContext";
+        ArgumentNullException.ThrowIfNull(frameworkElement);
 
-        /// <summary>
-        /// Cache containing already registered dependency properties.
-        /// </summary>
-        private static readonly Dictionary<string, DependencyProperty> _dependencyProperties = new Dictionary<string, DependencyProperty>();
+        return IsRealDependencyProperty(frameworkElement.GetType(), propertyName);
+    }
 
-        /// <summary>
-        /// Dictionary containing a dependency to real dependency name mapping.
-        /// </summary>
-        private static readonly Dictionary<DependencyProperty, string> _wrapperDependencyProperties = new Dictionary<DependencyProperty, string>();
+    public static bool IsRealDependencyProperty(Type frameworkElementType, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(frameworkElementType);
+        Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
-        /// <summary>
-        /// Dictionary containing values whether a property is a real dependency property.
-        /// </summary>
-        private static readonly Dictionary<string, bool> _realDependencyPropertiesCache = new Dictionary<string, bool>();
+        var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(frameworkElementType, propertyName);
 
-        //private static readonly ILog Log = LogManager.GetLogger(typeof(DependencyPropertyChangedHelper));
-
-        /// <summary>
-        /// Determines whether the specified dependency property is a real dependency or a wrapper or handler one for internal usage.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns><c>true</c> if the property is a real dependency property; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public static bool IsRealDependencyProperty(this FrameworkElement frameworkElement, string propertyName)
+        if (!_realDependencyPropertiesCache.TryGetValue(key, out var isRealDependencyProperty))
         {
-            ArgumentNullException.ThrowIfNull(frameworkElement);
+            isRealDependencyProperty = true;
 
-            return IsRealDependencyProperty(frameworkElement.GetType(), propertyName);
-        }
-
-        public static bool IsRealDependencyProperty(Type frameworkElementType, string propertyName)
-        {
-            ArgumentNullException.ThrowIfNull(frameworkElementType);
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-
-            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(frameworkElementType, propertyName);
-
-            if (!_realDependencyPropertiesCache.TryGetValue(key, out var isRealDependencyProperty))
+            if (propertyName.EndsWith("_handler"))
             {
-                isRealDependencyProperty = true;
-
-                if (propertyName.EndsWith("_handler"))
-                {
-                    isRealDependencyProperty = false;
-                }
-                else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(frameworkElementType)))
-                {
-                    isRealDependencyProperty = false;
-                }
-
-                _realDependencyPropertiesCache.Add(key, isRealDependencyProperty);
+                isRealDependencyProperty = false;
+            }
+            else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(frameworkElementType)))
+            {
+                isRealDependencyProperty = false;
             }
 
-            return isRealDependencyProperty;
+            _realDependencyPropertiesCache.Add(key, isRealDependencyProperty);
         }
 
-        /// <summary>
-        /// Subscribes to all dependency properties of the specified <see cref="FrameworkElement"/>.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="handler">The handler to subscribe.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void SubscribeToAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
-        {
-            ArgumentNullException.ThrowIfNull(frameworkElement);
-            ArgumentNullException.ThrowIfNull(handler);
+        return isRealDependencyProperty;
+    }
 
-            var dependencyProperties = frameworkElement.GetDependencyProperties();
-            foreach (var dependencyProperty in dependencyProperties)
+    /// <summary>
+    /// Subscribes to all dependency properties of the specified <see cref="FrameworkElement"/>.
+    /// </summary>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="handler">The handler to subscribe.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+    public static void SubscribeToAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+    {
+        ArgumentNullException.ThrowIfNull(frameworkElement);
+        ArgumentNullException.ThrowIfNull(handler);
+
+        var dependencyProperties = frameworkElement.GetDependencyProperties();
+        foreach (var dependencyProperty in dependencyProperties)
+        {
+            SubscribeToDependencyProperty(frameworkElement, dependencyProperty.PropertyName, handler);
+        }
+    }
+
+    /// <summary>
+    /// Subscribes to the change events of the inherited DataContext.
+    /// </summary>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="handler">The handler to subscribe.</param>
+    /// <param name="inherited">if set to <c>true</c>, check inherited data context as well.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+    public static void SubscribeToDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler,
+        bool inherited)
+    {
+        ArgumentNullException.ThrowIfNull(frameworkElement);
+        ArgumentNullException.ThrowIfNull(handler);
+
+        var propertyName = inherited ? InheritedDataContextName : "DataContext";
+
+        SubscribeToDependencyProperty(frameworkElement, propertyName, handler);
+    }
+
+    /// <summary>
+    /// Unsubscribes from all dependency properties of the specified <see cref="FrameworkElement"/>.
+    /// </summary>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="handler">The handler to unsubscribe.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+    public static void UnsubscribeFromAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+    {
+        ArgumentNullException.ThrowIfNull(frameworkElement);
+        ArgumentNullException.ThrowIfNull(handler);
+
+        var dependencyProperties = frameworkElement.GetDependencyProperties();
+        foreach (var dependencyProperty in dependencyProperties)
+        {
+            UnsubscribeFromDependencyProperty(frameworkElement, dependencyProperty.PropertyName, handler);
+        }
+    }
+
+    /// <summary>
+    /// Unsubscribes from the change events of the inherited DataContext.
+    /// </summary>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="handler">The handler to subscribe.</param>
+    /// <param name="inherited">if set to <c>true</c>, check inherited data context as well.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+    public static void UnsubscribeFromDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler, bool inherited)
+    {
+        ArgumentNullException.ThrowIfNull(frameworkElement);
+        ArgumentNullException.ThrowIfNull(handler);
+
+        var propertyName = inherited ? InheritedDataContextName : "DataContext";
+
+        UnsubscribeFromDependencyProperty(frameworkElement, propertyName, handler);
+    }
+
+    /// <summary>
+    /// Subscribes to the specified dependency property of the specified <see cref="FrameworkElement"/>.
+    /// </summary>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="propertyName">The name of the dependency property to subscribe to.</param>
+    /// <param name="handler">The handler to subscribe.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+    public static void SubscribeToDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+    {
+        ArgumentNullException.ThrowIfNull(frameworkElement);
+        Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+        ArgumentNullException.ThrowIfNull(handler);
+
+        //Log.Debug("Subscribing to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+
+        var dependencyProperty = GetDependencyProperty<object>(frameworkElement, propertyName);
+        if (frameworkElement.GetValue(dependencyProperty) is null)
+        {
+            var binding = new Binding();
+
+            if (!string.Equals(propertyName, InheritedDataContextName))
             {
-                SubscribeToDependencyProperty(frameworkElement, dependencyProperty.PropertyName, handler);
+                binding.Source = frameworkElement;
+                binding.Path = new PropertyPath(propertyName);
             }
+
+            binding.Mode = BindingMode.OneWay;
+
+            frameworkElement.SetBinding(dependencyProperty, binding);
         }
 
-        /// <summary>
-        /// Subscribes to the change events of the inherited DataContext.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="handler">The handler to subscribe.</param>
-        /// <param name="inherited">if set to <c>true</c>, check inherited data context as well.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void SubscribeToDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler,
-            bool inherited)
+        var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
+        var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
+
+        var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
+        internalHandler += handler;
+        frameworkElement.SetValue(handlerDependencyProperty, internalHandler);
+
+        //Log.Debug("Subscribed to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+    }
+
+    /// <summary>
+    /// Subscribes from the specified dependency property of the specified <see cref="FrameworkElement"/>.
+    /// </summary>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="propertyName">The name of the dependency property to unsubscribe from.</param>
+    /// <param name="handler">The handler to unsubscribe.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+    public static void UnsubscribeFromDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+    {
+        ArgumentNullException.ThrowIfNull(frameworkElement);
+        Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+        ArgumentNullException.ThrowIfNull(handler);
+
+        //Log.Debug("Unsubscribing from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+
+        var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
+        var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
+        var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
+        if (internalHandler is not null)
         {
-            ArgumentNullException.ThrowIfNull(frameworkElement);
-            ArgumentNullException.ThrowIfNull(handler);
-
-            var propertyName = inherited ? InheritedDataContextName : "DataContext";
-
-            SubscribeToDependencyProperty(frameworkElement, propertyName, handler);
+            internalHandler -= handler;
         }
 
-        /// <summary>
-        /// Unsubscribes from all dependency properties of the specified <see cref="FrameworkElement"/>.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="handler">The handler to unsubscribe.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void UnsubscribeFromAllDependencyProperties(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        if (internalHandler is not null)
         {
-            ArgumentNullException.ThrowIfNull(frameworkElement);
-            ArgumentNullException.ThrowIfNull(handler);
-
-            var dependencyProperties = frameworkElement.GetDependencyProperties();
-            foreach (var dependencyProperty in dependencyProperties)
-            {
-                UnsubscribeFromDependencyProperty(frameworkElement, dependencyProperty.PropertyName, handler);
-            }
+            frameworkElement.SetValue(handlerDependencyProperty, internalHandler);
         }
-
-        /// <summary>
-        /// Unsubscribes from the change events of the inherited DataContext.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="handler">The handler to subscribe.</param>
-        /// <param name="inherited">if set to <c>true</c>, check inherited data context as well.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void UnsubscribeFromDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler, bool inherited)
+        else
         {
-            ArgumentNullException.ThrowIfNull(frameworkElement);
-            ArgumentNullException.ThrowIfNull(handler);
-
-            var propertyName = inherited ? InheritedDataContextName : "DataContext";
-
-            UnsubscribeFromDependencyProperty(frameworkElement, propertyName, handler);
-        }
-
-        /// <summary>
-        /// Subscribes to the specified dependency property of the specified <see cref="FrameworkElement"/>.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="propertyName">The name of the dependency property to subscribe to.</param>
-        /// <param name="handler">The handler to subscribe.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void SubscribeToDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
-        {
-            ArgumentNullException.ThrowIfNull(frameworkElement);
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            ArgumentNullException.ThrowIfNull(handler);
-
-            //Log.Debug("Subscribing to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+            frameworkElement.ClearValue(handlerDependencyProperty);
 
             var dependencyProperty = GetDependencyProperty<object>(frameworkElement, propertyName);
-            if (frameworkElement.GetValue(dependencyProperty) is null)
-            {
-                var binding = new Binding();
-
-                if (!string.Equals(propertyName, InheritedDataContextName))
-                {
-                    binding.Source = frameworkElement;
-                    binding.Path = new PropertyPath(propertyName);
-                }
-
-                binding.Mode = BindingMode.OneWay;
-
-                frameworkElement.SetBinding(dependencyProperty, binding);
-            }
-
-            var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
-            var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
-
-            var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
-            internalHandler += handler;
-            frameworkElement.SetValue(handlerDependencyProperty, internalHandler);
-
-            //Log.Debug("Subscribed to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+            frameworkElement.ClearValue(dependencyProperty);
         }
 
-        /// <summary>
-        /// Subscribes from the specified dependency property of the specified <see cref="FrameworkElement"/>.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="propertyName">The name of the dependency property to unsubscribe from.</param>
-        /// <param name="handler">The handler to unsubscribe.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void UnsubscribeFromDependencyProperty(this FrameworkElement frameworkElement, string propertyName, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        //Log.Debug("Unsubcribed from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+    }
+
+    /// <summary>
+    /// Called when a dependency property has changed.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+    private static void OnDependencyPropertyChanged(object? sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is not FrameworkElement frameworkElement)
         {
-            ArgumentNullException.ThrowIfNull(frameworkElement);
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
-            ArgumentNullException.ThrowIfNull(handler);
-
-            //Log.Debug("Unsubscribing from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
-
-            var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
-            var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
-            var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
-            if (internalHandler is not null)
-            {
-                internalHandler -= handler;
-            }
-
-            if (internalHandler is not null)
-            {
-                frameworkElement.SetValue(handlerDependencyProperty, internalHandler);
-            }
-            else
-            {
-                frameworkElement.ClearValue(handlerDependencyProperty);
-
-                var dependencyProperty = GetDependencyProperty<object>(frameworkElement, propertyName);
-                frameworkElement.ClearValue(dependencyProperty);
-            }
-
-            //Log.Debug("Unsubcribed from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+            return;
         }
 
-        /// <summary>
-        /// Called when a dependency property has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        private static void OnDependencyPropertyChanged(object? sender, DependencyPropertyChangedEventArgs e)
+        var propertyName = _wrapperDependencyProperties[e.Property];
+
+        if (!IsRealDependencyProperty(frameworkElement, propertyName))
         {
-            if (sender is not FrameworkElement frameworkElement)
-            {
-                return;
-            }
-
-            var propertyName = _wrapperDependencyProperties[e.Property];
-
-            if (!IsRealDependencyProperty(frameworkElement, propertyName))
-            {
-                return;
-            }
-
-            //Log.Debug("OnDependencyPropertyChanged: '{0}' to {1}", propertyName, e.NewValue);
-
-            var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
-            var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
-
-            var handler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
-            if (handler is not null)
-            {
-                if (string.Equals(propertyName, InheritedDataContextName))
-                {
-                    propertyName = "DataContext";
-                }
-
-                handler(sender, new DependencyPropertyValueChangedEventArgs(propertyName, e));
-            }
+            return;
         }
 
-        /// <summary>
-        /// Gets the dependency property from the cache. If it does not yet exist, it will create the dependency property and
-        /// add it to the cache.
-        /// </summary>
-        /// <typeparam name="T">The type of the dependency property.</typeparam>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>The dependency property.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        private static DependencyProperty GetDependencyProperty<T>(FrameworkElement frameworkElement, string propertyName)
-        {
-            var viewType = frameworkElement.GetType();
-            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(viewType, propertyName);
+        //Log.Debug("OnDependencyPropertyChanged: '{0}' to {1}", propertyName, e.NewValue);
 
-            if (!_dependencyProperties.TryGetValue(key, out var dependencyProperty))
+        var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
+        var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
+
+        var handler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
+        if (handler is not null)
+        {
+            if (string.Equals(propertyName, InheritedDataContextName))
             {
-                // If called with object, this is the request for the dummy value containing the mapped dependency property
-                // on which we subscribe for changess. Otherwise this is the dependency property containing the actual
-                // handlers to call when the property changes.
+                propertyName = "DataContext";
+            }
+
+            handler(sender, new DependencyPropertyValueChangedEventArgs(propertyName, e));
+        }
+    }
+
+    /// <summary>
+    /// Gets the dependency property from the cache. If it does not yet exist, it will create the dependency property and
+    /// add it to the cache.
+    /// </summary>
+    /// <typeparam name="T">The type of the dependency property.</typeparam>
+    /// <param name="frameworkElement">The framework element.</param>
+    /// <param name="propertyName">Name of the property.</param>
+    /// <returns>The dependency property.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
+    private static DependencyProperty GetDependencyProperty<T>(FrameworkElement frameworkElement, string propertyName)
+    {
+        var viewType = frameworkElement.GetType();
+        var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(viewType, propertyName);
+
+        if (!_dependencyProperties.TryGetValue(key, out var dependencyProperty))
+        {
+            // If called with object, this is the request for the dummy value containing the mapped dependency property
+            // on which we subscribe for changess. Otherwise this is the dependency property containing the actual
+            // handlers to call when the property changes.
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-                var dependencyPropertyMetaData = typeof(T) == typeof(object) ? new PropertyMetadata(default(T), OnDependencyPropertyChanged) : null;
+            var dependencyPropertyMetaData = typeof(T) == typeof(object) ? new PropertyMetadata(default(T), OnDependencyPropertyChanged) : null;
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
-                dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), viewType, dependencyPropertyMetaData);
+            dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), viewType, dependencyPropertyMetaData);
 
-                _dependencyProperties[key] = dependencyProperty;
-                _wrapperDependencyProperties[dependencyProperty] = propertyName;
-            }
-
-            return dependencyProperty;
+            _dependencyProperties[key] = dependencyProperty;
+            _wrapperDependencyProperties[dependencyProperty] = propertyName;
         }
 
-        /// <summary>
-        /// Gets the name of the handler dependency property.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>`
-        /// <returns>The name of the dependency property containing the changed handler for the actual dependency property.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        private static string GetHandlerDependencyPropertyName(string propertyName)
-        {
-            return string.Format("{0}_handler", propertyName);
-        }
+        return dependencyProperty;
+    }
+
+    /// <summary>
+    /// Gets the name of the handler dependency property.
+    /// </summary>
+    /// <param name="propertyName">Name of the property.</param>`
+    /// <returns>The name of the dependency property containing the changed handler for the actual dependency property.</returns>
+    /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
+    private static string GetHandlerDependencyPropertyName(string propertyName)
+    {
+        return string.Format("{0}_handler", propertyName);
     }
 }

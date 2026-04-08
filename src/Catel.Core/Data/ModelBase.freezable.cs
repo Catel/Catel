@@ -1,25 +1,24 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+public partial class ModelBase : IFreezable
 {
-    public partial class ModelBase : IFreezable
+    private bool _isFrozen;
+
+    bool IFreezable.IsFrozen
     {
-        private bool _isFrozen;
-
-        bool IFreezable.IsFrozen
+        get
         {
-            get
-            {
-                return _isFrozen;
-            }
+            return _isFrozen;
         }
+    }
 
-        void IFreezable.Freeze()
-        {
-            _isFrozen = true;
-        }
+    void IFreezable.Freeze()
+    {
+        _isFrozen = true;
+    }
 
-        void IFreezable.Unfreeze()
-        {
-            _isFrozen = false;
-        }
+    void IFreezable.Unfreeze()
+    {
+        _isFrozen = false;
     }
 }

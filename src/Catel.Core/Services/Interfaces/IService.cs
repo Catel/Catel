@@ -1,14 +1,13 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+/// <summary>
+/// Interface to define a service.
+/// </summary>
+public interface IService
 {
     /// <summary>
-    /// Interface to define a service.
+    /// Gets the name of the service.
     /// </summary>
-    public interface IService
-    {
-        /// <summary>
-        /// Gets the name of the service.
-        /// </summary>
-        /// <value>The name of the service.</value>
-        string Name { get; }
-    }
+    /// <value>The name of the service.</value>
+    string Name { get; }
 }

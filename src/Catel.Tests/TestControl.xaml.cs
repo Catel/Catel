@@ -1,13 +1,12 @@
-﻿namespace Catel.Tests
+﻿namespace Catel.Tests;
+
+/// <summary>
+/// Interaction logic for TestControl.xaml
+/// </summary>
+public partial class TestControl
 {
-    /// <summary>
-    /// Interaction logic for TestControl.xaml
-    /// </summary>
-    public partial class TestControl
+    public TestControl()
     {
-        public TestControl()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

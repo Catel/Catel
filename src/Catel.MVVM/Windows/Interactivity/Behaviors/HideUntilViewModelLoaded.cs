@@ -1,69 +1,68 @@
-﻿namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity;
+
+using System;
+using System.Windows;
+using Logging;
+using Microsoft.Extensions.Logging;
+using MVVM;
+using Reflection;
+
+/// <summary>
+/// Hides the view until the view model is loaded.
+/// </summary>
+public partial class HideUntilViewModelLoaded : BehaviorBase<FrameworkElement>
 {
-    using System;
-    using System.Windows;
-    using Logging;
-    using Microsoft.Extensions.Logging;
-    using MVVM;
-    using Reflection;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(HideUntilViewModelLoaded));
 
     /// <summary>
-    /// Hides the view until the view model is loaded.
+    /// Initializes this instance.
     /// </summary>
-    public partial class HideUntilViewModelLoaded : BehaviorBase<FrameworkElement>
+    protected override void Initialize()
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(HideUntilViewModelLoaded));
+        base.Initialize();
 
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        protected override void Initialize()
+        var viewModelContainer = AssociatedObject as IViewModelContainer;
+        if (viewModelContainer is null)
         {
-            base.Initialize();
-
-            var viewModelContainer = AssociatedObject as IViewModelContainer;
-            if (viewModelContainer is null)
-            {
-                var error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName(false));
-                throw Logger.LogErrorAndCreateException<InvalidOperationException>(error);
-            }
-
-            viewModelContainer.ViewModelChanged += OnViewModelChanged;
-
-            UpdateVisibility();
+            var error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName(false));
+            throw Logger.LogErrorAndCreateException<InvalidOperationException>(error);
         }
 
-        /// <summary>
-        /// Uninitializes this instance.
-        /// </summary>
-        protected override void Uninitialize()
-        {
-            var viewModelContainer = AssociatedObject as IViewModelContainer;
-            if (viewModelContainer is not null)
-            {
-                viewModelContainer.ViewModelChanged -= OnViewModelChanged;
-            }
+        viewModelContainer.ViewModelChanged += OnViewModelChanged;
 
-            base.Uninitialize();
+        UpdateVisibility();
+    }
+
+    /// <summary>
+    /// Uninitializes this instance.
+    /// </summary>
+    protected override void Uninitialize()
+    {
+        var viewModelContainer = AssociatedObject as IViewModelContainer;
+        if (viewModelContainer is not null)
+        {
+            viewModelContainer.ViewModelChanged -= OnViewModelChanged;
         }
 
-        private void OnViewModelChanged(object? sender, EventArgs e)
+        base.Uninitialize();
+    }
+
+    private void OnViewModelChanged(object? sender, EventArgs e)
+    {
+        UpdateVisibility();
+    }
+
+    private void UpdateVisibility()
+    {
+        if (!IsEnabled)
         {
-            UpdateVisibility();
+            return;
         }
 
-        private void UpdateVisibility()
+        var viewModelContainer = AssociatedObject as IViewModelContainer;
+        if (viewModelContainer is not null)
         {
-            if (!IsEnabled)
-            {
-                return;
-            }
-
-            var viewModelContainer = AssociatedObject as IViewModelContainer;
-            if (viewModelContainer is not null)
-            {
-                AssociatedObject.Visibility = (viewModelContainer.ViewModel is null) ? Visibility.Collapsed : Visibility.Visible;
-            }
+            AssociatedObject.Visibility = (viewModelContainer.ViewModel is null) ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

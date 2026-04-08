@@ -1,7 +1,6 @@
-﻿namespace Catel.Tests.MVVM.Exceptions
+﻿namespace Catel.Tests.MVVM.Exceptions;
+
+public class InvalidViewModelExceptionFacts
 {
-    public class InvalidViewModelExceptionFacts
-    {
-        // TODO: Implement
-    }
+    // TODO: Implement
 }

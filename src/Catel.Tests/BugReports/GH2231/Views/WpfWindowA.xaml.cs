@@ -1,24 +1,23 @@
-﻿namespace Catel.Tests.BugReports.GH2231.Views
+﻿namespace Catel.Tests.BugReports.GH2231.Views;
+
+using System;
+using System.Threading.Tasks;
+using System.Windows;
+
+public partial class WpfWindowA : Window
 {
-    using System;
-    using System.Threading.Tasks;
-    using System.Windows;
-
-    public partial class WpfWindowA : Window
+    public WpfWindowA()
     {
-        public WpfWindowA()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            Loaded += OnLoaded;
-        }
+        Loaded += OnLoaded;
+    }
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            await Task.Delay(1000);
+    private async void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        await Task.Delay(1000);
 
-            var windowB = new WpfWindowB();
-            windowB.ShowDialog();
-        }
+        var windowB = new WpfWindowB();
+        windowB.ShowDialog();
     }
 }

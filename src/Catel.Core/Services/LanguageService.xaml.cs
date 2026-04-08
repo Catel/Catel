@@ -1,96 +1,95 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.Globalization;
+using System.Linq;
+using Caching;
+using Logging;
+using Microsoft.Extensions.Logging;
+using Reflection;
+using ResourceManager = System.Resources.ResourceManager;
+
+public partial class LanguageService
 {
-    using System;
-    using System.Globalization;
-    using System.Linq;
-    using Caching;
-    using Logging;
-    using Microsoft.Extensions.Logging;
-    using Reflection;
-    using ResourceManager = System.Resources.ResourceManager;
+    private readonly ICacheStorage<string, ResourceManager?> _resourceFileCache = new CacheStorage<string, ResourceManager?>(storeNullValues: true);
 
-    public partial class LanguageService
+    /// <summary>
+    /// Preloads the language sources to provide optimal performance.
+    /// </summary>
+    /// <param name="languageSource">The language source.</param>    
+    protected override void PreloadLanguageSource(ILanguageSource languageSource)
     {
-        private readonly ICacheStorage<string, ResourceManager?> _resourceFileCache = new CacheStorage<string, ResourceManager?>(storeNullValues: true);
+        GetResourceManager(languageSource.GetSource());
+    }
 
-        /// <summary>
-        /// Preloads the language sources to provide optimal performance.
-        /// </summary>
-        /// <param name="languageSource">The language source.</param>    
-        protected override void PreloadLanguageSource(ILanguageSource languageSource)
+    /// <summary>
+    /// Gets the string from the specified resource file with the current culture.
+    /// </summary>
+    /// <param name="languageSource">The language source.</param>
+    /// <param name="resourceName">Name of the resource.</param>
+    /// <param name="cultureInfo">The culture information.</param>
+    /// <returns>The string or <c>null</c> if the string cannot be found.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
+    public override string? GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
+    {
+        Argument.IsNotNullOrWhitespace("resourceName", resourceName);
+           
+        string? value = null;
+        var source = languageSource.GetSource();
+        var resourceLoader = GetResourceManager(source);
+
+        if (resourceLoader is not null)
         {
-            GetResourceManager(languageSource.GetSource());
+            value = resourceLoader.GetString(resourceName, cultureInfo);
         }
 
-        /// <summary>
-        /// Gets the string from the specified resource file with the current culture.
-        /// </summary>
-        /// <param name="languageSource">The language source.</param>
-        /// <param name="resourceName">Name of the resource.</param>
-        /// <param name="cultureInfo">The culture information.</param>
-        /// <returns>The string or <c>null</c> if the string cannot be found.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
-        public override string? GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
+        return value;
+    }
+
+    /// <summary>
+    /// Gets the resource manager.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    private ResourceManager? GetResourceManager(string source)
+    {
+        Func<ResourceManager?> retrievalFunc = () =>
         {
-            Argument.IsNotNullOrWhitespace("resourceName", resourceName);
-               
-            string? value = null;
-            var source = languageSource.GetSource();
-            var resourceLoader = GetResourceManager(source);
-
-            if (resourceLoader is not null)
+            try
             {
-                value = resourceLoader.GetString(resourceName, cultureInfo);
-            }
+                var splittedString = source.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-            return value;
-        }
+                var assemblyName = splittedString[1].Trim();
+                var containingAssemblyName = string.Format("{0},", assemblyName);
+                var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
 
-        /// <summary>
-        /// Gets the resource manager.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        private ResourceManager? GetResourceManager(string source)
-        {
-            Func<ResourceManager?> retrievalFunc = () =>
-            {
-                try
+                // Invert so design-time will always pick the latest version
+                loadedAssemblies.Reverse();
+
+                var assembly = loadedAssemblies.FirstOrDefault(x => (x.FullName ?? string.Empty).StartsWith(containingAssemblyName));
+                if (assembly is null)
                 {
-                    var splittedString = source.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    var assemblyName = splittedString[1].Trim();
-                    var containingAssemblyName = string.Format("{0},", assemblyName);
-                    var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
-
-                    // Invert so design-time will always pick the latest version
-                    loadedAssemblies.Reverse();
-
-                    var assembly = loadedAssemblies.FirstOrDefault(x => (x.FullName ?? string.Empty).StartsWith(containingAssemblyName));
-                    if (assembly is null)
-                    {
-                        return null;
-                    }
-
-                    var resourceFile = splittedString[0];
-                    var resourceLoader = new ResourceManager(resourceFile, assembly);
-
-                    return resourceLoader;
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "Failed to get the resource manager for source '{0}'", source);
                     return null;
                 }
-            };
 
-            if (CacheResults)
-            {
-                return _resourceFileCache.GetFromCacheOrFetch(source, retrievalFunc);
+                var resourceFile = splittedString[0];
+                var resourceLoader = new ResourceManager(resourceFile, assembly);
+
+                return resourceLoader;
             }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to get the resource manager for source '{0}'", source);
+                return null;
+            }
+        };
 
-            return retrievalFunc();
+        if (CacheResults)
+        {
+            return _resourceFileCache.GetFromCacheOrFetch(source, retrievalFunc);
         }
+
+        return retrievalFunc();
     }
 }

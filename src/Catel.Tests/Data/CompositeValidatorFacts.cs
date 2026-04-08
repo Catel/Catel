@@ -1,429 +1,428 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System;
+using System.Linq.Expressions;
+
+using Catel.Data;
+
+using NUnit.Framework;
+
+using Moq;
+using System.Threading;
+
+public class CompositeValidatorFacts
 {
-    using System;
-    using System.Linq.Expressions;
-
-    using Catel.Data;
-
-    using NUnit.Framework;
-
-    using Moq;
-    using System.Threading;
-
-    public class CompositeValidatorFacts
+    [TestFixture]
+    public class TheValidationSequenceIsThreadSafe
     {
-        [TestFixture]
-        public class TheValidationSequenceIsThreadSafe
+        [TestCase]
+        public void CompositeValidatorModificationMustWaitUntilTheEnd()
         {
-            [TestCase]
-            public void CompositeValidatorModificationMustWaitUntilTheEnd()
+            var validatorMock = new Mock<IValidator>();
+            var validatorMock1 = new Mock<IValidator>();
+            var validatorMock2 = new Mock<IValidator>();
+
+            validatorMock.Setup(validator => validator.BeforeValidation(null, null, null));
+            validatorMock.Setup(validator => validator.AfterValidation(null, null, null));
+
+            validatorMock1.Setup(validator => validator.BeforeValidation(null, null, null));
+            validatorMock1.Setup(validator => validator.AfterValidation(null, null, null));
+
+            validatorMock2.Setup(validator => validator.BeforeValidation(null, null, null));
+            validatorMock2.Setup(validator => validator.AfterValidation(null, null, null));
+
+            var compositeValidator = new CompositeValidator();
+
+            using (var startEvent = new AutoResetEvent(false))
             {
-                var validatorMock = new Mock<IValidator>();
-                var validatorMock1 = new Mock<IValidator>();
-                var validatorMock2 = new Mock<IValidator>();
-
-                validatorMock.Setup(validator => validator.BeforeValidation(null, null, null));
-                validatorMock.Setup(validator => validator.AfterValidation(null, null, null));
-
-                validatorMock1.Setup(validator => validator.BeforeValidation(null, null, null));
-                validatorMock1.Setup(validator => validator.AfterValidation(null, null, null));
-
-                validatorMock2.Setup(validator => validator.BeforeValidation(null, null, null));
-                validatorMock2.Setup(validator => validator.AfterValidation(null, null, null));
-
-                var compositeValidator = new CompositeValidator();
-
-                using (var startEvent = new AutoResetEvent(false))
+                using (var alterEvent = new AutoResetEvent(false))
                 {
-                    using (var alterEvent = new AutoResetEvent(false))
+                    var syncEvents = new[]
                     {
-                        var syncEvents = new[]
+                        new AutoResetEvent(false),
+                        new AutoResetEvent(false)
+                    };
+
+                    // Validation loop thread
+                    ThreadPool.QueueUserWorkItem(
+                        delegate
                         {
-                            new AutoResetEvent(false),
-                            new AutoResetEvent(false)
-                        };
+                            startEvent.WaitOne();
 
-                        // Validation loop thread
-                        ThreadPool.QueueUserWorkItem(
-                            delegate
-                            {
-                                startEvent.WaitOne();
+                            compositeValidator.BeforeValidation(null, null, null);
 
-                                compositeValidator.BeforeValidation(null, null, null);
+                            alterEvent.Set();
+                            ThreadHelper.Sleep(1000);
 
-                                alterEvent.Set();
-                                ThreadHelper.Sleep(1000);
+                            compositeValidator.AfterValidation(null, null, null);
+                            syncEvents[0].Set();
+                        });
 
-                                compositeValidator.AfterValidation(null, null, null);
-                                syncEvents[0].Set();
-                            });
+                    // Alter validator composition thread.
+                    ThreadPool.QueueUserWorkItem(
+                        delegate
+                        {
 
-                        // Alter validator composition thread.
-                        ThreadPool.QueueUserWorkItem(
-                            delegate
-                            {
+                            compositeValidator.Add(validatorMock.Object);
 
-                                compositeValidator.Add(validatorMock.Object);
+                            compositeValidator.Add(validatorMock1.Object);
 
-                                compositeValidator.Add(validatorMock1.Object);
+                            startEvent.Set();
+                            alterEvent.WaitOne();
 
-                                startEvent.Set();
-                                alterEvent.WaitOne();
+                            // Try add a validator during a validation loop execution to the composition.
 
-                                // Try add a validator during a validation loop execution to the composition.
+                            compositeValidator.Add(validatorMock2.Object);
 
-                                compositeValidator.Add(validatorMock2.Object);
+                            syncEvents[1].Set();
+                        });
 
-                                syncEvents[1].Set();
-                            });
+                    syncEvents[0].WaitOne(TimeSpan.FromSeconds(10));
+                    syncEvents[1].WaitOne(TimeSpan.FromSeconds(10));
 
-                        syncEvents[0].WaitOne(TimeSpan.FromSeconds(10));
-                        syncEvents[1].WaitOne(TimeSpan.FromSeconds(10));
+                    validatorMock.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
+                    validatorMock.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
 
-                        validatorMock.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
-                        validatorMock.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
+                    validatorMock1.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
+                    validatorMock1.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
 
-                        validatorMock1.Verify(validator => validator.BeforeValidation(null, null, null), Times.Exactly(1));
-                        validatorMock1.Verify(validator => validator.AfterValidation(null, null, null), Times.Exactly(1));
-
-                        validatorMock2.Verify(validator => validator.BeforeValidation(null, null, null), Times.Never());
-                        validatorMock2.Verify(validator => validator.AfterValidation(null, null, null), Times.Never());
-                    }
+                    validatorMock2.Verify(validator => validator.BeforeValidation(null, null, null), Times.Never());
+                    validatorMock2.Verify(validator => validator.AfterValidation(null, null, null), Times.Never());
                 }
             }
         }
+    }
 
-        [TestFixture]
-        public class TheAddMethod
+    [TestFixture]
+    public class TheAddMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullValidator()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullValidator()
-            {
-                var compositeValidator = new CompositeValidator();
+            var compositeValidator = new CompositeValidator();
 
-                Assert.Throws<ArgumentNullException>(() => compositeValidator.Add(null));
-            }
-
-            [TestCase]
-            public void AddsNonExistingValidator()
-            {
-                var compositeValidator = new CompositeValidator();
-
-                var validatorMock = new Mock<IValidator>();
-                var validator = validatorMock.Object;
-
-                compositeValidator.Add(validator);
-
-                Assert.That(compositeValidator.Contains(validator), Is.True);
-            }
-
-            [TestCase]
-            public void PreventsAddingDuplicateValidator()
-            {
-                var compositeValidator = new CompositeValidator();
-
-                var validatorMock = new Mock<IValidator>();
-                var validator = validatorMock.Object;
-
-                compositeValidator.Add(validator);
-
-                Assert.That(compositeValidator.Contains(validator), Is.True);
-
-                compositeValidator.Add(validator);
-
-                Assert.That(compositeValidator.Contains(validator), Is.True);
-
-                compositeValidator.Remove(validator);
-
-                Assert.That(compositeValidator.Contains(validator), Is.False);
-            }
+            Assert.Throws<ArgumentNullException>(() => compositeValidator.Add(null));
         }
 
-        [TestFixture]
-        public class TheRemoveMethod
+        [TestCase]
+        public void AddsNonExistingValidator()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullValidator()
-            {
-                var compositeValidator = new CompositeValidator();
+            var compositeValidator = new CompositeValidator();
 
-                Assert.Throws<ArgumentNullException>(() => compositeValidator.Remove(null));
-            }
+            var validatorMock = new Mock<IValidator>();
+            var validator = validatorMock.Object;
 
-            [TestCase]
-            public void RemovesExistingValidator()
-            {
-                var compositeValidator = new CompositeValidator();
+            compositeValidator.Add(validator);
 
-                var validatorMock = new Mock<IValidator>();
-                var validator = validatorMock.Object;
-
-                compositeValidator.Add(validator);
-
-                Assert.That(compositeValidator.Contains(validator), Is.True);
-
-                compositeValidator.Remove(validator);
-
-                Assert.That(compositeValidator.Contains(validator), Is.False);
-            }
-
-            [TestCase]
-            public void DoesNotRemoveNonExistingValidator()
-            {
-                var compositeValidator = new CompositeValidator();
-
-                var validatorMock = new Mock<IValidator>();
-                var validator = validatorMock.Object;
-
-                Assert.That(compositeValidator.Contains(validator), Is.False);
-
-                compositeValidator.Remove(validator);
-
-                Assert.That(compositeValidator.Contains(validator), Is.False);
-            }
+            Assert.That(compositeValidator.Contains(validator), Is.True);
         }
 
-        [TestFixture]
-        public class TheContainsMethod
+        [TestCase]
+        public void PreventsAddingDuplicateValidator()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullValidator()
-            {
-                var compositeValidator = new CompositeValidator();
+            var compositeValidator = new CompositeValidator();
 
-                Assert.Throws<ArgumentNullException>(() => compositeValidator.Contains(null));
-            }
+            var validatorMock = new Mock<IValidator>();
+            var validator = validatorMock.Object;
 
-            [TestCase]
-            public void ReturnsTrueForExistingValidator()
-            {
-                var compositeValidator = new CompositeValidator();
+            compositeValidator.Add(validator);
 
-                var validatorMock = new Mock<IValidator>();
-                var validator = validatorMock.Object;
+            Assert.That(compositeValidator.Contains(validator), Is.True);
 
-                compositeValidator.Add(validator);
+            compositeValidator.Add(validator);
 
-                Assert.That(compositeValidator.Contains(validator), Is.True);
-            }
+            Assert.That(compositeValidator.Contains(validator), Is.True);
 
-            [TestCase]
-            public void ReturnsFalseForNonExistingValidator()
-            {
-                var compositeValidator = new CompositeValidator();
+            compositeValidator.Remove(validator);
 
-                var validatorMock = new Mock<IValidator>();
-                var validator = validatorMock.Object;
+            Assert.That(compositeValidator.Contains(validator), Is.False);
+        }
+    }
 
-                Assert.That(compositeValidator.Contains(validator), Is.False);
-            }
+    [TestFixture]
+    public class TheRemoveMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullValidator()
+        {
+            var compositeValidator = new CompositeValidator();
+
+            Assert.Throws<ArgumentNullException>(() => compositeValidator.Remove(null));
         }
 
-        [TestFixture]
-        public class TheBeforeValidationMethod
+        [TestCase]
+        public void RemovesExistingValidator()
         {
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidation(null, null, null), () => compositeValidator.BeforeValidation(null, null, null));
-            }
+            var compositeValidator = new CompositeValidator();
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+            var validatorMock = new Mock<IValidator>();
+            var validator = validatorMock.Object;
 
-                TestCompositeValidator(compositeValidator, validator => validator.BeforeValidation(null, null, null),
-                    () => compositeValidator.BeforeValidation(null, null, null));
-            }
+            compositeValidator.Add(validator);
+
+            Assert.That(compositeValidator.Contains(validator), Is.True);
+
+            compositeValidator.Remove(validator);
+
+            Assert.That(compositeValidator.Contains(validator), Is.False);
         }
 
-        [TestFixture]
-        public class TheBeforeValidateFieldsMethod
+        [TestCase]
+        public void DoesNotRemoveNonExistingValidator()
         {
+            var compositeValidator = new CompositeValidator();
 
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidateFields(null, null), () => compositeValidator.BeforeValidateFields(null, null));
-            }
+            var validatorMock = new Mock<IValidator>();
+            var validator = validatorMock.Object;
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+            Assert.That(compositeValidator.Contains(validator), Is.False);
 
-                TestCompositeValidator(compositeValidator, validator => validator.BeforeValidateFields(null, null),
-                    () => compositeValidator.BeforeValidateFields(null, null));
-            }
+            compositeValidator.Remove(validator);
+
+            Assert.That(compositeValidator.Contains(validator), Is.False);
+        }
+    }
+
+    [TestFixture]
+    public class TheContainsMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullValidator()
+        {
+            var compositeValidator = new CompositeValidator();
+
+            Assert.Throws<ArgumentNullException>(() => compositeValidator.Contains(null));
         }
 
-        [TestFixture]
-        public class TheBeforeValidateBusinessRulesMethod
+        [TestCase]
+        public void ReturnsTrueForExistingValidator()
         {
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidateBusinessRules(null, null), () => compositeValidator.BeforeValidateBusinessRules(null, null));
-            }
+            var compositeValidator = new CompositeValidator();
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+            var validatorMock = new Mock<IValidator>();
+            var validator = validatorMock.Object;
 
-                TestCompositeValidator(compositeValidator, validator => validator.BeforeValidateBusinessRules(null, null),
-                    () => compositeValidator.BeforeValidateBusinessRules(null, null));
-            }
+            compositeValidator.Add(validator);
+
+            Assert.That(compositeValidator.Contains(validator), Is.True);
         }
 
-        [TestFixture]
-        public class TheValidateFieldsMethod
+        [TestCase]
+        public void ReturnsFalseForNonExistingValidator()
         {
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.ValidateFields(null, null), () => compositeValidator.ValidateFields(null, null));
-            }
+            var compositeValidator = new CompositeValidator();
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+            var validatorMock = new Mock<IValidator>();
+            var validator = validatorMock.Object;
 
-                TestCompositeValidator(compositeValidator, validator => validator.ValidateFields(null, null),
-                    () => compositeValidator.ValidateFields(null, null));
-            }
+            Assert.That(compositeValidator.Contains(validator), Is.False);
+        }
+    }
+
+    [TestFixture]
+    public class TheBeforeValidationMethod
+    {
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidation(null, null, null), () => compositeValidator.BeforeValidation(null, null, null));
         }
 
-        [TestFixture]
-        public class TheValidateBusinessRulesMethod
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
         {
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.ValidateBusinessRules(null, null), () => compositeValidator.ValidateBusinessRules(null, null));
-            }
+            var compositeValidator = new CompositeValidator();
 
+            TestCompositeValidator(compositeValidator, validator => validator.BeforeValidation(null, null, null),
+                () => compositeValidator.BeforeValidation(null, null, null));
+        }
+    }
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+    [TestFixture]
+    public class TheBeforeValidateFieldsMethod
+    {
 
-                TestCompositeValidator(compositeValidator, validator => validator.ValidateBusinessRules(null, null),
-                    () => compositeValidator.ValidateBusinessRules(null, null));
-            }
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidateFields(null, null), () => compositeValidator.BeforeValidateFields(null, null));
         }
 
-        [TestFixture]
-        public class TheAfterValidateFieldsMethod
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
         {
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidateFields(null, null), () => compositeValidator.AfterValidateFields(null, null));
-            }
+            var compositeValidator = new CompositeValidator();
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+            TestCompositeValidator(compositeValidator, validator => validator.BeforeValidateFields(null, null),
+                () => compositeValidator.BeforeValidateFields(null, null));
+        }
+    }
 
-                TestCompositeValidator(compositeValidator, validator => validator.AfterValidateFields(null, null),
-                    () => compositeValidator.AfterValidateFields(null, null));
-            }
+    [TestFixture]
+    public class TheBeforeValidateBusinessRulesMethod
+    {
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidateBusinessRules(null, null), () => compositeValidator.BeforeValidateBusinessRules(null, null));
         }
 
-        [TestFixture]
-        public class TheAfterValidateBusinessRulesMethod
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
         {
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidateBusinessRules(null, null), () => compositeValidator.AfterValidateBusinessRules(null, null));
-            }
+            var compositeValidator = new CompositeValidator();
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+            TestCompositeValidator(compositeValidator, validator => validator.BeforeValidateBusinessRules(null, null),
+                () => compositeValidator.BeforeValidateBusinessRules(null, null));
+        }
+    }
 
-                TestCompositeValidator(compositeValidator, validator => validator.AfterValidateBusinessRules(null, null),
-                    () => compositeValidator.AfterValidateBusinessRules(null, null));
-            }
+    [TestFixture]
+    public class TheValidateFieldsMethod
+    {
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.ValidateFields(null, null), () => compositeValidator.ValidateFields(null, null));
         }
 
-        [TestFixture]
-        public class TheAfterValidationMethod
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
         {
-            [TestCase]
-            public void ThrowsExceptionIfAnyValidatorDoes()
-            {
-                var compositeValidator = new CompositeValidator();
-                TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidation(null, null, null), () => compositeValidator.AfterValidation(null, null, null));
-            }
+            var compositeValidator = new CompositeValidator();
 
-            [TestCase]
-            public void CallsMethodOnRegisteredValidatorsCorrectly()
-            {
-                var compositeValidator = new CompositeValidator();
+            TestCompositeValidator(compositeValidator, validator => validator.ValidateFields(null, null),
+                () => compositeValidator.ValidateFields(null, null));
+        }
+    }
 
-                TestCompositeValidator(compositeValidator, validator => validator.AfterValidation(null, null, null),
-                    () => compositeValidator.AfterValidation(null, null, null));
-            }
+    [TestFixture]
+    public class TheValidateBusinessRulesMethod
+    {
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.ValidateBusinessRules(null, null), () => compositeValidator.ValidateBusinessRules(null, null));
         }
 
-        /// <summary>
-        /// Creates a composite validator with 2 validators and checks whether the method are called.
-        /// </summary>
-        /// <param name="compositeValidator">The composite validator.</param>
-        /// <param name="expression">The expression.</param>
-        /// <param name="actionToExecute">The action to execute.</param>
-        private static void TestCompositeValidator(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute)
+
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
         {
-            var validator1Mock = new Mock<IValidator>();
-            validator1Mock.Setup(expression);
-            var validator1 = validator1Mock.Object;
+            var compositeValidator = new CompositeValidator();
 
-            var validator2Mock = new Mock<IValidator>();
-            validator2Mock.Setup(expression);
-            var validator2 = validator2Mock.Object;
+            TestCompositeValidator(compositeValidator, validator => validator.ValidateBusinessRules(null, null),
+                () => compositeValidator.ValidateBusinessRules(null, null));
+        }
+    }
 
-            compositeValidator.Add(validator1);
-            compositeValidator.Add(validator2);
-
-            actionToExecute();
-
-            validator1Mock.Verify(expression, Times.Once());
-            validator2Mock.Verify(expression, Times.Once());
+    [TestFixture]
+    public class TheAfterValidateFieldsMethod
+    {
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidateFields(null, null), () => compositeValidator.AfterValidateFields(null, null));
         }
 
-        private static void TestCompositeRethrowException<TException>(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute)
-            where TException : Exception, new()
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
         {
-            var validator1Mock = new Mock<IValidator>();
-            validator1Mock.Setup(expression);
-            var validator1 = validator1Mock.Object;
+            var compositeValidator = new CompositeValidator();
 
-            var validator2Mock = new Mock<IValidator>();
-            validator2Mock.Setup(expression).Throws(new TException());
-            var validator2 = validator2Mock.Object;
-
-            compositeValidator.Add(validator1);
-            compositeValidator.Add(validator2);
-
-            Assert.Throws<TException>(() => actionToExecute());
-
-            validator1Mock.Verify(expression, Times.Once());
-            validator2Mock.Verify(expression, Times.Once());
+            TestCompositeValidator(compositeValidator, validator => validator.AfterValidateFields(null, null),
+                () => compositeValidator.AfterValidateFields(null, null));
         }
+    }
+
+    [TestFixture]
+    public class TheAfterValidateBusinessRulesMethod
+    {
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidateBusinessRules(null, null), () => compositeValidator.AfterValidateBusinessRules(null, null));
+        }
+
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
+        {
+            var compositeValidator = new CompositeValidator();
+
+            TestCompositeValidator(compositeValidator, validator => validator.AfterValidateBusinessRules(null, null),
+                () => compositeValidator.AfterValidateBusinessRules(null, null));
+        }
+    }
+
+    [TestFixture]
+    public class TheAfterValidationMethod
+    {
+        [TestCase]
+        public void ThrowsExceptionIfAnyValidatorDoes()
+        {
+            var compositeValidator = new CompositeValidator();
+            TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidation(null, null, null), () => compositeValidator.AfterValidation(null, null, null));
+        }
+
+        [TestCase]
+        public void CallsMethodOnRegisteredValidatorsCorrectly()
+        {
+            var compositeValidator = new CompositeValidator();
+
+            TestCompositeValidator(compositeValidator, validator => validator.AfterValidation(null, null, null),
+                () => compositeValidator.AfterValidation(null, null, null));
+        }
+    }
+
+    /// <summary>
+    /// Creates a composite validator with 2 validators and checks whether the method are called.
+    /// </summary>
+    /// <param name="compositeValidator">The composite validator.</param>
+    /// <param name="expression">The expression.</param>
+    /// <param name="actionToExecute">The action to execute.</param>
+    private static void TestCompositeValidator(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute)
+    {
+        var validator1Mock = new Mock<IValidator>();
+        validator1Mock.Setup(expression);
+        var validator1 = validator1Mock.Object;
+
+        var validator2Mock = new Mock<IValidator>();
+        validator2Mock.Setup(expression);
+        var validator2 = validator2Mock.Object;
+
+        compositeValidator.Add(validator1);
+        compositeValidator.Add(validator2);
+
+        actionToExecute();
+
+        validator1Mock.Verify(expression, Times.Once());
+        validator2Mock.Verify(expression, Times.Once());
+    }
+
+    private static void TestCompositeRethrowException<TException>(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute)
+        where TException : Exception, new()
+    {
+        var validator1Mock = new Mock<IValidator>();
+        validator1Mock.Setup(expression);
+        var validator1 = validator1Mock.Object;
+
+        var validator2Mock = new Mock<IValidator>();
+        validator2Mock.Setup(expression).Throws(new TException());
+        var validator2 = validator2Mock.Object;
+
+        compositeValidator.Add(validator1);
+        compositeValidator.Add(validator2);
+
+        Assert.Throws<TException>(() => actionToExecute());
+
+        validator1Mock.Verify(expression, Times.Once());
+        validator2Mock.Verify(expression, Times.Once());
     }
 }

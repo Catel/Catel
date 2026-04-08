@@ -1,65 +1,64 @@
-﻿namespace Catel.ThirdPartyNotices
+﻿namespace Catel.ThirdPartyNotices;
+
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Catel;
+
+public class ResourceBasedThirdPartyNotice : ThirdPartyNotice
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using Catel;
-
-    public class ResourceBasedThirdPartyNotice : ThirdPartyNotice
+    protected ResourceBasedThirdPartyNotice()
     {
-        protected ResourceBasedThirdPartyNotice()
+        // Only here to allow derived classes
+    }
+
+    public ResourceBasedThirdPartyNotice(string title, string url, string assemblyName, string relativeResourceName)
+    {
+        var assembly = Catel.Reflection.AssemblyHelper.GetLoadedAssemblies().First(x => (x.GetName().Name ?? string.Empty).EqualsIgnoreCase(assemblyName));
+
+        Initialize(title, url, assembly, assembly.GetName().Name ?? string.Empty, relativeResourceName);
+    }
+
+    public ResourceBasedThirdPartyNotice(string title, string url, string assemblyName, string rootNamespace, string relativeResourceName)
+    {
+        var assembly = Catel.Reflection.AssemblyHelper.GetLoadedAssemblies().First(x => (x.GetName().Name ?? string.Empty).EqualsIgnoreCase(assemblyName));
+
+        Initialize(title, url, assembly, rootNamespace, relativeResourceName);
+    }
+
+    public ResourceBasedThirdPartyNotice(string title, string url, Assembly assembly, string relativeResourceName)
+    {
+        Initialize(title, url, assembly, assembly.GetName().Name ?? string.Empty, relativeResourceName);
+    }
+
+    public ResourceBasedThirdPartyNotice(string title, string url, Assembly assembly, string rootNamespace, string relativeResourceName)
+    {
+        Initialize(title, url, assembly, rootNamespace, relativeResourceName);
+    }
+
+    protected void Initialize(string title, string url, Assembly assembly, string rootNamespace, string relativeResourceName)
+    {
+        ArgumentNullException.ThrowIfNull(title);
+        ArgumentNullException.ThrowIfNull(assembly);
+
+        Title = title;
+        Url = url;
+
+        using (var memoryStream = new MemoryStream())
         {
-            // Only here to allow derived classes
-        }
+            ResourceHelper.ExtractEmbeddedResource(assembly, rootNamespace, relativeResourceName, memoryStream);
 
-        public ResourceBasedThirdPartyNotice(string title, string url, string assemblyName, string relativeResourceName)
-        {
-            var assembly = Catel.Reflection.AssemblyHelper.GetLoadedAssemblies().First(x => (x.GetName().Name ?? string.Empty).EqualsIgnoreCase(assemblyName));
+            memoryStream.Position = 0L;
 
-            Initialize(title, url, assembly, assembly.GetName().Name ?? string.Empty, relativeResourceName);
-        }
-
-        public ResourceBasedThirdPartyNotice(string title, string url, string assemblyName, string rootNamespace, string relativeResourceName)
-        {
-            var assembly = Catel.Reflection.AssemblyHelper.GetLoadedAssemblies().First(x => (x.GetName().Name ?? string.Empty).EqualsIgnoreCase(assemblyName));
-
-            Initialize(title, url, assembly, rootNamespace, relativeResourceName);
-        }
-
-        public ResourceBasedThirdPartyNotice(string title, string url, Assembly assembly, string relativeResourceName)
-        {
-            Initialize(title, url, assembly, assembly.GetName().Name ?? string.Empty, relativeResourceName);
-        }
-
-        public ResourceBasedThirdPartyNotice(string title, string url, Assembly assembly, string rootNamespace, string relativeResourceName)
-        {
-            Initialize(title, url, assembly, rootNamespace, relativeResourceName);
-        }
-
-        protected void Initialize(string title, string url, Assembly assembly, string rootNamespace, string relativeResourceName)
-        {
-            ArgumentNullException.ThrowIfNull(title);
-            ArgumentNullException.ThrowIfNull(assembly);
-
-            Title = title;
-            Url = url;
-
-            using (var memoryStream = new MemoryStream())
+            using (var textReader = new StreamReader(memoryStream))
             {
-                ResourceHelper.ExtractEmbeddedResource(assembly, rootNamespace, relativeResourceName, memoryStream);
+                Content = "[failed to load resources]";
 
-                memoryStream.Position = 0L;
-
-                using (var textReader = new StreamReader(memoryStream))
+                var content = textReader.ReadToEnd();
+                if (!string.IsNullOrEmpty(content))
                 {
-                    Content = "[failed to load resources]";
-
-                    var content = textReader.ReadToEnd();
-                    if (!string.IsNullOrEmpty(content))
-                    {
-                        Content = content;
-                    }
+                    Content = content;
                 }
             }
         }

@@ -1,6 +1,5 @@
-﻿namespace Catel.Tests.Services
+﻿namespace Catel.Tests.Services;
+
+public partial class ILanguageServiceExtensionsFacts
 {
-    public partial class ILanguageServiceExtensionsFacts
-    {
-    }
 }

@@ -1,23 +1,22 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+/// <summary>
+/// View model lifetime management options.
+/// </summary>
+public enum ViewModelLifetimeManagement
 {
     /// <summary>
-    /// View model lifetime management options.
+    /// Automatic view model lifetime management.
     /// </summary>
-    public enum ViewModelLifetimeManagement
-    {
-        /// <summary>
-        /// Automatic view model lifetime management.
-        /// </summary>
-        Automatic,
+    Automatic,
 
-        /// <summary>
-        /// Partly manual, view model will be created and initialized, but not be closed.
-        /// </summary>
-        PartlyManual,
+    /// <summary>
+    /// Partly manual, view model will be created and initialized, but not be closed.
+    /// </summary>
+    PartlyManual,
 
-        /// <summary>
-        /// Fully manual, view model will not be created.
-        /// </summary>
-        FullyManual,
-    }
+    /// <summary>
+    /// Fully manual, view model will not be created.
+    /// </summary>
+    FullyManual,
 }

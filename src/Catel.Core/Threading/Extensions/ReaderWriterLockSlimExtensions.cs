@@ -1,110 +1,109 @@
-﻿namespace Catel.Threading
+﻿namespace Catel.Threading;
+
+using System;
+using System.Threading;
+
+/// <summary>
+/// Provides extensions for <see cref="System.Threading.ReaderWriterLockSlim"/>.
+/// </summary>
+public static class ReaderWriterLockSlimExtensions
 {
-    using System;
-    using System.Threading;
+    /// <summary>
+    /// Performs operation that requires read access to shared resource.
+    /// </summary>
+    /// <param name="lockSlim">The reader-writer lock.</param>
+    /// <param name="criticalOperation">Performed operation.</param>
+    public static void PerformRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
+    {
+        lockSlim.EnterReadLock();
+
+        try
+        {
+            criticalOperation();
+        }
+        finally
+        {
+            lockSlim.ExitReadLock();
+        }
+    }
 
     /// <summary>
-    /// Provides extensions for <see cref="System.Threading.ReaderWriterLockSlim"/>.
+    /// Performs operation that requires read access to shared resource and returns it result.
     /// </summary>
-    public static class ReaderWriterLockSlimExtensions
+    /// <typeparam name="T">Type of result.</typeparam>
+    /// <param name="lockSlim">The reader-writer lock.</param>
+    /// <param name="criticalOperation">Performed operation.</param>
+    /// <returns>Performed operation result.</returns>
+    public static T PerformRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
     {
-        /// <summary>
-        /// Performs operation that requires read access to shared resource.
-        /// </summary>
-        /// <param name="lockSlim">The reader-writer lock.</param>
-        /// <param name="criticalOperation">Performed operation.</param>
-        public static void PerformRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
-        {
-            lockSlim.EnterReadLock();
+        lockSlim.EnterReadLock();
 
-            try
-            {
-                criticalOperation();
-            }
-            finally
-            {
-                lockSlim.ExitReadLock();
-            }
+        try
+        {
+            return criticalOperation();
         }
-
-        /// <summary>
-        /// Performs operation that requires read access to shared resource and returns it result.
-        /// </summary>
-        /// <typeparam name="T">Type of result.</typeparam>
-        /// <param name="lockSlim">The reader-writer lock.</param>
-        /// <param name="criticalOperation">Performed operation.</param>
-        /// <returns>Performed operation result.</returns>
-        public static T PerformRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
+        finally
         {
-            lockSlim.EnterReadLock();
-
-            try
-            {
-                return criticalOperation();
-            }
-            finally
-            {
-                lockSlim.ExitReadLock();
-            }
+            lockSlim.ExitReadLock();
         }
+    }
 
-        /// <summary>
-        /// Performs operation that requires write access to shared resource.
-        /// </summary>
-        /// <param name="lockSlim">The reader-writer lock.</param>
-        /// <param name="criticalOperation">Performed operation.</param>
-        public static void PerformWrite(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
+    /// <summary>
+    /// Performs operation that requires write access to shared resource.
+    /// </summary>
+    /// <param name="lockSlim">The reader-writer lock.</param>
+    /// <param name="criticalOperation">Performed operation.</param>
+    public static void PerformWrite(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
+    {
+        lockSlim.EnterWriteLock();
+
+        try
         {
-            lockSlim.EnterWriteLock();
-
-            try
-            {
-                criticalOperation();
-            }
-            finally
-            {
-                lockSlim.ExitWriteLock();
-            }
+            criticalOperation();
         }
-
-        /// <summary>
-        /// Performs operation that requires read access to shared resource but may require write access also.
-        /// </summary>
-        /// <param name="lockSlim">The reader-writer lock.</param>
-        /// <param name="criticalOperation">Performed operation.</param>
-        public static void PerformUpgradableRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
+        finally
         {
-            lockSlim.EnterUpgradeableReadLock();
-
-            try
-            {
-                criticalOperation();
-            }
-            finally
-            {
-                lockSlim.ExitUpgradeableReadLock();
-            }
+            lockSlim.ExitWriteLock();
         }
+    }
 
-        /// <summary>
-        /// Performs operation that requires read access to shared resource but may require write access also and returns it result.
-        /// </summary>
-        /// <typeparam name="T">Type of result.</typeparam>
-        /// <param name="lockSlim">The reader-writer lock.</param>
-        /// <param name="criticalOperation">Performed operation.</param>
-        /// <returns>Performed operation result.</returns>
-        public static T PerformUpgradableRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
+    /// <summary>
+    /// Performs operation that requires read access to shared resource but may require write access also.
+    /// </summary>
+    /// <param name="lockSlim">The reader-writer lock.</param>
+    /// <param name="criticalOperation">Performed operation.</param>
+    public static void PerformUpgradableRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
+    {
+        lockSlim.EnterUpgradeableReadLock();
+
+        try
         {
-            lockSlim.EnterUpgradeableReadLock();
+            criticalOperation();
+        }
+        finally
+        {
+            lockSlim.ExitUpgradeableReadLock();
+        }
+    }
 
-            try
-            {
-                return criticalOperation();
-            }
-            finally
-            {
-                lockSlim.ExitUpgradeableReadLock();
-            }
+    /// <summary>
+    /// Performs operation that requires read access to shared resource but may require write access also and returns it result.
+    /// </summary>
+    /// <typeparam name="T">Type of result.</typeparam>
+    /// <param name="lockSlim">The reader-writer lock.</param>
+    /// <param name="criticalOperation">Performed operation.</param>
+    /// <returns>Performed operation result.</returns>
+    public static T PerformUpgradableRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
+    {
+        lockSlim.EnterUpgradeableReadLock();
+
+        try
+        {
+            return criticalOperation();
+        }
+        finally
+        {
+            lockSlim.ExitUpgradeableReadLock();
         }
     }
 }

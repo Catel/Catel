@@ -1,75 +1,74 @@
-﻿namespace Catel.ComponentModel
+﻿namespace Catel.ComponentModel;
+
+using System;
+using Catel.IoC;
+using Microsoft.Extensions.DependencyInjection;
+using Services;
+
+/// <summary>
+/// A custom implementation of the display name attribute that uses the <see cref="ILanguageService"/>.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Field)]
+public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
 {
-    using System;
-    using Catel.IoC;
-    using Microsoft.Extensions.DependencyInjection;
-    using Services;
+    private readonly string _resourceName;
 
     /// <summary>
-    /// A custom implementation of the display name attribute that uses the <see cref="ILanguageService"/>.
+    /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Field)]
-    public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
+    public DisplayNameAttribute(string resourceName)
+        : this(IoCContainer.ServiceProvider.GetRequiredService<ILanguageService>(), resourceName)
     {
-        private readonly string _resourceName;
+        // leave empty
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
-        /// </summary>
-        public DisplayNameAttribute(string resourceName)
-            : this(IoCContainer.ServiceProvider.GetRequiredService<ILanguageService>(), resourceName)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
+    /// </summary>
+    public DisplayNameAttribute(ILanguageService languageService, string resourceName)
+        : base(string.Empty)
+    {
+        Argument.IsNotNullOrWhitespace("resourceName", resourceName);
+
+        LanguageService = languageService;
+        _resourceName = resourceName;
+    }
+
+    /// <summary>
+    /// Gets or sets the language service.
+    /// </summary>
+    /// <value>The language service.</value>
+    public ILanguageService LanguageService { get; set; }
+
+    /// <summary>
+    /// Gets the display name.
+    /// </summary>
+    /// <value>The display name.</value>
+    public override string DisplayName
+    {
+        get
         {
-            // leave empty
-        }
+            var languageService = LanguageService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
-        /// </summary>
-        public DisplayNameAttribute(ILanguageService languageService, string resourceName)
-            : base(string.Empty)
-        {
-            Argument.IsNotNullOrWhitespace("resourceName", resourceName);
-
-            LanguageService = languageService;
-            _resourceName = resourceName;
-        }
-
-        /// <summary>
-        /// Gets or sets the language service.
-        /// </summary>
-        /// <value>The language service.</value>
-        public ILanguageService LanguageService { get; set; }
-
-        /// <summary>
-        /// Gets the display name.
-        /// </summary>
-        /// <value>The display name.</value>
-        public override string DisplayName
-        {
-            get
+            var displayName = languageService.GetString(_resourceName);
+            if (string.IsNullOrWhiteSpace(displayName))
             {
-                var languageService = LanguageService;
-
-                var displayName = languageService.GetString(_resourceName);
-                if (string.IsNullOrWhiteSpace(displayName))
-                {
-                    displayName = _resourceName;
-                }
-
-                return displayName;
+                displayName = _resourceName;
             }
+
+            return displayName;
         }
+    }
 
-        /// <summary>
-        /// Gets the resource name.
-        /// </summary>
-        /// <value>The resource name.</value>
-        public string ResourceName
+    /// <summary>
+    /// Gets the resource name.
+    /// </summary>
+    /// <value>The resource name.</value>
+    public string ResourceName
+    {
+        get
         {
-            get
-            {
-                return _resourceName;
-            }
+            return _resourceName;
         }
     }
 }

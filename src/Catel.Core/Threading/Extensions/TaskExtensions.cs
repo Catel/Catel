@@ -1,113 +1,112 @@
-﻿namespace Catel.Threading
+﻿namespace Catel.Threading;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Class TaskExtensions.
+/// </summary>
+public static class TaskExtensions
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Logging;
-    using Microsoft.Extensions.Logging;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(TaskExtensions));
 
     /// <summary>
-    /// Class TaskExtensions.
+    /// Awaits the task with the specified time out. If the 
     /// </summary>
-    public static class TaskExtensions
+    /// <param name="task">The task.</param>
+    /// <param name="timeout">The timeout.</param>
+    /// <returns></returns>
+    public static async Task AwaitWithTimeoutAsync(this Task task, int timeout)
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(TaskExtensions));
-
-        /// <summary>
-        /// Awaits the task with the specified time out. If the 
-        /// </summary>
-        /// <param name="task">The task.</param>
-        /// <param name="timeout">The timeout.</param>
-        /// <returns></returns>
-        public static async Task AwaitWithTimeoutAsync(this Task task, int timeout)
+        using (var cts = new CancellationTokenSource())
         {
-            using (var cts = new CancellationTokenSource())
-            {
-                // If the task is the first one to be returned, the task completed faster than the delay task
+            // If the task is the first one to be returned, the task completed faster than the delay task
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
+            if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
 #pragma warning restore HAA0101 // Array allocation for params parameter
-                {
+            {
 #if NET8_0_OR_GREATER
-                    await cts.CancelAsync();
+                await cts.CancelAsync();
 #else
-                    cts.Cancel();
+                cts.Cancel();
 #endif
-                    return;
-                }
-
-                // Failed
-                throw Logger.LogErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
+                return;
             }
+
+            // Failed
+            throw Logger.LogErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
         }
+    }
 
-        /// <summary>
-        /// Waits for the task to complete, unwrapping any exceptions.
-        /// </summary>
-        /// <param name="task">The task. May not be <c>null</c>.</param>
-        public static void WaitAndUnwrapException(this Task task)
+    /// <summary>
+    /// Waits for the task to complete, unwrapping any exceptions.
+    /// </summary>
+    /// <param name="task">The task. May not be <c>null</c>.</param>
+    public static void WaitAndUnwrapException(this Task task)
+    {
+        task.GetAwaiter().GetResult();
+    }
+
+    /// <summary>
+    /// Waits for the task to complete, unwrapping any exceptions.
+    /// </summary>
+    /// <param name="task">The task. May not be <c>null</c>.</param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> was cancelled before the <paramref name="task"/> completed, or the <paramref name="task"/> raised an <see cref="OperationCanceledException"/>.</exception>
+    public static void WaitAndUnwrapException(this Task task, CancellationToken cancellationToken)
+    {
+        try
         {
-            task.GetAwaiter().GetResult();
+            task.Wait(cancellationToken);
         }
-
-        /// <summary>
-        /// Waits for the task to complete, unwrapping any exceptions.
-        /// </summary>
-        /// <param name="task">The task. May not be <c>null</c>.</param>
-        /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
-        /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> was cancelled before the <paramref name="task"/> completed, or the <paramref name="task"/> raised an <see cref="OperationCanceledException"/>.</exception>
-        public static void WaitAndUnwrapException(this Task task, CancellationToken cancellationToken)
+        catch (AggregateException ex)
         {
-            try
+            if (ex.InnerException is not null)
             {
-                task.Wait(cancellationToken);
+                throw ex.InnerException;
             }
-            catch (AggregateException ex)
-            {
-                if (ex.InnerException is not null)
-                {
-                    throw ex.InnerException;
-                }
 
-                throw;
-            }
+            throw;
         }
+    }
 
-        /// <summary>
-        /// Waits for the task to complete, unwrapping any exceptions.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result of the task.</typeparam>
-        /// <param name="task">The task. May not be <c>null</c>.</param>
-        /// <returns>The result of the task.</returns>
-        public static TResult WaitAndUnwrapException<TResult>(this Task<TResult> task)
+    /// <summary>
+    /// Waits for the task to complete, unwrapping any exceptions.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result of the task.</typeparam>
+    /// <param name="task">The task. May not be <c>null</c>.</param>
+    /// <returns>The result of the task.</returns>
+    public static TResult WaitAndUnwrapException<TResult>(this Task<TResult> task)
+    {
+        return task.GetAwaiter().GetResult();
+    }
+
+    /// <summary>
+    /// Waits for the task to complete, unwrapping any exceptions.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result of the task.</typeparam>
+    /// <param name="task">The task. May not be <c>null</c>.</param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>The result of the task.</returns>
+    /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> was cancelled before the <paramref name="task"/> completed, or the <paramref name="task"/> raised an <see cref="OperationCanceledException"/>.</exception>
+    public static TResult WaitAndUnwrapException<TResult>(this Task<TResult> task, CancellationToken cancellationToken)
+    {
+        try
         {
-            return task.GetAwaiter().GetResult();
+            task.Wait(cancellationToken);
+            return task.Result;
         }
-
-        /// <summary>
-        /// Waits for the task to complete, unwrapping any exceptions.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result of the task.</typeparam>
-        /// <param name="task">The task. May not be <c>null</c>.</param>
-        /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
-        /// <returns>The result of the task.</returns>
-        /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> was cancelled before the <paramref name="task"/> completed, or the <paramref name="task"/> raised an <see cref="OperationCanceledException"/>.</exception>
-        public static TResult WaitAndUnwrapException<TResult>(this Task<TResult> task, CancellationToken cancellationToken)
+        catch (AggregateException ex)
         {
-            try
+            if (ex.InnerException is not null)
             {
-                task.Wait(cancellationToken);
-                return task.Result;
+                throw ex.InnerException;
             }
-            catch (AggregateException ex)
-            {
-                if (ex.InnerException is not null)
-                {
-                    throw ex.InnerException;
-                }
 
-                throw;
-            }
+            throw;
         }
     }
 }

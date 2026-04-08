@@ -1,46 +1,45 @@
-﻿namespace Catel.Tests.Data.TestClasses
+﻿namespace Catel.Tests.Data.TestClasses;
+
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+using Catel.Data;
+
+public class ValidatableParent : ChildAwareModelBase
 {
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-
-    using Catel.Data;
-
-    public class ValidatableParent : ChildAwareModelBase
+    public ValidatableChild Child
     {
-        public ValidatableChild Child
+        get => GetValue<ValidatableChild>(ChildProperty);
+        set => SetValue(ChildProperty, value);
+    }
+
+    public static readonly IPropertyData ChildProperty = RegisterProperty<ValidatableParent, ValidatableChild>(model => model.Child);
+
+    public ObservableCollection<ValidatableChild> Collection
+    {
+        get => GetValue<ObservableCollection<ValidatableChild>>(CollectionProperty);
+        set => SetValue(CollectionProperty, value);
+    }
+
+    public static readonly IPropertyData CollectionProperty = RegisterProperty<ValidatableParent, ObservableCollection<ValidatableChild>>(model => model.Collection);
+
+    protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
+    {
+        if (Child is not null)
         {
-            get => GetValue<ValidatableChild>(ChildProperty);
-            set => SetValue(ChildProperty, value);
-        }
-
-        public static readonly IPropertyData ChildProperty = RegisterProperty<ValidatableParent, ValidatableChild>(model => model.Child);
-
-        public ObservableCollection<ValidatableChild> Collection
-        {
-            get => GetValue<ObservableCollection<ValidatableChild>>(CollectionProperty);
-            set => SetValue(CollectionProperty, value);
-        }
-
-        public static readonly IPropertyData CollectionProperty = RegisterProperty<ValidatableParent, ObservableCollection<ValidatableChild>>(model => model.Collection);
-
-        protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
-        {
-            if (Child is not null)
+            var errors = Child.GetErrorMessage();
+            if (errors.Length != 0)
             {
-                var errors = Child.GetErrorMessage();
-                if (errors.Length != 0)
-                {
-                    validationResults.Add(BusinessRuleValidationResult.CreateError(errors));
-                }
+                validationResults.Add(BusinessRuleValidationResult.CreateError(errors));
             }
+        }
 
-            if (Collection is not null && Collection.Count != 0)
+        if (Collection is not null && Collection.Count != 0)
+        {
+            var errors = Collection[0].GetErrorMessage();
+            if (errors.Length != 0)
             {
-                var errors = Collection[0].GetErrorMessage();
-                if (errors.Length != 0)
-                {
-                    validationResults.Add(BusinessRuleValidationResult.CreateError(errors));
-                }
+                validationResults.Add(BusinessRuleValidationResult.CreateError(errors));
             }
         }
     }

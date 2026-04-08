@@ -1,18 +1,17 @@
-﻿namespace Catel.Configuration
+﻿namespace Catel.Configuration;
+
+/// <summary>
+/// The configuration containers.
+/// </summary>
+public enum ConfigurationContainer
 {
     /// <summary>
-    /// The configuration containers.
+    /// The local configuration container.
     /// </summary>
-    public enum ConfigurationContainer
-    {
-        /// <summary>
-        /// The local configuration container.
-        /// </summary>
-        Local,
+    Local,
 
-        /// <summary>
-        /// The roaming configuration container.
-        /// </summary>
-        Roaming
-    }
+    /// <summary>
+    /// The roaming configuration container.
+    /// </summary>
+    Roaming
 }

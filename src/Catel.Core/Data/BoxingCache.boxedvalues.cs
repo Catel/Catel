@@ -10,471 +10,470 @@
 // </auto-generated> 
 //------------------------------------------------------------------------------
 
-namespace Catel.Data
-{
+namespace Catel.Data;
+
 	using System;
 
 	public static partial class BoxingCache
 	{
-        /// <summary>
-        /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue<TValue>(TValue value)
-            where TValue : notnull
+    /// <summary>
+    /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue<TValue>(TValue value)
+        where TValue : notnull
+    {
+        return BoxingCache<TValue>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Boolean value)
+    {
+        return BoxingCache<Boolean>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Boolean? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<TValue>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Boolean value)
+        return BoxingCache<Boolean>.Default.GetBoxedValue(value.Value);
+    }
+
+    /// <summary>
+    /// Converts the specified Char value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Char value)
+    {
+        return BoxingCache<Char>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Char value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Char? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<Boolean>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Boolean? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        return BoxingCache<Char>.Default.GetBoxedValue(value.Value);
+    }
 
-            return BoxingCache<Boolean>.Default.GetBoxedValue(value.Value);
+    /// <summary>
+    /// Converts the specified SByte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(SByte value)
+    {
+        return BoxingCache<SByte>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified SByte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(SByte? value)
+    {
+        if (value is null)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Char value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Char value)
+        return BoxingCache<SByte>.Default.GetBoxedValue(value.Value);
+    }
+
+    /// <summary>
+    /// Converts the specified Byte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Byte value)
+    {
+        return BoxingCache<Byte>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Byte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Byte? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<Char>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Char value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Char? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        return BoxingCache<Byte>.Default.GetBoxedValue(value.Value);
+    }
 
-            return BoxingCache<Char>.Default.GetBoxedValue(value.Value);
+    /// <summary>
+    /// Converts the specified Int16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Int16 value)
+    {
+        return BoxingCache<Int16>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Int16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Int16? value)
+    {
+        if (value is null)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified SByte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(SByte value)
+        return BoxingCache<Int16>.Default.GetBoxedValue(value.Value);
+    }
+
+    /// <summary>
+    /// Converts the specified UInt16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(UInt16 value)
+    {
+        return BoxingCache<UInt16>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified UInt16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(UInt16? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<SByte>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified SByte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(SByte? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        return BoxingCache<UInt16>.Default.GetBoxedValue(value.Value);
+    }
 
-            return BoxingCache<SByte>.Default.GetBoxedValue(value.Value);
+    /// <summary>
+    /// Converts the specified Int32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Int32 value)
+    {
+        return BoxingCache<Int32>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Int32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Int32? value)
+    {
+        if (value is null)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Byte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Byte value)
+        return BoxingCache<Int32>.Default.GetBoxedValue(value.Value);
+    }
+
+    /// <summary>
+    /// Converts the specified UInt32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(UInt32 value)
+    {
+        return BoxingCache<UInt32>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified UInt32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(UInt32? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<Byte>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Byte value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Byte? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        return BoxingCache<UInt32>.Default.GetBoxedValue(value.Value);
+    }
 
-            return BoxingCache<Byte>.Default.GetBoxedValue(value.Value);
+    /// <summary>
+    /// Converts the specified Int64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Int64 value)
+    {
+        return BoxingCache<Int64>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Int64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Int64? value)
+    {
+        if (value is null)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Int16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Int16 value)
+        return BoxingCache<Int64>.Default.GetBoxedValue(value.Value);
+    }
+
+    /// <summary>
+    /// Converts the specified UInt64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(UInt64 value)
+    {
+        return BoxingCache<UInt64>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified UInt64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(UInt64? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<Int16>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Int16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Int16? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        return BoxingCache<UInt64>.Default.GetBoxedValue(value.Value);
+    }
 
-            return BoxingCache<Int16>.Default.GetBoxedValue(value.Value);
+    /// <summary>
+    /// Converts the specified Single value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Single value)
+    {
+        return BoxingCache<Single>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Single value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Single? value)
+    {
+        if (value is null)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified UInt16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(UInt16 value)
+        return BoxingCache<Single>.Default.GetBoxedValue(value.Value);
+    }
+
+    /// <summary>
+    /// Converts the specified Double value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Double value)
+    {
+        return BoxingCache<Double>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Double value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Double? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<UInt16>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified UInt16 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(UInt16? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        return BoxingCache<Double>.Default.GetBoxedValue(value.Value);
+    }
 
-            return BoxingCache<UInt16>.Default.GetBoxedValue(value.Value);
+    /// <summary>
+    /// Converts the specified Decimal value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Decimal value)
+    {
+        return BoxingCache<Decimal>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified Decimal value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(Decimal? value)
+    {
+        if (value is null)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Int32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Int32 value)
+        return BoxingCache<Decimal>.Default.GetBoxedValue(value.Value);
+    }
+
+    /// <summary>
+    /// Converts the specified DateTime value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(DateTime value)
+    {
+        return BoxingCache<DateTime>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified DateTime value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(DateTime? value)
+    {
+        if (value is null)
         {
-            return BoxingCache<Int32>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified Int32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Int32? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        return BoxingCache<DateTime>.Default.GetBoxedValue(value.Value);
+    }
 
-            return BoxingCache<Int32>.Default.GetBoxedValue(value.Value);
+    /// <summary>
+    /// Converts the specified String value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(String value)
+    {
+        if (value is null)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified UInt32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(UInt32 value)
+        return BoxingCache<String>.Default.GetBoxedValue(value);
+    }
+
+    /// <summary>
+    /// Converts the specified value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>An object representing the value.</returns>
+    public static object? GetBoxedValue(object? value)
+    {
+        var objectValue = value;
+        if (objectValue is null)
         {
-            return BoxingCache<UInt32>.Default.GetBoxedValue(value);
+            return null;
         }
 
-        /// <summary>
-        /// Converts the specified UInt32 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(UInt32? value)
+        var valueType = objectValue.GetType();
+        if (valueType.IsValueType)
         {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<UInt32>.Default.GetBoxedValue(value.Value);
-        }
-
-        /// <summary>
-        /// Converts the specified Int64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Int64 value)
-        {
-            return BoxingCache<Int64>.Default.GetBoxedValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified Int64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Int64? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<Int64>.Default.GetBoxedValue(value.Value);
-        }
-
-        /// <summary>
-        /// Converts the specified UInt64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(UInt64 value)
-        {
-            return BoxingCache<UInt64>.Default.GetBoxedValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified UInt64 value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(UInt64? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<UInt64>.Default.GetBoxedValue(value.Value);
-        }
-
-        /// <summary>
-        /// Converts the specified Single value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Single value)
-        {
-            return BoxingCache<Single>.Default.GetBoxedValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified Single value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Single? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<Single>.Default.GetBoxedValue(value.Value);
-        }
-
-        /// <summary>
-        /// Converts the specified Double value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Double value)
-        {
-            return BoxingCache<Double>.Default.GetBoxedValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified Double value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Double? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<Double>.Default.GetBoxedValue(value.Value);
-        }
-
-        /// <summary>
-        /// Converts the specified Decimal value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Decimal value)
-        {
-            return BoxingCache<Decimal>.Default.GetBoxedValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified Decimal value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(Decimal? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<Decimal>.Default.GetBoxedValue(value.Value);
-        }
-
-        /// <summary>
-        /// Converts the specified DateTime value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(DateTime value)
-        {
-            return BoxingCache<DateTime>.Default.GetBoxedValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified DateTime value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(DateTime? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<DateTime>.Default.GetBoxedValue(value.Value);
-        }
-
-        /// <summary>
-        /// Converts the specified String value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(String value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return BoxingCache<String>.Default.GetBoxedValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object? GetBoxedValue(object? value)
-        {
-            var objectValue = value;
-            if (objectValue is null)
-            {
-                return null;
-            }
-
-            var valueType = objectValue.GetType();
-            if (valueType.IsValueType)
-            {
 				if (false)
 				{
 					// Dummy code node
 				}
-                else if (valueType == typeof(Boolean))
-                {
-                    objectValue = BoxingCache<Boolean>.Default.GetBoxedValue((Boolean)objectValue);
-                }
-                else if (valueType == typeof(Char))
-                {
-                    objectValue = BoxingCache<Char>.Default.GetBoxedValue((Char)objectValue);
-                }
-                else if (valueType == typeof(SByte))
-                {
-                    objectValue = BoxingCache<SByte>.Default.GetBoxedValue((SByte)objectValue);
-                }
-                else if (valueType == typeof(Byte))
-                {
-                    objectValue = BoxingCache<Byte>.Default.GetBoxedValue((Byte)objectValue);
-                }
-                else if (valueType == typeof(Int16))
-                {
-                    objectValue = BoxingCache<Int16>.Default.GetBoxedValue((Int16)objectValue);
-                }
-                else if (valueType == typeof(UInt16))
-                {
-                    objectValue = BoxingCache<UInt16>.Default.GetBoxedValue((UInt16)objectValue);
-                }
-                else if (valueType == typeof(Int32))
-                {
-                    objectValue = BoxingCache<Int32>.Default.GetBoxedValue((Int32)objectValue);
-                }
-                else if (valueType == typeof(UInt32))
-                {
-                    objectValue = BoxingCache<UInt32>.Default.GetBoxedValue((UInt32)objectValue);
-                }
-                else if (valueType == typeof(Int64))
-                {
-                    objectValue = BoxingCache<Int64>.Default.GetBoxedValue((Int64)objectValue);
-                }
-                else if (valueType == typeof(UInt64))
-                {
-                    objectValue = BoxingCache<UInt64>.Default.GetBoxedValue((UInt64)objectValue);
-                }
-                else if (valueType == typeof(Single))
-                {
-                    objectValue = BoxingCache<Single>.Default.GetBoxedValue((Single)objectValue);
-                }
-                else if (valueType == typeof(Double))
-                {
-                    objectValue = BoxingCache<Double>.Default.GetBoxedValue((Double)objectValue);
-                }
-                else if (valueType == typeof(Decimal))
-                {
-                    objectValue = BoxingCache<Decimal>.Default.GetBoxedValue((Decimal)objectValue);
-                }
-                else if (valueType == typeof(DateTime))
-                {
-                    objectValue = BoxingCache<DateTime>.Default.GetBoxedValue((DateTime)objectValue);
-                }
-                else if (valueType == typeof(String))
-                {
-                    objectValue = BoxingCache<String>.Default.GetBoxedValue((String)objectValue);
-                }
+            else if (valueType == typeof(Boolean))
+            {
+                objectValue = BoxingCache<Boolean>.Default.GetBoxedValue((Boolean)objectValue);
             }
-
-            return objectValue;
+            else if (valueType == typeof(Char))
+            {
+                objectValue = BoxingCache<Char>.Default.GetBoxedValue((Char)objectValue);
+            }
+            else if (valueType == typeof(SByte))
+            {
+                objectValue = BoxingCache<SByte>.Default.GetBoxedValue((SByte)objectValue);
+            }
+            else if (valueType == typeof(Byte))
+            {
+                objectValue = BoxingCache<Byte>.Default.GetBoxedValue((Byte)objectValue);
+            }
+            else if (valueType == typeof(Int16))
+            {
+                objectValue = BoxingCache<Int16>.Default.GetBoxedValue((Int16)objectValue);
+            }
+            else if (valueType == typeof(UInt16))
+            {
+                objectValue = BoxingCache<UInt16>.Default.GetBoxedValue((UInt16)objectValue);
+            }
+            else if (valueType == typeof(Int32))
+            {
+                objectValue = BoxingCache<Int32>.Default.GetBoxedValue((Int32)objectValue);
+            }
+            else if (valueType == typeof(UInt32))
+            {
+                objectValue = BoxingCache<UInt32>.Default.GetBoxedValue((UInt32)objectValue);
+            }
+            else if (valueType == typeof(Int64))
+            {
+                objectValue = BoxingCache<Int64>.Default.GetBoxedValue((Int64)objectValue);
+            }
+            else if (valueType == typeof(UInt64))
+            {
+                objectValue = BoxingCache<UInt64>.Default.GetBoxedValue((UInt64)objectValue);
+            }
+            else if (valueType == typeof(Single))
+            {
+                objectValue = BoxingCache<Single>.Default.GetBoxedValue((Single)objectValue);
+            }
+            else if (valueType == typeof(Double))
+            {
+                objectValue = BoxingCache<Double>.Default.GetBoxedValue((Double)objectValue);
+            }
+            else if (valueType == typeof(Decimal))
+            {
+                objectValue = BoxingCache<Decimal>.Default.GetBoxedValue((Decimal)objectValue);
+            }
+            else if (valueType == typeof(DateTime))
+            {
+                objectValue = BoxingCache<DateTime>.Default.GetBoxedValue((DateTime)objectValue);
+            }
+            else if (valueType == typeof(String))
+            {
+                objectValue = BoxingCache<String>.Default.GetBoxedValue((String)objectValue);
+            }
         }
+
+        return objectValue;
+    }
 	}
-}

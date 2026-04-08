@@ -1,105 +1,104 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System;
+using System.Windows;
+using Caching;
+using Catel.Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Theme helper to ensure themes are loaded upon usage.
+/// </summary>
+public static class ThemeHelper
 {
-    using System;
-    using System.Windows;
-    using Caching;
-    using Catel.Logging;
-    using Microsoft.Extensions.Logging;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(ThemeHelper));
+
+    private static readonly ICacheStorage<Uri, bool> ThemeLoadedCache = new CacheStorage<Uri, bool>();
 
     /// <summary>
-    /// Theme helper to ensure themes are loaded upon usage.
+    /// Ensures that the Catel.MVVM theme is loaded.
     /// </summary>
-    public static class ThemeHelper
+    public static void EnsureCatelMvvmThemeIsLoaded()
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ThemeHelper));
+        EnsureThemeIsLoaded(new Uri("/Catel.MVVM;component/themes/generic.xaml", UriKind.RelativeOrAbsolute));
+    }
 
-        private static readonly ICacheStorage<Uri, bool> ThemeLoadedCache = new CacheStorage<Uri, bool>();
-
-        /// <summary>
-        /// Ensures that the Catel.MVVM theme is loaded.
-        /// </summary>
-        public static void EnsureCatelMvvmThemeIsLoaded()
+    /// <summary>
+    /// Ensures that the specified theme is loaded.
+    /// </summary>
+    /// <param name="resourceUri">The resource URI.</param>
+    public static void EnsureThemeIsLoaded(Uri resourceUri)
+    {
+        EnsureThemeIsLoaded(resourceUri, () =>
         {
-            EnsureThemeIsLoaded(new Uri("/Catel.MVVM;component/themes/generic.xaml", UriKind.RelativeOrAbsolute));
-        }
-
-        /// <summary>
-        /// Ensures that the specified theme is loaded.
-        /// </summary>
-        /// <param name="resourceUri">The resource URI.</param>
-        public static void EnsureThemeIsLoaded(Uri resourceUri)
-        {
-            EnsureThemeIsLoaded(resourceUri, () =>
+            var application = Application.Current;
+            if (application is null)
             {
-                var application = Application.Current;
-                if (application is null)
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var value = ThemeLoadedCache.GetFromCacheOrFetch(resourceUri, () => ContainsDictionary(application.Resources, resourceUri));
+            var value = ThemeLoadedCache.GetFromCacheOrFetch(resourceUri, () => ContainsDictionary(application.Resources, resourceUri));
 
-                // CTL-893: don't store "false" values, we are only interested in cached "true" values
-                if (!value)
-                {
-                    ThemeLoadedCache.Remove(resourceUri);
-                }
-
-                return value;
-            });
-        }
-
-        /// <summary>
-        /// Ensures that the specified theme is loaded.
-        /// </summary>
-        /// <param name="resourceUri">The resource URI.</param>
-        /// <param name="predicate">The predicate.</param>
-        public static void EnsureThemeIsLoaded(Uri resourceUri, Func<bool> predicate)
-        {
-            ArgumentNullException.ThrowIfNull(resourceUri);
-            ArgumentNullException.ThrowIfNull(predicate);
-
-            try
+            // CTL-893: don't store "false" values, we are only interested in cached "true" values
+            if (!value)
             {
-                var application = Application.Current;
-                if (application is not null)
-                {
-                    var resources = application.Resources;
+                ThemeLoadedCache.Remove(resourceUri);
+            }
 
-                    if (!predicate())
+            return value;
+        });
+    }
+
+    /// <summary>
+    /// Ensures that the specified theme is loaded.
+    /// </summary>
+    /// <param name="resourceUri">The resource URI.</param>
+    /// <param name="predicate">The predicate.</param>
+    public static void EnsureThemeIsLoaded(Uri resourceUri, Func<bool> predicate)
+    {
+        ArgumentNullException.ThrowIfNull(resourceUri);
+        ArgumentNullException.ThrowIfNull(predicate);
+
+        try
+        {
+            var application = Application.Current;
+            if (application is not null)
+            {
+                var resources = application.Resources;
+
+                if (!predicate())
+                {
+                    Logger.LogInformation("Loading resource dictionary '{0}'", resourceUri.ToString());
+
+                    resources.MergedDictionaries.Add(new ResourceDictionary
                     {
-                        Logger.LogInformation("Loading resource dictionary '{0}'", resourceUri.ToString());
-
-                        resources.MergedDictionaries.Add(new ResourceDictionary
-                        {
-                            Source = resourceUri
-                        });
-                    }
+                        Source = resourceUri
+                    });
                 }
             }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "Failed to resource dictionary '{0}'", resourceUri.ToString());
-            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to resource dictionary '{0}'", resourceUri.ToString());
+        }
+    }
+
+    private static bool ContainsDictionary(ResourceDictionary resourceDictionary, Uri resourceUri)
+    {
+        var source = resourceDictionary.Source;
+        if (source is not null && source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
+        {
+            return true;
         }
 
-        private static bool ContainsDictionary(ResourceDictionary resourceDictionary, Uri resourceUri)
+        foreach (var mergedDictionary in resourceDictionary.MergedDictionaries)
         {
-            var source = resourceDictionary.Source;
-            if (source is not null && source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
+            if (ContainsDictionary(mergedDictionary, resourceUri))
             {
                 return true;
             }
-
-            foreach (var mergedDictionary in resourceDictionary.MergedDictionaries)
-            {
-                if (ContainsDictionary(mergedDictionary, resourceUri))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
+
+        return false;
     }
 }

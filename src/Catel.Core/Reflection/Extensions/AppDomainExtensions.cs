@@ -1,171 +1,170 @@
-﻿namespace Catel.Reflection
+﻿namespace Catel.Reflection;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// <see cref="AppDomain"/> extensions.
+/// </summary>
+public static class AppDomainExtensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using Logging;
-    using Microsoft.Extensions.Logging;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(AppDomainExtensions));
 
     /// <summary>
-    /// <see cref="AppDomain"/> extensions.
+    /// Gets a list of all types inside the <see cref="AppDomain"/>.
     /// </summary>
-    public static class AppDomainExtensions
+    /// <param name="appDomain">The app domain.</param>
+    /// <returns>List of types found in the <see cref="AppDomain"/>.</returns>
+    /// <remarks>
+    /// This class must only be used by Catel. To make sure that an application performs, make sure to use
+    /// <see cref="TypeCache.GetTypes"/> instead.
+    /// </remarks>
+    internal static Type[] GetTypes(this AppDomain appDomain)
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(AppDomainExtensions));
+        return TypeCache.GetTypes();
+    }
 
-        /// <summary>
-        /// Gets a list of all types inside the <see cref="AppDomain"/>.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <returns>List of types found in the <see cref="AppDomain"/>.</returns>
-        /// <remarks>
-        /// This class must only be used by Catel. To make sure that an application performs, make sure to use
-        /// <see cref="TypeCache.GetTypes"/> instead.
-        /// </remarks>
-        internal static Type[] GetTypes(this AppDomain appDomain)
+    /// <summary>
+    /// Loads the assembly into the specified <see cref="AppDomain" />.
+    /// </summary>
+    /// <param name="appDomain">The app domain.</param>
+    /// <param name="assemblyFilename">The assembly filename.</param>
+    /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
+    public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies = true)
+    {
+        LoadAssemblyIntoAppDomain(appDomain, assemblyFilename, includeReferencedAssemblies, new HashSet<string>());
+    }
+
+    /// <summary>
+    /// Loads the assembly into the specified <see cref="AppDomain" />.
+    /// </summary>
+    /// <param name="appDomain">The app domain.</param>
+    /// <param name="assemblyFilename">The assembly filename.</param>
+    /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+    /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
+    private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies,
+        HashSet<string> alreadyLoadedAssemblies)
+    {
+        Argument.IsNotNullOrWhitespace("assemblyFilename", assemblyFilename);
+
+        if (!File.Exists(assemblyFilename))
         {
-            return TypeCache.GetTypes();
+            Logger.LogWarning("Assembly file '{0}' does not exist, cannot preload assembly", assemblyFilename);
+            return;
         }
 
-        /// <summary>
-        /// Loads the assembly into the specified <see cref="AppDomain" />.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <param name="assemblyFilename">The assembly filename.</param>
-        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
-        public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies = true)
+        try
         {
-            LoadAssemblyIntoAppDomain(appDomain, assemblyFilename, includeReferencedAssemblies, new HashSet<string>());
+            var assemblyName = AssemblyName.GetAssemblyName(assemblyFilename);
+            LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, alreadyLoadedAssemblies);
         }
-
-        /// <summary>
-        /// Loads the assembly into the specified <see cref="AppDomain" />.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <param name="assemblyFilename">The assembly filename.</param>
-        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
-        /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
-        private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies,
-            HashSet<string> alreadyLoadedAssemblies)
+        catch (Exception ex)
         {
-            Argument.IsNotNullOrWhitespace("assemblyFilename", assemblyFilename);
+            Logger.LogWarning(ex, "Failed to retrieve the assembly name of file '{0}', cannot preload assembly", assemblyFilename);
+        }
+    }
 
-            if (!File.Exists(assemblyFilename))
+    /// <summary>
+    /// Loads the assembly into the specified <see cref="AppDomain" />.
+    /// </summary>
+    /// <param name="appDomain">The app domain.</param>
+    /// <param name="assembly">The assembly.</param>
+    /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
+    public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies = true)
+    {
+        LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, new HashSet<string>());
+    }
+
+    /// <summary>
+    /// Loads the assembly into the specified <see cref="AppDomain" />.
+    /// </summary>
+    /// <param name="appDomain">The app domain.</param>
+    /// <param name="assembly">The assembly.</param>
+    /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+    /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="assembly" /> is <c>null</c>.</exception>
+    public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies,
+        HashSet<string> alreadyLoadedAssemblies)
+    {
+        LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, alreadyLoadedAssemblies);
+    }
+
+    /// <summary>
+    /// Loads the assembly into the specified <see cref="AppDomain" />.
+    /// </summary>
+    /// <param name="appDomain">The app domain.</param>
+    /// <param name="assemblyName">The assembly name.</param>
+    /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="assemblyName"/> is <c>null</c>.</exception>
+    public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies = true)
+    {
+        LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, new HashSet<string>());
+    }
+
+    /// <summary>
+    /// Loads the assembly into the specified <see cref="AppDomain" />.
+    /// </summary>
+    /// <param name="appDomain">The app domain.</param>
+    /// <param name="assemblyName">The assembly name.</param>
+    /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+    /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="assemblyName" /> is <c>null</c>.</exception>
+    private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies,
+        HashSet<string> alreadyLoadedAssemblies)
+    {
+        try
+        {
+            if (alreadyLoadedAssemblies.Contains(assemblyName.FullName))
             {
-                Logger.LogWarning("Assembly file '{0}' does not exist, cannot preload assembly", assemblyFilename);
                 return;
             }
 
-            try
+            if (appDomain.GetAssemblies().Any(assembly => AssemblyName.ReferenceMatchesDefinition(assemblyName, assembly.GetName())))
             {
-                var assemblyName = AssemblyName.GetAssemblyName(assemblyFilename);
-                LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, alreadyLoadedAssemblies);
+                return;
             }
-            catch (Exception ex)
+
+            alreadyLoadedAssemblies.Add(assemblyName.FullName);
+
+            Logger.LogDebug("Preloading assembly '{0}'", assemblyName);
+
+            var loadedAssembly = appDomain.Load(assemblyName);
+
+            // Note: actually load a type so the assembly is loaded
+            var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => x.IsClassEx() && !x.IsInterfaceEx());
+
+            Logger.LogDebug("Loaded assembly, found '{0}' as first class type", type?.GetSafeFullName(false) ?? "[no type]");
+
+            if (includeReferencedAssemblies)
             {
-                Logger.LogWarning(ex, "Failed to retrieve the assembly name of file '{0}', cannot preload assembly", assemblyFilename);
-            }
-        }
+                Logger.LogDebug("Loading referenced assemblies of assembly '{0}'", assemblyName);
 
-        /// <summary>
-        /// Loads the assembly into the specified <see cref="AppDomain" />.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <param name="assembly">The assembly.</param>
-        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
-        public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies = true)
-        {
-            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, new HashSet<string>());
-        }
-
-        /// <summary>
-        /// Loads the assembly into the specified <see cref="AppDomain" />.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <param name="assembly">The assembly.</param>
-        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
-        /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="assembly" /> is <c>null</c>.</exception>
-        public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies,
-            HashSet<string> alreadyLoadedAssemblies)
-        {
-            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, alreadyLoadedAssemblies);
-        }
-
-        /// <summary>
-        /// Loads the assembly into the specified <see cref="AppDomain" />.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <param name="assemblyName">The assembly name.</param>
-        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="assemblyName"/> is <c>null</c>.</exception>
-        public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies = true)
-        {
-            LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, new HashSet<string>());
-        }
-
-        /// <summary>
-        /// Loads the assembly into the specified <see cref="AppDomain" />.
-        /// </summary>
-        /// <param name="appDomain">The app domain.</param>
-        /// <param name="assemblyName">The assembly name.</param>
-        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
-        /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="assemblyName" /> is <c>null</c>.</exception>
-        private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies,
-            HashSet<string> alreadyLoadedAssemblies)
-        {
-            try
-            {
-                if (alreadyLoadedAssemblies.Contains(assemblyName.FullName))
+                var referencedAssemblies = loadedAssembly.GetReferencedAssemblies();
+                foreach (var referencedAssembly in referencedAssemblies)
                 {
-                    return;
+                    LoadAssemblyIntoAppDomain(appDomain, referencedAssembly, false, alreadyLoadedAssemblies);
                 }
-
-                if (appDomain.GetAssemblies().Any(assembly => AssemblyName.ReferenceMatchesDefinition(assemblyName, assembly.GetName())))
-                {
-                    return;
-                }
-
-                alreadyLoadedAssemblies.Add(assemblyName.FullName);
-
-                Logger.LogDebug("Preloading assembly '{0}'", assemblyName);
-
-                var loadedAssembly = appDomain.Load(assemblyName);
-
-                // Note: actually load a type so the assembly is loaded
-                var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => x.IsClassEx() && !x.IsInterfaceEx());
-
-                Logger.LogDebug("Loaded assembly, found '{0}' as first class type", type?.GetSafeFullName(false) ?? "[no type]");
-
-                if (includeReferencedAssemblies)
-                {
-                    Logger.LogDebug("Loading referenced assemblies of assembly '{0}'", assemblyName);
-
-                    var referencedAssemblies = loadedAssembly.GetReferencedAssemblies();
-                    foreach (var referencedAssembly in referencedAssemblies)
-                    {
-                        LoadAssemblyIntoAppDomain(appDomain, referencedAssembly, false, alreadyLoadedAssemblies);
-                    }
-                }
-
-                TypeCache.InitializeTypes(loadedAssembly);
             }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "Failed to load assembly '{0}'", assemblyName);
-            }
+
+            TypeCache.InitializeTypes(loadedAssembly);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to load assembly '{0}'", assemblyName);
         }
     }
 }

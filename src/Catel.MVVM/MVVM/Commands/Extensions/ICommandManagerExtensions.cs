@@ -1,148 +1,147 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
+using Catel.Logging;
+using Catel.MVVM;
+using Catel.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using InputGesture = Catel.Windows.Input.InputGesture;
+
+/// <summary>
+/// Extension methods for the <see cref="ICommandManager"/>.
+/// </summary>
+public static partial class ICommandManagerExtensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Windows.Input;
-    using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.Reflection;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using InputGesture = Catel.Windows.Input.InputGesture;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(ICommandManagerExtensions));
 
     /// <summary>
-    /// Extension methods for the <see cref="ICommandManager"/>.
+    /// Finds the commands inside the <see cref="ICommandManager"/> by gesture.
     /// </summary>
-    public static partial class ICommandManagerExtensions
+    /// <param name="commandManager">The command manager.</param>
+    /// <param name="inputGesture">The input gesture.</param>
+    /// <returns>Dictionary&lt;System.String, ICommand&gt;.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="commandManager"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="inputGesture"/> is <c>null</c>.</exception>
+    public static Dictionary<string, ICommand> FindCommandsByGesture(this ICommandManager commandManager, InputGesture inputGesture)
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ICommandManagerExtensions));
+        ArgumentNullException.ThrowIfNull(commandManager);
+        ArgumentNullException.ThrowIfNull(inputGesture);
 
-        /// <summary>
-        /// Finds the commands inside the <see cref="ICommandManager"/> by gesture.
-        /// </summary>
-        /// <param name="commandManager">The command manager.</param>
-        /// <param name="inputGesture">The input gesture.</param>
-        /// <returns>Dictionary&lt;System.String, ICommand&gt;.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="commandManager"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="inputGesture"/> is <c>null</c>.</exception>
-        public static Dictionary<string, ICommand> FindCommandsByGesture(this ICommandManager commandManager, InputGesture inputGesture)
+        var commands = new Dictionary<string, ICommand>();
+
+        foreach (var commandName in commandManager.GetCommands())
         {
-            ArgumentNullException.ThrowIfNull(commandManager);
-            ArgumentNullException.ThrowIfNull(inputGesture);
-
-            var commands = new Dictionary<string, ICommand>();
-
-            foreach (var commandName in commandManager.GetCommands())
+            var commandInputGesture = commandManager.GetInputGesture(commandName);
+            if (inputGesture.Equals(commandInputGesture))
             {
-                var commandInputGesture = commandManager.GetInputGesture(commandName);
-                if (inputGesture.Equals(commandInputGesture))
+                var command = commandManager.GetCommand(commandName);
+                if (command is not null)
                 {
-                    var command = commandManager.GetCommand(commandName);
-                    if (command is not null)
-                    {
-                        commands[commandName] = command;
-                    }
-                }
-            }
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Creates a command using a naming convention with the specified gesture.
-        /// </summary>
-        /// <param name="commandManager">The command manager.</param>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="containerType">Type of the container.</param>
-        /// <param name="commandNameFieldName">Name of the command name field.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="commandManager"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="containerType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="commandNameFieldName"/> is <c>null</c>.</exception>
-        public static void CreateCommandWithGesture(this ICommandManager commandManager, IServiceProvider serviceProvider, Type containerType, string commandNameFieldName)
-        {
-            ArgumentNullException.ThrowIfNull(commandManager);
-            ArgumentNullException.ThrowIfNull(containerType);
-            Argument.IsNotNullOrWhitespace("commandNameFieldName", commandNameFieldName);
-
-            Logger.LogDebug($"Creating command '{commandNameFieldName}'");
-
-            // Note: we must store binding flags inside variable otherwise invalid IL will be generated
-            var bindingFlags = BindingFlags.Public | BindingFlags.Static;
-            var commandNameField = containerType.GetFieldEx(commandNameFieldName, bindingFlags);
-            if (commandNameField is null)
-            {
-                throw Logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
-                    commandNameFieldName, containerType.GetSafeFullName(false));
-            }
-
-            var commandName = (string?)commandNameField.GetValue(null);
-            if (commandName is null)
-            {
-                throw Logger.LogErrorAndCreateException<CatelException>($"Command name is not valid on on container type '{containerType.GetSafeFullName()}'");
-            }
-
-            if (commandManager.IsCommandCreated(commandName))
-            {
-                Logger.LogDebug("Command '{0}' is already created, skipping...", commandName);
-                return;
-            }
-
-            InputGesture? commandInputGesture = null;
-            var inputGestureField = containerType.GetFieldEx($"{commandNameFieldName}InputGesture", bindingFlags);
-            if (inputGestureField is not null)
-            {
-                commandInputGesture = inputGestureField.GetValue(null) as InputGesture;
-            }
-
-            commandManager.CreateCommand(commandName, commandInputGesture);
-
-            var commandContainerName = string.Format("{0}CommandContainer", commandName.Replace(".", string.Empty));
-
-            // https://github.com/Catel/Catel/issues/1383: CommandManager.CreateCommandWithGesture does not create CommandContainer
-            var commandContainerType = (from type in TypeCache.GetTypes(allowInitialization: true)
-                                        where string.Equals(type.Name, commandContainerName, StringComparison.OrdinalIgnoreCase)
-                                        select type).FirstOrDefault();
-            if (commandContainerType is null)
-            {
-                Logger.LogDebug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
-                return;
-            }
-
-            Logger.LogDebug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
-
-            if (!serviceProvider.IsRegistered(commandContainerType))
-            {
-                var commandContainer = ActivatorUtilities.CreateInstance(serviceProvider, commandContainerType);
-                if (commandContainer is not null)
-                {
-                    // TODO: How to keep alive?
-                    //serviceLocator.RegisterInstance(commandContainerType, commandContainer);
-                }
-                else
-                {
-                    Logger.LogWarning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
+                    commands[commandName] = command;
                 }
             }
         }
 
-        /// <summary>
-        /// Gets the command by name. If the command does not exist, this method will throw an exception.
-        /// </summary>
-        /// <param name="commandManager"></param>
-        /// <param name="commandName">Name of the command.</param>
-        /// <returns>The command.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        public static ICommand GetRequiredCommand(this ICommandManager commandManager, string commandName)
-        {
-            var command = commandManager.GetCommand(commandName);
-            if (command is null)
-            {
-                throw Logger.LogErrorAndCreateException<CatelException>($"Command '{commandName}' is not registered in the command manager");
-            }
+        return commands;
+    }
 
-            return command;
+    /// <summary>
+    /// Creates a command using a naming convention with the specified gesture.
+    /// </summary>
+    /// <param name="commandManager">The command manager.</param>
+    /// <param name="serviceProvider">The service provider.</param>
+    /// <param name="containerType">Type of the container.</param>
+    /// <param name="commandNameFieldName">Name of the command name field.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="commandManager"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="containerType"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="commandNameFieldName"/> is <c>null</c>.</exception>
+    public static void CreateCommandWithGesture(this ICommandManager commandManager, IServiceProvider serviceProvider, Type containerType, string commandNameFieldName)
+    {
+        ArgumentNullException.ThrowIfNull(commandManager);
+        ArgumentNullException.ThrowIfNull(containerType);
+        Argument.IsNotNullOrWhitespace("commandNameFieldName", commandNameFieldName);
+
+        Logger.LogDebug($"Creating command '{commandNameFieldName}'");
+
+        // Note: we must store binding flags inside variable otherwise invalid IL will be generated
+        var bindingFlags = BindingFlags.Public | BindingFlags.Static;
+        var commandNameField = containerType.GetFieldEx(commandNameFieldName, bindingFlags);
+        if (commandNameField is null)
+        {
+            throw Logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
+                commandNameFieldName, containerType.GetSafeFullName(false));
         }
+
+        var commandName = (string?)commandNameField.GetValue(null);
+        if (commandName is null)
+        {
+            throw Logger.LogErrorAndCreateException<CatelException>($"Command name is not valid on on container type '{containerType.GetSafeFullName()}'");
+        }
+
+        if (commandManager.IsCommandCreated(commandName))
+        {
+            Logger.LogDebug("Command '{0}' is already created, skipping...", commandName);
+            return;
+        }
+
+        InputGesture? commandInputGesture = null;
+        var inputGestureField = containerType.GetFieldEx($"{commandNameFieldName}InputGesture", bindingFlags);
+        if (inputGestureField is not null)
+        {
+            commandInputGesture = inputGestureField.GetValue(null) as InputGesture;
+        }
+
+        commandManager.CreateCommand(commandName, commandInputGesture);
+
+        var commandContainerName = string.Format("{0}CommandContainer", commandName.Replace(".", string.Empty));
+
+        // https://github.com/Catel/Catel/issues/1383: CommandManager.CreateCommandWithGesture does not create CommandContainer
+        var commandContainerType = (from type in TypeCache.GetTypes(allowInitialization: true)
+                                    where string.Equals(type.Name, commandContainerName, StringComparison.OrdinalIgnoreCase)
+                                    select type).FirstOrDefault();
+        if (commandContainerType is null)
+        {
+            Logger.LogDebug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
+            return;
+        }
+
+        Logger.LogDebug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
+
+        if (!serviceProvider.IsRegistered(commandContainerType))
+        {
+            var commandContainer = ActivatorUtilities.CreateInstance(serviceProvider, commandContainerType);
+            if (commandContainer is not null)
+            {
+                // TODO: How to keep alive?
+                //serviceLocator.RegisterInstance(commandContainerType, commandContainer);
+            }
+            else
+            {
+                Logger.LogWarning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the command by name. If the command does not exist, this method will throw an exception.
+    /// </summary>
+    /// <param name="commandManager"></param>
+    /// <param name="commandName">Name of the command.</param>
+    /// <returns>The command.</returns>
+    /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+    public static ICommand GetRequiredCommand(this ICommandManager commandManager, string commandName)
+    {
+        var command = commandManager.GetCommand(commandName);
+        if (command is null)
+        {
+            throw Logger.LogErrorAndCreateException<CatelException>($"Command '{commandName}' is not registered in the command manager");
+        }
+
+        return command;
     }
 }

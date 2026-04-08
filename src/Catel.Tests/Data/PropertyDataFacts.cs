@@ -1,49 +1,48 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using NUnit.Framework;
+
+public class PropertyDataFacts
 {
-    using NUnit.Framework;
-
-    public class PropertyDataFacts
+    [TestFixture]
+    public class TheDefaultValueProperty
     {
-        [TestFixture]
-        public class TheDefaultValueProperty
+        [TestCase]
+        public void ReturnsDefaultValueForReferenceTypes()
         {
-            [TestCase]
-            public void ReturnsDefaultValueForReferenceTypes()
-            {
-                var propertiesObject = new ObjectWithoutDefaultValues();
+            var propertiesObject = new ObjectWithoutDefaultValues();
 
-                Assert.That(propertiesObject.ReferenceType, Is.Not.EqualTo(null));
-                Assert.That(propertiesObject.ReferenceTypeWithoutDefaultValue, Is.EqualTo(null));
-            }
-
-            [TestCase]
-            public void ReturnsDefaultValueForValueTypes()
-            {
-                var propertiesObject = new ObjectWithoutDefaultValues();
-
-                Assert.That(propertiesObject.ValueType, Is.EqualTo(1));
-                Assert.That(propertiesObject.ValueTypeWithoutDefaultValue, Is.EqualTo(0));
-            }
+            Assert.That(propertiesObject.ReferenceType, Is.Not.EqualTo(null));
+            Assert.That(propertiesObject.ReferenceTypeWithoutDefaultValue, Is.EqualTo(null));
         }
 
-        [TestFixture]
-        public class TheGetDefaultValueMethod
+        [TestCase]
+        public void ReturnsDefaultValueForValueTypes()
         {
-            [TestCase]
-            public void ReturnsDefaultValueForReferenceType()
-            {
-                var property = ObjectWithoutDefaultValues.ReferenceTypeProperty;
+            var propertiesObject = new ObjectWithoutDefaultValues();
 
-                Assert.That(property.GetDefaultValue<object>(), Is.EqualTo(property.GetDefaultValue()));
-            }
+            Assert.That(propertiesObject.ValueType, Is.EqualTo(1));
+            Assert.That(propertiesObject.ValueTypeWithoutDefaultValue, Is.EqualTo(0));
+        }
+    }
 
-            [TestCase]
-            public void ReturnsDefaultValueForValueType()
-            {
-                var property = ObjectWithoutDefaultValues.ValueTypeProperty;
+    [TestFixture]
+    public class TheGetDefaultValueMethod
+    {
+        [TestCase]
+        public void ReturnsDefaultValueForReferenceType()
+        {
+            var property = ObjectWithoutDefaultValues.ReferenceTypeProperty;
 
-                Assert.That(property.GetDefaultValue<int>(), Is.EqualTo(property.GetDefaultValue()));
-            }
+            Assert.That(property.GetDefaultValue<object>(), Is.EqualTo(property.GetDefaultValue()));
+        }
+
+        [TestCase]
+        public void ReturnsDefaultValueForValueType()
+        {
+            var property = ObjectWithoutDefaultValues.ValueTypeProperty;
+
+            Assert.That(property.GetDefaultValue<int>(), Is.EqualTo(property.GetDefaultValue()));
         }
     }
 }

@@ -1,90 +1,89 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System.IO;
+using System.Reflection;
+using System.Text;
+using Catel.Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Resource helper class to read resource files.
+/// </summary>
+public static class ResourceHelper
 {
-    using System.IO;
-    using System.Reflection;
-    using System.Text;
-    using Catel.Logging;
-    using Microsoft.Extensions.Logging;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(ResourceHelper));
 
     /// <summary>
-    /// Resource helper class to read resource files.
+    /// Extracts the embedded resource and reads it as a string.
     /// </summary>
-    public static class ResourceHelper
+    /// <param name="assembly">The assembly to read the resource from.</param>
+    /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
+    /// <returns>The embedded resource as a string.</returns>
+    public static string? ExtractEmbeddedResource(this Assembly assembly, string relativeResourceName)
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ResourceHelper));
-
-        /// <summary>
-        /// Extracts the embedded resource and reads it as a string.
-        /// </summary>
-        /// <param name="assembly">The assembly to read the resource from.</param>
-        /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
-        /// <returns>The embedded resource as a string.</returns>
-        public static string? ExtractEmbeddedResource(this Assembly assembly, string relativeResourceName)
+        using (var memoryStream = new MemoryStream())
         {
-            using (var memoryStream = new MemoryStream())
+            ExtractEmbeddedResource(assembly, relativeResourceName, memoryStream);
+
+            if (memoryStream.Length == 0)
             {
-                ExtractEmbeddedResource(assembly, relativeResourceName, memoryStream);
+                return null;
+            }
 
-                if (memoryStream.Length == 0)
-                {
-                    return null;
-                }
+            memoryStream.Position = 0L;
 
-                memoryStream.Position = 0L;
-
-                using (var streamReader = new StreamReader(memoryStream))
-                {
-                    return streamReader.ReadToEnd();
-                }
+            using (var streamReader = new StreamReader(memoryStream))
+            {
+                return streamReader.ReadToEnd();
             }
         }
+    }
 
-        /// <summary>
-        /// Extracts the embedded resource and writes it to the target stream.
-        /// </summary>
-        /// <param name="assembly">The assembly to read the resource from.</param>
-        /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
-        /// <param name="targetStream">The target stream to write the resource to.</param>
-        public static void ExtractEmbeddedResource(this Assembly assembly, string relativeResourceName, Stream targetStream)
+    /// <summary>
+    /// Extracts the embedded resource and writes it to the target stream.
+    /// </summary>
+    /// <param name="assembly">The assembly to read the resource from.</param>
+    /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
+    /// <param name="targetStream">The target stream to write the resource to.</param>
+    public static void ExtractEmbeddedResource(this Assembly assembly, string relativeResourceName, Stream targetStream)
+    {
+        ExtractEmbeddedResource(assembly, assembly.GetName().Name ?? "unknown", relativeResourceName, targetStream);
+    }
+
+    /// <summary>
+    /// Extracts the embedded resource and writes it to the target stream.
+    /// </summary>
+    /// <param name="assembly">The assembly to read the resource from.</param>
+    /// <param name="assemblyName">The assembly name to prefix the resource with.</param>
+    /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
+    /// <param name="targetStream">The target stream to write the resource to.</param>
+    public static void ExtractEmbeddedResource(this Assembly assembly, string assemblyName, string relativeResourceName, Stream targetStream)
+    {
+        Logger.LogDebug($"Extracting embedded resource '{relativeResourceName}' from assembly '{assembly.FullName}'");
+
+        var finalResourceName = relativeResourceName;
+        if (!string.IsNullOrWhiteSpace(assemblyName))
         {
-            ExtractEmbeddedResource(assembly, assembly.GetName().Name ?? "unknown", relativeResourceName, targetStream);
+            finalResourceName = $"{assemblyName}.{finalResourceName}";
         }
 
-        /// <summary>
-        /// Extracts the embedded resource and writes it to the target stream.
-        /// </summary>
-        /// <param name="assembly">The assembly to read the resource from.</param>
-        /// <param name="assemblyName">The assembly name to prefix the resource with.</param>
-        /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
-        /// <param name="targetStream">The target stream to write the resource to.</param>
-        public static void ExtractEmbeddedResource(this Assembly assembly, string assemblyName, string relativeResourceName, Stream targetStream)
+        using (var resource = assembly.GetManifestResourceStream(finalResourceName))
         {
-            Logger.LogDebug($"Extracting embedded resource '{relativeResourceName}' from assembly '{assembly.FullName}'");
-
-            var finalResourceName = relativeResourceName;
-            if (!string.IsNullOrWhiteSpace(assemblyName))
+            if (resource is null)
             {
-                finalResourceName = $"{assemblyName}.{finalResourceName}";
-            }
+                var warning = new StringBuilder();
+                warning.AppendLine($"Failed to extract embedded resource '{finalResourceName}', possible names:");
 
-            using (var resource = assembly.GetManifestResourceStream(finalResourceName))
-            {
-                if (resource is null)
+                foreach (var name in assembly.GetManifestResourceNames())
                 {
-                    var warning = new StringBuilder();
-                    warning.AppendLine($"Failed to extract embedded resource '{finalResourceName}', possible names:");
-
-                    foreach (var name in assembly.GetManifestResourceNames())
-                    {
-                        warning.AppendLine($"  * {name}");
-                    }
-
-                    Logger.LogWarning(warning.ToString());
-                    return;
+                    warning.AppendLine($"  * {name}");
                 }
 
-                resource.CopyTo(targetStream);
+                Logger.LogWarning(warning.ToString());
+                return;
             }
+
+            resource.CopyTo(targetStream);
         }
     }
 }

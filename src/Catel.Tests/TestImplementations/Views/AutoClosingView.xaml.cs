@@ -1,22 +1,21 @@
-﻿namespace Catel.Tests.Views
+﻿namespace Catel.Tests.Views;
+
+using System;
+using Catel.Services;
+
+public partial class AutoClosingView
 {
-    using System;
-    using Catel.Services;
-
-    public partial class AutoClosingView
+    public AutoClosingView(IServiceProvider serviceProvider, IWrapControlService wrapControlService,
+        ILanguageService languageService)
+        : base(serviceProvider, wrapControlService, languageService)
     {
-        public AutoClosingView(IServiceProvider serviceProvider, IWrapControlService wrapControlService,
-            ILanguageService languageService)
-            : base(serviceProvider, wrapControlService, languageService)
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        protected override void OnLoaded(EventArgs e)
-        {
-            base.OnLoaded(e);
+    protected override void OnLoaded(EventArgs e)
+    {
+        base.OnLoaded(e);
 
-            Close();
-        }
+        Close();
     }
 }

@@ -1,235 +1,234 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MVVM;
+using Logging;
+using Catel.Reflection;
+using Catel.MVVM.Views;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Service to show modal or non-modal popup windows.
+/// <para/>
+/// All windows will have to be registered manually or are be resolved via the <see cref="Catel.MVVM.IViewLocator"/>.
+/// </summary>
+public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using MVVM;
-    using Logging;
-    using Catel.Reflection;
-    using Catel.MVVM.Views;
-    using Microsoft.Extensions.Logging;
+    protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
+
+    private readonly ILogger<UIVisualizerService> _logger;
+    private readonly IViewLocator _viewLocator;
+    private readonly IViewFactory _viewFactory;
+    private readonly IDispatcherService _dispatcherService;
+    private readonly IViewModelFactory _viewModelFactory;
 
     /// <summary>
-    /// Service to show modal or non-modal popup windows.
-    /// <para/>
-    /// All windows will have to be registered manually or are be resolved via the <see cref="Catel.MVVM.IViewLocator"/>.
+    /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
     /// </summary>
-    public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
+    /// <param name="logger">The logger.</param>
+    /// <param name="viewLocator">The view locator.</param>
+    /// <param name="viewFactory">The view factory.</param>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
+    public UIVisualizerService(ILogger<UIVisualizerService> logger, IViewLocator viewLocator, 
+        IViewFactory viewFactory, IDispatcherService dispatcherService, IViewModelFactory viewModelFactory)
     {
-        protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
+        ArgumentNullException.ThrowIfNull(viewLocator);
+        ArgumentNullException.ThrowIfNull(dispatcherService);
 
-        private readonly ILogger<UIVisualizerService> _logger;
-        private readonly IViewLocator _viewLocator;
-        private readonly IViewFactory _viewFactory;
-        private readonly IDispatcherService _dispatcherService;
-        private readonly IViewModelFactory _viewModelFactory;
+        _logger = logger;
+        _viewLocator = viewLocator;
+        _viewFactory = viewFactory;
+        _dispatcherService = dispatcherService;
+        _viewModelFactory = viewModelFactory;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="viewLocator">The view locator.</param>
-        /// <param name="viewFactory">The view factory.</param>
-        /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <param name="viewModelFactory">The view model factory.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        public UIVisualizerService(ILogger<UIVisualizerService> logger, IViewLocator viewLocator, 
-            IViewFactory viewFactory, IDispatcherService dispatcherService, IViewModelFactory viewModelFactory)
+    /// <summary>
+    /// Determines whether to throw exceptions when a window that still has modal child windows
+    /// is being closed.
+    /// <para />
+    /// The default value is <c>true</c>.
+    /// </summary>
+    protected virtual bool ThrowExceptionWhenClosingWithModalChildWindows { get { return true; } }
+
+    /// <summary>
+    /// Determines whether the specified name is registered.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns><c>true</c> if the specified name is registered; otherwise, <c>false</c>.</returns>
+    /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+    public virtual bool IsRegistered(string name)
+    {
+        Argument.IsNotNullOrWhitespace("name", name);
+
+        lock (RegisteredWindows)
         {
-            ArgumentNullException.ThrowIfNull(viewLocator);
-            ArgumentNullException.ThrowIfNull(dispatcherService);
-
-            _logger = logger;
-            _viewLocator = viewLocator;
-            _viewFactory = viewFactory;
-            _dispatcherService = dispatcherService;
-            _viewModelFactory = viewModelFactory;
+            return RegisteredWindows.ContainsKey(name);
         }
+    }
 
-        /// <summary>
-        /// Determines whether to throw exceptions when a window that still has modal child windows
-        /// is being closed.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        protected virtual bool ThrowExceptionWhenClosingWithModalChildWindows { get { return true; } }
+    /// <summary>
+    /// Registers the specified view model and the window type. This way, Catel knowns what
+    /// window to show when a specific view model window is requested.
+    /// </summary>
+    /// <param name="name">Name of the registered window.</param>
+    /// <param name="windowType">Type of the window.</param>
+    /// <param name="throwExceptionIfExists">if set to <c>true</c>, this method will throw an exception when already registered.</param>
+    /// <exception cref="System.InvalidOperationException"></exception>
+    /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
+    public virtual void Register(string name, Type windowType, bool throwExceptionIfExists = true)
+    {
+        Argument.IsNotNullOrWhitespace("name", name);
+        ArgumentNullException.ThrowIfNull(windowType);
 
-        /// <summary>
-        /// Determines whether the specified name is registered.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns><c>true</c> if the specified name is registered; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public virtual bool IsRegistered(string name)
+        lock (RegisteredWindows)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            lock (RegisteredWindows)
+            if (RegisteredWindows.TryGetValue(name, out var existingRegistration))
             {
-                return RegisteredWindows.ContainsKey(name);
-            }
-        }
-
-        /// <summary>
-        /// Registers the specified view model and the window type. This way, Catel knowns what
-        /// window to show when a specific view model window is requested.
-        /// </summary>
-        /// <param name="name">Name of the registered window.</param>
-        /// <param name="windowType">Type of the window.</param>
-        /// <param name="throwExceptionIfExists">if set to <c>true</c>, this method will throw an exception when already registered.</param>
-        /// <exception cref="System.InvalidOperationException"></exception>
-        /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public virtual void Register(string name, Type windowType, bool throwExceptionIfExists = true)
-        {
-            Argument.IsNotNullOrWhitespace("name", name);
-            ArgumentNullException.ThrowIfNull(windowType);
-
-            lock (RegisteredWindows)
-            {
-                if (RegisteredWindows.TryGetValue(name, out var existingRegistration))
+                if (existingRegistration != windowType && throwExceptionIfExists)
                 {
-                    if (existingRegistration != windowType && throwExceptionIfExists)
-                    {
-                        throw _logger.LogErrorAndCreateException<InvalidOperationException>($"View model '{name}' already registered");
-                    }
+                    throw _logger.LogErrorAndCreateException<InvalidOperationException>($"View model '{name}' already registered");
                 }
+            }
 
-                RegisteredWindows[name] = windowType;
+            RegisteredWindows[name] = windowType;
 
-                _logger.LogDebug("Registered view model '{0}' in combination with '{1}' in the UIVisualizerService", name, windowType.FullName);
+            _logger.LogDebug("Registered view model '{0}' in combination with '{1}' in the UIVisualizerService", name, windowType.FullName);
+        }
+    }
+
+    /// <summary>
+    /// This unregisters the specified view model.
+    /// </summary>
+    /// <param name="name">Name of the registered window.</param>
+    /// <returns>
+    /// <c>true</c> if the view model is unregistered; otherwise <c>false</c>.
+    /// </returns>
+    public virtual bool Unregister(string name)
+    {
+        lock (RegisteredWindows)
+        {
+            var result = RegisteredWindows.Remove(name);
+            if (result)
+            {
+                _logger.LogDebug("Unregistered view model '{0}' in UIVisualizerService", name);
+            }
+
+            return result;
+        }
+    }
+
+    public virtual async Task<UIVisualizerResult> ShowAsync<TViewModel>(object? dataContext = null)
+        where TViewModel : IViewModel
+    {
+        var viewModel = dataContext as IViewModel;
+        if (viewModel is null)
+        {
+            viewModel = _viewModelFactory.CreateViewModel<TViewModel>(dataContext);
+        }
+
+        var newContext = new UIVisualizerContext()
+        {
+            Data = viewModel,
+            IsModal = false
+        };
+
+        var result = await ShowContextAsync(newContext);
+        return result;
+    }
+
+    public virtual async Task<UIVisualizerResult> ShowDialogAsync<TViewModel>(object? dataContext = null)
+        where TViewModel : IViewModel
+    {
+        var viewModel = dataContext as IViewModel;
+        if (viewModel is null)
+        {
+            viewModel = _viewModelFactory.CreateViewModel<TViewModel>(dataContext);
+        }
+
+        var newContext = new UIVisualizerContext()
+        {
+            Data = viewModel,
+            IsModal = true
+        };
+
+        var result = await ShowContextAsync(newContext);
+        return result;
+    }
+
+    /// <summary>
+    /// Shows a window with the specified context.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <returns>The dialog result.</returns>
+    public virtual async Task<UIVisualizerResult> ShowContextAsync(UIVisualizerContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        var viewModel = context.Data as IViewModel;
+        if (viewModel is not null)
+        {
+            var viewModelType = viewModel.GetType();
+
+            RegisterViewForViewModelIfRequired(viewModelType);
+
+            if (string.IsNullOrWhiteSpace(context.Name))
+            {
+                context.Name = viewModelType.GetSafeFullName();
             }
         }
 
-        /// <summary>
-        /// This unregisters the specified view model.
-        /// </summary>
-        /// <param name="name">Name of the registered window.</param>
-        /// <returns>
-        /// <c>true</c> if the view model is unregistered; otherwise <c>false</c>.
-        /// </returns>
-        public virtual bool Unregister(string name)
+        if (!string.IsNullOrWhiteSpace(context.Name))
         {
-            lock (RegisteredWindows)
-            {
-                var result = RegisteredWindows.Remove(name);
-                if (result)
-                {
-                    _logger.LogDebug("Unregistered view model '{0}' in UIVisualizerService", name);
-                }
-
-                return result;
-            }
+            EnsureViewIsRegistered(context.Name);
         }
 
-        public virtual async Task<UIVisualizerResult> ShowAsync<TViewModel>(object? dataContext = null)
-            where TViewModel : IViewModel
+        var window = await CreateWindowAsync(context);
+        if (window is not null)
         {
-            var viewModel = dataContext as IViewModel;
-            if (viewModel is null)
-            {
-                viewModel = _viewModelFactory.CreateViewModel<TViewModel>(dataContext);
-            }
-
-            var newContext = new UIVisualizerContext()
-            {
-                Data = viewModel,
-                IsModal = false
-            };
-
-            var result = await ShowContextAsync(newContext);
+            var result = await ShowWindowAsync(window, context);
             return result;
         }
 
-        public virtual async Task<UIVisualizerResult> ShowDialogAsync<TViewModel>(object? dataContext = null)
-            where TViewModel : IViewModel
+        return new UIVisualizerResult(null, context, null);
+    }
+
+    /// <summary>
+    /// Ensures that the specified view is registered.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <exception cref="WindowNotRegisteredException"></exception>
+    protected virtual void EnsureViewIsRegistered(string name)
+    {
+        lock (RegisteredWindows)
         {
-            var viewModel = dataContext as IViewModel;
-            if (viewModel is null)
+            if (!RegisteredWindows.ContainsKey(name))
             {
-                viewModel = _viewModelFactory.CreateViewModel<TViewModel>(dataContext);
-            }
-
-            var newContext = new UIVisualizerContext()
-            {
-                Data = viewModel,
-                IsModal = true
-            };
-
-            var result = await ShowContextAsync(newContext);
-            return result;
-        }
-
-        /// <summary>
-        /// Shows a window with the specified context.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>The dialog result.</returns>
-        public virtual async Task<UIVisualizerResult> ShowContextAsync(UIVisualizerContext context)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            var viewModel = context.Data as IViewModel;
-            if (viewModel is not null)
-            {
-                var viewModelType = viewModel.GetType();
-
-                RegisterViewForViewModelIfRequired(viewModelType);
-
-                if (string.IsNullOrWhiteSpace(context.Name))
-                {
-                    context.Name = viewModelType.GetSafeFullName();
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(context.Name))
-            {
-                EnsureViewIsRegistered(context.Name);
-            }
-
-            var window = await CreateWindowAsync(context);
-            if (window is not null)
-            {
-                var result = await ShowWindowAsync(window, context);
-                return result;
-            }
-
-            return new UIVisualizerResult(null, context, null);
-        }
-
-        /// <summary>
-        /// Ensures that the specified view is registered.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <exception cref="WindowNotRegisteredException"></exception>
-        protected virtual void EnsureViewIsRegistered(string name)
-        {
-            lock (RegisteredWindows)
-            {
-                if (!RegisteredWindows.ContainsKey(name))
-                {
-                    throw _logger.LogErrorAndCreateException<WindowNotRegisteredException>(name);
-                }
+                throw _logger.LogErrorAndCreateException<WindowNotRegisteredException>(name);
             }
         }
+    }
 
-        /// <summary>
-        /// Registers the view for the specified view model if required.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model.</param>
-        protected virtual void RegisterViewForViewModelIfRequired(Type viewModelType)
+    /// <summary>
+    /// Registers the view for the specified view model if required.
+    /// </summary>
+    /// <param name="viewModelType">Type of the view model.</param>
+    protected virtual void RegisterViewForViewModelIfRequired(Type viewModelType)
+    {
+        lock (RegisteredWindows)
         {
-            lock (RegisteredWindows)
-            {
-                var fullName = viewModelType.GetSafeFullName();
+            var fullName = viewModelType.GetSafeFullName();
 
-                if (!RegisteredWindows.ContainsKey(fullName))
+            if (!RegisteredWindows.ContainsKey(fullName))
+            {
+                var viewType = _viewLocator.ResolveView(viewModelType);
+                if (viewType is not null)
                 {
-                    var viewType = _viewLocator.ResolveView(viewModelType);
-                    if (viewType is not null)
-                    {
-                        Register(fullName, viewType);
-                    }
+                    Register(fullName, viewType);
                 }
             }
         }

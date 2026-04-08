@@ -1,10 +1,9 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+/// <summary>
+/// Defines all validation members for the models.
+/// </summary>
+public interface IValidatableModel : IModel, IValidatable
 {
-    /// <summary>
-    /// Defines all validation members for the models.
-    /// </summary>
-    public interface IValidatableModel : IModel, IValidatable
-    {
-        
-    }
+    
 }

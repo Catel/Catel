@@ -1,15 +1,14 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System;
+using Catel.Data;
+
+public class TestValidatorProvider : ValidatorProviderBase
 {
-    using System;
-    using Catel.Data;
-
-    public class TestValidatorProvider : ValidatorProviderBase
+    protected override IValidator GetValidator(Type targetType)
     {
-        protected override IValidator GetValidator(Type targetType)
-        {
-            ArgumentNullException.ThrowIfNull(targetType);
+        ArgumentNullException.ThrowIfNull(targetType);
 
-            return new TestValidator();
-        }
+        return new TestValidator();
     }
 }

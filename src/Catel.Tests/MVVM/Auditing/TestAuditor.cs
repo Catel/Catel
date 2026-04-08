@@ -1,169 +1,168 @@
-﻿namespace Catel.Tests.MVVM.Auditing
+﻿namespace Catel.Tests.MVVM.Auditing;
+
+using System;
+using Catel.MVVM;
+using Catel.MVVM.Auditing;
+
+public class TestAuditor : AuditorBase
 {
-    using System;
-    using Catel.MVVM;
-    using Catel.MVVM.Auditing;
+    public bool OnViewModelCreatingCalled { get; set; }
+    public Type OnViewModelCreatingType { get; set; }
 
-    public class TestAuditor : AuditorBase
+    public override void OnViewModelCreating(Type viewModelType)
     {
-        public bool OnViewModelCreatingCalled { get; set; }
-        public Type OnViewModelCreatingType { get; set; }
-
-        public override void OnViewModelCreating(Type viewModelType)
+        if (OnViewModelCreatingCalled)
         {
-            if (OnViewModelCreatingCalled)
-            {
-                return;
-            }
-
-            OnViewModelCreatingCalled = true;
-            OnViewModelCreatingType = viewModelType;
+            return;
         }
 
-        public bool OnViewModelCreatedCalled { get; set; }
-        public Type OnViewModelCreatedType { get; set; }
+        OnViewModelCreatingCalled = true;
+        OnViewModelCreatingType = viewModelType;
+    }
 
-        public override void OnViewModelCreated(IViewModel viewModel)
+    public bool OnViewModelCreatedCalled { get; set; }
+    public Type OnViewModelCreatedType { get; set; }
+
+    public override void OnViewModelCreated(IViewModel viewModel)
+    {
+        if (OnViewModelCreatedCalled)
         {
-            if (OnViewModelCreatedCalled)
-            {
-                return;
-            }
-
-            OnViewModelCreatedCalled = true;
-            OnViewModelCreatedType = viewModel.GetType();
+            return;
         }
 
+        OnViewModelCreatedCalled = true;
+        OnViewModelCreatedType = viewModel.GetType();
+    }
 
-        public bool OnViewModelInitializedCalled { get; set; }
-        public Type OnViewModelInitializedType { get; set; }
 
-        public override void OnViewModelInitialized(IViewModel viewModel)
+    public bool OnViewModelInitializedCalled { get; set; }
+    public Type OnViewModelInitializedType { get; set; }
+
+    public override void OnViewModelInitialized(IViewModel viewModel)
+    {
+        if (OnViewModelInitializedCalled)
         {
-            if (OnViewModelInitializedCalled)
-            {
-                return;
-            }
-
-            OnViewModelInitializedCalled = true;
-            OnViewModelInitializedType = viewModel.GetType();
+            return;
         }
 
-        public bool OnPropertyChangedCalled { get; set; }
-        public IViewModel OnPropertyChangedViewModel { get; set; }
-        public string OnPropertyChangedPropertyName { get; set; }
-        public object OnPropertyChangedNewValue { get; set; }
+        OnViewModelInitializedCalled = true;
+        OnViewModelInitializedType = viewModel.GetType();
+    }
 
-        public override void OnPropertyChanged(IViewModel viewModel, string propertyName, object newValue)
+    public bool OnPropertyChangedCalled { get; set; }
+    public IViewModel OnPropertyChangedViewModel { get; set; }
+    public string OnPropertyChangedPropertyName { get; set; }
+    public object OnPropertyChangedNewValue { get; set; }
+
+    public override void OnPropertyChanged(IViewModel viewModel, string propertyName, object newValue)
+    {
+        OnPropertyChangedCalled = true;
+        OnPropertyChangedViewModel = viewModel;
+        OnPropertyChangedPropertyName = propertyName;
+        OnPropertyChangedNewValue = newValue;
+    }
+
+    public bool OnCommandExecutedCalled { get; set; }
+    public IViewModel OnCommandExecutedViewModel { get; set; }
+    public string OnCommandExecutedCommandName { get; set; }
+    public ICatelCommand OnCommandExecutedCommand { get; set; }
+    public object OnCommandExecutedCommandParameter { get; set; }
+
+    public override void OnCommandExecuted(IViewModel viewModel, string commandName, ICatelCommand command, object commandParameter)
+    {
+        if (OnCommandExecutedCalled)
         {
-            OnPropertyChangedCalled = true;
-            OnPropertyChangedViewModel = viewModel;
-            OnPropertyChangedPropertyName = propertyName;
-            OnPropertyChangedNewValue = newValue;
+            return;
         }
 
-        public bool OnCommandExecutedCalled { get; set; }
-        public IViewModel OnCommandExecutedViewModel { get; set; }
-        public string OnCommandExecutedCommandName { get; set; }
-        public ICatelCommand OnCommandExecutedCommand { get; set; }
-        public object OnCommandExecutedCommandParameter { get; set; }
+        OnCommandExecutedCalled = true;
+        OnCommandExecutedViewModel = viewModel;
+        OnCommandExecutedCommandName = commandName;
+        OnCommandExecutedCommand = command;
+        OnCommandExecutedCommandParameter = commandParameter;
+    }
 
-        public override void OnCommandExecuted(IViewModel viewModel, string commandName, ICatelCommand command, object commandParameter)
+    public bool OnViewModelSavingCalled { get; set; }
+    public IViewModel OnViewModelSavingViewModel { get; set; }
+
+    public override void OnViewModelSaving(IViewModel viewModel)
+    {
+        if (OnViewModelSavingCalled)
         {
-            if (OnCommandExecutedCalled)
-            {
-                return;
-            }
-
-            OnCommandExecutedCalled = true;
-            OnCommandExecutedViewModel = viewModel;
-            OnCommandExecutedCommandName = commandName;
-            OnCommandExecutedCommand = command;
-            OnCommandExecutedCommandParameter = commandParameter;
+            return;
         }
 
-        public bool OnViewModelSavingCalled { get; set; }
-        public IViewModel OnViewModelSavingViewModel { get; set; }
+        OnViewModelSavingCalled = true;
+        OnViewModelSavingViewModel = viewModel;
+    }
 
-        public override void OnViewModelSaving(IViewModel viewModel)
+    public bool OnViewModelSavedCalled { get; set; }
+    public IViewModel OnViewModelSavedViewModel { get; set; }
+
+    public override void OnViewModelSaved(IViewModel viewModel)
+    {
+        if (OnViewModelSavedCalled)
         {
-            if (OnViewModelSavingCalled)
-            {
-                return;
-            }
-
-            OnViewModelSavingCalled = true;
-            OnViewModelSavingViewModel = viewModel;
+            return;
         }
 
-        public bool OnViewModelSavedCalled { get; set; }
-        public IViewModel OnViewModelSavedViewModel { get; set; }
+        OnViewModelSavedCalled = true;
+        OnViewModelSavedViewModel = viewModel;
+    }
 
-        public override void OnViewModelSaved(IViewModel viewModel)
+    public bool OnViewModelCancelingCalled { get; set; }
+    public IViewModel OnViewModelCancelingViewModel { get; set; }
+
+    public override void OnViewModelCanceling(IViewModel viewModel)
+    {
+        if (OnViewModelCancelingCalled)
         {
-            if (OnViewModelSavedCalled)
-            {
-                return;
-            }
-
-            OnViewModelSavedCalled = true;
-            OnViewModelSavedViewModel = viewModel;
+            return;
         }
 
-        public bool OnViewModelCancelingCalled { get; set; }
-        public IViewModel OnViewModelCancelingViewModel { get; set; }
+        OnViewModelCancelingCalled = true;
+        OnViewModelCancelingViewModel = viewModel;
+    }
 
-        public override void OnViewModelCanceling(IViewModel viewModel)
+    public bool OnViewModelCanceledCalled { get; set; }
+    public IViewModel OnViewModelCanceledViewModel { get; set; }
+
+    public override void OnViewModelCanceled(IViewModel viewModel)
+    {
+        if (OnViewModelCanceledCalled)
         {
-            if (OnViewModelCancelingCalled)
-            {
-                return;
-            }
-
-            OnViewModelCancelingCalled = true;
-            OnViewModelCancelingViewModel = viewModel;
+            return;
         }
 
-        public bool OnViewModelCanceledCalled { get; set; }
-        public IViewModel OnViewModelCanceledViewModel { get; set; }
+        OnViewModelCanceledCalled = true;
+        OnViewModelCanceledViewModel = viewModel;
+    }
 
-        public override void OnViewModelCanceled(IViewModel viewModel)
+    public bool OnViewModelClosingCalled { get; set; }
+    public IViewModel OnViewModelClosingViewModel { get; set; }
+
+    public override void OnViewModelClosing(IViewModel viewModel)
+    {
+        if (OnViewModelClosingCalled)
         {
-            if (OnViewModelCanceledCalled)
-            {
-                return;
-            }
-
-            OnViewModelCanceledCalled = true;
-            OnViewModelCanceledViewModel = viewModel;
+            return;
         }
 
-        public bool OnViewModelClosingCalled { get; set; }
-        public IViewModel OnViewModelClosingViewModel { get; set; }
+        OnViewModelClosingCalled = true;
+        OnViewModelClosingViewModel = viewModel;
+    }
 
-        public override void OnViewModelClosing(IViewModel viewModel)
+    public bool OnViewModelClosedCalled { get; set; }
+    public IViewModel OnViewModelClosedViewModel { get; set; }
+
+    public override void OnViewModelClosed(IViewModel viewModel)
+    {
+        if (OnViewModelClosedCalled)
         {
-            if (OnViewModelClosingCalled)
-            {
-                return;
-            }
-
-            OnViewModelClosingCalled = true;
-            OnViewModelClosingViewModel = viewModel;
+            return;
         }
 
-        public bool OnViewModelClosedCalled { get; set; }
-        public IViewModel OnViewModelClosedViewModel { get; set; }
-
-        public override void OnViewModelClosed(IViewModel viewModel)
-        {
-            if (OnViewModelClosedCalled)
-            {
-                return;
-            }
-
-            OnViewModelClosedCalled = true;
-            OnViewModelClosedViewModel = viewModel;
-        }
+        OnViewModelClosedCalled = true;
+        OnViewModelClosedViewModel = viewModel;
     }
 }

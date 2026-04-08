@@ -1,17 +1,16 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+/// <summary>
+/// Base class for services.
+/// </summary>
+public abstract class ServiceBase : IService
 {
     /// <summary>
-    /// Base class for services.
+    /// Gets the name of the service.
     /// </summary>
-    public abstract class ServiceBase : IService
+    /// <value>The name of the service.</value>
+    public virtual string Name
     {
-        /// <summary>
-        /// Gets the name of the service.
-        /// </summary>
-        /// <value>The name of the service.</value>
-        public virtual string Name
-        {
-            get { return GetType().Name; }
-        }
+        get { return GetType().Name; }
     }
 }

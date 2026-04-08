@@ -1,130 +1,129 @@
-﻿namespace Catel.Reflection
+﻿namespace Catel.Reflection;
+
+using System;
+using System.Linq.Expressions;
+using System.Reflection;
+using Caching;
+using Catel.Data;
+using Logging;
+
+/// <summary>
+/// Property helper class.
+/// </summary>
+public static partial class PropertyHelper
 {
-    using System;
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using Caching;
-    using Catel.Data;
-    using Logging;
+    private static readonly ICacheStorage<string, string> ExpressionNameCache = new CacheStorage<string, string>(); 
 
     /// <summary>
-    /// Property helper class.
+    /// Gets the name of the property based on the expression.
     /// </summary>
-    public static partial class PropertyHelper
+    /// <param name="propertyExpression">The property expression.</param>
+    /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
+    /// <returns>The string representing the property name.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
+    /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
+    public static string GetPropertyName(Expression propertyExpression, bool allowNested = false)
     {
-        private static readonly ICacheStorage<string, string> ExpressionNameCache = new CacheStorage<string, string>(); 
+        ArgumentNullException.ThrowIfNull(propertyExpression);
 
-        /// <summary>
-        /// Gets the name of the property based on the expression.
-        /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
-        /// <returns>The string representing the property name.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
-        public static string GetPropertyName(Expression propertyExpression, bool allowNested = false)
+        return GetPropertyName(propertyExpression, allowNested, false);
+    }
+
+    /// <summary>
+    /// Gets the name of the property based on the expression.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="propertyExpression">The property expression.</param>
+    /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
+    /// <returns>The string representing the property name.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
+    /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
+    public static string GetPropertyName<TValue>(Expression<Func<TValue>> propertyExpression, bool allowNested = false)
+    {
+        ArgumentNullException.ThrowIfNull(propertyExpression);
+
+        var body = propertyExpression.Body;
+        return GetPropertyName(body, allowNested);
+    }
+
+    /// <summary>
+    /// Gets the name of the property based on the expression.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the model.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="propertyExpression">The property expression.</param>
+    /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
+    /// <returns>The string representing the property name.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
+    /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
+    public static string GetPropertyName<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, bool allowNested = false)
+    {
+        ArgumentNullException.ThrowIfNull(propertyExpression);
+
+        var body = propertyExpression.Body;
+        return GetPropertyName(body, allowNested);
+    }
+
+    /// <summary>
+    /// Gets the name of the property based on the expression.
+    /// </summary>
+    /// <param name="propertyExpression">The property expression.</param>
+    /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
+    /// <param name="nested">If set to <c>true</c>, this is a nested call.</param>
+    /// <returns>The string representing the property name or <see cref="string.Empty"/> if no property can be found.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
+    /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
+    private static string GetPropertyName(Expression propertyExpression, bool allowNested = false, bool nested = false)
+    {
+        ArgumentNullException.ThrowIfNull(propertyExpression);
+
+        const string NoMemberExpression = "The expression is not a member access expression";
+
+        var cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, BoxingCache.GetBoxedValue(allowNested), BoxingCache.GetBoxedValue(nested));
+
+        return ExpressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
         {
-            ArgumentNullException.ThrowIfNull(propertyExpression);
+            MemberExpression? memberExpression;
 
-            return GetPropertyName(propertyExpression, allowNested, false);
-        }
-
-        /// <summary>
-        /// Gets the name of the property based on the expression.
-        /// </summary>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
-        /// <returns>The string representing the property name.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
-        public static string GetPropertyName<TValue>(Expression<Func<TValue>> propertyExpression, bool allowNested = false)
-        {
-            ArgumentNullException.ThrowIfNull(propertyExpression);
-
-            var body = propertyExpression.Body;
-            return GetPropertyName(body, allowNested);
-        }
-
-        /// <summary>
-        /// Gets the name of the property based on the expression.
-        /// </summary>
-        /// <typeparam name="TModel">The type of the model.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
-        /// <returns>The string representing the property name.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
-        public static string GetPropertyName<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, bool allowNested = false)
-        {
-            ArgumentNullException.ThrowIfNull(propertyExpression);
-
-            var body = propertyExpression.Body;
-            return GetPropertyName(body, allowNested);
-        }
-
-        /// <summary>
-        /// Gets the name of the property based on the expression.
-        /// </summary>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
-        /// <param name="nested">If set to <c>true</c>, this is a nested call.</param>
-        /// <returns>The string representing the property name or <see cref="string.Empty"/> if no property can be found.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
-        private static string GetPropertyName(Expression propertyExpression, bool allowNested = false, bool nested = false)
-        {
-            ArgumentNullException.ThrowIfNull(propertyExpression);
-
-            const string NoMemberExpression = "The expression is not a member access expression";
-
-            var cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, BoxingCache.GetBoxedValue(allowNested), BoxingCache.GetBoxedValue(nested));
-
-            return ExpressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
+            var unaryExpression = propertyExpression as UnaryExpression;
+            if (unaryExpression is not null)
             {
-                MemberExpression? memberExpression;
+                memberExpression = unaryExpression.Operand as MemberExpression;
+            }
+            else
+            {
+                memberExpression = propertyExpression as MemberExpression;
+            }
 
-                var unaryExpression = propertyExpression as UnaryExpression;
-                if (unaryExpression is not null)
+            if (memberExpression is null)
+            {
+                if (nested)
                 {
-                    memberExpression = unaryExpression.Operand as MemberExpression;
-                }
-                else
-                {
-                    memberExpression = propertyExpression as MemberExpression;
-                }
-
-                if (memberExpression is null)
-                {
-                    if (nested)
-                    {
-                        return string.Empty;
-                    }
-
-                    throw Logger.LogErrorAndCreateException<NotSupportedException>(NoMemberExpression);
+                    return string.Empty;
                 }
 
-                var propertyInfo = memberExpression.Member as PropertyInfo;
-                if (propertyInfo is null)
-                {
-                    if (nested)
-                    {
-                        return string.Empty;
-                    }
+                throw Logger.LogErrorAndCreateException<NotSupportedException>(NoMemberExpression);
+            }
 
-                    throw Logger.LogErrorAndCreateException<NotSupportedException>(NoMemberExpression);
+            var propertyInfo = memberExpression.Member as PropertyInfo;
+            if (propertyInfo is null)
+            {
+                if (nested)
+                {
+                    return string.Empty;
                 }
 
-                if (allowNested && (memberExpression.Expression is not null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
-                {
-                    var propertyName = GetPropertyName(memberExpression.Expression, true, true);
+                throw Logger.LogErrorAndCreateException<NotSupportedException>(NoMemberExpression);
+            }
 
-                    return propertyName + (!string.IsNullOrEmpty(propertyName) ? "." : string.Empty) + propertyInfo.Name;
-                }
+            if (allowNested && (memberExpression.Expression is not null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
+            {
+                var propertyName = GetPropertyName(memberExpression.Expression, true, true);
 
-                return propertyInfo.Name;
-            });
-        }
+                return propertyName + (!string.IsNullOrEmpty(propertyName) ? "." : string.Empty) + propertyInfo.Name;
+            }
+
+            return propertyInfo.Name;
+        });
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace Catel.Reflection
+﻿namespace Catel.Reflection;
+
+public static partial class CastExtensions
 {
-    public static partial class CastExtensions
-    {
-    }
 }

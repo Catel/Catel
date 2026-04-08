@@ -1,16 +1,15 @@
-﻿namespace Catel.ThirdPartyNotices
+﻿namespace Catel.ThirdPartyNotices;
+
+using System;
+
+public class FontThirdPartyNotice : ThirdPartyNotice
 {
-    using System;
-
-    public class FontThirdPartyNotice : ThirdPartyNotice
+    public FontThirdPartyNotice(string fontName, string fontUrl)
     {
-        public FontThirdPartyNotice(string fontName, string fontUrl)
-        {
-            ArgumentNullException.ThrowIfNull(fontName);
-            ArgumentNullException.ThrowIfNull(fontUrl);
+        ArgumentNullException.ThrowIfNull(fontName);
+        ArgumentNullException.ThrowIfNull(fontUrl);
 
-            Title = fontName;
-            Url = fontUrl;
-        }
+        Title = fontName;
+        Url = fontUrl;
     }
 }

@@ -1,12 +1,12 @@
-﻿namespace Catel.MVVM
-{
-    using System;
-    using Catel.Properties;
+﻿namespace Catel.MVVM;
 
-    /// <summary>
-    /// Exception in case a mapped property is not found on the model.
-    /// </summary>
-    public class PropertyNotFoundInModelException : Exception
+using System;
+using Catel.Properties;
+
+/// <summary>
+/// Exception in case a mapped property is not found on the model.
+/// </summary>
+public class PropertyNotFoundInModelException : Exception
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyNotFoundInModelException"/> class.
@@ -40,4 +40,3 @@
 		/// <value>The name of the model property.</value>
 		public string ModelPropertyName { get; private set; }
 	}
-}

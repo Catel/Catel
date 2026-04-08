@@ -1,8 +1,7 @@
-﻿namespace Catel.Logging
-{
-    using Microsoft.Extensions.Logging;
+﻿namespace Catel.Logging;
 
-    public interface IInMemoryLogger : ILogger
-    {
-    }
+using Microsoft.Extensions.Logging;
+
+public interface IInMemoryLogger : ILogger
+{
 }

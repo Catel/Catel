@@ -7,59 +7,58 @@
 // </auto-generated> 
 //------------------------------------------------------------------------------
 
-namespace Catel.Reflection
+namespace Catel.Reflection;
+
+using System;
+
+public partial class FastMemberInvoker<TEntity>
 {
-    using System;
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Object value) =>
+        TrySetPropertyValue<Object>(entity, propertyName, value);
 
-    public partial class FastMemberInvoker<TEntity>
-    {
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Object value) =>
-            TrySetPropertyValue<Object>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Boolean value) =>
+        TrySetPropertyValue<Boolean>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Boolean value) =>
-            TrySetPropertyValue<Boolean>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Char value) =>
+        TrySetPropertyValue<Char>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Char value) =>
-            TrySetPropertyValue<Char>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, SByte value) =>
+        TrySetPropertyValue<SByte>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, SByte value) =>
-            TrySetPropertyValue<SByte>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Byte value) =>
+        TrySetPropertyValue<Byte>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Byte value) =>
-            TrySetPropertyValue<Byte>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Int16 value) =>
+        TrySetPropertyValue<Int16>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Int16 value) =>
-            TrySetPropertyValue<Int16>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, UInt16 value) =>
+        TrySetPropertyValue<UInt16>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, UInt16 value) =>
-            TrySetPropertyValue<UInt16>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Int32 value) =>
+        TrySetPropertyValue<Int32>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Int32 value) =>
-            TrySetPropertyValue<Int32>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, UInt32 value) =>
+        TrySetPropertyValue<UInt32>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, UInt32 value) =>
-            TrySetPropertyValue<UInt32>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Int64 value) =>
+        TrySetPropertyValue<Int64>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Int64 value) =>
-            TrySetPropertyValue<Int64>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, UInt64 value) =>
+        TrySetPropertyValue<UInt64>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, UInt64 value) =>
-            TrySetPropertyValue<UInt64>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Single value) =>
+        TrySetPropertyValue<Single>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Single value) =>
-            TrySetPropertyValue<Single>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Double value) =>
+        TrySetPropertyValue<Double>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Double value) =>
-            TrySetPropertyValue<Double>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, Decimal value) =>
+        TrySetPropertyValue<Decimal>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, Decimal value) =>
-            TrySetPropertyValue<Decimal>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, DateTime value) =>
+        TrySetPropertyValue<DateTime>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, DateTime value) =>
-            TrySetPropertyValue<DateTime>(entity, propertyName, value);
+    public bool TrySetPropertyValue(TEntity entity, string propertyName, String value) =>
+        TrySetPropertyValue<String>(entity, propertyName, value);
 
-        public bool TrySetPropertyValue(TEntity entity, string propertyName, String value) =>
-            TrySetPropertyValue<String>(entity, propertyName, value);
-
-    }
 }

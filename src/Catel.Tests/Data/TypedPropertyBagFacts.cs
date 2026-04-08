@@ -1,57 +1,56 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System;
+using Catel.Data;
+using NUnit.Framework;
+
+[TestFixture]
+public class TypedPropertyBagFacts
 {
-    using System;
-    using Catel.Data;
-    using NUnit.Framework;
+    //[TestCase]
+    //public void CanSetCompatiblePropertyValues()
+    //{
+    //    var propertyBag = new TypedPropertyBag();
 
-    [TestFixture]
-    public class TypedPropertyBagFacts
+    //    propertyBag.SetValue("Int", 42);
+    //    propertyBag.SetValue("Int", 42u);
+    //}
+
+    [TestCase]
+    public void PreventsRegistrationWithNullValue()
     {
-        //[TestCase]
-        //public void CanSetCompatiblePropertyValues()
-        //{
-        //    var propertyBag = new TypedPropertyBag();
+        var propertyBag = new TypedPropertyBag();
 
-        //    propertyBag.SetValue("Int", 42);
-        //    propertyBag.SetValue("Int", 42u);
-        //}
+        propertyBag.SetValue("Int", 42);
+        Assert.Throws<InvalidOperationException>(() => propertyBag.SetValue("Int", (object)null));
+    }
 
-        [TestCase]
-        public void PreventsRegistrationWithNullValue()
-        {
-            var propertyBag = new TypedPropertyBag();
+    [TestCase]
+    public void PreventsRegistrationWithDifferentTypes_1()
+    {
+        var propertyBag = new TypedPropertyBag();
 
-            propertyBag.SetValue("Int", 42);
-            Assert.Throws<InvalidOperationException>(() => propertyBag.SetValue("Int", (object)null));
-        }
+        propertyBag.SetValue("Int", 42);
+        Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", (object)true));
+    }
 
-        [TestCase]
-        public void PreventsRegistrationWithDifferentTypes_1()
-        {
-            var propertyBag = new TypedPropertyBag();
+    [TestCase]
+    public void PreventsRegistrationWithDifferentTypes_2()
+    {
+        var propertyBag = new TypedPropertyBag();
 
-            propertyBag.SetValue("Int", 42);
-            Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", (object)true));
-        }
+        propertyBag.SetValue("Int", 42);
+        Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", new object()));
+    }
 
-        [TestCase]
-        public void PreventsRegistrationWithDifferentTypes_2()
-        {
-            var propertyBag = new TypedPropertyBag();
+    [TestCase]
+    public void AutomaticallyCastsObjectsToRightTypesIfPossible()
+    {
+        var propertyBag = new TypedPropertyBag();
 
-            propertyBag.SetValue("Int", 42);
-            Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", new object()));
-        }
+        propertyBag.SetValue("Int", 42);
+        propertyBag.SetValue("Int", (object)52);
 
-        [TestCase]
-        public void AutomaticallyCastsObjectsToRightTypesIfPossible()
-        {
-            var propertyBag = new TypedPropertyBag();
-
-            propertyBag.SetValue("Int", 42);
-            propertyBag.SetValue("Int", (object)52);
-
-            Assert.That(propertyBag.GetValue("Int", 0), Is.EqualTo(52));
-        }
+        Assert.That(propertyBag.GetValue("Int", 0), Is.EqualTo(52));
     }
 }

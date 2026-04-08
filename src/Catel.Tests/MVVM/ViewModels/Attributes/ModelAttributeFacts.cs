@@ -1,29 +1,28 @@
-﻿namespace Catel.Tests.MVVM.ViewModels.Attributes
+﻿namespace Catel.Tests.MVVM.ViewModels.Attributes;
+
+using Catel.MVVM;
+
+using NUnit.Framework;
+
+public class ModelAttributeFacts
 {
-    using Catel.MVVM;
-
-    using NUnit.Framework;
-
-    public class ModelAttributeFacts
+    [TestFixture]
+    public class TheConstructor
     {
-        [TestFixture]
-        public class TheConstructor
+        [TestCase]
+        public void CorrectlySetsDefaultValue_SupportIEditableObject()
         {
-            [TestCase]
-            public void CorrectlySetsDefaultValue_SupportIEditableObject()
-            {
-                var modelAttribute = new ModelAttribute();
+            var modelAttribute = new ModelAttribute();
 
-                Assert.That(modelAttribute.SupportIEditableObject, Is.EqualTo(true));
-            }
+            Assert.That(modelAttribute.SupportIEditableObject, Is.EqualTo(true));
+        }
 
-            [TestCase]
-            public void CorrectlySetsDefault_SupportValidation()
-            {
-                var modelAttribute = new ModelAttribute();
+        [TestCase]
+        public void CorrectlySetsDefault_SupportValidation()
+        {
+            var modelAttribute = new ModelAttribute();
 
-                Assert.That(modelAttribute.SupportValidation, Is.EqualTo(true));
-            }
+            Assert.That(modelAttribute.SupportValidation, Is.EqualTo(true));
         }
     }
 }

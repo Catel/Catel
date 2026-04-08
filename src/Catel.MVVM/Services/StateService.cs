@@ -1,63 +1,62 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.Collections.Generic;
+using Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// The state service which can store and restore states.
+/// </summary>
+public class StateService : IStateService
 {
-    using System;
-    using System.Collections.Generic;
-    using Logging;
-    using Microsoft.Extensions.Logging;
+    private readonly ILogger<StateService> _logger;
+
+    private readonly Dictionary<string, IState?> _states = new Dictionary<string, IState?>();
+
+    public StateService(ILogger<StateService> logger)
+    {
+        _logger = logger;
+    }
 
     /// <summary>
-    /// The state service which can store and restore states.
+    /// Stores the state.
     /// </summary>
-    public class StateService : IStateService
+    /// <param name="key">The key.</param>
+    /// <param name="state">The state.</param>
+    public void StoreState(string key, IState? state)
     {
-        private readonly ILogger<StateService> _logger;
+        ArgumentNullException.ThrowIfNull(key);
 
-        private readonly Dictionary<string, IState?> _states = new Dictionary<string, IState?>();
-
-        public StateService(ILogger<StateService> logger)
+        lock (_states)
         {
-            _logger = logger;
+            _logger.LogDebug($"Storing state '{key}'");
+
+            _states[key] = state;
         }
+    }
 
-        /// <summary>
-        /// Stores the state.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="state">The state.</param>
-        public void StoreState(string key, IState? state)
+    /// <summary>
+    /// Loads the state.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <returns></returns>
+    public IState? LoadState(string key)
+    {
+        ArgumentNullException.ThrowIfNull(key);
+
+        lock (_states)
         {
-            ArgumentNullException.ThrowIfNull(key);
-
-            lock (_states)
+            if (_states.TryGetValue(key, out var state))
             {
-                _logger.LogDebug($"Storing state '{key}'");
+                _logger.LogDebug($"Loaded state '{key}'");
 
-                _states[key] = state;
+                return state;
             }
-        }
 
-        /// <summary>
-        /// Loads the state.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
-        public IState? LoadState(string key)
-        {
-            ArgumentNullException.ThrowIfNull(key);
+            _logger.LogDebug($"State '{key}' not found");
 
-            lock (_states)
-            {
-                if (_states.TryGetValue(key, out var state))
-                {
-                    _logger.LogDebug($"Loaded state '{key}'");
-
-                    return state;
-                }
-
-                _logger.LogDebug($"State '{key}' not found");
-
-                return null;
-            }
+            return null;
         }
     }
 }

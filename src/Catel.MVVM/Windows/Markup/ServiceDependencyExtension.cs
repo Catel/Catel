@@ -1,57 +1,56 @@
-﻿namespace Catel.Windows.Markup
+﻿namespace Catel.Windows.Markup;
+
+using System;
+using System.Windows.Markup;
+
+/// <summary>
+/// Service dependency extension to allow service access in xaml for services with properties.
+/// </summary>
+public class ServiceDependencyExtension : MarkupExtension
 {
-    using System;
-    using System.Windows.Markup;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ServiceDependencyExtension"/> class.
+    /// </summary>
+    public ServiceDependencyExtension()
+        : this(typeof(object))
+    {
+        // Keep empty
+    }
 
     /// <summary>
-    /// Service dependency extension to allow service access in xaml for services with properties.
+    /// Initializes a new instance of the <see cref="ServiceDependencyExtension"/> class.
     /// </summary>
-    public class ServiceDependencyExtension : MarkupExtension
+    /// <param name="type">The type.</param>
+    public ServiceDependencyExtension(Type type)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceDependencyExtension"/> class.
-        /// </summary>
-        public ServiceDependencyExtension()
-            : this(typeof(object))
+        Type = type;
+    }
+
+    /// <summary>
+    /// Gets or sets the type.
+    /// </summary>
+    /// <value>The type.</value>
+    [ConstructorArgument("type")]
+    public Type Type { get; set; }
+
+    /// <summary>
+    /// Gets or sets the tag.
+    /// </summary>
+    /// <value>The tag.</value>
+    public object? Tag { get; set; }
+
+    /// <summary>
+    /// When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension.
+    /// </summary>
+    /// <param name="serviceProvider">Object that can provide services for the markup extension.</param>
+    /// <returns>The object value to set on the property where the extension is applied.</returns>
+    public override object? ProvideValue(IServiceProvider? serviceProvider)
+    {
+        if (CatelEnvironment.IsInDesignMode)
         {
-            // Keep empty
+            return null;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceDependencyExtension"/> class.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        public ServiceDependencyExtension(Type type)
-        {
-            Type = type;
-        }
-
-        /// <summary>
-        /// Gets or sets the type.
-        /// </summary>
-        /// <value>The type.</value>
-        [ConstructorArgument("type")]
-        public Type Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tag.
-        /// </summary>
-        /// <value>The tag.</value>
-        public object? Tag { get; set; }
-
-        /// <summary>
-        /// When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension.
-        /// </summary>
-        /// <param name="serviceProvider">Object that can provide services for the markup extension.</param>
-        /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public override object? ProvideValue(IServiceProvider? serviceProvider)
-        {
-            if (CatelEnvironment.IsInDesignMode)
-            {
-                return null;
-            }
-
-            return serviceProvider?.GetService(Type);
-        }
+        return serviceProvider?.GetService(Type);
     }
 }

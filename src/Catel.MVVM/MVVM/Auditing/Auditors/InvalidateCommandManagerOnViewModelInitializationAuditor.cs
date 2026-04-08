@@ -1,46 +1,45 @@
-﻿namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing;
+
+using System;
+using System.Threading;
+using Catel.Services;
+
+public class InvalidateCommandManagerOnViewModelInitializationAuditor : AuditorBase
 {
-    using System;
-    using System.Threading;
-    using Catel.Services;
+    private static readonly TimeSpan TimerDuration = TimeSpan.FromMilliseconds(50);
 
-    public class InvalidateCommandManagerOnViewModelInitializationAuditor : AuditorBase
-    {
-        private static readonly TimeSpan TimerDuration = TimeSpan.FromMilliseconds(50);
-
-        private readonly ICommandManager _commandManager;
-        private readonly IDispatcherService _dispatcherService;
+    private readonly ICommandManager _commandManager;
+    private readonly IDispatcherService _dispatcherService;
 
 #pragma warning disable IDISP006 // Implement IDisposable.
-        private readonly Timer _timer;
+    private readonly Timer _timer;
 #pragma warning restore IDISP006 // Implement IDisposable.
 
-        public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager,
-            IDispatcherService dispatcherService)
+    public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager,
+        IDispatcherService dispatcherService)
+    {
+        ArgumentNullException.ThrowIfNull(commandManager);
+        ArgumentNullException.ThrowIfNull(dispatcherService);
+
+        _commandManager = commandManager;
+        _dispatcherService = dispatcherService;
+
+        _timer = new Timer(OnTimerTick, null, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+    }
+
+    public override void OnViewModelInitialized(IViewModel viewModel)
+    {
+        base.OnViewModelInitialized(viewModel);
+
+        // Reset timer
+        _timer.Change(TimerDuration, Timeout.InfiniteTimeSpan);
+    }
+
+    private void OnTimerTick(object? e)
+    {
+        _dispatcherService.BeginInvokeIfRequired(() =>
         {
-            ArgumentNullException.ThrowIfNull(commandManager);
-            ArgumentNullException.ThrowIfNull(dispatcherService);
-
-            _commandManager = commandManager;
-            _dispatcherService = dispatcherService;
-
-            _timer = new Timer(OnTimerTick, null, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-        }
-
-        public override void OnViewModelInitialized(IViewModel viewModel)
-        {
-            base.OnViewModelInitialized(viewModel);
-
-            // Reset timer
-            _timer.Change(TimerDuration, Timeout.InfiniteTimeSpan);
-        }
-
-        private void OnTimerTick(object? e)
-        {
-            _dispatcherService.BeginInvokeIfRequired(() =>
-            {
-                _commandManager.InvalidateCommands();
-            });
-        }
+            _commandManager.InvalidateCommands();
+        });
     }
 }

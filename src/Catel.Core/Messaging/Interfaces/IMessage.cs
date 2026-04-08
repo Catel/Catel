@@ -1,6 +1,5 @@
-﻿namespace Catel.Messaging
+﻿namespace Catel.Messaging;
+
+public interface IMessage
 {
-    public interface IMessage
-    {
-    }
 }

@@ -1,11 +1,10 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System;
+
+public interface ITimeProvider
 {
-    using System;
+    DateTimeOffset GetLocalNow();
 
-    public interface ITimeProvider
-    {
-        DateTimeOffset GetLocalNow();
-
-        DateTimeOffset GetUtcNow();
-    }
+    DateTimeOffset GetUtcNow();
 }

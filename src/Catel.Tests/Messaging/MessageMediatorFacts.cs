@@ -1,6 +1,5 @@
-﻿namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging;
+
+public partial class MessageMediatorFacts
 {
-    public partial class MessageMediatorFacts
-    {
-    }
 }

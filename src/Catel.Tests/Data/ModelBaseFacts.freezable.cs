@@ -1,31 +1,30 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using Catel.Data;
+using NUnit.Framework;
+
+public partial class ModelBaseFacts
 {
-    using Catel.Data;
-    using NUnit.Framework;
-
-    public partial class ModelBaseFacts
+    [TestCase]
+    public void TheFreezeImplementation()
     {
-        [TestCase]
-        public void TheFreezeImplementation()
-        {
-            var model = new PersonTestModel();
-            var freezable = (IFreezable)model;
+        var model = new PersonTestModel();
+        var freezable = (IFreezable)model;
 
-            model.FirstName = "John";
-            Assert.That(model.FirstName, Is.EqualTo("John"));
-            Assert.That(freezable.IsFrozen, Is.False);
+        model.FirstName = "John";
+        Assert.That(model.FirstName, Is.EqualTo("John"));
+        Assert.That(freezable.IsFrozen, Is.False);
 
-            freezable.Freeze();
+        freezable.Freeze();
 
-            model.FirstName = "Jane";
-            Assert.That(model.FirstName, Is.EqualTo("John"));
-            Assert.That(freezable.IsFrozen, Is.True);
+        model.FirstName = "Jane";
+        Assert.That(model.FirstName, Is.EqualTo("John"));
+        Assert.That(freezable.IsFrozen, Is.True);
 
-            freezable.Unfreeze();
+        freezable.Unfreeze();
 
-            model.FirstName = "Jane";
-            Assert.That(model.FirstName, Is.EqualTo("Jane"));
-            Assert.That(freezable.IsFrozen, Is.False);
-        }
+        model.FirstName = "Jane";
+        Assert.That(model.FirstName, Is.EqualTo("Jane"));
+        Assert.That(freezable.IsFrozen, Is.False);
     }
 }

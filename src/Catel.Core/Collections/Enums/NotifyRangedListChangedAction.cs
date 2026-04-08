@@ -1,23 +1,22 @@
-﻿namespace Catel.Collections
+﻿namespace Catel.Collections;
+
+/// <summary>
+/// Describes the real action performed on the <see cref="FastBindingList{T}"/>. 
+/// </summary>
+public enum NotifyRangedListChangedAction
 {
     /// <summary>
-    /// Describes the real action performed on the <see cref="FastBindingList{T}"/>. 
+    /// Items was added to the <see cref="FastBindingList{T}"/>.
     /// </summary>
-    public enum NotifyRangedListChangedAction
-    {
-        /// <summary>
-        /// Items was added to the <see cref="FastBindingList{T}"/>.
-        /// </summary>
-        Add,
+    Add,
 
-        /// <summary>
-        /// Items was removed from the <see cref="FastBindingList{T}"/>.
-        /// </summary>
-        Remove,
+    /// <summary>
+    /// Items was removed from the <see cref="FastBindingList{T}"/>.
+    /// </summary>
+    Remove,
 
-        /// <summary>
-        /// The <see cref="FastBindingList{T}"/> has been reset.
-        /// </summary>
-        Reset
-    }
+    /// <summary>
+    /// The <see cref="FastBindingList{T}"/> has been reset.
+    /// </summary>
+    Reset
 }

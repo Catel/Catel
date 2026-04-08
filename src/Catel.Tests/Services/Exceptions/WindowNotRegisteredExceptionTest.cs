@@ -1,23 +1,22 @@
-﻿namespace Catel.Tests.Services.Exceptions
+﻿namespace Catel.Tests.Services.Exceptions;
+
+using Catel.Services;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class WindowNotRegisteredExceptionTest
 {
-    using Catel.Services;
-
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class WindowNotRegisteredExceptionTest
+    [TestCase]
+    public void Constructor()
     {
-        [TestCase]
-        public void Constructor()
+        try
         {
-            try
-            {
-                throw new WindowNotRegisteredException("windowName");
-            }
-            catch (WindowNotRegisteredException ex)
-            {
-                Assert.That(ex.Name, Is.EqualTo("windowName"));
-            }
+            throw new WindowNotRegisteredException("windowName");
+        }
+        catch (WindowNotRegisteredException ex)
+        {
+            Assert.That(ex.Name, Is.EqualTo("windowName"));
         }
     }
 }

@@ -1,21 +1,20 @@
-﻿namespace Catel.Tests.Data.Exceptions
+﻿namespace Catel.Tests.Data.Exceptions;
+
+using Catel.Data;
+
+using NUnit.Framework;
+
+public class PropertyNotNullableExceptionFacts
 {
-    using Catel.Data;
-
-    using NUnit.Framework;
-
-    public class PropertyNotNullableExceptionFacts
+    [TestFixture]
+    public class TheConstructor
     {
-        [TestFixture]
-        public class TheConstructor
+        [TestCase]
+        public void SetsValuesCorrectly()
         {
-            [TestCase]
-            public void SetsValuesCorrectly()
-            {
-                var exception = new PropertyNotNullableException("PropertyName", typeof(string));
-                Assert.That(exception.PropertyName, Is.EqualTo("PropertyName"));
-                Assert.That(exception.PropertyType, Is.EqualTo(typeof(string)));
-            }
+            var exception = new PropertyNotNullableException("PropertyName", typeof(string));
+            Assert.That(exception.PropertyName, Is.EqualTo("PropertyName"));
+            Assert.That(exception.PropertyType, Is.EqualTo(typeof(string)));
         }
     }
 }
