@@ -22,9 +22,6 @@
     <Project Path="Catel.MVVM/Catel.MVVM.csproj" />
   </Folder>
   <Folder Name="/src/Tests/">
-    <Project Path="Catel.Tests.TestReferenceA/Catel.Tests.TestReferenceA.csproj" />
-    <Project Path="Catel.Tests.TestReferenceB/Catel.Tests.TestReferenceB.csproj" />
-    <Project Path="Catel.Tests.TestReferenceC/Catel.Tests.TestReferenceC.csproj" />
     <Project Path="Catel.Tests/Catel.Tests.csproj" />
   </Folder>
 </Solution>
