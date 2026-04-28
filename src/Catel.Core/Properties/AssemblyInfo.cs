@@ -17,5 +17,4 @@ using System.Runtime.CompilerServices;
 [assembly: NeutralResourcesLanguage("en-US")]
 
 [assembly: InternalsVisibleTo("Catel.MVVM")]
-[assembly: InternalsVisibleTo("Catel.Serialization.Json")]
 [assembly: InternalsVisibleTo("Catel.Tests")]

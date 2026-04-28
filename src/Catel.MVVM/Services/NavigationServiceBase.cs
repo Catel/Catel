@@ -1,48 +1,47 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+
+/// <summary>
+/// Abstract base class to support abstract partial methods.
+/// </summary>
+public abstract class NavigationServiceBase : ViewModelServiceBase
 {
-    using System;
+    /// <summary>
+    /// Gets a value indicating whether it is possible to navigate back.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if it is possible to navigate back; otherwise, <c>false</c>.
+    /// </value>
+    public abstract bool CanGoBack { get; }
 
     /// <summary>
-    /// Abstract base class to support abstract partial methods.
+    /// Gets a value indicating whether it is possible to navigate forward.
     /// </summary>
-    public abstract class NavigationServiceBase : ViewModelServiceBase
-    {
-        /// <summary>
-        /// Gets a value indicating whether it is possible to navigate back.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if it is possible to navigate back; otherwise, <c>false</c>.
-        /// </value>
-        public abstract bool CanGoBack { get; }
+    /// <value>
+    /// <c>true</c> if it is possible to navigate forward otherwise, <c>false</c>.
+    /// </value>
+    public abstract bool CanGoForward { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether it is possible to navigate forward.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if it is possible to navigate backforward otherwise, <c>false</c>.
-        /// </value>
-        public abstract bool CanGoForward { get; }
+    /// <summary>
+    /// Resolves the navigation target.
+    /// </summary>
+    /// <param name="viewModelType">The view model type.</param>
+    /// <returns>The target to navigate to.</returns>
+    protected abstract string? ResolveNavigationTarget(Type viewModelType);
 
-        /// <summary>
-        /// Resolves the navigation target.
-        /// </summary>
-        /// <param name="viewModelType">The view model type.</param>
-        /// <returns>The target to navigate to.</returns>
-        protected abstract string? ResolveNavigationTarget(Type viewModelType);
+    /// <summary>
+    /// Returns the number of total back entries (which is the navigation history).
+    /// </summary>
+    public abstract int GetBackStackCount();
 
-        /// <summary>
-        /// Returns the number of total back entries (which is the navigation history).
-        /// </summary>
-        public abstract int GetBackStackCount();
+    /// <summary>
+    /// Removes the last back entry from the navigation history.
+    /// </summary>
+    public abstract void RemoveBackEntry();
 
-        /// <summary>
-        /// Removes the last back entry from the navigation history.
-        /// </summary>
-        public abstract void RemoveBackEntry();
-
-        /// <summary>
-        /// Removes all the back entries from the navigation history.
-        /// </summary>
-        public abstract void RemoveAllBackEntries();
-    }
+    /// <summary>
+    /// Removes all the back entries from the navigation history.
+    /// </summary>
+    public abstract void RemoveAllBackEntries();
 }

@@ -1,31 +1,30 @@
-﻿namespace System.ComponentModel
+﻿namespace System.ComponentModel;
+
+using System;
+using System.Collections;
+
+/// <summary>
+/// Interface that is based on the <see cref="INotifyDataErrorInfo"/> interface, but supports warnings instead of errors.
+/// </summary>
+public interface INotifyDataWarningInfo
 {
-    using System;
-    using System.Collections;
+    /// <summary>
+    /// Gets a value indicating whether this object contains any field or business warnings.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
+    /// </value>
+    bool HasWarnings { get; }
 
     /// <summary>
-    /// Interface that is based on the <see cref="INotifyDataErrorInfo"/> interface, but supports warnings instead of errors.
+    /// Occurs when the warnings have changed.
     /// </summary>
-    public interface INotifyDataWarningInfo
-    {
-        /// <summary>
-        /// Gets a value indicating whether this object contains any field or business warnings.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
-        /// </value>
-        bool HasWarnings { get; }
+    event EventHandler<DataErrorsChangedEventArgs>? WarningsChanged;
 
-        /// <summary>
-        /// Occurs when the warnings have changed.
-        /// </summary>
-        event EventHandler<DataErrorsChangedEventArgs>? WarningsChanged;
-
-        /// <summary>
-        /// Gets the warnings for the specific property name.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns><see cref="IEnumerable"/> of warnings.</returns>
-        IEnumerable GetWarnings(string? propertyName);
-    }
+    /// <summary>
+    /// Gets the warnings for the specific property name.
+    /// </summary>
+    /// <param name="propertyName">Name of the property.</param>
+    /// <returns><see cref="IEnumerable"/> of warnings.</returns>
+    IEnumerable GetWarnings(string? propertyName);
 }

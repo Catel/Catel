@@ -1,29 +1,28 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+using System;
+
+/// <summary>
+/// Attribute to define custom validation at class level for all classes that derive from <see cref="ModelBase"/>.
+/// <para />
+/// This attribute follows a naming convention. If 
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class ValidateModelAttribute : Attribute
 {
-    using System;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ValidateModelAttribute"/> class.
+    /// </summary>
+    /// <param name="validatorType">Type of the validator.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="validatorType"/> is <c>null</c>.</exception>
+    public ValidateModelAttribute(Type validatorType)
+    {
+        ValidatorType = validatorType;
+    }
 
     /// <summary>
-    /// Attribute to define custom validation at class level for all classes that derive from <see cref="ModelBase"/>.
-    /// <para />
-    /// This attribute follows a naming convention. If 
+    /// Gets the type of the validator.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class ValidateModelAttribute : Attribute
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidateModelAttribute"/> class.
-        /// </summary>
-        /// <param name="validatorType">Type of the validator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="validatorType"/> is <c>null</c>.</exception>
-        public ValidateModelAttribute(Type validatorType)
-        {
-            ValidatorType = validatorType;
-        }
-
-        /// <summary>
-        /// Gets the type of the validator.
-        /// </summary>
-        /// <value>The type of the validator.</value>
-        public Type ValidatorType { get; private set; }
-    }
+    /// <value>The type of the validator.</value>
+    public Type ValidatorType { get; private set; }
 }

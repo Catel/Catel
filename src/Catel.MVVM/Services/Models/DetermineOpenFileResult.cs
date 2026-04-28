@@ -1,21 +1,20 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+
+/// <summary>
+/// The result of a determine open file call.
+/// </summary>
+public class DetermineOpenFileResult : DetermineFileResult
 {
-    using System;
+    public DetermineOpenFileResult()
+    {
+        FileNames = Array.Empty<string>();
+    }
 
     /// <summary>
-    /// The result of a determine open file call.
+    /// Gets or sets the name of the file.
     /// </summary>
-    public class DetermineOpenFileResult : DetermineFileResult
-    {
-        public DetermineOpenFileResult()
-        {
-            FileNames = Array.Empty<string>();
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the file.
-        /// </summary>
-        /// <value>The name of the file.</value>
-        public string[] FileNames { get; set; }
-    }
+    /// <value>The name of the file.</value>
+    public string[] FileNames { get; set; }
 }

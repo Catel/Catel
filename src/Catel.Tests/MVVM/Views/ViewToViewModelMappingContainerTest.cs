@@ -1,10 +1,9 @@
-﻿namespace Catel.Tests.MVVM.Views
-{
-    using NUnit.Framework;
+﻿namespace Catel.Tests.MVVM.Views;
 
-    [TestFixture]
-    public class ViewToViewModelMappingContainerTest
-    {
-        // TODO: Add
-    }
+using NUnit.Framework;
+
+[TestFixture]
+public class ViewToViewModelMappingContainerTest
+{
+    // TODO: Add
 }

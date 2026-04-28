@@ -1,129 +1,134 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Catel.Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Process service to run files or start processes from a view model.
+/// </summary>
+public class ProcessService : IProcessService
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Threading.Tasks;
-    using Catel.Logging;
+    private readonly ILogger<ProcessService> _logger;
+
+    public ProcessService(ILogger<ProcessService> logger)
+    {
+        _logger = logger;
+    }
 
     /// <summary>
-    /// Process service to run files or start processes from a view model.
+    /// Starts a process and returns an awaitable task which will end once the application is closed.
     /// </summary>
-    public class ProcessService : IProcessService
+    /// <param name="processContext">The process context of an application file to run in the process.</param>
+    /// <returns>The <see cref="ProcessResult"/> containing details about the execution.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
+    public virtual async Task<ProcessResult> RunAsync(ProcessContext processContext)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(processContext);
+        Argument.IsNotNullOrWhitespace(nameof(processContext.FileName), processContext.FileName);
 
-        /// <summary>
-        /// Starts a process and returns an awaitable task which will end once the application is closed.
-        /// </summary>
-        /// <param name="processContext">The process context of an application file to run in the process.</param>
-        /// <returns>The <see cref="ProcessResult"/> containing details about the execution.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
-        public virtual async Task<ProcessResult> RunAsync(ProcessContext processContext)
+        var fileName = processContext.FileName;
+
+        var arguments = processContext.Arguments;
+        if (arguments is null)
         {
-            ArgumentNullException.ThrowIfNull(processContext);
-            Argument.IsNotNullOrWhitespace(nameof(processContext.FileName), processContext.FileName);
+            arguments = string.Empty;
+        }
 
-            var fileName = processContext.FileName;
+        var tcs = new TaskCompletionSource<int>();
 
-            var arguments = processContext.Arguments;
-            if (arguments is null)
+        _logger.LogDebug($"Running '{processContext.FileName}'");
+
+        try
+        {
+            var processStartInfo = new ProcessStartInfo(fileName, arguments)
             {
-                arguments = string.Empty;
+                Verb = processContext.Verb,
+                UseShellExecute = processContext.UseShellExecute
+            };
+
+            // Note for debuggers: whenever you *inspect* processStartInfo *and* use UseShellExecute = true,
+            // the debugger will evaluate the Environment and EnvironmentVariables properties and instantiate them. 
+            // This will result in Process.Start to throw exceptions. The solution is *not* to inspect processStartInfo
+            // when UseShellExecute is true
+
+            if (!string.IsNullOrWhiteSpace(processContext.Verb) &&
+                !processStartInfo.UseShellExecute)
+            {
+                _logger.LogWarning($"Verb is specified, this requires UseShellExecute to be set to true");
+
+                processStartInfo.UseShellExecute = true;
             }
 
-            var tcs = new TaskCompletionSource<int>();
-
-            Log.Debug($"Running '{processContext.FileName}'");
-
-            try
+            if (!string.IsNullOrWhiteSpace(processContext.WorkingDirectory))
             {
-                var processStartInfo = new ProcessStartInfo(fileName, arguments)
-                {
-                    Verb = processContext.Verb,
-                    UseShellExecute = processContext.UseShellExecute
-                };
-
-                // Note for debuggers: whenever you *inspect* processStartInfo *and* use UseShellExecute = true,
-                // the debugger will evaluate the Environment and EnvironmentVariables properties and instantiate them. 
-                // This will result in Process.Start to throw exceptions. The solution is *not* to inspect processStartInfo
-                // when UseShellExecute is true
-
-                if (!string.IsNullOrWhiteSpace(processContext.Verb) &&
-                    !processStartInfo.UseShellExecute)
-                {
-                    Log.Warning($"Verb is specified, this requires UseShellExecute to be set to true");
-
-                    processStartInfo.UseShellExecute = true;
-                }
-
-                if (!string.IsNullOrWhiteSpace(processContext.WorkingDirectory))
-                {
-                    processStartInfo.WorkingDirectory = processContext.WorkingDirectory;
-                }
+                processStartInfo.WorkingDirectory = processContext.WorkingDirectory;
+            }
 
 #pragma warning disable IDISP001 // Dispose created
-                var process = Process.Start(processStartInfo);
+            var process = Process.Start(processStartInfo);
 #pragma warning restore IDISP001 // Dispose created
-                if (process is null)
-                {
-                    Log.Debug($"Process is already completed, cannot wait for it to complete");
-
-                    tcs.SetResult(0);
-                }
-                else
-                {
-                    process.EnableRaisingEvents = true;
-                    process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
-                }
-            }
-            catch (Exception ex)
+            if (process is null)
             {
-                Log.Error(ex, $"An error occurred while running '{processContext.FileName}'");
+                _logger.LogDebug($"Process is already completed, cannot wait for it to complete");
 
-                tcs.SetException(ex);
+                tcs.SetResult(0);
             }
-
-            await tcs.Task;
-
-            return new ProcessResult(processContext)
+            else
             {
-                ExitCode = tcs.Task?.Result ?? 0
-            };
+                process.EnableRaisingEvents = true;
+                process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
+            }
         }
-
-        /// <summary>
-        /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
-        /// </summary>
-        /// <param name="processContext">The process context of an application file to run in the process.</param>
-        /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
-        /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
-        public virtual void StartProcess(ProcessContext processContext, ProcessCompletedDelegate? processCompletedCallback = null)
+        catch (Exception ex)
         {
-            var task = RunAsync(processContext);
+            _logger.LogError(ex, $"An error occurred while running '{processContext.FileName}'");
 
-            if (processCompletedCallback is not null)
-            {
-                task.ContinueWith(x => processCompletedCallback(processContext, task.Result.ExitCode));
-            }
+            tcs.SetException(ex);
         }
 
-        /// <summary>
-        /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
-        /// </summary>
-        /// <param name="fileName">The name of an application file to run in the process.</param>
-        /// <param name="arguments">Command-line arguments to pass when starting the process.</param>
-        /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
-        /// <exception cref="ArgumentException">The <paramref name="fileName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
-        public virtual void StartProcess(string fileName, string arguments = "", ProcessCompletedDelegate? processCompletedCallback = null)
+        await tcs.Task;
+
+        return new ProcessResult(processContext)
         {
-            StartProcess(new ProcessContext
-            {
-                FileName = fileName,
-                Arguments = arguments
-            }, processCompletedCallback);
+            ExitCode = tcs.Task?.Result ?? 0
+        };
+    }
+
+    /// <summary>
+    /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
+    /// </summary>
+    /// <param name="processContext">The process context of an application file to run in the process.</param>
+    /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
+    /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
+    public virtual void StartProcess(ProcessContext processContext, ProcessCompletedDelegate? processCompletedCallback = null)
+    {
+        var task = RunAsync(processContext);
+
+        if (processCompletedCallback is not null)
+        {
+            task.ContinueWith(x => processCompletedCallback(processContext, task.Result.ExitCode));
         }
+    }
+
+    /// <summary>
+    /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
+    /// </summary>
+    /// <param name="fileName">The name of an application file to run in the process.</param>
+    /// <param name="arguments">Command-line arguments to pass when starting the process.</param>
+    /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
+    /// <exception cref="ArgumentException">The <paramref name="fileName"/> is <c>null</c> or whitespace.</exception>
+    /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
+    public virtual void StartProcess(string fileName, string arguments = "", ProcessCompletedDelegate? processCompletedCallback = null)
+    {
+        StartProcess(new ProcessContext
+        {
+            FileName = fileName,
+            Arguments = arguments
+        }, processCompletedCallback);
     }
 }

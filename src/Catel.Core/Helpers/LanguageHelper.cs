@@ -1,40 +1,24 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System;
+using Catel.IoC;
+using Catel.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+public static class LanguageHelper
 {
-    using System;
-    using System.Globalization;
-    using Catel.IoC;
-    using Catel.Services;
-
-    public static class LanguageHelper
+    private static readonly Lazy<ILanguageService> LanguageServiceLazy = new(() =>
     {
-        private static readonly Lazy<ILanguageService> LanguageService = new Lazy<ILanguageService>(() =>
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            return dependencyResolver.ResolveRequired<ILanguageService>();
-        });
+        return IoCContainer.ServiceProvider.GetRequiredService<ILanguageService>();
+    });
 
-        public static string? GetString(string resourceName) 
-        {
-            var languageService = LanguageService.Value;
-            return languageService.GetString(resourceName);
-        }
+    public static string? GetString(string resourceName)
+    {
+        return LanguageServiceLazy.Value.GetString(resourceName);
+    }
 
-        public static string? GetString(string resourceName, CultureInfo cultureInfo)
-        {
-            var languageService = LanguageService.Value;
-            return languageService.GetString(resourceName, cultureInfo);
-        }
-
-        public static string GetRequiredString(string resourceName)
-        {
-            var languageService = LanguageService.Value;
-            return languageService.GetRequiredString(resourceName);
-        }
-
-        public static string GetRequiredString(string resourceName, CultureInfo cultureInfo)
-        {
-            var languageService = LanguageService.Value;
-            return languageService.GetRequiredString(resourceName, cultureInfo);
-        }
+    public static string GetRequiredString(string resourceName)
+    {
+        return LanguageServiceLazy.Value.GetRequiredString(resourceName);
     }
 }

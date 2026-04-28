@@ -1,299 +1,400 @@
-﻿namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM;
+
+using System;
+using System.Threading.Tasks;
+using Catel.MVVM;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
+using NUnit.Framework;
+
+public class CommandManagerFacts
 {
-    using System;
-    using System.Threading.Tasks;
-    using Catel.MVVM;
-    using NUnit.Framework;
-
-    public class CommandManagerFacts
+    [TestFixture]
+    public class TheCreateCommandMethod
     {
-        [TestFixture]
-        public class TheCreateCommandMethod
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommandName()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommandName()
-            {
-                var commandManager = new CommandManager();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
-            {
-                var commandManager = new CommandManager();
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(" "));
-            }
-
-            [TestCase]
-            public void ThrowsInvalidOperationExceptionForAlreadyCreatedCommand()
-            {
-                var commandManager = new CommandManager();
-
-                commandManager.CreateCommand("MyCommand");
-
-                Assert.Throws<InvalidOperationException>(() => commandManager.CreateCommand("MyCommand"));
-            }
-
-            [TestCase]
-            public void CorrectlyCreatesTheCommand()
-            {
-                var commandManager = new CommandManager();
-
-                commandManager.CreateCommand("MyCommand");
-
-                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
-            }
+            Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(null));
         }
 
-        [TestFixture]
-        public class TheIsCommandCreatedMethod
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommandName()
-            {
-                var commandManager = new CommandManager();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
-            {
-                var commandManager = new CommandManager();
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
-            }
-
-            [TestCase]
-            public void ReturnsTrueForCreatedCommand()
-            {
-                var commandManager = new CommandManager();
-
-                commandManager.CreateCommand("MyCommand");
-
-                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
-            }
-
-            [TestCase]
-            public void ReturnsFalseForNotCreatedCommand()
-            {
-                var commandManager = new CommandManager();
-
-                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.False);
-            }
+            Assert.Throws<ArgumentException>(() => commandManager.CreateCommand(" "));
         }
 
-        [TestFixture]
-        public class TheGetCommandMethod
+        [TestCase]
+        public void ThrowsInvalidOperationExceptionForAlreadyCreatedCommand()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommandName()
-            {
-                var commandManager = new CommandManager();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentException>(() => commandManager.GetCommand(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
-            {
-                var commandManager = new CommandManager();
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                Assert.Throws<ArgumentException>(() => commandManager.GetCommand(" "));
-            }
+            commandManager.CreateCommand("MyCommand");
 
-            [TestCase]
-            public void ReturnsNullForNotCreatedCommand()
-            {
-                var commandManager = new CommandManager();
-
-                Assert.That(commandManager.GetCommand("MyCommand"), Is.Null);
-            }
-
-            [TestCase]
-            public void ReturnsCommandForCreatedCommand()
-            {
-                var commandManager = new CommandManager();
-
-                commandManager.CreateCommand("MyCommand");
-
-                Assert.That(commandManager.GetCommand("MyCommand"), Is.Not.Null);
-            }
+            Assert.Throws<InvalidOperationException>(() => commandManager.CreateCommand("MyCommand"));
         }
 
-        [TestFixture]
-        public class TheExecuteCommandMethod
+        [TestCase]
+        public void CorrectlyCreatesTheCommand()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommandName()
-            {
-                var commandManager = new CommandManager();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
-            {
-                var commandManager = new CommandManager();
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider); 
 
-                Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(" "));
-            }
+            commandManager.CreateCommand("MyCommand");
 
-            [TestCase]
-            public void ExecutesRegisteredCommands()
-            {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+            Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
+        }
+    }
 
-                commandManager.CreateCommand("MyCommand");
-                commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
+    [TestFixture]
+    public class TheIsCommandCreatedMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                commandManager.ExecuteCommand("MyCommand");
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                Assert.That(vm.IsTestCommand1Executed, Is.True);
-            }
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-            [TestCase]
-            public void DoesNotExecuteUnregisteredCommands()
-            {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
-
-                commandManager.CreateCommand("MyCommand");
-                commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
-
-                Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
-
-                commandManager.UnregisterCommand("MyCommand", vm.TestCommand1);
-
-                commandManager.ExecuteCommand("MyCommand");
-
-                Assert.That(vm.IsTestCommand1Executed, Is.False);
-            }
+            Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
         }
 
-        [TestFixture]
-        public class TheRegisterCommandMethod
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommandName()
-            {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(null, vm.TestCommand1));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
-            {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(" ", vm.TestCommand1));
-            }
-
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommand()
-            {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
-
-                Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
-            }
+            Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
         }
 
-        [TestFixture]
-        public class TheUnregisterCommandMethod
+        [TestCase]
+        public void ReturnsTrueForCreatedCommand()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommandName()
-            {
-                var commandManager = new CommandManager();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
-            {
-                var commandManager = new CommandManager();
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
-            }
+            commandManager.CreateCommand("MyCommand");
 
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommand()
-            {
-                var vm = new CompositeCommandViewModel();
-                var commandManager = new CommandManager();
-
-                Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
-            }
+            Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
         }
 
-        [TestFixture]
-        public class TheRegisterAndUnregisterActionFunctionality
+        [TestCase]
+        public void ReturnsFalseForNotCreatedCommand()
         {
-            [TestCase]
-            public async Task RegisteredActionsCanBeInvokedAsync()
-            {
-                var invoked = false;
-                Action action = () => invoked = true;
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                var commandManager = new CommandManager();
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                commandManager.CreateCommand("TestAction");
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                commandManager.RegisterAction("TestAction", action);
+            Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.False);
+        }
+    }
 
-                commandManager.ExecuteCommand("TestAction");
+    [TestFixture]
+    public class TheGetCommandMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.That(invoked, Is.True);
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void RegisteredActionsCanBeUnregistered_DefinedAction()
-            {
-                var invoked = false;
-                Action action = () => invoked = true;
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                var commandManager = new CommandManager();
+            Assert.Throws<ArgumentException>(() => commandManager.GetCommand(null));
+        }
 
-                commandManager.CreateCommand("TestAction");
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                commandManager.RegisterAction("TestAction", action);
-                commandManager.UnregisterAction("TestAction", action);
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                commandManager.ExecuteCommand("TestAction");
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                Assert.That(invoked, Is.False);
-            }
+            Assert.Throws<ArgumentException>(() => commandManager.GetCommand(" "));
+        }
 
-            [TestCase]
-            public void RegisteredActionsCanBeUnregistered_DynamicAction()
-            {
-                var commandManager = new CommandManager();
+        [TestCase]
+        public void ReturnsNullForNotCreatedCommand()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                commandManager.CreateCommand("TestAction");
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                commandManager.RegisterAction("TestAction", RegisteredActionsCanBeUnregistered_TestMethod);
-                commandManager.UnregisterAction("TestAction", RegisteredActionsCanBeUnregistered_TestMethod);
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
 
-                commandManager.ExecuteCommand("TestAction");
+            Assert.That(commandManager.GetCommand("MyCommand"), Is.Null);
+        }
 
-                Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
-            }
+        [TestCase]
+        public void ReturnsCommandForCreatedCommand()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            private bool _registeredActionsCanBeUnregistered_TestValue = false;
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            private void RegisteredActionsCanBeUnregistered_TestMethod()
-            {
-                _registeredActionsCanBeUnregistered_TestValue = true;
-            }
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            commandManager.CreateCommand("MyCommand");
+
+            Assert.That(commandManager.GetCommand("MyCommand"), Is.Not.Null);
+        }
+    }
+
+    [TestFixture]
+    public class TheExecuteCommandMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(null));
+        }
+
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            Assert.Throws<ArgumentException>(() => commandManager.ExecuteCommand(" "));
+        }
+
+        [TestCase]
+        public void ExecutesRegisteredCommands()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+            var vm = new CompositeCommandViewModel(serviceProvider);
+
+            commandManager.CreateCommand("MyCommand");
+            commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
+
+            commandManager.ExecuteCommand("MyCommand");
+
+            Assert.That(vm.IsTestCommand1Executed, Is.True);
+        }
+
+        [TestCase]
+        public void DoesNotExecuteUnregisteredCommands()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+            var vm = new CompositeCommandViewModel(serviceProvider);
+
+            commandManager.CreateCommand("MyCommand");
+            commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
+
+            Assert.That(commandManager.IsCommandCreated("MyCommand"), Is.True);
+
+            commandManager.UnregisterCommand("MyCommand", vm.TestCommand1);
+
+            commandManager.ExecuteCommand("MyCommand");
+
+            Assert.That(vm.IsTestCommand1Executed, Is.False);
+        }
+    }
+
+    [TestFixture]
+    public class TheRegisterCommandMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+            var vm = new CompositeCommandViewModel(serviceProvider);
+
+            Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(null, vm.TestCommand1));
+        }
+
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+            var vm = new CompositeCommandViewModel(serviceProvider);
+
+            Assert.Throws<ArgumentException>(() => commandManager.RegisterCommand(" ", vm.TestCommand1));
+        }
+
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommand()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+            var vm = new CompositeCommandViewModel(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
+        }
+    }
+
+    [TestFixture]
+    public class TheUnregisterCommandMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(null));
+        }
+
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            Assert.Throws<ArgumentException>(() => commandManager.IsCommandCreated(" "));
+        }
+
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommand()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+            var vm = new CompositeCommandViewModel(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => commandManager.RegisterCommand("MyCommand", null));
+        }
+    }
+
+    [TestFixture]
+    public class TheRegisterAndUnregisterActionFunctionality
+    {
+        [TestCase]
+        public async Task RegisteredActionsCanBeInvokedAsync()
+        {
+            var invoked = false;
+            Action action = () => invoked = true;
+
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            commandManager.CreateCommand("TestAction");
+
+            commandManager.RegisterAction("TestAction", action);
+
+            commandManager.ExecuteCommand("TestAction");
+
+            Assert.That(invoked, Is.True);
+        }
+
+        [TestCase]
+        public void RegisteredActionsCanBeUnregistered_DefinedAction()
+        {
+            var invoked = false;
+            Action action = () => invoked = true;
+
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            commandManager.CreateCommand("TestAction");
+
+            commandManager.RegisterAction("TestAction", action);
+            commandManager.UnregisterAction("TestAction", action);
+
+            commandManager.ExecuteCommand("TestAction");
+
+            Assert.That(invoked, Is.False);
+        }
+
+        [TestCase]
+        public void RegisteredActionsCanBeUnregistered_DynamicAction()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var commandManager = new CommandManager(new NullLogger<CommandManager>(), serviceProvider);
+
+            commandManager.CreateCommand("TestAction");
+
+            commandManager.RegisterAction("TestAction", RegisteredActionsCanBeUnregistered_TestMethod);
+            commandManager.UnregisterAction("TestAction", RegisteredActionsCanBeUnregistered_TestMethod);
+
+            commandManager.ExecuteCommand("TestAction");
+
+            Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
+        }
+
+        private bool _registeredActionsCanBeUnregistered_TestValue = false;
+
+        private void RegisteredActionsCanBeUnregistered_TestMethod()
+        {
+            _registeredActionsCanBeUnregistered_TestValue = true;
         }
     }
 }

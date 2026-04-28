@@ -1,56 +1,47 @@
-namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses;
+
+using System;
+using System.Linq;
+using Catel.MVVM;
+
+public class CollapsMapping : DefaultViewModelToModelMappingConverter
 {
-    using System;
-    using System.Linq;
-    using Catel.MVVM;
+    private readonly char _separator;
 
-    public class CollapsMapping : DefaultViewModelToModelMappingConverter
+    // Note: keep the constructor, it's used in the tests
+    public CollapsMapping(string[] propertyNames)
+        : this(propertyNames, ' ')
     {
-        #region Fields
-        private readonly char _separator;
-        #endregion
+    }
 
-        #region Constructors
-        // Note: keep the constructor, it's used in the tests
-        public CollapsMapping(string[] propertyNames)
-            : this(propertyNames, ' ')
-        {
-        }
+    public CollapsMapping(string[] propertyNames, char separator = ' ')
+        : base(propertyNames)
+    {
+        _separator = separator;
+    }
 
-        public CollapsMapping(string[] propertyNames, char separator = ' ')
-            : base(propertyNames)
-        {
-            _separator = separator;
-        }
-        #endregion
+    public char Separator
+    {
+        get { return _separator; }
+    }
 
-        #region Properties
-        public char Separator
-        {
-            get { return _separator; }
-        }
-        #endregion
+    public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
+    {
+        return types.All(x => x == typeof(string)) && outType == typeof(string);
+    }
 
-        #region Methods
-        public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
-        {
-            return types.All(x => x == typeof(string)) && outType == typeof(string);
-        }
+    public override object Convert(object[] values, IViewModel viewModel)
+    {
+        return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string)x)));
+    }
 
-        public override object Convert(object[] values, IViewModel viewModel)
-        {
-            return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string)x)));
-        }
+    public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
+    {
+        return outTypes.All(x => x == typeof(string)) && inType == typeof(string);
+    }
 
-        public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
-        {
-            return outTypes.All(x => x == typeof(string)) && inType == typeof(string);
-        }
-
-        public override object[] ConvertBack(object value, IViewModel viewModel)
-        {
-            return ((string)value).Split(Separator);
-        }
-        #endregion
+    public override object[] ConvertBack(object value, IViewModel viewModel)
+    {
+        return ((string)value).Split(Separator);
     }
 }

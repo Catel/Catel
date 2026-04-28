@@ -1,16 +1,15 @@
-﻿namespace Catel.Tests.Data
-{
-    using System;
-    using Catel.Data;
+﻿namespace Catel.Tests.Data;
 
-    [Serializable]
-    public class ClassWithoutPropertiesA : ComparableModelBase
+using System;
+using Catel.Data;
+
+public class ClassWithoutPropertiesA : ComparableModelBase
+{
+    /// <summary>
+    ///   Initializes a new object from scratch.
+    /// </summary>
+    public ClassWithoutPropertiesA()
+        : base(new ModelEqualityComparer())
     {
-        /// <summary>
-        ///   Initializes a new object from scratch.
-        /// </summary>
-        public ClassWithoutPropertiesA()
-        {
-        }
     }
 }

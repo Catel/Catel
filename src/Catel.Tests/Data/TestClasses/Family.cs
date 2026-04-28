@@ -1,55 +1,54 @@
-﻿namespace Catel.Tests.Data.TestClasses
+﻿namespace Catel.Tests.Data.TestClasses;
+
+using System.Collections.ObjectModel;
+using Catel.Data;
+
+internal class GrandParent : ChildAwareModelBase
 {
-    using System.Collections.ObjectModel;
-    using Catel.Data;
-
-    internal class GrandParent : ChildAwareModelBase
+    public void ResetDirtyFlag()
     {
-        public void ResetDirtyFlag()
-        {
-            IsDirty = false;
-        }
-
-        public ObservableCollection<Parent> Parents
-        {
-            get => GetValue<ObservableCollection<Parent>>(ParentsProperty);
-            set => SetValue(ParentsProperty, value);
-        }
-
-        public static readonly IPropertyData ParentsProperty = RegisterProperty(nameof(Parents), () => new ObservableCollection<Parent>());
+        IsDirty = false;
     }
 
-    internal class Parent : ChildAwareModelBase
+    public ObservableCollection<Parent> Parents
     {
-        public void ResetDirtyFlag()
-        {
-            IsDirty = false;
-        }
-
-        public ObservableCollection<Child> Children
-
-        {
-            get => GetValue<ObservableCollection<Child>>(ChildrenProperty);
-            set => SetValue(ChildrenProperty, value);
-        }
-
-        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), () => new ObservableCollection<Child>());
-
+        get => GetValue<ObservableCollection<Parent>>(ParentsProperty);
+        set => SetValue(ParentsProperty, value);
     }
 
-    internal class Child : ModelBase
+    public static readonly IPropertyData ParentsProperty = RegisterProperty(nameof(Parents), () => new ObservableCollection<Parent>());
+}
+
+internal class Parent : ChildAwareModelBase
+{
+    public void ResetDirtyFlag()
     {
-        public void ResetDirtyFlag()
-        {
-            IsDirty = false;
-        }
-
-        public string Name
-        {
-            get => GetValue<string>(NameProperty);
-            set => SetValue(NameProperty, value);
-        }
-
-        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
+        IsDirty = false;
     }
+
+    public ObservableCollection<Child> Children
+
+    {
+        get => GetValue<ObservableCollection<Child>>(ChildrenProperty);
+        set => SetValue(ChildrenProperty, value);
+    }
+
+    public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), () => new ObservableCollection<Child>());
+
+}
+
+internal class Child : ModelBase
+{
+    public void ResetDirtyFlag()
+    {
+        IsDirty = false;
+    }
+
+    public string Name
+    {
+        get => GetValue<string>(NameProperty);
+        set => SetValue(NameProperty, value);
+    }
+
+    public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
 }

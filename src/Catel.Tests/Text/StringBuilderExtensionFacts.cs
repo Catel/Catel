@@ -1,23 +1,22 @@
-﻿namespace Catel.Tests.Text
+﻿namespace Catel.Tests.Text;
+
+using Catel.Text;
+using System.Text;
+using NUnit.Framework;
+
+public class StringBuilderExtensionFacts
 {
-    using Catel.Text;
-    using System.Text;
-    using NUnit.Framework;
-
-    public class StringBuilderExtensionFacts
+    [TestFixture]
+    public class TheAppendLineMethod
     {
-        [TestFixture]
-        public class TheAppendLineMethod
+        [TestCase]
+        public void CorrectlyAppendsLineWithFormatting()
         {
-            [TestCase]
-            public void CorrectlyAppendsLineWithFormatting()
-            {
-                var stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine("test with {0} {1}", "formatting", 1);
+            stringBuilder.AppendLine("test with {0} {1}", "formatting", 1);
 
-                Assert.That(stringBuilder.ToString(), Is.EqualTo("test with formatting 1\r\n"));
-            }
+            Assert.That(stringBuilder.ToString(), Is.EqualTo("test with formatting 1\r\n"));
         }
     }
 }

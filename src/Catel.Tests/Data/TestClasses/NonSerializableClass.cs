@@ -1,6 +1,5 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+public class NonSerializableClass
 {
-    public class NonSerializableClass
-    {
-    }
 }

@@ -1,7 +1,6 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+public interface IAppDataService
 {
-    public interface IAppDataService
-    {
-        string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget applicationDataTarget);
-    }
+    string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget applicationDataTarget);
 }

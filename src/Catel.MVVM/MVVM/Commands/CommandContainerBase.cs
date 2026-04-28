@@ -1,155 +1,167 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+using System;
+using System.Threading.Tasks;
+using Auditing;
+using Catel.Logging;
+using Catel.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Container for application-wide commands.
+/// </summary>
+public abstract class CommandContainerBase : CommandContainerBase<object?>
 {
-    using System;
-    using System.Threading.Tasks;
-    using Auditing;
-    using Catel.Logging;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandContainerBase"/> class.
+    /// </summary>
+    /// <param name="commandName">Name of the command.</param>
+    /// <param name="commandManager">The command manager.</param>
+    /// <param name="serviceProvider">The service provider.</param>
+    protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
+        : base(commandName, commandManager, serviceProvider)
+    {
+    }
+}
+
+/// <summary>
+/// Container for application-wide commands.
+/// </summary>
+/// <typeparam name="TParameter">The type of the command parameter.</typeparam>
+public abstract class CommandContainerBase<TParameter> : CommandContainerBase<TParameter, TParameter, ITaskProgressReport>
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandContainerBase{TParameter}"/> class.
+    /// </summary>
+    /// <param name="commandName">Name of the command.</param>
+    /// <param name="commandManager">The command manager.</param>
+    /// <param name="serviceProvider">The service provider.</param>
+    protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
+        : base(commandName, commandManager, serviceProvider)
+    {
+    }
+}
+
+/// <summary>
+/// Container for application-wide commands.
+/// </summary>
+/// <typeparam name="TExecuteParameter">The type of the command execute parameter.</typeparam>
+/// <typeparam name="TCanExecuteParameter">The type of the command can execute parameter.</typeparam>
+public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter> : CommandContainerBase<TExecuteParameter, TCanExecuteParameter, ITaskProgressReport>
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandContainerBase{TExecuteParameter, TCanExecuteParameter}"/> class.
+    /// </summary>
+    /// <param name="commandName">Name of the command.</param>
+    /// <param name="commandManager">The command manager.</param>
+    /// <param name="serviceProvider">The service provider.</param>
+    protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
+        : base(commandName, commandManager, serviceProvider)
+    {
+    }
+}
+
+/// <summary>
+/// Container for application-wide commands.
+/// </summary>
+/// <typeparam name="TExecuteParameter">The type of the command execute parameter.</typeparam>
+/// <typeparam name="TCanExecuteParameter">The type of the command can execute parameter.</typeparam>
+/// <typeparam name="TProgress">The type of the progress.</typeparam>
+public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TProgress> 
+    where TProgress : ITaskProgressReport
+{
+    private readonly ICatelCommand _command;
+    private readonly ICommandManager _commandManager;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly IAuditingManager _auditingManager;
+
+    private readonly ICompositeCommand _compositeCommand;
 
     /// <summary>
-    /// Container for application-wide commands.
+    /// Initializes a new instance of the <see cref="CommandContainerBase{TExecuteParameter, TCanExecuteParameter, TPogress}"/> class.
     /// </summary>
-    public abstract class CommandContainerBase : CommandContainerBase<object?>
+    /// <param name="commandName">Name of the command.</param>
+    /// <param name="commandManager">The command manager.</param>
+    /// <param name="serviceProvider">The service provider.</param>
+    protected CommandContainerBase(string commandName, ICommandManager commandManager, IServiceProvider serviceProvider)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandContainerBase"/> class.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
-            : base(commandName, commandManager)
+        Argument.IsNotNullOrWhitespace("commandName", commandName);
+        ArgumentNullException.ThrowIfNull(commandManager);
+
+        CommandName = commandName;
+        _commandManager = commandManager;
+        _serviceProvider = serviceProvider;
+        _auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+
+        var compositeCommand = _commandManager.GetCommand(commandName) as ICompositeCommand;
+        if (compositeCommand is null)
         {
+            throw new CatelException($"Cannot find composite command command '{commandName}'");
         }
+
+        _compositeCommand = compositeCommand;
+        _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress>(serviceProvider, ExecuteInternalAsync, CanExecute);
+
+        _commandManager.RegisterCommand(commandName, _command);
     }
 
     /// <summary>
-    /// Container for application-wide commands.
+    /// Gets the service provider bound to this command container.
     /// </summary>
-    /// <typeparam name="TParameter">The type of the command parameter.</typeparam>
-    public abstract class CommandContainerBase<TParameter> : CommandContainerBase<TParameter, TParameter, ITaskProgressReport>
+    protected IServiceProvider ServiceProvider => _serviceProvider;
+
+    /// <summary>
+    /// Gets the name of the command.
+    /// </summary>
+    /// <value>The name of the command.</value>
+    public string CommandName { get; private set; }
+
+    /// <summary>
+    /// Invalidates the command.
+    /// </summary>
+    public virtual void InvalidateCommand()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandContainerBase{TParameter}"/> class.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
-            : base(commandName, commandManager)
-        {
-        }
+        _compositeCommand.RaiseCanExecuteChanged();
     }
 
     /// <summary>
-    /// Container for application-wide commands.
+    /// Determines whether the command can be executed.
     /// </summary>
-    /// <typeparam name="TExecuteParameter">The type of the command execute parameter.</typeparam>
-    /// <typeparam name="TCanExecuteParameter">The type of the command can execute parameter.</typeparam>
-    public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter> : CommandContainerBase<TExecuteParameter, TCanExecuteParameter, ITaskProgressReport>
+    /// <param name="parameter">The parameter.</param>
+    /// <returns><c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.</returns>
+    public virtual bool CanExecute(TCanExecuteParameter? parameter)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandContainerBase{TExecuteParameter, TCanExecuteParameter}"/> class.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
-            : base(commandName, commandManager)
-        {
-        }
+        return true;
     }
 
     /// <summary>
-    /// Container for application-wide commands.
+    /// Executes the command.
     /// </summary>
-    /// <typeparam name="TExecuteParameter">The type of the command execute parameter.</typeparam>
-    /// <typeparam name="TCanExecuteParameter">The type of the command can execute parameter.</typeparam>
-    /// <typeparam name="TPogress">The type of the pogress.</typeparam>
-    public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TPogress> 
-        where TPogress : ITaskProgressReport
+    /// <param name="parameter">The parameter.</param>
+    /// <returns>Task.</returns>
+    private async Task ExecuteInternalAsync(TExecuteParameter? parameter)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        await ExecuteAsync(parameter);
 
-        private readonly ICatelCommand _command;
-        private readonly ICommandManager _commandManager;
-        private readonly ICompositeCommand _compositeCommand;
+        _auditingManager.OnCommandExecuted(null, CommandName, _command, parameter);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandContainerBase{TExecuteParameter, TCanExecuteParameter, TPogress}"/> class.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="commandManager">The command manager.</param>
-        protected CommandContainerBase(string commandName, ICommandManager commandManager)
-        {
-            Argument.IsNotNullOrWhitespace("commandName", commandName);
-            ArgumentNullException.ThrowIfNull(commandManager);
+    /// <summary>
+    /// Execute the command as an asynchronous operation.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    /// <returns>Task.</returns>
+    public virtual async Task ExecuteAsync(TExecuteParameter? parameter)
+    {
+        Execute(parameter);
+    }
 
-            CommandName = commandName;
-            _commandManager = commandManager;
-
-            var compositeCommand = _commandManager.GetCommand(commandName) as ICompositeCommand;
-            if (compositeCommand is null)
-            {
-                throw Log.ErrorAndCreateException<CatelException>($"Cannot find composite command command '{commandName}'");
-            }
-
-            _compositeCommand = compositeCommand;
-            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteInternalAsync, CanExecute);
-
-            _commandManager.RegisterCommand(commandName, _command);
-        }
-
-        /// <summary>
-        /// Gets the name of the command.
-        /// </summary>
-        /// <value>The name of the command.</value>
-        public string CommandName { get; private set; }
-
-        /// <summary>
-        /// Invalidates the command.
-        /// </summary>
-        public virtual void InvalidateCommand()
-        {
-            _compositeCommand.RaiseCanExecuteChanged();
-        }
-
-        /// <summary>
-        /// Determines whether the command can be executed.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns><c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.</returns>
-        public virtual bool CanExecute(TCanExecuteParameter? parameter)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>Task.</returns>
-        private async Task ExecuteInternalAsync(TExecuteParameter? parameter)
-        {
-            await ExecuteAsync(parameter);
-
-#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-            AuditingManager.OnCommandExecuted(null, CommandName, _command, parameter);
-#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
-        }
-
-        /// <summary>
-        /// Execute the command as an asynchronous operation.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>Task.</returns>
-        public virtual async Task ExecuteAsync(TExecuteParameter? parameter)
-        {
-            Execute(parameter);
-        }
-
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        public virtual void Execute(TExecuteParameter? parameter)
-        {
-        }
+    /// <summary>
+    /// Executes the command.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public virtual void Execute(TExecuteParameter? parameter)
+    {
     }
 }

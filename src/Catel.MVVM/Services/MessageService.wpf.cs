@@ -1,59 +1,58 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.Threading.Tasks;
+using System.Windows;
+using Windows;
+
+public partial class MessageService
 {
-    using System;
-    using System.Threading.Tasks;
-    using System.Windows;
-    using Windows;
-
-    public partial class MessageService
+    /// <summary>
+    /// Translates the message image.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <returns>
+    /// Corresponding <see cref="MessageBoxImage"/>.
+    /// </returns>
+    protected static MessageBoxImage TranslateMessageImage(MessageImage image)
     {
-        /// <summary>
-        /// Translates the message image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <returns>
-        /// Corresponding <see cref="MessageBoxImage"/>.
-        /// </returns>
-        protected static MessageBoxImage TranslateMessageImage(MessageImage image)
+        return Enum<MessageBoxImage>.ConvertFromOtherEnumValue(image);
+    }
+
+    /// <summary>
+    /// Shows the message box.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="caption">The caption.</param>
+    /// <param name="button">The button.</param>
+    /// <param name="icon">The icon.</param>
+    /// <returns>The message result.</returns>
+    /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
+    protected virtual Task<MessageResult> ShowMessageBoxAsync(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
+    {
+        Argument.IsNotNullOrWhitespace("message", message);
+
+        var tcs = new TaskCompletionSource<MessageResult>();
+
+        _dispatcherService.BeginInvoke(() =>
         {
-            return Enum<MessageBoxImage>.ConvertFromOtherEnumValue(image);
-        }
+            MessageBoxResult result;
+            var messageBoxButton = TranslateMessageButton(button);
+            var messageBoxImage = TranslateMessageImage(icon);
 
-        /// <summary>
-        /// Shows the message box.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <param name="button">The button.</param>
-        /// <param name="icon">The icon.</param>
-        /// <returns>The message result.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        protected virtual Task<MessageResult> ShowMessageBoxAsync(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
-        {
-            Argument.IsNotNullOrWhitespace("message", message);
-
-            var tcs = new TaskCompletionSource<MessageResult>();
-
-            _dispatcherService.BeginInvoke(() =>
+            var activeWindow = Application.Current.GetActiveWindow();
+            if (activeWindow is not null)
             {
-                MessageBoxResult result;
-                var messageBoxButton = TranslateMessageButton(button);
-                var messageBoxImage = TranslateMessageImage(icon);
+                result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
+            }
+            else
+            {
+                result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
+            }
 
-                var activeWindow = Application.Current.GetActiveWindow();
-                if (activeWindow is not null)
-                {
-                    result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
-                }
-                else
-                {
-                    result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
-                }
+            tcs.SetResult(TranslateMessageBoxResult(result));
+        });
 
-                tcs.SetResult(TranslateMessageBoxResult(result));
-            });
-
-            return tcs.Task;
-        }
+        return tcs.Task;
     }
 }

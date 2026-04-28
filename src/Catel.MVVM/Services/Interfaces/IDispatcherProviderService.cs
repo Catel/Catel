@@ -1,8 +1,7 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+public interface IDispatcherProviderService
 {
-    public interface IDispatcherProviderService
-    {
-        object GetApplicationDispatcher();
-        object GetCurrentDispatcher();
-    }
+    object GetApplicationDispatcher();
+    object GetCurrentDispatcher();
 }

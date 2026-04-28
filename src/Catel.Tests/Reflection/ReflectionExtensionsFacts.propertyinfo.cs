@@ -1,6 +1,5 @@
-﻿namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection;
+
+public partial class ReflectionExtensionsFacts
 {
-    public partial class ReflectionExtensionsFacts
-    {
-    }
 }

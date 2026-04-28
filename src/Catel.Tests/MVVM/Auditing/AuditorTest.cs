@@ -1,196 +1,245 @@
-﻿namespace Catel.Tests.MVVM.Auditing
+﻿namespace Catel.Tests.MVVM.Auditing;
+
+using System.Threading.Tasks;
+using Catel.MVVM.Auditing;
+using Catel.Tests.MVVM.ViewModels.TestClasses;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+
+[TestFixture]
+public class AuditorTest
 {
-    using System.Threading.Tasks;
-    using Catel.MVVM.Auditing;
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class AuditorTest
+    [TestCase]
+    public void OnViewModelCreating()
     {
-        [TestCase]
-        public void OnViewModelCreating()
-        {
-            AuditingManager.Clear();
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var viewModel = new TestViewModel();
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            Assert.That(auditor.OnViewModelCreatingCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelCreatingType, Is.EqualTo(typeof(TestViewModel)));
-        }
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-        [TestCase]
-        public void OnViewModelCreated()
-        {
-            AuditingManager.Clear();
+        var viewModel = new TestViewModel(serviceProvider);
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        Assert.That(auditor.OnViewModelCreatingCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelCreatingType, Is.EqualTo(typeof(TestViewModel)));
+    }
 
-            var viewModel = new TestViewModel();
+    [TestCase]
+    public void OnViewModelCreated()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(auditor.OnViewModelCreatedCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelCreatedType, Is.EqualTo(typeof(TestViewModel)));
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public async Task OnViewModelInitializedAsync()
-        {
-            AuditingManager.Clear();
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-            var viewModel = new TestViewModel();
-            await viewModel.InitializeViewModelAsync();
+        var viewModel = new TestViewModel(serviceProvider);
 
-            Assert.That(auditor.OnViewModelInitializedCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelInitializedType, Is.EqualTo(typeof(TestViewModel)));
-        }
+        Assert.That(auditor.OnViewModelCreatedCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelCreatedType, Is.EqualTo(typeof(TestViewModel)));
+    }
 
-        [TestCase]
-        public void OnPropertyChanged()
-        {
-            AuditingManager.Clear();
+    [TestCase]
+    public async Task OnViewModelInitializedAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var viewModel = new TestViewModel();
-            viewModel.TestProperty = "test";
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            Assert.That(auditor.OnPropertyChangedCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnPropertyChangedViewModel, Is.EqualTo(viewModel));
-            Assert.That(auditor.OnPropertyChangedPropertyName, Is.EqualTo("TestProperty"));
-            Assert.That(auditor.OnPropertyChangedNewValue, Is.EqualTo("test"));
-        }
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-        [TestCase]
-        public void OnPropertyChanged_IgnoredProperties()
-        {
-            AuditingManager.Clear();
+        var viewModel = new TestViewModel(serviceProvider);
+        await viewModel.InitializeViewModelAsync();
 
-            var auditor = new TestAuditor();
-            auditor.PropertiesToIgnore.Add("TestProperty");
-            AuditingManager.RegisterAuditor(auditor);
+        Assert.That(auditor.OnViewModelInitializedCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelInitializedType, Is.EqualTo(typeof(TestViewModel)));
+    }
 
-            var viewModel = new TestViewModel();
-            viewModel.TestProperty = "test";
+    [TestCase]
+    public void OnPropertyChanged()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(auditor.OnPropertyChangedCalled, Is.EqualTo(false));
-            Assert.That(auditor.OnPropertyChangedViewModel, Is.EqualTo(null));
-            Assert.That(auditor.OnPropertyChangedPropertyName, Is.EqualTo(null));
-            Assert.That(auditor.OnPropertyChangedNewValue, Is.EqualTo(null));
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public void OnCommandExecuted()
-        {
-            AuditingManager.Clear();
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-            var viewModel = new TestViewModel();
-            viewModel.TestCommand.Execute("test");
+        var viewModel = new TestViewModel(serviceProvider);
+        viewModel.TestProperty = "test";
 
-            Assert.That(auditor.OnCommandExecutedCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnCommandExecutedViewModel, Is.EqualTo(viewModel));
-            Assert.That(auditor.OnCommandExecutedCommandName, Is.EqualTo("TestCommand"));
-            Assert.That(auditor.OnCommandExecutedCommand, Is.EqualTo(viewModel.TestCommand));
-            Assert.That(auditor.OnCommandExecutedCommandParameter, Is.EqualTo("test"));
-        }
+        Assert.That(auditor.OnPropertyChangedCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnPropertyChangedViewModel, Is.EqualTo(viewModel));
+        Assert.That(auditor.OnPropertyChangedPropertyName, Is.EqualTo("TestProperty"));
+        Assert.That(auditor.OnPropertyChangedNewValue, Is.EqualTo("test"));
+    }
 
-        [TestCase]
-        public async Task OnViewModelSavingAsync()
-        {
-            AuditingManager.Clear();
+    [TestCase]
+    public void OnPropertyChanged_IgnoredProperties()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var viewModel = new TestViewModel();
-            await viewModel.SaveViewModelAsync();
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            Assert.That(auditor.OnViewModelSavingCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelSavingViewModel, Is.EqualTo(viewModel));
-        }
+        var auditor = new TestAuditor();
+        auditor.PropertiesToIgnore.Add("TestProperty");
+        auditingManager.RegisterAuditor(auditor);
 
-        [TestCase]
-        public async Task OnViewModelSavedAsync()
-        {
-            AuditingManager.Clear();
+        var viewModel = new TestViewModel(serviceProvider);
+        viewModel.TestProperty = "test";
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        Assert.That(auditor.OnPropertyChangedCalled, Is.EqualTo(false));
+        Assert.That(auditor.OnPropertyChangedViewModel, Is.EqualTo(null));
+        Assert.That(auditor.OnPropertyChangedPropertyName, Is.EqualTo(null));
+        Assert.That(auditor.OnPropertyChangedNewValue, Is.EqualTo(null));
+    }
 
-            var viewModel = new TestViewModel();
-            await viewModel.SaveViewModelAsync();
+    [TestCase]
+    public void OnCommandExecuted()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelSavedViewModel, Is.EqualTo(viewModel));
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public async Task OnViewModelCancelingAsync()
-        {
-            AuditingManager.Clear();
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-            var viewModel = new TestViewModel();
-            await viewModel.CancelViewModelAsync();
+        var viewModel = new TestViewModel(serviceProvider);
+        viewModel.TestCommand.Execute("test");
 
-            Assert.That(auditor.OnViewModelCancelingCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelCancelingViewModel, Is.EqualTo(viewModel));
-        }
+        Assert.That(auditor.OnCommandExecutedCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnCommandExecutedViewModel, Is.EqualTo(viewModel));
+        Assert.That(auditor.OnCommandExecutedCommandName, Is.EqualTo("TestCommand"));
+        Assert.That(auditor.OnCommandExecutedCommand, Is.EqualTo(viewModel.TestCommand));
+        Assert.That(auditor.OnCommandExecutedCommandParameter, Is.EqualTo("test"));
+    }
 
-        [TestCase]
-        public async Task OnViewModelCanceledAsync()
-        {
-            AuditingManager.Clear();
+    [TestCase]
+    public async Task OnViewModelSavingAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var viewModel = new TestViewModel();
-            await viewModel.CancelViewModelAsync();
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelCanceledViewModel, Is.EqualTo(viewModel));
-        }
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-        [TestCase]
-        public async Task OnViewModelClosingAsync()
-        {
-            AuditingManager.Clear();
+        var viewModel = new TestViewModel(serviceProvider);
+        await viewModel.SaveViewModelAsync();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        Assert.That(auditor.OnViewModelSavingCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelSavingViewModel, Is.EqualTo(viewModel));
+    }
 
-            var viewModel = new TestViewModel();
-            await viewModel.CloseViewModelAsync(null);
+    [TestCase]
+    public async Task OnViewModelSavedAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(auditor.OnViewModelClosingCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelClosingViewModel, Is.EqualTo(viewModel));
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public async Task OnViewModelClosedAsync()
-        {
-            AuditingManager.Clear();
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-            var viewModel = new TestViewModel();
-            await viewModel.CloseViewModelAsync(null);
+        var viewModel = new TestViewModel(serviceProvider);
+        await viewModel.SaveViewModelAsync();
 
-            Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
-            Assert.That(auditor.OnViewModelClosedViewModel, Is.EqualTo(viewModel));
-        }
+        Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelSavedViewModel, Is.EqualTo(viewModel));
+    }
+
+    [TestCase]
+    public async Task OnViewModelCancelingAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
+
+        var viewModel = new TestViewModel(serviceProvider);
+        await viewModel.CancelViewModelAsync();
+
+        Assert.That(auditor.OnViewModelCancelingCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelCancelingViewModel, Is.EqualTo(viewModel));
+    }
+
+    [TestCase]
+    public async Task OnViewModelCanceledAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
+
+        var viewModel = new TestViewModel(serviceProvider);
+        await viewModel.CancelViewModelAsync();
+
+        Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelCanceledViewModel, Is.EqualTo(viewModel));
+    }
+
+    [TestCase]
+    public async Task OnViewModelClosingAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
+
+        var viewModel = new TestViewModel(serviceProvider);
+        await viewModel.CloseViewModelAsync(null);
+
+        Assert.That(auditor.OnViewModelClosingCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelClosingViewModel, Is.EqualTo(viewModel));
+    }
+
+    [TestCase]
+    public async Task OnViewModelClosedAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
+
+        var viewModel = new TestViewModel(serviceProvider);
+        await viewModel.CloseViewModelAsync(null);
+
+        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
+        Assert.That(auditor.OnViewModelClosedViewModel, Is.EqualTo(viewModel));
     }
 }

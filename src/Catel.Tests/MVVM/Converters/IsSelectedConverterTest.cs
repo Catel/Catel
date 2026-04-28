@@ -1,108 +1,105 @@
-﻿namespace Catel.Tests.MVVM.Converters
+﻿namespace Catel.Tests.MVVM.Converters;
+
+using System.Globalization;
+using Catel.MVVM.Converters;
+
+using NUnit.Framework;
+
+/// <summary>
+///This is a test class for IsSelectedConverterTest and is intended
+///to contain all IsSelectedConverterTest Unit Tests
+///</summary>
+[TestFixture]
+public class IsSelectedConverterTest
 {
-    using System.Globalization;
-    using Catel.MVVM.Converters;
-
-    using NUnit.Framework;
-
-    /// <summary>
-    ///This is a test class for IsSelectedConverterTest and is intended
-    ///to contain all IsSelectedConverterTest Unit Tests
-    ///</summary>
-    [TestFixture]
-    public class IsSelectedConverterTest
+    [TestCase]
+    public void Convert_Null()
     {
-        #region Methods
-        [TestCase]
-        public void Convert_Null()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.Convert(null, typeof(bool), null, (CultureInfo)null), Is.EqualTo(false));
-        }
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.Convert(null, typeof(bool), null, (CultureInfo)null), Is.EqualTo(false));
+    }
 
-        [TestCase]
-        public void Convert_True()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.Convert(true, typeof(bool), null, (CultureInfo)null), Is.EqualTo(true));
-        }
+    [TestCase]
+    public void Convert_True()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.Convert(true, typeof(bool), null, (CultureInfo)null), Is.EqualTo(true));
+    }
 
-        [TestCase]
-        public void Convert_True_ParameterFalse()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.Convert(true, typeof(bool), false, (CultureInfo)null), Is.EqualTo(true));
-        }
+    [TestCase]
+    public void Convert_True_ParameterFalse()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.Convert(true, typeof(bool), false, (CultureInfo)null), Is.EqualTo(true));
+    }
 
-        [TestCase]
-        public void Convert_True_ParameterTrue()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.Convert(true, typeof(bool), true, (CultureInfo)null), Is.EqualTo(true));
-        }
+    [TestCase]
+    public void Convert_True_ParameterTrue()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.Convert(true, typeof(bool), true, (CultureInfo)null), Is.EqualTo(true));
+    }
 
-        [TestCase]
-        public void Convert_False()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.Convert(false, typeof(bool), null, (CultureInfo)null), Is.EqualTo(false));
-        }
+    [TestCase]
+    public void Convert_False()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.Convert(false, typeof(bool), null, (CultureInfo)null), Is.EqualTo(false));
+    }
 
-        [TestCase]
-        public void Convert_False_ParameterFalse()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.Convert(false, typeof(bool), false, (CultureInfo)null), Is.EqualTo(false));
-        }
+    [TestCase]
+    public void Convert_False_ParameterFalse()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.Convert(false, typeof(bool), false, (CultureInfo)null), Is.EqualTo(false));
+    }
 
-        [TestCase]
-        public void Convert_False_ParameterTrue()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.Convert(false, typeof(bool), true, (CultureInfo)null), Is.EqualTo(false));
-        }
+    [TestCase]
+    public void Convert_False_ParameterTrue()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.Convert(false, typeof(bool), true, (CultureInfo)null), Is.EqualTo(false));
+    }
 
-        [TestCase]
-        public void ConvertBack_True()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.ConvertBack(true, typeof(bool?), null, (CultureInfo)null), Is.EqualTo(true));
-        }
+    [TestCase]
+    public void ConvertBack_True()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.ConvertBack(true, typeof(bool?), null, (CultureInfo)null), Is.EqualTo(true));
+    }
 
-        [TestCase]
-        public void ConvertBack_True_ParameterFalse()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.ConvertBack(true, typeof(bool?), false, (CultureInfo)null), Is.EqualTo(true));
-        }
+    [TestCase]
+    public void ConvertBack_True_ParameterFalse()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.ConvertBack(true, typeof(bool?), false, (CultureInfo)null), Is.EqualTo(true));
+    }
 
-        [TestCase]
-        public void ConvertBack_True_ParameterTrue()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.ConvertBack(true, typeof(bool?), true, (CultureInfo)null), Is.EqualTo(true));
-        }
+    [TestCase]
+    public void ConvertBack_True_ParameterTrue()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.ConvertBack(true, typeof(bool?), true, (CultureInfo)null), Is.EqualTo(true));
+    }
 
-        [TestCase]
-        public void ConvertBack_False()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.ConvertBack(false, typeof(bool?), null, (CultureInfo)null), Is.EqualTo(false));
-        }
+    [TestCase]
+    public void ConvertBack_False()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.ConvertBack(false, typeof(bool?), null, (CultureInfo)null), Is.EqualTo(false));
+    }
 
-        [TestCase]
-        public void ConvertBack_False_ParameterFalse()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.ConvertBack(false, typeof(bool?), false, (CultureInfo)null), Is.EqualTo(false));
-        }
+    [TestCase]
+    public void ConvertBack_False_ParameterFalse()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.ConvertBack(false, typeof(bool?), false, (CultureInfo)null), Is.EqualTo(false));
+    }
 
-        [TestCase]
-        public void ConvertBack_False_ParameterTrue()
-        {
-            var converter = new IsSelectedConverter();
-            Assert.That(converter.ConvertBack(false, typeof(bool?), true, (CultureInfo)null), Is.EqualTo(false));
-        }
-        #endregion
+    [TestCase]
+    public void ConvertBack_False_ParameterTrue()
+    {
+        var converter = new IsSelectedConverter();
+        Assert.That(converter.ConvertBack(false, typeof(bool?), true, (CultureInfo)null), Is.EqualTo(false));
     }
 }

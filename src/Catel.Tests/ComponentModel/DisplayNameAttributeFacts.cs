@@ -1,36 +1,36 @@
-﻿namespace Catel.Tests.ComponentModel
+﻿namespace Catel.Tests.ComponentModel;
+
+using Catel.Services;
+using Moq;
+using NUnit.Framework;
+
+public class DisplayNameAttributeFacts
 {
-    using NUnit.Framework;
-    using Services.Fixtures;
-
-    public class DisplayNameAttributeFacts
+    [TestFixture]
+    public class The_DisplayName_Property
     {
-        [TestFixture]
-        public class TheDisplayNameProperty
+        [TestCase]
+        public void Returns_Translated_Resource_Name()
         {
-            [TestCase]
-            public void ReturnsTranslatedResourceName()
-            {
-                var languageService = new LanguageServiceFixture();
-                languageService.RegisterValue("MyDisplayName", "It works");
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock.Setup(x => x.GetString("MyDisplayName"))
+                .Returns<string>(x => "It works");
 
-                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyDisplayName");
-                displayAttribute.LanguageService = languageService;
+            var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageServiceMock.Object, "MyDisplayName");
 
-                Assert.That(displayAttribute.DisplayName, Is.EqualTo("It works"));
-            }
+            Assert.That(displayAttribute.DisplayName, Is.EqualTo("It works"));
+        }
 
-            [TestCase]
-            public void ReturnsResourceNameIfTranslationCannotBeFound()
-            {
-                var languageService = new LanguageServiceFixture();
-                languageService.RegisterValue("MyDisplayName", "It works");
+        [TestCase]
+        public void Returns_Resource_Name_If_Translation_Cannot_Be_Found()
+        {
+            var languageServiceMock = new Mock<ILanguageService>();
+            languageServiceMock.Setup(x => x.GetString("MyDisplayName"))
+                .Returns<string>(x => "It works");
 
-                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyNonExistingDisplayName");
-                displayAttribute.LanguageService = languageService;
+            var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute(languageServiceMock.Object, "MyNonExistingDisplayName");
 
-                Assert.That(displayAttribute.DisplayName, Is.EqualTo("MyNonExistingDisplayName"));
-            }
+            Assert.That(displayAttribute.DisplayName, Is.EqualTo("MyNonExistingDisplayName"));
         }
     }
 }

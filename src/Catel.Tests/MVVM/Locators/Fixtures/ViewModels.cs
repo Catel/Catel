@@ -1,8 +1,7 @@
-﻿namespace Catel.Tests.MVVM.Locators.Fixtures.ViewModels
-{
-    public class MyNameViewerViewModel { }
+﻿namespace Catel.Tests.MVVM.Locators.Fixtures.ViewModels;
 
-    public class MyNameViewerViewModel2 { }
+public class MyNameViewerViewModel { }
 
-    public class NonCompatibleViewModel { }
-}
+public class MyNameViewerViewModel2 { }
+
+public class NonCompatibleViewModel { }

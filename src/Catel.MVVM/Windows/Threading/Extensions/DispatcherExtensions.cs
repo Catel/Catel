@@ -1,24 +1,23 @@
-﻿namespace Catel.Windows.Threading
+﻿namespace Catel.Windows.Threading;
+
+using System;
+using System.Windows.Threading;
+
+/// <summary>
+/// Extension methods for the dispatcher.
+/// </summary>
+public static partial class DispatcherExtensions
 {
-    using System;
-    using System.Windows.Threading;
-
     /// <summary>
-    /// Extension methods for the dispatcher.
+    /// Gets the managed thread identifier for the specified dispatcher.
     /// </summary>
-    public static partial class DispatcherExtensions
+    /// <param name="dispatcher">The dispatcher.</param>
+    /// <returns>The managed thread id.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="dispatcher" /> is <c>null</c>.</exception>
+    public static int GetThreadId(this Dispatcher dispatcher)
     {
-        /// <summary>
-        /// Gets the managed thread identifier for the specified dispatcher.
-        /// </summary>
-        /// <param name="dispatcher">The dispatcher.</param>
-        /// <returns>The managed thread id.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="dispatcher" /> is <c>null</c>.</exception>
-        public static int GetThreadId(this Dispatcher dispatcher)
-        {
-            ArgumentNullException.ThrowIfNull(dispatcher);
+        ArgumentNullException.ThrowIfNull(dispatcher);
 
-            return dispatcher.Thread.ManagedThreadId;
-        }
+        return dispatcher.Thread.ManagedThreadId;
     }
 }

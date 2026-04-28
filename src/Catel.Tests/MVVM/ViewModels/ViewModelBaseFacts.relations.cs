@@ -1,281 +1,344 @@
-﻿namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Catel.Data;
+using Catel.MVVM;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+using TestClasses;
+
+public partial class ViewModelBaseFacts
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Catel.Data;
-    using Catel.MVVM;
-    using NUnit.Framework;
-    using TestClasses;
-
-    public partial class ViewModelBaseFacts
+    [TestCase]
+    public void SetParentViewModel()
     {
-        [TestCase]
-        public void SetParentviewModel()
-        {
-            var viewModel = new TestViewModel();
-            var parentViewModel = new TestViewModel();
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(viewModel.GetParentViewModelForTest(), Is.Null);
-            ((IRelationalViewModel)viewModel).SetParentViewModel(parentViewModel);
-            Assert.That(viewModel.GetParentViewModelForTest(), Is.EqualTo(parentViewModel));
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModel = new TestFeaturedViewModel(serviceProvider);
+        var parentViewModel = new TestFeaturedViewModel(serviceProvider);
+
+        Assert.That(viewModel.GetParentViewModelForTest(), Is.Null);
+        ((IRelationalViewModel)viewModel).SetParentViewModel(parentViewModel);
+        Assert.That(viewModel.GetParentViewModelForTest(), Is.EqualTo(parentViewModel));
+    }
+
+    [TestCase]
+    public void RegisterChildViewModel_Null()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModel = new TestFeaturedViewModel(serviceProvider);
+
+        Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
+    }
+
+    /// <summary>
+    /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
+    /// being validated. Then, it unsubscribes the child view model by closing it.
+    /// </summary>
+    [TestCase]
+    public async Task RegisterChildViewModel_RemovedViaClosingChildViewModelAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        bool validationTriggered = false;
+        using (var validatedEvent = new ManualResetEvent(false))
+        {
+            var person = new Person();
+            person.FirstName = "first name";
+            person.LastName = "last name";
+
+            var viewModel = new TestFeaturedViewModel(serviceProvider);
+            var childViewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+            Assert.That(childViewModel.HasErrors, Is.False);
+
+            ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
+            ((IValidatable)viewModel).Validating += delegate
+            {
+                validationTriggered = true;
+                validatedEvent.Set();
+            };
+
+            childViewModel.FirstName = string.Empty;
+
+            validatedEvent.WaitOne(2000, false);
+
+            Assert.That(validationTriggered, Is.True, "Validating event is not triggered");
+
+            await childViewModel.CloseViewModelAsync(null);
+
+            validationTriggered = false;
+            validatedEvent.Reset();
+
+            validatedEvent.WaitOne(2000, false);
+
+            Assert.That(validationTriggered, Is.False, "Validating event should not be triggered because child view model is removed");
         }
+    }
 
-        [TestCase]
-        public void RegisterChildViewModel_Null()
+    /// <summary>
+    /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
+    /// being validated. Then, it unsubscribes the child view model by calling UnregisterChildViewModel.
+    /// </summary>
+    [TestCase]
+    public void RegisterChildViewModel_RemovedViaUnregisterChildViewModel()
+    {
+        bool validationTriggered = false;
+        using (ManualResetEvent validatedEvent = new ManualResetEvent(false))
         {
-            var viewModel = new TestViewModel();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            Person person = new Person();
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
+
+            var viewModel = new TestFeaturedViewModel(serviceProvider);
+            var childViewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+            Assert.That(childViewModel.HasErrors, Is.False);
+
+            ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
+            ((IValidatable)viewModel).Validating += delegate
+            {
+                validationTriggered = true;
+                validatedEvent.Set();
+            };
+
+            childViewModel.FirstName = string.Empty;
+
+            validatedEvent.WaitOne(2000, false);
+
+            Assert.That(validationTriggered, Is.True, "Validating event is not triggered");
+
+            ((IRelationalViewModel)viewModel).UnregisterChildViewModel(childViewModel);
+
+            validationTriggered = false;
+            validatedEvent.Reset();
+
+            validatedEvent.WaitOne(2000, false);
+
+            Assert.That(validationTriggered, Is.False, "Validating event should not be triggered because child view model is removed");
+        }
+    }
+
+    [TestCase]
+    public void ChildViewModelUpdatesValidation()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var person = new Person();
+        person.FirstName = "first_name";
+
+        var viewModel = new TestFeaturedViewModel(serviceProvider);
+        var childViewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
+
+        Assert.That(viewModel.HasErrors, Is.True);
+        Assert.That(childViewModel.HasErrors, Is.True);
+
+        person.LastName = "last_name";
+
+        Assert.That(viewModel.HasErrors, Is.False);
+        Assert.That(childViewModel.HasErrors, Is.False);
+
+        person.LastName = string.Empty;
+
+        Assert.That(viewModel.HasErrors, Is.True);
+        Assert.That(childViewModel.HasErrors, Is.True);
+    }
+
+    [TestFixture]
+    public class The_RegisterChildViewModel_Method
+    {
+        [Test]
+        public void Throws_ArgumentNullException_For_Null_ChildViewModel()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestFeaturedViewModel(serviceProvider);
 
             Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
         }
 
-        /// <summary>
-        /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
-        /// being validated. Then, it unsubscribes the child view model by closing it.
-        /// </summary>
-        [TestCase]
-        public async Task RegisterChildViewModel_RemovedViaClosingChildViewModelAsync()
+        [Test]
+        public async Task Revalidates_Parent_After_Adding_ChildViewModel_Async()
         {
-            bool validationTriggered = false;
-            using (var validatedEvent = new ManualResetEvent(false))
-            {
-                var person = new Person();
-                person.FirstName = "first name";
-                person.LastName = "last name";
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                var viewModel = new TestViewModel();
-                var childViewModel = new TestViewModel(person);
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                Assert.That(childViewModel.HasErrors, Is.False);
+            var parentViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
+            var childViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
 
-                ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-                ((IValidatable)viewModel).Validating += delegate
-                {
-                    validationTriggered = true;
-                    validatedEvent.Set();
-                };
+            await parentViewModel.InitializeViewModelAsync();
+            await childViewModel.InitializeViewModelAsync();
 
-                childViewModel.FirstName = string.Empty;
+            childViewModel.BusinessRuleErrorWhenEmpty = null;
 
-                validatedEvent.WaitOne(2000, false);
-
-                Assert.That(validationTriggered, Is.True, "Validating event is not triggered");
-
-                await childViewModel.CloseViewModelAsync(null);
-
-                validationTriggered = false;
-                validatedEvent.Reset();
-
-                validatedEvent.WaitOne(2000, false);
-
-                Assert.That(validationTriggered, Is.False, "Validating event should not be triggered because child view model is removed");
-            }
-        }
-
-        /// <summary>
-        /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
-        /// being validated. Then, it unsubscribes the child view model by calling UnregisterChildViewModel.
-        /// </summary>
-        [TestCase]
-        public void RegisterChildViewModel_RemovedViaUnregisterChildViewModel()
-        {
-            bool validationTriggered = false;
-            using (ManualResetEvent validatedEvent = new ManualResetEvent(false))
-            {
-                Person person = new Person();
-                person.FirstName = "first_name";
-                person.LastName = "last_name";
-
-                var viewModel = new TestViewModel();
-                var childViewModel = new TestViewModel(person);
-
-                Assert.That(childViewModel.HasErrors, Is.False);
-
-                ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-                ((IValidatable)viewModel).Validating += delegate
-                {
-                    validationTriggered = true;
-                    validatedEvent.Set();
-                };
-
-                childViewModel.FirstName = string.Empty;
-
-                validatedEvent.WaitOne(2000, false);
-
-                Assert.That(validationTriggered, Is.True, "Validating event is not triggered");
-
-                ((IRelationalViewModel)viewModel).UnregisterChildViewModel(childViewModel);
-
-                validationTriggered = false;
-                validatedEvent.Reset();
-
-                validatedEvent.WaitOne(2000, false);
-
-                Assert.That(validationTriggered, Is.False, "Validating event should not be triggered because child view model is removed");
-            }
-        }
-
-        [TestCase]
-        public void ChildViewModelUpdatesValidation()
-        {
-            var person = new Person();
-            person.FirstName = "first_name";
-
-            var viewModel = new TestViewModel();
-            var childViewModel = new TestViewModel(person);
-
-            ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-
-            Assert.That(viewModel.HasErrors, Is.True);
+            Assert.That(parentViewModel.HasErrors, Is.False);
             Assert.That(childViewModel.HasErrors, Is.True);
 
-            person.LastName = "last_name";
+            ((IRelationalViewModel)parentViewModel).RegisterChildViewModel(childViewModel);
 
-            Assert.That(viewModel.HasErrors, Is.False);
-            Assert.That(childViewModel.HasErrors, Is.False);
+            Assert.That(parentViewModel.HasErrors, Is.True);
+        }
+    }
 
-            person.LastName = string.Empty;
+    [TestFixture]
+    public class The_UnregisterChildViewModel_Method
+    {
+        [Test]
+        public void Throws_ArgumentNullException_For_Null_ChildViewModel()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(viewModel.HasErrors, Is.True);
-            Assert.That(childViewModel.HasErrors, Is.True);
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var viewModel = new TestFeaturedViewModel(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).UnregisterChildViewModel(null));
         }
 
-        [TestFixture]
-        public class The_RegisterChildViewModel_Method
+        [Test]
+        public async Task Revalidates_Parent_After_Removing_ChildViewModel_Async()
         {
-            [Test]
-            public void Throws_ArgumentNullException_For_Null_ChildViewModel()
-            {
-                var viewModel = new TestViewModel();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [Test]
-            public async Task Revalidates_Parent_After_Adding_ChildViewModel_Async()
-            {
-                var parentViewModel = new TestViewModel(new SpecialValidationModel());
-                var childViewModel = new TestViewModel(new SpecialValidationModel());
+            var parentViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
+            var childViewModel = new TestFeaturedViewModel(new SpecialValidationModel(), serviceProvider);
 
-                await parentViewModel.InitializeViewModelAsync();
-                await childViewModel.InitializeViewModelAsync();
+            await parentViewModel.InitializeViewModelAsync();
+            await childViewModel.InitializeViewModelAsync();
 
-                childViewModel.BusinessRuleErrorWhenEmpty = null;
+            ((IRelationalViewModel)parentViewModel).RegisterChildViewModel(childViewModel);
 
-                Assert.That(parentViewModel.HasErrors, Is.False);
-                Assert.That(childViewModel.HasErrors, Is.True);
+            Assert.That(parentViewModel.HasErrors, Is.False);
 
-                ((IRelationalViewModel)parentViewModel).RegisterChildViewModel(childViewModel);
+            childViewModel.BusinessRuleErrorWhenEmpty = null;
 
-                Assert.That(parentViewModel.HasErrors, Is.True);
-            }
+            Assert.That(parentViewModel.HasErrors, Is.True);
+
+            ((IRelationalViewModel)parentViewModel).UnregisterChildViewModel(childViewModel);
+
+            Assert.That(parentViewModel.HasErrors, Is.False);
         }
+    }
 
-        [TestFixture]
-        public class The_UnregisterChildViewModel_Method
+
+    [TestFixture]
+    public class DeferValidationUntilFirstSaveCallWithChildViewModels
+    {
+        public class DeferViewModelBase : FeaturedViewModelBase
         {
-            [Test]
-            public void Throws_ArgumentNullException_For_Null_ChildViewModel()
+            public DeferViewModelBase(IServiceProvider serviceProvider)
+                : base(serviceProvider)
             {
-                var viewModel = new TestViewModel();
-
-                Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).UnregisterChildViewModel(null));
+                
             }
 
-            [Test]
-            public async Task Revalidates_Parent_After_Removing_ChildViewModel_Async()
+            public bool DeferValidationUntilFirstSaveValue
             {
-                var parentViewModel = new TestViewModel(new SpecialValidationModel());
-                var childViewModel = new TestViewModel(new SpecialValidationModel());
-
-                await parentViewModel.InitializeViewModelAsync();
-                await childViewModel.InitializeViewModelAsync();
-
-                ((IRelationalViewModel)parentViewModel).RegisterChildViewModel(childViewModel);
-
-                Assert.That(parentViewModel.HasErrors, Is.False);
-
-                childViewModel.BusinessRuleErrorWhenEmpty = null;
-
-                Assert.That(parentViewModel.HasErrors, Is.True);
-
-                ((IRelationalViewModel)parentViewModel).UnregisterChildViewModel(childViewModel);
-
-                Assert.That(parentViewModel.HasErrors, Is.False);
+                get { return base.DeferValidationUntilFirstSaveCall; }
+                set { base.DeferValidationUntilFirstSaveCall = value; }
             }
         }
 
-
-        [TestFixture]
-        public class DeferValidationUntilFirstSaveCallWithChildViewModels
+        public class GrantParentViewModel : DeferViewModelBase
         {
-            public class DeferViewModelBase : ViewModelBase
-            {
-                public bool DeferValidationUntilFirstSaveValue
-                {
-                    get { return base.DeferValidationUntilFirstSaveCall; }
-                    set { base.DeferValidationUntilFirstSaveCall = value; }
-                }
-            }
-
-            public class GrantParentViewModel : DeferViewModelBase
+            public GrantParentViewModel(IServiceProvider serviceProvider)
+                : base(serviceProvider)
             {
 
             }
 
-            public class ParentViewModel : DeferViewModelBase
+        }
+
+        public class ParentViewModel : DeferViewModelBase
+        {
+            public ParentViewModel(IServiceProvider serviceProvider)
+                : base(serviceProvider)
             {
 
             }
+        }
 
-            public class ChildViewModel : DeferViewModelBase
+        public class ChildViewModel : DeferViewModelBase
+        {
+            public ChildViewModel(IServiceProvider serviceProvider)
+                : base(serviceProvider)
             {
 
             }
+        }
 
-            [TestCase]
-            public void RetrievesFromParentWhenAttachingViewModelToTree()
-            {
-                var grantParentVm = new GrantParentViewModel();
-                var parentVm = new ParentViewModel();
-                var childVm = new ChildViewModel();
+        [TestCase]
+        public void RetrievesFromParentWhenAttachingViewModelToTree()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                grantParentVm.DeferValidationUntilFirstSaveValue = true;
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                ((IRelationalViewModel)grantParentVm).RegisterChildViewModel(parentVm);
-                ((IRelationalViewModel)parentVm).SetParentViewModel(grantParentVm);
+            var grantParentVm = new GrantParentViewModel(serviceProvider);
+            var parentVm = new ParentViewModel(serviceProvider);
+            var childVm = new ChildViewModel(serviceProvider);
 
-                ((IRelationalViewModel)parentVm).RegisterChildViewModel(childVm);
-                ((IRelationalViewModel)childVm).SetParentViewModel(parentVm);
+            grantParentVm.DeferValidationUntilFirstSaveValue = true;
 
-                Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.True);
-                Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.True);
-            }
+            ((IRelationalViewModel)grantParentVm).RegisterChildViewModel(parentVm);
+            ((IRelationalViewModel)parentVm).SetParentViewModel(grantParentVm);
 
-            [TestCase]
-            public void UpdatesChildsWhenUpdatingDeferValidationUntilFirstSave()
-            {
-                var grantParentVm = new GrantParentViewModel();
-                var parentVm = new ParentViewModel();
-                var childVm = new ChildViewModel();
+            ((IRelationalViewModel)parentVm).RegisterChildViewModel(childVm);
+            ((IRelationalViewModel)childVm).SetParentViewModel(parentVm);
 
-                grantParentVm.DeferValidationUntilFirstSaveValue = false;
-                parentVm.DeferValidationUntilFirstSaveValue = false;
-                childVm.DeferValidationUntilFirstSaveValue = false;
+            Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.True);
+            Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.True);
+        }
 
-                ((IRelationalViewModel)grantParentVm).RegisterChildViewModel(parentVm);
-                ((IRelationalViewModel)parentVm).RegisterChildViewModel(childVm);
+        [TestCase]
+        public void UpdatesChildsWhenUpdatingDeferValidationUntilFirstSave()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.That(grantParentVm.DeferValidationUntilFirstSaveValue, Is.False);
-                Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.False);
-                Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.False);
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                parentVm.DeferValidationUntilFirstSaveValue = true;
+            var grantParentVm = new GrantParentViewModel(serviceProvider);
+            var parentVm = new ParentViewModel(serviceProvider);
+            var childVm = new ChildViewModel(serviceProvider);
 
-                Assert.That(grantParentVm.DeferValidationUntilFirstSaveValue, Is.False);
-                Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.True);
-                Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.True);
-            }
+            grantParentVm.DeferValidationUntilFirstSaveValue = false;
+            parentVm.DeferValidationUntilFirstSaveValue = false;
+            childVm.DeferValidationUntilFirstSaveValue = false;
+
+            ((IRelationalViewModel)grantParentVm).RegisterChildViewModel(parentVm);
+            ((IRelationalViewModel)parentVm).RegisterChildViewModel(childVm);
+
+            Assert.That(grantParentVm.DeferValidationUntilFirstSaveValue, Is.False);
+            Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.False);
+            Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.False);
+
+            parentVm.DeferValidationUntilFirstSaveValue = true;
+
+            Assert.That(grantParentVm.DeferValidationUntilFirstSaveValue, Is.False);
+            Assert.That(parentVm.DeferValidationUntilFirstSaveValue, Is.True);
+            Assert.That(childVm.DeferValidationUntilFirstSaveValue, Is.True);
         }
     }
 }

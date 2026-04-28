@@ -1,18 +1,17 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+/// <summary>
+/// The value validator interface
+/// </summary>
+/// <typeparam name="TValue">The type of the value</typeparam>
+public interface IValueValidator<in TValue>
 {
     /// <summary>
-    /// The value validator interface
+    /// Determines whether the specified value is valid.
     /// </summary>
-    /// <typeparam name="TValue">The type of the value</typeparam>
-    public interface IValueValidator<in TValue>
-    {
-        /// <summary>
-        /// Determines whether the specified value is valid.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if is valid, otherwise <c>false</c>.
-        /// </returns>
-        bool IsValid(TValue @value);
-    }
+    /// <param name="value">The value.</param>
+    /// <returns>
+    ///   <c>true</c> if is valid, otherwise <c>false</c>.
+    /// </returns>
+    bool IsValid(TValue @value);
 }

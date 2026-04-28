@@ -1,91 +1,90 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Catel;
+using Catel.Collections;
+using Catel.Data;
+
+/// <summary>
+/// Service to implement auto completion features.
+/// </summary>
+public class AutoCompletionService : IAutoCompletionService
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Catel;
-    using Catel.Collections;
-    using Catel.Data;
+    private readonly IObjectAdapter _objectAdapter;
 
     /// <summary>
-    /// Service to implement auto completion features.
+    /// Initializes a new instance of the <see cref="AutoCompletionService"/> class.
     /// </summary>
-    public class AutoCompletionService : IAutoCompletionService
+    public AutoCompletionService(IObjectAdapter objectAdapter)
     {
-        private readonly IObjectAdapter _objectAdapter;
+        ArgumentNullException.ThrowIfNull(objectAdapter);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AutoCompletionService"/> class.
-        /// </summary>
-        public AutoCompletionService(IObjectAdapter objectAdapter)
+        _objectAdapter = objectAdapter;
+    }
+
+    /// <summary>
+    /// Gets the auto complete values.
+    /// </summary>
+    /// <param name="property">The property.</param>
+    /// <param name="filter">The filter.</param>
+    /// <param name="source">The source.</param>
+    /// <returns>System.String[].</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
+    public virtual IReadOnlyList<string> GetAutoCompleteValues(string property, string filter, IEnumerable source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+
+        if (source is string)
         {
-            ArgumentNullException.ThrowIfNull(objectAdapter);
-
-            _objectAdapter = objectAdapter;
+            return Array.Empty<string>();
         }
 
-        /// <summary>
-        /// Gets the auto complete values.
-        /// </summary>
-        /// <param name="property">The property.</param>
-        /// <param name="filter">The filter.</param>
-        /// <param name="source">The source.</param>
-        /// <returns>System.String[].</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        public virtual string[] GetAutoCompleteValues(string property, string filter, IEnumerable source)
+        var propertyValues = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(property))
         {
-            ArgumentNullException.ThrowIfNull(source);
-
-            if (source is string)
+            try
             {
-                return Array.Empty<string>();
+                // Filter items directly
+                propertyValues.AddRange(from x in source.OfType<string>()
+                                        select x);
             }
-
-            var propertyValues = new List<string>();
-
-            if (string.IsNullOrWhiteSpace(property))
+            catch (Exception)
             {
-                try
-                {
-                    // Filter items directly
-                    propertyValues.AddRange(from x in source.OfType<string>()
-                                            select x);
-                }
-                catch (Exception)
-                {
-                    // Swallow
-                }
+                // Swallow
             }
-            else
-            {
-                propertyValues.AddRange(from x in source.Cast<object>()
-                                        select GetPropertyValue(x, property));
-            }
-
-            propertyValues = propertyValues.Where(x => !string.Equals(x, "null")).Distinct().ToList();
-
-            var filteredValues = propertyValues;
-
-            if (!string.IsNullOrEmpty(filter))
-            {
-                filteredValues = filteredValues.Where(x => x.Contains(filter)).ToList();
-            }
-
-            var orderedPropertyValues = filteredValues.GroupBy(x => x).Select(g => new
-            {
-                Value = g.Key,
-                Count = g.Select(x => x).Distinct().Count()
-            }).OrderBy(x => x.Count).Select(x => x.Value).Take(10);
-
-            return orderedPropertyValues.OrderBy(x => x).ToArray();
+        }
+        else
+        {
+            propertyValues.AddRange(from x in source.Cast<object>()
+                                    select GetPropertyValue(x, property));
         }
 
-        private string GetPropertyValue(object obj, string propertyName)
-        {
-            _objectAdapter.TryGetMemberValue(obj, propertyName, out object? value);
+        propertyValues = propertyValues.Where(x => !string.Equals(x, "null")).Distinct().ToList();
 
-            return ObjectToStringHelper.ToString(value);
+        var filteredValues = propertyValues;
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            filteredValues = filteredValues.Where(x => x.Contains(filter)).ToList();
         }
+
+        var orderedPropertyValues = filteredValues.GroupBy(x => x).Select(g => new
+        {
+            Value = g.Key,
+            Count = g.Select(x => x).Distinct().Count()
+        }).OrderBy(x => x.Count).Select(x => x.Value).Take(10);
+
+        return orderedPropertyValues.OrderBy(x => x).ToArray();
+    }
+
+    private string GetPropertyValue(object obj, string propertyName)
+    {
+        _objectAdapter.TryGetMemberValue(obj, propertyName, out object? value);
+
+        return ObjectToStringHelper.ToString(value);
     }
 }

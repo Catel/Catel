@@ -1,82 +1,106 @@
-﻿namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels;
+
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+using TestClasses;
+
+[TestFixture]
+public partial class ViewModelBaseFacts
 {
-    using NUnit.Framework;
-    using TestClasses;
-
-    [TestFixture]
-    public partial class ViewModelBaseFacts
+    [Test]
+    public void UpdatesMappedValidationAfterChangingMappedViewModelProperty()
     {
-        [Test]
-        public void UpdatesMappedValidationAfterChangingMappedViewModelProperty()
-        {
-            var vm = new TestViewModelWithMappings(new Person());
-            vm.DeferValidationUntilFirstSaveCallWrapper = false;
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            vm.FirstNameAsTwoWay = "John";
-            vm.LastName = "Doe";
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(vm.HasErrors, Is.False);
-        }
+        var vm = new TestViewModelWithMappings(new Person(), serviceProvider);
+        vm.DeferValidationUntilFirstSaveCallWrapper = false;
 
-        [Test]
-        public void Exposes_Validation_For_Validated_Model()
-        {
-            // Test case for https://github.com/Catel/Catel/issues/1615
+        vm.FirstNameAsTwoWay = "John";
+        vm.LastName = "Doe";
 
-            var model = new Person();
-            model.Validate();
+        Assert.That(vm.HasErrors, Is.False);
+    }
 
-            Assert.That(model.HasErrors, Is.True);
+    [Test]
+    public void Exposes_Validation_For_Validated_Model()
+    {
+        // Test case for https://github.com/Catel/Catel/issues/1615
 
-            var vm = new TestViewModelWithMappings(model);
-            vm.DeferValidationUntilFirstSaveCallWrapper = false;
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(vm.HasErrors, Is.True);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            vm.FirstNameAsTwoWay = "John";
-            vm.LastName = "Doe";
+        var model = new Person();
+        model.Validate();
 
-            Assert.That(vm.HasErrors, Is.False);
-        }
+        Assert.That(model.HasErrors, Is.True);
 
-        [Test]
-        public void HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
-        {
-            var vm = new TestViewModelWithSuspendedModelValidation(new Person());
+        var vm = new TestViewModelWithMappings(model, serviceProvider);
+        vm.DeferValidationUntilFirstSaveCallWrapper = false;
 
-            vm.Validate();
+        Assert.That(vm.HasErrors, Is.True);
 
-            Assert.That(vm.HasErrors, Is.False);
-        }
+        vm.FirstNameAsTwoWay = "John";
+        vm.LastName = "Doe";
 
-        [Test]
-        public void HasErrors_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
-        {
-            var vm = new TestViewModelWithEnabledModelValidation(new Person());
+        Assert.That(vm.HasErrors, Is.False);
+    }
 
-            vm.Validate();
+    [Test]
+    public void HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(vm.HasErrors, Is.True);
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [Test]
-        public void HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
-        {
-            var vm = new TestViewModelWithSuspendedModelValidation(new Person());
+        var vm = new TestViewModelWithSuspendedModelValidation(new Person(), serviceProvider);
 
-            vm.Validate();
+        vm.Validate();
 
-            Assert.That(vm.HasWarnings, Is.False);
-        }
+        Assert.That(vm.HasErrors, Is.False);
+    }
 
-        [Test]
-        public void HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
-        {
-            var vm = new TestViewModelWithEnabledModelValidation(new Person());
+    [Test]
+    public void HasErrors_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            vm.Validate();
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(vm.HasWarnings, Is.True);
-        }
+        var vm = new TestViewModelWithEnabledModelValidation(new Person(), serviceProvider);
+
+        vm.Validate();
+
+        Assert.That(vm.HasErrors, Is.True);
+    }
+
+    [Test]
+    public void HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var vm = new TestViewModelWithSuspendedModelValidation(new Person(), serviceProvider);
+
+        vm.Validate();
+
+        Assert.That(vm.HasWarnings, Is.False);
+    }
+
+    [Test]
+    public void HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var vm = new TestViewModelWithEnabledModelValidation(new Person(), serviceProvider);
+
+        vm.Validate();
+
+        Assert.That(vm.HasWarnings, Is.True);
     }
 }

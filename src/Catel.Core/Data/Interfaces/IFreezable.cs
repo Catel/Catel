@@ -1,11 +1,10 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+public interface IFreezable
 {
-    public interface IFreezable
-    {
-        bool IsFrozen { get; }
+    bool IsFrozen { get; }
 
-        void Freeze();
+    void Freeze();
 
-        void Unfreeze();
-    }
+    void Unfreeze();
 }

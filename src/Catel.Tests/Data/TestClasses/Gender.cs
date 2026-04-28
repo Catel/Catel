@@ -1,9 +1,8 @@
-﻿namespace Catel.Tests.Data
-{
-    public enum Gender
-    {
-        Male,
+﻿namespace Catel.Tests.Data;
 
-        Female
-    }
+public enum Gender
+{
+    Male,
+
+    Female
 }

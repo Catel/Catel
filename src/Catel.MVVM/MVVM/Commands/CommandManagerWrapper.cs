@@ -1,119 +1,118 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+using System;
+using System.Windows;
+using Logging;
+using Microsoft.Extensions.Logging;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+
+/// <summary>
+/// Wrapper class to support key down events and automatically invoke commands on the <see cref="ICommandManager" />.
+/// </summary>
+public class CommandManagerWrapper
 {
-    using Catel.IoC;
-    using Logging;
-    using System;
-    using System.Windows;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(CommandManagerWrapper));
+
+    private readonly ICommandManager _commandManager;
+
+    private bool _subscribed;
 
     /// <summary>
-    /// Wrapper class to support key down events and automatically invoke commands on the <see cref="ICommandManager" />.
+    /// Initializes a new instance of the <see cref="CommandManagerWrapper" /> class.
     /// </summary>
-    public class CommandManagerWrapper
+    /// <param name="view">The view.</param>
+    /// <param name="commandManager">The command manager.</param>
+    public CommandManagerWrapper(FrameworkElement view, ICommandManager commandManager)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(view);
 
-        private readonly ICommandManager _commandManager;
+        _commandManager = commandManager;
 
-        private bool _subscribed;
+        View = view;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManagerWrapper" /> class.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        /// <param name="commandManager">The command manager.</param>
-        public CommandManagerWrapper(FrameworkElement view, ICommandManager? commandManager = null)
+        if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Loaded), OnViewLoaded, false) is null)
         {
-            ArgumentNullException.ThrowIfNull(view);
+            Logger.LogDebug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
-            _commandManager = commandManager ?? ServiceLocator.Default.ResolveRequiredType<ICommandManager>();
-
-            View = view;
-
-            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Loaded), OnViewLoaded, false) is null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
-
-                view.Loaded += OnViewLoaded;
-            }
-
-            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Unloaded), OnViewUnloaded, false) is null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
-
-                view.Unloaded += OnViewUnloaded;
-            }
-
-            Subscribe();
+            view.Loaded += OnViewLoaded;
         }
 
-        /// <summary>
-        /// Gets the view.
-        /// </summary>
-        /// <value>The view.</value>
-        protected FrameworkElement View { get; private set; }
-
-        private void Subscribe()
+        if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Unloaded), OnViewUnloaded, false) is null)
         {
-            if (_subscribed)
-            {
-                return;
-            }
+            Logger.LogDebug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 
-            View.PreviewKeyDown += OnKeyDown;
-
-            _subscribed = true;
+            view.Unloaded += OnViewUnloaded;
         }
 
-        private void Unsubscribe()
+        Subscribe();
+    }
+
+    /// <summary>
+    /// Gets the view.
+    /// </summary>
+    /// <value>The view.</value>
+    protected FrameworkElement View { get; private set; }
+
+    private void Subscribe()
+    {
+        if (_subscribed)
         {
-            if (!_subscribed)
-            {
-                return;
-            }
-
-            View.PreviewKeyDown -= OnKeyDown;
-
-            _subscribed = false;
+            return;
         }
 
-        private void OnViewLoaded(object? sender, RoutedEventArgs e)
+        View.PreviewKeyDown += OnKeyDown;
+
+        _subscribed = true;
+    }
+
+    private void Unsubscribe()
+    {
+        if (!_subscribed)
         {
-            Subscribe();
+            return;
         }
 
-        private void OnViewUnloaded(object? sender, RoutedEventArgs e)
+        View.PreviewKeyDown -= OnKeyDown;
+
+        _subscribed = false;
+    }
+
+    private void OnViewLoaded(object? sender, RoutedEventArgs e)
+    {
+        Subscribe();
+    }
+
+    private void OnViewUnloaded(object? sender, RoutedEventArgs e)
+    {
+        Unsubscribe();
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (_commandManager.IsKeyboardEventsSuspended)
         {
-            Unsubscribe();
+            return;
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        if (e.Handled)
         {
-            if (_commandManager.IsKeyboardEventsSuspended)
-            {
-                return;
-            }
+            // Don't get in the way of already handled KeyDown events
+            return;
+        }
 
-            if (e.Handled)
-            {
-                // Don't get in the way of already handled KeyDown events
-                return;
-            }
+        // TODO: consider caching or something like that
+        var commandNames = _commandManager.GetCommands();
 
-            // TODO: consider caching or something like that
-            var commandNames = _commandManager.GetCommands();
-
-            foreach (var commandName in commandNames)
+        foreach (var commandName in commandNames)
+        {
+            var inputGesture = _commandManager.GetInputGesture(commandName);
+            if (inputGesture is not null)
             {
-                var inputGesture = _commandManager.GetInputGesture(commandName);
-                if (inputGesture is not null)
+                if (inputGesture.Matches(e))
                 {
-                    if (inputGesture.Matches(e))
-                    {
-                        e.Handled = true;
-                        _commandManager.ExecuteCommand(commandName);
-                        break;
-                    }
+                    e.Handled = true;
+                    _commandManager.ExecuteCommand(commandName);
+                    break;
                 }
             }
         }

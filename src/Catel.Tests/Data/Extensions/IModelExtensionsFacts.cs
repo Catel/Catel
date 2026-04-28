@@ -1,211 +1,222 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System;
+using System.Collections.ObjectModel;
+using Catel.Collections;
+using Catel.Data;
+using Catel.IoC;
+using Catel.Services;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+
+public class IModelExtensionsFacts
 {
-    using Catel.Collections;
-    using Catel.Data;
-    using NUnit.Framework;
-
-    public class IModelExtensionsFacts
+    public class Preset : ModelBase
     {
-        public class Preset : ModelBase
+        public string Foo
         {
-            public string Foo
-            {
-                get { return GetValue<string>(FooProperty); }
-                set { SetValue(FooProperty, value); }
-            }
-
-            public static readonly IPropertyData FooProperty = RegisterProperty<string>(nameof(Foo));
+            get { return GetValue<string>(FooProperty); }
+            set { SetValue(FooProperty, value); }
         }
 
-        public class Plugin : ChildAwareModelBase
+        public static readonly IPropertyData FooProperty = RegisterProperty<string>(nameof(Foo));
+    }
+
+    public class Plugin : ChildAwareModelBase
+    {
+        public string Name
         {
-            public string Name
-            {
-                get { return GetValue<string>(NameProperty); }
-                set { SetValue(NameProperty, value); }
-            }
-
-            public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
-
-            public FastObservableCollection<Preset> Presets
-            {
-                get { return GetValue<FastObservableCollection<Preset>>(PresetsProperty); }
-                set { SetValue(PresetsProperty, value); }
-            }
-
-            public static readonly IPropertyData PresetsProperty = RegisterProperty<FastObservableCollection<Preset>>(nameof(Presets), () => new FastObservableCollection<Preset>());
-
-            public void ClearDirty()
-            {
-                IsDirty = false;
-            }
+            get { return GetValue<string>(NameProperty); }
+            set { SetValue(NameProperty, value); }
         }
 
-        public class PluginContainer : ChildAwareModelBase
+        public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
+
+        public ObservableCollection<Preset> Presets
         {
-            public string Name
-            {
-                get { return GetValue<string>(NameProperty); }
-                set { SetValue(NameProperty, value); }
-            }
-
-            public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
-
-            public FastObservableCollection<Plugin> Plugins
-            {
-                get { return GetValue<FastObservableCollection<Plugin>>(PluginsProperty); }
-                set { SetValue(PluginsProperty, value); }
-            }
-
-            public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins), () => new FastObservableCollection<Plugin>());
-
+            get { return GetValue<ObservableCollection<Preset>>(PresetsProperty); }
+            set { SetValue(PresetsProperty, value); }
         }
 
-        [TestFixture]
-        public class TheClearIsDirtyOnAllChildrenMethod
-        {
-            [Test]
-            public void DoesNotSuspendNotifications()
-            {
-                var pluginChangeNotifications = 0;
-                var presetChangeNotifications = 0;
+        public static readonly IPropertyData PresetsProperty = RegisterProperty<ObservableCollection<Preset>>(nameof(Presets), 
+            () => new ObservableCollection<Preset>());
 
-                var pluginContainer = new PluginContainer
+        public void ClearDirty()
+        {
+            IsDirty = false;
+        }
+    }
+
+    public class PluginContainer : ChildAwareModelBase
+    {
+        public string Name
+        {
+            get { return GetValue<string>(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        }
+
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
+
+        public ObservableCollection<Plugin> Plugins
+        {
+            get { return GetValue<ObservableCollection<Plugin>>(PluginsProperty); }
+            set { SetValue(PluginsProperty, value); }
+        }
+
+        public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins),
+            () => new ObservableCollection<Plugin>());
+    }
+
+    [TestFixture]
+    public class TheClearIsDirtyOnAllChildrenMethod
+    {
+        [Test]
+        public void Does_Not_Suspend_Notifications()
+        {
+            var pluginChangeNotifications = 0;
+            var presetChangeNotifications = 0;
+
+            var pluginContainer = new PluginContainer
+            {
+                Name = "test"
+            };
+
+            var totalCount = 0;
+
+            for (int i = 0; i < 100; i++)
+            {
+                var plugin = new Plugin
                 {
-                    Name = "test"
                 };
 
-                for (int i = 0; i < 100; i++)
+                totalCount++;
+
+                plugin.PropertyChanged += (sender, e) =>
                 {
-                    var plugin = new Plugin
+                    pluginChangeNotifications++;
+                };
+
+                for (int j = 0; j < 500; j++)
+                {
+                    var preset = new Preset
                     {
+                        Foo = (j + 1).ToString()
                     };
 
-                    plugin.PropertyChanged += (sender, e) =>
+                    totalCount++;
+
+                    preset.PropertyChanged += (sender, e) =>
                     {
-                        pluginChangeNotifications++;
+                        presetChangeNotifications++;
                     };
 
-                    for (int j = 0; j < 500; j++)
-                    {
-                        var preset = new Preset
-                        {
-                            Foo = (j + 1).ToString()
-                        };
-
-                        preset.PropertyChanged += (sender, e) =>
-                        {
-                            presetChangeNotifications++;
-                        };
-
-                        plugin.Presets.Add(preset);
-                    }
-
-                    pluginContainer.Plugins.Add(plugin);
+                    plugin.Presets.Add(preset);
                 }
 
-                // Set up the test data (change all values)
-                foreach (var plugin in pluginContainer.Plugins)
+                pluginContainer.Plugins.Add(plugin);
+            }
+
+            // Set up the test data (change all values)
+            foreach (var plugin in pluginContainer.Plugins)
+            {
+                plugin.Name = "dummy";
+                Assert.That(plugin.IsDirty, Is.True);
+
+                foreach (var preset in plugin.Presets)
                 {
-                    plugin.Name = "dummy";
-                    Assert.That(plugin.IsDirty, Is.True);
-
-                    foreach (var preset in plugin.Presets)
-                    {
-                        preset.Foo = "test";
-                        Assert.That(preset.IsDirty, Is.True);
-                    }
-                }
-
-                pluginChangeNotifications = 0;
-                presetChangeNotifications = 0;
-
-                Assert.That(pluginContainer.IsDirty, Is.True);
-
-                pluginContainer.ClearIsDirtyOnAllChildren();
-
-                Assert.That(pluginChangeNotifications, Is.EqualTo(100));
-                Assert.That(presetChangeNotifications, Is.EqualTo(50000));
-
-                // Test https://github.com/Catel/Catel/issues/1262
-                Assert.That(pluginContainer.IsDirty, Is.False);
-
-                foreach (var plugin in pluginContainer.Plugins)
-                {
-                    Assert.That(plugin.IsDirty, Is.False);
+                    preset.Foo = "test";
+                    Assert.That(preset.IsDirty, Is.True);
                 }
             }
 
-            [Test]
-            public void DoesSuspendNotifications()
-            {
-                var pluginChangeNotifications = 0;
-                var presetChangeNotifications = 0;
+            pluginChangeNotifications = 0;
+            presetChangeNotifications = 0;
 
-                var pluginContainer = new PluginContainer
+            Assert.That(pluginContainer.IsDirty, Is.True);
+
+            pluginContainer.ClearIsDirtyOnAllChildren();
+
+            Assert.That(pluginChangeNotifications, Is.EqualTo(100));
+            Assert.That(presetChangeNotifications, Is.EqualTo(50000));
+
+            // Test https://github.com/Catel/Catel/issues/1262
+            Assert.That(pluginContainer.IsDirty, Is.False);
+
+            foreach (var plugin in pluginContainer.Plugins)
+            {
+                Assert.That(plugin.IsDirty, Is.False);
+            }
+        }
+
+        [Test]
+        public void Does_Suspend_Notifications()
+        {
+            var pluginChangeNotifications = 0;
+            var presetChangeNotifications = 0;
+
+            var pluginContainer = new PluginContainer
+            {
+                Name = "test"
+            };
+
+            for (int i = 0; i < 100; i++)
+            {
+                var plugin = new Plugin
                 {
-                    Name = "test"
                 };
 
-                for (int i = 0; i < 100; i++)
+                plugin.PropertyChanged += (sender, e) =>
                 {
-                    var plugin = new Plugin
+                    pluginChangeNotifications++;
+                };
+
+                for (int j = 0; j < 500; j++)
+                {
+                    var preset = new Preset
                     {
+                        Foo = (j + 1).ToString()
                     };
 
-                    plugin.PropertyChanged += (sender, e) =>
+                    preset.PropertyChanged += (sender, e) =>
                     {
-                        pluginChangeNotifications++;
+                        presetChangeNotifications++;
                     };
 
-                    for (int j = 0; j < 500; j++)
-                    {
-                        var preset = new Preset
-                        {
-                            Foo = (j + 1).ToString()
-                        };
-
-                        preset.PropertyChanged += (sender, e) =>
-                        {
-                            presetChangeNotifications++;
-                        };
-
-                        plugin.Presets.Add(preset);
-                    }
-
-                    pluginContainer.Plugins.Add(plugin);
+                    plugin.Presets.Add(preset);
                 }
 
-                // Set up the test data (change all values)
-                foreach (var plugin in pluginContainer.Plugins)
+                pluginContainer.Plugins.Add(plugin);
+            }
+
+            // Set up the test data (change all values)
+            foreach (var plugin in pluginContainer.Plugins)
+            {
+                plugin.Name = "dummy";
+                Assert.That(plugin.IsDirty, Is.True);
+
+                foreach (var preset in plugin.Presets)
                 {
-                    plugin.Name = "dummy";
-                    Assert.That(plugin.IsDirty, Is.True);
-
-                    foreach (var preset in plugin.Presets)
-                    {
-                        preset.Foo = "test";
-                        Assert.That(preset.IsDirty, Is.True);
-                    }
+                    preset.Foo = "test";
+                    Assert.That(preset.IsDirty, Is.True);
                 }
+            }
 
-                pluginChangeNotifications = 0;
-                presetChangeNotifications = 0;
+            pluginChangeNotifications = 0;
+            presetChangeNotifications = 0;
 
-                Assert.That(pluginContainer.IsDirty, Is.True);
+            Assert.That(pluginContainer.IsDirty, Is.True);
 
-                pluginContainer.ClearIsDirtyOnAllChildren(true);
+            pluginContainer.ClearIsDirtyOnAllChildren(true);
 
-                Assert.That(pluginChangeNotifications, Is.EqualTo(0));
-                Assert.That(presetChangeNotifications, Is.EqualTo(0));
+            Assert.That(pluginChangeNotifications, Is.EqualTo(0));
+            Assert.That(presetChangeNotifications, Is.EqualTo(0));
 
-                // Test https://github.com/Catel/Catel/issues/1262
-                Assert.That(pluginContainer.IsDirty, Is.False);
+            // Test https://github.com/Catel/Catel/issues/1262
+            Assert.That(pluginContainer.IsDirty, Is.False);
 
-                foreach (var plugin in pluginContainer.Plugins)
-                {
-                    Assert.That(plugin.IsDirty, Is.False);
-                }
+            foreach (var plugin in pluginContainer.Plugins)
+            {
+                Assert.That(plugin.IsDirty, Is.False);
             }
         }
     }

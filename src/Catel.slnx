@@ -20,7 +20,6 @@
   <Folder Name="/src/Core/">
     <Project Path="Catel.Core/Catel.Core.csproj" />
     <Project Path="Catel.MVVM/Catel.MVVM.csproj" />
-    <Project Path="Catel.Serialization.Json/Catel.Serialization.Json.csproj" />
   </Folder>
   <Folder Name="/src/Tests/">
     <Project Path="Catel.Tests.TestReferenceA/Catel.Tests.TestReferenceA.csproj" />

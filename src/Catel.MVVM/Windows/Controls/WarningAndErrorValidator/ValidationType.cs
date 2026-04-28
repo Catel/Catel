@@ -1,18 +1,17 @@
-﻿namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls;
+
+/// <summary>
+/// Business validation type.
+/// </summary>
+public enum ValidationType
 {
     /// <summary>
-    /// Business validation type.
+    /// Warning.
     /// </summary>
-    public enum ValidationType
-    {
-        /// <summary>
-        /// Warning.
-        /// </summary>
-        Warning,
+    Warning,
 
-        /// <summary>
-        /// Error.
-        /// </summary>
-        Error
-    }
+    /// <summary>
+    /// Error.
+    /// </summary>
+    Error
 }

@@ -1,7 +1,6 @@
-﻿namespace Catel.MVVM.Converters
+﻿namespace Catel.MVVM.Converters;
+
+public interface IEventArgsConverter
 {
-    public interface IEventArgsConverter
-    {
-        object? Convert(object? sender, object? args);
-    }
+    object? Convert(object? sender, object? args);
 }

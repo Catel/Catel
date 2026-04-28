@@ -1,122 +1,121 @@
-﻿namespace Catel.Tests
+﻿namespace Catel.Tests;
+
+using System;
+
+using NUnit.Framework;
+
+[TestFixture, Explicit]
+public class WeakFuncFacts
 {
-    using System;
-
-    using NUnit.Framework;
-
-    [TestFixture, Explicit]
-    public class WeakFuncFacts
+    #region Test classes
+    public class FuncTarget
     {
-        #region Test classes
-        public class FuncTarget
-        {
-            #region Properties
-            public int PublicFuncExecutedCount { get; private set; }
+        #region Properties
+        public int PublicFuncExecutedCount { get; private set; }
 
-            public int PrivateFuncExecutedCount { get; private set; }
+        public int PrivateFuncExecutedCount { get; private set; }
 
-            public int PublicFuncWithParameterExecutedCount { get; private set; }
+        public int PublicFuncWithParameterExecutedCount { get; private set; }
 
-            public int PrivateFuncWithParameterExecutedCount { get; private set; }
-            #endregion
-
-            #region Methods
-            public bool PublicFuncToExecute()
-            {
-                PublicFuncExecutedCount++;
-                return true;
-            }
-
-            public bool PrivateFuncToExecute()
-            {
-                PrivateFuncExecutedCount++;
-                return true;
-            }
-
-            public bool PublicFuncWithParameterToExecute(int parameter)
-            {
-                PublicFuncWithParameterExecutedCount++;
-                return true;
-            }
-
-            public bool PrivateFuncWithParameterToExecute(int parameter)
-            {
-                PrivateFuncWithParameterExecutedCount++;
-                return true;
-            }
-            #endregion
-        }
+        public int PrivateFuncWithParameterExecutedCount { get; private set; }
         #endregion
 
         #region Methods
-        [TestCase]
-        public void MemoryLeakFreeWithNoInvocation()
+        public bool PublicFuncToExecute()
         {
-            var target = new FuncTarget();
-            var weakAction = new WeakFunc<bool>(target, target.PublicFuncToExecute);
-
-            target = null;
-            GC.Collect();
-
-            Assert.That(weakAction.IsTargetAlive, Is.False);
+            PublicFuncExecutedCount++;
+            return true;
         }
 
-        [TestCase]
-        public void NonGeneric_PublicMethod()
+        public bool PrivateFuncToExecute()
         {
-            var target = new FuncTarget();
-            var weakFunc = new WeakFunc<bool>(target, target.PublicFuncToExecute);
-
-            bool result;
-            Assert.That(weakFunc.Execute(out result), Is.True);
-
-            Assert.That(target.PublicFuncExecutedCount, Is.EqualTo(1));
-
-            target = null;
-            GC.Collect();
-
-            Assert.That(weakFunc.IsTargetAlive, Is.False);
+            PrivateFuncExecutedCount++;
+            return true;
         }
 
-        [TestCase]
-        public void NonGeneric_AnonymousDelegate()
+        public bool PublicFuncWithParameterToExecute(int parameter)
         {
-            Assert.Throws<NotSupportedException>(() => new WeakFunc<bool>(null, () => true));
+            PublicFuncWithParameterExecutedCount++;
+            return true;
         }
 
-        [TestCase]
-        public void Generic_PublicMethod()
+        public bool PrivateFuncWithParameterToExecute(int parameter)
         {
-            var target = new FuncTarget();
-            var weakFunc = new WeakFunc<int, bool>(target, target.PublicFuncWithParameterToExecute);
-
-            bool result;
-            Assert.That(weakFunc.Execute(1, out result), Is.True);
-
-            Assert.That(target.PublicFuncWithParameterExecutedCount, Is.EqualTo(1));
-
-            target = null;
-            GC.Collect();
-
-            Assert.That(weakFunc.IsTargetAlive, Is.False);
-        }
-
-        [TestCase]
-        public void Generic_AnonymousDelegate()
-        {
-            var count = 0;
-
-            Assert.Throws<NotSupportedException>(
-                () => new WeakFunc<int, bool>(
-                    null,
-                    i =>
-                        {
-                            count = i;
-                            return true;
-                        }));
-
-            Assert.That(count, Is.EqualTo(0));
+            PrivateFuncWithParameterExecutedCount++;
+            return true;
         }
         #endregion
     }
+    #endregion
+
+    #region Methods
+    [TestCase]
+    public void MemoryLeakFreeWithNoInvocation()
+    {
+        var target = new FuncTarget();
+        var weakAction = new WeakFunc<bool>(target, target.PublicFuncToExecute);
+
+        target = null;
+        GC.Collect();
+
+        Assert.That(weakAction.IsTargetAlive, Is.False);
+    }
+
+    [TestCase]
+    public void NonGeneric_PublicMethod()
+    {
+        var target = new FuncTarget();
+        var weakFunc = new WeakFunc<bool>(target, target.PublicFuncToExecute);
+
+        bool result;
+        Assert.That(weakFunc.Execute(out result), Is.True);
+
+        Assert.That(target.PublicFuncExecutedCount, Is.EqualTo(1));
+
+        target = null;
+        GC.Collect();
+
+        Assert.That(weakFunc.IsTargetAlive, Is.False);
+    }
+
+    [TestCase]
+    public void NonGeneric_AnonymousDelegate()
+    {
+        Assert.Throws<NotSupportedException>(() => new WeakFunc<bool>(null, () => true));
+    }
+
+    [TestCase]
+    public void Generic_PublicMethod()
+    {
+        var target = new FuncTarget();
+        var weakFunc = new WeakFunc<int, bool>(target, target.PublicFuncWithParameterToExecute);
+
+        bool result;
+        Assert.That(weakFunc.Execute(1, out result), Is.True);
+
+        Assert.That(target.PublicFuncWithParameterExecutedCount, Is.EqualTo(1));
+
+        target = null;
+        GC.Collect();
+
+        Assert.That(weakFunc.IsTargetAlive, Is.False);
+    }
+
+    [TestCase]
+    public void Generic_AnonymousDelegate()
+    {
+        var count = 0;
+
+        Assert.Throws<NotSupportedException>(
+            () => new WeakFunc<int, bool>(
+                null,
+                i =>
+                    {
+                        count = i;
+                        return true;
+                    }));
+
+        Assert.That(count, Is.EqualTo(0));
+    }
+    #endregion
 }

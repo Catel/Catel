@@ -1,20 +1,19 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+using System.ComponentModel;
+
+/// <summary>
+/// Available clean up models for a model.
+/// </summary>
+public enum ModelCleanUpMode
 {
-    using System.ComponentModel;
+    /// <summary>
+    /// Call <see cref="IEditableObject.CancelEdit"/>.
+    /// </summary>
+    CancelEdit,
 
     /// <summary>
-    /// Available clean up models for a model.
+    /// Call <see cref="IEditableObject.EndEdit"/>.
     /// </summary>
-    public enum ModelCleanUpMode
-    {
-        /// <summary>
-        /// Call <see cref="IEditableObject.CancelEdit"/>.
-        /// </summary>
-        CancelEdit,
-
-        /// <summary>
-        /// Call <see cref="IEditableObject.EndEdit"/>.
-        /// </summary>
-        EndEdit
-    }
+    EndEdit
 }

@@ -1,108 +1,114 @@
-﻿namespace Catel.Tests.Configuration
+﻿namespace Catel.Tests.Configuration;
+
+using System.IO;
+using System.Threading.Tasks;
+using Catel.Configuration;
+using Catel.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
+using NUnit.Framework;
+
+public partial class ConfigurationServiceFacts
 {
-    using System.IO;
-    using System.Threading.Tasks;
-    using Catel.Configuration;
-    using Catel.Runtime.Serialization;
-    using Catel.Services;
-    using NUnit.Framework;
-
-    public partial class ConfigurationServiceFacts
+    [TestFixture]
+    public class Serialization
     {
-        [TestFixture]
-        public class Serialization
+        [SetUp]
+        public void Setup()
         {
-            [SetUp()]
-            public void Setup()
+            var appDataService = new AppDataService();
+
+            var localConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.json");
+            File.Delete(localConfigurationFile);
+
+            var roamingConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.json");
+            File.Delete(roamingConfigurationFile);
+        }
+
+        private class SerializationConfigurationService : ConfigurationService
+        {
+            public SerializationConfigurationService()
+                : base(new NullLogger<ConfigurationService>(), new ObjectConverterService(), 
+                    new AppDataService(), new ConfigurationBuilder())
             {
-                var appDataService = new AppDataService();
-
-                var localConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
-                File.Delete(localConfigurationFile);
-
-                var roamingConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
-                File.Delete(roamingConfigurationFile);
             }
 
-            private class SerializationConfigurationService : ConfigurationService
+            protected override void SetValueToStore(ConfigurationContainer container, string key, object? value)
             {
-                public SerializationConfigurationService()
-                    : base(new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), 
-                        new AppDataService(), new DispatcherService(new DispatcherProviderService()))
+                base.SetValueToStore(container, key, value);
+
+                switch (container)
                 {
+                    case ConfigurationContainer.Local:
+                        LocalChangeCount++;
+                        break;
+
+                    case ConfigurationContainer.Roaming:
+                        RoamingChangeCount++;
+                        break;
                 }
-
-                protected override void SetValueToStore(ConfigurationContainer container, string key, object? value)
-                {
-                    base.SetValueToStore(container, key, value);
-
-                    switch (container)
-                    {
-                        case ConfigurationContainer.Local:
-                            LocalChangeCount++;
-                            break;
-
-                        case ConfigurationContainer.Roaming:
-                            RoamingChangeCount++;
-                            break;
-                    }
-                }
-
-                protected override async Task SaveConfigurationAsync(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
-                {
-                    switch (container)
-                    {
-                        case ConfigurationContainer.Local:
-                            LocalSaveCount++;
-                            break;
-
-                        case ConfigurationContainer.Roaming:
-                            RoamingSaveCount++;
-                            break;
-                    }
-                }
-
-                public int LocalChangeCount { get; private set; }
-
-                public int LocalSaveCount { get; private set; }
-
-                public int RoamingChangeCount { get; private set; }
-
-                public int RoamingSaveCount { get; private set; }
             }
 
-            [Test]
-            public async Task DuplicateProcessesDoNotResetConfigurationAsync()
+            protected override async Task SaveConfigurationAsync(ConfigurationContainer container, IConfiguration configuration, string fileName)
             {
-                // See https://github.com/Catel/Catel/issues/1840 for details:
-                // 
-                // 1. Process A and B are launched at the same time, process A is allowed to run and loads the correct config, but process B resets the config and writes to disk
-                // 2. If process A makes no changes, it will happily close
-                // 3. Process C is launched, but B reset the configuration and configuration has been reset to default values
-                var configServiceA = await GetConfigurationServiceAsync("GH1840");
-                configServiceA.CreateDelayDuringSave = true;
-                configServiceA.SetRoamingValue("NAME", "A");
+                switch (container)
+                {
+                    case ConfigurationContainer.Local:
+                        LocalSaveCount++;
+                        break;
 
-                // The save should be ready, but the additional delay will lock the file and mimic process A from locking the file
-                // and thus not allowing process B to correctly load the config
-                await Task.Delay(150);
-
-                // This code must be called *while service A is writing* so we added a delay. It should have waited until
-                // the config value of A was released, then set value and overwrite the file instead of resetting it
-                var configServiceB = await GetConfigurationServiceAsync("GH1840");
-                configServiceB.SetRoamingValue("ANOTHER VALUE", "B");
-
-                // Close both files, wait long enough (longer than 5 seconds)
-                await Task.Delay(7000);
-
-                var configServiceC = await GetConfigurationServiceAsync("GH1840");
-                var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);
-
-                Assert.That(value, Is.EqualTo("A"));
+                    case ConfigurationContainer.Roaming:
+                        RoamingSaveCount++;
+                        break;
+                }
             }
 
-            [Test]
-            public async Task DoesNotCallSaveMultipleTimesAsync()
+            public int LocalChangeCount { get; private set; }
+
+            public int LocalSaveCount { get; private set; }
+
+            public int RoamingChangeCount { get; private set; }
+
+            public int RoamingSaveCount { get; private set; }
+        }
+
+        [Test]
+        public async Task Duplicate_Processes_Do_Not_Reset_Configuration()
+        {
+            // See https://github.com/Catel/Catel/issues/1840 for details:
+            // 
+            // 1. Process A and B are launched at the same time, process A is allowed to run and loads the correct config, but process B resets the config and writes to disk
+            // 2. If process A makes no changes, it will happily close
+            // 3. Process C is launched, but B reset the configuration and configuration has been reset to default values
+            var configServiceA = await GetConfigurationServiceAsync("GH1840");
+            configServiceA.CreateDelayDuringSave = true;
+            configServiceA.SetRoamingValue("NAME", "A");
+
+            // The save should be ready, but the additional delay will lock the file and mimic process A from locking the file
+            // and thus not allowing process B to correctly load the config
+            await Task.Delay(150);
+
+            // This code must be called *while service A is writing* so we added a delay. It should have waited until
+            // the config value of A was released, then set value and overwrite the file instead of resetting it
+            var configServiceB = await GetConfigurationServiceAsync("GH1840");
+            configServiceB.SetRoamingValue("ANOTHER VALUE", "B");
+
+            // Close both files, wait long enough (longer than 5 seconds)
+            await Task.Delay(7000);
+
+            var configServiceC = await GetConfigurationServiceAsync("GH1840");
+            var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);
+
+            Assert.That(value, Is.EqualTo("A"));
+        }
+
+        [Test]
+        public async Task Does_Not_Call_Save_Multiple_Times()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {
                 var configurationService = new SerializationConfigurationService();
 
@@ -122,9 +128,14 @@
 
                 Assert.That(configurationService.RoamingSaveCount, Is.EqualTo(1));
             }
+        }
 
-            [Test]
-            public async Task CorrectlySchedulesLocalSerializationAsync()
+        [Test]
+        public async Task Correctly_Schedules_Local_Serialization()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {
                 var configurationService = new SerializationConfigurationService();
 
@@ -148,9 +159,14 @@
                 Assert.That(configurationService.LocalChangeCount, Is.EqualTo(5 * 50));
                 Assert.That(configurationService.LocalSaveCount, Is.EqualTo(5));
             }
+        }
 
-            [Test]
-            public async Task CorrectlySchedulesRoamingSerializationAsync()
+        [Test]
+        public async Task Correctly_Schedules_Roaming_Serialization()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {
                 var configurationService = new SerializationConfigurationService();
 

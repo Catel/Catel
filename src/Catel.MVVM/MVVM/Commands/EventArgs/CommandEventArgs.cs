@@ -1,25 +1,24 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+using System;
+
+/// <summary>
+/// CommandEventArgs, simply holds the command parameter.
+/// </summary>
+public class CommandEventArgs : EventArgs
 {
-    using System;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandEventArgs"/> class.
+    /// </summary>
+    /// <param name="commandParameter">The command parameter.</param>
+    public CommandEventArgs(object? commandParameter = null)
+    {
+        CommandParameter = commandParameter;
+    }
 
     /// <summary>
-    /// CommandEventArgs, simply holds the command parameter.
+    /// Gets the command parameter used for the execution.
     /// </summary>
-    public class CommandEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandEventArgs"/> class.
-        /// </summary>
-        /// <param name="commandParameter">The command parameter.</param>
-        public CommandEventArgs(object? commandParameter = null)
-        {
-            CommandParameter = commandParameter;
-        }
-
-        /// <summary>
-        /// Gets the command parameter used for the execution.
-        /// </summary>
-        /// <value>The command parameter.</value>
-        public object? CommandParameter { get;  set; }
-    }
+    /// <value>The command parameter.</value>
+    public object? CommandParameter { get;  set; }
 }

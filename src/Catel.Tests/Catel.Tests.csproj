@@ -10,6 +10,7 @@
     <PackageTags></PackageTags>
     <Nullable>annotations</Nullable>
     <SonarQubeExclude>true</SonarQubeExclude>
+    <DefineConstants>$(DefineConstants);FINISHED_MIGRATION</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,15 +23,17 @@
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.3" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="NUnit" Version="4.4.0" PrivateAssets="all" />
-    <PackageReference Include="NUnit3TestAdapter" Version="5.2.0">
+    <PackageReference Include="NUnit" Version="4.5.1" PrivateAssets="all" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PublicApiGenerator" Version="11.5.1" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="31.7.2" />
+    <PackageReference Include="PublicApiGenerator" Version="11.5.4" PrivateAssets="all" />
+    <PackageReference Include="Verify.NUnit" Version="31.16.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
@@ -48,10 +51,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
     <ProjectReference Include="..\Catel.MVVM\Catel.MVVM.csproj" />
-    <ProjectReference Include="..\Catel.Serialization.Json\Catel.Serialization.Json.csproj" />
-    <ProjectReference Include="..\Catel.Tests.TestReferenceA\Catel.Tests.TestReferenceA.csproj" />
-    <ProjectReference Include="..\Catel.Tests.TestReferenceB\Catel.Tests.TestReferenceB.csproj" />
-    <ProjectReference Include="..\Catel.Tests.TestReferenceC\Catel.Tests.TestReferenceC.csproj" />
   </ItemGroup>
 
   <ItemGroup>

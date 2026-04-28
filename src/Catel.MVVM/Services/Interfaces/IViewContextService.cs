@@ -1,9 +1,8 @@
-﻿namespace Catel.Services
-{
-    using Catel.MVVM.Views;
+﻿namespace Catel.Services;
 
-    public interface IViewContextService
-    {
-        object? GetContext(IView view);
-    }
+using Catel.MVVM.Views;
+
+public interface IViewContextService
+{
+    object? GetContext(IView view);
 }

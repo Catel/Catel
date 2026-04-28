@@ -1,26 +1,25 @@
-﻿namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views;
+
+using System;
+
+/// <summary>
+/// Interface containing the load state of a view. This interface can be implemented by
+/// a view, but also by other helper classes wrapping a view.
+/// </summary>
+public interface IViewLoadState
 {
-    using System;
+    /// <summary>
+    /// Gets the view object.
+    /// </summary>
+    IView? View { get; }
 
     /// <summary>
-    /// Interface containing the load state of a view. This interface can be implemented by
-    /// a view, but also by other helper classes wrapping a view.
+    /// Occurs when the view is loaded.
     /// </summary>
-    public interface IViewLoadState
-    {
-        /// <summary>
-        /// Gets the view object.
-        /// </summary>
-        IView? View { get; }
+    event EventHandler<EventArgs>? Loaded;
 
-        /// <summary>
-        /// Occurs when the view is loaded.
-        /// </summary>
-        event EventHandler<EventArgs>? Loaded;
-
-        /// <summary>
-        /// Occurs when the view is unloaded.
-        /// </summary>
-        event EventHandler<EventArgs>? Unloaded;
-    }
+    /// <summary>
+    /// Occurs when the view is unloaded.
+    /// </summary>
+    event EventHandler<EventArgs>? Unloaded;
 }

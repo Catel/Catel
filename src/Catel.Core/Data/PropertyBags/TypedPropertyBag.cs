@@ -1,66 +1,66 @@
-﻿namespace Catel.Data
+﻿namespace Catel.Data;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Catel.Logging;
+using Catel.Reflection;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Memory efficient typed property bag that takes care of boxing.
+/// </summary>
+public partial class TypedPropertyBag : PropertyBagBase
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Catel.Logging;
-    using Catel.Reflection;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(TypedPropertyBag));
 
-    /// <summary>
-    /// Memory efficient typed property bag that takes care of boxing.
-    /// </summary>
-    public partial class TypedPropertyBag : PropertyBagBase
+    private readonly Dictionary<string, Type> _propertyTypes = new Dictionary<string, Type>();
+
+    public override string[] GetAllNames()
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private readonly Dictionary<string, Type> _propertyTypes = new Dictionary<string, Type>();
-
-        public override string[] GetAllNames()
+        lock (_propertyTypes)
         {
-            lock (_propertyTypes)
+            return _propertyTypes.Keys.ToArray();
+        }
+    }
+
+    public override bool IsAvailable(string name)
+    {
+        Argument.IsNotNullOrWhitespace(nameof(name), name);
+
+        lock (_propertyTypes)
+        {
+            return _propertyTypes.ContainsKey(name);
+        }
+    }
+
+    private Type? GetRegisteredPropertyType(string name)
+    {
+        lock (_propertyTypes)
+        {
+            if (_propertyTypes.TryGetValue(name, out var existingType))
             {
-                return _propertyTypes.Keys.ToArray();
+                return existingType;
             }
         }
 
-        public override bool IsAvailable(string name)
-        {
-            Argument.IsNotNullOrWhitespace(nameof(name), name);
+        return null;
+    }
 
-            lock (_propertyTypes)
-            {
-                return _propertyTypes.ContainsKey(name);
-            }
-        }
-
-        private Type? GetRegisteredPropertyType(string name)
+    private void EnsureIntegrity(string name, Type type)
+    {
+        lock (_propertyTypes)
         {
-            lock (_propertyTypes)
+            if (_propertyTypes.TryGetValue(name, out var existingType))
             {
-                if (_propertyTypes.TryGetValue(name, out var existingType))
+                if (existingType != type && !existingType.IsAssignableFromEx(type))
                 {
-                    return existingType;
+                    throw Logger.LogErrorAndCreateException<InvalidOperationException>($"Property '{name}' is already registered as '{existingType.FullName}' which is not compatible with '{type.FullName}'");
                 }
             }
-
-            return null;
-        }
-
-        private void EnsureIntegrity(string name, Type type)
-        {
-            lock (_propertyTypes)
+            else
             {
-                if (_propertyTypes.TryGetValue(name, out var existingType))
-                {
-                    if (existingType != type && !existingType.IsAssignableFromEx(type))
-                    {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Property '{name}' is already registered as '{existingType.FullName}' which is not compatible with '{type.FullName}'");
-                    }
-                }
-                else
-                {
-                    _propertyTypes[name] = type;
-                }
+                _propertyTypes[name] = type;
             }
         }
     }

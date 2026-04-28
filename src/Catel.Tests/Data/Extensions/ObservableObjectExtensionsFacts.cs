@@ -1,44 +1,43 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System;
+using Catel.Data;
+
+using NUnit.Framework;
+
+public class ObservableObjectExtensionsFacts
 {
-    using System;
-    using Catel.Data;
-
-    using NUnit.Framework;
-
-    public class ObservableObjectExtensionsFacts
+    public class TestModel : ObservableObject
     {
-        public class TestModel : ObservableObject
-        {
 
+    }
+
+    [TestFixture]
+    public class TheRaiseAllPropertiesChangedMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullObject()
+        {
+            Assert.Throws<ArgumentNullException>(() => ObservableObjectExtensions.RaiseAllPropertiesChanged(null));
         }
 
-        [TestFixture]
-        public class TheRaiseAllPropertiesChangedMethod
+        [TestCase]
+        public void RaisesPropertyChangedEventCorrectly()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullObject()
-            {
-                Assert.Throws<ArgumentNullException>(() => ObservableObjectExtensions.RaiseAllPropertiesChanged(null));
-            }
+            var model = new TestModel();
 
-            [TestCase]
-            public void RaisesPropertyChangedEventCorrectly()
+            var propertyChanged = false;
+            model.PropertyChanged += (sender, e) =>
             {
-                var model = new TestModel();
-
-                var propertyChanged = false;
-                model.PropertyChanged += (sender, e) =>
+                if (string.IsNullOrEmpty(e.PropertyName))
                 {
-                    if (string.IsNullOrEmpty(e.PropertyName))
-                    {
-                        propertyChanged = true;
-                    }
-                };
+                    propertyChanged = true;
+                }
+            };
 
-                model.RaiseAllPropertiesChanged();
+            model.RaiseAllPropertiesChanged();
 
-                Assert.That(propertyChanged, Is.True);
-            }
+            Assert.That(propertyChanged, Is.True);
         }
     }
 }

@@ -1,35 +1,34 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System;
+using System.Collections.Generic;
+
+/// <summary>
+/// Attribute to support code at design time.
+/// </summary>
+[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
+public class DesignTimeCodeAttribute : Attribute
 {
-    using System;
-    using System.Collections.Generic;
+    private static readonly Dictionary<Type, bool> InitializedTypes = new Dictionary<Type, bool>();
 
     /// <summary>
-    /// Attribute to support code at design time.
+    /// Initializes a new instance of the <see cref="DesignTimeCodeAttribute"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    public class DesignTimeCodeAttribute : Attribute
+    /// <param name="typeToConstruct">The type to construct.</param>
+    public DesignTimeCodeAttribute(Type typeToConstruct)
     {
-        private static readonly Dictionary<Type, bool> InitializedTypes = new Dictionary<Type, bool>();
+        ArgumentNullException.ThrowIfNull(typeToConstruct);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DesignTimeCodeAttribute"/> class.
-        /// </summary>
-        /// <param name="typeToConstruct">The type to construct.</param>
-        public DesignTimeCodeAttribute(Type typeToConstruct)
+        if (InitializedTypes.ContainsKey(typeToConstruct))
         {
-            ArgumentNullException.ThrowIfNull(typeToConstruct);
+            return;
+        }
 
-            if (InitializedTypes.ContainsKey(typeToConstruct))
-            {
-                return;
-            }
+        InitializedTypes[typeToConstruct] = true;
 
-            InitializedTypes[typeToConstruct] = true;
-
-            if (CatelEnvironment.IsInDesignMode)
-            {
-                Activator.CreateInstance(typeToConstruct);
-            }
+        if (CatelEnvironment.IsInDesignMode)
+        {
+            Activator.CreateInstance(typeToConstruct);
         }
     }
 }

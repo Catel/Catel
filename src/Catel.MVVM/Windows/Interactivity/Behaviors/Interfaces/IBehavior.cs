@@ -1,9 +1,8 @@
-﻿namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity;
+
+/// <summary>
+/// Behavior interface.
+/// </summary>
+public interface IBehavior
 {
-    /// <summary>
-    /// Behavior interface.
-    /// </summary>
-    public interface IBehavior
-    {
-    }
 }

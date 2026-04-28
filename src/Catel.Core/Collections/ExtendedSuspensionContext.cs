@@ -1,216 +1,215 @@
-﻿namespace Catel.Collections
+﻿namespace Catel.Collections;
+
+using System.Collections.Generic;
+using System.Collections.Specialized;
+
+/// <summary>
+/// Context class the hold all relevant data while notifications are suspended.
+/// </summary>
+/// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
+public class ExtendedSuspensionContext<T>
 {
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
+    private readonly List<int> _newItemIndices = new List<int>();
+
+    private readonly List<T> _newItems = new List<T>();
+
+    private readonly List<int> _oldItemIndices = new List<int>();
+
+    private readonly List<T> _oldItems = new List<T>();
+
+    private readonly List<int> _mixedItemIndices = new List<int>();
+
+    private readonly List<T> _mixedItems = new List<T>();
+
+    private readonly List<NotifyCollectionChangedAction> _mixedActions = new List<NotifyCollectionChangedAction>();
+
+    private int _suspensionCount;
+
+    private readonly SuspensionMode _suspensionMode;
 
     /// <summary>
-    /// Context class the hold all relevant data while notifications are suspended.
+    /// Initializes a new instance of the <see cref="ExtendedSuspensionContext{T}" /> class.
     /// </summary>
-    /// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
-    public class ExtendedSuspensionContext<T>
+    /// <param name="mode">The suspension mode.</param>
+    public ExtendedSuspensionContext(SuspensionMode mode)
     {
-        private readonly List<int> _newItemIndices = new List<int>();
+        _suspensionMode = mode;
+    }
 
-        private readonly List<T> _newItems = new List<T>();
-
-        private readonly List<int> _oldItemIndices = new List<int>();
-
-        private readonly List<T> _oldItems = new List<T>();
-
-        private readonly List<int> _mixedItemIndices = new List<int>();
-
-        private readonly List<T> _mixedItems = new List<T>();
-
-        private readonly List<NotifyCollectionChangedAction> _mixedActions = new List<NotifyCollectionChangedAction>();
-
-        private int _suspensionCount;
-
-        private readonly SuspensionMode _suspensionMode;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtendedSuspensionContext{T}" /> class.
-        /// </summary>
-        /// <param name="mode">The suspension mode.</param>
-        public ExtendedSuspensionContext(SuspensionMode mode)
+    /// <summary>
+    /// Gets or sets the suspension count.
+    /// </summary>
+    public int Count
+    {
+        get
         {
-            _suspensionMode = mode;
+            return _suspensionCount;
         }
 
-        /// <summary>
-        /// Gets or sets the suspension count.
-        /// </summary>
-        public int Count
+        set
         {
-            get
+            if (value != _suspensionCount)
             {
-                return _suspensionCount;
-            }
-
-            set
-            {
-                if (value != _suspensionCount)
+                if (value < 0)
                 {
-                    if (value < 0)
-                    {
-                        _suspensionCount = 0;
-                    }
-                    else
-                    {
-                        _suspensionCount = value;
-                    }
+                    _suspensionCount = 0;
+                }
+                else
+                {
+                    _suspensionCount = value;
                 }
             }
         }
+    }
 
-        /// <summary>
-        /// Gets the suspension mode.
-        /// </summary>
-        public SuspensionMode Mode
+    /// <summary>
+    /// Gets the suspension mode.
+    /// </summary>
+    public SuspensionMode Mode
+    {
+        get
         {
-            get
-            {
-                return _suspensionMode;
-            }
+            return _suspensionMode;
         }
+    }
 
-        /// <summary>
-        /// Gets the indices of the added items while change notifications were suspended in Adding mode.
-        /// </summary>
-        public List<int> NewItemIndices
+    /// <summary>
+    /// Gets the indices of the added items while change notifications were suspended in Adding mode.
+    /// </summary>
+    public List<int> NewItemIndices
+    {
+        get
         {
-            get
-            {
-                return _newItemIndices;
-            }
+            return _newItemIndices;
         }
+    }
 
-        /// <summary>
-        /// Gets the added items while change notifications were suspended in Adding mode.
-        /// </summary>
-        public List<T> NewItems
+    /// <summary>
+    /// Gets the added items while change notifications were suspended in Adding mode.
+    /// </summary>
+    public List<T> NewItems
+    {
+        get
         {
-            get
-            {
-                return _newItems;
-            }
+            return _newItems;
         }
+    }
 
-        /// <summary>
-        /// Gets the indices of the removed items while change notifications were suspended in Removing mode.
-        /// </summary>
-        public List<int> OldItemIndices
+    /// <summary>
+    /// Gets the indices of the removed items while change notifications were suspended in Removing mode.
+    /// </summary>
+    public List<int> OldItemIndices
+    {
+        get
         {
-            get
-            {
-                return _oldItemIndices;
-            }
+            return _oldItemIndices;
         }
+    }
 
-        /// <summary>
-        /// Gets the removed items while change notifications were suspended in Removing mode.
-        /// </summary>
-        public List<T> OldItems
+    /// <summary>
+    /// Gets the removed items while change notifications were suspended in Removing mode.
+    /// </summary>
+    public List<T> OldItems
+    {
+        get
         {
-            get
-            {
-                return _oldItems;
-            }
+            return _oldItems;
         }
+    }
 
-        /// <summary>
-        /// Gets the indices of the added and removed items while change notifications were suspended in Mixed mode.
-        /// </summary>
-        public List<int> MixedItemIndices
+    /// <summary>
+    /// Gets the indices of the added and removed items while change notifications were suspended in Mixed mode.
+    /// </summary>
+    public List<int> MixedItemIndices
+    {
+        get
         {
-            get
-            {
-                return _mixedItemIndices;
-            }
+            return _mixedItemIndices;
         }
+    }
 
-        /// <summary>
-        /// Gets the added and removed items while change notifications were suspended in Mixed mode.
-        /// </summary>
-        public List<T> MixedItems
+    /// <summary>
+    /// Gets the added and removed items while change notifications were suspended in Mixed mode.
+    /// </summary>
+    public List<T> MixedItems
+    {
+        get
         {
-            get
-            {
-                return _mixedItems;
-            }
+            return _mixedItems;
         }
+    }
 
-        /// <summary>
-        /// Gets the actions while change notifications were suspended in Mixed mode.
-        /// </summary>
-        public List<NotifyCollectionChangedAction> MixedActions
+    /// <summary>
+    /// Gets the actions while change notifications were suspended in Mixed mode.
+    /// </summary>
+    public List<NotifyCollectionChangedAction> MixedActions
+    {
+        get
         {
-            get
-            {
-                return _mixedActions;
-            }
+            return _mixedActions;
         }
+    }
 
-        /// <summary>
-        /// Tries to remove the item from old items
-        /// </summary>
-        /// <param name="index">The item index.</param>
-        /// <param name="item">The item.</param>
-        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
-        /// <remarks>This code is only need by <c>FastBindingList{T}</c>.</remarks>
-        public bool TryRemoveItemFromOldItems(int index, T item)
+    /// <summary>
+    /// Tries to remove the item from old items
+    /// </summary>
+    /// <param name="index">The item index.</param>
+    /// <param name="item">The item.</param>
+    /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
+    /// <remarks>This code is only need by <c>FastBindingList{T}</c>.</remarks>
+    public bool TryRemoveItemFromOldItems(int index, T item)
+    {
+        if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
         {
-            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
+            var oldIdx = OldItems.LastIndexOf(item);
+            if (oldIdx > -1 && OldItemIndices[oldIdx] == index)
             {
-                var oldIdx = OldItems.LastIndexOf(item);
-                if (oldIdx > -1 && OldItemIndices[oldIdx] == index)
+                OldItems.RemoveAt(oldIdx);
+                OldItemIndices.RemoveAt(oldIdx);
+
+                for (var i = 0; i < OldItemIndices.Count; i++)
                 {
-                    OldItems.RemoveAt(oldIdx);
-                    OldItemIndices.RemoveAt(oldIdx);
-
-                    for (var i = 0; i < OldItemIndices.Count; i++)
+                    if (OldItemIndices[i] >= index)
                     {
-                        if (OldItemIndices[i] >= index)
-                        {
-                            OldItemIndices[i]++;
-                        }
+                        OldItemIndices[i]++;
                     }
-
-                    return true;
                 }
-            }
 
-            return false;
+                return true;
+            }
         }
 
-        /// <summary>
-        /// Tries to remove the item from new items
-        /// </summary>
-        /// <param name="index">The item index.</param>
-        /// <param name="item">The item.</param>
-        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
-        /// <remarks>This code is only need by <c>FastBindingList{T}</c>.</remarks>
-        public bool? TryRemoveItemFromNewItems(int index, T item)
+        return false;
+    }
+
+    /// <summary>
+    /// Tries to remove the item from new items
+    /// </summary>
+    /// <param name="index">The item index.</param>
+    /// <param name="item">The item.</param>
+    /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
+    /// <remarks>This code is only need by <c>FastBindingList{T}</c>.</remarks>
+    public bool? TryRemoveItemFromNewItems(int index, T item)
+    {
+        if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
         {
-            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
+            var newIdx = NewItems.LastIndexOf(item);
+            if (newIdx > -1 && NewItemIndices[newIdx] == index)
             {
-                var newIdx = NewItems.LastIndexOf(item);
-                if (newIdx > -1 && NewItemIndices[newIdx] == index)
+                NewItems.RemoveAt(newIdx);
+                NewItemIndices.RemoveAt(newIdx);
+                for (var i = 0; i < NewItemIndices.Count; i++)
                 {
-                    NewItems.RemoveAt(newIdx);
-                    NewItemIndices.RemoveAt(newIdx);
-                    for (var i = 0; i < NewItemIndices.Count; i++)
+                    if (NewItemIndices[i] >= index)
                     {
-                        if (NewItemIndices[i] >= index)
-                        {
-                            NewItemIndices[i]--;
-                        }
+                        NewItemIndices[i]--;
                     }
-
-                    return true;
                 }
-            }
 
-            return false;
+                return true;
+            }
         }
+
+        return false;
     }
 }

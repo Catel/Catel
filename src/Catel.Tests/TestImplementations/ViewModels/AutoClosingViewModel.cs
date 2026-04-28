@@ -1,8 +1,12 @@
-﻿namespace Catel.Tests.ViewModels
-{
-    using Catel.MVVM;
+﻿namespace Catel.Tests.ViewModels;
 
-    public class AutoClosingViewModel : ViewModelBase
+using System;
+using Catel.MVVM;
+
+public class AutoClosingViewModel : ViewModelBase
+{
+    public AutoClosingViewModel(IServiceProvider serviceProvider) 
+        : base(serviceProvider)
     {
     }
 }

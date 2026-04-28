@@ -1,31 +1,32 @@
-﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses
+﻿namespace Catel.Tests.MVVM.ViewModels.TestClasses;
+
+using System;
+using Catel.Data;
+using Catel.MVVM;
+
+public class TestViewModelWithImplicitModelMappings : FeaturedViewModelBase
 {
-    using Catel.Data;
-    using Catel.MVVM;
+    public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
 
-    public class TestViewModelWithImplicitModelMappings : ViewModelBase
+    public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName");
+
+    public TestViewModelWithImplicitModelMappings(IPerson person, IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
+        Person = person;
+    }
 
-        public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName");
+    [Model]
+    public IPerson Person
+    {
+        get { return GetValue<IPerson>(PersonProperty); }
+        private set { SetValue(PersonProperty, value); }
+    }
 
-        public TestViewModelWithImplicitModelMappings(IPerson person)
-        {
-            Person = person;
-        }
-
-        [Model]
-        public IPerson Person
-        {
-            get { return GetValue<IPerson>(PersonProperty); }
-            private set { SetValue(PersonProperty, value); }
-        }
-
-        [ViewModelToModel]
-        public string FirstName
-        {
-            get { return GetValue<string>(FirstNameProperty); }
-            set { SetValue(FirstNameProperty, value); }
-        }
+    [ViewModelToModel]
+    public string FirstName
+    {
+        get { return GetValue<string>(FirstNameProperty); }
+        set { SetValue(FirstNameProperty, value); }
     }
 }

@@ -1,0 +1,359 @@
+<Solution>
+
+  <Folder Name="/src/" />
+  <Folder Name="/src/App.CsvTextEditor/">
+    <Project Path="../../CsvTextEditor/src/CsvTextEditor/CsvTextEditor.csproj" Id="70261f8b-6554-4c72-bc0b-cfbd7a7dd94c" />
+  </Folder>
+  <Folder Name="/src/App.LogViewer/">
+    <Project Path="../../LogViewer/src/LogViewer/LogViewer.csproj" Id="a396337f-fe94-454e-9bc7-369a5b140fe5" />
+  </Folder>
+  <Folder Name="/src/Catel/">
+    <Project Path="Catel.Core/Catel.Core.csproj" />
+    <Project Path="Catel.MVVM/Catel.MVVM.csproj" />
+  </Folder>
+  <Folder Name="/src/Catel/Tests/">
+    <Project Path="Catel.Tests/Catel.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.AutomaticSupport/">
+    <Project Path="../../Orc.AutomaticSupport/src/Orc.AutomaticSupport/Orc.AutomaticSupport.csproj" Id="53a5aaef-a053-4813-98cb-c17df63d277b" />
+  </Folder>
+  <Folder Name="/src/Orc.AutomaticSupport/Example/" />
+  <Folder Name="/src/Orc.AutomaticSupport/Tests/">
+    <Project Path="../../Orc.AutomaticSupport/src/Orc.AutomaticSupport.Tests/Orc.AutomaticSupport.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Automation/">
+    <Project Path="../../Orc.Automation/src/Orc.Automation.Tests/Orc.Automation.Tests.csproj" Id="8ebd8595-0992-4ffa-bca2-ee7bf507b507" />
+    <Project Path="../../Orc.Automation/src/Orc.Automation/Orc.Automation.csproj" Id="8946028d-a6f7-4a64-98cc-71f1669e1d8e" />
+  </Folder>
+  <Folder Name="/src/Orc.Automation/Example/" />
+  <Folder Name="/src/Orc.Calendar/">
+    <Project Path="../../Orc.Calendar/src/Orc.Calendar/Orc.Calendar.csproj" Id="403bf182-aa4f-4b16-8d12-f362bb391894" />
+  </Folder>
+  <Folder Name="/src/Orc.Calendar/Example/" />
+  <Folder Name="/src/Orc.Calendar/Tests/">
+    <Project Path="../../Orc.Calendar/src/Orc.Calendar.Tests/Orc.Calendar.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Controls/">
+    <Project Path="../../Orc.Controls/src/Orc.Controls.Settings/Orc.Controls.Settings.csproj" Id="f5fed560-415b-4197-a7cb-a1513b72fdc2" />
+    <Project Path="../../Orc.Controls/src/Orc.Controls/Orc.Controls.csproj" Id="84e22240-d816-4b43-ac37-92b805a2bee3" />
+  </Folder>
+  <Folder Name="/src/Orc.Controls/Example/">
+    <Project Path="../../Orc.Controls/src/Orc.Controls.Example/Orc.Controls.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Controls/Tests/">
+    <Project Path="../../Orc.Controls/src/Orc.Controls.Tests/Orc.Controls.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Csv/">
+    <Project Path="../../Orc.Csv/src/Orc.Csv/Orc.Csv.csproj" Id="65e6c289-ac0c-4551-af0a-c8f3db3b7bd6" />
+  </Folder>
+  <Folder Name="/src/Orc.Csv/Example/" />
+  <Folder Name="/src/Orc.Csv/Tests/">
+    <Project Path="../../Orc.Csv/src/Orc.Csv.Tests/Orc.Csv.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.CsvTextEditor/">
+    <Project Path="../../Orc.CsvTextEditor/src/Orc.CsvTextEditor/Orc.CsvTextEditor.csproj" Id="a97b1b48-88b2-47dc-bc78-9af835dcf2a0" />
+  </Folder>
+  <Folder Name="/src/Orc.CsvTextEditor/Example/">
+    <Project Path="../../Orc.CsvTextEditor/src/Orc.CsvTextEditor.Example/Orc.CsvTextEditor.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.CsvTextEditor/Tests/">
+    <Project Path="../../Orc.CsvTextEditor/src/Orc.CsvTextEditor.Tests/Orc.CsvTextEditor.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.DataAccess/">
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess.Xaml/Orc.DataAccess.Xaml.csproj" Id="431ef206-5dfd-49c3-8597-371a01e76ab5" />
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess/Orc.DataAccess.csproj" Id="5fb38c9c-a74b-46d3-b297-2de0274f952c" />
+  </Folder>
+  <Folder Name="/src/Orc.DataAccess/Example/">
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess.Example/Orc.DataAccess.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.DataAccess/Tests/">
+    <Project Path="../../Orc.DataAccess/src/Orc.DataAccess.Tests/Orc.DataAccess.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.DependencyGraph/">
+    <Project Path="../../Orc.DependencyGraph/src/Orc.DependencyGraph/Orc.DependencyGraph.csproj" Id="4d453cc5-bf49-4af1-bc25-99fff818af79" />
+  </Folder>
+  <Folder Name="/src/Orc.DependencyGraph/Example/">
+    <Project Path="../../Orc.DependencyGraph/src/Orc.DependencyGraph.Example/Orc.DependencyGraph.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.DependencyGraph/Tests/">
+    <Project Path="../../Orc.DependencyGraph/src/Orc.DependencyGraph.Tests/Orc.DependencyGraph.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.DynamicObjects/">
+    <Project Path="../../Orc.DynamicObjects/src/Orc.DynamicObjects/Orc.DynamicObjects.csproj" Id="c363c62a-3dd3-46bb-9711-c8891d6c4c53" />
+  </Folder>
+  <Folder Name="/src/Orc.DynamicObjects/Example/">
+    <Project Path="../../Orc.DynamicObjects/src/Orc.DynamicObjects.Example/Orc.DynamicObjects.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.DynamicObjects/Tests/">
+    <Project Path="../../Orc.DynamicObjects/src/Orc.DynamicObjects.Tests/Orc.DynamicObjects.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.EntityFramework/">
+    <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6/Orc.EntityFramework6.csproj" Id="be45a653-6ff3-4634-bbd3-b68435fe10f3" />
+  </Folder>
+  <Folder Name="/src/Orc.EntityFramework/Tests/">
+    <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6.Tests.DbContext/Orc.EntityFramework6.Tests.DbContext.csproj" />
+    <Project Path="../../Orc.EntityFramework/src/Orc.EntityFramework6.Tests/Orc.EntityFramework6.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Extensibility/">
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility/Orc.Extensibility.csproj" Id="504f9e8e-1463-4a1a-bb66-a1b791abccf8" />
+  </Folder>
+  <Folder Name="/src/Orc.Extensibility/Example/">
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.Api/Orc.Extensibility.Example.Api.csproj" />
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionA/Orc.Extensibility.Example.ExtensionA.csproj" />
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionB/Orc.Extensibility.Example.ExtensionB.csproj" />
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Example/Orc.Extensibility.Example.csproj">
+      <BuildDependency Project="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionA/Orc.Extensibility.Example.ExtensionA.csproj" />
+      <BuildDependency Project="../../Orc.Extensibility/src/Orc.Extensibility.Example.ExtensionB/Orc.Extensibility.Example.ExtensionB.csproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/Orc.Extensibility/Tests/">
+    <Project Path="../../Orc.Extensibility/src/Orc.Extensibility.Tests/Orc.Extensibility.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FeatureToggles/">
+    <Project Path="../../Orc.FeatureToggles/src/Orc.FeatureToggles.Xaml/Orc.FeatureToggles.Xaml.csproj" Id="9a55f5cf-a1a7-446f-9d22-8f72c6ee1577" />
+    <Project Path="../../Orc.FeatureToggles/src/Orc.FeatureToggles/Orc.FeatureToggles.csproj" Id="82e9cef6-4793-49b0-94fe-bf3bc243741c" />
+  </Folder>
+  <Folder Name="/src/Orc.FeatureToggles/Example/">
+    <Project Path="../../Orc.FeatureToggles/src/Orc.FeatureToggles.Example/Orc.FeatureToggles.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FeatureToggles/Tests/">
+    <Project Path="../../Orc.FeatureToggles/src/Orc.FeatureToggles.Tests/Orc.FeatureToggles.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Feedback/">
+    <Project Path="../../Orc.Feedback/src/Orc.Feedback/Orc.Feedback.csproj" Id="f280e1a7-11b0-4b4f-8b9a-da9b62eac3fd" />
+  </Folder>
+  <Folder Name="/src/Orc.Feedback/Example/" />
+  <Folder Name="/src/Orc.Feedback/Tests/">
+    <Project Path="../../Orc.Feedback/src/Orc.Feedback.Tests/Orc.Feedback.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FileAssociation/">
+    <Project Path="../../Orc.FileAssociation/src/Orc.FileAssociation/Orc.FileAssociation.csproj" Id="cc56aeaf-3f95-471f-9b81-af600d0cfa7e" />
+  </Folder>
+  <Folder Name="/src/Orc.FileAssociation/Example/">
+    <Project Path="../../Orc.FileAssociation/src/Orc.FileAssociation.Example/Orc.FileAssociation.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FileAssociation/Tests/">
+    <Project Path="../../Orc.FileAssociation/src/Orc.FileAssociation.Tests/Orc.FileAssociation.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FileSystem/">
+    <Project Path="../../Orc.FileSystem/src/Orc.FileSystem/Orc.FileSystem.csproj" Id="360c62c6-7905-46d0-8b93-abd90857e478" />
+  </Folder>
+  <Folder Name="/src/Orc.FileSystem/Example/" />
+  <Folder Name="/src/Orc.FileSystem/Tests/">
+    <Project Path="../../Orc.FileSystem/src/Orc.FileSystem.Tests/Orc.FileSystem.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FilterBuilder/">
+    <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder.Xaml/Orc.FilterBuilder.Xaml.csproj" Id="e276e661-3ddb-47e2-8030-d87dbf0361fd" />
+    <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder/Orc.FilterBuilder.csproj" Id="cb68f51c-2a87-4945-a220-722bec604789" />
+  </Folder>
+  <Folder Name="/src/Orc.FilterBuilder/Example/">
+    <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder.Example/Orc.FilterBuilder.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.FilterBuilder/Tests/">
+    <Project Path="../../Orc.FilterBuilder/src/Orc.FilterBuilder.Tests/Orc.FilterBuilder.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.LicenseManager/">
+    <Project Path="../../Orc.LicenseManager/src/Orc.LicenseManager.Client.WPF/Orc.LicenseManager.Client.WPF.csproj" Id="3c2f09ac-f23f-439f-bb6f-a502241ca829" />
+    <Project Path="../../Orc.LicenseManager/src/Orc.LicenseManager.Client/Orc.LicenseManager.Client.csproj" Id="673e6fb6-2042-44d0-9767-a41b45dad42e" />
+  </Folder>
+  <Folder Name="/src/Orc.LicenseManager/Example/">
+    <Project Path="../../Orc.LicenseManager/src/Orc.LicenseManager.Client.WPF.Example/Orc.LicenseManager.Client.WPF.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.LicenseManager/Tests/">
+    <Project Path="../../Orc.LicenseManager/src/Orc.LicenseManager.Tests/Orc.LicenseManager.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.LogViewer/">
+    <Project Path="../../Orc.LogViewer/src/Orc.LogViewer/Orc.LogViewer.csproj" Id="a420ca39-3b44-4dac-b66a-d12960aac025" />
+  </Folder>
+  <Folder Name="/src/Orc.LogViewer/Example/">
+    <Project Path="../../Orc.LogViewer/src/Orc.LogViewer.Example/Orc.LogViewer.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.LogViewer/Tests/">
+    <Project Path="../../Orc.LogViewer/src/Orc.LogViewer.Tests/Orc.LogViewer.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Memento/">
+    <Project Path="../../Orc.Memento/src/Orc.Memento/Orc.Memento.csproj" Id="7073b93b-7be9-4ab6-bf0c-813f0491f32a" />
+  </Folder>
+  <Folder Name="/src/Orc.Memento/Example/">
+    <Project Path="../../Orc.Memento/src/Orc.Memento.Example/Orc.Memento.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Memento/Tests/">
+    <Project Path="../../Orc.Memento/src/Orc.Memento.Tests/Orc.Memento.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Metadata/">
+    <Project Path="../../Orc.Metadata/src/Orc.Metadata/Orc.Metadata.csproj" Id="c9b4af7b-2b2c-483a-b483-e2ee31db4c14" />
+  </Folder>
+  <Folder Name="/src/Orc.Metadata/Tests/">
+    <Project Path="../../Orc.Metadata/src/Orc.Metadata.Tests/Orc.Metadata.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Notifications/">
+    <Project Path="../../Orc.Notifications/src/Orc.Notifications/Orc.Notifications.csproj" Id="4b76ca3b-37ab-4b3b-9eb7-efe9d65bb09c" />
+  </Folder>
+  <Folder Name="/src/Orc.Notifications/Example/">
+    <Project Path="../../Orc.Notifications/src/Orc.Notifications.Example/Orc.Notifications.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Notifications/Tests/">
+    <Project Path="../../Orc.Notifications/src/Orc.Notifications.Tests/Orc.Notifications.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.NuGetExplorer/">
+    <Project Path="../../Orc.NuGetExplorer/src/Orc.NuGetExplorer.Xaml/Orc.NuGetExplorer.Xaml.csproj" Id="6a1494f8-88aa-41ce-b899-6b2cfaa8c678" />
+    <Project Path="../../Orc.NuGetExplorer/src/Orc.NuGetExplorer/Orc.NuGetExplorer.csproj" Id="a02ee7b2-0ea4-4bd6-b2af-2bc53feb87f0" />
+  </Folder>
+  <Folder Name="/src/Orc.NuGetExplorer/Example/">
+    <Project Path="../../Orc.NuGetExplorer/src/Orc.NuGetExplorer.Example/Orc.NuGetExplorer.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.NuGetExplorer/Tests/">
+    <Project Path="../../Orc.NuGetExplorer/src/Orc.NuGetExplorer.Tests/Orc.NuGetExplorer.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Plot/">
+    <Project Path="../../Orc.Plot/src/Orc.Plot/Orc.Plot.csproj" Id="b148a23a-bf6e-409a-91de-6dc309d18d31" />
+  </Folder>
+  <Folder Name="/src/Orc.Plot/Example/">
+    <Project Path="../../Orc.Plot/src/Orc.Plot.Example/Orc.Plot.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Plot/Tests/">
+    <Project Path="../../Orc.Plot/src/Orc.Plot.Tests/Orc.Plot.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.ProjectManagement/">
+    <Project Path="../../Orc.ProjectManagement/src/Orc.ProjectManagement/Orc.ProjectManagement.csproj" Id="49323bb6-1208-4760-a989-27bb6f43cd49" />
+  </Folder>
+  <Folder Name="/src/Orc.ProjectManagement/Example/">
+    <Project Path="../../Orc.ProjectManagement/src/Orc.ProjectManagement.Example/Orc.ProjectManagement.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.ProjectManagement/Tests/">
+    <Project Path="../../Orc.ProjectManagement/src/Orc.ProjectManagement.Tests/Orc.ProjectManagement.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Scheduling/">
+    <Project Path="../../Orc.Scheduling/src/Orc.Scheduling/Orc.Scheduling.csproj" Id="285de889-2065-4de5-97eb-35ff3fbcd44a" />
+  </Folder>
+  <Folder Name="/src/Orc.Scheduling/Example/" />
+  <Folder Name="/src/Orc.Scheduling/Tests/">
+    <Project Path="../../Orc.Scheduling/src/Orc.Scheduling.Tests/Orc.Scheduling.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Search/">
+    <Project Path="../../Orc.Search/src/Orc.Search.Xaml/Orc.Search.Xaml.csproj" Id="c0f595e1-b7da-4358-96dc-a49c63cac724" />
+    <Project Path="../../Orc.Search/src/Orc.Search/Orc.Search.csproj" Id="50dba6e6-31d3-43c8-9d74-0c711185d2ba" />
+  </Folder>
+  <Folder Name="/src/Orc.Search/Example/">
+    <Project Path="../../Orc.Search/src/Orc.Search.Example/Orc.Search.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Search/Tests/">
+    <Project Path="../../Orc.Search/src/Orc.Search.Tests/Orc.Search.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.SelectionManagement/">
+    <Project Path="../../Orc.SelectionManagement/src/Orc.SelectionManagement/Orc.SelectionManagement.csproj" Id="4886595e-c108-4ddd-a6c0-5850f275333e" />
+  </Folder>
+  <Folder Name="/src/Orc.SelectionManagement/Example/">
+    <Project Path="../../Orc.SelectionManagement/src/Orc.SelectionManagement.Example/Orc.SelectionManagement.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.SelectionManagement/Tests/">
+    <Project Path="../../Orc.SelectionManagement/src/Orc.SelectionManagement.Tests/Orc.SelectionManagement.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Serialization/">
+    <Project Path="../../Orc.Serialization/src/Orc.Serialization.Json/Orc.Serialization.Json.csproj" Id="3c144956-6635-48c9-ab59-de6d96f1bb48" />
+    <Project Path="../../Orc.Serialization/src/Orc.Serialization.Yaml/Orc.Serialization.Yaml.csproj" Id="6607793b-c15e-4fe3-bc84-8e202c4e5183" />
+  </Folder>
+  <Folder Name="/src/Orc.Serialization/Example/" />
+  <Folder Name="/src/Orc.Serialization/Tests/">
+    <Project Path="../../Orc.Serialization/src/Orc.Serialization.Json.Tests/Orc.Serialization.Json.Tests.csproj" />
+    <Project Path="../../Orc.Serialization/src/Orc.Serialization.Yaml.Tests/Orc.Serialization.Yaml.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Skia/">
+    <Project Path="../../Orc.Skia/src/Orc.Skia/Orc.Skia.csproj" Id="9a158429-3dc0-4eae-99ef-82362cd4eae0" />
+  </Folder>
+  <Folder Name="/src/Orc.Skia/Example/">
+    <Project Path="../../Orc.Skia/src/Orc.Skia.Example/Orc.Skia.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Skia/Tests/">
+    <Project Path="../../Orc.Skia/src/Orc.Skia.Tests/Orc.Skia.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Snapshots/">
+    <Project Path="../../Orc.Snapshots/src/Orc.Snapshots.Xaml/Orc.Snapshots.Xaml.csproj" Id="be6d669a-b63d-49eb-b1b0-52cde64e7276" />
+    <Project Path="../../Orc.Snapshots/src/Orc.Snapshots/Orc.Snapshots.csproj" Id="376bef69-c935-450f-82eb-a8bc25875007" />
+  </Folder>
+  <Folder Name="/src/Orc.Snapshots/Example/">
+    <Project Path="../../Orc.Snapshots/src/Orc.Snapshots.Example/Orc.Snapshots.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Snapshots/Tests/">
+    <Project Path="../../Orc.Snapshots/src/Orc.Snapshots.Tests/Orc.Snapshots.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Sort/">
+    <Project Path="../../Orc.Sort/src/Orc.Sort/Orc.Sort.csproj" Id="1e514dd5-9ca9-4b5b-ab3d-65bec97c9e91" />
+  </Folder>
+  <Folder Name="/src/Orc.Sort/Example/" />
+  <Folder Name="/src/Orc.Sort/Tests/">
+    <Project Path="../../Orc.Sort/src/Orc.Sort.Tests/Orc.Sort.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Squirrel/">
+    <Project Path="../../Orc.Squirrel/src/Orc.Squirrel.Xaml/Orc.Squirrel.Xaml.csproj" Id="6234e77a-7893-4a11-ac03-3e46db523e30" />
+    <Project Path="../../Orc.Squirrel/src/Orc.Squirrel/Orc.Squirrel.csproj" Id="c0f9bc1c-e178-4080-8bf8-951f1853fb4f" />
+  </Folder>
+  <Folder Name="/src/Orc.Squirrel/Example/">
+    <Project Path="../../Orc.Squirrel/src/Orc.Squirrel.Example/Orc.Squirrel.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Squirrel/Tests/">
+    <Project Path="../../Orc.Squirrel/src/Orc.Squirrel.Tests/Orc.Squirrel.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.SupportPackage/">
+    <Project Path="../../Orc.SupportPackage/src/Orc.SupportPackage.Xaml/Orc.SupportPackage.Xaml.csproj" Id="db4d196a-3133-4fb0-9ffd-31e62e36a362" />
+    <Project Path="../../Orc.SupportPackage/src/Orc.SupportPackage/Orc.SupportPackage.csproj" Id="5f124337-a439-4d73-bf24-199cdcd60bc7" />
+  </Folder>
+  <Folder Name="/src/Orc.SupportPackage/Example/">
+    <Project Path="../../Orc.SupportPackage/src/Orc.SupportPackage.Example/Orc.SupportPackage.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.SupportPackage/Tests/">
+    <Project Path="../../Orc.SupportPackage/src/Orc.SupportPackage.Tests/Orc.SupportPackage.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.SystemInfo/">
+    <Project Path="../../Orc.SystemInfo/src/Orc.SystemInfo/Orc.SystemInfo.csproj" Id="80a0d499-6ec4-49e5-b7be-1e9f196ba7fa" />
+  </Folder>
+  <Folder Name="/src/Orc.SystemInfo/Example/">
+    <Project Path="../../Orc.SystemInfo/src/Orc.SystemInfo.Example/Orc.SystemInfo.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.SystemInfo/Tests/">
+    <Project Path="../../Orc.SystemInfo/src/Orc.SystemInfo.Tests/Orc.SystemInfo.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Theming/">
+    <Project Path="../../Orc.Theming/src/Orc.Theming/Orc.Theming.csproj" Id="fcd588fc-6acc-4658-893f-0ecb2d8de620" />
+  </Folder>
+  <Folder Name="/src/Orc.Theming/Example/">
+    <Project Path="../../Orc.Theming/src/Orc.Theming.Example/Orc.Theming.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Theming/Tests/">
+    <Project Path="../../Orc.Theming/src/Orc.Theming.Tests/Orc.Theming.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Wizard/">
+    <Project Path="../../Orc.Wizard/src/Orc.Wizard/Orc.Wizard.csproj" Id="b5bf9f67-3ca7-4728-ab3e-08a54bdb33dc" />
+  </Folder>
+  <Folder Name="/src/Orc.Wizard/Example/">
+    <Project Path="../../Orc.Wizard/src/Orc.Wizard.Example/Orc.Wizard.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.Wizard/Tests/">
+    <Project Path="../../Orc.Wizard/src/Orc.Wizard.Tests/Orc.Wizard.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.WorkspaceManagement/">
+    <Project Path="../../Orc.WorkspaceManagement/src/Orc.WorkspaceManagement.Xaml/Orc.WorkspaceManagement.Xaml.csproj" Id="2805d052-5f85-4cc2-bd3d-7ad822d171bb" />
+    <Project Path="../../Orc.WorkspaceManagement/src/Orc.WorkspaceManagement/Orc.WorkspaceManagement.csproj" Id="c51392cb-513f-4155-914b-063a8e0893e1" />
+  </Folder>
+  <Folder Name="/src/Orc.WorkspaceManagement/Example/">
+    <Project Path="../../Orc.WorkspaceManagement/src/Orc.WorkspaceManagement.Example/Orc.WorkspaceManagement.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Orc.WorkspaceManagement/Tests/">
+    <Project Path="../../Orc.WorkspaceManagement/src/Orc.WorkspaceManagement.Tests/Orc.WorkspaceManagement.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Orchestra/">
+    <Project Path="../../Orchestra/src/Orchestra.Core/Orchestra.Core.csproj" Id="c7049e9c-d258-4e3f-8de3-17d8c50145ca" />
+    <Project Path="../../Orchestra/src/Orchestra.Shell.Ribbon.Fluent/Orchestra.Shell.Ribbon.Fluent.csproj" Id="bd65929c-36c0-4935-8d03-9ab82684c56d" />
+    <Project Path="../../Orchestra/src/Orchestra.Shell.Shared/Orchestra.Shell.Shared.shproj" Id="bc10fce0-c843-4592-802d-bb800a514ca0" />
+    <Project Path="../../Orchestra/src/Orchestra.Shell.TaskRunner/Orchestra.Shell.TaskRunner.csproj" Id="d93a4322-36e1-4f2e-851a-ff2c7f6373c7" />
+  </Folder>
+  <Folder Name="/src/Orchestra/Example/">
+    <Project Path="../../Orchestra/src/Orchestra.Examples.Ribbon.Fluent/Orchestra.Examples.Ribbon.Fluent.csproj" />
+    <Project Path="../../Orchestra/src/Orchestra.Examples.Shared/Orchestra.Examples.Shared.shproj" Id="0f4ee33d-8e27-43ba-bcf7-1c61cdca09ec" />
+    <Project Path="../../Orchestra/src/Orchestra.Examples.TaskRunner/Orchestra.Examples.TaskRunner.csproj" />
+  </Folder>
+  <Folder Name="/src/Orchestra/Tests/">
+    <Project Path="../../Orchestra/src/Orchestra.Tests/Orchestra.Tests.csproj" />
+  </Folder>
+
+</Solution>

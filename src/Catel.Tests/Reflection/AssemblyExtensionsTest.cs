@@ -1,118 +1,117 @@
-﻿namespace Catel.Tests.Reflection
+﻿namespace Catel.Tests.Reflection;
+
+using System;
+using System.Reflection;
+using Catel.Reflection;
+
+using NUnit.Framework;
+
+/// <summary>
+/// Summary description for AssemblyInfoTest
+/// </summary>
+[TestFixture]
+public class AssemblyExtensionsTest
 {
-    using System;
-    using System.Reflection;
-    using Catel.Reflection;
+    private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
-    using NUnit.Framework;
+    // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
+    private static readonly string CurrentYear = DateTime.Today.Year.ToString();
+    private static readonly string VersionPrefix = Assembly.Version(2);
 
-    /// <summary>
-    /// Summary description for AssemblyInfoTest
-    /// </summary>
-    [TestFixture]
-    public class AssemblyExtensionsTest
+    [TestCase]
+    public void TitleAutomatic()
     {
-        private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
+        var expected = "Catel.Tests";
 
-        // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
-        private static readonly string CurrentYear = DateTime.Today.Year.ToString();
-        private static readonly string VersionPrefix = Assembly.Version(2);
+        var result = Assembly.Title();
 
-        [TestCase]
-        public void TitleAutomatic()
-        {
-            var expected = "Catel.Tests";
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Title();
+    [TestCase]
+    public void VersionAutomatic()
+    {
+        string expected = VersionPrefix + ".0";
 
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        var result = Assembly.Version();
 
-        [TestCase]
-        public void VersionAutomatic()
-        {
-            string expected = VersionPrefix + ".0";
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Version();
+    [TestCase]
+    public void VersionWithSeparatorAutomatic()
+    {
+        string expected = VersionPrefix.Substring(0, VersionPrefix.IndexOf(".", 2));
 
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        var result = Assembly.Version(1);
 
-        [TestCase]
-        public void VersionWithSeparatorAutomatic()
-        {
-            string expected = VersionPrefix.Substring(0, VersionPrefix.IndexOf(".", 2));
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Version(1);
+    [TestCase]
+    public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
+    {
+        string expected = VersionPrefix + ".0";
 
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        var result = Assembly.Version(8);
 
-        [TestCase]
-        public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
-        {
-            string expected = VersionPrefix + ".0";
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Version(8);
+    //[TestCase]
+    //public void InformationalVersionAutomatic()
+    //{
+    //    var expected = VersionPrefix + ", manually built in Visual Studio";
 
-            Assert.That(result, Is.EqualTo(expected));
-        }
+    //    var result = Assembly.InformationalVersion();
 
-        //[TestCase]
-        //public void InformationalVersionAutomatic()
-        //{
-        //    var expected = VersionPrefix + ", manually built in Visual Studio";
+    //    Assert.AreEqual(expected, result);
+    //}
 
-        //    var result = Assembly.InformationalVersion();
+    [TestCase]
+    public void DescriptionAutomatic()
+    {
+        string expected = "Catel tests library";
 
-        //    Assert.AreEqual(expected, result);
-        //}
+        var result = Assembly.Description();
 
-        [TestCase]
-        public void DescriptionAutomatic()
-        {
-            string expected = "Catel tests library";
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Description();
+    [TestCase]
+    public void ProductAutomatic()
+    {
+        string expected = "Catel.Tests";
 
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        var result = Assembly.Product();
 
-        [TestCase]
-        public void ProductAutomatic()
-        {
-            string expected = "Catel.Tests";
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Product();
+    [TestCase]
+    public void CopyrightAutomatic()
+    {
+        string expected = "Copyright © CatenaLogic 2010 - " + CurrentYear;
 
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        var result = Assembly.Copyright();
 
-        [TestCase]
-        public void CopyrightAutomatic()
-        {
-            string expected = "Copyright © CatenaLogic 2010 - " + CurrentYear;
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Copyright();
+    [TestCase]
+    public void CompanyAutomatic()
+    {
+        string expected = "CatenaLogic";
 
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        var result = Assembly.Company();
 
-        [TestCase]
-        public void CompanyAutomatic()
-        {
-            string expected = "CatenaLogic";
+        Assert.That(result, Is.EqualTo(expected));
+    }
 
-            var result = Assembly.Company();
-
-            Assert.That(result, Is.EqualTo(expected));
-        }
-
-        [TestCase]
-        public void TheGetBuildDateTimeMethod()
-        {
-            // Just check if the call works
-            var dateTime = Assembly.GetBuildDateTime();
-        }
+    [TestCase]
+    public void TheGetBuildDateTimeMethod()
+    {
+        // Just check if the call works
+        var dateTime = Assembly.GetBuildDateTime();
     }
 }

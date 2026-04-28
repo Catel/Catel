@@ -1,32 +1,33 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System;
+using Catel.Data;
+
+/// <summary>
+/// ModelB Data object class which fully supports serialization, property changed notifications,
+/// backwards compatibility and error checking.
+/// </summary>
+public class ModelB : Model
 {
-    using System;
-    using Catel.Data;
+    /// <summary>
+    /// Initializes a new object from scratch.
+    /// </summary>
+    public ModelB(IModelEqualityComparer modelEqualityComparer)
+        : base(modelEqualityComparer)
+    {
+    }
 
     /// <summary>
-    /// ModelB Data object class which fully supports serialization, property changed notifications,
-    /// backwards compatibility and error checking.
+    /// Gets or sets property C.
     /// </summary>
-    [Serializable]
-    public class ModelB : Model
+    public string C
     {
-        /// <summary>
-        /// Initializes a new object from scratch.
-        /// </summary>
-        public ModelB() { }
-
-        /// <summary>
-        /// Gets or sets property C.
-        /// </summary>
-        public string C
-        {
-            get { return GetValue<string>(CProperty); }
-            set { SetValue(CProperty, value); }
-        }
-
-        /// <summary>
-        /// Register the C property so it is known in the class.
-        /// </summary>
-        public static readonly IPropertyData CProperty = RegisterProperty("C", string.Empty);
+        get { return GetValue<string>(CProperty); }
+        set { SetValue(CProperty, value); }
     }
+
+    /// <summary>
+    /// Register the C property so it is known in the class.
+    /// </summary>
+    public static readonly IPropertyData CProperty = RegisterProperty("C", string.Empty);
 }

@@ -1,24 +1,23 @@
-﻿namespace Catel.MVVM
+﻿namespace Catel.MVVM;
+
+/// <summary>
+/// CommandCanceledEventArgs, just like above but allows the event to 
+/// be cancelled.
+/// </summary>
+public class CommandCanceledEventArgs : CommandEventArgs
 {
     /// <summary>
-    /// CommandCanceledEventArgs, just like above but allows the event to 
-    /// be cancelled.
+    /// Initializes a new instance of the <see cref="CommandCanceledEventArgs"/> class.
     /// </summary>
-    public class CommandCanceledEventArgs : CommandEventArgs
+    /// <param name="commandParameter">The command parameter.</param>
+    public CommandCanceledEventArgs(object? commandParameter = null)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandCanceledEventArgs"/> class.
-        /// </summary>
-        /// <param name="commandParameter">The command parameter.</param>
-        public CommandCanceledEventArgs(object? commandParameter = null)
-        {
-            CommandParameter = commandParameter;
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="CommandCanceledEventArgs"/> command should be cancelled.
-        /// </summary>
-        /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
-        public bool Cancel { get; set; }
+        CommandParameter = commandParameter;
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this <see cref="CommandCanceledEventArgs"/> command should be cancelled.
+    /// </summary>
+    /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
+    public bool Cancel { get; set; }
 }

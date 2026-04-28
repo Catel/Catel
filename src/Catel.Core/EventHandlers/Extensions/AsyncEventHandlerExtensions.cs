@@ -1,81 +1,81 @@
-﻿namespace Catel
+﻿namespace Catel;
+
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Logging;
+using Microsoft.Extensions.Logging;
+
+/// <summary>
+/// Extensions for asynchronous event handlers.
+/// </summary>
+public static class AsyncEventHandlerExtensions
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Logging;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(AsyncEventHandlerExtensions));
 
     /// <summary>
-    /// Extensions for asynchronous event handlers.
+    /// Invokes the specified <paramref name="handler" />
     /// </summary>
-    public static class AsyncEventHandlerExtensions
+    /// <param name="handler">The handler.</param>
+    /// <param name="sender">The sender.</param>
+    /// <param name="allowParallelExecution">if set to <c>true</c>, allow parallel invocation of the handlers.</param>
+    /// <returns>Task&lt;System.Boolean&gt;.</returns>
+    public static Task<bool> SafeInvokeAsync(this AsyncEventHandler<EventArgs>? handler, object sender, bool allowParallelExecution = true)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        return SafeInvokeAsync(handler, sender, EventArgs.Empty, allowParallelExecution);
+    }
 
-        /// <summary>
-        /// Invokes the specified <paramref name="handler" />
-        /// </summary>
-        /// <param name="handler">The handler.</param>
-        /// <param name="sender">The sender.</param>
-        /// <param name="allowParallelExecution">if set to <c>true</c>, allow parallel invocation of the handlers.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public static Task<bool> SafeInvokeAsync(this AsyncEventHandler<EventArgs>? handler, object sender, bool allowParallelExecution = true)
+    /// <summary>
+    /// Invokes the specified <paramref name="handler" />
+    /// </summary>
+    /// <typeparam name="TEventArgs">The type of the <see cref="EventArgs" /> class.</typeparam>
+    /// <param name="handler">The handler.</param>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The event args.</param>
+    /// <param name="allowParallelExecution">if set to <c>true</c>, allow parallel invocation of the handlers.</param>
+    /// <returns>Task&lt;System.Boolean&gt;.</returns>
+    public static async Task<bool> SafeInvokeAsync<TEventArgs>(this AsyncEventHandler<TEventArgs>? handler, object sender, TEventArgs e, bool allowParallelExecution = true)
+        where TEventArgs : EventArgs
+    {
+        if (handler is null)
         {
-            return SafeInvokeAsync(handler, sender, EventArgs.Empty, allowParallelExecution);
+            return false;
         }
 
-        /// <summary>
-        /// Invokes the specified <paramref name="handler" />
-        /// </summary>
-        /// <typeparam name="TEventArgs">The type of the <see cref="EventArgs" /> class.</typeparam>
-        /// <param name="handler">The handler.</param>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The event args.</param>
-        /// <param name="allowParallelExecution">if set to <c>true</c>, allow parallel invocation of the handlers.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public static async Task<bool> SafeInvokeAsync<TEventArgs>(this AsyncEventHandler<TEventArgs>? handler, object sender, TEventArgs e, bool allowParallelExecution = true)
-            where TEventArgs : EventArgs
+        var eventListeners = handler.GetInvocationList().Cast<AsyncEventHandler<TEventArgs>>().ToArray();
+
+        if (allowParallelExecution)
         {
-            if (handler is null)
+            try
             {
-                return false;
+                var tasks = (from eventListener in eventListeners
+                             select eventListener(sender, e)).ToArray();
+
+                await Task.WhenAll(tasks);
             }
-
-            var eventListeners = handler.GetInvocationList().Cast<AsyncEventHandler<TEventArgs>>().ToArray();
-
-            if (allowParallelExecution)
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Failed to invoke event handler in parallel");
+                throw;
+            }
+        }
+        else
+        {
+            for (var i = 0; i < eventListeners.Length; i++)
             {
                 try
                 {
-                    var tasks = (from eventListener in eventListeners
-                                 select eventListener(sender, e)).ToArray();
-
-                    await Task.WhenAll(tasks);
+                    var eventListener = eventListeners[i];
+                    await eventListener(sender, e);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to invoke event handler in parallel");
+                    Logger.LogError(ex, $"Failed to invoke event handler at index '{i}'");
                     throw;
                 }
             }
-            else
-            {
-                for (var i = 0; i < eventListeners.Length; i++)
-                {
-                    try
-                    {
-                        var eventListener = eventListeners[i];
-                        await eventListener(sender, e);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, $"Failed to invoke event handler at index '{i.ToString()}'");
-                        throw;
-                    }
-                }
-            }
-
-            return true;
         }
+
+        return true;
     }
 }

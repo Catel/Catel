@@ -1,49 +1,49 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System.Windows.Input;
+using Logging;
+using Microsoft.Extensions.Logging;
+
+public partial class BusyIndicatorService
 {
-    using System.Windows.Input;
-    using Logging;
+    private Cursor? _previousCursor;
 
-    public partial class BusyIndicatorService
+    partial void SetStatus(string status)
     {
-        private Cursor? _previousCursor;
+        // not required
+    }
 
-        partial void SetStatus(string status)
-        {
-            // not required
-        }
+    partial void InitializeBusyIndicator()
+    {
+        // not required
+    }
 
-        partial void InitializeBusyIndicator()
+    partial void ShowBusyIndicator(bool indeterminate)
+    {
+        _dispatcherService.BeginInvokeIfRequired(() =>
         {
-            // not required
-        }
+            var overrideCursor = Mouse.OverrideCursor;
 
-        partial void ShowBusyIndicator(bool indeterminate)
-        {
-            _dispatcherService.BeginInvokeIfRequired(() =>
+            _logger.LogDebug($"Storing cursor '{overrideCursor}' overriding it to 'Wait'");
+
+            if (_previousCursor is null)
             {
-                var overrideCursor = Mouse.OverrideCursor;
+                _previousCursor = overrideCursor;
+            }
 
-                Log.Debug($"Storing cursor '{overrideCursor}' overriding it to 'Wait'");
+            Mouse.OverrideCursor = Cursors.Wait;
+        });
+    }
 
-                if (_previousCursor is null)
-                {
-                    _previousCursor = overrideCursor;
-                }
-
-                Mouse.OverrideCursor = Cursors.Wait;
-            });
-        }
-
-        partial void HideBusyIndicator()
+    partial void HideBusyIndicator()
+    {
+        _dispatcherService.BeginInvokeIfRequired(() =>
         {
-            _dispatcherService.BeginInvokeIfRequired(() =>
-            {
-                Log.Debug($"Restoring cursor '{_previousCursor}'");
+            _logger.LogDebug($"Restoring cursor '{_previousCursor}'");
 
-                Mouse.OverrideCursor = _previousCursor;
+            Mouse.OverrideCursor = _previousCursor;
 
-                _previousCursor = null;
-            });
-        }
+            _previousCursor = null;
+        });
     }
 }

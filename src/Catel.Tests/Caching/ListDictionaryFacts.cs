@@ -1,119 +1,118 @@
-﻿namespace Catel.Tests.Caching
+﻿namespace Catel.Tests.Caching;
+
+using System;
+using System.Linq;
+using Catel.Collections;
+using NUnit.Framework;
+
+public class ListDictionaryFacts
 {
-    using System;
-    using System.Linq;
-    using Catel.Collections;
-    using NUnit.Framework;
-
-    public class ListDictionaryFacts
+    [TestFixture]
+    public class CustomComparer
     {
-        [TestFixture]
-        public class CustomComparer
+        [TestCase("key", "key", true)]
+        [TestCase("key", "KEY", true)]
+        [TestCase("key", "key ", false)]
+        [TestCase("key", "KEY ", false)]
+        public void CheckComparisonsOrdinalIgnoreCase(string key, string retrievalKey, bool expected)
         {
-            [TestCase("key", "key", true)]
-            [TestCase("key", "KEY", true)]
-            [TestCase("key", "key ", false)]
-            [TestCase("key", "KEY ", false)]
-            public void CheckComparisonsOrdinalIgnoreCase(string key, string retrievalKey, bool expected)
+            var list = new ListDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            list.Add(key, "value");
+
+            Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
+        }
+
+        [TestCase("key", "key", true)]
+        [TestCase("key", "KEY", false)]
+        [TestCase("key", "key ", false)]
+        [TestCase("key", "KEY ", false)]
+        public void CheckComparisonsCurrentCulture(string key, string retrievalKey, bool expected)
+        {
+            var list = new ListDictionary<string, string>(StringComparer.CurrentCulture);
+
+            list.Add(key, "value");
+
+            Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
+        }
+    }
+
+    [TestFixture]
+    public class KeepsOrder
+    {
+        #region Methods
+        [TestCase(4)]
+        public void AddingItemsDoesntChangeItemsOrder(int itemsCount)
+        {
+            var listDictionary = new ListDictionary<string, int>();
+
+            for (var i = 0; i < itemsCount; i++)
             {
-                var list = new ListDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-                list.Add(key, "value");
-
-                Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
+                listDictionary[i.ToString()] = i;
             }
 
-            [TestCase("key", "key", true)]
-            [TestCase("key", "KEY", false)]
-            [TestCase("key", "key ", false)]
-            [TestCase("key", "KEY ", false)]
-            public void CheckComparisonsCurrentCulture(string key, string retrievalKey, bool expected)
+            var keyValuePairs = listDictionary.ToList();
+            for (var i = 0; i < itemsCount; i++)
             {
-                var list = new ListDictionary<string, string>(StringComparer.CurrentCulture);
-
-                list.Add(key, "value");
-
-                Assert.That(list.ContainsKey(retrievalKey), Is.EqualTo(expected));
+                Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
             }
         }
 
-        [TestFixture]
-        public class KeepsOrder
+        [TestCase(4, 3)]
+        [TestCase(9, 5)]
+        public void AddRemoveAddItemsDoesntChangeItemsOrder(int itemsToAddCount, int itemsToRemoveCount)
         {
-            #region Methods
-            [TestCase(4)]
-            public void AddingItemsDoesntChangeItemsOrder(int itemsCount)
+            var dict = new ListDictionary<string, int>();
+
+            for (var i = 0; i < itemsToAddCount; i++)
             {
-                var listDictionary = new ListDictionary<string, int>();
-
-                for (var i = 0; i < itemsCount; i++)
-                {
-                    listDictionary[i.ToString()] = i;
-                }
-
-                var keyValuePairs = listDictionary.ToList();
-                for (var i = 0; i < itemsCount; i++)
-                {
-                    Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
-                }
+                var key = i.ToString();
+                dict[key] = 0;
             }
 
-            [TestCase(4, 3)]
-            [TestCase(9, 5)]
-            public void AddRemoveAddItemsDoesntChangeItemsOrder(int itemsToAddCount, int itemsToRemoveCount)
+            for (var i = 0; i < itemsToRemoveCount; i++)
             {
-                var dict = new ListDictionary<string, int>();
-
-                for (var i = 0; i < itemsToAddCount; i++)
-                {
-                    var key = i.ToString();
-                    dict[key] = 0;
-                }
-
-                for (var i = 0; i < itemsToRemoveCount; i++)
-                {
-                    var key = (itemsToAddCount - itemsToRemoveCount + i).ToString();
-                    dict.Remove(key);
-                }
-
-                for (var i = itemsToAddCount - itemsToRemoveCount; i < itemsToAddCount; i++)
-                {
-                    var key = i.ToString();
-                    dict[key] = 0;
-                }
-
-                var keyValuePairs = dict.ToList();
-                for (var i = 0; i < itemsToAddCount; i++)
-                {
-                    Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
-                }
+                var key = (itemsToAddCount - itemsToRemoveCount + i).ToString();
+                dict.Remove(key);
             }
 
-            #endregion
+            for (var i = itemsToAddCount - itemsToRemoveCount; i < itemsToAddCount; i++)
+            {
+                var key = i.ToString();
+                dict[key] = 0;
+            }
+
+            var keyValuePairs = dict.ToList();
+            for (var i = 0; i < itemsToAddCount; i++)
+            {
+                Assert.That(keyValuePairs[i].Key, Is.EqualTo(i.ToString()));
+            }
         }
 
-        [TestFixture]
-        public class TheRemoveMethod
+        #endregion
+    }
+
+    [TestFixture]
+    public class TheRemoveMethod
+    {
+        [TestCase(4)]
+        [TestCase(6)]
+        [TestCase(2)]
+        public void RemovedAllItems(int itemsCount)
         {
-            [TestCase(4)]
-            [TestCase(6)]
-            [TestCase(2)]
-            public void RemovedAllItems(int itemsCount)
+            var listDictionary = new ListDictionary<string, int>();
+
+            for (int i = 0; i < itemsCount; i++)
             {
-                var listDictionary = new ListDictionary<string, int>();
-
-                for (int i = 0; i < itemsCount; i++)
-                {
-                    listDictionary[i.ToString()] = i;
-                }
-
-                for (int i = 0; i < itemsCount; i++)
-                {
-                    listDictionary.Remove(i.ToString());
-                }
-
-                Assert.That(listDictionary.Count, Is.EqualTo(0));
+                listDictionary[i.ToString()] = i;
             }
+
+            for (int i = 0; i < itemsCount; i++)
+            {
+                listDictionary.Remove(i.ToString());
+            }
+
+            Assert.That(listDictionary.Count, Is.EqualTo(0));
         }
     }
 }

@@ -1,43 +1,42 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+using System;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+/// <summary>
+/// Service to open files.
+/// </summary>
+public partial class SelectDirectoryService
 {
-    using System;
-    using System.Threading.Tasks;
-    using System.Windows.Forms;
-
-    /// <summary>
-    /// Service to open files.
-    /// </summary>
-    public partial class SelectDirectoryService
+    /// <inheritdoc />
+    public virtual async Task<DetermineDirectoryResult> DetermineDirectoryAsync(DetermineDirectoryContext context)
     {
-        /// <inheritdoc />
-        public virtual async Task<DetermineDirectoryResult> DetermineDirectoryAsync(DetermineDirectoryContext context)
+        ArgumentNullException.ThrowIfNull(context);
+
+        using (var browserDialog = new FolderBrowserDialog())
         {
-            ArgumentNullException.ThrowIfNull(context);
+            browserDialog.Description = context.Title ?? string.Empty;
+            browserDialog.ShowNewFolderButton = context.ShowNewFolderButton;
 
-            using (var browserDialog = new FolderBrowserDialog())
+            var initialDirectory = context.InitialDirectory;
+
+            if (!string.IsNullOrEmpty(initialDirectory))
             {
-                browserDialog.Description = context.Title ?? string.Empty;
-                browserDialog.ShowNewFolderButton = context.ShowNewFolderButton;
-
-                var initialDirectory = context.InitialDirectory;
-
-                if (!string.IsNullOrEmpty(initialDirectory))
-                {
-                    browserDialog.SelectedPath = IO.Path.AppendTrailingSlash(initialDirectory);
-                }
-                else
-                {
-                    browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
-                }
-
-                var result = new DetermineDirectoryResult
-                {
-                    Result = browserDialog.ShowDialog() == DialogResult.OK,
-                    DirectoryName = browserDialog.SelectedPath
-                };
-
-                return result;
+                browserDialog.SelectedPath = IO.Path.AppendTrailingSlash(initialDirectory);
             }
+            else
+            {
+                browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            }
+
+            var result = new DetermineDirectoryResult
+            {
+                Result = browserDialog.ShowDialog() == DialogResult.OK,
+                DirectoryName = browserDialog.SelectedPath
+            };
+
+            return result;
         }
     }
 }

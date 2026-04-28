@@ -1,30 +1,29 @@
-﻿namespace Catel.MVVM.Auditing
+﻿namespace Catel.MVVM.Auditing;
+
+using System;
+using Catel.Services;
+
+public class SubscribeKeyboardEventsOnViewModelCreationAuditor : AuditorBase
 {
-    using System;
-    using Catel.Services;
+    private readonly ICommandManager _commandManager;
+    private readonly IDispatcherService _dispatcherService;
 
-    public class SubscribeKeyboardEventsOnViewModelCreationAuditor : AuditorBase
+    public SubscribeKeyboardEventsOnViewModelCreationAuditor(ICommandManager commandManager, IDispatcherService dispatcherService)
     {
-        private readonly ICommandManager _commandManager;
-        private readonly IDispatcherService _dispatcherService;
+        ArgumentNullException.ThrowIfNull(commandManager);
+        ArgumentNullException.ThrowIfNull(dispatcherService);
 
-        public SubscribeKeyboardEventsOnViewModelCreationAuditor(ICommandManager commandManager, IDispatcherService dispatcherService)
+        _commandManager = commandManager;
+        _dispatcherService = dispatcherService;
+    }
+
+    public override void OnViewModelCreated(IViewModel viewModel)
+    {
+        base.OnViewModelCreated(viewModel);
+
+        _dispatcherService.BeginInvokeIfRequired(() =>
         {
-            ArgumentNullException.ThrowIfNull(commandManager);
-            ArgumentNullException.ThrowIfNull(dispatcherService);
-
-            _commandManager = commandManager;
-            _dispatcherService = dispatcherService;
-        }
-
-        public override void OnViewModelCreated(IViewModel viewModel)
-        {
-            base.OnViewModelCreated(viewModel);
-
-            _dispatcherService.BeginInvokeIfRequired(() =>
-            {
-                _commandManager.SubscribeToKeyboardEvents();
-            });
-        }
+            _commandManager.SubscribeToKeyboardEvents();
+        });
     }
 }

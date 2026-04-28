@@ -7,60 +7,59 @@
 // </auto-generated> 
 //------------------------------------------------------------------------------
 
-namespace Catel.Reflection
+namespace Catel.Reflection;
+
+using System;
+using Catel.Data;
+
+public partial class FastMemberInvoker<TEntity>
 {
-    using System;
-    using Catel.Data;
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item) => 
+        TryGetFieldValue<Object>(entity, fieldName, out item);
 
-    public partial class FastMemberInvoker<TEntity>
-    {
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item) => 
-            TryGetFieldValue<Object>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item) => 
+        TryGetFieldValue<Boolean>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item) => 
-            TryGetFieldValue<Boolean>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item) => 
+        TryGetFieldValue<Char>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item) => 
-            TryGetFieldValue<Char>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item) => 
+        TryGetFieldValue<SByte>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item) => 
-            TryGetFieldValue<SByte>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item) => 
+        TryGetFieldValue<Byte>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item) => 
-            TryGetFieldValue<Byte>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item) => 
+        TryGetFieldValue<Int16>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item) => 
-            TryGetFieldValue<Int16>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item) => 
+        TryGetFieldValue<UInt16>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item) => 
-            TryGetFieldValue<UInt16>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item) => 
+        TryGetFieldValue<Int32>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item) => 
-            TryGetFieldValue<Int32>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item) => 
+        TryGetFieldValue<UInt32>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item) => 
-            TryGetFieldValue<UInt32>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item) => 
+        TryGetFieldValue<Int64>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item) => 
-            TryGetFieldValue<Int64>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item) => 
+        TryGetFieldValue<UInt64>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item) => 
-            TryGetFieldValue<UInt64>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item) => 
+        TryGetFieldValue<Single>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item) => 
-            TryGetFieldValue<Single>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item) => 
+        TryGetFieldValue<Double>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item) => 
-            TryGetFieldValue<Double>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item) => 
+        TryGetFieldValue<Decimal>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item) => 
-            TryGetFieldValue<Decimal>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item) => 
+        TryGetFieldValue<DateTime>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item) => 
-            TryGetFieldValue<DateTime>(entity, fieldName, out item);
+    public bool TryGetFieldValue(TEntity entity, string fieldName, out String item) => 
+        TryGetFieldValue<String>(entity, fieldName, out item);
 
-        public bool TryGetFieldValue(TEntity entity, string fieldName, out String item) => 
-            TryGetFieldValue<String>(entity, fieldName, out item);
-
-    }
 }

@@ -1,38 +1,37 @@
-﻿namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity;
+
+using System.Windows;
+
+/// <summary>
+/// Behavior to focus the first control in a window.
+/// </summary>
+public partial class FocusFirstControl : BehaviorBase<FrameworkElement>
 {
-    using System.Windows;
+    /// <summary>
+    /// Gets or sets a value indicating whether the parent should be focused first. 
+    /// <para />
+    /// The default value is <c>true</c>.
+    /// </summary>
+    /// <value><c>true</c> if the parent should be focused first; otherwise, <c>false</c>.</value>
+    public bool FocusParentsFirst
+    {
+        get { return (bool) GetValue(FocusParentsFirstProperty); }
+        set { SetValue(FocusParentsFirstProperty, value); }
+    }
 
     /// <summary>
-    /// Behavior to focus the first control in a window.
+    /// Dependency property for the <see cref="FocusParentsFirst"/> property.
     /// </summary>
-    public class FocusFirstControl : BehaviorBase<FrameworkElement>
+    public static readonly DependencyProperty FocusParentsFirstProperty = DependencyProperty.Register(nameof(FocusParentsFirst),
+        typeof(bool), typeof(FocusFirstControl), new PropertyMetadata(true));
+
+    /// <summary>
+    /// Called when the associated object is loaded.
+    /// </summary>
+    protected override void OnAssociatedObjectLoaded()
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether the parent should be focused first. 
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value><c>true</c> if the parent should be focused first; otherwise, <c>false</c>.</value>
-        public bool FocusParentsFirst
-        {
-            get { return (bool) GetValue(FocusParentsFirstProperty); }
-            set { SetValue(FocusParentsFirstProperty, value); }
-        }
+        base.OnAssociatedObjectLoaded();
 
-        /// <summary>
-        /// Dependency property for the <see cref="FocusParentsFirst"/> property.
-        /// </summary>
-        public static readonly DependencyProperty FocusParentsFirstProperty = DependencyProperty.Register(nameof(FocusParentsFirst),
-            typeof(bool), typeof(FocusFirstControl), new PropertyMetadata(true));
-
-        /// <summary>
-        /// Called when the associated object is loaded.
-        /// </summary>
-        protected override void OnAssociatedObjectLoaded()
-        {
-            base.OnAssociatedObjectLoaded();
-
-            AssociatedObject.FocusFirstControl(FocusParentsFirst);
-        }
+        AssociatedObject.FocusFirstControl(FocusParentsFirst);
     }
 }

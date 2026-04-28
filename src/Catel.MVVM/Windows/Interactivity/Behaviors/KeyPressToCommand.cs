@@ -1,76 +1,75 @@
-﻿namespace Catel.Windows.Interactivity
+﻿namespace Catel.Windows.Interactivity;
+
+using System.Windows;
+using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+
+/// <summary>
+/// Behavior that converts a key press on a specific UI element to a command.
+/// </summary>
+public partial class KeyPressToCommand : CommandBehaviorBase<FrameworkElement>
 {
-    using System.Windows;
-    using System.Windows.Input;
-    using Microsoft.Xaml.Behaviors;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    /// <summary>
+    /// Gets or sets the key to which the behavior should respond.
+    /// </summary>
+    /// <value>The key.</value>
+    public Key Key
+    {
+        get { return (Key)GetValue(KeyProperty); }
+        set { SetValue(KeyProperty, value); }
+    }
 
     /// <summary>
-    /// Behavior that converts a key press on a specific UI element to a command.
+    /// Using a DependencyProperty as the backing store for Key.  This enables animation, styling, binding, etc...
     /// </summary>
-    public class KeyPressToCommand : CommandBehaviorBase<FrameworkElement>
+    public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(nameof(Key), typeof(Key), 
+        typeof(KeyPressToCommand), new PropertyMetadata(Key.None));
+
+    /// <summary>
+    /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
+    /// </summary>
+    protected override void OnAssociatedObjectLoaded()
     {
-        /// <summary>
-        /// Gets or sets the key to which the behavior should respond.
-        /// </summary>
-        /// <value>The key.</value>
-        public Key Key
+        base.OnAssociatedObjectLoaded();
+
+        AssociatedObject.KeyDown += OnKeyDown;
+    }
+
+    /// <summary>
+    /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is unloaded.
+    /// </summary>
+    protected override void OnAssociatedObjectUnloaded()
+    {
+        AssociatedObject.KeyDown -= OnKeyDown;
+
+        base.OnAssociatedObjectUnloaded();
+    }
+
+    /// <summary>
+    /// Called when the specified key is pressed.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The key event args instance containing the event data.</param>
+    private void OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (!IsEnabled)
         {
-            get { return (Key)GetValue(KeyProperty); }
-            set { SetValue(KeyProperty, value); }
+            return;
         }
 
-        /// <summary>
-        /// Using a DependencyProperty as the backing store for Key.  This enables animation, styling, binding, etc...
-        /// </summary>
-        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(nameof(Key), typeof(Key), 
-            typeof(KeyPressToCommand), new PropertyMetadata(Key.None));
-
-        /// <summary>
-        /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
-        /// </summary>
-        protected override void OnAssociatedObjectLoaded()
+        if (e.Handled)
         {
-            base.OnAssociatedObjectLoaded();
-
-            AssociatedObject.KeyDown += OnKeyDown;
+            return;
         }
 
-        /// <summary>
-        /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is unloaded.
-        /// </summary>
-        protected override void OnAssociatedObjectUnloaded()
+        if (e.Key == Key)
         {
-            AssociatedObject.KeyDown -= OnKeyDown;
-
-            base.OnAssociatedObjectUnloaded();
-        }
-
-        /// <summary>
-        /// Called when the specified key is pressed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The key event args instance containing the event data.</param>
-        private void OnKeyDown(object? sender, KeyEventArgs e)
-        {
-            if (!IsEnabled)
+            if (CanExecuteCommand())
             {
-                return;
-            }
+                ExecuteCommand();
 
-            if (e.Handled)
-            {
-                return;
-            }
-
-            if (e.Key == Key)
-            {
-                if (CanExecuteCommand())
-                {
-                    ExecuteCommand();
-
-                    e.Handled = true;
-                }
+                e.Handled = true;
             }
         }
     }

@@ -1,70 +1,82 @@
-﻿namespace Catel.Tests.MVVM.Commands
+﻿namespace Catel.Tests.MVVM.Commands;
+
+using System;
+using Catel.Data;
+using Catel.MVVM;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+
+public class CommandFacts
 {
-    using System;
-    using Catel.Data;
-    using Catel.MVVM;
-
-    using NUnit.Framework;
-
-    public class CommandFacts
+    [TestFixture]
+    public class TheExecuteCommand
     {
-        [TestFixture]
-        public class TheExecuteCommand
+        [Test]
+        public void Execute_Throws_Exception()
         {
-            [Test]
-            public void ExecuteThrowsException()
-            {
-                var command = new Command(() => { throw new Exception(); }, () => true);
-                Assert.Throws<Exception>(() => command.Execute());
-            }
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            [Test]
-            public void CanExecuteThrowsException()
-            {
-                var command = new Command(() => { }, () => { throw new Exception(); });
-                Assert.Throws<Exception>(() => command.Execute());
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var command = new Command(serviceProvider, () => { throw new Exception(); }, () => true);
+            Assert.Throws<Exception>(() => command.Execute());
         }
 
-        /// <summary>
-        /// See https://github.com/Catel/Catel/issues/1192
-        /// </summary>
-        [TestFixture]
-        public class CTL1192_WeakRef_CanExecute
+        [Test]
+        public void CanExecute_Throws_Exception()
         {
-            public class TestDisplayClassViewModel : ViewModelBase
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var command = new Command(serviceProvider, () => { }, () => { throw new Exception(); });
+            Assert.Throws<Exception>(() => command.Execute());
+        }
+    }
+
+    /// <summary>
+    /// See https://github.com/Catel/Catel/issues/1192
+    /// </summary>
+    [TestFixture]
+    public class CTL1192_WeakRef_CanExecute
+    {
+        public class TestDisplayClassViewModel : ViewModelBase
+        {
+            public TestDisplayClassViewModel(IServiceProvider serviceProvider)
+                : base(serviceProvider)
             {
-                public TestDisplayClassViewModel()
+                int localVariable = 1;
+                TestCommand = new Command(serviceProvider, TestFunction, () =>
                 {
-                    int localVariable = 1;
-                    TestCommand = new Command(TestFunction, () =>
-                    {
-                        Console.WriteLine("CanExecute called " + BoxingCache.GetBoxedValue(localVariable++));
-                        return false;
-                    });
-                }
-
-                public void TestFunction()
-                {
-                }
-
-                public Command TestCommand { get; set; }
+                    Console.WriteLine("CanExecute called " + BoxingCache.GetBoxedValue(localVariable++));
+                    return false;
+                });
             }
 
-            [Test]
-            public void CanExecuteWeakRefLostTest()
+            public void TestFunction()
             {
-                var vm = new TestDisplayClassViewModel();
-
-                var canExecuteBefore = vm.TestCommand.CanExecute();
-                Console.WriteLine("CanExecute before: " + canExecuteBefore);
-
-                GC.Collect();
-
-                var canExecuteAfter = vm.TestCommand.CanExecute();
-                Console.WriteLine("CanExecute after: " + canExecuteAfter);
-                Assert.That(canExecuteAfter, Is.False);
             }
+
+            public Command TestCommand { get; set; }
+        }
+
+        [Test]
+        public void CanExecute_Weak_Ref_Lost_Test()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var vm = new TestDisplayClassViewModel(serviceProvider);
+
+            var canExecuteBefore = vm.TestCommand.CanExecute();
+            Console.WriteLine("CanExecute before: " + canExecuteBefore);
+
+            GC.Collect();
+
+            var canExecuteAfter = vm.TestCommand.CanExecute();
+            Console.WriteLine("CanExecute after: " + canExecuteAfter);
+            Assert.That(canExecuteAfter, Is.False);
         }
     }
 }

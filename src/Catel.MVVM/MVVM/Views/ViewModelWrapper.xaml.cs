@@ -1,23 +1,22 @@
-﻿namespace Catel.MVVM.Views
+﻿namespace Catel.MVVM.Views;
+
+using System.Windows.Controls;
+
+public partial class ViewModelWrapper
 {
-    using System.Windows.Controls;
+    private Grid? _grid;
 
-    public partial class ViewModelWrapper
+    partial void CreateWrapper(object viewModelWrapper)
     {
-        private Grid? _grid;
+        _grid = (Grid)viewModelWrapper;
+    }
 
-        partial void CreateWrapper(object viewModelWrapper)
+    partial void SetViewModel(IViewModel viewModel)
+    {
+        var grid = _grid;
+        if (grid is not null)
         {
-            _grid = (Grid)viewModelWrapper;
-        }
-
-        partial void SetViewModel(IViewModel viewModel)
-        {
-            var grid = _grid;
-            if (grid is not null)
-            {
-                grid.DataContext = viewModel;
-            }
+            grid.DataContext = viewModel;
         }
     }
 }

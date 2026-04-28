@@ -1,29 +1,28 @@
-﻿namespace Catel.Tests.IO
+﻿namespace Catel.Tests.IO;
+
+using Catel.IO;
+using System.IO;
+using NUnit.Framework;
+
+public class StreamExtensionsFacts
 {
-    using Catel.IO;
-    using System.IO;
-    using NUnit.Framework;
-
-    public class StreamExtensionsFacts
+    [TestFixture]
+    public class TheGetUtf8StringMethod
     {
-        [TestFixture]
-        public class TheGetUtf8StringMethod
+        [TestCase("simplestring")]
+        [TestCase("string with spaces")]
+        public void ReturnsRightString(string input)
         {
-            [TestCase("simplestring")]
-            [TestCase("string with spaces")]
-            public void ReturnsRightString(string input)
+            using (var memoryStream = new MemoryStream())
             {
-                using (var memoryStream = new MemoryStream())
+                using (var streamWriter = new StreamWriter(memoryStream))
                 {
-                    using (var streamWriter = new StreamWriter(memoryStream))
-                    {
-                        streamWriter.Write(input);
-                        streamWriter.Flush();
+                    streamWriter.Write(input);
+                    streamWriter.Flush();
 
-                        var output = memoryStream.GetUtf8String();
+                    var output = memoryStream.GetUtf8String();
 
-                        Assert.That(output, Is.EqualTo(input));
-                    }
+                    Assert.That(output, Is.EqualTo(input));
                 }
             }
         }

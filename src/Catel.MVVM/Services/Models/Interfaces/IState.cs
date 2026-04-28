@@ -1,9 +1,8 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+/// <summary>
+/// State definition.
+/// </summary>
+public interface IState
 {
-    /// <summary>
-    /// State definition.
-    /// </summary>
-    public interface IState
-    {
-    }
 }

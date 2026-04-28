@@ -1,75 +1,71 @@
-﻿namespace Catel.Tests.MVVM.Auditing
+﻿namespace Catel.Tests.MVVM.Auditing;
+
+using System;
+using Catel.Data;
+using Catel.MVVM;
+
+/// <summary>
+/// Test view model.
+/// </summary>
+public class TestViewModel : FeaturedViewModelBase
 {
-    using Catel.Data;
-    using Catel.MVVM;
+    #region Commands
+
+    #region Properties
+    /// <summary>
+    /// Gets the TestCommand command.
+    /// </summary>
+    public Command<string> TestCommand { get; private set; }
+    #endregion
+
+    #region Methods
+    /// <summary>
+    /// Method to invoke when the TestCommand command is executed.
+    /// </summary>
+    /// <param name="parameter">The parameter of the command.</param>
+    private void OnTestCommandExecute(string parameter)
+    {
+        // Empty by purpose   
+    }
+    #endregion
+
+    #endregion
 
     /// <summary>
-    /// Test view model.
+    /// Initializes a new instance of the <see cref="TestViewModel"/> class.
     /// </summary>
-    public class TestViewModel : ViewModelBase
+    public TestViewModel(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        #region Constants
-        /// <summary>
-        /// Register the TestProperty property so it is known in the class.
-        /// </summary>
-        public static readonly IPropertyData TestPropertyProperty = RegisterProperty("TestProperty", "defaultvalue");
-        #endregion
-
-        #region Commands
-
-        #region Properties
-        /// <summary>
-        /// Gets the TestCommand command.
-        /// </summary>
-        public Command<string> TestCommand { get; private set; }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Method to invoke when the TestCommand command is executed.
-        /// </summary>
-        /// <param name="parameter">The parameter of the command.</param>
-        private void OnTestCommandExecute(string parameter)
-        {
-            // Empty by purpose   
-        }
-        #endregion
-
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestViewModel"/> class.
-        /// </summary>
-        public TestViewModel()
-        {
-            TestCommand = new Command<string>(OnTestCommandExecute);
-            TestCommand.AutomaticallyDispatchEvents = false;
+        TestCommand = new Command<string>(serviceProvider, OnTestCommandExecute);
+        TestCommand.AutomaticallyDispatchEvents = false;
 
 #pragma warning disable 4014
-            InitializeViewModelAsync();
+        InitializeViewModelAsync();
 #pragma warning restore 4014
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets the title of the view model.
-        /// </summary>
-        /// <value>The title.</value>
-        public override string Title
-        {
-            get { return "View model title"; }
-        }
-
-        /// <summary>
-        /// Gets or sets the test property.
-        /// </summary>
-        public string TestProperty
-        {
-            get { return GetValue<string>(TestPropertyProperty); }
-            set { SetValue(TestPropertyProperty, value); }
-        }
-        #endregion
     }
+
+    /// <summary>
+    /// Gets the title of the view model.
+    /// </summary>
+    /// <value>The title.</value>
+    public override string Title
+    {
+        get { return "View model title"; }
+    }
+
+    /// <summary>
+    /// Gets or sets the test property.
+    /// </summary>
+    public string TestProperty
+    {
+        get { return GetValue<string>(TestPropertyProperty); }
+        set { SetValue(TestPropertyProperty, value); }
+    }
+
+    /// <summary>
+    /// Register the TestProperty property so it is known in the class.
+    /// </summary>
+    public static readonly IPropertyData TestPropertyProperty = RegisterProperty("TestProperty", "defaultvalue");
+
 }

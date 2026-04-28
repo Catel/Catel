@@ -1,10 +1,9 @@
-﻿namespace Catel.Tests
+﻿namespace Catel.Tests;
+
+public static class ConsoleHelper
 {
-    public static class ConsoleHelper
+    public static void Write(string format, params object[] args)
     {
-        public static void Write(string format, params object[] args)
-        {
-            System.Console.WriteLine(format, args);
-        }
+        System.Console.WriteLine(format, args);
     }
 }

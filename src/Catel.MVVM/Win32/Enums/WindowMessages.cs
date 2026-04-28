@@ -1,7 +1,6 @@
-﻿namespace Catel.Win32
+﻿namespace Catel.Win32;
+
+internal enum WindowMessages
 {
-    internal enum WindowMessages
-    {
-        SETICON = 0x0080
-    }
+    SETICON = 0x0080
 }

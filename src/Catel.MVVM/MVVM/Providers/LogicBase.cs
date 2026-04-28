@@ -1,1297 +1,1265 @@
-﻿namespace Catel.MVVM.Providers
+﻿namespace Catel.MVVM.Providers;
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using Catel.Services;
+using Data;
+using Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using MVVM;
+using Reflection;
+using Views;
+
+/// <summary>
+/// Available unload behaviors.
+/// </summary>
+public enum UnloadBehavior
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Threading.Tasks;
-    using Data;
-    using IoC;
-    using Logging;
-    using MVVM;
-    using Views;
-    using Reflection;
-    using Catel.Services;
+    /// <summary>
+    /// Closes the view model.
+    /// </summary>
+    CloseViewModel,
 
     /// <summary>
-    /// Available unload behaviors.
+    /// Saves and closes the view model.
     /// </summary>
-    public enum UnloadBehavior
-    {
-        /// <summary>
-        /// Closes the view model.
-        /// </summary>
-        CloseViewModel,
-
-        /// <summary>
-        /// Saves and closes the view model.
-        /// </summary>
-        SaveAndCloseViewModel,
-
-        /// <summary>
-        /// Cancels and closes the view model.
-        /// </summary>
-        CancelAndCloseViewModel
-    }
+    SaveAndCloseViewModel,
 
     /// <summary>
-    /// The available view model behaviors.
+    /// Cancels and closes the view model.
     /// </summary>
-    public enum LogicViewModelBehavior
-    {
-        /// <summary>
-        /// View model was injected thus will be stable during the lifetime of the view.
-        /// </summary>
-        Injected,
+    CancelAndCloseViewModel
+}
 
-        /// <summary>
-        /// View model is dynamic and will be automatically determined.
-        /// </summary>
-        Dynamic
-    }
+/// <summary>
+/// The available view model behaviors.
+/// </summary>
+public enum LogicViewModelBehavior
+{
+    /// <summary>
+    /// View model was injected thus will be stable during the lifetime of the view.
+    /// </summary>
+    Injected,
 
     /// <summary>
-    /// Base implementation of the behaviors, which defines all the different possible situations
-    /// a behavior must implement / support to be a valid MVVM provider behavior.
+    /// View model is dynamic and will be automatically determined.
     /// </summary>
-    public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
+    Dynamic
+}
+
+/// <summary>
+/// Base implementation of the behaviors, which defines all the different possible situations
+/// a behavior must implement / support to be a valid MVVM provider behavior.
+/// </summary>
+public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
+{
+    private const string DataContextPropertyName = "DataContext";
+
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(LogicBase));
+
+    protected readonly IViewModelFactory _viewModelFactory;
+    protected readonly IViewModelLocator _viewModelLocator;
+    protected readonly IViewManager _viewManager;
+    protected readonly IViewPropertySelector _viewPropertySelector;
+    protected readonly IViewContextService _viewContextService;
+    protected readonly IObjectAdapter _objectAdapter;
+    protected readonly IViewLoadManager _viewLoadManager;
+
+    private readonly Dictionary<Type, bool> _hasVmPropertyCache = new Dictionary<Type, bool>();
+
+    /// <summary>
+    /// The view model instances currently held by this provider. This value should only be used
+    /// inside the <see cref="ViewModel"/> property. For accessing the view model, use the 
+    /// <see cref="ViewModel"/> property.
+    /// </summary>
+    private IViewModel? _viewModel;
+
+    private bool _isFirstValidationAfterLoaded = true;
+
+    /// <summary>
+    /// The lock object.
+    /// </summary>
+    protected readonly object _lockObject = new object();
+
+    private IView? _targetView;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LogicBase"/> class.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider.</param>
+    /// <param name="targetView">The target control.</param>
+    /// <param name="viewModelType">Type of the view model.</param>
+    /// <param name="viewModel">The view model.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
+    protected LogicBase(IServiceProvider serviceProvider, IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
     {
-        private const string DataContextPropertyName = "DataContext";
+        _viewModelFactory = serviceProvider.GetRequiredService<IViewModelFactory>();
+        _viewModelLocator = serviceProvider.GetRequiredService<IViewModelLocator>();
+        _viewManager = serviceProvider.GetRequiredService<IViewManager>();
+        _viewPropertySelector = serviceProvider.GetRequiredService<IViewPropertySelector>();
+        _viewContextService = serviceProvider.GetRequiredService<IViewContextService>();
+        _objectAdapter = serviceProvider.GetRequiredService<IObjectAdapter>();
+        _viewLoadManager = serviceProvider.GetRequiredService<IViewLoadManager>();
 
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static IViewModelFactory? _viewModelFactory;
-        private static readonly IViewModelLocator _viewModelLocator;
-        private static readonly IViewManager _viewManager;
-        private static readonly IViewPropertySelector _viewPropertySelector;
-        private static readonly IViewContextService _viewContextService;
-        private static readonly IObjectAdapter _objectAdapter;
-        private static readonly Dictionary<Type, bool> _hasVmPropertyCache = new Dictionary<Type, bool>();
-
-        /// <summary>
-        /// The view model instances currently held by this provider. This value should only be used
-        /// inside the <see cref="ViewModel"/> property. For accessing the view model, use the 
-        /// <see cref="ViewModel"/> property.
-        /// </summary>
-        private IViewModel? _viewModel;
-
-        private bool _isFirstValidationAfterLoaded = true;
-
-        /// <summary>
-        /// The view load manager.
-        /// </summary>
-        protected static readonly IViewLoadManager ViewLoadManager;
-
-        /// <summary>
-        /// The lock object.
-        /// </summary>
-        protected readonly object _lockObject = new object();
-
-        private IView? _targetView;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="LogicBase"/> class.
-        /// </summary>
-        static LogicBase()
+        if (CatelEnvironment.IsInDesignMode)
         {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-
-            _viewModelLocator = dependencyResolver.ResolveRequired<IViewModelLocator>();
-            _viewManager = dependencyResolver.ResolveRequired<IViewManager>();
-            _viewPropertySelector = dependencyResolver.ResolveRequired<IViewPropertySelector>();
-            _viewContextService = dependencyResolver.ResolveRequired<IViewContextService>();
-            _objectAdapter = dependencyResolver.ResolveRequired<IObjectAdapter>();
-            ViewLoadManager = dependencyResolver.ResolveRequired<IViewLoadManager>();
+            ViewModelType = typeof(IViewModel);
+            return;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogicBase"/> class.
-        /// </summary>
-        /// <param name="targetView">The target control.</param>
-        /// <param name="viewModelType">Type of the view model.</param>
-        /// <param name="viewModel">The view model.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        protected LogicBase(IView targetView, Type? viewModelType = null, IViewModel? viewModel = null)
+        ArgumentNullException.ThrowIfNull(targetView);
+
+        var targetViewType = targetView.GetType();
+
+        if (!_hasVmPropertyCache.TryGetValue(targetViewType, out var hasVmProperty))
         {
-            if (CatelEnvironment.IsInDesignMode)
+            hasVmProperty = targetViewType.GetPropertyEx("VM") is not null;
+            _hasVmPropertyCache[targetViewType] = hasVmProperty;
+        }
+
+        HasVmProperty = hasVmProperty;
+
+        if (viewModelType is null)
+        {
+            viewModelType = (viewModel is not null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
+            if (viewModelType is null)
             {
-                ViewModelType = typeof(IViewModel);
+                throw Logger.LogErrorAndCreateException<NotSupportedException>($"The view model of the view '{targetViewType.Name}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually");
+            }
+        }
+
+        UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<LogicBase>();
+
+        Logger.LogDebug($"Constructing behavior '{GetType().Name}' for '{targetView.GetType().Name}' with unique id '{BoxingCache.GetBoxedValue(UniqueIdentifier)}'");
+
+        TargetView = targetView;
+        ViewModelType = viewModelType;
+        ViewModel = viewModel;
+
+        ViewModelBehavior = (viewModel is not null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
+        ViewModelLifetimeManagement = ViewModelLifetimeManagement.Automatic;
+
+        if (ViewModel is not null)
+        {
+            SetDataContext(ViewModel);
+        }
+
+        Logger.LogDebug("Subscribing to view events");
+
+        _viewLoadManager.AddView(this);
+
+        if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewLoading), OnViewLoadedManagerLoadingInternal, false) is null)
+        {
+            Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
+
+            _viewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
+        }
+
+        if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewLoaded), OnViewLoadedManagerLoadedInternal, false) is null)
+        {
+            Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
+
+            _viewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
+        }
+
+        if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewUnloading), OnViewLoadedManagerUnloadingInternal, false) is null)
+        {
+            Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
+
+            _viewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
+        }
+
+        if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(_viewLoadManager, nameof(IViewLoadManager.ViewUnloaded), OnViewLoadedManagerUnloadedInternal, false) is null)
+        {
+            Logger.LogDebug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
+
+            _viewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloadedInternal;
+        }
+
+        // Required so the ViewLoadManager can handle the rest
+        targetView.Loaded += (sender, e) => Loaded?.Invoke(this, EventArgs.Empty);
+        targetView.Unloaded += (sender, e) => Unloaded?.Invoke(this, EventArgs.Empty);
+
+        TargetView.DataContextChanged += OnTargetViewDataContextChanged;
+
+        Logger.LogDebug("Subscribing to view properties");
+
+        // This also subscribes to DataContextChanged, don't double subscribe
+        var viewPropertiesToSubscribe = DetermineInterestingViewProperties();
+        foreach (var viewPropertyToSubscribe in viewPropertiesToSubscribe)
+        {
+            TargetView.SubscribeToPropertyChanged(viewPropertyToSubscribe, OnTargetViewPropertyChanged);
+        }
+
+        Logger.LogDebug($"Constructed behavior '{GetType().Name}' for '{TargetViewType?.Name}'");
+    }
+
+    /// <summary>
+    /// Gets the weak reference to the last known data context.
+    /// </summary>
+    protected WeakReference? LastKnownDataContext { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the view model.
+    /// </summary>
+    /// <value>The view model.</value>
+    /// <remarks>
+    /// When a new value is set, the old view model will be disposed.
+    /// </remarks>
+    public IViewModel? ViewModel
+    {
+        get
+        {
+            return _viewModel;
+        }
+        protected set
+        {
+            if (ReferenceEquals(_viewModel, value))
+            {
                 return;
             }
 
-            ArgumentNullException.ThrowIfNull(targetView);
+            var oldViewModel = _viewModel;
+            var newViewModel = value;
 
-            var targetViewType = targetView.GetType();
+            Logger.LogDebug($"Changing view model from '{oldViewModel?.GetType()}' to '{newViewModel?.GetType()}'");
 
-            if (!_hasVmPropertyCache.TryGetValue(targetViewType, out var hasVmProperty))
+            OnViewModelChanging();
+
+            if (_viewModel is not null)
             {
-                hasVmProperty = targetViewType.GetPropertyEx("VM") is not null;
-                _hasVmPropertyCache[targetViewType] = hasVmProperty;
+                _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+                _viewModel.CanceledAsync -= OnViewModelCanceledAsync;
+                _viewModel.SavedAsync -= OnViewModelSavedAsync;
+                _viewModel.ClosedAsync -= OnViewModelClosedAsync;
             }
 
-            HasVmProperty = hasVmProperty;
+            _viewModel = value;
 
-            if (viewModelType is null)
+            if (_viewModel is not null)
             {
-                viewModelType = (viewModel is not null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
-                if (viewModelType is null)
+                _viewModel.PropertyChanged += OnViewModelPropertyChanged;
+                _viewModel.CanceledAsync += OnViewModelCanceledAsync;
+                _viewModel.SavedAsync += OnViewModelSavedAsync;
+                _viewModel.ClosedAsync += OnViewModelClosedAsync;
+
+                // Must be in a try/catch because some lighter platforms sometimes throws out of range exceptions for bindings
+                try
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>($"The view model of the view '{targetViewType.Name}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually");
+                    SetDataContext(_viewModel);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogWarning("Caught exception while setting DataContext to new value: {Exception}", ex);
                 }
             }
 
-            UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<LogicBase>();
+            OnViewModelChanged();
 
-            Log.Debug($"Constructing behavior '{GetType().Name}' for '{targetView.GetType().Name}' with unique id '{BoxingCache.GetBoxedValue(UniqueIdentifier)}'");
+            ViewModelChanged?.Invoke(this, EventArgs.Empty);
 
-            TargetView = targetView;
-            ViewModelType = viewModelType;
-            ViewModel = viewModel;
+            RaisePropertyChanged("ViewModel");
 
-            ViewModelBehavior = (viewModel is not null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
-            ViewModelLifetimeManagement = ViewModelLifetimeManagement.Automatic;
-
-            if (ViewModel is not null)
+            if ((_viewModel is not null) && IsTargetViewLoaded)
             {
-                SetDataContext(ViewModel);
-            }
-
-            Log.Debug("Subscribing to view events");
-
-            ViewLoadManager.AddView(this);
-
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoading), OnViewLoadedManagerLoadingInternal, false) is null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
-
-                ViewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
-            }
-
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoaded), OnViewLoadedManagerLoadedInternal, false) is null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
-
-                ViewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
-            }
-
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloading), OnViewLoadedManagerUnloadingInternal, false) is null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
-
-                ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
-            }
-
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloaded), OnViewLoadedManagerUnloadedInternal, false) is null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
-
-                ViewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloadedInternal;
-            }
-
-            // Required so the ViewLoadManager can handle the rest
-            targetView.Loaded += (sender, e) => Loaded?.Invoke(this, EventArgs.Empty);
-            targetView.Unloaded += (sender, e) => Unloaded?.Invoke(this, EventArgs.Empty);
-
-            TargetView.DataContextChanged += OnTargetViewDataContextChanged;
-
-            Log.Debug("Subscribing to view properties");
-
-            // This also subscribes to DataContextChanged, don't double subscribe
-            var viewPropertiesToSubscribe = DetermineInterestingViewProperties();
-            foreach (var viewPropertyToSubscribe in viewPropertiesToSubscribe)
-            {
-                TargetView.SubscribeToPropertyChanged(viewPropertyToSubscribe, OnTargetViewPropertyChanged);
-            }
-
-            Log.Debug($"Constructed behavior '{GetType().Name}' for '{TargetViewType?.Name}'");
-        }
-
-        #region Properties
-        /// <summary>
-        /// Gets the view model factory used to create the view model instances.
-        /// </summary>
-        protected IViewModelFactory ViewModelFactory
-        {
-            get
-            {
-                if (_viewModelFactory is null)
+                // Target view is loaded, but it *could* be possible the container has not yet been registered. To
+                // make sure that the 
+                var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
+                if (targetViewAsViewModelContainer is not null)
                 {
-                    var dependencyResolver = this.GetDependencyResolver();
-                    _viewModelFactory = dependencyResolver.ResolveRequired<IViewModelFactory>();
+                    ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
                 }
 
-                return _viewModelFactory;
+                _viewModel.InitializeViewModelAsync();
             }
         }
+    }
 
-        /// <summary>
-        /// Gets the weak reference to the last known data context.
-        /// </summary>
-        protected WeakReference? LastKnownDataContext { get; private set; }
+    /// <summary>
+    /// Gets the unique identifier.
+    /// </summary>
+    /// <value>The unique identifier.</value>
+    public int UniqueIdentifier { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the view model.
-        /// </summary>
-        /// <value>The view model.</value>
-        /// <remarks>
-        /// When a new value is set, the old view model will be disposed.
-        /// </remarks>
-        public IViewModel? ViewModel
+    /// <summary>
+    /// Gets the view model behavior.
+    /// </summary>
+    /// <value>The view model behavior.</value>
+    public LogicViewModelBehavior ViewModelBehavior { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the view model lifetime management.
+    /// </summary>
+    public ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
+
+    /// <summary>
+    /// Gets the type of the view model.
+    /// </summary>
+    /// <value>The type of the view model.</value>
+    public Type ViewModelType { get; private set; }
+
+    /// <summary>
+    /// Gets a value whether the target view has a 'VM' property available.
+    /// </summary>
+    public bool HasVmProperty { get; private set; }
+
+    /// <summary>
+    /// Gets the target control of this MVVM provider.
+    /// </summary>
+    /// <value>The target control.</value>
+    protected internal IView? TargetView
+    {
+        get { return _targetView; }
+        set
         {
-            get
-            {
-                return _viewModel;
-            }
-            protected set
-            {
-                if (ReferenceEquals(_viewModel, value))
-                {
-                    return;
-                }
-
-                var oldViewModel = _viewModel;
-                var newViewModel = value;
-
-                Log.Debug($"Changing view model from '{oldViewModel?.GetType()}' to '{newViewModel?.GetType()}'");
-
-                OnViewModelChanging();
-
-                if (_viewModel is not null)
-                {
-                    _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-                    _viewModel.CanceledAsync -= OnViewModelCanceledAsync;
-                    _viewModel.SavedAsync -= OnViewModelSavedAsync;
-                    _viewModel.ClosedAsync -= OnViewModelClosedAsync;
-                }
-
-                _viewModel = value;
-
-                if (_viewModel is not null)
-                {
-                    _viewModel.PropertyChanged += OnViewModelPropertyChanged;
-                    _viewModel.CanceledAsync += OnViewModelCanceledAsync;
-                    _viewModel.SavedAsync += OnViewModelSavedAsync;
-                    _viewModel.ClosedAsync += OnViewModelClosedAsync;
-
-                    // Must be in a try/catch because some lighter platforms sometimes throws out of range exceptions for bindings
-                    try
-                    {
-                        SetDataContext(_viewModel);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warning("Caught exception while setting DataContext to new value", ex);
-                    }
-                }
-
-                OnViewModelChanged();
-
-                ViewModelChanged?.Invoke(this, EventArgs.Empty);
-
-                RaisePropertyChanged("ViewModel");
-
-                if ((_viewModel is not null) && IsTargetViewLoaded)
-                {
-                    // Target view is loaded, but it *could* be possible the container has not yet been registered. To
-                    // make sure that the 
-                    var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
-                    if (targetViewAsViewModelContainer is not null)
-                    {
-                        ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
-                    }
-
-                    _viewModel.InitializeViewModelAsync();
-                }
-            }
+            _targetView = value;
+            TargetViewType = _targetView?.GetType();
         }
+    }
 
-        /// <summary>
-        /// Gets the unique identifier.
-        /// </summary>
-        /// <value>The unique identifier.</value>
-        public int UniqueIdentifier { get; private set; }
+    /// <summary>
+    /// Gets the type of the target control.
+    /// </summary>
+    /// <value>The type of the target control.</value>
+    protected Type? TargetViewType { get; private set; }
 
-        /// <summary>
-        /// Gets the view model behavior.
-        /// </summary>
-        /// <value>The view model behavior.</value>
-        public LogicViewModelBehavior ViewModelBehavior { get; private set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether a <c>null</c> DataContext should be ignored and no new view
+    /// model should be created.
+    /// <para />
+    /// This property will automatically be set to <c>true</c> when a parent view model container invokes the
+    /// <see cref="IViewLoadManager.ViewUnloading"/> event. It will be set to <c>false</c> again when the parent
+    /// view model container invokes the <see cref="IViewLoadManager.ViewLoading"/>.
+    /// <para />
+    /// The default value is <c>false</c>.
+    /// </summary>
+    /// <value><c>true</c> if the <c>null</c> DataContext should be ignored; otherwise, <c>false</c>.</value>
+    protected bool IgnoreNullDataContext { get; set; }
 
-        /// <summary>
-        /// Gets or sets the view model lifetime management.
-        /// </summary>
-        public ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
+    /// <summary>
+    /// Gets a value indicating whether the target control is loaded or not.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if the target control is loaded; otherwise, <c>false</c>.
+    /// </value>
+    public bool IsTargetViewLoaded { get; private set; }
 
-        /// <summary>
-        /// Gets the type of the view model.
-        /// </summary>
-        /// <value>The type of the view model.</value>
-        public Type ViewModelType { get; private set; }
+    /// <summary>
+    /// Gets a value indicating whether the control can be loaded. This is very useful in non-WPF classes where
+    /// the <c>LayoutUpdated</c> is used instead of the <c>Loaded</c> event.
+    /// <para />
+    /// If this value is <c>true</c>, this logic implementation can call the <see cref="OnTargetViewLoadedAsync"/> when
+    /// the control is loaded. Otherwise, the call will be ignored.
+    /// </summary>
+    /// <remarks>
+    /// This value is introduced for Windows Phone because a navigation backwards still leads to a call to
+    /// <c>LayoutUpdated</c>. To prevent new view models from being created, this property can be overridden by 
+    /// such logic implementations.
+    /// </remarks>
+    /// <value><c>true</c> if this instance can control be loaded; otherwise, <c>false</c>.</value>
+    protected virtual bool CanViewBeLoaded { get { return true; } }
 
-        /// <summary>
-        /// Gets a value whether the target view has a 'VM' property available.
-        /// </summary>
-        public bool HasVmProperty { get; private set; }
+    /// <summary>
+    /// Gets a value indicating whether this instance is loading.
+    /// </summary>
+    /// <value><c>true</c> if this instance is loading; otherwise, <c>false</c>.</value>
+    protected bool IsLoading { get; private set; }
 
-        /// <summary>
-        /// Gets the target control of this MVVM provider.
-        /// </summary>
-        /// <value>The target control.</value>
-        protected internal IView? TargetView
+    /// <summary>
+    /// Gets a value indicating whether this instance is unloading.
+    /// </summary>
+    /// <value><c>true</c> if this instance is unloading; otherwise, <c>false</c>.</value>
+    protected bool IsUnloading { get; private set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the current view model is being closed.
+    /// </summary>
+    /// <value><c>true</c> if this instance is closing the current view model; otherwise, <c>false</c>.</value>
+    protected bool IsClosingViewModel { get; private set; }
+
+    private bool CanLoad
+    {
+        get
         {
-            get { return _targetView; }
-            set
+            // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
+            if (IsTargetViewLoaded)
             {
-                _targetView = value;
-                TargetViewType = _targetView?.GetType();
+                Logger.LogDebug($"Cannot load target view '{TargetViewType?.Name}', view is already loaded");
+
+                return false;
             }
+
+            if (!CanViewBeLoaded)
+            {
+                Logger.LogDebug($"Cannot load target view '{TargetViewType?.Name}', CanViewBeLoaded returned false");
+
+                return false;
+            }
+
+            return true;
         }
+    }
 
-        /// <summary>
-        /// Gets the type of the target control.
-        /// </summary>
-        /// <value>The type of the target control.</value>
-        protected Type? TargetViewType { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether a <c>null</c> DataContext should be ignored and no new view
-        /// model should be created.
-        /// <para />
-        /// This property will automatically be set to <c>true</c> when a parent view model container invokes the
-        /// <see cref="IViewLoadManager.ViewUnloading"/> event. It will be set to <c>false</c> again when the parent
-        /// view model container invokes the <see cref="IViewLoadManager.ViewLoading"/>.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if the <c>null</c> DataContext should be ignored; otherwise, <c>false</c>.</value>
-        protected bool IgnoreNullDataContext { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the target control is loaded or not.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the target control is loaded; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsTargetViewLoaded { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the control can be loaded. This is very useful in non-WPF classes where
-        /// the <c>LayoutUpdated</c> is used instead of the <c>Loaded</c> event.
-        /// <para />
-        /// If this value is <c>true</c>, this logic implementation can call the <see cref="OnTargetViewLoadedAsync"/> when
-        /// the control is loaded. Otherwise, the call will be ignored.
-        /// </summary>
-        /// <remarks>
-        /// This value is introduced for Windows Phone because a navigation backwards still leads to a call to
-        /// <c>LayoutUpdated</c>. To prevent new view models from being created, this property can be overridden by 
-        /// such logic implementations.
-        /// </remarks>
-        /// <value><c>true</c> if this instance can control be loaded; otherwise, <c>false</c>.</value>
-        protected virtual bool CanViewBeLoaded { get { return true; } }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is loading.
-        /// </summary>
-        /// <value><c>true</c> if this instance is loading; otherwise, <c>false</c>.</value>
-        protected bool IsLoading { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is unloading.
-        /// </summary>
-        /// <value><c>true</c> if this instance is unloading; otherwise, <c>false</c>.</value>
-        protected bool IsUnloading { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the current view model is being closed.
-        /// </summary>
-        /// <value><c>true</c> if this instance is closing the current view model; otherwise, <c>false</c>.</value>
-        protected bool IsClosingViewModel { get; private set; }
-
-        private bool CanLoad
+    private bool CanUnload
+    {
+        get
         {
-            get
+            // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
+            if (!IsTargetViewLoaded)
             {
-                // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
-                if (IsTargetViewLoaded)
-                {
-                    Log.Debug($"Cannot load target view '{TargetViewType?.Name}', view is already loaded");
-
-                    return false;
-                }
-
-                if (!CanViewBeLoaded)
-                {
-                    Log.Debug($"Cannot load target view '{TargetViewType?.Name}', CanViewBeLoaded returned false");
-
-                    return false;
-                }
-
-                return true;
+                return false;
             }
+
+            return true;
         }
+    }
 
-        private bool CanUnload
+    /// <summary>
+    /// The view.
+    /// </summary>
+    IView? IViewLoadState.View
+    {
+        get { return TargetView; }
+    }
+
+    /// <summary>
+    /// Occurs when the view model is about to construct a new view model. This event can be used to
+    /// intercept and inject a dynamically instantiated view model.
+    /// </summary>
+    public event EventHandler<DetermineViewModelInstanceEventArgs>? DetermineViewModelInstance;
+
+    /// <summary>
+    /// Occurs when the view model is about to construct a new view model. This event can be used to
+    /// intercept and inject a dynamically determined view model type.
+    /// </summary>
+    public event EventHandler<DetermineViewModelTypeEventArgs>? DetermineViewModelType;
+
+    /// <summary>
+    /// Occurs when the <see cref="ViewModel"/> property has changed.
+    /// </summary>
+    public event EventHandler<EventArgs>? ViewModelChanged;
+
+    /// <summary>
+    /// Occurs when a property on the current <see cref="ViewModel"/> has changed.
+    /// </summary>
+    public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
+
+    /// <summary>
+    /// Occurs when the <see cref="ViewModel"/> has been canceled.
+    /// </summary>
+    public event AsyncEventHandler<EventArgs>? ViewModelCanceledAsync;
+
+    /// <summary>
+    /// Occurs when the <see cref="ViewModel"/> has been saved.
+    /// </summary>
+    public event AsyncEventHandler<EventArgs>? ViewModelSavedAsync;
+
+    /// <summary>
+    /// Occurs when the <see cref="ViewModel"/> has been closed.
+    /// </summary>
+    public event AsyncEventHandler<ViewModelClosedEventArgs>? ViewModelClosedAsync;
+
+    /// <summary>
+    /// Occurs when a property on the <see cref="TargetView"/> has changed.
+    /// </summary>
+    public event EventHandler<PropertyChangedEventArgs>? TargetViewPropertyChanged;
+
+    /// <summary>
+    /// Occurs when the view model container is loaded.
+    /// </summary>
+    public event EventHandler<EventArgs>? Loaded;
+
+    /// <summary>
+    /// Occurs when the view model container is unloaded.
+    /// </summary>
+    public event EventHandler<EventArgs>? Unloaded;
+
+    /// <summary>
+    /// Determines the interesting view properties.
+    /// </summary>
+    /// <returns>A list of names with view properties to subscribe to.</returns>
+    private List<string> DetermineInterestingViewProperties()
+    {
+        var finalProperties = new List<string>();
+
+        var targetViewType = TargetViewType;
+        if (targetViewType is null)
         {
-            get
-            {
-                // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
-                if (!IsTargetViewLoaded)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// The view.
-        /// </summary>
-        IView? IViewLoadState.View
-        {
-            get { return TargetView; }
-        }
-        #endregion
-
-        #region Events
-        /// <summary>
-        /// Occurs when the view model is about to construct a new view model. This event can be used to
-        /// intercept and inject a dynamically instantiated view model.
-        /// </summary>
-        public event EventHandler<DetermineViewModelInstanceEventArgs>? DetermineViewModelInstance;
-
-        /// <summary>
-        /// Occurs when the view model is about to construct a new view model. This event can be used to
-        /// intercept and inject a dynamically determined view model type.
-        /// </summary>
-        public event EventHandler<DetermineViewModelTypeEventArgs>? DetermineViewModelType;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> property has changed.
-        /// </summary>
-        public event EventHandler<EventArgs>? ViewModelChanged;
-
-        /// <summary>
-        /// Occurs when a property on the current <see cref="ViewModel"/> has changed.
-        /// </summary>
-        public event EventHandler<PropertyChangedEventArgs>? ViewModelPropertyChanged;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been canceled.
-        /// </summary>
-        public event AsyncEventHandler<EventArgs>? ViewModelCanceledAsync;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been saved.
-        /// </summary>
-        public event AsyncEventHandler<EventArgs>? ViewModelSavedAsync;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been closed.
-        /// </summary>
-        public event AsyncEventHandler<ViewModelClosedEventArgs>? ViewModelClosedAsync;
-
-        /// <summary>
-        /// Occurs when a property on the <see cref="TargetView"/> has changed.
-        /// </summary>
-        public event EventHandler<PropertyChangedEventArgs>? TargetViewPropertyChanged;
-
-        /// <summary>
-        /// Occurs when the view model container is loaded.
-        /// </summary>
-        public event EventHandler<EventArgs>? Loaded;
-
-        /// <summary>
-        /// Occurs when the view model container is unloaded.
-        /// </summary>
-        public event EventHandler<EventArgs>? Unloaded;
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Determines the interesting view properties.
-        /// </summary>
-        /// <returns>A list of names with view properties to subscribe to.</returns>
-        private List<string> DetermineInterestingViewProperties()
-        {
-            var finalProperties = new List<string>();
-
-            var targetViewType = TargetViewType;
-            if (targetViewType is null)
-            {
-                return finalProperties;
-            }
-
-            if ((_viewPropertySelector is null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
-            {
-                var viewProperties = ViewExtensions.GetProperties(targetViewType);
-                finalProperties.AddRange(viewProperties);
-            }
-            else
-            {
-                var propertiesToSubscribe = new HashSet<string>(_viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType));
-                if (!propertiesToSubscribe.Contains(DataContextPropertyName))
-                {
-                    propertiesToSubscribe.Add(DataContextPropertyName);
-                }
-
-                foreach (var propertyToSubscribe in propertiesToSubscribe)
-                {
-                    if (!finalProperties.Contains(propertyToSubscribe))
-                    {
-                        finalProperties.Add(propertyToSubscribe);
-                    }
-                }
-            }
-
             return finalProperties;
         }
 
-        /// <summary>
-        /// Gets the data context for the current view.
-        /// </summary>
-        /// <param name="view">The view to retrieve the data context from.</param>
-        /// <returns>The data context.</returns>
-        protected virtual object? GetDataContext(IView? view)
+        if ((_viewPropertySelector is null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
         {
-            if (view is null)
+            var viewProperties = ViewExtensions.GetProperties(targetViewType);
+            finalProperties.AddRange(viewProperties);
+        }
+        else
+        {
+            var propertiesToSubscribe = new HashSet<string>(_viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType));
+            if (!propertiesToSubscribe.Contains(DataContextPropertyName))
             {
-                return null;
+                propertiesToSubscribe.Add(DataContextPropertyName);
             }
 
-            return _viewContextService.GetContext(view);
-        }
-
-        /// <summary>
-        /// Sets the data context of the target control.
-        /// <para />
-        /// This method is abstract because the real logic implementation knows how to set the data context (for example,
-        /// by using an additional data context grid).
-        /// </summary>
-        /// <param name="newDataContext">The new data context.</param>
-        protected abstract void SetDataContext(object newDataContext);
-
-        /// <summary>
-        /// Creates a view model by using data context or, if that is not possible, the constructor of the view model.
-        /// </summary>
-        protected IViewModel? CreateViewModelByUsingDataContextOrConstructor()
-        {
-            var dataContext = GetDataContext(TargetView);
-
-            // It might be possible that a view model is already set, so use it if the datacontext is a view model
-            var dataContextAsIViewModel = dataContext as IViewModel;
-            if ((dataContextAsIViewModel is not null) && (dataContextAsIViewModel.GetType() == ViewModelType))
+            foreach (var propertyToSubscribe in propertiesToSubscribe)
             {
-                return dataContextAsIViewModel;
-            }
-
-            return ConstructViewModelUsingArgumentOrDefaultConstructor(dataContext);
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> property is about to change.
-        /// </summary>
-        protected virtual void OnViewModelChanging()
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> property has just been changed.
-        /// </summary>
-        protected virtual void OnViewModelChanged()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view manager is unloading.
-        /// <para />
-        /// This method is public because the view loaded manager must be subscribed to as a weak event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerLoadingInternal(object? sender, ViewLoadEventArgs e)
-        {
-            OnViewLoadedManagerLoading(sender, e);
-        }
-
-        /// <summary>
-        /// Called when the view manager is unloading.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerLoading(object? sender, ViewLoadEventArgs e)
-        {
-            if (ReferenceEquals(e.View, TargetView))
-            {
-                OnTargetViewLoadingInternal(TargetView, EventArgs.Empty);
+                if (!finalProperties.Contains(propertyToSubscribe))
+                {
+                    finalProperties.Add(propertyToSubscribe);
+                }
             }
         }
 
-        /// <summary>
-        /// Called when the view manager is loaded.
-        /// <para />
-        /// This method is public because the view loaded manager must be subscribed to as a weak event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerLoadedInternal(object? sender, ViewLoadEventArgs e)
+        return finalProperties;
+    }
+
+    /// <summary>
+    /// Gets the data context for the current view.
+    /// </summary>
+    /// <param name="view">The view to retrieve the data context from.</param>
+    /// <returns>The data context.</returns>
+    protected virtual object? GetDataContext(IView? view)
+    {
+        if (view is null)
         {
-            OnViewLoadedManagerLoaded(sender, e);
+            return null;
         }
 
-        /// <summary>
-        /// Called when the view manager is loaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerLoaded(object? sender, ViewLoadEventArgs e)
+        return _viewContextService.GetContext(view);
+    }
+
+    /// <summary>
+    /// Sets the data context of the target control.
+    /// <para />
+    /// This method is abstract because the real logic implementation knows how to set the data context (for example,
+    /// by using an additional data context grid).
+    /// </summary>
+    /// <param name="newDataContext">The new data context.</param>
+    protected abstract void SetDataContext(object newDataContext);
+
+    /// <summary>
+    /// Creates a view model by using data context or, if that is not possible, the constructor of the view model.
+    /// </summary>
+    protected IViewModel? CreateViewModelByUsingDataContextOrConstructor()
+    {
+        var dataContext = GetDataContext(TargetView);
+
+        // It might be possible that a view model is already set, so use it if the datacontext is a view model
+        var dataContextAsIViewModel = dataContext as IViewModel;
+        if ((dataContextAsIViewModel is not null) && (dataContextAsIViewModel.GetType() == ViewModelType))
         {
-            if (ReferenceEquals(e.View, TargetView))
-            {
-                OnTargetViewLoadedInternal(TargetView, EventArgs.Empty);
-            }
+            return dataContextAsIViewModel;
         }
 
-        /// <summary>
-        /// Called when the view manager is unloading.
-        /// <para />
-        /// This method is public because the view loaded manager must be subscribed to as a weak event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerUnloadingInternal(object? sender, ViewLoadEventArgs e)
+        return ConstructViewModelUsingArgumentOrDefaultConstructor(dataContext);
+    }
+
+    /// <summary>
+    /// Called when the <see cref="ViewModel"/> property is about to change.
+    /// </summary>
+    protected virtual void OnViewModelChanging()
+    {
+    }
+
+    /// <summary>
+    /// Called when the <see cref="ViewModel"/> property has just been changed.
+    /// </summary>
+    protected virtual void OnViewModelChanged()
+    {
+    }
+
+    /// <summary>
+    /// Called when the view manager is unloading.
+    /// <para />
+    /// This method is public because the view loaded manager must be subscribed to as a weak event.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    public void OnViewLoadedManagerLoadingInternal(object? sender, ViewLoadEventArgs e)
+    {
+        OnViewLoadedManagerLoading(sender, e);
+    }
+
+    /// <summary>
+    /// Called when the view manager is unloading.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    protected virtual void OnViewLoadedManagerLoading(object? sender, ViewLoadEventArgs e)
+    {
+        if (ReferenceEquals(e.View, TargetView))
         {
-            OnViewLoadedManagerUnloading(sender, e);
+            OnTargetViewLoadingInternal(TargetView, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    /// Called when the view manager is loaded.
+    /// <para />
+    /// This method is public because the view loaded manager must be subscribed to as a weak event.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    public void OnViewLoadedManagerLoadedInternal(object? sender, ViewLoadEventArgs e)
+    {
+        OnViewLoadedManagerLoaded(sender, e);
+    }
+
+    /// <summary>
+    /// Called when the view manager is loaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    protected virtual void OnViewLoadedManagerLoaded(object? sender, ViewLoadEventArgs e)
+    {
+        if (ReferenceEquals(e.View, TargetView))
+        {
+            OnTargetViewLoadedInternal(TargetView, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    /// Called when the view manager is unloading.
+    /// <para />
+    /// This method is public because the view loaded manager must be subscribed to as a weak event.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    public void OnViewLoadedManagerUnloadingInternal(object? sender, ViewLoadEventArgs e)
+    {
+        OnViewLoadedManagerUnloading(sender, e);
+    }
+
+    /// <summary>
+    /// Called when the view manager is unloading.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    protected virtual void OnViewLoadedManagerUnloading(object? sender, ViewLoadEventArgs e)
+    {
+        if (ReferenceEquals(e.View, TargetView))
+        {
+            OnTargetViewUnloadingInternal(TargetView, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    /// Called when the view manager is unloaded.
+    /// <para />
+    /// This method is public because the view loaded manager must be subscribed to as a weak event.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    public void OnViewLoadedManagerUnloadedInternal(object? sender, ViewLoadEventArgs e)
+    {
+        OnViewLoadedManagerUnloaded(sender, e);
+    }
+
+    /// <summary>
+    /// Called when the view manager is unloaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+    protected virtual void OnViewLoadedManagerUnloaded(object? sender, ViewLoadEventArgs e)
+    {
+        if (ReferenceEquals(e.View, TargetView))
+        {
+            OnTargetViewUnloadedInternal(TargetView, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    /// Called when the <see cref="TargetView"/> is about to be loaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    private void OnTargetViewLoadingInternal(object? sender, EventArgs e)
+    {
+        if (!CanLoad)
+        {
+            return;
         }
 
-        /// <summary>
-        /// Called when the view manager is unloading.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerUnloading(object? sender, ViewLoadEventArgs e)
-        {
-            if (ReferenceEquals(e.View, TargetView))
-            {
-                OnTargetViewUnloadingInternal(TargetView, EventArgs.Empty);
-            }
-        }
+        Logger.LogDebug($"Target view '{TargetViewType?.Name}' is being loaded");
 
-        /// <summary>
-        /// Called when the view manager is unloaded.
-        /// <para />
-        /// This method is public because the view loaded manager must be subscribed to as a weak event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        public void OnViewLoadedManagerUnloadedInternal(object? sender, ViewLoadEventArgs e)
-        {
-            OnViewLoadedManagerUnloaded(sender, e);
-        }
+        IsLoading = true;
+    }
 
-        /// <summary>
-        /// Called when the view manager is unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewLoadedManagerUnloaded(object? sender, ViewLoadEventArgs e)
-        {
-            if (ReferenceEquals(e.View, TargetView))
-            {
-                OnTargetViewUnloadedInternal(TargetView, EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
-        /// Called when the <see cref="TargetView"/> is about to be loaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewLoadingInternal(object? sender, EventArgs e)
-        {
-            if (!CanLoad)
-            {
-                return;
-            }
-
-            Log.Debug($"Target view '{TargetViewType?.Name}' is being loaded");
-
-            IsLoading = true;
-        }
-
-        /// <summary>
-        /// Called when the <see cref="TargetView"/> has just been loaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// This method will call the <see cref="OnTargetViewLoadedAsync"/> which can be overriden for custom 
-        /// behavior. This method is required to protect from duplicate loaded events.
-        /// </remarks>
+    /// <summary>
+    /// Called when the <see cref="TargetView"/> has just been loaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method will call the <see cref="OnTargetViewLoadedAsync"/> which can be overridden for custom 
+    /// behavior. This method is required to protect from duplicate loaded events.
+    /// </remarks>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnTargetViewLoadedInternal(object? sender, EventArgs e)
+    private async void OnTargetViewLoadedInternal(object? sender, EventArgs e)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
+    {
+        if (!CanLoad)
         {
-            if (!CanLoad)
-            {
-                return;
-            }
+            return;
+        }
 
-            Log.Debug($"Target view '{TargetViewType?.Name}' has been loaded");
+        Logger.LogDebug($"Target view '{TargetViewType?.Name}' has been loaded");
 
-            var view = TargetView;
-            if (view is null)
-            {
-                return;
-            }
+        var view = TargetView;
+        if (view is null)
+        {
+            return;
+        }
 
-            _viewManager.RegisterView(view);
+        _viewManager.RegisterView(view);
 
-            IsTargetViewLoaded = true;
+        IsTargetViewLoaded = true;
 
-            var dataContext = GetDataContext(view);
-            LastKnownDataContext = (dataContext is not null) ? new WeakReference(dataContext) : null;
+        var dataContext = GetDataContext(view);
+        LastKnownDataContext = (dataContext is not null) ? new WeakReference(dataContext) : null;
 
-            await OnTargetViewLoadedAsync(sender, e);
+        await OnTargetViewLoadedAsync(sender, e);
 
-            view.EnsureVisualTree();
+        view.EnsureVisualTree();
 
-            var targetViewAsViewModelContainer = view as IViewModelContainer;
-            if (targetViewAsViewModelContainer is not null)
-            {
-                ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
-            }
+        var targetViewAsViewModelContainer = view as IViewModelContainer;
+        if (targetViewAsViewModelContainer is not null)
+        {
+            ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
+        }
 
-            view.Dispatch(() =>
-            {
+        view.Dispatch(() =>
+        {
 #pragma warning disable 4014
-                // No need to await
-                InitializeViewModelAsync();
+            // No need to await
+            InitializeViewModelAsync();
 #pragma warning restore 4014
-            });
+        });
 
-            IsLoading = false;
-        }
+        IsLoading = false;
+    }
 
-        private async Task InitializeViewModelAsync()
+    private async Task InitializeViewModelAsync()
+    {
+        var viewModel = ViewModel;
+        if (viewModel is not null)
         {
-            var viewModel = ViewModel;
-            if (viewModel is not null)
+            // Initialize the view model. The view model itself is responsible to prevent double initialization
+            await viewModel.InitializeViewModelAsync();
+
+            // Revalidate since the control already initialized the view model before the control
+            // was visible, therefore the WPF engine does not show warnings and errors
+            var viewModelAsViewModelBase = viewModel as ViewModelBase;
+            if (viewModelAsViewModelBase is not null)
             {
-                // Initialize the view model. The view model itself is responsible to prevent double initialization
-                await viewModel.InitializeViewModelAsync();
-
-                // Revalidate since the control already initialized the view model before the control
-                // was visible, therefore the WPF engine does not show warnings and errors
-                var viewModelAsViewModelBase = viewModel as ViewModelBase;
-                if (viewModelAsViewModelBase is not null)
-                {
-                    viewModelAsViewModelBase.Validate(true, false);
-                }
-                else
-                {
-                    viewModel.Validate(true);
-                }
-
-                _isFirstValidationAfterLoaded = true;
+                viewModelAsViewModelBase.Validate(true, false);
             }
-        }
-
-        /// <summary>
-        /// Called when the <see cref="TargetView" /> has just been loaded.
-        /// <para />
-        /// The base implementation will try to create a view model based on the current DataContext and
-        /// set it as the DataContext of the <see cref="TargetView" />. To create custom logic for
-        /// view model creation, override this method and do not call the base.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        /// <returns>Task.</returns>
-        public virtual async Task OnTargetViewLoadedAsync(object? sender, EventArgs e)
-        {
-            await CompleteViewModelClosingAsync();
-
-            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
+            else
             {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
-                return;
+                viewModel.Validate(true);
             }
 
-            if (ViewModel is null)
-            {
-                ViewModel = CreateViewModelByUsingDataContextOrConstructor();
-            }
-        }
-
-        /// <summary>
-        /// Called when the <see cref="TargetView"/> is about to be unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewUnloadingInternal(object? sender, EventArgs e)
-        {
-            if (!CanUnload)
-            {
-                return;
-            }
-
-            Log.Debug($"Target view '{TargetViewType?.Name}' is being unloaded");
-
-            IsUnloading = true;
-        }
-
-        /// <summary>
-        /// Called when the <see cref="TargetView"/> has just been unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// This method will call the <see cref="OnTargetViewUnloadedAsync"/> which can be overriden for custom 
-        /// behavior. This method is required to protect from duplicate unloaded events.
-        /// </remarks>
-#pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void OnTargetViewUnloadedInternal(object? sender, EventArgs e)
-#pragma warning restore AvoidAsyncVoid // Avoid async void
-        {
-            if (!CanUnload)
-            {
-                return;
-            }
-
-            Log.Debug($"Target view '{TargetViewType?.Name}' has been unloaded");
-
-            var view = TargetView;
-            if (view is not null)
-            {
-                _viewManager.UnregisterView(view);
-            }
-
-            IsTargetViewLoaded = false;
             _isFirstValidationAfterLoaded = true;
+        }
+    }
 
-            await OnTargetViewUnloadedAsync(sender, e);
+    /// <summary>
+    /// Called when the <see cref="TargetView" /> has just been loaded.
+    /// <para />
+    /// The base implementation will try to create a view model based on the current DataContext and
+    /// set it as the DataContext of the <see cref="TargetView" />. To create custom logic for
+    /// view model creation, override this method and do not call the base.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+    /// <returns>Task.</returns>
+    public virtual async Task OnTargetViewLoadedAsync(object? sender, EventArgs e)
+    {
+        await CompleteViewModelClosingAsync();
 
-            var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
-            if (targetViewAsViewModelContainer is not null)
-            {
-                ViewToViewModelMappingHelper.UninitializeViewToViewModelMappings(targetViewAsViewModelContainer);
-            }
-
-            IsUnloading = false;
+        if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
+        {
+            Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+            return;
         }
 
-        /// <summary>
-        /// Called when the <see cref="TargetView" /> has just been unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        /// <returns>Task.</returns>
-        public virtual Task OnTargetViewUnloadedAsync(object? sender, EventArgs e)
+        if (ViewModel is null)
         {
-            return Task.CompletedTask;
+            ViewModel = CreateViewModelByUsingDataContextOrConstructor();
+        }
+    }
+
+    /// <summary>
+    /// Called when the <see cref="TargetView"/> is about to be unloaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    private void OnTargetViewUnloadingInternal(object? sender, EventArgs e)
+    {
+        if (!CanUnload)
+        {
+            return;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the specified arguments represent the current data context.
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected bool IsCurrentDataContext(DataContextChangedEventArgs e)
+        Logger.LogDebug($"Target view '{TargetViewType?.Name}' is being unloaded");
+
+        IsUnloading = true;
+    }
+
+    /// <summary>
+    /// Called when the <see cref="TargetView"/> has just been unloaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method will call the <see cref="OnTargetViewUnloadedAsync"/> which can be overridden for custom 
+    /// behavior. This method is required to protect from duplicate unloaded events.
+    /// </remarks>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
+    private async void OnTargetViewUnloadedInternal(object? sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
+    {
+        if (!CanUnload)
         {
-            if (e.AreEqual)
+            return;
+        }
+
+        Logger.LogDebug($"Target view '{TargetViewType?.Name}' has been unloaded");
+
+        var view = TargetView;
+        if (view is not null)
+        {
+            _viewManager.UnregisterView(view);
+        }
+
+        IsTargetViewLoaded = false;
+        _isFirstValidationAfterLoaded = true;
+
+        await OnTargetViewUnloadedAsync(sender, e);
+
+        var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
+        if (targetViewAsViewModelContainer is not null)
+        {
+            ViewToViewModelMappingHelper.UninitializeViewToViewModelMappings(targetViewAsViewModelContainer);
+        }
+
+        IsUnloading = false;
+    }
+
+    /// <summary>
+    /// Called when the <see cref="TargetView" /> has just been unloaded.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+    /// <returns>Task.</returns>
+    public virtual Task OnTargetViewUnloadedAsync(object? sender, EventArgs e)
+    {
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether the specified arguments represent the current data context.
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected bool IsCurrentDataContext(DataContextChangedEventArgs e)
+    {
+        if (e.AreEqual)
+        {
+            return true;
+        }
+
+        // CTL-891 Additional check for data context change
+        var lastKnownDataContext = LastKnownDataContext;
+        if (lastKnownDataContext is not null && lastKnownDataContext.IsAlive)
+        {
+            if (ReferenceEquals(lastKnownDataContext.Target, e.NewContext))
             {
                 return true;
             }
+        }
 
-            // CTL-891 Additional check for data context change
-            var lastKnownDataContext = LastKnownDataContext;
-            if (lastKnownDataContext is not null && lastKnownDataContext.IsAlive)
-            {
-                if (ReferenceEquals(lastKnownDataContext.Target, e.NewContext))
-                {
-                    return true;
-                }
-            }
+        return false;
+    }
 
+    /// <summary>
+    /// Called when the <c>DataContext</c> property of the <see cref="TargetView" /> has changed.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    public virtual void OnTargetViewDataContextChanged(object? sender, DataContextChangedEventArgs e)
+    {
+        if (IsCurrentDataContext(e))
+        {
+            return;
+        }
+
+        var targetView = TargetView;
+        if (targetView is null)
+        {
+            Logger.LogWarning($"Target view is null, cannot handle DataContextChanged event");
+            return;
+        }
+
+        var targetViewType = TargetViewType ?? targetView.GetType();
+
+        var dataContext = GetDataContext(targetView);
+
+        Logger.LogDebug($"DataContext of TargetView '{targetViewType.GetSafeFullName()}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
+
+        LastKnownDataContext = null;
+
+        if (ReferenceEquals(dataContext, null))
+        {
+            return;
+        }
+
+        if (dataContext.IsSentinelBindingObject())
+        {
+            return;
+        }
+
+        // Here we have a data context that makes sense
+        LastKnownDataContext = new WeakReference(dataContext);
+
+        if (ReferenceEquals(ViewModel, dataContext))
+        {
+            return;
+        }
+
+        // Check if the VM is compatible
+        if (_viewModelLocator.IsCompatible(targetViewType, dataContext.GetType()))
+        {
+            // Use the view model from the data context, probably set manually
+            ViewModel = (IViewModel)dataContext;
+        }
+    }
+
+    /// <summary>
+    /// Called when a property on the <see cref="TargetView" /> has changed.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+    private void OnTargetViewPropertyChangedInternal(object? sender, PropertyChangedEventArgs e)
+    {
+        OnTargetViewPropertyChanged(sender, e);
+    }
+
+    /// <summary>
+    /// Called when a property on the <see cref="TargetView" /> has changed.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+    public virtual void OnTargetViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        TargetViewPropertyChanged?.Invoke(this, e);
+    }
+
+    /// <summary>
+    /// Called when a property on the <see cref="ViewModel"/> has changed.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+    public virtual void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        ViewModelPropertyChanged?.Invoke(this, e);
+    }
+
+    /// <summary>
+    /// Called when the <see cref="ViewModel"/> has been saved.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    public virtual Task OnViewModelCanceledAsync(object? sender, EventArgs e)
+    {
+        return ViewModelCanceledAsync.SafeInvokeAsync(this, e);
+    }
+
+    /// <summary>
+    /// Called when the <see cref="ViewModel"/> has been saved.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    public virtual Task OnViewModelSavedAsync(object? sender, EventArgs e)
+    {
+        return ViewModelSavedAsync.SafeInvokeAsync(this, e);
+    }
+
+    /// <summary>
+    /// Called when the <see cref="ViewModel"/> has been closed.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
+    public virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
+    {
+        return ViewModelClosedAsync.SafeInvokeAsync(this, e);
+    }
+
+    /// <summary>
+    /// Validates the view model.
+    /// </summary>
+    public virtual void ValidateViewModel()
+    {
+        var vm = ViewModel;
+        if (vm is null)
+        {
+            return;
+        }
+
+        vm.Validate(_isFirstValidationAfterLoaded);
+
+        _isFirstValidationAfterLoaded = false;
+    }
+
+    /// <summary>
+    /// Cancels the view model.
+    /// </summary>
+    /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
+    public virtual Task<bool> CancelViewModelAsync()
+    {
+        if (ViewModel is null)
+        {
+            return Task<bool>.FromResult(true);
+        }
+
+        return ViewModel.CancelViewModelAsync();
+    }
+
+    /// <summary>
+    /// Cancels and closes the view model.
+    /// </summary>
+    /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
+    public async Task<bool> CancelAndCloseViewModelAsync()
+    {
+        if (!await CancelViewModelAsync())
+        {
             return false;
         }
 
-        /// <summary>
-        /// Called when the <c>DataContext</c> property of the <see cref="TargetView" /> has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnTargetViewDataContextChanged(object? sender, DataContextChangedEventArgs e)
+        await CloseViewModelAsync(true);
+
+        return true;
+    }
+
+    /// <summary>
+    /// Saves the view model.
+    /// </summary>
+    /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
+    public virtual Task<bool> SaveViewModelAsync()
+    {
+        var vm = ViewModel;
+        if (vm is null)
         {
-            if (IsCurrentDataContext(e))
-            {
-                return;
-            }
-
-            var targetView = TargetView;
-            if (targetView is null)
-            {
-                Log.Warning($"Target view is null, cannot handle DataContextChanged event");
-                return;
-            }
-
-            var targetViewType = TargetViewType ?? targetView.GetType();
-
-            var dataContext = GetDataContext(targetView);
-
-            Log.Debug($"DataContext of TargetView '{targetViewType.GetSafeFullName()}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
-
-            LastKnownDataContext = null;
-
-            if (ReferenceEquals(dataContext, null))
-            {
-                return;
-            }
-
-            if (dataContext.IsSentinelBindingObject())
-            {
-                return;
-            }
-
-            // Here we have a data context that makes sense
-            LastKnownDataContext = new WeakReference(dataContext);
-
-            if (ReferenceEquals(ViewModel, dataContext))
-            {
-                return;
-            }
-
-            // Check if the VM is compatible
-            if (_viewModelLocator.IsCompatible(targetViewType, dataContext.GetType()))
-            {
-                // Use the view model from the data context, probably set manually
-                ViewModel = (IViewModel)dataContext;
-            }
+            return Task<bool>.FromResult(true);
         }
 
-        /// <summary>
-        /// Called when a property on the <see cref="TargetView" /> has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnTargetViewPropertyChangedInternal(object? sender, PropertyChangedEventArgs e)
+        return vm.SaveViewModelAsync();
+    }
+
+    /// <summary>
+    /// Saves and closes the view model. If the saving fails, the view model is not closed.
+    /// </summary>
+    /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
+    public async Task<bool> SaveAndCloseViewModelAsync()
+    {
+        if (!await SaveViewModelAsync())
         {
-            OnTargetViewPropertyChanged(sender, e);
+            return false;
         }
 
-        /// <summary>
-        /// Called when a property on the <see cref="TargetView" /> has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        public virtual void OnTargetViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        await CloseViewModelAsync(true);
+
+        return true;
+    }
+
+    /// <summary>
+    /// Closes the view model.
+    /// </summary>
+    public virtual Task CloseViewModelAsync(bool? result)
+    {
+        return CloseViewModelAsync(result, false);
+    }
+
+    /// <summary>
+    /// Closes and disposes the view model.
+    /// </summary>
+    public async virtual Task CloseViewModelAsync(bool? result, bool dispose)
+    {
+        var vm = ViewModel;
+        if (vm is not null)
         {
-            TargetViewPropertyChanged?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Called when a property on the <see cref="ViewModel"/> has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            ViewModelPropertyChanged?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> has been saved.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual Task OnViewModelCanceledAsync(object? sender, EventArgs e)
-        {
-            return ViewModelCanceledAsync.SafeInvokeAsync(this, e);
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> has been saved.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual Task OnViewModelSavedAsync(object? sender, EventArgs e)
-        {
-            return ViewModelSavedAsync.SafeInvokeAsync(this, e);
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> has been closed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
-        public virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
-        {
-            return ViewModelClosedAsync.SafeInvokeAsync(this, e);
-        }
-
-        /// <summary>
-        /// Validates the view model.
-        /// </summary>
-        public virtual void ValidateViewModel()
-        {
-            var vm = ViewModel;
-            if (vm is null)
-            {
-                return;
-            }
-
-            vm.Validate(_isFirstValidationAfterLoaded);
-
-            _isFirstValidationAfterLoaded = false;
-        }
-
-        /// <summary>
-        /// Cancels the view model.
-        /// </summary>
-        /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public virtual Task<bool> CancelViewModelAsync()
-        {
-            if (ViewModel is null)
-            {
-                return Task<bool>.FromResult(true);
-            }
-
-            return ViewModel.CancelViewModelAsync();
-        }
-
-        /// <summary>
-        /// Cancels and closes the view model.
-        /// </summary>
-        /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public async Task<bool> CancelAndCloseViewModelAsync()
-        {
-            if (!await CancelViewModelAsync())
-            {
-                return false;
-            }
-
-            await CloseViewModelAsync(true);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Saves the view model.
-        /// </summary>
-        /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public virtual Task<bool> SaveViewModelAsync()
-        {
-            var vm = ViewModel;
-            if (vm is null)
-            {
-                return Task<bool>.FromResult(true);
-            }
-
-            return vm.SaveViewModelAsync();
-        }
-
-        /// <summary>
-        /// Saves and closes the view model. If the saving fails, the view model is not closed.
-        /// </summary>
-        /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public async Task<bool> SaveAndCloseViewModelAsync()
-        {
-            if (!await SaveViewModelAsync())
-            {
-                return false;
-            }
-
-            await CloseViewModelAsync(true);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Closes the view model.
-        /// </summary>
-        public virtual Task CloseViewModelAsync(bool? result)
-        {
-            return CloseViewModelAsync(result, false);
-        }
-
-        /// <summary>
-        /// Closes and disposes the view model.
-        /// </summary>
-        public async virtual Task CloseViewModelAsync(bool? result, bool dispose)
-        {
-            var vm = ViewModel;
-            if (vm is not null)
-            {
-                try
-                {
-                    lock (_lockObject)
-                    {
-                        IsClosingViewModel = true;
-                    }
-
-                    var isClosing = false;
-
-                    var viewModelBase = vm as ViewModelBase;
-                    if (viewModelBase is not null)
-                    {
-                        isClosing = viewModelBase.IsClosing;
-                    }
-
-                    if (!isClosing && !vm.IsClosed)
-                    {
-                        await vm.CloseViewModelAsync(result);
-
-                        if (dispose)
-                        {
-                            var disposable = vm as IDisposable;
-                            if (disposable is not null)
-                            {
-                                disposable.Dispose();
-                            }
-                        }
-                    }
-
-                    ViewModel = null;
-                }
-                finally
-                {
-                    lock (_lockObject)
-                    {
-                        IsClosingViewModel = false;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Awaits until the closing of the view model is completed.
-        /// </summary>
-        /// <returns>Task.</returns>
-        protected async Task CompleteViewModelClosingAsync()
-        {
-            while (true)
+            try
             {
                 lock (_lockObject)
                 {
-                    if (!IsClosingViewModel)
+                    IsClosingViewModel = true;
+                }
+
+                var isClosing = false;
+
+                var viewModelBase = vm as ViewModelBase;
+                if (viewModelBase is not null)
+                {
+                    isClosing = viewModelBase.IsClosing;
+                }
+
+                if (!isClosing && !vm.IsClosed)
+                {
+                    await vm.CloseViewModelAsync(result);
+
+                    if (dispose)
                     {
-                        return;
+                        var disposable = vm as IDisposable;
+                        if (disposable is not null)
+                        {
+                            disposable.Dispose();
+                        }
                     }
                 }
 
-                Log.Debug($"View '{TargetViewType}' is still closing the view model, awaiting completion");
-
-                await Task.Delay(5);
+                ViewModel = null;
+            }
+            finally
+            {
+                lock (_lockObject)
+                {
+                    IsClosingViewModel = false;
+                }
             }
         }
+    }
 
-        /// <summary>
-        /// Tries to construct the view model using the argument. If that fails, it will try to use
-        /// the default constructor of the view model. If that is not available, <c>null</c> is returned.
-        /// </summary>
-        /// <param name="injectionObject">The object that is injected into the view model constructor.</param>
-        /// <returns>
-        /// Constructed view model or <c>null</c> if the view model could not be constructed.
-        /// </returns>
-        protected IViewModel? ConstructViewModelUsingArgumentOrDefaultConstructor(object? injectionObject)
+    /// <summary>
+    /// Awaits until the closing of the view model is completed.
+    /// </summary>
+    /// <returns>Task.</returns>
+    protected async Task CompleteViewModelClosingAsync()
+    {
+        while (true)
         {
-            return ConstructViewModelUsingArgumentOrDefaultConstructor(injectionObject, ViewModelType);
-        }
+            lock (_lockObject)
+            {
+                if (!IsClosingViewModel)
+                {
+                    return;
+                }
+            }
 
-        /// <summary>
-        /// Tries to construct the view model using the argument. If that fails, it will try to use
-        /// the default constructor of the view model. If that is not available, <c>null</c> is returned.
-        /// </summary>
-        /// <param name="injectionObject">The object that is injected into the view model constructor.</param>
-        /// <param name="viewModelType">Type of the view model.</param>
-        /// <returns>Constructed view model or <c>null</c> if the view model could not be constructed.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        private IViewModel? ConstructViewModelUsingArgumentOrDefaultConstructor(object? injectionObject, Type viewModelType)
+            Logger.LogDebug($"View '{TargetViewType}' is still closing the view model, awaiting completion");
+
+            await Task.Delay(5);
+        }
+    }
+
+    /// <summary>
+    /// Tries to construct the view model using the argument. If that fails, it will try to use
+    /// the default constructor of the view model. If that is not available, <c>null</c> is returned.
+    /// </summary>
+    /// <param name="injectionObject">The object that is injected into the view model constructor.</param>
+    /// <returns>
+    /// Constructed view model or <c>null</c> if the view model could not be constructed.
+    /// </returns>
+    protected IViewModel? ConstructViewModelUsingArgumentOrDefaultConstructor(object? injectionObject)
+    {
+        return ConstructViewModelUsingArgumentOrDefaultConstructor(injectionObject, ViewModelType);
+    }
+
+    /// <summary>
+    /// Tries to construct the view model using the argument. If that fails, it will try to use
+    /// the default constructor of the view model. If that is not available, <c>null</c> is returned.
+    /// </summary>
+    /// <param name="injectionObject">The object that is injected into the view model constructor.</param>
+    /// <param name="viewModelType">Type of the view model.</param>
+    /// <returns>Constructed view model or <c>null</c> if the view model could not be constructed.</returns>
+    /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
+    private IViewModel? ConstructViewModelUsingArgumentOrDefaultConstructor(object? injectionObject, Type viewModelType)
+    {
+        ArgumentNullException.ThrowIfNull(viewModelType);
+
+        if (ViewModelBehavior == LogicViewModelBehavior.Injected)
         {
-            ArgumentNullException.ThrowIfNull(viewModelType);
-
-            if (ViewModelBehavior == LogicViewModelBehavior.Injected)
-            {
-                return ViewModel;
-            }
-
-            var targetViewtype = TargetViewType;
-            if (targetViewtype is null)
-            {
-                Log.Debug($"Target view type is null, preventing view model creation");
-                return null;
-            }
-
-            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
-            {
-                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', preventing view model creation for '{targetViewtype.Name}'");
-                return null;
-            }
-
-            if (IgnoreNullDataContext && (injectionObject is null))
-            {
-                Log.Info("ViewModel construction is prevented by the IgnoreNullDataContext property");
-                return null;
-            }
-
-            var determineViewModelInstanceHandler = DetermineViewModelInstance;
-            if (determineViewModelInstanceHandler is not null)
-            {
-                var determineViewModelInstanceEventArgs = new DetermineViewModelInstanceEventArgs(injectionObject);
-                determineViewModelInstanceHandler(this, determineViewModelInstanceEventArgs);
-                if (determineViewModelInstanceEventArgs.ViewModel is not null)
-                {
-                    var viewModel = determineViewModelInstanceEventArgs.ViewModel;
-                    Log.Info("ViewModel instance is overriden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
-
-                    return viewModel;
-                }
-
-                if (determineViewModelInstanceEventArgs.DoNotCreateViewModel)
-                {
-                    Log.Info("ViewModel construction is prevented by the DetermineViewModelInstance event (DoNotCreateViewModel is set to true)");
-                    return null;
-                }
-            }
-
-            var determineViewModelTypeHandler = DetermineViewModelType;
-            if (determineViewModelTypeHandler is not null)
-            {
-                var determineViewModelTypeEventArgs = new DetermineViewModelTypeEventArgs(injectionObject);
-                determineViewModelTypeHandler(this, determineViewModelTypeEventArgs);
-                if (determineViewModelTypeEventArgs.ViewModelType is not null)
-                {
-                    Log.Info("ViewModelType is overriden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
-                        determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
-
-                    viewModelType = determineViewModelTypeEventArgs.ViewModelType;
-                }
-            }
-
-            var injectionObjectAsViewModel = injectionObject as IViewModel;
-            if (injectionObjectAsViewModel is not null)
-            {
-                var injectionObjectViewModelType = injectionObjectAsViewModel.GetType();
-
-                if (ViewModelFactory.CanReuseViewModel(targetViewtype, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
-                {
-                    Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
-                             viewModelType.GetSafeFullName(), targetViewtype.GetSafeFullName());
-
-                    return injectionObjectAsViewModel;
-                }
-            }
-
-            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", ViewModelFactory.GetType().GetSafeFullName());
-
-            var viewModelInstance = ViewModelFactory.CreateViewModel(viewModelType, injectionObject);
-
-            Log.Debug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
-                (viewModelInstance is not null) ? string.Empty : " NOT");
-
-            return viewModelInstance;
+            return ViewModel;
         }
-        #endregion
+
+        var targetViewType = TargetViewType;
+        if (targetViewType is null)
+        {
+            Logger.LogDebug($"Target view type is null, preventing view model creation");
+            return null;
+        }
+
+        if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
+        {
+            Logger.LogDebug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', preventing view model creation for '{targetViewType.Name}'");
+            return null;
+        }
+
+        if (IgnoreNullDataContext && (injectionObject is null))
+        {
+            Logger.LogDebug("ViewModel construction is prevented by the IgnoreNullDataContext property");
+            return null;
+        }
+
+        var determineViewModelInstanceHandler = DetermineViewModelInstance;
+        if (determineViewModelInstanceHandler is not null)
+        {
+            var determineViewModelInstanceEventArgs = new DetermineViewModelInstanceEventArgs(injectionObject);
+            determineViewModelInstanceHandler(this, determineViewModelInstanceEventArgs);
+            if (determineViewModelInstanceEventArgs.ViewModel is not null)
+            {
+                var viewModel = determineViewModelInstanceEventArgs.ViewModel;
+                Logger.LogDebug("ViewModel instance is overridden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
+
+                return viewModel;
+            }
+
+            if (determineViewModelInstanceEventArgs.DoNotCreateViewModel)
+            {
+                Logger.LogDebug("ViewModel construction is prevented by the DetermineViewModelInstance event (DoNotCreateViewModel is set to true)");
+                return null;
+            }
+        }
+
+        var determineViewModelTypeHandler = DetermineViewModelType;
+        if (determineViewModelTypeHandler is not null)
+        {
+            var determineViewModelTypeEventArgs = new DetermineViewModelTypeEventArgs(injectionObject);
+            determineViewModelTypeHandler(this, determineViewModelTypeEventArgs);
+            if (determineViewModelTypeEventArgs.ViewModelType is not null)
+            {
+                Logger.LogDebug("ViewModelType is overridden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
+                    determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
+
+                viewModelType = determineViewModelTypeEventArgs.ViewModelType;
+            }
+        }
+
+        var injectionObjectAsViewModel = injectionObject as IViewModel;
+        if (injectionObjectAsViewModel is not null)
+        {
+            var injectionObjectViewModelType = injectionObjectAsViewModel.GetType();
+
+            if (_viewModelFactory.CanReuseViewModel(targetViewType, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
+            {
+                Logger.LogDebug("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
+                         viewModelType.GetSafeFullName(), targetViewType.GetSafeFullName());
+
+                return injectionObjectAsViewModel;
+            }
+        }
+
+        Logger.LogDebug("Using IViewModelFactory '{0}' to instantiate the view model", _viewModelFactory.GetType().GetSafeFullName());
+
+        var viewModelInstance = _viewModelFactory.CreateViewModel(viewModelType, injectionObject);
+
+        Logger.LogDebug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
+            (viewModelInstance is not null) ? string.Empty : " NOT");
+
+        return viewModelInstance;
     }
 }

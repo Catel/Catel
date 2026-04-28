@@ -1,17 +1,16 @@
-﻿namespace Catel.Services
-{
-    using System;
+﻿namespace Catel.Services;
 
+using System;
+
+/// <summary>
+/// Event args class for an event when an application gets closed.
+/// </summary>
+public class ApplicationClosingEventArgs : EventArgs
+{
     /// <summary>
-    /// Event args class for an event when an application gets closed.
+    /// Gets or sets a value indicating whether the closing of the application should be canceled.
     /// </summary>
-    public class ApplicationClosingEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Gets or sets a value indicating whether the closing of the application should be canceled.
-        /// </summary>
-        /// <value><c>true</c> if the action should be canceled; otherwise, <c>false</c>.</value>
-        /// <remarks></remarks>
-        public bool Cancel { get; set; }
-    }
+    /// <value><c>true</c> if the action should be canceled; otherwise, <c>false</c>.</value>
+    /// <remarks></remarks>
+    public bool Cancel { get; set; }
 }

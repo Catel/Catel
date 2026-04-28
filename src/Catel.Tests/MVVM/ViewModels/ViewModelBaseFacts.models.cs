@@ -1,107 +1,130 @@
-﻿namespace Catel.Tests.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels;
+
+using System.Threading.Tasks;
+using Catel.Data;
+using Catel.MVVM;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+using TestClasses;
+
+public partial class ViewModelBaseFacts
 {
-    using System.Threading.Tasks;
-    using Catel.Data;
-    using Catel.MVVM;
-    using NUnit.Framework;
-    using TestClasses;
-
-    public partial class ViewModelBaseFacts
+    [TestCase]
+    public void GetAllModels_With_Null()
     {
-        [TestCase]
-        public void GetAllModels_With_Null()
-        {
-            var person = new Person();
-            person.FirstName = "first_name";
-            person.LastName = "last_name";
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var viewModel = new TestViewModel(person);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var models = viewModel.GetAllModelsForTest();
+        var person = new Person();
+        person.FirstName = "first_name";
+        person.LastName = "last_name";
 
-            Assert.That(models.Length, Is.EqualTo(1));
-            Assert.That(models[0], Is.EqualTo(person));
-        }
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-        [TestCase]
-        public void GetAllModels()
-        {
-            var person = new Person();
-            person.FirstName = "first_name";
-            person.LastName = "last_name";
+        var models = viewModel.GetAllModelsForTest();
 
-            var viewModel = new TestViewModel(person);
+        Assert.That(models.Length, Is.EqualTo(1));
+        Assert.That(models[0], Is.EqualTo(person));
+    }
 
-            var specialValidationModel = new SpecialValidationModel();
-            viewModel.SpecialValidationModel = specialValidationModel;
+    [TestCase]
+    public void GetAllModels()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var models = viewModel.GetAllModelsForTest();
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(models.Length, Is.EqualTo(2));
-            Assert.That(models[0], Is.EqualTo(person));
-            Assert.That(models[1], Is.EqualTo(specialValidationModel));
-        }
+        var person = new Person();
+        person.FirstName = "first_name";
+        person.LastName = "last_name";
 
-        [TestCase]
-        public async Task ModelsSavedBySaveAsync()
-        {
-            var person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
 
-            var model = person as IModel;
-            var viewModel = new TestViewModel(person);
-            Assert.That(model.IsInEditSession, Is.True);
+        var specialValidationModel = new SpecialValidationModel();
+        viewModel.SpecialValidationModel = specialValidationModel;
 
-            viewModel.FirstName = "new";
+        var models = viewModel.GetAllModelsForTest();
 
-            await viewModel.SaveAndCloseViewModelAsync();
+        Assert.That(models.Length, Is.EqualTo(2));
+        Assert.That(models[0], Is.EqualTo(person));
+        Assert.That(models[1], Is.EqualTo(specialValidationModel));
+    }
 
-            Assert.That(model.IsInEditSession, Is.False);
-            Assert.That(person.FirstName, Is.EqualTo("new"));
-        }
+    [TestCase]
+    public async Task ModelsSavedBySaveAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-        [TestCase]
-        public async Task ModelsCanceledByCancelAsync()
-        {
-            var person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var model = person as IModel;
-            var viewModel = new TestViewModel(person);
-            Assert.That(model.IsInEditSession, Is.True);
+        var person = new Person();
+        person.FirstName = "first name";
+        person.LastName = "last name";
 
-            viewModel.FirstName = "new first name";
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        Assert.That(person.IsInEditSession, Is.True);
 
-            await viewModel.CancelAndCloseViewModelAsync();
+        viewModel.FirstName = "new";
 
-            Assert.That(model.IsInEditSession, Is.False);
-            Assert.That(person.FirstName, Is.EqualTo("first name"));
-        }
+        await viewModel.SaveAndCloseViewModelAsync();
 
-        [TestCase]
-        public void IsModelRegistered_ExistingModel()
-        {
-            var person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+        Assert.That(person.IsInEditSession, Is.False);
+        Assert.That(person.FirstName, Is.EqualTo("new"));
+    }
 
-            var viewModel = new TestViewModel(person);
+    [TestCase]
+    public async Task ModelsCanceledByCancelAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(viewModel.IsModelRegisteredForTest("Person"), Is.True);
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public void IsModelRegistered_NonExistingModel()
-        {
-            var person = new Person();
-            person.FirstName = "first_name";
-            person.LastName = "last_name";
+        var person = new Person();
+        person.FirstName = "first name";
+        person.LastName = "last name";
 
-            var viewModel = new TestViewModel(person);
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        Assert.That(person.IsInEditSession, Is.True);
 
-            Assert.That(viewModel.IsModelRegisteredForTest("SecondPerson"), Is.False);
-        }
+        viewModel.FirstName = "new first name";
+
+        await viewModel.CancelAndCloseViewModelAsync();
+
+        Assert.That(person.IsInEditSession, Is.False);
+        Assert.That(person.CalledCancelEdit, Is.True);
+        Assert.That(person.CalledEndEdit, Is.False);
+    }
+
+    [TestCase]
+    public void IsModelRegistered_ExistingModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var person = new Person();
+        person.FirstName = "first name";
+        person.LastName = "last name";
+
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        Assert.That(viewModel.IsModelRegisteredForTest("Person"), Is.True);
+    }
+
+    [TestCase]
+    public void IsModelRegistered_NonExistingModel()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var person = new Person();
+        person.FirstName = "first_name";
+        person.LastName = "last_name";
+
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        Assert.That(viewModel.IsModelRegisteredForTest("SecondPerson"), Is.False);
     }
 }

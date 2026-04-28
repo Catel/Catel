@@ -1,1 +1,0 @@
-﻿{"skip":1,"take":2,"some other string":3}

@@ -1,75 +1,81 @@
-﻿namespace Catel.Tests.CTL1669
+﻿namespace Catel.Tests.CTL1669;
+
+using System;
+using Catel.Data;
+using Catel.MVVM;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+
+[TestFixture]
+internal class TestFixture
 {
-    using Catel.Data;
-    using Catel.MVVM;
-    using NUnit.Framework;
-
-    [TestFixture]
-    internal class TestFixture
+    [Test]
+    public void ViewModelInit_DoesNotThrows()
     {
-        [Test]
-        public void ViewModelInit_DoesNotThrows()
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        Assert.DoesNotThrow(() =>
         {
-            Assert.DoesNotThrow(() =>
+            var dogModel = new DogModel
             {
-                var dogModel = new DogModel
-                {
-                    Name = "name"
-                };
+                Name = "name"
+            };
 
-                var vm = new DogViewModel(dogModel);
+            var vm = new DogViewModel(dogModel, serviceProvider);
 
-                Assert.That(dogModel.Name, Is.EqualTo(vm.Name));
-            });
-        }
+            Assert.That(dogModel.Name, Is.EqualTo(vm.Name));
+        });
+    }
+}
+
+public abstract class AnimalModelBase : ModelBase
+{
+}
+
+public class DogModel : AnimalModelBase
+{
+    public string Name
+    {
+        get => GetValue<string>(NameProperty);
+        set => SetValue(NameProperty, value);
     }
 
-    public abstract class AnimalModelBase : ModelBase
+    public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
+}
+
+public abstract class AnimalViewModelBase : FeaturedViewModelBase
+{
+    public AnimalViewModelBase(AnimalModelBase model, IServiceProvider serviceProvider)
+        : base(serviceProvider)
+    {
+        Animal = model;
+    }
+
+    [Model]
+    public AnimalModelBase Animal
+    {
+        get => GetValue<AnimalModelBase>(AnimalProperty);
+        set => SetValue(AnimalProperty, value);
+    }
+
+    public static readonly IPropertyData AnimalProperty = RegisterProperty<AnimalModelBase>(nameof(Animal));
+}
+
+public class DogViewModel : AnimalViewModelBase
+{
+    public DogViewModel(DogModel model, IServiceProvider serviceProvider)
+        : base(model, serviceProvider)
     {
     }
 
-    public class DogModel : AnimalModelBase
+    [ViewModelToModel(nameof(Animal), nameof(DogModel.Name))]
+    public string Name
     {
-        public string Name
-        {
-            get => GetValue<string>(NameProperty);
-            set => SetValue(NameProperty, value);
-        }
-
-        public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
+        get => GetValue<string>(NameProperty);
+        set => SetValue(NameProperty, value);
     }
 
-    public abstract class AnimalViewModelBase : ViewModelBase
-    {
-        public AnimalViewModelBase(AnimalModelBase model)
-        {
-            Animal = model;
-        }
-
-        [Model]
-        public AnimalModelBase Animal
-        {
-            get => GetValue<AnimalModelBase>(AnimalProperty);
-            set => SetValue(AnimalProperty, value);
-        }
-
-        public static readonly IPropertyData AnimalProperty = RegisterProperty<AnimalModelBase>(nameof(Animal));
-    }
-
-    public class DogViewModel : AnimalViewModelBase
-    {
-        public DogViewModel(DogModel model)
-            : base(model)
-        {
-        }
-
-        [ViewModelToModel(nameof(Animal), nameof(DogModel.Name))]
-        public string Name
-        {
-            get => GetValue<string>(NameProperty);
-            set => SetValue(NameProperty, value);
-        }
-
-        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
-    }
+    public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
 }

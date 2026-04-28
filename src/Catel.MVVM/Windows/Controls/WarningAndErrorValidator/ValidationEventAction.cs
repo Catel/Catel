@@ -1,28 +1,27 @@
-﻿namespace Catel.Windows.Controls
+﻿namespace Catel.Windows.Controls;
+
+/// <summary>
+/// Validation event action.
+/// </summary>
+public enum ValidationEventAction
 {
     /// <summary>
-    /// Validation event action.
+    /// Added.
     /// </summary>
-    public enum ValidationEventAction
-    {
-        /// <summary>
-        /// Added.
-        /// </summary>
-        Added,
+    Added,
 
-        /// <summary>
-        /// Removed.
-        /// </summary>
-        Removed,
+    /// <summary>
+    /// Removed.
+    /// </summary>
+    Removed,
 
-        /// <summary>
-        /// Refresh the validation, don't add or remove.
-        /// </summary>
-        Refresh,
+    /// <summary>
+    /// Refresh the validation, don't add or remove.
+    /// </summary>
+    Refresh,
 
-        /// <summary>
-        /// All validation info of the specified object should be cleared.
-        /// </summary>
-        ClearAll
-    }
+    /// <summary>
+    /// All validation info of the specified object should be cleared.
+    /// </summary>
+    ClearAll
 }

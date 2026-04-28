@@ -1,86 +1,85 @@
-﻿namespace Catel.Tests.Messaging
+﻿namespace Catel.Tests.Messaging;
+
+using Catel.Messaging;
+
+public class MessageSender
 {
-    using Catel.Messaging;
-
-    public class MessageSender
+    public bool SendMessage(IMessageMediator messageMediator, string message)
     {
-        public bool SendMessage(IMessageMediator messageMediator, string message)
-        {
-            return SendMessage(messageMediator, message, null);
-        }
-
-        public bool SendMessage(IMessageMediator messageMediator, string message, object tag)
-        {
-            return messageMediator.SendMessage(message, tag);
-        }
+        return SendMessage(messageMediator, message, null);
     }
 
-    public class MessageRecipient
+    public bool SendMessage(IMessageMediator messageMediator, string message, object tag)
     {
-        public int MessagesReceived { get; private set; }
+        return messageMediator.SendMessage(message, tag);
+    }
+}
 
-        public int MessagesReceivedViaMessageMediatorWithTag { get; private set; }
+public class MessageRecipient
+{
+    public int MessagesReceived { get; private set; }
 
-        public int MessagesReceivedViaMessageMediatorWithoutTag { get; private set; }
+    public int MessagesReceivedViaMessageMediatorWithTag { get; private set; }
 
-        public void OnMessage(string message)
-        {
-            MessagesReceived++;
-        }
+    public int MessagesReceivedViaMessageMediatorWithoutTag { get; private set; }
 
-        public void AnotherOnMessage(string message)
-        {
-            MessagesReceived++;
-        }
-
-        public void YetAnotherOnMessage(string message)
-        {
-            MessagesReceived++;
-        }
-
-        [MessageRecipient]
-        public void OnMessageWithoutTag(string message)
-        {
-            MessagesReceivedViaMessageMediatorWithoutTag++;
-        }
-
-        [MessageRecipient(Tag = "tag")]
-        public void OnMessageWithTag(string message)
-        {
-            MessagesReceivedViaMessageMediatorWithTag++;
-        }
-
-        public void SubscribeViaMessageMediatorHelper(IMessageMediator messageMediator)
-        {
-            MessageMediatorHelper.SubscribeRecipient(this, messageMediator);
-        }
-
-        public void UnsubscribeViaMessageMediatorHelper(IMessageMediator messageMediator)
-        {
-            MessageMediatorHelper.UnsubscribeRecipient(this, messageMediator);
-        }
+    public void OnMessage(string message)
+    {
+        MessagesReceived++;
     }
 
-    public class Message
+    public void AnotherOnMessage(string message)
     {
-        public string Text { get; set; }
+        MessagesReceived++;
     }
 
-    public class ReceiverA
+    public void YetAnotherOnMessage(string message)
     {
-        public string Received { get; private set; }
-        public void OnMessageReceived(Message msg)
-        {
-            Received = msg.Text;
-        }
+        MessagesReceived++;
     }
 
-    public class ReceiverB
+    [MessageRecipient]
+    public void OnMessageWithoutTag(string message)
     {
-        public string Received { get; private set; }
-        public void OnMessageReceived(Message msg)
-        {
-            Received = msg.Text;
-        }
+        MessagesReceivedViaMessageMediatorWithoutTag++;
+    }
+
+    [MessageRecipient(Tag = "tag")]
+    public void OnMessageWithTag(string message)
+    {
+        MessagesReceivedViaMessageMediatorWithTag++;
+    }
+
+    public void SubscribeViaMessageMediatorHelper(IMessageMediator messageMediator)
+    {
+        MessageMediatorHelper.SubscribeRecipient(this, messageMediator);
+    }
+
+    public void UnsubscribeViaMessageMediatorHelper(IMessageMediator messageMediator)
+    {
+        MessageMediatorHelper.UnsubscribeRecipient(this, messageMediator);
+    }
+}
+
+public class Message
+{
+    public string Text { get; set; }
+}
+
+public class ReceiverA
+{
+    public string Received { get; private set; }
+    public void OnMessageReceived(Message msg)
+    {
+        Received = msg.Text;
+    }
+}
+
+public class ReceiverB
+{
+    public string Received { get; private set; }
+    public void OnMessageReceived(Message msg)
+    {
+        Received = msg.Text;
     }
 }

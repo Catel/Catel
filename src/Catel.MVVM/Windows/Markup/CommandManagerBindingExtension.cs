@@ -1,100 +1,104 @@
-﻿namespace Catel.Windows.Markup
+﻿namespace Catel.Windows.Markup;  
+
+using System;
+using Catel.MVVM;
+using System.Windows.Markup;
+using Microsoft.Extensions.DependencyInjection;
+
+/// <summary>
+/// Binds commands to the command manager.
+/// </summary>
+public class CommandManagerBindingExtension : UpdatableMarkupExtension
 {
-    using System;
-    using Catel.MVVM;
-    using IoC;
-    using System.Windows.Markup;
+    private ICommandManager? _commandManager;
 
     /// <summary>
-    /// Binds commands to the command manager.
+    /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
     /// </summary>
-    public class CommandManagerBindingExtension : UpdatableMarkupExtension
+    public CommandManagerBindingExtension()
+        : this(string.Empty)
     {
-        private readonly ICommandManager _commandManager;
+        // Leave empty
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
-        /// </summary>
-        public CommandManagerBindingExtension()
-            : this(string.Empty)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
+    /// </summary>
+    /// <param name="commandName">Name of the command.</param>
+    public CommandManagerBindingExtension(string commandName)
+    {
+        CommandName = commandName;
+    }
+
+    /// <summary>
+    /// Gets or sets the name of the command.
+    /// </summary>
+    /// <value>The name of the command.</value>
+    [ConstructorArgument("commandName")]
+    public string CommandName { get; set; }
+
+    /// <summary>
+    /// Called when the target object has been loaded.
+    /// </summary>
+    protected override void OnTargetObjectLoaded()
+    {
+        base.OnTargetObjectLoaded();
+
+        var commandManager = _commandManager;
+        if (commandManager is not null)
         {
-            // Leave empty
+            commandManager.CommandCreated += OnCommandManagerCommandCreated;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        public CommandManagerBindingExtension(string commandName)
-        {
-            CommandName = commandName;
+        // It's possible that we have a late-bound command, always update
+        UpdateValue();
+    }
 
-            var dependencyResolver = this.GetDependencyResolver();
-            _commandManager = dependencyResolver.ResolveRequired<ICommandManager>();
+    /// <summary>
+    /// Called when the target object has been unloaded.
+    /// </summary>
+    protected override void OnTargetObjectUnloaded()
+    {
+        var commandManager = _commandManager;
+        if (commandManager is not null)
+        {
+            commandManager.CommandCreated -= OnCommandManagerCommandCreated;
         }
 
-        /// <summary>
-        /// Gets or sets the name of the command.
-        /// </summary>
-        /// <value>The name of the command.</value>
-        [ConstructorArgument("commandName")]
-        public string CommandName { get; set; }
+        base.OnTargetObjectUnloaded();
+    }
 
-        /// <summary>
-        /// Called when the target object has been loaded.
-        /// </summary>
-        protected override void OnTargetObjectLoaded()
+    private void OnCommandManagerCommandCreated(object? sender, CommandCreatedEventArgs e)
+    {
+        if (string.Equals(CommandName, e.Name))
         {
-            base.OnTargetObjectLoaded();
-
-            _commandManager.CommandCreated += OnCommandManagerCommandCreated;
-
-            // It's possible that we have a late-bound command, always update
             UpdateValue();
         }
+    }
 
-        /// <summary>
-        /// Called when the target object has been unloaded.
-        /// </summary>
-        protected override void OnTargetObjectUnloaded()
+    /// <summary>
+    /// Provides the dynamic value.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider.</param>
+    /// <returns>System.Object.</returns>
+    protected override object? ProvideDynamicValue(IServiceProvider serviceProvider)
+    {
+        if (CatelEnvironment.IsInDesignMode)
         {
-            _commandManager.CommandCreated -= OnCommandManagerCommandCreated;
-
-            base.OnTargetObjectUnloaded();
+            return null;
         }
 
-        private void OnCommandManagerCommandCreated(object? sender, CommandCreatedEventArgs e)
+        if (_commandManager is null)
         {
-            if (string.Equals(CommandName, e.Name))
-            {
-                UpdateValue();
-            }
+            _commandManager = serviceProvider.GetRequiredService<ICommandManager>();
         }
 
-        /// <summary>
-        /// Provides the dynamic value.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <returns>System.Object.</returns>
-        protected override object? ProvideDynamicValue(IServiceProvider? serviceProvider)
+        if (string.IsNullOrWhiteSpace(CommandName))
         {
-            if (CatelEnvironment.IsInDesignMode)
-            {
-                return null;
-            }
-
-            if (_commandManager is null)
-            {
-                return null;
-            }
-
-            if (string.IsNullOrWhiteSpace(CommandName))
-            {
-                return null;
-            }
-
-            var command = _commandManager.GetCommand(CommandName);
-            return command;
+            return null;
         }
+
+        var command = _commandManager.GetCommand(CommandName);
+        return command;
     }
 }

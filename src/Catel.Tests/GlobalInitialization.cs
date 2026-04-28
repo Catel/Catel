@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
-using Catel.Data;
-using Catel.IoC;
 using Catel.Logging;
 using Catel.Reflection;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 /// <summary>
@@ -16,16 +15,23 @@ public class GlobalInitialization
     [OneTimeSetUp]
     public static void SetUp()
     {
-        if (Debugger.IsAttached)
+        LogManager.FallbackLoggerFactory = LoggerFactory.Create(x =>
         {
-            LogManager.AddDebugListener();
-        }
+            if (Debugger.IsAttached)
+            {
+                x.AddFilter(x => x == LogLevel.Debug);
 
-        // For testing purposes, enable features we disabled for CTL-234
-        var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
-        modelEqualityComparer.CompareProperties = true;
-        modelEqualityComparer.CompareValues = true;
-        modelEqualityComparer.CompareCollections = true;
+                x.AddDebug();
+            }
+
+            x.AddConsole();
+        });
+
+        //// For testing purposes, enable features we disabled for CTL-234
+        //var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
+        //modelEqualityComparer.CompareProperties = true;
+        //modelEqualityComparer.CompareValues = true;
+        //modelEqualityComparer.CompareCollections = true;
 
         var culture = new CultureInfo("en-US");
         System.Threading.Thread.CurrentThread.CurrentCulture = culture;

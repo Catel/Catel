@@ -1,103 +1,139 @@
-﻿namespace Catel.Tests.MVVM.Auditing
+﻿namespace Catel.Tests.MVVM.Auditing;
+
+using System;
+using Catel.MVVM.Auditing;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+
+[TestFixture]
+public class AuditingManagerTest
 {
-    using System;
-    using Catel.MVVM.Auditing;
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class AuditingManagerTest
+    [TestCase]
+    public void Clear_ValidAuditor()
     {
-        [TestCase]
-        public void Clear_ValidAuditor()
-        {
-            AuditingManager.Clear();
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+        var auditingManager = new AuditingManager(serviceProvider);
 
-            AuditingManager.Clear();
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
-        }
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
 
-        [TestCase]
-        public void RegisterAuditor_Null()
-        {
-            Assert.Throws<ArgumentNullException>(() => AuditingManager.RegisterAuditor(null));
-        }
+        auditingManager.Clear();
 
-        [TestCase]
-        public void RegisterAuditor_ValidAuditor()
-        {
-            AuditingManager.Clear();
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
+    }
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+    [TestCase]
+    public void RegisterAuditor_Null()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public void RegisterAuditor_SameAuditorTwice()
-        {
-            AuditingManager.Clear();
+        var auditingManager = new AuditingManager(serviceProvider);
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
-            AuditingManager.RegisterAuditor(auditor);
+        Assert.Throws<ArgumentNullException>(() => auditingManager.RegisterAuditor(null));
+    }
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
-        }
+    [TestCase]
+    public void RegisterAuditor_ValidAuditor()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-        [TestCase]
-        public void UnregisterAuditor_Null()
-        {
-            Assert.Throws<ArgumentNullException>(() => AuditingManager.UnregisterAuditor(null));
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public void UnregisterAuditor_UnregisterExisting()
-        {
-            AuditingManager.Clear();
+        var auditingManager = new AuditingManager(serviceProvider);
 
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+    }
 
-            AuditingManager.UnregisterAuditor(auditor);
+    [TestCase]
+    public void RegisterAuditor_SameAuditorTwice()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        [TestCase]
-        public void UnregisterAuditor_UnregisterNotExisting()
-        {
-            AuditingManager.Clear();
+        var auditingManager = new AuditingManager(serviceProvider);
 
-            var auditor = new TestAuditor();
-            AuditingManager.UnregisterAuditor(auditor);
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
+        auditingManager.RegisterAuditor(auditor);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
-        }
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+    }
 
-        [TestCase]
-        public void UnregisterAuditor_UnregisterNotExistingWithAnotherRegistered()
-        {
-            AuditingManager.Clear();
+    [TestCase]
+    public void UnregisterAuditor_Null()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            var auditor1 = new TestAuditor();
-            var auditor2 = new TestAuditor();
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            AuditingManager.RegisterAuditor(auditor1);
+        var auditingManager = new AuditingManager(serviceProvider);
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+        Assert.Throws<ArgumentNullException>(() => auditingManager.UnregisterAuditor(null));
+    }
 
-            AuditingManager.UnregisterAuditor(auditor2);
+    [TestCase]
+    public void UnregisterAuditor_UnregisterExisting()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-            Assert.That(AuditingManager.RegisteredAuditorsCount, Is.EqualTo(1), "Count should still be 1");
-        }
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var auditingManager = new AuditingManager(serviceProvider);
+
+        var auditor = new TestAuditor();
+        auditingManager.RegisterAuditor(auditor);
+
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+
+        auditingManager.UnregisterAuditor(auditor);
+
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
+    }
+
+    [TestCase]
+    public void UnregisterAuditor_UnregisterNotExisting()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var auditingManager = new AuditingManager(serviceProvider);
+
+        var auditor = new TestAuditor();
+        auditingManager.UnregisterAuditor(auditor);
+
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(0));
+    }
+
+    [TestCase]
+    public void UnregisterAuditor_UnregisterNotExistingWithAnotherRegistered()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var auditingManager = new AuditingManager(serviceProvider);
+
+        var auditor1 = new TestAuditor();
+        var auditor2 = new TestAuditor();
+
+        auditingManager.RegisterAuditor(auditor1);
+
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1));
+
+        auditingManager.UnregisterAuditor(auditor2);
+
+        Assert.That(auditingManager.RegisteredAuditorsCount, Is.EqualTo(1), "Count should still be 1");
     }
 }

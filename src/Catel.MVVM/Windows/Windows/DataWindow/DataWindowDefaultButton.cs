@@ -1,28 +1,29 @@
-﻿namespace Catel.Windows
+﻿namespace Catel.Windows;
+
+/// <summary>
+/// Available default buttons on the data window mode.
+/// </summary>
+public enum DataWindowDefaultButton
 {
+    Default = OK,
+
     /// <summary>
-    /// Available default buttons on the data window mode.
+    /// No button.
     /// </summary>
-    public enum DataWindowDefaultButton
-    {
-        /// <summary>
-        /// OK button.
-        /// </summary>
-        OK,
+    None = 0,
 
-        /// <summary>
-        /// Apply button.
-        /// </summary>
-        Apply,
+    /// <summary>
+    /// OK button.
+    /// </summary>
+    OK = 1,
 
-        /// <summary>
-        /// Close button.
-        /// </summary>
-        Close,
+    /// <summary>
+    /// Apply button.
+    /// </summary>
+    Apply = 2,
 
-        /// <summary>
-        /// No button.
-        /// </summary>
-        None
-    }
+    /// <summary>
+    /// Close button.
+    /// </summary>
+    Close = 3,
 }

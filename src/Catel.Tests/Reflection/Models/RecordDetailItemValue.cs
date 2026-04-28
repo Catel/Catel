@@ -1,26 +1,25 @@
-﻿namespace Catel.Tests.Reflection.Models
+﻿namespace Catel.Tests.Reflection.Models;
+
+using System.Globalization;
+using Catel;
+
+public class RecordDetailItemValue
 {
-    using System.Globalization;
-    using Catel;
-
-    public class RecordDetailItemValue
+    public RecordDetailItemValue(RecordDetailItem parent)
     {
-        public RecordDetailItemValue(RecordDetailItem parent)
-        {
-            Parent = parent;
-        }
+        Parent = parent;
+    }
 
-        public RecordDetailItem Parent { get; private set; }
+    public RecordDetailItem Parent { get; private set; }
 
-        public object Value { get; set; }
+    public object Value { get; set; }
 
-        public object Delta { get; set; }
+    public object Delta { get; set; }
 
-        public bool IsDifferent { get; set; }
+    public bool IsDifferent { get; set; }
 
-        public override string ToString()
-        {
-            return ObjectToStringHelper.ToString(Value, CultureInfo.CurrentCulture);
-        }
+    public override string ToString()
+    {
+        return ObjectToStringHelper.ToString(Value, CultureInfo.CurrentCulture);
     }
 }

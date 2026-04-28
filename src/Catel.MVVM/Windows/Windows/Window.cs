@@ -1,23 +1,34 @@
-﻿namespace Catel.Windows
-{
-    using System.Windows;
+﻿namespace Catel.Windows;
 
+using System;
+using System.Windows;
+using Catel.MVVM;
+using Catel.Services;
+
+/// <summary>
+/// Easy implementation of the <see cref="DataWindow"/> that adds some features to make
+/// the data window behave as a normal window.
+/// </summary>
+public class Window : DataWindow
+{
     /// <summary>
-    /// Easy implementation of the <see cref="DataWindow"/> that adds some features to make
-    /// the data window behave as a normal window.
+    /// Initializes a new instance of the <see cref="Window"/> class.
     /// </summary>
-    public class Window : DataWindow
+    public Window(IServiceProvider serviceProvider, IWrapControlService wrapControlService, 
+        ILanguageService languageService)
+        : this(null, serviceProvider, wrapControlService, languageService)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Window"/> class.
-        /// </summary>
-        public Window()
-            : base(DataWindowMode.Custom)
-        {
-            SizeToContent = SizeToContent.Manual;
-            ShowInTaskbar = true;
-            ResizeMode = ResizeMode.CanResize;
-            WindowStartupLocation = WindowStartupLocation.Manual;
-        }
+        // Leave empty!
+    }
+
+    public Window(IViewModel? viewModel, IServiceProvider serviceProvider, 
+        IWrapControlService wrapControlService, ILanguageService languageService)
+        : base(viewModel, serviceProvider, wrapControlService, languageService)
+    {
+        Mode = DataWindowMode.Custom;
+        SizeToContent = SizeToContent.Manual;
+        ShowInTaskbar = true;
+        ResizeMode = ResizeMode.CanResize;
+        WindowStartupLocation = WindowStartupLocation.Manual;
     }
 }

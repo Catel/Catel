@@ -1,26 +1,28 @@
-﻿namespace Catel.Tests.BugReports.GH2231.Views
+﻿namespace Catel.Tests.BugReports.GH2231.Views;
+
+using System;
+using System.Threading.Tasks;
+using Catel.Services;
+
+public partial class WindowBView
 {
-    using System;
-    using System.Threading.Tasks;
-
-    public partial class WindowBView
+    public WindowBView(IServiceProvider serviceProvider, IWrapControlService wrapControlService, 
+        ILanguageService languageService)
+        : base(serviceProvider, wrapControlService, languageService)
     {
-        public WindowBView()
+        InitializeComponent();
+    }
+
+    protected override void OnLoaded(EventArgs e)
+    {
+        base.OnLoaded(e);
+
+        Dispatcher.BeginInvoke(async () =>
         {
-            InitializeComponent();
-        }
+            await Task.Delay(5000);
 
-        protected override void OnLoaded(EventArgs e)
-        {
-            base.OnLoaded(e);
-
-            Dispatcher.BeginInvoke(async () =>
-            {
-                await Task.Delay(5000);
-
-                var parent = Owner;
-                parent.Close();
-            });
-        }
+            var parent = Owner;
+            parent.Close();
+        });
     }
 }

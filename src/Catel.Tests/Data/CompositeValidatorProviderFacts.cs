@@ -1,155 +1,160 @@
-﻿namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data;
+
+using System;
+
+using Catel.Data;
+using Catel.MVVM;
+
+using NUnit.Framework;
+
+public class CompositeValidatorProviderFacts
 {
-    using System;
-
-    using Catel.Data;
-    using Catel.MVVM;
-
-    using NUnit.Framework;
-
-    public class CompositeValidatorProviderFacts
+    [TestFixture]
+    public class TheAddMethod
     {
-        [TestFixture]
-        public class TheAddMethod
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullValidator()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullValidator()
-            {
-                var compositeValidatorProvider = new CompositeValidatorProvider();
+            var compositeValidatorProvider = new CompositeValidatorProvider();
 
-                Assert.Throws<ArgumentNullException>(
-                    () => compositeValidatorProvider.Add(null));
+            Assert.Throws<ArgumentNullException>(
+                () => compositeValidatorProvider.Add(null));
+        }
+    }
+
+    [TestFixture]
+    public class TheRemoveMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullValidator()
+        {
+            var compositeValidatorProvider = new CompositeValidatorProvider();
+
+            Assert.Throws<ArgumentNullException>(() => compositeValidatorProvider.Remove(null));
+        }
+
+        [TestCase]
+        public void EliminatesAnAlreadyAddedValidator()
+        {
+            var compositeValidatorProvider = new CompositeValidatorProvider();
+            var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
+            var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
+
+            compositeValidatorProvider.Add(validatorProviderMock1.Object);
+            compositeValidatorProvider.Add(validatorProviderMock2.Object);
+
+            compositeValidatorProvider.Remove(validatorProviderMock1.Object);
+            Assert.That(compositeValidatorProvider.Contains(validatorProviderMock1.Object), Is.False);
+        }
+    }
+
+    [TestFixture]
+    public class GetValidatorGenericMethod
+    {
+        public class FooViewModel : ViewModelBase
+        {
+            public FooViewModel(IServiceProvider serviceProvider) 
+                : base(serviceProvider)
+            {
             }
         }
 
-        [TestFixture]
-        public class TheRemoveMethod
+        [TestCase]
+        public void RetrieveTheRightValidatorComposition()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullValidator()
+            var compositeValidatorProvider = new CompositeValidatorProvider();
+            var validatorMock1 = new Moq.Mock<IValidator>();
+            var validatorMock2 = new Moq.Mock<IValidator>();
+
+            var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
+
+            var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock2.Object);
+
+            compositeValidatorProvider.Add(validatorProviderMock1.Object);
+            compositeValidatorProvider.Add(validatorProviderMock2.Object);
+
+            IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
+
+            Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
+            ((CompositeValidator)validator).Contains(validatorMock1.Object);
+            ((CompositeValidator)validator).Contains(validatorMock2.Object);
+        }
+
+        [TestCase]
+        public void RetrieveTheRightSingleValidator()
+        {
+            var compositeValidatorProvider = new CompositeValidatorProvider();
+            var validatorMock1 = new Moq.Mock<IValidator>();
+
+            var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
+
+            var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(default(IValidator));
+
+            compositeValidatorProvider.Add(validatorProviderMock1.Object);
+            compositeValidatorProvider.Add(validatorProviderMock2.Object);
+
+            IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
+
+            Assert.That(validatorMock1.Object, Is.EqualTo(validator));
+        }
+    }
+
+    [TestFixture]
+    public class GetValidatorMethod
+    {
+        public class FooViewModel : ViewModelBase
+        {
+            public FooViewModel(IServiceProvider serviceProvider) 
+                : base(serviceProvider)
             {
-                var compositeValidatorProvider = new CompositeValidatorProvider();
-
-                Assert.Throws<ArgumentNullException>(() => compositeValidatorProvider.Remove(null));
-            }
-
-            [TestCase]
-            public void EliminatesAnAlreadyAddedValidator()
-            {
-                var compositeValidatorProvider = new CompositeValidatorProvider();
-                var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
-                var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
-
-                compositeValidatorProvider.Add(validatorProviderMock1.Object);
-                compositeValidatorProvider.Add(validatorProviderMock2.Object);
-
-                compositeValidatorProvider.Remove(validatorProviderMock1.Object);
-                Assert.That(compositeValidatorProvider.Contains(validatorProviderMock1.Object), Is.False);
             }
         }
 
-        [TestFixture]
-        public class GetValidatorGenericMethod
+        [TestCase]
+        public void RetrieveTheRightValidatorComposition()
         {
-            public class FooViewModel : ViewModelBase
-            {
+            var compositeValidatorProvider = new CompositeValidatorProvider();
+            var validatorMock1 = new Moq.Mock<IValidator>();
+            var validatorMock2 = new Moq.Mock<IValidator>();
 
-            }
+            var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
 
-            [TestCase]
-            public void RetrieveTheRightValidatorComposition()
-            {
-                var compositeValidatorProvider = new CompositeValidatorProvider();
-                var validatorMock1 = new Moq.Mock<IValidator>();
-                var validatorMock2 = new Moq.Mock<IValidator>();
+            var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock2.Object);
 
-                var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
+            compositeValidatorProvider.Add(validatorProviderMock1.Object);
+            compositeValidatorProvider.Add(validatorProviderMock2.Object);
 
-                var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock2.Object);
+            IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
 
-                compositeValidatorProvider.Add(validatorProviderMock1.Object);
-                compositeValidatorProvider.Add(validatorProviderMock2.Object);
-
-                IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
-
-                Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
-                ((CompositeValidator)validator).Contains(validatorMock1.Object);
-                ((CompositeValidator)validator).Contains(validatorMock2.Object);
-            }
-
-            [TestCase]
-            public void RetrieveTheRightSingleValidator()
-            {
-                var compositeValidatorProvider = new CompositeValidatorProvider();
-                var validatorMock1 = new Moq.Mock<IValidator>();
-
-                var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
-
-                var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(default(IValidator));
-
-                compositeValidatorProvider.Add(validatorProviderMock1.Object);
-                compositeValidatorProvider.Add(validatorProviderMock2.Object);
-
-                IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
-
-                Assert.That(validatorMock1.Object, Is.EqualTo(validator));
-            }
+            Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
+            ((CompositeValidator)validator).Contains(validatorMock1.Object);
+            ((CompositeValidator)validator).Contains(validatorMock2.Object);
         }
 
-        [TestFixture]
-        public class GetValidatorMethod
+        [TestCase]
+        public void RetrieveTheRightSingleValidator()
         {
-            public class FooViewModel : ViewModelBase
-            {
+            var compositeValidatorProvider = new CompositeValidatorProvider();
+            var validatorMock1 = new Moq.Mock<IValidator>();
 
-            }
+            var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
 
-            [TestCase]
-            public void RetrieveTheRightValidatorComposition()
-            {
-                var compositeValidatorProvider = new CompositeValidatorProvider();
-                var validatorMock1 = new Moq.Mock<IValidator>();
-                var validatorMock2 = new Moq.Mock<IValidator>();
+            var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
+            validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(default(IValidator));
 
-                var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
+            compositeValidatorProvider.Add(validatorProviderMock1.Object);
+            compositeValidatorProvider.Add(validatorProviderMock2.Object);
 
-                var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock2.Object);
+            IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
 
-                compositeValidatorProvider.Add(validatorProviderMock1.Object);
-                compositeValidatorProvider.Add(validatorProviderMock2.Object);
-
-                IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
-
-                Assert.That(validator, Is.InstanceOf(typeof(CompositeValidator)));
-                ((CompositeValidator)validator).Contains(validatorMock1.Object);
-                ((CompositeValidator)validator).Contains(validatorMock2.Object);
-            }
-
-            [TestCase]
-            public void RetrieveTheRightSingleValidator()
-            {
-                var compositeValidatorProvider = new CompositeValidatorProvider();
-                var validatorMock1 = new Moq.Mock<IValidator>();
-
-                var validatorProviderMock1 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock1.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(validatorMock1.Object);
-
-                var validatorProviderMock2 = new Moq.Mock<IValidatorProvider>();
-                validatorProviderMock2.Setup(provider => provider.GetValidator(typeof(FooViewModel))).Returns(default(IValidator));
-
-                compositeValidatorProvider.Add(validatorProviderMock1.Object);
-                compositeValidatorProvider.Add(validatorProviderMock2.Object);
-
-                IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
-
-                Assert.That(validatorMock1.Object, Is.EqualTo(validator));
-            }
+            Assert.That(validatorMock1.Object, Is.EqualTo(validator));
         }
     }
 }

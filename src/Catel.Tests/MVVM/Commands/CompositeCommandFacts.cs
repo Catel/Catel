@@ -1,222 +1,280 @@
-﻿namespace Catel.Tests.MVVM
+﻿namespace Catel.Tests.MVVM;
+
+using System;
+using System.Threading.Tasks;
+using Catel.MVVM;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+
+public class CompositeCommandFacts
 {
-    using System;
-    using Catel.MVVM;
-    using NUnit.Framework;
-    using System.Threading.Tasks;
-
-    public class CompositeCommandFacts
+    [TestFixture]
+    public class TheCanExecuteState
     {
-        [TestFixture]
-        public class TheCanExecuteState
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        public void CanExecuteEmptyCommandWithAtLeastOneMustBeExecutable(bool atLeastOneMustBeExecutable, bool expectedValue)
         {
-            [TestCase(false, true)]
-            [TestCase(true, false)]
-            public void CanExecuteEmptyCommandWithAtLeastOneMustBeExecutable(bool atLeastOneMustBeExecutable, bool expectedValue)
-            {
-                var compositeCommand = new CompositeCommand();
-                compositeCommand.AtLeastOneMustBeExecutable = atLeastOneMustBeExecutable;
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase(false, true)]
-            [TestCase(true, false)]
-            public void PreventsExecutionOfPartiallyExecutableCommand(bool checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand, bool expectedValue)
-            {
-                var compositeCommand = new CompositeCommand();
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                compositeCommand.RegisterCommand(new Command(() => { }, () => false));
-                compositeCommand.RegisterCommand(new Command(() => { }, () => true));
+            compositeCommand.AtLeastOneMustBeExecutable = atLeastOneMustBeExecutable;
 
-                compositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand = checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand;
-
-                Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
-            }
+            Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
         }
 
-        [TestFixture]
-        public class TheRegisterCommandMethod
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        public void PreventsExecutionOfPartiallyExecutableCommand(bool checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand, bool expectedValue)
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommand()
-            {
-                var compositeCommand = new CompositeCommand();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void RegistersCommandForExecution()
-            {
-                var vm = new CompositeCommandViewModel();
-                var compositeCommand = new CompositeCommand();
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                compositeCommand.RegisterCommand(vm.TestCommand1, vm);
+            compositeCommand.RegisterCommand(new Command(serviceProvider, () => { }, () => false));
+            compositeCommand.RegisterCommand(new Command(serviceProvider, () => { }, () => true));
 
-                compositeCommand.Execute();
+            compositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand = checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand;
 
-                Assert.That(vm.IsTestCommand1Executed, Is.True);
-            }
+            Assert.That(((ICatelCommand)compositeCommand).CanExecute(null), Is.EqualTo(expectedValue));
+        }
+    }
+
+    [TestFixture]
+    public class TheRegisterCommandMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommand()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
         }
 
-        [TestFixture]
-        public class TheUnregisterCommandMethod
+        [TestCase]
+        public void RegistersCommandForExecution()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullCommand()
-            {
-                var compositeCommand = new CompositeCommand();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void UnregistersCommandForExecution()
-            {
-                var vm = new CompositeCommandViewModel();
-                var compositeCommand = new CompositeCommand();
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                compositeCommand.RegisterCommand(vm.TestCommand1, vm);
-                compositeCommand.RegisterCommand(vm.TestCommand2, vm);
+            var vm = new CompositeCommandViewModel(serviceProvider);
+            compositeCommand.RegisterCommand(vm.TestCommand1, vm);
 
-                compositeCommand.UnregisterCommand(vm.TestCommand1);
+            compositeCommand.Execute();
 
-                compositeCommand.Execute();
+            Assert.That(vm.IsTestCommand1Executed, Is.True);
+        }
+    }
 
-                Assert.That(vm.IsTestCommand1Executed, Is.False);
-                Assert.That(vm.IsTestCommand2Executed, Is.True);
-            }
+    [TestFixture]
+    public class TheUnregisterCommandMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullCommand()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
         }
 
-        [TestFixture]
-        public class TheRegisterGenericActionMethod
+        [TestCase]
+        public void UnregistersCommandForExecution()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullAction()
-            {
-                var compositeCommand = new CompositeCommand();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void RegistersActionForExecution()
-            {
-                var compositeCommand = new CompositeCommand();
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                bool executed = false;
-                var action = new Action<object>(obj => executed = true);
+            var vm = new CompositeCommandViewModel(serviceProvider); 
+            
+            compositeCommand.RegisterCommand(vm.TestCommand1, vm);
+            compositeCommand.RegisterCommand(vm.TestCommand2, vm);
 
-                compositeCommand.RegisterAction(action);
-                compositeCommand.Execute();
+            compositeCommand.UnregisterCommand(vm.TestCommand1);
 
-                Assert.That(executed, Is.True);
-            }
+            compositeCommand.Execute();
+
+            Assert.That(vm.IsTestCommand1Executed, Is.False);
+            Assert.That(vm.IsTestCommand2Executed, Is.True);
+        }
+    }
+
+    [TestFixture]
+    public class TheRegisterGenericActionMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullAction()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
         }
 
-        [TestFixture]
-        public class TheUnregisterGenericActionMethod
+        [TestCase]
+        public void RegistersActionForExecution()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullAction()
-            {
-                var compositeCommand = new CompositeCommand();
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void UnregistersCommandForExecution()
-            {
-                var compositeCommand = new CompositeCommand();
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                bool executed = false;
-                var action = new Action<object>(obj => executed = true);
+            bool executed = false;
+            var action = new Action<object>(obj => executed = true);
 
-                compositeCommand.RegisterAction(action);
-                compositeCommand.UnregisterAction(action);
+            compositeCommand.RegisterAction(action);
+            compositeCommand.Execute();
 
-                compositeCommand.Execute();
+            Assert.That(executed, Is.True);
+        }
+    }
 
-                Assert.That(executed, Is.False);
-            }
+    [TestFixture]
+    public class TheUnregisterGenericActionMethod
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullAction()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+
+            Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
         }
 
-        [TestFixture]
-        public class TheRegisterAndUnregisterActionFunctionality
+        [TestCase]
+        public void UnregistersCommandForExecution()
         {
-            [TestCase]
-            public void RegisteredActionsCanBeInvoked()
-            {
-                var invoked = false;
-                Action action = () => invoked = true;
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                var compositeCommand = new CompositeCommand();
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                compositeCommand.RegisterAction(action);
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                compositeCommand.Execute(null);
+            bool executed = false;
+            var action = new Action<object>(obj => executed = true);
 
-                Assert.That(invoked, Is.True);
-            }
+            compositeCommand.RegisterAction(action);
+            compositeCommand.UnregisterAction(action);
 
-            [TestCase]
-            public void RegisteredActionsCanBeUnregistered_DefinedAction()
-            {
-                var invoked = false;
-                Action action = () => invoked = true;
+            compositeCommand.Execute();
 
-                var compositeCommand = new CompositeCommand();
+            Assert.That(executed, Is.False);
+        }
+    }
 
-                compositeCommand.RegisterAction(action);
-                compositeCommand.UnregisterAction(action);
+    [TestFixture]
+    public class TheRegisterAndUnregisterActionFunctionality
+    {
+        [TestCase]
+        public void RegisteredActionsCanBeInvoked()
+        {
+            var invoked = false;
+            Action action = () => invoked = true;
 
-                compositeCommand.Execute(null);
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.That(invoked, Is.False);
-            }
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            [TestCase]
-            public void RegisteredActionsCanBeUnregistered_DynamicAction()
-            {
-                var compositeCommand = new CompositeCommand();
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                compositeCommand.RegisterAction(RegisteredActionsCanBeUnregistered_TestMethod);
-                compositeCommand.UnregisterAction(RegisteredActionsCanBeUnregistered_TestMethod);
+            compositeCommand.RegisterAction(action);
 
-                compositeCommand.Execute(null);
+            compositeCommand.Execute(null);
 
-                Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
-            }
-
-            private bool _registeredActionsCanBeUnregistered_TestValue = false;
-
-            private void RegisteredActionsCanBeUnregistered_TestMethod()
-            {
-                _registeredActionsCanBeUnregistered_TestValue = true;
-            }
+            Assert.That(invoked, Is.True);
         }
 
-        [TestFixture]
-        public class TheAutoUnsubscribeFunctionality
+        [TestCase]
+        public void RegisteredActionsCanBeUnregistered_DefinedAction()
         {
-            [TestCase]
-            public async Task AutomaticallyUnsubscribesCommandOnViewModelClosedAsync()
-            {
-                var vm = new CompositeCommandViewModel();
-                var compositeCommand = new CompositeCommand();
+            var invoked = false;
+            Action action = () => invoked = true;
 
-                compositeCommand.RegisterCommand(vm.TestCommand1, vm);
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-                Assert.That(vm.IsTestCommand1Executed, Is.False);
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                await vm.CloseViewModelAsync(false);
+            var compositeCommand = new CompositeCommand(serviceProvider);
 
-                compositeCommand.Execute();
+            compositeCommand.RegisterAction(action);
+            compositeCommand.UnregisterAction(action);
 
-                Assert.That(vm.IsTestCommand1Executed, Is.False);
-            }
+            compositeCommand.Execute(null);
+
+            Assert.That(invoked, Is.False);
+        }
+
+        [TestCase]
+        public void RegisteredActionsCanBeUnregistered_DynamicAction()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+
+            compositeCommand.RegisterAction(RegisteredActionsCanBeUnregistered_TestMethod);
+            compositeCommand.UnregisterAction(RegisteredActionsCanBeUnregistered_TestMethod);
+
+            compositeCommand.Execute(null);
+
+            Assert.That(_registeredActionsCanBeUnregistered_TestValue, Is.False);
+        }
+
+        private bool _registeredActionsCanBeUnregistered_TestValue = false;
+
+        private void RegisteredActionsCanBeUnregistered_TestMethod()
+        {
+            _registeredActionsCanBeUnregistered_TestValue = true;
+        }
+    }
+
+    [TestFixture]
+    public class TheAutoUnsubscribeFunctionality
+    {
+        [TestCase]
+        public async Task AutomaticallyUnsubscribesCommandOnViewModelClosedAsync()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+
+            var vm = new CompositeCommandViewModel(serviceProvider);
+            compositeCommand.RegisterCommand(vm.TestCommand1, vm);
+
+            Assert.That(vm.IsTestCommand1Executed, Is.False);
+
+            await vm.CloseViewModelAsync(false);
+
+            compositeCommand.Execute();
+
+            Assert.That(vm.IsTestCommand1Executed, Is.False);
         }
     }
 }

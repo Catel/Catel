@@ -1,14 +1,13 @@
-﻿namespace Catel.Services
+﻿namespace Catel.Services;
+
+/// <summary>
+/// Service to retrieve the navigation root in the application.
+/// </summary>
+public interface INavigationRootService
 {
     /// <summary>
-    /// Service to retrieve the navigation root in the application.
+    /// Gets the navigation root.
     /// </summary>
-    public interface INavigationRootService
-    {
-        /// <summary>
-        /// Gets the navigation root.
-        /// </summary>
-        /// <returns>System.Object.</returns>
-        object? GetNavigationRoot();
-    }
+    /// <returns>System.Object.</returns>
+    object? GetNavigationRoot();
 }
