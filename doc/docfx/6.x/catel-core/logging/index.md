@@ -37,7 +37,7 @@ Log.Error(ex, "Failed to delete file '{0}'", fileName);
 
 ## Logging in code with additional data
 
-Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the the bare minimum required for logging. To pass in additional information, use the *[Level]WithData* methods (such as *DebugWithData*):
+Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the bare minimum required for logging. To pass in additional information, use the *[Level]WithData* methods (such as *DebugWithData*):
 
 ```
 Log.Debug("This is a message from a specific thread", new LogData

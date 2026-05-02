@@ -33,5 +33,5 @@ The other properties are fully customizable and can be defined on the fly. This 
           IsDebugEnabled="false" IsInfoEnabled="true" IsWarningEnabled="true" IsErrorEnabled="true"/>
 ```
 
-The *ILogListener *properties (*IsDebugEnabled*, *IsInfoEnabled*, *IsWarningEnabled* and *IsErrorEnabled*) are available to all listeners. All other properties depend on the the actual listener being registered. This allows major flexibility at runtime.
+The *ILogListener *properties (*IsDebugEnabled*, *IsInfoEnabled*, *IsWarningEnabled* and *IsErrorEnabled*) are available to all listeners. All other properties depend on the actual listener being registered. This allows major flexibility at runtime.
 
