@@ -4,10 +4,14 @@ permissions:
   contents: write      # required to push to gh-pages
   
 on:
+  # Automatically 
   push:
     branches: [ develop ]
     paths:
       - 'doc/docfx/**'
+  
+  # Allow to run manually
+  workflow_dispatch:
 
 jobs:
   build:
