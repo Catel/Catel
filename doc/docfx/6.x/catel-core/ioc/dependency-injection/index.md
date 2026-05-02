@@ -165,7 +165,7 @@ public class PersonViewModel : ViewModelBase
 }
 ```
 
-This feature is initially written to support dependency injection in combination with [nested user controls](Introduction_to_the_nested_user_controls_problem)
+This feature is initially written to support dependency injection in combination with [nested user controls](../../../introduction/mvvm/introduction-to-nested-user-controls-problem.md)
 
 The advanced dependency injection can be used by using the TypeFactory class. Below is an example on how to create a new type using advanced dependency injection:
 

@@ -3,7 +3,7 @@ title: "Caveats in Android"
 ---
 Below are all caveats in Android.
 
--   [Linker settings](#CaveatsinAndroid-Linkersettings)
+-   [Linker settings](#linker-settings)
 
 Know caveats? Feel free to add them!
 

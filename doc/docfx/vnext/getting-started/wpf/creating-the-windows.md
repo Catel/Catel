@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Creating the views (windows)" 
 ---
 In this step we will create the windows for the application. In the previous step we already created the user controls.Â Windows are a great way to show in an edit-context. Catel provides great edit-windows in the form of theÂ `DataWindow`. This is a window that automatically addsÂ *OK*Â andÂ *Cancel*Â buttons (but of course allows customization of the buttons and behavior).
@@ -9,7 +9,7 @@ It is very important that the window derives from one of the Catel windows. This
 
 To add a newÂ `DataWindow`,Â right-click theÂ *Views*Â folder in the solution =\>Â *Add*Â =\>Â *New item...*Â =\>Â *On-line*Â =\> and search for Catel as you can see in the screen below:
 
-![](../../../images/getting-started/wpf/creating-the-windows/itemtemplate.png)
+![](../../images/getting-started/wpf/creating-the-windows/itemtemplate.png)
 
 Give the new view the nameÂ `PersonWindow`. The view will be added to theÂ *Views*Â folder.
 

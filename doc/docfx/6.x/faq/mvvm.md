@@ -3,7 +3,7 @@ title: "MVVM"
 ---
 ## How to support example data with view models?
 
-To find out how to create design time data, see the [designers](Designers)topic.
+To find out how to create design time data, see the [designers](../catel-mvvm/designers/index.md) topic.
 
 ## How to use events with MVVM?
 

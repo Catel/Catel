@@ -1,4 +1,4 @@
-﻿---
+---
 title: "DependencyResolver and DependencyResolverManager" 
 ---
 # Introduction to 
@@ -88,7 +88,7 @@ var dependencyResolver = dependencyResolverManager.GetDependencyResolverForInsta
 
 Below is a graph that shows how the dependency resolver of an instance is determined:
 
-![](../../../../images/catel-core/ioc/introduction-to-components/dependencyresolver/flow.png)
+![](../../../images/catel-core/ioc/introduction-to-components/dependencyresolver/flow.png)
 
 ## Managing the dependency resolvers per type
 

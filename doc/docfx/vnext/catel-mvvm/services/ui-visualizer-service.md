@@ -1,11 +1,11 @@
-﻿---
+---
 title: "UIVisualizerService" 
 ---
 The `IUIVisualizerService` allows a developer to show (modal) windows or dialogs without actually referencing a specific view. Internally, the `UIVisualizerService` uses the `ViewLocator` to resolve views.
 
 ## Screenshot
 
-![](../../../images/catel-mvvm/services/ui-visualizer-service/example.png)
+![](../../images/catel-mvvm/services/ui-visualizer-service/example.png)
 
 ## Showing a non-modal window
 

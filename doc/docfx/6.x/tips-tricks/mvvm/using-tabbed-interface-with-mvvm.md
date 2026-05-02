@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Using a tabbed interface with MVVM" 
 ---
 A common scenario in WPF is to use a tabbed interface to give the user the option to use multiple main views in a tabbed environment. This example shows how to implement this correctly with both closable and non-closable tabs.
@@ -8,7 +8,7 @@ For this example, we will have a few requirements:
 -   Be able to add, close and activate tabs via a service
 -   Be able to specify whether a tab can be closed by the end-user
 
-![](../../../images/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.gif)
+![](../../images/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.gif)
 
 ## Creating the model describing a tab item
 
@@ -640,5 +640,5 @@ _tabService.Remove(selectedTab);
 
 ## Download example
 
-[Download example](../../../downloads/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.rar)
+[Download example](../../downloads/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.rar)
 

@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Creating the WPF project" 
 ---
 In this step we will create the project and add the relevant NuGet packages.
@@ -9,7 +9,7 @@ This guide uses the on-line templates that are available in the Visual Studio ga
 
 To create the project, start Visual Studio and chooseÂ *File =\> New Project*... Then switch to the *on-line template section* as you can see in the screenshot below and search for Catel:
 
-![](../../../images/getting-started/wpf/creating-the-project/projecttemplate.png)
+![](../../images/getting-started/wpf/creating-the-project/projecttemplate.png)
 
 Pick a good name, in our caseÂ *WPF.GettingStarted* and click OK. The template will now be downloaded and the project will be created.
 
@@ -17,19 +17,19 @@ Pick a good name, in our caseÂ *WPF.GettingStarted* and click OK. The template
 
 As soon as the project is created, theÂ *Readme.txt* will be opened and instruct your what to do. Right-click on the solution =\>Â *Manage NuGet packages...Â *Then search forÂ `Catel.MVVM` and clickÂ *Install*.
 
-![](../../../images/getting-started/wpf/creating-the-project/nuget.png)
+![](../../images/getting-started/wpf/creating-the-project/nuget.png)
 
 ## Running the project
 
 Now the NuGet packages are installed, the project is created and can be built. The basics are created and the application is ready:
 
-![](../../../images/getting-started/wpf/creating-the-project/example.png)
+![](../../images/getting-started/wpf/creating-the-project/example.png)
 
 ## Explanation of the project structure
 
 The project template creates the project structure that fits best with Catel. Below is an explanation of the new project structure:
 
-![](../../../images/getting-started/wpf/creating-the-project/solutionexplorer.png)
+![](../../images/getting-started/wpf/creating-the-project/solutionexplorer.png)
 
 The `ViewModels` folder contains the `MainWindowViewModel`, which contains the logic for the interaction with theÂ `MainWindow` view.
 

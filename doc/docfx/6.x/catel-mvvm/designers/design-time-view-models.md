@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Design-time view models" 
 ---
 Lots of developers are using designers such as the built-in designer in Visual Studio or Expression Blend to design their xaml based applications. Although you shouldÂ use designers with lots of care, we strive to fully support all designers.
@@ -55,5 +55,5 @@ Full DataWindow declaration:
 
 3. Example of design time data support:
 
-![](../../../images/catel-mvvm/designers/design-time-view-models/wpf.png)
+![](../../images/catel-mvvm/designers/design-time-view-models/wpf.png)
 

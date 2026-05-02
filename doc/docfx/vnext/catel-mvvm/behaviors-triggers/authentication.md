@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Authentication" 
 ---
 The Authentication behavior is able to hide, collapse or disable UI elements based on the current user state. The behavior uses the registered IAuthenticationProvider instances to determine whether the user has access to the specified UI element.
@@ -67,9 +67,9 @@ xmlns:catel="http://schemas.catelproject.com"
 
 **Logged in as administrator:**
 
-![](../../../images/catel-mvvm/behaviors-triggers/authentication/administrator.png)
+![](../../images/catel-mvvm/behaviors-triggers/authentication/administrator.png)
 
 **Logged in as read-only user:**
 
-![](../../../images/catel-mvvm/behaviors-triggers/authentication/readonly.png)
+![](../../images/catel-mvvm/behaviors-triggers/authentication/readonly.png)
 

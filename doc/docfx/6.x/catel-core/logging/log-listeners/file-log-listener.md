@@ -5,7 +5,7 @@ Catel also supports very lightweight listeners to allow external logging librari
 
 The ILogListener has a separate method for each LogEvent, but also has a shared method that is called for each log event. For example, if a debug message is written to the log, both the Write and Debug methods are invoked on the ILogListener.
 
-For an example which writes to disk in batches, see the [batch log event listeners](Batch_log_listeners)
+For an example which writes to disk in batches, see the [batch log event listeners](batch-log-listeners.md)
 
 Note that Catel already contains a FileLogListener and there is no need to reproduce this class. It only acts as an example that is easy to understand
 

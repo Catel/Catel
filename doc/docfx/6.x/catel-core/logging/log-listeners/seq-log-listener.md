@@ -1,9 +1,9 @@
-﻿---
+---
 title: "SeqLogListener" 
 ---
 [Seq](http://getseq.net/) is a structured logs server for .NET Apps. It act like a logs repository, allow to diagnostic by query your logs using a natural syntax, react on notifying you through email or instant messages and so on ...
 
-![](../../../../images/catel-core/logging/log-listeners/seq-log-listener/seq.png)
+![](../../../images/catel-core/logging/log-listeners/seq-log-listener/seq.png)
 
 To use the Seq log listener, use the following code:
 

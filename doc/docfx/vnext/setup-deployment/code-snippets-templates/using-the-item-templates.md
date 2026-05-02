@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'Using the item templates'
 ---
 There are lots of item templates available for Catel so it is really easy to develop new views very fast.
@@ -28,7 +28,7 @@ The view model is the easiest and smallest item template available. The question
 
 The user control templates create a user control deriving from UserControl. First it is very important to make a decision whether the logic should be implemented in the view base or a behavior. Then, select the appropriate template:
 
-![](../../../images/setup-deployment/code-snippets-templates/using-the-item-templates/usercontrol.png)
+![](../../images/setup-deployment/code-snippets-templates/using-the-item-templates/usercontrol.png)
 
 The item template will assume that a view model with the same name is already created. For example, if a view with the name *PersonView* is created, the template assumes that the view model name is *PersonViewModel*. If you prefer a different naming convention, simply change the view model type name after the item has been created.
 
@@ -38,7 +38,7 @@ Unfortunately, there is a bug in the item templates system of Visual Studio so i
 
 The window templates create a window deriving from DataWindow. First it is very important to make a decision whether the logic should be implemented in the view base or a behavior. Then, select the appropriate template:
 
-![](../../../images/setup-deployment/code-snippets-templates/using-the-item-templates/window.png)
+![](../../images/setup-deployment/code-snippets-templates/using-the-item-templates/window.png)
 
 The item template will assume that a view model with the same name is already created. For example, if a view with the name PersonView is created, the template assumes that the view model name is PersonViewModel. If you prefer a different naming convention, simply change the view model type name after the item has been created.
 
