@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Specifying what gets serialized | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Specifying what gets serialized | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../../toc.html">
+      <meta name="docfx:tocrel" content="../../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/serialization/specifying-what-gets-serialized/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>By default, Catel only serializes the defined Catel properties on theÂ <em>ModelBase</em> or any deriving classes. It is possible to customize this behavior. Below is a class which will be used in all examples:</p>
+<pre><code>public class MyModel : ModelBase
+{
+    private string _fieldValue;
+
+    public string RegularProperty { get; set; }
+
+    public string CatelProperty
+    {
+        get { return GetValue&lt;string&gt;(CatelPropertyProperty); }
+        set { SetValue(CatelPropertyProperty, value); }
+    }
+
+    public static readonly PropertyData CatelPropertyProperty = RegisterProperty(&quot;CatelProperty&quot;, typeof(string), null);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Member name</th>
+<th>Gets serialized</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_fieldValue</td>
+<td>false</td>
+</tr>
+<tr>
+<td>RegularProperty</td>
+<td>false</td>
+</tr>
+<tr>
+<td>CatelProperty</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<h2 id="including-fields-and-properties-using-includeinserialization-attribute">Including fields and properties using IncludeInSerialization attribute</h2>
+<p>To include fields or regular properties on an object, use the following code:</p>
+<pre><code>public class MyModel : ModelBase
+{
+    [IncludeInSerialization]
+    private string _fieldValue;
+
+    [IncludeInSerialization]
+    public string RegularProperty { get; set; }
+
+    public string CatelProperty
+    {
+        get { return GetValue&lt;string&gt;(CatelPropertyProperty); }
+        set { SetValue(CatelPropertyProperty, value); }
+    }
+
+    public static readonly PropertyData CatelPropertyProperty = RegisterProperty(&quot;CatelProperty&quot;, typeof(string), null);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Member name</th>
+<th>Gets serialized</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_fieldValue</td>
+<td>true</td>
+</tr>
+<tr>
+<td>RegularProperty</td>
+<td>true</td>
+</tr>
+<tr>
+<td>CatelProperty</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<p>Note that private members can only be serialized in full .NET, not in limited platforms such as UWP</p>
+<h2 id="excluding-fields-and-properties-using-excludefromserialization-attribute">Excluding fields and properties using ExcludeFromSerialization attribute</h2>
+<p>To exclude Catel properties on an object, use the following code:</p>
+<pre><code>public class MyModel : ModelBase
+{
+    private string _fieldValue;
+
+    public string RegularProperty { get; set; }
+Â 
+    [ExcludeFromSerialization]
+    public string CatelProperty
+    {
+        get { return GetValue&lt;string&gt;(CatelPropertyProperty); }
+        set { SetValue(CatelPropertyProperty, value); }
+    }
+
+    public static readonly PropertyData CatelPropertyProperty = RegisterProperty(&quot;CatelProperty&quot;, typeof(string), null);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Member name</th>
+<th>Gets serialized</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_fieldValue</td>
+<td>false</td>
+</tr>
+<tr>
+<td>RegularProperty</td>
+<td>false</td>
+</tr>
+<tr>
+<td>CatelProperty</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h2 id="serializing-a-modelbase-as-collection">Serializing a ModelBase as collection</h2>
+<p>There is a very edge case that a class derives fromÂ <em>ModelBase</em>, but also implements <em>IList&lt;T&gt;</em>. In this case, it's hard for the serializers to determine what to do. By default, it will treat the model as a Catel model (since it can contain more properties than just theÂ <em>Items</em> property. If such a class should be serialized as collection (meaning it will only serialize theÂ <em>Items</em> property), decorate it with theÂ <em>SerializeAsCollection</em> attribute:</p>
+<p>Â</p>
+<pre><code>[SerializeAsCollection]
+public class MyModel : ModelBase, IList&lt;int&gt;
+{
+    // implementation left out for readability
+}
+</code></pre>
+<h2 id="implementing-a-custom-iserializationmanager">Implementing a custom ISerializationManager</h2>
+<p>Internally Catel uses a default implementation of theÂ <em>ISerializationManager</em> to determine what members of a type should be serialized. It is possible to customize this behavior by overriding a single method or by creating a brand new type. Below is an example which always excludesÂ <em>Password</em> properties and fields from serialization.</p>
+<pre><code>public class SafeSerializationManager : SerializationManager
+{
+    public override HashSet&lt;string&gt; GetFieldsToSerialize(Type type)
+    {
+        var fieldsList = new List&lt;string&gt;(base.GetFieldsToSerialize(type));
+
+        for (int i = 0; i &lt; fieldsList.Count; i++)
+        {
+            if (string.Equals(fieldsList[i], &quot;_password&quot;))
+            {
+                fieldsList.RemoveAt(i--);
+            }
+        }
+
+        return new HashSet&lt;string&gt;(fieldsList);
+    }
+
+    public override HashSet&lt;string&gt; GetPropertiesToSerialize(Type type)
+    {
+        var propertiesList = new List&lt;string&gt;(base.GetPropertiesToSerialize(type));
+
+        for (int i = 0; i &lt; propertiesList.Count; i++)
+        {
+            if (string.Equals(propertiesList[i], &quot;Password&quot;))
+            {
+                propertiesList.RemoveAt(i--);
+            }
+        }
+
+        return new HashSet&lt;string&gt;(propertiesList);
+    }   
+}
+</code></pre>
+<p>Don't forget to register it in the <em>ServiceLocator</em> as well:</p>
+<pre><code>var serviceLocator = ServiceLocator.Default;
+serviceLocator.RegisterType&lt;ISerializationManager, SafeSerializationManager&gt;();
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/serialization/specifying-what-gets-serialized/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

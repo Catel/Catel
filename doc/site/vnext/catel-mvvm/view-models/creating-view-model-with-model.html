@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Creating a view model with a model | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Creating a view model with a model | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-mvvm/view-models/creating-view-model-with-model.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>This example shows how to create a &quot;classical&quot; view model without any Catel specific MVVM features such as data pass-through. Although it is recommended to use the pass-through features, some people want to have custom validation on the view model, or want to be fully in control.</p>
+<h2 id="code-snippets">Code snippets</h2>
+<ul>
+<li>vm - declare a view model</li>
+<li>vmprop - declare a property on a view model</li>
+</ul>
+<h2 id="explanation">Explanation</h2>
+<p>To be in full control, the only thing required is to create a basic view model with the <code>vm</code> code snippet. Then, the following methods should be implemented:</p>
+<ul>
+<li>Constructor - initialize the properties on the view model</li>
+<li>ValidateFields - check for field errors in the view model</li>
+<li>ValidateBusinessRules - check for business rules in the view model</li>
+<li>Save - save the view model data to the model and then save the model</li>
+</ul>
+<h2 id="code">Code</h2>
+<p><strong>C#</strong></p>
+<pre><code>/// &lt;summary&gt;
+/// Classical view model.
+/// &lt;/summary&gt;
+public class ClassicalViewModel : ViewModelBase
+{
+   #region Properties
+   /// &lt;summary&gt;
+   /// Gets or sets the Person.
+   /// &lt;/summary&gt;
+   private Person Person
+   {
+      get { return GetValue&lt;Person&gt;(PersonProperty); }
+      set { SetValue(PersonProperty, value); }
+   }
+
+   /// &lt;summary&gt;
+   /// Register the Person property so it is known in the class.
+   /// &lt;/summary&gt;
+   public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
+
+   /// &lt;summary&gt;
+   /// Gets or sets the first name.
+   /// &lt;/summary&gt;
+   public string FirstName
+   {
+      get { return GetValue&lt;string&gt;(FirstNameProperty); }
+      set { SetValue(FirstNameProperty, value); }
+   }
+
+   /// &lt;summary&gt;
+   /// Register the FirstName property so it is known in the class.
+   /// &lt;/summary&gt;
+   public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string));
+
+   /// &lt;summary&gt;
+   /// Gets or sets the last name.
+   /// &lt;/summary&gt;
+   public string LastName
+   {
+      get { return GetValue&lt;string&gt;(LastNameProperty); }
+      set { SetValue(LastNameProperty, value); }
+   }
+
+   /// &lt;summary&gt;
+   /// Register the LastName property so it is known in the class.
+   /// &lt;/summary&gt;
+   public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;LastName&quot;, typeof(string));
+   #endregion
+
+   #region Methods
+   /// &lt;summary&gt;
+   /// Initializes the object by setting default values.
+   /// &lt;/summary&gt;   
+   protected override void Initialize()
+   {
+      // Get the person from (in this case) a magical context
+      Person = Context.CurrentPerson;
+Â 
+      // Load the data manually to the view model
+      FirstName = Person.FirstName;
+      LastName = Person.LastName;
+   }
+
+   /// &lt;summary&gt;
+   /// Validates the field values of this object. Override this method to enable
+   /// validation of field values.
+   /// &lt;/summary&gt;
+   /// &lt;param name=&quot;validationResults&quot;&gt;The validation results, add additional results to this list.&lt;/param&gt;
+   protected override void ValidateFields(List&lt;FieldValidationResult&gt; validationResults)
+   {
+       if (string.IsNullOrWhiteSpace(FirstName))
+       {
+           validationResults.Add(FieldValidationResult.CreateError(FirstNameProperty, &quot;First name is required&quot;));
+       }
+Â 
+       if (string.IsNullOrWhiteSpace(LastName))
+       {
+           validationResults.Add(FieldValidationResult.CreateError(LastNameProperty, &quot;Last name is required&quot;));
+       }
+   }
+
+   /// &lt;summary&gt;
+   /// Saves the data.
+   /// &lt;/summary&gt;
+   /// &lt;returns&gt;
+   ///    &lt;c&gt;true&lt;/c&gt; if successful; otherwise &lt;c&gt;false&lt;/c&gt;.
+   /// &lt;/returns&gt;   
+   protected override Task&lt;bool&gt; Save()
+   {
+      return Task.Factory.StartNew(() =&gt;
+      {
+          // Save the data manually to the model
+          Person.FirstName = FirstName;
+          Person.LastName = LastName;
+Â 
+          // Save the model
+          return Person.Save();
+      });
+   }
+   #endregion
+}
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-mvvm/view-models/creating-view-model-with-model.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

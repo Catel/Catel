@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Window and DataWindow | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Window and DataWindow | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../../toc.html">
+      <meta name="docfx:tocrel" content="../../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-mvvm/views/xaml/window-and-datawindow.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<h2 id="introduction-to-the-window">Introduction to the Window</h2>
+<p>The Window is a simplified class representing the same logic as the regular System.Windows.Window but with the binding support of Catel.</p>
+<h2 id="introduction-to-the-datawindow">Introduction to the DataWindow</h2>
+<p>When developing software in XAML, most developers always need the following three types of windows:</p>
+<ul>
+<li>OK / Cancel buttons for data windows;</li>
+<li>OK / Cancel / Apply buttons for application settings / options;</li>
+<li>Close button on windows for action windows.</li>
+</ul>
+<p>Creating these windows is just boring and the steps are always the same:</p>
+<p>The <code>DataWindow</code> class makes it much easier to create these basic windows, simply by specifying the mode of the <em>Window</em>. By using this window, you can concentrate on the actual implementation and you donâ€™t have to worry about the implementation of the buttons itself, which saves you time!Â</p>
+<h2 id="using-the-datawindow-in-mvvm">Using the DataWindow in MVVM</h2>
+<p>The easiest object to use with the MVVM Framework is the <code>DataWindow</code> class. The <code>DataWindow</code> takes fully care of the construction of the view models and the validation of the view models.</p>
+<p>The usage of the <code>DataWindow</code> class is very simple, once you know how to do it. First of all, you will have to specify the base class in the xaml file like shown below:</p>
+<pre><code>&lt;catel:DataWindow x:Class=&quot;Catel.Articles._03___MVVM.Examples.DataWindow.PersonWindow&quot;
+                  xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+                  xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+                  xmlns:catel=&quot;http://schemas.catelproject.com&quot;&gt;
+
+    &lt;!-- Content left out for the sake of simplicity --&gt;
+
+&lt;/catel:DataWindow&gt;
+</code></pre>
+<p>As you can see, one thing has changed in regard to a â€œnormalâ€ window definition:</p>
+<ol>
+<li>The type definition has changed from <code>Window</code> to <code>catel:DataWindow</code>;</li>
+</ol>
+<p>The code-behind is even simpler:</p>
+<pre><code>/// &lt;summary&gt;
+/// Interaction logic for PersonWindow.xaml
+/// &lt;/summary&gt;
+public partial class PersonWindow : DataWindow
+{
+    /// &lt;summary&gt;
+    /// Initializes a new instance of the &lt;see cref=&quot;PersonWindow&quot;/&gt; class.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;viewModel&quot;&gt;The view model.&lt;/param&gt;
+    public PersonWindow(PersonViewModel viewModel)
+        : base(viewModel)
+    {
+        InitializeComponent();
+    }
+}
+</code></pre>
+<p>The code above is everything you will need when using the MVVM Framework of Catel.Â</p>
+<p>The easiest way to create a new <code>DataWindow</code> is to use item templates</p>
+<h2 id="construction-of-view-models">Construction of view models</h2>
+<p>There are multiple ways to construct a window with a view model. There are three options that you have to construct a view model:</p>
+<ul>
+<li><strong>Constructor with view model</strong>
+This is the best option you can use. This way, it is possible to inject view models into the data window.</li>
+<li><strong>Constructor with model</strong>
+It is possible to save a developer from creating a view model manually by accepting a model as input. Then, the data window will have to construct the view model manually and pass it through to its base constructor.</li>
+<li><strong>Empty constructor</strong>
+If you use an empty constructor, the developer will have to set the data context manually. This something you really should avoid. But hey, itâ€™s all up to you.</li>
+</ul>
+<h2 id="automatic-validation">Automatic validation</h2>
+<p>The cool thing about the <code>DataWindow</code> is that it automatically wraps the content that a developer defines into an <code>InfoBarMessageControl</code>. This way, errors and warnings are shown at the top of the window. Another feature of the <code>DataWindow</code> is that it automatically creates a <code>WarningAndErrorValidator</code> control and sets the view model as source. This way, all the warnings of the view model are also shown in the <code>InfoBarMessageControl</code>. In other words: you donâ€™t have to do anything to implementation validation, except for actually setting the warnings and errors in your view model. And if the validation takes place in the model, you can use the <code>ViewModelToModelAttribute</code> so you donâ€™t have to worry about that either.</p>
+<h2 id="customizing-the-buttons">Customizing the buttons</h2>
+<p>It is possible to use custom buttons and still be able to use the <code>DataWindow</code>.</p>
+<ol>
+<li>First, use the base constructor to specify that you want to use custom mode.</li>
+</ol>
+<pre><code>/// &lt;summary&gt;
+/// Upload window.
+/// &lt;/summary&gt;
+public class UploadWindow : DataWindow
+{
+    public UploadWindow()
+        : base(DataWindowMode.Custom)
+    {
+        InitializeComponent();
+    }
+}
+</code></pre>
+<ol start="2">
+<li>Add the custom buttons. This must be done before the call to <code>InitializeComponent</code>.</li>
+</ol>
+<pre><code>/// &lt;summary&gt;
+/// Upload window.
+/// &lt;/summary&gt;
+public class UploadWindow : DataWindow
+{
+    public UploadWindow()
+        : base(DataWindowMode.Custom)
+    {
+        AddCustomButton(new DataWindowButton(&quot;Upload&quot;, &quot;Upload&quot;));
+
+        InitializeComponent();
+    }
+}
+</code></pre>
+<h2 id="styling-the-datawindow">Styling the DataWindow</h2>
+<p>Starting with Catel 2.4, the <code>DataWindow</code> has its own styles. These are located in <code>DataWindow.generic.xaml</code>. Below is a table that contains the available styles and a short description.</p>
+<table>
+<thead>
+<tr>
+<th>Style key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DataWindowStyle</td>
+<td>The actual window style which can be used to decorate or customize the window itself.</td>
+</tr>
+<tr>
+<td>DataWindowButtonContainerStyle</td>
+<td>The container that is used for the buttons. This is a <code>WrapPanel</code>, so the styles must match that.</td>
+</tr>
+<tr>
+<td>DataWindowButtonStyle</td>
+<td>The style for the buttons. By default, the buttons are right aligned and have a fixed size.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="closing-the-datawindow-with-the-escape-key">Closing the DataWindow with the Escape key</h2>
+<p>The <code>DataWindow</code> can be configured to close with the Escape key using the <code>CanCloseUsingEscape</code> dependency property (default <code>true</code>). This is useful for when <code>DataWindow</code> is used in e.g. dialogs. When used as the main window, it is advised to set <code>CanCloseUsingEscape=False</code>, as the user can inadvertedly close the application by pressing the <code>Escape</code> key.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-mvvm/views/xaml/window-and-datawindow.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

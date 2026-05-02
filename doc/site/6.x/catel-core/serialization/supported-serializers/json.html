@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Json | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Json | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../../toc.html">
+      <meta name="docfx:tocrel" content="../../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/serialization/supported-serializers/json.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>The <code>JsonSerializer</code> is implemented in a separate assembly because it uses Json.Net under the hood.</p>
+<h2 id="customizing-configuration">Customizing configuration</h2>
+<p>The <code>JsonSerializationConfiguration</code> enables support for customizing the configuration used while (de)serializing. Below is an example</p>
+<h3 id="using-bson-instead-of-json">Using Bson instead of Json</h3>
+<p>To use Bson instead of Json, use the <code>JsonSerializationConfiguration</code> class:</p>
+<pre><code>var configuration = new JsonSerializationConfiguration
+{
+    UseBson = true
+};
+
+jsonSerializer.Serialize(myObject, configuration);
+</code></pre>
+<h3 id="specifying-the-culture-to-use-during-deserialization">Specifying the culture to use during (de)serialization</h3>
+<p>To specify the culture to use during (de)serialization, set the <code>Culture</code> property on the configuration class:</p>
+<pre><code>var configuration = new SerializationConfiguration
+{
+    Culture = new CultureInfo(&quot;nl-NL&quot;)
+};
+
+jsonSerializer.Serialize(myObject, configuration);
+</code></pre>
+<h2 id="preserve-references-and-support-circular-references">Preserve references (and support circular references)</h2>
+<p>By default the <code>JsonSerializer</code> supports circular references. It does so by adding additional property values to the json. Below is a json object with support for circular references:</p>
+<pre><code>{  
+   &quot;$graphid&quot;:1,
+   &quot;Name&quot;:&quot;1&quot;,
+   &quot;CircularModel&quot;:{  
+      &quot;$graphid&quot;:2,
+      &quot;Name&quot;:&quot;2&quot;,
+      &quot;CircularModel&quot;:{  
+         &quot;$graphrefid&quot;:1
+      }
+   }
+}
+</code></pre>
+<p>or</p>
+<pre><code>{
+    &quot;$graphid&quot;: 1,
+    &quot;Collection1&quot;: [1,
+    2,
+    3,
+    4,
+    5],
+    &quot;$Collection1_$graphid&quot;: 2,
+    &quot;Collection2&quot;: [1,
+    2,
+    3,
+    4,
+    5],
+    &quot;$Collection2_$graphrefid&quot;: 2
+}
+</code></pre>
+<p>To disable the support for reference preservation, use the code below:</p>
+<pre><code>var jsonSerializer = dependencyResolver.Resolve&lt;IJsonSerializer&gt;();
+jsonSerializer.PreserveReferences = false;
+</code></pre>
+<h2 id="support-complex-dynamic-types">Support complex dynamic types</h2>
+<p>Catel can support complex dynamic types. For this to be supported in json, the objects need additional type information in order to restore the type info again during deserialization. Below is a json object with the type information stored inside the json:</p>
+<pre><code>{  
+   &quot;$typename&quot;:&quot;Catel.Test.Data.IniFile&quot;,
+   &quot;FileName&quot;:&quot;MyIniFile&quot;,
+   &quot;IniEntryCollection&quot;:[  
+      {  
+         &quot;$typename&quot;:&quot;Catel.Test.Data.IniEntry&quot;,
+         &quot;Group&quot;:&quot;Group 0&quot;,
+         &quot;Key&quot;:&quot;Key 0&quot;,
+         &quot;Value&quot;:&quot;Value 0&quot;,
+         &quot;IniEntryType&quot;:0
+      },
+      {  
+         &quot;$typename&quot;:&quot;Catel.Test.Data.IniEntry&quot;,
+         &quot;Group&quot;:&quot;Group 1&quot;,
+         &quot;Key&quot;:&quot;Key 1&quot;,
+         &quot;Value&quot;:&quot;Value 1&quot;,
+         &quot;IniEntryType&quot;:1
+      },
+      {  
+         &quot;$typename&quot;:&quot;Catel.Test.Data.IniEntry&quot;,
+         &quot;Group&quot;:&quot;Group 2&quot;,
+         &quot;Key&quot;:&quot;Key 2&quot;,
+         &quot;Value&quot;:&quot;Value 2&quot;,
+         &quot;IniEntryType&quot;:0
+      }
+   ]
+}
+</code></pre>
+<p>To disable the type information in json, use the code below:</p>
+<pre><code>var jsonSerializer = dependencyResolver.Resolve&lt;IJsonSerializer&gt;();
+jsonSerializer.WriteTypeInfo = false;
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/serialization/supported-serializers/json.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

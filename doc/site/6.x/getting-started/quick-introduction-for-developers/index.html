@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Quick introduction for developers | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Quick introduction for developers | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/getting-started/quick-introduction-for-developers/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>This is a quick introduction for developers who don't have a lot of time to read all the docs. This document contains the absolute basics of what a developer needs to know.</p>
+<h2 id="core">Core</h2>
+<p>This pare contains the core functionality of Catel and what you should know when using Catel.</p>
+<h3 id="logging--debugging">Logging / debugging</h3>
+<p>If you ever think Catel is behaving strange or does not work as expected, make sure to enable the logging. Below is an example on how to enable the logging:</p>
+<pre><code>#if DEBUG
+    LogManager.RegisterDebugListener();
+#endif
+</code></pre>
+<p>Catel will then log everything to the output window and provide all the information about its internals.</p>
+<p>For more information, read about <a href="Logging">logging</a>.</p>
+<h3 id="catel-properties">Catel properties</h3>
+<p>All properties in classes deriving from <em>ModelBase</em> (thus also <em>ViewModelBase</em>) require a special property definition.</p>
+<p>Normally one would write something like this:</p>
+<pre><code>private string _firstName;
+public string FirstName
+{
+    get { return _firstName; }
+    set
+    {
+        RaisePropertyChanging(&quot;FirstName&quot;);
+        _firstName = value;
+        RaisePropertyChanged(&quot;FirstName&quot;);
+    }
+}
+</code></pre>
+<p>In Catel one should write this:</p>
+<pre><code>public string FirstName
+{
+    get { return GetValue&lt; string&gt;(FirstNameProperty); }
+    set { SetValue(FirstNameProperty, value); }
+}
+
+public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), null);
+</code></pre>
+<p>Catel will automatically take care of change notifications.</p>
+<p>Note that you can use the <em>modelprop</em> or <em>vmprop</em> to easily create these properties using code snippets. You can also use [Catel.Fody]({{&lt; relref &quot;catel-fody/_index.md&quot; &gt;}}) instead</p>
+<h2 id="mvvm">MVVM</h2>
+<p>This part is especially meant for the MVVM part.</p>
+<h3 id="handling-of-viewmodels">Handling of viewmodels</h3>
+<p>In other MVVM frameworks, you are obliged to set the data context of a view manually. It will look something like this:</p>
+<pre><code>var view = new PersonView();
+view.DataContext = new PersonViewModel();
+</code></pre>
+<p>Catel automatically resolves the right view model based on the view. If a view is created, Catel automatically creates the view model:</p>
+<pre><code>var view = new PersonView();
+// view model is automatically created
+</code></pre>
+<p>It goes even further. Catel can create view models based on the data context. For more information, read <a href="Introduction_to_the_nested_user_controls_problem">nested user controls</a>.</p>
+<h3 id="handling-hierarchy-and-parentchild-view-models">Handling hierarchy and parent/child view models</h3>
+<p>Note thatÂ CatelÂ is already fully aware of parent/child relations of view models so you donâ€™t have to do anything for this yourself. For more information,Â readÂ nested user controls.</p>
+<h3 id="resolving-views-and-view-models">Resolving views and view models</h3>
+<p>Catel resolves views and view models by naming convention. This means that based on the name of a view, the view model can be determined. This also works the other way around where the view model can be determined based on the view. For more information, read about <a href="https://catelproject.atlassian.net/wiki/display/CTL/Locators+and+naming+conventions">naming conventions</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/getting-started/quick-introduction-for-developers/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

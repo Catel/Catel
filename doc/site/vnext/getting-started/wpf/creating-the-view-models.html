@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Creating the view models | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Creating the view models | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/getting-started/wpf/creating-the-view-models.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>In this step we will create the view models. Since this is a very simple application, just a few view models are required.Â A view model in essence is nothing more than a class that derives from theÂ <code>ViewModelBase</code> class</p>
+<p>The <em>vm</em> code snippet is available to create view models. There is also an on-line item template available for Catel view models</p>
+<h2 id="creating-the-personviewmodel">Creating the PersonViewModel</h2>
+<p>Below is the class definition of theÂ <code>PersonViewModel</code>. This view model will be used to show the details of aÂ <code>Person</code> model.</p>
+<pre><code>namespace WPF.GettingStarted.ViewModels
+{
+    using Catel.MVVM;
+
+    public class PersonViewModel : ViewModelBase
+    {
+    }
+}
+</code></pre>
+<h3 id="enabling-model-injection">Enabling model injection</h3>
+<p>In hierarchy views, it is important to manage the state of views and view models based on the actual context where the view (thus view model) is located. Catel does this by allowing model injection. The view models will only be created when the model is available within the context of the view.</p>
+<pre><code>public class PersonViewModel : ViewModelBase
+{
+    public PersonViewModel(Person person)
+    {
+        Argument.IsNotNull(() =&gt; person);
+
+        Person = person;
+    }
+
+    /// &lt;summary&gt;
+    /// Gets or sets the person.
+    /// &lt;/summary&gt;
+    [Model]
+    public Person Person
+    {
+        get { return GetValue&lt;Person&gt;(PersonProperty); }
+        set { SetValue(PersonProperty, value); }
+    }
+
+    /// &lt;summary&gt;
+    /// Register the Person property so it is known in the class.
+    /// &lt;/summary&gt;
+    public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person), null);
+}
+</code></pre>
+<p>Note that the <code>Person</code> property is decorated with the <code>Model</code> attribute. This automatically makes sure that if a view model is saved, the <code>IEditableObject.EndEdit</code> is called. When the view model is canceled, the <code>IEditableObject.CancelEdit</code> is called and all changes on the model will be reverted.</p>
+<h3 id="exposing-properties-of-a-model">Exposing properties of a model</h3>
+<p>One very powerful feature of Catel is that it can automatically map properties from a model to a view model. This way the user does not have to write repetitive code to map the properties from the model to the view model at startup and map the properties from view model to model when the view model is closed. Catel will take care of this all automatically.</p>
+<pre><code>/// &lt;summary&gt;
+/// Gets or sets the first name.
+/// &lt;/summary&gt;
+[ViewModelToModel(&quot;Person&quot;)]
+public string FirstName
+{
+    get { return GetValue&lt;string&gt;(FirstNameProperty); }
+    set { SetValue(FirstNameProperty, value); }
+}
+
+/// &lt;summary&gt;
+/// Register the FirstName property so it is known in the class.
+/// &lt;/summary&gt;
+public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), null);
+
+/// &lt;summary&gt;
+/// Gets or sets the last name.
+/// &lt;/summary&gt;
+[ViewModelToModel(&quot;Person&quot;)]
+public string LastName
+{
+    get { return GetValue&lt;string&gt;(LastNameProperty); }
+    set { SetValue(LastNameProperty, value); }
+}
+
+/// &lt;summary&gt;
+/// Register the LastName property so it is known in the class.
+/// &lt;/summary&gt;
+public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;LastName&quot;, typeof(string), null);
+</code></pre>
+<p>Note that the properties are decorated with the <em>ViewModelToModel</em> attribute which enables the automatic mappings feature in Catel.</p>
+<h2 id="creating-the-familyviewmodel">Creating the FamilyViewModel</h2>
+<p>TheÂ <code>FamilyViewModel</code> must be set up the same way as theÂ <code>PersonViewModel</code> above.</p>
+<pre><code>namespace WPF.GettingStarted.ViewModels
+{
+    using System.Collections.ObjectModel;
+    using Catel;
+    using Catel.Data;
+    using Catel.MVVM;
+    using WPF.GettingStarted.Models;
+
+    public class FamilyViewModel : ViewModelBase
+    {
+        public FamilyViewModel(Family family)
+        {
+            Argument.IsNotNull(() =&gt; family);
+Â 
+            Family = family; 
+        }
+
+        /// &lt;summary&gt;
+        /// Gets the family.
+        /// &lt;/summary&gt;
+        [Model]
+        public Family Family
+        {
+            get { return GetValue&lt;Family&gt;(FamilyProperty); }
+            private set { SetValue(FamilyProperty, value); }
+        }
+
+        /// &lt;summary&gt;
+        /// Register the Family property so it is known in the class.
+        /// &lt;/summary&gt;
+        public static readonly PropertyData FamilyProperty = RegisterProperty(&quot;Family&quot;, typeof(Family), null);
+
+        /// &lt;summary&gt;
+        /// Gets the family members.
+        /// &lt;/summary&gt;
+        [ViewModelToModel(&quot;Family&quot;)]
+        public ObservableCollection&lt;Person&gt; Persons
+        {
+            get { return GetValue&lt;ObservableCollection&lt;Person&gt;&gt;(PersonsProperty); }
+            private set { SetValue(PersonsProperty, value); }
+        }
+
+        /// &lt;summary&gt;
+        /// Register the Persons property so it is known in the class.
+        /// &lt;/summary&gt;
+        public static readonly PropertyData PersonsProperty = RegisterProperty(&quot;Persons&quot;, typeof(ObservableCollection&lt;Person&gt;), null);
+
+        /// &lt;summary&gt;
+        /// Gets or sets the family name.
+        /// &lt;/summary&gt;
+        [ViewModelToModel(&quot;Family&quot;)]
+        public string FamilyName
+        {
+            get { return GetValue&lt;string&gt;(FamilyNameProperty); }
+            set { SetValue(FamilyNameProperty, value); }
+        }
+
+        /// &lt;summary&gt;
+        /// Register the FamilyName property so it is known in the class.
+        /// &lt;/summary&gt;
+        public static readonly PropertyData FamilyNameProperty = RegisterProperty(&quot;FamilyName&quot;, typeof(string));
+    }
+}
+</code></pre>
+<h2 id="up-next">Up next</h2>
+<p>[Creating the views (user controls)]({{&lt; relref &quot;getting-started/wpf/creating-the-user-controls.md&quot; &gt;}})</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/getting-started/wpf/creating-the-view-models.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

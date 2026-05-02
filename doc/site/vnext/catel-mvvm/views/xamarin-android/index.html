@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Xamarin.Android | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Xamarin.Android | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../../toc.html">
+      <meta name="docfx:tocrel" content="../../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-mvvm/views/xamarin-android/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Note that this guide is not a full Android development guide. It will cover the basics though.</p>
+<h2 id="bindings">Bindings</h2>
+<p>Unfortunately Android does not have a powerful binding system like XAML does. Therefore it is required to manually synchronize data from the view to the view model and back or to use the binding system in Catel.</p>
+<h3 id="binding-properties">Binding properties</h3>
+<pre><code>[Activity]
+public class SecondActivity : Catel.Android.App.Activity
+{
+    private PersonView _personView;
+
+    protected override void OnCreate(Bundle bundle)
+    {
+        base.OnCreate(bundle);
+
+        // Set our view from the &quot;main&quot; layout resource
+        SetContentView(Resource.Layout.Page_Second);
+
+        _personView = FragmentManager.FindFragmentById&lt;PersonView&gt;(Resource.Id.PersonView);
+    }
+    protected override void AddBindings(BindingContext bindingContext, IViewModel viewModel)
+    {
+        var vm = (SecondViewModel) viewModel;
+
+        bindingContext.AddBinding(() =&gt; vm.Title, () =&gt; Title);
+        bindingContext.AddBinding(() =&gt; vm.Person, () =&gt; _personView.DataContext);
+    }
+}
+</code></pre>
+<h3 id="binding-properties-with-events">Binding properties with events</h3>
+<pre><code>public class PersonView : Catel.Android.App.Fragment
+{
+    private EditText _firstNameEditText;
+    private EditText _lastNameEditText;
+    private TextView _lastNameMirrorTextView ;
+
+    public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        var inflateResult = inflater.Inflate(Resource.Layout.Fragment_Person, container, false);
+        return inflateResult;
+    }
+
+    public override void OnResume()
+    {
+        _firstNameEditText = Activity.FindViewById&lt;EditText&gt;(Resource.Id.firstNameText);
+        _lastNameEditText = Activity.FindViewById&lt;EditText&gt;(Resource.Id.lastNameText);
+        _lastNameMirrorTextView = Activity.FindViewById&lt;TextView&gt;(Resource.Id.lastNameMirrorTextView);
+
+        base.OnResume();
+    }
+
+    protected override void AddBindings(BindingContext bindingContext, IViewModel viewModel)
+    {
+        var vm = (PersonViewModel)viewModel;
+
+        bindingContext.AddBinding(() =&gt; vm.FirstName, () =&gt; _firstNameEditText.Text).AddTargetEvent(&quot;TextChanged&quot;);
+        bindingContext.AddBinding(() =&gt; vm.LastName, () =&gt; _lastNameEditText.Text).AddTargetEvent(&quot;TextChanged&quot;);
+        bindingContext.AddBinding(() =&gt; vm.LastName, () =&gt; _lastNameMirrorTextView.Text, BindingMode.OneWay);
+    }
+}
+</code></pre>
+<h3 id="binding-properties-with-converters">Binding properties with converters</h3>
+<pre><code>protected override void AddBindings(BindingContext bindingContext, IViewModel viewModel)
+{
+    var vm = (MainViewModel)viewModel;
+
+    bindingContext.AddBindingWithConverter&lt;ClicksConverter&gt;(() =&gt; vm.Counter, () =&gt; _testButton.Text, BindingMode.OneWay);
+}
+</code></pre>
+<h3 id="binding-commands">Binding commands</h3>
+<p>Â</p>
+<pre><code>protected override void AddBindings(BindingContext bindingContext, IViewModel viewModel)
+{
+    var vm = (MainViewModel)viewModel;
+
+    bindingContext.AddCommandBinding(_testButton, &quot;Click&quot;, vm.RunCommand);
+}
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-mvvm/views/xamarin-android/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

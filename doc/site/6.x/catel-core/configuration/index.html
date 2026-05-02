@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Configuration | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Configuration | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/configuration/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Catel makes it very easy to use configurations on all supported platforms.Â</p>
+<p>Below is a table to explain what technology is used per platform to retrieve and store configuration values.</p>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Technology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.NET</td>
+<td>ConfigurationManager.AppSettings</td>
+</tr>
+<tr>
+<td>UWP</td>
+<td>ApplicationData.Current.LocalSettings</td>
+</tr>
+<tr>
+<td>PCL</td>
+<td>Not supported</td>
+</tr>
+</tbody>
+</table>
+<h2 id="getting-values-from-the-configuration">Getting values from the configuration</h2>
+<p>To retrieve values from the configuration, use the following code:</p>
+<pre><code>var configurationService = new ConfigurationService();
+var mySetting = configurationService.GetValue&lt;int&gt;(&quot;mySetting&quot;, 42);
+</code></pre>
+<p>The code above will retrieve the values from the configuration. If the configuration value does not exist, it will return <em>42</em> as default value.</p>
+<p>It's best to retrieve the service from the dependency resolver or let it be injected into the classes using it</p>
+<h2 id="setting-values-to-the-configuration">Setting values to the configuration</h2>
+<p>To store values in the configuration, use the following code:</p>
+<pre><code>var configurationService = new ConfigurationService();
+configurationService.SetValue(&quot;mySetting&quot;, 42);
+</code></pre>
+<p>It's best to retrieve the service from the dependency resolver or let it be injected into the classes using it</p>
+<h2 id="customizing-the-way-values-are-stored">Customizing the way values are stored</h2>
+<p>The <em>ConfigurationService</em> is written with extensibility in mind. Though it defaults to the .NET local storage system, it is very easy to create a customized configuration service. Below is an example on how to customize the service so it reads and writes values from/to a database.</p>
+<pre><code>public class DbConfigurationService : ConfigurationService
+{
+    protected override bool ValueExists(string key)
+    {
+        using (var context = new ConfigurationContext())
+        {
+            return (from config in context.Configurations
+                    where config.Key == key
+                    select config).Any();
+        }
+    }
+Â 
+    protected override string GetValueFromStore(string key)
+    {
+        using (var context = new ConfigurationContext())
+        {
+            return (from config in context.Configurations
+                    where config.Key == key
+                    select config.Value).First();
+        }
+    }
+
+    protected override void SetValueToStore(string key, string value)
+    {
+        using (var context = new ConfigurationContext())
+        {
+            var configuration (from config in context.Configurations
+                    where config.Key == key
+                    select config).FirstOrDefault();
+
+            if (configuration == null)
+            {
+                configuration = context.CreateObject&lt;Configuration&gt;();
+                configuration.Key = key;
+            }
+
+            configuration.Value = value;
+            context.SaveChanges();
+        }
+    }
+}
+</code></pre>
+<p>Don't forget to register the customized <em>ConfigurationService</em> in the <em>ServiceLocator</em></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/configuration/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

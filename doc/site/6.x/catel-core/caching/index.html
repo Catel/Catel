@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Caching | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Caching | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/caching/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Caching is about improving applications performance. The most expensive performance costs of the applications are related with data retrieving, typically when this data requires to be moved across the network or loaded from disk. But some data have a slow changing behavior (a.k.a non-volatile) and doesn't require to be re-read with the same frequency of the volatile data.</p>
+<p>So, to improve your application's performance and handling this &quot;nonvolatile&quot; data from a pretty clean approach, Catel comes with a CacheStorage class. Notice that the first generic parameter is the type of the key and the second the type of the value the will be stored, just like a Dictionary but CacheStorage isn't it just a Dictionary. This class allows you to retrieve data and store it into the cache with single statement and also helps you to handle expiration policy if you need it.</p>
+<h2 id="initializing-a-cache-storage">Initializing a cache storage</h2>
+<p>To initialize a cache storage field into your class use the following code:</p>
+<pre><code>private readonly CacheStorage&lt;string, Person&gt; _personCache = new CacheStorage&lt;string, Person&gt;(storeNullValues: true);
+</code></pre>
+<h2 id="retrieving-data-and-storing-into-cache-with-single-statement">Retrieving data and storing into cache with single statement</h2>
+<p>To retrieve data and store into a cache with a single statement use the following code:</p>
+<pre><code>var person = _personCache.GetFromCacheOrFetch(Id, () =&gt; service.FindPersonById(Id));
+</code></pre>
+<p>When this statement is executed with the same keyÂ more than once , the value will be retrieved from the cache storage instead of the service call. The service call will be executed just the first time or if the item is removed from the cache manually or automatically due to the expiration policy.</p>
+<h2 id="using-cache-expiration-policies">Using cache expiration policies</h2>
+<p>The cache expiration policies add a removal behavior to the cache storage items. A policy signals that an item is expired to make that cache storage remove the item automatically.</p>
+<p>A default cache expiration policy initialization code can be specified during cache storage initialization constructor:</p>
+<pre><code>CacheStorage&lt;string, Person&gt; _personCache = new CacheStorage&lt;string, Person&gt;(() =&gt; ExpirationPolicy.Duration(TimeSpan.FromMinutes(5)), true);
+</code></pre>
+<p>You can specify a specific expiration policy for an item when it's storing:</p>
+<pre><code>_personCache.GetFromCacheOrFetch(id, () =&gt; service.GetPersonById(id), ExpirationPolicy.Duration(TimeSpan.FromMinutes(10)));
+</code></pre>
+<p>The default cache policy specified at cache storage initialization will be used if the item storing the expiration policy is not specified.</p>
+<h2 id="build-in-expiration-policies">Build-in expiration policies</h2>
+<p>Catel comes with build-in expiration policies. They are listed in the follow table:</p>
+<table>
+<thead>
+<tr>
+<th>Expiration policy</th>
+<th>Type</th>
+<th>Description</th>
+<th>Initialization code sample</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AbsoluteExpirationPolicy</td>
+<td>Time-base</td>
+<td>The cache item will expire on the absolute expiration DateTime</td>
+<td><code>ExpirationPolicy.Absolute(new DateTime(21, 12, 2012))</code></td>
+</tr>
+<tr>
+<td>DurationExpirationPolicy</td>
+<td>Time-base</td>
+<td>The cache item will expire using the duration TimeSpan to calculate the absolute expiration from DateTime.Now</td>
+<td><code>ExpirationPolicy.Duration(TimeSpan.FromMinutes(5))</code></td>
+</tr>
+<tr>
+<td>SlidingExpirationPolicy</td>
+<td>Time-base</td>
+<td>The cache item will expire using the duration TimeSpan to calculate the absolute expiration from DateTime.Now, but everytime the item is requested, it is expanded again with the specified TimeSpan</td>
+<td><code>ExpirationPolicy.Sliding(TimeSpan.FromMinutes(5))</code></td>
+</tr>
+<tr>
+<td>CustomExpirationPolicy</td>
+<td>Custom</td>
+<td>The cache item will expire using the expire function and execute the reset action if specified. The example shows how to create a sliding expiration policy with a custom expiration policy.</td>
+<td><code>var startDateTime = DateTime.Now;var duration = TimeSpan.FromMinutes(5);ExpirationPolicy.Custom(() =&gt; DateTime.Now &gt; startDateTime.Add(duration), () =&gt; startDateTime = DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>CompositeExpirationPolicy</td>
+<td>Custom</td>
+<td>Combines several expiration policy into a single one. It can be configured to expire when any policy expires or when all policies expire.</td>
+<td><code>new CompositeExpirationPolicy().Add(ExpirationPolicy.Sliding(TimeSpan.FromMinutes(5))).Add(ExpirationPolicy.Custom(()=&gt;...))</code></td>
+</tr>
+</tbody>
+</table>
+<p>Implementing your own expiration cache policy</p>
+<p>If the <em>CustomExpirationPolicy</em> is not enough, you can implement you own expiration policy to make that cache item expire triggered from a custom event. You are also able to add some code to reset the expiration policy if the item is read from the cache before it expires (just like <em>SlidingExpirationPolicy</em> does).</p>
+<p>To implement an expiration cache policy use the following code template:</p>
+<pre><code>public class MyExpirationPolicy : ExpirationPolicy
+{
+   public MyExpirationPolicy():base(true)
+   {
+   }
+
+   public override bool IsExpired
+   {
+      get
+      {
+         // Add your custom expiration code to detect if the item expires
+      }
+   }
+
+   public override void OnReset()
+   {
+      // Add your custom code to reset the policy if the item is read.
+   }
+}
+</code></pre>
+<p>The base constructor has a parameter to indicate if the policy can be reset. Therefore, if you call the base constructor with false then the OnReset method will never called.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/caching/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

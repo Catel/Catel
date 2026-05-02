@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Validation | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Validation | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-core/validation/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>The <code>ViewModelBase</code> derives from <code>ModelBase</code>, thus all information here also applies to the <code>ViewModelBase</code></p>
+<p>Validation is very important for data objects. Therefore, the ModelBase supports all kinds of different validation:</p>
+<ul>
+<li>Internal validation via the ValidateFields and ValidateBusinessRules methods</li>
+<li>Validation via data annotations (attributes)</li>
+<li>External validators using the IValidatorProvider and IValidator interfaces</li>
+</ul>
+<p>The validation results are cached and only executed when a property changes (the object becomes dirty) or when the validation is forced.</p>
+<h2 id="different-types-of-validation">Different types of validation</h2>
+<p>There are two different types of validation in Catel, namely warnings and errors. There are also two flavors of validations, namely field validation and business rule validation.</p>
+<h2 id="order-of-execution-of-events">Order of execution of events</h2>
+<p>The order of execution is very important if you want to perform very advanced validation (such as translating validations at the end of each validation sequence).</p>
+<ol>
+<li>IValidator.BeforeValidation</li>
+<li>OnValidation (raises Validating event)
+<strong>if not already validated</strong></li>
+<li>IValidator.BeforeValidateFields</li>
+<li>OnValidatingFields (raises the ValidatingFields event)</li>
+<li>IValidator.ValidateFields</li>
+<li>ValidateFields</li>
+<li>OnValidatedFields (raises the ValidatedFields event)</li>
+<li>IValidator.AfterValidateFields</li>
+<li>IValidator.BeforeValidateBusinessRules</li>
+<li>OnValidatingBusinessRules (raises the ValidatingBusinessRules event)</li>
+<li>IValidator.ValidateBusinessRules</li>
+<li>ValidateBusinessRules</li>
+<li>OnValidatedBusinessRules (raises the ValidatedBusinessRules event)</li>
+<li>IValidator.AfterValidateBusinessRules
+<strong>end if not already validated</strong></li>
+<li>OnValidated (raises the Validated event)</li>
+<li>IValidator.AfterValidation</li>
+</ol>
+<p>There are lots of events, and it may seem complex and confusing at first sight. However, all these events give developers the opportunity to hook into the validation sequence at any time.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-core/validation/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
