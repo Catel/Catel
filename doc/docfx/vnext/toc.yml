@@ -35,41 +35,6 @@
     items:
     - name: WPF implementation for exception handling
       href: catel-core/exception-handling/wpf-implementation-for-exception-handling.md
-  - name: Logging
-    href: catel-core/logging/index.md
-    items:
-    - name: Anotar.Catel.Fody
-      href: catel-core/logging/anotar-catel-fody/index.md
-    - name: Creating log listeners via configuration
-      href: catel-core/logging/creating-log-listeners-via-configuration/index.md
-    - name: Customizing listeners
-      href: catel-core/logging/customizing-listeners/index.md
-    - name: Integration with external logging
-      href: catel-core/logging/integration-with-external-loggers/index.md
-      items:
-      - name: Log4net
-        href: catel-core/logging/integration-with-external-loggers/log4net.md
-      - name: NLog
-        href: catel-core/logging/integration-with-external-loggers/nlog.md
-    - name: Log listeners
-      href: catel-core/logging/log-listeners/index.md
-      items:
-      - name: Batch log listeners
-        href: catel-core/logging/log-listeners/batch-log-listeners.md
-      - name: ConsoleLogListener
-        href: catel-core/logging/log-listeners/console-log-listener.md
-      - name: DebugLogListener
-        href: catel-core/logging/log-listeners/debug-log-listener.md
-      - name: EventLogListener
-        href: catel-core/logging/log-listeners/event-log-listener.md
-      - name: Event Tracing for Windows (ETW)
-        href: catel-core/logging/log-listeners/event-tracing-for-windows.md
-      - name: FileLogListener
-        href: catel-core/logging/log-listeners/file-log-listener.md
-      - name: RollingInMemoryLogListener
-        href: catel-core/logging/log-listeners/rolling-in-memory-log-listener.md
-      - name: SeqLogListener
-        href: catel-core/logging/log-listeners/seq-log-listener.md
   - name: Messaging
     href: catel-core/messaging/index.md
     items:
