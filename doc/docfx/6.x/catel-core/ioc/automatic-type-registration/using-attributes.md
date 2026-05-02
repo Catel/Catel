@@ -1,7 +1,7 @@
 ﻿---
 title: "Using attributes" 
 ---
-The [ServiceLocator](Introduction_to_the_ServiceLocator) in Catel can be set up to discover attribute based registration.Â 
+The [ServiceLocator](../introduction-to-components/servicelocator.md) in Catel can be set up to discover attribute based registration.Â 
 
 ## Declaring a registration since the type definition
 

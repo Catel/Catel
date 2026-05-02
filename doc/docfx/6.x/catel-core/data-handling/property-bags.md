@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Property bags" 
 ---
 A property bag is a class that can hold multiple (dynamically registered) values. It can be compared to a dictionary, but does a bit more since it will also do integrity checks and change notifications.
@@ -29,7 +29,7 @@ The `TypedPropertyBag` uses separate dictionaries for each value type. To preven
 
 The advantage of storing values inside typed dictionaries is that it removes the requirement for boxing, therefore resulting in improved memory usage as shown below in the benchmarks comparing the different implementations:
 
-![](../../../images/catel-core/data-handling/property-bags/benchmarks.png)
+![](../../images/catel-core/data-handling/property-bags/benchmarks.png)
 
 The downside of the `TypedPropertyBag` is that it is *slightly* slower than the `PropertyBag`.
 

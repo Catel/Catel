@@ -1,4 +1,4 @@
-﻿---
+---
 title: "AutoCompletionBehavior" 
 ---
 To enable auto completion features, once can use the services and behaviors provided by Catel. There are two components required for auto completion:
@@ -8,7 +8,7 @@ To enable auto completion features, once can use the services and behaviors prov
 
 The auto completion features looks like the screenshot below:
 
-![](../../../images/catel-mvvm/behaviors-triggers/autocompletion/example.png)
+![](../../images/catel-mvvm/behaviors-triggers/autocompletion/example.png)
 
 ## AutoCompletion service
 

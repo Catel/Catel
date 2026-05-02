@@ -19,7 +19,7 @@ If you ever think Catel is behaving strange or does not work as expected, make s
 
 Catel will then log everything to the output window and provide all the information about its internals.
 
-For more information, read about [logging](Logging).
+For more information, read about [logging](../../catel-core/logging/index.md).
 
 ### Catel properties
 
@@ -77,7 +77,7 @@ var view = new PersonView();
 // view model is automatically created
 ```
 
-It goes even further. Catel can create view models based on the data context. For more information, read [nested user controls](Introduction_to_the_nested_user_controls_problem).
+It goes even further. Catel can create view models based on the data context. For more information, read [nested user controls](../../introduction/mvvm/introduction-to-nested-user-controls-problem.md).
 
 ### Handling hierarchy and parent/child view models
 

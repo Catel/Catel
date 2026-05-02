@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Serializing data from/to disk" 
 ---
 In this step we will create services that will serialize the models from/to disk. Services are a great way to abstract functionality that can be used in every part of the application. This guide will also register the service in theÂ *ServiceLocator* so it can be injected in view models.
@@ -7,7 +7,7 @@ In this step we will create services that will serialize the models from/to disk
 
 The first thing to do is to create theÂ *Services* folder to group the services. Below is a screenshot of how to solution will look after creating the folders:
 
-![](../../../images/getting-started/wpf/serializing-data-from-to-disk/solutionexplorer.png)
+![](../../images/getting-started/wpf/serializing-data-from-to-disk/solutionexplorer.png)
 
 Then add a new interface to theÂ `Interfaces` folder namedÂ `IFamilyService`. This will manage the families that are avaiable. Below is the interface defined:
 

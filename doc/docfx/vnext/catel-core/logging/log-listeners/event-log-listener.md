@@ -1,9 +1,9 @@
-﻿---
+---
 title: "EventLogListener" 
 ---
 The `EventLogListener` allow to write log data to the system event log.Â 
 
-![](../../../../images/catel-core/logging/log-listeners/event-log-listener/eventlog.png)Â 
+![](../../../images/catel-core/logging/log-listeners/event-log-listener/eventlog.png)Â 
 
 To add it, use the code below:
 

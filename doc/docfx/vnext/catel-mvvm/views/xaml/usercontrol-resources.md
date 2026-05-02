@@ -1,4 +1,4 @@
-﻿---
+---
 title: "UserControl Resources" 
 ---
 For the most part the resources declared within a Catel `UserControl` behave the exact same as resources defined in the standard 
@@ -145,7 +145,7 @@ and this View:
 
 Will produce this at runtime:
 
-![](../../../../images/catel-mvvm/views/xaml/usercontrol-resources/example.png)
+![](../../../images/catel-mvvm/views/xaml/usercontrol-resources/example.png)
 
 Â 
 Â The ListView on the left is not populated because the binding is not found and will produce this error:

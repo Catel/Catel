@@ -17,5 +17,5 @@ Now you can see all the log messages in the output window.
 
 ## Enabling stepping through the code
 
-It's possible to step through the Catel code to see what is happening in the internals of Catel. This gives you great insights in Catel and can help you solve the problems you are encountering. See the [stepping through the code documentation](Stepping_through_the_code).
+It's possible to step through the Catel code to see what is happening in the internals of Catel. This gives you great insights in Catel and can help you solve the problems you are encountering. See the [stepping through the code documentation](../setup-deployment/stepping-through-the-code/index.md).
 

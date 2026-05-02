@@ -1,7 +1,7 @@
 ﻿---
 title: "Using conventions" 
 ---
-The [ServiceLocator](Introduction_to_the_ServiceLocator) in Catel can be set up to automatically register types based on the conventions. Â 
+The [ServiceLocator](../introduction-to-components/servicelocator.md) in Catel can be set up to automatically register types based on the conventions. Â 
 
 The convention based registration should to be run first than the others registration methods to be sure to have all your types registered correctly.
 
