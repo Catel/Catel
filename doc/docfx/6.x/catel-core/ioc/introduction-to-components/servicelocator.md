@@ -54,7 +54,7 @@ private void OnMissingType(object sender, MissingTypeEventArgs e)
 }
 ```
 
-If both theÂ ImplementingInstanceÂ andÂ ImplementingTypeÂ are filled, theÂ ImplementingIntanceÂ will be used.
+If both the ImplementingInstance and ImplementingType are filled, the ImplementingIntance will be used.
 
 ## Resolving a type
 

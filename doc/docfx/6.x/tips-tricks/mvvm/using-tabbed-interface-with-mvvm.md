@@ -59,7 +59,7 @@ public namespace TabDemo
 }
 ```
 
-Because we subscribe to theÂ *ClosedAsync* event, we can close the tab from withing the view model.
+Because we subscribe to the *ClosedAsync* event, we can close the tab from withing the view model.
 
 ## Creating the service
 
@@ -609,7 +609,7 @@ namespace TabDemo.Services
 }
 ```
 
-Â 
+
 
 ## Using the service
 
@@ -623,7 +623,7 @@ _tabService.AddAndActivate<DemoTabViewModel>(null, true);
 
 ### Closing a tab from withing a view model
 
-This closes a tab from within a tab view model. Closing a view model causes theÂ *TabItem* to raise theÂ *Closed* event and theÂ *TabService* will correctly close the tab and update its selection.
+This closes a tab from within a tab view model. Closing a view model causes the *TabItem* to raise the *Closed* event and the *TabService* will correctly close the tab and update its selection.
 
 ```
 this.SaveAndCloseViewModelAsync();

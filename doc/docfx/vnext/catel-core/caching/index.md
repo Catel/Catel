@@ -21,7 +21,7 @@ To retrieve data and store into a cache with a single statement use the followin
 var person = _personCache.GetFromCacheOrFetch(Id, () => service.FindPersonById(Id));
 ```
 
-When this statement is executed with the same keyÂ more than once , the value will be retrieved from the cache storage instead of the service call. The service call will be executed just the first time or if the item is removed from the cache manually or automatically due to the expiration policy.
+When this statement is executed with the same key more than once , the value will be retrieved from the cache storage instead of the service call. The service call will be executed just the first time or if the item is removed from the cache manually or automatically due to the expiration policy.
 
 ## Using cache expiration policies
 

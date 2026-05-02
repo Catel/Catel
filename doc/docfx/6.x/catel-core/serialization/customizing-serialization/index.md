@@ -7,7 +7,7 @@ All classes deriving from `ModelBase` use the serialization engine of Catel to s
 
 ![](../../../images/catel-core/serialization/customizing-serialization/introduction/architecture.png)
 
-TheÂ `SerializerBase` now contains all the serialization and deserialization logic. The advantage is that this logic is no longer contained by the `ModelBase` itself which makes the class much simpler to understand and maintain. Now theÂ `SerializerBase` contains all the heavy lifting, the deriving classes (`XmlSerializer`Â andÂ `BinarySerializer`) only have to implement a few methods.
+The `SerializerBase` now contains all the serialization and deserialization logic. The advantage is that this logic is no longer contained by the `ModelBase` itself which makes the class much simpler to understand and maintain. Now the `SerializerBase` contains all the heavy lifting, the deriving classes (`XmlSerializer` and `BinarySerializer`) only have to implement a few methods.
 
 The serialization process works as shown in the diagram below:
 

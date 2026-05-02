@@ -5,7 +5,7 @@ For performance reasons, Catel no longer automatically subscribes to the *Comman
 
 This was removed for a reason (performance), so this is not the recommended approach. But this allows you to get back the old behavior.
 
-To use this class, instantiate it and register it in theÂ *ServiceLocator* so it stays alive.
+To use this class, instantiate it and register it in the *ServiceLocator* so it stays alive.
 
 ```
 public class RequeryUsingCommandManager

@@ -17,7 +17,7 @@ Note that the pool manager does not limit the number of objects in memory. It ha
 
 ### Retrieving objects from the pool
 
-Retrieving an object from the pool is very simple. WhenÂ an instance of the `PoolManager<TPoolable>` is available, use the code below:
+Retrieving an object from the pool is very simple. When an instance of the `PoolManager<TPoolable>` is available, use the code below:
 
 ```
 var poolableBuffer = _poolManager.GetObject();
@@ -44,7 +44,7 @@ The flow chart below shows how the `PoolManager<TPoolable>` will handle the disp
 
 ![](../../images/catel-core/pooling/reachedmaxsize.png)
 
-## CustomizingÂ a pool manager
+## Customizing a pool manager
 
 Catel implements pooling via the `PoolManager<TPoolable>` class. This class allows the caller to retrieve an object. There is no need to explicitly derive a class from the `PoolManager<TPoolable>`. It can be customized though.
 

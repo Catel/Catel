@@ -9,7 +9,7 @@ There are two different interpretations of MVVM, the "purist" way where the mode
 
 This is what most people do. The view model implements the model, and then provides the model to the view. The view then binds directly to the model.
 
-Â **Advantages**
+**Advantages**
 
 -   Easy to use
 -   Fast since view model hardly contains any properties
@@ -23,7 +23,7 @@ This is what most people do. The view model implements the model, and then provi
 
 This is what the developers of Catel strongly believe in. It requires a bit more code, but gives great freedom and control and protection of the model because all bindings go through the view model.
 
-Â **Advantages**
+**Advantages**
 
 -   Full contol and freedom, you can inject both logic and validation between view and model (what MVVM is actually about)
 -   Everything is available on the view model, no need for "sub-bindings" (such as Model.[PropertyName])
@@ -31,5 +31,5 @@ This is what the developers of Catel strongly believe in. It requires a bit more
 
 **Disadvantages**
 
-Â Needs a bit more code (but thanks to code snippets and the Expose attribute, this is not a big disadvantage)
+Needs a bit more code (but thanks to code snippets and the Expose attribute, this is not a big disadvantage)
 

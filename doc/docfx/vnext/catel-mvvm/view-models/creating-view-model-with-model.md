@@ -79,7 +79,7 @@ public class ClassicalViewModel : ViewModelBase
    {
       // Get the person from (in this case) a magical context
       Person = Context.CurrentPerson;
-Â 
+
       // Load the data manually to the view model
       FirstName = Person.FirstName;
       LastName = Person.LastName;
@@ -96,7 +96,7 @@ public class ClassicalViewModel : ViewModelBase
        {
            validationResults.Add(FieldValidationResult.CreateError(FirstNameProperty, "First name is required"));
        }
-Â 
+
        if (string.IsNullOrWhiteSpace(LastName))
        {
            validationResults.Add(FieldValidationResult.CreateError(LastNameProperty, "Last name is required"));
@@ -116,7 +116,7 @@ public class ClassicalViewModel : ViewModelBase
           // Save the data manually to the model
           Person.FirstName = FirstName;
           Person.LastName = LastName;
-Â 
+
           // Save the model
           return Person.Save();
       });

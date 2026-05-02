@@ -33,11 +33,11 @@ Code:
 
 ```
 private readonly IMessageService _messageService;
-Â 
+
 public void MyViewModel(IMessageService messageService)
 {
     Argument.IsNotNull(() => messageService);
-Â 
+
     _messageService = messageService;
 
     // Add commands
@@ -66,11 +66,11 @@ Code:
 
 ```
 private readonly IMessageService _messageService;
-Â 
+
 public void MyViewModel(IMessageService messageService)
 {
     Argument.IsNotNull(() => messageService);
-Â 
+
     _messageService = messageService;
 
     // Add commands

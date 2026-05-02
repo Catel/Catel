@@ -1,7 +1,7 @@
 ﻿---
 title: "Running code at design-time" 
 ---
-Sometimes one needs to run code during design-time. A good example is to register a customÂ `LanguageResourceSource` in theÂ `LanguageService` to show translations in the designer. Unfortunately it is not as easy as putting some code in the code-behind to get this working.
+Sometimes one needs to run code during design-time. A good example is to register a custom `LanguageResourceSource` in the `LanguageService` to show translations in the designer. Unfortunately it is not as easy as putting some code in the code-behind to get this working.
 
 Starting with Catel 4.3, calling `CatelEnvironment.IsInDesignTime` will automatically invoke *DesignTimeHelper.InitializeDesignTime* if in design mode. This means you only have to add classes deriving from `DesignTimeInitializer` and they will automatically be invoked when any code is checking if it's currently running inside a designer context (e.g. `LanguageBinding`)
 
@@ -18,7 +18,7 @@ When the attribute is found by Catel, it will automatically construct the types 
 
 ## Introducing the DesignTimeInitializer
 
-TheÂ `DesignTimeCodeAttribute` contains the types that are constructed during design-time. Although the reflection in Catel is protected by only checking these arguments at design-time, it cannot be guaranteed for other systems. Therefore Catel also provides theÂ `DesignTimeInitializer` base class. This is a base class that checks whether the type being constructed is actually running inside a design tool.
+The `DesignTimeCodeAttribute` contains the types that are constructed during design-time. Although the reflection in Catel is protected by only checking these arguments at design-time, it cannot be guaranteed for other systems. Therefore Catel also provides the `DesignTimeInitializer` base class. This is a base class that checks whether the type being constructed is actually running inside a design tool.
 
 Below is an example of the usage, which registers custom language resource sources in the language service. This allows real-time updates of the `LanguageService` in the designer.
 

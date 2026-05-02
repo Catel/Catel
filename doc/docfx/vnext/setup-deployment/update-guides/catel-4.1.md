@@ -7,7 +7,7 @@ This guide assumes that you are coming from Catel 4.0. If not, please read that 
 
 ## IUIVisualizerService
 
-We have reverted the change to force you to use async code on theÂ *IUIVisualizerService*. There are now 2 options:
+We have reverted the change to force you to use async code on the *IUIVisualizerService*. There are now 2 options:
 
 1.  Synchronous:
 
@@ -25,5 +25,5 @@ We have reverted the change to force you to use async code on theÂ *IUIVisuali
     // Window is closed here thanks to the await keyword
     ```
 
-Â 
+
 

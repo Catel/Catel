@@ -1,7 +1,7 @@
 ﻿---
 title: "Specifying what gets serialized" 
 ---
-By default, Catel only serializes the defined Catel properties on theÂ *ModelBase* or any deriving classes. It is possible to customize this behavior. Below is a class which will be used in all examples:
+By default, Catel only serializes the defined Catel properties on the *ModelBase* or any deriving classes. It is possible to customize this behavior. Below is a class which will be used in all examples:
 
 ```
 public class MyModel : ModelBase
@@ -67,7 +67,7 @@ public class MyModel : ModelBase
     private string _fieldValue;
 
     public string RegularProperty { get; set; }
-Â 
+
     [ExcludeFromSerialization]
     public string CatelProperty
     {
@@ -87,9 +87,9 @@ CatelProperty|false
 
 ## Serializing a ModelBase as collection
 
-There is a very edge case that a class derives fromÂ *ModelBase*, but also implements *IList\<T\>*. In this case, it's hard for the serializers to determine what to do. By default, it will treat the model as a Catel model (since it can contain more properties than just theÂ *Items* property. If such a class should be serialized as collection (meaning it will only serialize theÂ *Items* property), decorate it with theÂ *SerializeAsCollection* attribute:
+There is a very edge case that a class derives from *ModelBase*, but also implements *IList\<T\>*. In this case, it's hard for the serializers to determine what to do. By default, it will treat the model as a Catel model (since it can contain more properties than just the *Items* property. If such a class should be serialized as collection (meaning it will only serialize the *Items* property), decorate it with the *SerializeAsCollection* attribute:
 
-Â 
+
 
 ```
 [SerializeAsCollection]
@@ -101,7 +101,7 @@ public class MyModel : ModelBase, IList<int>
 
 ## Implementing a custom ISerializationManager
 
-Internally Catel uses a default implementation of theÂ *ISerializationManager* to determine what members of a type should be serialized. It is possible to customize this behavior by overriding a single method or by creating a brand new type. Below is an example which always excludesÂ *Password* properties and fields from serialization.
+Internally Catel uses a default implementation of the *ISerializationManager* to determine what members of a type should be serialized. It is possible to customize this behavior by overriding a single method or by creating a brand new type. Below is an example which always excludes *Password* properties and fields from serialization.
 
 ```
 public class SafeSerializationManager : SerializationManager

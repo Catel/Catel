@@ -46,7 +46,7 @@ public class AuthenticationProvider : IAuthenticationProvider
 Catel.IoC.ServiceLocator.Instance.RegisterType<IAuthenticationProvider, AuthenticationProvider>();
 ```
 
-3)Â Add the following XML namespaces to your view:
+3) Add the following XML namespaces to your view:
 
 ```
 xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"

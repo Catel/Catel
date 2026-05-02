@@ -44,29 +44,29 @@ To gain the best performance possible using the json serializer, a model should 
 ```
 public class CustomJsonSerializationModel : ModelBase, ICustomJsonSerializable
 {
-Â Â Â  public string FirstName
-Â Â Â  {
-Â Â Â Â Â Â Â  get { return GetValue<string>(FirstNameProperty); }
-Â Â Â Â Â Â Â  set { SetValue(FirstNameProperty, value); }
-Â Â Â  }
+    public string FirstName
+    {
+        get { return GetValue<string>(FirstNameProperty); }
+        set { SetValue(FirstNameProperty, value); }
+    }
 
-Â Â Â  public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+    public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
 
-Â Â Â  void ICustomJsonSerializable.Serialize(JsonWriter jsonWriter)
-Â Â Â  {
-Â Â Â Â Â Â Â  jsonWriter.WriteStartObject();
-Â Â Â Â Â Â Â  jsonWriter.WritePropertyName("FirstName");
-Â Â Â Â Â Â Â  jsonWriter.WriteValue(FirstName);
-Â Â Â Â Â Â Â  jsonWriter.WriteEndObject();
-Â Â Â  }
+    void ICustomJsonSerializable.Serialize(JsonWriter jsonWriter)
+    {
+        jsonWriter.WriteStartObject();
+        jsonWriter.WritePropertyName("FirstName");
+        jsonWriter.WriteValue(FirstName);
+        jsonWriter.WriteEndObject();
+    }
 
-Â Â Â  void ICustomJsonSerializable.Deserialize(JsonReader jsonReader)
-Â Â Â  {
-Â Â Â Â Â Â Â  // Note: this is probably not the fastest way to deserialize, but it's used to show the possibilities of the engine
-Â Â Â Â Â Â Â  var jsonObject = JObject.Load(jsonReader);
-Â Â Â Â Â Â Â  var jsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
-Â Â Â Â Â Â Â  FirstName = (string)jsonProperties["FirstName"].Value;
-Â Â Â  }
+    void ICustomJsonSerializable.Deserialize(JsonReader jsonReader)
+    {
+        // Note: this is probably not the fastest way to deserialize, but it's used to show the possibilities of the engine
+        var jsonObject = JObject.Load(jsonReader);
+        var jsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
+        FirstName = (string)jsonProperties["FirstName"].Value;
+    }
 }
 ```
 

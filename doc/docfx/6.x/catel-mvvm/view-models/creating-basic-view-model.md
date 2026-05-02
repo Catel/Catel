@@ -27,7 +27,7 @@ public class SimpleViewModel : ViewModelBase
    /// </summary>
    /// <value>The title.</value>
    public override string Title { get { return "Just acknowledge"; } }
-Â 
+
    /// <summary>
    /// Gets or sets whether the user has agreed to continue.
    /// </summary>
@@ -56,7 +56,7 @@ public class SimpleViewModel : ViewModelBase
 }
 ```
 
-Â 
+
 
 **XAML (assuming that the view model is set as datacontext)
 **

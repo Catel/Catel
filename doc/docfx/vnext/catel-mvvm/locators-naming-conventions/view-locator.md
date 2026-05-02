@@ -1,7 +1,7 @@
 ﻿---
 title: "ViewLocator" 
 ---
-The `IViewLocator` class is responsible for resolving the right views for a view model. Before Catel 3.0, the `IUIVisualizerService` was responsible for resolving the view, but this responsibility is now taken over by the `IViewLocator`. The `UIVisualizerService` internally uses the `IViewLocator` to resolve the views.Â 
+The `IViewLocator` class is responsible for resolving the right views for a view model. Before Catel 3.0, the `IUIVisualizerService` was responsible for resolving the view, but this responsibility is now taken over by the `IViewLocator`. The `UIVisualizerService` internally uses the `IViewLocator` to resolve the views. 
 
 ## Resolving by naming convention
 

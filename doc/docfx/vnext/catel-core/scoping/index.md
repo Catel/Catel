@@ -7,10 +7,10 @@ Sometimes scoping is important to share an object inside a specific scope which 
 using (var scopeManager = ScopeManager<object>.GetScopeManager("object"))
 {
     var scopeObject = scopeManager.ScopeObject;
-Â 
+
     // scope can be used here
 }
 ```
 
-When the scope does not yet exist, it will be created and the object will be created by theÂ `TypeFactory`.
+When the scope does not yet exist, it will be created and the object will be created by the `TypeFactory`.
 

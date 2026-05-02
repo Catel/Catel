@@ -7,13 +7,13 @@ In this step we will hook everything together and add additional logic to the re
 
 We now have most of the application ready. However we need some logic in the view models to hook up everything together.
 
-### Adding additional logic toÂ FamilyWindowViewModel
+### Adding additional logic to FamilyWindowViewModel
 
-The first thing we are going to do is to finalize theÂ `FamilyWindowViewModel` we created in the previous step. To do this, we are going to add a few properties and commands to the view model.
+The first thing we are going to do is to finalize the `FamilyWindowViewModel` we created in the previous step. To do this, we are going to add a few properties and commands to the view model.
 
 #### Adding additional dependencies being injected
 
-Since we will be using additional services inside theÂ `FamilyWindowViewModel`, it is important to add them as dependency via the constructor. The updated constructor will look like this:
+Since we will be using additional services inside the `FamilyWindowViewModel`, it is important to add them as dependency via the constructor. The updated constructor will look like this:
 
 ```
 public FamilyWindowViewModel(Family family, IUIVisualizerService uiVisualizerService, IMessageService messageService)
@@ -52,11 +52,11 @@ public static readonly PropertyData SelectedPersonProperty = RegisterProperty("S
 
 #### Adding the commands
 
-Note that we recommend that you use theÂ *vmtaskcommand* andÂ *vmtaskcommandwithcanexecute* code snippets availableÂ [here](http://www.catelproject.com/download/general-files/)
+Note that we recommend that you use the *vmtaskcommand* and *vmtaskcommandwithcanexecute* code snippets available [here](http://www.catelproject.com/download/general-files/)
 
 Below is the code which comes in two parts.
 
-1.Â Add this code to the constructor:
+1. Add this code to the constructor:
 
 ```
 AddPerson = new TaskCommand(OnAddPersonExecuteAsync);
@@ -64,7 +64,7 @@ EditPerson = new TaskCommand(OnEditPersonExecuteAsync, OnEditPersonCanExecute);
 RemovePerson = new TaskCommand(OnRemovePersonExecuteAsync, OnRemovePersonCanExecute);
 ```
 
-2. You mustÂ import `Catel.IoC` namespace since it contains `ViewModelBase`'s `GetTypeFactory()` extension method used below.
+2. You must import `Catel.IoC` namespace since it contains `ViewModelBase`'s `GetTypeFactory()` extension method used below.
 
 ```
 using Catel.IoC;
@@ -73,7 +73,7 @@ using Catel.IoC;
 3. Add this code to the view model itself:
 
 ```
-Â /// <summary>
+ /// <summary>
 /// Gets the AddPerson command.
 /// </summary>
 public TaskCommand AddPerson { get; private set; }
@@ -151,11 +151,11 @@ private async Task OnRemovePersonExecuteAsync()
 
 ### Adding additional logic to the MainWindowViewModel
 
-The same edit functionality we added to theÂ `FamilyWindowViewModel` must be added to theÂ `MainWindowViewModel`. The difference is that instead of adding / editing / removing persons, theÂ `MainWindowViewModel` will do this for families.
+The same edit functionality we added to the `FamilyWindowViewModel` must be added to the `MainWindowViewModel`. The difference is that instead of adding / editing / removing persons, the `MainWindowViewModel` will do this for families.
 
 #### Adding additional dependencies being injected
 
-We will again need additional dependencies. Below is the updated constructor for theÂ `MainWindowViewModel`:
+We will again need additional dependencies. Below is the updated constructor for the `MainWindowViewModel`:
 
 ```
 public MainWindowViewModel(IFamilyService familyService, IUIVisualizerService uiVisualizerService, IMessageService messageService)
@@ -192,9 +192,9 @@ public static readonly PropertyData SelectedFamilyProperty = RegisterProperty("S
 
 #### Adding the commands
 
-Last but not least, we will also add the commands to theÂ `MainWindowViewModel` to handle the logic.
+Last but not least, we will also add the commands to the `MainWindowViewModel` to handle the logic.
 
-1.Â Add this code to the constructor:
+1. Add this code to the constructor:
 
 ```
 AddFamily = new TaskCommand(OnAddFamilyExecuteAsync);
@@ -282,10 +282,10 @@ private async Task OnRemoveFamilyExecuteAsync()
 
 ## Hooking up the views
 
-We now have all the views ready, but we don't see anything yet. The reason for this is that we haven't modified theÂ `MainWindow` view yet. To do so, replace the xaml content with the xaml below:
+We now have all the views ready, but we don't see anything yet. The reason for this is that we haven't modified the `MainWindow` view yet. To do so, replace the xaml content with the xaml below:
 
 ```
-Â <Grid>
+ <Grid>
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="100" />

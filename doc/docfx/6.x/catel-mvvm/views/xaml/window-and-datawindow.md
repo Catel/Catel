@@ -15,7 +15,7 @@ When developing software in XAML, most developers always need the following thre
 
 Creating these windows is just boring and the steps are always the same:
 
-The `DataWindow` class makes it much easier to create these basic windows, simply by specifying the mode of the *Window*. By using this window, you can concentrate on the actual implementation and you donâ€™t have to worry about the implementation of the buttons itself, which saves you time!Â 
+The `DataWindow` class makes it much easier to create these basic windows, simply by specifying the mode of the *Window*. By using this window, you can concentrate on the actual implementation and you don’t have to worry about the implementation of the buttons itself, which saves you time! 
 
 ## Using the DataWindow in MVVM
 
@@ -34,7 +34,7 @@ The usage of the `DataWindow` class is very simple, once you know how to do it. 
 </catel:DataWindow>
 ```
 
-As you can see, one thing has changed in regard to a â€œnormalâ€ window definition:
+As you can see, one thing has changed in regard to a “normal” window definition:
 
 1.  The type definition has changed from `Window` to `catel:DataWindow`;
 
@@ -58,7 +58,7 @@ public partial class PersonWindow : DataWindow
 }
 ```
 
-The code above is everything you will need when using the MVVM Framework of Catel.Â 
+The code above is everything you will need when using the MVVM Framework of Catel. 
 
 The easiest way to create a new `DataWindow` is to use item templates
 
@@ -71,11 +71,11 @@ There are multiple ways to construct a window with a view model. There are three
 -   **Constructor with model**
     It is possible to save a developer from creating a view model manually by accepting a model as input. Then, the data window will have to construct the view model manually and pass it through to its base constructor.
 -   **Empty constructor**
-    If you use an empty constructor, the developer will have to set the data context manually. This something you really should avoid. But hey, itâ€™s all up to you.
+    If you use an empty constructor, the developer will have to set the data context manually. This something you really should avoid. But hey, it’s all up to you.
 
 ## Automatic validation
 
-The cool thing about the `DataWindow` is that it automatically wraps the content that a developer defines into an `InfoBarMessageControl`. This way, errors and warnings are shown at the top of the window. Another feature of the `DataWindow` is that it automatically creates a `WarningAndErrorValidator` control and sets the view model as source. This way, all the warnings of the view model are also shown in the `InfoBarMessageControl`. In other words: you donâ€™t have to do anything to implementation validation, except for actually setting the warnings and errors in your view model. And if the validation takes place in the model, you can use the `ViewModelToModelAttribute` so you donâ€™t have to worry about that either.
+The cool thing about the `DataWindow` is that it automatically wraps the content that a developer defines into an `InfoBarMessageControl`. This way, errors and warnings are shown at the top of the window. Another feature of the `DataWindow` is that it automatically creates a `WarningAndErrorValidator` control and sets the view model as source. This way, all the warnings of the view model are also shown in the `InfoBarMessageControl`. In other words: you don’t have to do anything to implementation validation, except for actually setting the warnings and errors in your view model. And if the validation takes place in the model, you can use the `ViewModelToModelAttribute` so you don’t have to worry about that either.
 
 ## Customizing the buttons
 

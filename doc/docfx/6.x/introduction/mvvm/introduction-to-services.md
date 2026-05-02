@@ -5,7 +5,7 @@ Services are very important in MVVM. They define a way to interact with the user
 
 ## ServiceLocator
 
-The key behind services is theÂ *ServiceLocator*. TheÂ *ServiceLocator* is the IoC (Inversion of Control) container that Catel provides. This is a container that contains all registrations and service instances available throughout the application. Retrieving services from the defaultÂ *ServiceLocator* in Catel is very simple:
+The key behind services is the *ServiceLocator*. The *ServiceLocator* is the IoC (Inversion of Control) container that Catel provides. This is a container that contains all registrations and service instances available throughout the application. Retrieving services from the default *ServiceLocator* in Catel is very simple:
 
 ```
 var dependencyResolver = this.GetDependencyResolver();
@@ -16,7 +16,7 @@ It is also possible to get services injected into the constructor, which is the 
 
 ## Dependency injection
 
-A slightly better way to manage dependencies is to use dependency injection. The reason is that to instantiate a class, you always have to provide all the dependencies. This way, all dependencies are always known to the caller making it a bit complicated and encouraging high coupling. Using dependency injection however makes it a bit easier to control than having toÂ *know* what services are being used by a component (such as a view model).
+A slightly better way to manage dependencies is to use dependency injection. The reason is that to instantiate a class, you always have to provide all the dependencies. This way, all dependencies are always known to the caller making it a bit complicated and encouraging high coupling. Using dependency injection however makes it a bit easier to control than having to *know* what services are being used by a component (such as a view model).
 
 Catel fully supports dependency on view models. This means that a view model can have a constructor with several services. Catel will automatically inject the services via the constructor. An example is below:
 

@@ -35,11 +35,11 @@ When an error or warning is found on the changed property, the control invokes t
 
 ## Styling in DataWindow
 
-AÂ `InfoBarMessageControl` is automatically added to the `DataWindow`, if you want to use a different style for thisÂ `InfoBarMessageControl`,Â you must override the default style, add your ownÂ `InfoBarMessageControl`Â and disable the defaultÂ `InfoBarMessageControl` from the `DataWindow`.
+A `InfoBarMessageControl` is automatically added to the `DataWindow`, if you want to use a different style for this `InfoBarMessageControl`, you must override the default style, add your own `InfoBarMessageControl` and disable the default `InfoBarMessageControl` from the `DataWindow`.
 
-1.  Create a custom style based on theÂ [default style](https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml).
-2.  Change the x:Key fromÂ Â x:Key="{x:Type local:InfoBarMessageControl}" toÂ Â x:Key="yourCustomStyleKey"
-3.  Set theÂ InfoBarMessageControlGenerationMode to None
+1.  Create a custom style based on the [default style](https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml).
+2.  Change the x:Key from  x:Key="{x:Type local:InfoBarMessageControl}" to  x:Key="yourCustomStyleKey"
+3.  Set the InfoBarMessageControlGenerationMode to None
 
     ```
             /// <summary>
@@ -56,7 +56,7 @@ AÂ `InfoBarMessageControl` is automatically added to the `DataWindow`, if you 
             }
     ```
 
-4.  Add a newÂ `InfoBarMessageControl` as root control to yourÂ `DataWindow` and set the style.
+4.  Add a new `InfoBarMessageControl` as root control to your `DataWindow` and set the style.
 
     ```
     <catel:InfoBarMessageControl  Style="{DynamicResource yourCustomStyleKey}">

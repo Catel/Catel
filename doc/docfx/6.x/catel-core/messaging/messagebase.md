@@ -11,7 +11,7 @@ The MessageBase provides the following additional functionality out of the box:
 
 ## Creating messages based on the MessageBase
 
-Â It is very easy to create a new message. The message below is a message that contains a string and this little class provides lots of capabilities.
+It is very easy to create a new message. The message below is a message that contains a string and this little class provides lots of capabilities.
 
 ```
 public class DemoMessage : MessageBase<DemoMessage, string>
@@ -25,7 +25,7 @@ public class DemoMessage : MessageBase<DemoMessage, string>
 
 Note that the message needs an empty constructor
 
-##Â Sending messages
+## Sending messages
 
 A user can send a message by using the following code:
 
@@ -35,7 +35,7 @@ DemoMessage.SendWith("hello world");
 
 Registering to messages
 
-Â A class that is interested in message can register to a message using the Register method:
+A class that is interested in message can register to a message using the Register method:
 
 ```
 DemoMessage.Register(this, OnDemoMessage);

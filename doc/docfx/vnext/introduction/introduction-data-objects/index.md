@@ -5,11 +5,11 @@ It is very important to understand the data objects in Catel because they form t
 
 ## The ObservableObject class
 
-Very basic class implementing the System.ComponentModel.INotifyPropertyChanging and T:System.ComponentModel.INotifyPropertyChanged interfaces as well as CatelsÂ Catel.Data.IAdvancedNotifyPropertyChanging andÂ CatelsÂ Catel.Data.IAdvancedNotifyPropertyChanged.
+Very basic class implementing the System.ComponentModel.INotifyPropertyChanging and T:System.ComponentModel.INotifyPropertyChanged interfaces as well as Catels Catel.Data.IAdvancedNotifyPropertyChanging and Catels Catel.Data.IAdvancedNotifyPropertyChanged.
 
 ## The ModelBase class
 
-TheÂ [ModelBase]({{< relref "catel-core/data-handling/modelbase.md" >}})(previously known as theÂ `DataObjectBase`)Â class is a generic base class that can be used for all your data classes. This comesÂ fully supporting serialization, property changed notifications, backwards compatibility and error checking.
+The [ModelBase]({{< relref "catel-core/data-handling/modelbase.md" >}})(previously known as the `DataObjectBase`) class is a generic base class that can be used for all your data classes. This comes fully supporting serialization, property changed notifications, backwards compatibility and error checking.
 
 ## Creating your first data object
 
@@ -54,11 +54,11 @@ public class FirstModel : ModelBase
     /// <param name="context"><see cref="StreamingContext"/>.</param> 
     protected FirstModel(SerializationInfo info, StreamingContext context)
         : base(info, context) { }
-    #endregionÂ 
+    #endregion 
 
     #region Properties
     // TODO: Define your custom properties here using the propdata code snippet
-    #endregionÂ 
+    #endregion 
 
     #region Methods
     /// <summary>
@@ -250,7 +250,7 @@ defaultvalue|"MyName"
 public class Person : SavableModelBase<Person>
 {
     #region Fields
-    #endregionÂ 
+    #endregion 
 
     #region Constructors
     /// <summary> 
@@ -269,7 +269,7 @@ public class Person : SavableModelBase<Person>
     //       cref="StreamingContext"/>.</param> 
     protected Person(SerializationInfo info, StreamingContext context)
         : base(info, context) { }
-    #endregionÂ 
+    #endregion 
 
     #region Properties
     /// <summary> 
@@ -284,7 +284,7 @@ public class Person : SavableModelBase<Person>
     /// Register the Name property so it is known in the class.
     /// </summary> 
     public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), "MyName");
-    #endregionÂ 
+    #endregion 
 
     #region Methods
     #endregion 

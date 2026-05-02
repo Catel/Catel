@@ -3,19 +3,19 @@ title: "Creating the WPF project"
 ---
 In this step we will create the project and add the relevant NuGet packages.
 
-This guide uses the on-line templates that are available in the Visual Studio gallery. If you can't find the templates on-line, please download themÂ [here](http://www.catelproject.com/download/general-files/).
+This guide uses the on-line templates that are available in the Visual Studio gallery. If you can't find the templates on-line, please download them [here](http://www.catelproject.com/download/general-files/).
 
 ## Creating the project
 
-To create the project, start Visual Studio and chooseÂ *File =\> New Project*... Then switch to the *on-line template section* as you can see in the screenshot below and search for Catel:
+To create the project, start Visual Studio and choose *File =\> New Project*... Then switch to the *on-line template section* as you can see in the screenshot below and search for Catel:
 
 ![](../../images/getting-started/wpf/creating-the-project/projecttemplate.png)
 
-Pick a good name, in our caseÂ *WPF.GettingStarted* and click OK. The template will now be downloaded and the project will be created.
+Pick a good name, in our case *WPF.GettingStarted* and click OK. The template will now be downloaded and the project will be created.
 
 ## Adding the NuGet packages
 
-As soon as the project is created, theÂ *Readme.txt* will be opened and instruct your what to do. Right-click on the solution =\>Â *Manage NuGet packages...Â *Then search forÂ `Catel.MVVM` and clickÂ *Install*.
+As soon as the project is created, the *Readme.txt* will be opened and instruct your what to do. Right-click on the solution =\> *Manage NuGet packages... *Then search for `Catel.MVVM` and click *Install*.
 
 ![](../../images/getting-started/wpf/creating-the-project/nuget.png)
 
@@ -31,9 +31,9 @@ The project template creates the project structure that fits best with Catel. Be
 
 ![](../../images/getting-started/wpf/creating-the-project/solutionexplorer.png)
 
-The `ViewModels` folder contains the `MainWindowViewModel`, which contains the logic for the interaction with theÂ `MainWindow` view.
+The `ViewModels` folder contains the `MainWindowViewModel`, which contains the logic for the interaction with the `MainWindow` view.
 
-TheÂ `Views` folder contains theÂ `MainWindow`, which represents the actual view.
+The `Views` folder contains the `MainWindow`, which represents the actual view.
 
 This structure ties to how Catel implements viewmodel location. You do not however have to follow this structure and could for example decide to place both the View and ViewModel under the same namespace/folder and implement a custom `IViewModelLocator`.
 

@@ -1,11 +1,11 @@
 ﻿---
 title: "Customizing the serialization for specific models" 
 ---
-Catel has a default behavior for what gets serialized. It can be tweaked by including / excluding fields and properties by using the *IncludeInSerialization* and *ExcludeFromSerialization* attributes. But sometimes one needs more specific customization of the serialization for a specific type. This customization is possible via theÂ *ISerializerModifier*.
+Catel has a default behavior for what gets serialized. It can be tweaked by including / excluding fields and properties by using the *IncludeInSerialization* and *ExcludeFromSerialization* attributes. But sometimes one needs more specific customization of the serialization for a specific type. This customization is possible via the *ISerializerModifier*.
 
 ## Creating the modifier
 
-To customize the serialization of a specific model type, one needs to implement theÂ *ISerializerModifier* interface. The example belows shows how to encrypt theÂ *Password* property on theÂ *Person* model class.
+To customize the serialization of a specific model type, one needs to implement the *ISerializerModifier* interface. The example belows shows how to encrypt the *Password* property on the *Person* model class.
 
 ```
 public class PersonSerializerModifier : SerializerModifierBase<Person>
@@ -17,7 +17,7 @@ public class PersonSerializerModifier : SerializerModifierBase<Person>
             memberValue.Value = EncryptionHelper.Encrypt(memberValue.Value);
         }
     }
-Â 
+
     public override void DeserializeMember(ISerializationContext context, MemberValue memberValue)
     {
         if (string.Equals(memberValue.Name, "Password"))
@@ -30,7 +30,7 @@ public class PersonSerializerModifier : SerializerModifierBase<Person>
 
 ## Registering the modifier
 
-To register a modifier for a specific class, define theÂ *SerializerModifier* attribute:
+To register a modifier for a specific class, define the *SerializerModifier* attribute:
 
 ```
 [SerializerModifier(typeof(PersonSerializerModifier))]

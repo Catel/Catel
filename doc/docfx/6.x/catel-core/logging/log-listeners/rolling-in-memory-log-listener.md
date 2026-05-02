@@ -1,7 +1,7 @@
 ﻿---
 title: "RollingInMemoryLogListener" 
 ---
-In memory logging can be very useful to be able to query the latest log messages. Catel provides this via the *RollingInMemoryLogListener* and *RollingInMemoryLogService*. TheÂ *RollingInMemoryLogServiceÂ *is a wrapper around theÂ *RollingInMemoryLogListener*Â to provide a simple way to use the listener.
+In memory logging can be very useful to be able to query the latest log messages. Catel provides this via the *RollingInMemoryLogListener* and *RollingInMemoryLogService*. The *RollingInMemoryLogService *is a wrapper around the *RollingInMemoryLogListener* to provide a simple way to use the listener.
 
 ## Enabling the feature
 

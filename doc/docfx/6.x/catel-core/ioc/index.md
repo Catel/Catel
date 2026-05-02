@@ -10,9 +10,9 @@ There are several different components that are very important for the IoC in Ca
 -   **ServiceLocator**
     Component that is responsible for the registrations of all types. This is the actual IoC container.
 -   **TypeFactory**
-    Component that is responsible to create types. This uses theÂ *IServiceLocatorÂ *to retrieve the types which are required to instantiate a type.
+    Component that is responsible to create types. This uses the *IServiceLocator *to retrieve the types which are required to instantiate a type.
 -   **DependencyResolver**
-    Light-weight implementation of theÂ *IServiceLocator* which does not expose any register methods, but only allows to resolve types.**
+    Light-weight implementation of the *IServiceLocator* which does not expose any register methods, but only allows to resolve types.**
     **
 
 ## Getting components for any object
@@ -28,10 +28,10 @@ public class MyService
     {
         // If you need to create a type with the current scope type factory
         var typeFactory = this.GetTypeFactory();
-Â 
+
         // If you need to register a type with the current scope service locator
         var serviceLocator = this.GetServiceLocator();
-Â 
+
         // If you need to resolve a type with the current scope and the type is not injected via dependency injection
         var dependencyResolver = this.GetDependencyResolver();
     }

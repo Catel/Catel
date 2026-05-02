@@ -1,21 +1,21 @@
 ﻿---
 title: "Weak events" 
 ---
-You have probably heard about weak events before. This documentation is not about the issue of the cause of weak events, there are lots of articles about that. This documentation writes about the solution, which is the WeakEventListener. Shortly said, when you do this in every class (just for the sake of explaining the problem, donâ€™t start thinking this code has no business value):
+You have probably heard about weak events before. This documentation is not about the issue of the cause of weak events, there are lots of articles about that. This documentation writes about the solution, which is the WeakEventListener. Shortly said, when you do this in every class (just for the sake of explaining the problem, don’t start thinking this code has no business value):
 
 ```
 var log = Log.Instance;
 log.LogReceived += OnLogReceived;
 ```
 
-As you can see, the log is a singleton, so there is only one living instance of the Log class. It will probably live as long as the app itself. Now you might be thinking: whatâ€™s wrong with this code? Nothing, until the app starts growing and growing and your users start complaining about memory issues.
+As you can see, the log is a singleton, so there is only one living instance of the Log class. It will probably live as long as the app itself. Now you might be thinking: what’s wrong with this code? Nothing, until the app starts growing and growing and your users start complaining about memory issues.
 
 What happens here is that you subscribe to the LogReceived event of the Log class. This subscription contains 2 things:
 
 1.  What class do I need to call (null for static, otherwise the instance of the class)
 2.  What method do I need to call
 
-So, in fact now the Log class knows about the instance of the class that just subscribed to it and holds a reference to it (how else can it deliver the event, if it doesnâ€™t know the address). Thus, the classes that subscribe to the Log and that do no unsubscribe will never be collected by the garbage collection.
+So, in fact now the Log class knows about the instance of the class that just subscribed to it and holds a reference to it (how else can it deliver the event, if it doesn’t know the address). Thus, the classes that subscribe to the Log and that do no unsubscribe will never be collected by the garbage collection.
 
 ## Open instance delegates
 
@@ -47,7 +47,7 @@ This weak event listener follows the rules of the .NET framework. So, it cannot 
 
 There are a few downsides about using a weak event listeners in general:
 
--   Itâ€™s notation is ugly, the â€œoriginalâ€ .NET way looks way better
+-   It’s notation is ugly, the “original” .NET way looks way better
 -   You have to name the event by string, that sucks (if you know a better way, contact me!)
 -   It can only handle events with a handler of EventHandler\<TEventArgs\>
 -   You become a lazy developer not caring about subscriptions
@@ -88,5 +88,5 @@ var weakEventListener = WeakEventListener<EventListener, EventSource, EventArgs>
 
 ### Static to static
 
-This is not supported because you shouldnâ€™t be using a weak event listener here. Static events with static event handlers simply cannot cause memory leaks because both the source and the target have no instance. However, it might be possible that you subscribe to an event too many times and the event fires too many times. But again, no memory issues here.
+This is not supported because you shouldn’t be using a weak event listener here. Static events with static event handlers simply cannot cause memory leaks because both the source and the target have no instance. However, it might be possible that you subscribe to an event too many times and the event fires too many times. But again, no memory issues here.
 

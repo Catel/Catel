@@ -1,13 +1,13 @@
 ﻿---
 title: "Creating the view models" 
 ---
-In this step we will create the view models. Since this is a very simple application, just a few view models are required.Â A view model in essence is nothing more than a class that derives from theÂ `ViewModelBase` class
+In this step we will create the view models. Since this is a very simple application, just a few view models are required. A view model in essence is nothing more than a class that derives from the `ViewModelBase` class
 
 The *vm* code snippet is available to create view models. There is also an on-line item template available for Catel view models
 
 ## Creating the PersonViewModel
 
-Below is the class definition of theÂ `PersonViewModel`. This view model will be used to show the details of aÂ `Person` model.
+Below is the class definition of the `PersonViewModel`. This view model will be used to show the details of a `Person` model.
 
 ```
 namespace WPF.GettingStarted.ViewModels
@@ -93,7 +93,7 @@ Note that the properties are decorated with the *ViewModelToModel* attribute whi
 
 ## Creating the FamilyViewModel
 
-TheÂ `FamilyViewModel` must be set up the same way as theÂ `PersonViewModel` above.
+The `FamilyViewModel` must be set up the same way as the `PersonViewModel` above.
 
 ```
 namespace WPF.GettingStarted.ViewModels
@@ -109,7 +109,7 @@ namespace WPF.GettingStarted.ViewModels
         public FamilyViewModel(Family family)
         {
             Argument.IsNotNull(() => family);
-Â 
+
             Family = family; 
         }
 

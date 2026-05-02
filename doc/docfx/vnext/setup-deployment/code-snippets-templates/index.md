@@ -5,15 +5,15 @@ The latest code snippets and templates are available on the [official website](h
 
 ## Installing the code snippets
 
-Extract the zip file to the following directory:Â *%MyDocuments%\\Visual Studio 2xxx\\Code Snippets*
+Extract the zip file to the following directory: *%MyDocuments%\\Visual Studio 2xxx\\Code Snippets*
 
 ## Installing the item and project templates
 
 **C\#**
 
-Extract the *zip\\C\#\\ItemTemplates* to the following directory:Â *%MyDocuments%\\Visual Studio 2xxx\\Templates\\ItemTemplates\\Visual C\#*
+Extract the *zip\\C\#\\ItemTemplates* to the following directory: *%MyDocuments%\\Visual Studio 2xxx\\Templates\\ItemTemplates\\Visual C\#*
 
-*Extract theÂ *zip\\C\#\\ProjectTemplates*Â to the following directory:Â *%MyDocuments%\\Visual Studio 2xxx\\Templates\\ProjectTemplates\\Visual C\#**
+*Extract the *zip\\C\#\\ProjectTemplates* to the following directory: *%MyDocuments%\\Visual Studio 2xxx\\Templates\\ProjectTemplates\\Visual C\#**
 
 **
 **

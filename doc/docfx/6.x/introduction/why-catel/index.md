@@ -1,7 +1,7 @@
 ﻿---
 title: "Why Catel" 
 ---
-We care a lot about the freedom you need as a software developer. Most frameworks require a developer to learn its conventions, or use the whole framework or nothing at all. When we, the developers of Catel, use an external framework, we choose that framework for a specific reason, and donâ€™t want to be bothered by all the other superb stuff it has to offer (maybe later, but not now).
+We care a lot about the freedom you need as a software developer. Most frameworks require a developer to learn its conventions, or use the whole framework or nothing at all. When we, the developers of Catel, use an external framework, we choose that framework for a specific reason, and don’t want to be bothered by all the other superb stuff it has to offer (maybe later, but not now).
 
 During the development of Catel, we tried to maintain this freedom aspect which is very important to us. Therefore, all functionality is loosely coupled. Sounds great, but everything is called loosely coupled nowadays. Catel contains a lot of different aspects, such as logging, diagnostics, reflection, MVVM, user controls, windows, etc. All these aspects are complementary to each other, but the great thing about Catel is that you decide whether to use just one, some, or maybe all aspects.
 

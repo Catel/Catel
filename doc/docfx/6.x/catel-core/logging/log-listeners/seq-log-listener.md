@@ -27,6 +27,6 @@ This one can also be used on configuration file:
 </catel>
 ```
 
-This log listener is currentlyÂ available only for the full .net framework
+This log listener is currently available only for the full .net framework
 
 

@@ -1,7 +1,7 @@
 ﻿---
 title: "Anotar.Catel.Fody" 
 ---
-Logging is a very important part of an application. It provides detailed information about the application workflow, even when an application is already deployed to several clients. Thatâ€™s the reason that logging is a first class citizen in the Catel framework.
+Logging is a very important part of an application. It provides detailed information about the application workflow, even when an application is already deployed to several clients. That’s the reason that logging is a first class citizen in the Catel framework.
 
 In general, logging works by defining an *ILog* instance on a class:
 
@@ -12,17 +12,17 @@ private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 Then in any method, logging can be added like this:
 
 ```
-Log.Info(â€œThis is a logging with a format â€˜{0}â€™â€, â€œtestâ€);
+Log.Info(“This is a logging with a format ‘{0}’”, “test”);
 ```
 
-Writing the *Log* definition can be boring and repetitive. Luckily [Simon Cropp](http://twitter.com/simoncropp) came up with a solution for that, namely [Anotar.Catel.Fody](http://www.nuget.org/packages/Anotar.Catel.Fody/). With the Anotar implementation, a reference will be added to the solution. Then after compilation the assembly will be removed and all calls to the *LogTo* class will be replaced by actual calls to the CatelÂ logging classes.
+Writing the *Log* definition can be boring and repetitive. Luckily [Simon Cropp](http://twitter.com/simoncropp) came up with a solution for that, namely [Anotar.Catel.Fody](http://www.nuget.org/packages/Anotar.Catel.Fody/). With the Anotar implementation, a reference will be added to the solution. Then after compilation the assembly will be removed and all calls to the *LogTo* class will be replaced by actual calls to the Catel logging classes.
 
 ## How to use Anotar
 
 Using Anotar is really easy, just call the static methods on the *LogTo* class as you can see below:
 
 ```
-LogTo.Info("This is a logging with a format â€˜{0}â€™", â€œtestâ€);
+LogTo.Info("This is a logging with a format ‘{0}’", “test”);
 ```
 
 Note that it is no longer required to define the *Log* field, it will be added automatically by Anotar.
@@ -57,7 +57,7 @@ Then the output will look like this:
 
 ### Logging exceptions automatically
 
-It is possible to automatically log exceptions inside a method. To accomplish this, decorate the method with theÂ *LogTo[LogLevel]OnException* attribute:
+It is possible to automatically log exceptions inside a method. To accomplish this, decorate the method with the *LogTo[LogLevel]OnException* attribute:
 
 ```
 [LogToDebugOnException]

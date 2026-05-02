@@ -138,7 +138,7 @@ protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult
 Thanks to the validation system in Catel, it is very easy to implement very advanced validation features in view models. The example below shows how to translate errors that are added to a model in the Data Access Layer or validation layer. Assume that the following pseudo code is used to set an error on a model in the DAL:
 
 ```
-SetFieldError(â€œFirstNameâ€, â€œFirstNameRequiredâ€);
+SetFieldError(“FirstName”, “FirstNameRequired”);
 ```
 
 All errors that are mapped from the model to the view model automatically are available in the `validationResults` parameter. This way, the error can be easily translated:
@@ -161,7 +161,7 @@ protected override void ValidateFields(List<IFieldValidationResult> validationRe
 }
 ```
 
-Of course this is not something you want to actually do in your view model, so youâ€™ll probably have to write a helper class that translates the validation for you. You might or might not like delaying the translation of the model errors to as close as the view, but it shows how extremely powerful the improved validation of Catel is. And if you think a bit about it,Â wouldn'tÂ it be a good idea to delay the translation from the server to the actual client to as close as the viewâ€¦?
+Of course this is not something you want to actually do in your view model, so you’ll probably have to write a helper class that translates the validation for you. You might or might not like delaying the translation of the model errors to as close as the view, but it shows how extremely powerful the improved validation of Catel is. And if you think a bit about it, wouldn't it be a good idea to delay the translation from the server to the actual client to as close as the view…?
 
 ## Validating via annotations
 

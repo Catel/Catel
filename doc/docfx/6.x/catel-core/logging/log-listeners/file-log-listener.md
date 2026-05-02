@@ -11,13 +11,13 @@ Note that Catel already contains a FileLogListener and there is no need to repro
 
 ## Specifying the path
 
-The defaultÂ *FileLogListener* that ships with Catel allows the customization of the file name and the size of the log file. If no size is specified, the max log file size will default to 10 MB.Â 
+The default *FileLogListener* that ships with Catel allows the customization of the file name and the size of the log file. If no size is specified, the max log file size will default to 10 MB. 
 
 There are several constants inside the file name that can be used:
 
 *{AppData}*
 
-The application data directoryÂ that is used by all users.
+The application data directory that is used by all users.
 
 Based on the entry assembly. For example `%ProgramData%\[company]\[product]\.`
 
@@ -38,7 +38,7 @@ Based on the entry assembly. For example `%AppData%\[company]\[product]\`.
 
 *{AppDataMachine}*
 
-The application data directoryÂ that is used by all users.
+The application data directory that is used by all users.
 
 Based on the entry assembly. For example `%ProgramData%\[company]\[product]\`.
 
@@ -76,14 +76,14 @@ The process id.
 
 *{WorkDir}*
 
-The application execution directory.Â  Calls `Directory.GetCurrentDirectory()`, internally.
+The application execution directory.  Calls `Directory.GetCurrentDirectory()`, internally.
 
 A good example would be:
 
 ```
 var fileLogListener = new FileLogListener();
 fileLogListener.FilePath = "{AppDir}\{AutoLogFileName}";
-Â 
+
 LogManager.AddListener(fileLogListener);
 ```
 
@@ -117,7 +117,7 @@ public class FileLogListener : LogListenerBase
 
 ## Registering the listener
 
-Â Last but not least, it is important to register the listener:
+Last but not least, it is important to register the listener:
 
 ```
 LogManager.AddListener(new FileLogListener("<log_file_path>"));

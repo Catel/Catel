@@ -1,11 +1,11 @@
 ﻿---
 title: "CommandManager and command containers (Application-wide commands)" 
 ---
-Most commands are registered per view and available per view model. Some commands (such as commands on a `Ribbon` or `Toolbar`) are application-wide. Catel supports both types, and this part of the documentation explains how to use theÂ `ICommandManager` to work with application-wide commands such asÂ `Refresh` with a key bound toÂ `F5`.
+Most commands are registered per view and available per view model. Some commands (such as commands on a `Ribbon` or `Toolbar`) are application-wide. Catel supports both types, and this part of the documentation explains how to use the `ICommandManager` to work with application-wide commands such as `Refresh` with a key bound to `F5`.
 
 ## CommandManager
 
-There is no generic way to specify application-wide commands in XAML platforms. To overcome this issue, Catel introduces the *CommandManager*. This manager allows to create commands which are hosted by theÂ *CommandManager*. The commands on the command manager can be created with input gestures. Once a view model wants to hook into a specific command, it only has to register the view model command with the application-wide command.
+There is no generic way to specify application-wide commands in XAML platforms. To overcome this issue, Catel introduces the *CommandManager*. This manager allows to create commands which are hosted by the *CommandManager*. The commands on the command manager can be created with input gestures. Once a view model wants to hook into a specific command, it only has to register the view model command with the application-wide command.
 
 Note that application-wide commands by default are only available on the main window of an application. To support this on other windows, add the following code in the constructor of a window:
 
@@ -13,11 +13,11 @@ Note that application-wide commands by default are only available on the main wi
 public class SomeWindow
 {
     private readonly CommandManagerWrapper _commandManagerWrapper;
-Â 
+
     public SomeWindow()
     {
         InitializeComponent();
-Â 
+
         _commandManagerWrapper = new CommandManagerWrapper(this);
     }
 }
@@ -25,12 +25,12 @@ public class SomeWindow
 
 ## Creating application-wide commands
 
-To create application-wide commands, one must resolve theÂ *ICommandManager* from theÂ *DependencyResolverÂ *and create the command:
+To create application-wide commands, one must resolve the *ICommandManager* from the *DependencyResolver *and create the command:
 
 ```
 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 var commandManager = dependencyResolver.Resolve<ICommandManager>();
-Â 
+
 commandManager.CreateCommand("Refresh", new InputGesture(Key.F5));
 ```
 
@@ -67,7 +67,7 @@ public class CommandSubscribingViewModel : ViewModelBase
 
 ### Using application-wide commands in xaml
 
-To make it easy to bind to application-wide commands, Catel provides theÂ *CommandManagerBindingÂ *markup extension. To bind to commands in xaml, use the following code:
+To make it easy to bind to application-wide commands, Catel provides the *CommandManagerBinding *markup extension. To bind to commands in xaml, use the following code:
 
 ```
 <Ribbon catel:StackGrid.ColumnSpan="4">
@@ -80,11 +80,11 @@ To make it easy to bind to application-wide commands, Catel provides theÂ *Com
 </Ribbon>
 ```
 
-As the code shows, theÂ *CommandManagerBinding* extension automatically resolves theÂ *Refresh* command from theÂ *CommandManager*.
+As the code shows, the *CommandManagerBinding* extension automatically resolves the *Refresh* command from the *CommandManager*.
 
 ## Command containers
 
-When implementing a ribbon or any menu structure inside an application can result in a very complex view model containing all the commands. Catel solves this issue by implementing so-called command containers. These are containers that have only 1 purpose: contain a command so the logic can easily be viewed / edited and the commands will be available during the whole lifetime of the app. Internally command containers use theÂ *ICommandManager* to register commands, so theÂ *ICommandManager* is still responsible for the commands.
+When implementing a ribbon or any menu structure inside an application can result in a very complex view model containing all the commands. Catel solves this issue by implementing so-called command containers. These are containers that have only 1 purpose: contain a command so the logic can easily be viewed / edited and the commands will be available during the whole lifetime of the app. Internally command containers use the *ICommandManager* to register commands, so the *ICommandManager* is still responsible for the commands.
 
 ### Creating a command container
 
@@ -118,7 +118,7 @@ If you don't use the extension methods below, you must register the command cont
 
 #### Command definitions
 
-To make it very easy to register new commands, Catel uses naming conventions and extension methods. The name of the command (for example,Â *About* must be a constant on the command definitions class). If the command definition also contains aÂ *\<CommandName\>InputGesture*, in this case *AboutInputGesture*,Â it will use that input gesture as a default to register the command with.
+To make it very easy to register new commands, Catel uses naming conventions and extension methods. The name of the command (for example, *About* must be a constant on the command definitions class). If the command definition also contains a *\<CommandName\>InputGesture*, in this case *AboutInputGesture*, it will use that input gesture as a default to register the command with.
 
 ```
 public static class Commands
@@ -131,7 +131,7 @@ public static class Commands
         public const string About = "Application.About";
         public static readonly InputGesture AboutInputGesture = new InputGesture(Key.F1);
     }
-Â 
+
     public static class OtherPartOfApplication
     {
         public const string SomeCommand = "OtherPartOfApplication.SomeCommand";
@@ -148,7 +148,7 @@ Once you have the command container and the command definition (command name and
 
 ```
 var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
-Â 
+
 commandManager.CreateCommandWithGesture(typeof(Commands.Application), "About");
 ```
 
@@ -156,7 +156,7 @@ This will keep the command registration very readable and maintainable when usin
 
 ```
 var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
-Â 
+
 commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "Exit");
 commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "About");
 

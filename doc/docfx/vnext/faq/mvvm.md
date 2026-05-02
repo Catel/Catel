@@ -28,7 +28,7 @@ When writing MVVM, it's "forbidden" (read: not a best practice) to use click han
     </i:Interaction.Triggers>
     ```
 
-An example for aÂ *ListBoxÂ *double click:
+An example for a *ListBox *double click:
 
 ```
 <ListBox ItemsSource="{Binding PersonCollection}" SelectedItem="{Binding SelectedPerson}">
@@ -121,7 +121,7 @@ The *UserControl* is a very powerful control. It allows lazy loaded dynamic view
 1.  The *DataContext* of the control can be injected into a constructor of the view model
 2.  The view model has an empty constructor
 
-Â You can set the DataContext of the control to a view model, and this way "inject" a view model into a control instead of letting it be created first. In fact, the user control first checks whether the DataContext is already a valid view model for the user control. If so, it keeps it that way.
+You can set the DataContext of the control to a view model, and this way "inject" a view model into a control instead of letting it be created first. In fact, the user control first checks whether the DataContext is already a valid view model for the user control. If so, it keeps it that way.
 
 ## How can I prevent validation of required fields?
 
@@ -133,5 +133,5 @@ Validate(true, false);
 
 If the validation is implemented in the models and not in the view model, set the *ValidateModelsOnInitialization* to false.
 
-Â 
+
 

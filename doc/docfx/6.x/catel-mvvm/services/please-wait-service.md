@@ -1,7 +1,7 @@
 ﻿---
 title: "PleaseWaitService" 
 ---
-The `IPleaseWaitService` allows a developer to show a please wait message (a.k.a. busy indicator) from a view model.Â 
+The `IPleaseWaitService` allows a developer to show a please wait message (a.k.a. busy indicator) from a view model. 
 
 ## Showing
 

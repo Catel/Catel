@@ -39,7 +39,7 @@ public class MyClass
 }
 ```
 
-Â 
+
 
 **Example 3: good, gets the dependencies injected**
 
@@ -102,14 +102,14 @@ When the MyClass will be retrieved from the ServiceLocator, this will happen:
 
 Catel first sorts the constructors based on the number of parameters. Then it will "sub-sort" the same number of parameters and puts parameters with *Object* and *DynamicObject* as last so it will first try all constructors with the best possible matches
 
-If Catel is still unable to pick the right constructor in a class, this behavior can be overridden by decorating the constructor with theÂ DependencyInjectionConstructor attribute:
+If Catel is still unable to pick the right constructor in a class, this behavior can be overridden by decorating the constructor with the DependencyInjectionConstructor attribute:
 
 ```
 public MyClass(IPerson person)
 {
-Â 
+
 }
-Â 
+
 [InjectionConstructor]
 public MyClass(Person person)
 {
@@ -126,7 +126,7 @@ public class PersonViewModel : ViewModelBase
 {
     private readonly IMessageService _messageService;
     private readonly IProcessService _processService;
-Â 
+
     public PersonViewModel(IPerson person)
     {
         Argument.IsNotNull(() => person);
@@ -148,7 +148,7 @@ public class PersonViewModel : ViewModelBase
 {
     private readonly IMessageService _messageService;
     private readonly IProcessService _processService;
-Â 
+
     public PersonViewModel(IPerson person, IMessageService messageService, IProcessService processService)
     {
         Argument.IsNotNull(() => person);
@@ -173,7 +173,7 @@ The advanced dependency injection can be used by using the TypeFactory class. Be
 var personViewModel = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<PersonViewModel>(new Person());
 ```
 
-As you can see it is only required to pass in the objects that are not registered in the IoC container. All other dependencies will be automatically resolved from theÂ *ServiceLocator*.
+As you can see it is only required to pass in the objects that are not registered in the IoC container. All other dependencies will be automatically resolved from the *ServiceLocator*.
 
 Note that the order of the parameters must be the same as the constructor, otherwise the *TypeFactory* cannot determine the right constructor to use
 
@@ -187,7 +187,7 @@ Note that the Catel team recommends using constructor injection over property in
 
 2) Dependency Injection is just a technique. When using a constructor, you can force a user to provide the value and check the input. With property injection, you can only *hope* that the user will set them for you, there is no way to check this (unless that is some *after constructor and dependency injection* initialization routine. This is never the case if a user manually creates a type though.
 
-To use property injection, simply decorate the properties of a class with theÂ Inject attribute. Below are several options:
+To use property injection, simply decorate the properties of a class with the Inject attribute. Below are several options:
 
 #### Type is automatically determined based on property type
 
@@ -223,7 +223,7 @@ public class MyClass
 
 ## Disabling dependency injection
 
-Â Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:
+Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:
 
 ```
 ServiceLocator.Default.SupportedDependencyInjection = false

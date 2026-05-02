@@ -147,55 +147,55 @@ Catel is extremely powerful, but sometimes the property definitions are lots of 
 
 	public class Person : ModelBase
 	{
-	Â Â Â Â public string FirstName { get; set; }
-	Â Â Â Â public string MiddleName { get; set; }
-	Â Â Â Â public string LastName { get; set; }
+	    public string FirstName { get; set; }
+	    public string MiddleName { get; set; }
+	    public string LastName { get; set; }
 	}
 
 Then hit ALT + Enter and turn properties into Catel properties, which will result in this class:
 
 	public class Person : ModelBase
 	{
-	Â Â Â Â /// <summary>
-	Â Â Â Â /// Gets or sets the first name.
-	Â Â Â Â /// </summary>
-	Â Â Â Â public string FirstName
-	Â Â Â Â {
-	Â Â Â Â Â Â Â Â get { return GetValue<string>(FirstNameProperty); }
-	Â Â Â Â Â Â Â Â set { SetValue(FirstNameProperty, value); }
-	Â Â Â Â }
-	Â Â 
-	Â Â Â Â /// <summary>
-	Â Â Â Â /// Register the FirstName property so it is known in the class.
-	Â Â Â Â /// </summary>
-	Â Â Â Â public static readonly PropertyData FirstNameProperty = RegisterProperty<Person, string>(model => model.FirstName);
-	Â Â 
-	Â Â Â Â /// <summary>
-	Â Â Â Â /// Gets or sets the middle name.
-	Â Â Â Â /// </summary>
-	Â Â Â Â public string MiddleName
-	Â Â Â Â {
-	Â Â Â Â Â Â Â Â get { return GetValue<string>(MiddleNameProperty); }
-	Â Â Â Â Â Â Â Â set { SetValue(MiddleNameProperty, value); }
-	Â Â Â Â }
-	Â Â 
-	Â Â Â Â /// <summary>
-	Â Â Â Â /// Register the MiddleName property so it is known in the class.
-	Â Â Â Â /// </summary>
-	Â Â Â Â public static readonly PropertyData MiddleNameProperty = RegisterProperty<Person, string>(model => model.MiddleName);
-	Â Â 
-	Â Â Â Â /// <summary>
-	Â Â Â Â /// Gets or sets the last name.
-	Â Â Â Â /// </summary>
-	Â Â Â Â public string LastName
-	Â Â Â Â {
-	Â Â Â Â Â Â Â Â get { return GetValue<string>(LastNameProperty); }
-	Â Â Â Â Â Â Â Â set { SetValue(LastNameProperty, value); }
-	Â Â Â Â }
-	Â Â 
-	Â Â Â Â /// <summary>
-	Â Â Â Â /// Register the LastName property so it is known in the class.
-	Â Â Â Â /// </summary>
-	Â Â Â Â public static readonly PropertyData LastNameProperty = RegisterProperty<Person, string>(model => model.LastName);
+	    /// <summary>
+	    /// Gets or sets the first name.
+	    /// </summary>
+	    public string FirstName
+	    {
+	        get { return GetValue<string>(FirstNameProperty); }
+	        set { SetValue(FirstNameProperty, value); }
+	    }
+
+	    /// <summary>
+	    /// Register the FirstName property so it is known in the class.
+	    /// </summary>
+	    public static readonly PropertyData FirstNameProperty = RegisterProperty<Person, string>(model => model.FirstName);
+
+	    /// <summary>
+	    /// Gets or sets the middle name.
+	    /// </summary>
+	    public string MiddleName
+	    {
+	        get { return GetValue<string>(MiddleNameProperty); }
+	        set { SetValue(MiddleNameProperty, value); }
+	    }
+
+	    /// <summary>
+	    /// Register the MiddleName property so it is known in the class.
+	    /// </summary>
+	    public static readonly PropertyData MiddleNameProperty = RegisterProperty<Person, string>(model => model.MiddleName);
+
+	    /// <summary>
+	    /// Gets or sets the last name.
+	    /// </summary>
+	    public string LastName
+	    {
+	        get { return GetValue<string>(LastNameProperty); }
+	        set { SetValue(LastNameProperty, value); }
+	    }
+
+	    /// <summary>
+	    /// Register the LastName property so it is known in the class.
+	    /// </summary>
+	    public static readonly PropertyData LastNameProperty = RegisterProperty<Person, string>(model => model.LastName);
 	}
 

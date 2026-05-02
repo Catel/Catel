@@ -1,7 +1,7 @@
 ﻿---
 title: "AutoScroll" 
 ---
-TheÂ `AutoScroll` behavior automatically scrolls to a specific direction when theÂ `ItemsSource` of anÂ `ItemsControl` changes.
+The `AutoScroll` behavior automatically scrolls to a specific direction when the `ItemsSource` of an `ItemsControl` changes.
 
 1) Add the following XML namespaces:
 
@@ -20,7 +20,7 @@ xmlns:catel="http://schemas.catelproject.com"
 </ListBox>
 ```
 
-TheÂ `ScrollDirection` determines the direction (`Top` or `Bottom`).
+The `ScrollDirection` determines the direction (`Top` or `Bottom`).
 
-TheÂ `ScrollTreshold` allows the treshold of the real offset (to determine whether auto scroll should be enabled). For example, when the user is manually scrolling, this behavior will pause.
+The `ScrollTreshold` allows the treshold of the real offset (to determine whether auto scroll should be enabled). For example, when the user is manually scrolling, this behavior will pause.
 

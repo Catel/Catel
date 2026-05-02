@@ -1,7 +1,7 @@
 ﻿---
 title: "Command bindings" 
 ---
-Catel will automatically hook up theÂ `CanExecute`Â of the command to theÂ `Enabled`Â property of the element it is bound to. A command binding is always bound to an event of a specific element as shown below.
+Catel will automatically hook up the `CanExecute` of the command to the `Enabled` property of the element it is bound to. A command binding is always bound to an event of a specific element as shown below.
 
 ## Android
 

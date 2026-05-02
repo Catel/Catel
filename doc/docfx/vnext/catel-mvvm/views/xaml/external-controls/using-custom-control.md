@@ -18,7 +18,7 @@ public class TabItem : RadTabItem, IUserControl
    private event EventHandler<EventArgs> _viewLoaded;
    private event EventHandler<EventArgs> _viewUnloaded;
    private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-Â 
+
    /// <summary>
    /// Initializes a new instance of the <see cref="TabItem"/> class.
    /// </summary>
@@ -50,8 +50,8 @@ public class TabItem : RadTabItem, IUserControl
    /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
    /// (mostly the container of a view model) because the .NET Framework does not allows us to.
    /// </remarks>
-   public event PropertyChangedEventHandler PropertyChanged;   Â 
-Â 
+   public event PropertyChangedEventHandler PropertyChanged;    
+
     /// <summary>
     /// Occurs when the view is loaded.
     /// </summary>
