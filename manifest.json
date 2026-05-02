@@ -4901,36 +4901,6 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/platform-support/caveats-in-android.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/platform-support/caveats-in-android.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/platform-support/caveats-in-ios.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/platform-support/caveats-in-ios.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/platform-support/caveats-in-uwp.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/platform-support/caveats-in-uwp.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "vnext/introduction/platform-support/caveats-in-wpf.md",
       "output": {
         ".html": {
@@ -5035,46 +5005,6 @@
       "output": {
         ".html": {
           "relative_path": "vnext/setup-deployment/stepping-through-the-code/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/update-guides/catel-4.0.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/update-guides/catel-4.0.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/update-guides/catel-4.1.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/update-guides/catel-4.1.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/update-guides/catel-5.0.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/update-guides/catel-5.0.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/update-guides/catel-5.4.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/update-guides/catel-5.4.html"
         }
       },
       "version": ""
