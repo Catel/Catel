@@ -19,7 +19,7 @@ If you ever think Catel is behaving strange or does not work as expected, make s
 
 Catel will then log everything to the output window and provide all the information about its internals.
 
-For more information, read about [logging](../../catel-core/logging/index.md).
+For more information about logging in Catel, see the [Catel.Core documentation](../../catel-core/index.md).
 
 ### Catel properties
 

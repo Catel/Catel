@@ -35,8 +35,6 @@
     items:
     - name: WPF implementation for exception handling
       href: catel-core/exception-handling/wpf-implementation-for-exception-handling.md
-  - name: Logging
-    href: catel-core/logging/index.md
   - name: Messaging
     href: catel-core/messaging/index.md
     items:
@@ -115,6 +113,11 @@
       href: catel-mvvm/behaviors-triggers/delay-binding-update.md
     - name: DoubleClickToCommand
       href: catel-mvvm/behaviors-triggers/double-click-to-command.md
+    - name: EventToCommand
+      href: catel-mvvm/behaviors-triggers/event-to-command/index.md
+      items:
+      - name: EventArgsConverter
+        href: catel-mvvm/behaviors-triggers/event-to-command/event-args-converter.md
     - name: Focus
       href: catel-mvvm/behaviors-triggers/focus.md
     - name: focus-first-control
@@ -217,8 +220,58 @@
       href: catel-mvvm/view-models/nested-view-models.md
     - name: Validation in view models
       href: catel-mvvm/view-models/validation-in-view-models.md
+    - name: Advanced
+      href: catel-mvvm/view-models/advanced/index.md
+      items:
+      - name: Controlling the instantiation of view models
+        href: catel-mvvm/view-models/advanced/controlling-instantiation-of-view-models.md
+      - name: Exposing properties of a model automatically
+        href: catel-mvvm/view-models/advanced/exposing-properties-of-model-automatically.md
+      - name: Keeping view models alive
+        href: catel-mvvm/view-models/advanced/keeping-view-models-alive.md
   - name: Views
     href: catel-mvvm/views/index.md
+    items:
+    - name: XAML
+      href: catel-mvvm/views/xaml/index.md
+      items:
+      - name: UserControl
+        href: catel-mvvm/views/xaml/usercontrol.md
+      - name: UserControl Resources
+        href: catel-mvvm/views/xaml/usercontrol-resources.md
+      - name: Window and DataWindow
+        href: catel-mvvm/views/xaml/window-and-datawindow.md
+      - name: Validation controls
+        href: catel-mvvm/views/xaml/validation-controls.md
+      - name: Customizing DataContext subscription behavior
+        href: catel-mvvm/views/xaml/customizing-datacontext-subscription-behavior.md
+      - name: Improving performance by defining the view model grid manually
+        href: catel-mvvm/views/xaml/improving-performance-by-defining-view-model-grid-manually.md
+      - name: Advanced
+        href: catel-mvvm/views/xaml/advanced/index.md
+        items:
+        - name: DataWindow - under the hood
+          href: catel-mvvm/views/xaml/advanced/datawindow-under-the-hood.md
+        - name: UserControl - under the hood
+          href: catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md
+      - name: External controls
+        href: catel-mvvm/views/xaml/external-controls/index.md
+        items:
+        - name: Using a custom control
+          href: catel-mvvm/views/xaml/external-controls/using-custom-control.md
+        - name: Using a custom window
+          href: catel-mvvm/views/xaml/external-controls/using-custom-window.md
+    - name: Xamarin.Android
+      href: catel-mvvm/views/xamarin-android/index.md
+      items:
+      - name: Activities (pages)
+        href: catel-mvvm/views/xamarin-android/activities-pages.md
+      - name: Fragments (user controls)
+        href: catel-mvvm/views/xamarin-android/fragments-user-controls.md
+    - name: Xamarin.Forms
+      href: catel-mvvm/views/xamarin-forms/index.md
+    - name: Xamarin.iOS
+      href: catel-mvvm/views/xamarin-ios/index.md
 - name: Examples
   href: examples/index.md
 - name: FAQ
