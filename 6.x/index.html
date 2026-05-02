@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Catel Documentation - 6.x | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Catel Documentation - 6.x | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="catel">Catel</h1>
+
+<p>Catel is an application development platform with the focus on MVVM (WPF &amp; Universal Windows Platform).
+The goal of Catel is to provide a complete set of modular functionality for Line of Business applications written in any .NET
+technology, from client to server.</p>
+<p>Catel distinguishes itself by unique features to aid in the development of MVVM applications and server-side application
+development. Since Catel focuses on Line of Business applications, it provides professional support and excellent documentation
+which ensures a safe bet by professional companies and developers.</p>
+<h2 id="major-features">Major features</h2>
+<p>Below are a few major features that are available in Catel.</p>
+<h3 id="catelcore">Catel.Core</h3>
+<p>Catel.Core is the library you want to include in all your projects, whether you are writing a UI project or not. It contains lots of useful helper methods. The
+most important features are listed below:</p>
+<ul>
+<li>Argument validation (e.g. <code>Argument.IsNotNull(() =&gt; myArgument)</code>)</li>
+<li>Caching</li>
+<li>Data (ModelBase, PropertyBag, Validation)</li>
+<li>IoC (ServiceLocator, TypeFactory)</li>
+<li>Logging (LogManager, Log, several log listeners)</li>
+<li>Messaging</li>
+<li>Reflection (same reflection API for <em>every supported platform</em>)</li>
+<li>Serialization (XmlSerializer and JsonSerializer)</li>
+<li>Weak references (WeakEventListener)</li>
+</ul>
+<p>And more....</p>
+<h3 id="catelmvvm">Catel.MVVM</h3>
+<p>Catel.MVVM is the library you want to include when you are writing a UI project (e.g. WPF, UWP, Xamarin) and you want to use the MVVM pattern. Catel is the <em>only</em> MVVM library that has context-aware view and view-model creation, which can be used to solve the <a href="http://docs.catelproject.com/vnext/introduction/mvvm/introduction-to-nested-user-controls-problem/">nested user controls problem</a>.</p>
+<p>The most important
+features are listed below:</p>
+<ul>
+<li>Auditing</li>
+<li>Collections (FastObservableCollection, FastObservableDictionary, etc)</li>
+<li>Commands (Command, TaskCommand, etc)</li>
+<li>Converters (tons of converters out of the box)</li>
+<li>Services
+<ul>
+<li>BusyIndicatorService</li>
+<li>MessageService</li>
+<li>NavigationService</li>
+<li>OpenFileService</li>
+<li>SaveFileService</li>
+<li>UIVisualizerService</li>
+</ul>
+</li>
+<li>View models
+<ul>
+<li>Automatic validation</li>
+<li>Automatic mappings from model to view model</li>
+</ul>
+</li>
+<li>Views
+<ul>
+<li>DataWindow</li>
+<li>UserControl</li>
+<li>Window</li>
+</ul>
+</li>
+</ul>
+<h2 id="example-code">Example code</h2>
+<h3 id="models">Models</h3>
+<p>This model has automatic change notifications and validation.</p>
+<pre><code>public class Person : ValidatableModelBase
+{
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
+    {
+        if (string.IsNullOrWhitespace(FirstName))
+        {
+            validationResults.Add(FieldValidationResult.CreateError(nameof(FirstName), &quot;First name is required&quot;));
+        }
+
+        if (string.IsNullOrWhitespace(LastName))
+        {
+            validationResults.Add(FieldValidationResult.CreateError(nameof(LastName), &quot;Last name is required&quot;));
+        }
+    }    
+}
+</code></pre>
+<h3 id="view-models">View models</h3>
+<p>This is a view model with:</p>
+<ul>
+<li>Automatic injection of the DataContext</li>
+<li>Automatic mapping of properties &amp; validation from model =&gt; view model</li>
+</ul>
+<pre><code>public class PersonViewModel : ViewModelBase
+{
+    public PersonViewModel(Person person)
+    {
+        Argument.IsNotNull(() =&gt; person);
+
+        Person = person;
+    }
+
+    [Model]
+    private Person Person { get; set; }
+
+    [ViewModelToModel]
+    public string FirstName { get; set; }
+
+    [ViewModelToModel]
+    public string LastName { get; set; }
+}
+</code></pre>
+<h3 id="continue-reading">Continue reading</h3>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

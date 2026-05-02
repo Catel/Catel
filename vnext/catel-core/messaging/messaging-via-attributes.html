@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Messaging via attributes | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Messaging via attributes | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-core/messaging/messaging-via-attributes.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>The message mediator is a great way to communicate between instances in an application. It does however require to manually subscribe to and unsubscribe from classes. This issue can be bypassed using the attribute based approach. This is an alternative for registering a method in the message mediator and not be obliged to use Register&lt;T&gt; method.</p>
+<h2 id="subscribing-and-unsubscribing">Subscribing and unsubscribing</h2>
+<p>Â When attributes are using inside a class, it is required to call the <em>MessageMediatorHelper.SubscripeRecipient</em>. To unsubscribe an object, it is required to call <em>MessageMediatorHelper.UnsubscribeRecipient</em>.</p>
+<p>There are two options to decorate methods with the attribute. Either with or without tag.</p>
+<h2 id="subscribing-without-a-tag">Subscribing without a tag</h2>
+<p>In this case, the mediator will send the message to all the methods that has subscribe using the attribute to receive the message and not one especially. The code below broadcasts a message without any tag. This is just regular behavior of the message mediator.</p>
+<pre><code>/// &lt;summary&gt;
+/// Method to invoke when the command is executed.
+/// &lt;/summary&gt;
+private void OnCmdExecute()
+{
+    var dependencyResolver = this.GetDependencyResolver();
+    var mediator = dependencyResolver.Resolve&lt;IMessageMediator&gt;();
+    mediator.SendMessage(&quot;Test Value&quot;);
+}
+</code></pre>
+<p>If a class, for example a view model, is interested in these messages, the only thing that needs to be done is to decorate a method with the MessageRecipient attribute as shown below:</p>
+<pre><code>/// &lt;summary&gt;
+/// Shows the message.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;value&quot;&gt;The value.&lt;/param&gt;
+[MessageRecipient]
+private void ShowMessage(string value)
+{
+    var dependencyResolver = this.GetDependencyResolver();
+    var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
+    messageService.Show(value);
+}
+</code></pre>
+<h2 id="subscribing-with-a-tag">Subscribing with a tag</h2>
+<p>Â A tag can be used to specify some sort of grouping for messages. The MessageRecipient attribute also supports this as shown in the code below. First lets take a look how to send a message and specify a tag.</p>
+<pre><code>/// &lt;summary&gt;
+/// Method to invoke when the command is executed.
+/// &lt;/summary&gt;
+private void OnCmdExecute()
+{
+    var dependencyResolver = this.GetDependencyResolver();
+    var mediator = dependencyResolver.Resolve&lt;IMessageMediator&gt;();
+    mediator.SendMessage(&quot;Test Value&quot;, &quot;myTag&quot;);
+}
+</code></pre>
+<p>The message is now sent with the tag. The attribute has to be used as shown below:</p>
+<pre><code>/// &lt;summary&gt;
+/// Shows the message.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;value&quot;&gt;The value.&lt;/param&gt;
+[MessageRecipient(Tag = &quot;myTag&quot;)]
+private void ShowMessage(string value)
+{
+    var dependencyResolver = this.GetDependencyResolver();
+    var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
+    messageService.Show(value);
+}
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-core/messaging/messaging-via-attributes.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

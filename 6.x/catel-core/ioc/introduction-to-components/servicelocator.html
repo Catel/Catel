@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ServiceLocator | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ServiceLocator | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../../toc.html">
+      <meta name="docfx:tocrel" content="../../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/ioc/introduction-to-components/servicelocator.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>The <em>ServiceLocator</em> services as the container inside Catel.</p>
+<p>Internally it uses the <code>TypeFactory</code> as instantiator for the services.</p>
+<p>Catel uses it's own <code>ServiceLocator</code> implementing the <code>IServiceLocator</code> to gather all services required by Catel. For example, default services are the <code>IPleaseWaitService</code> and the <code>IUIVisualizerService</code>. By default, when the first view model is instantiated, Catel registers all default out of the box services to the <code>ServiceLocator</code>. However, it only does this when the specific services are not already registered. This allows an end-developer to register his/her own implementations of the services before any view model is instantiated (for example, at application startup).</p>
+<p>The <code>ServiceLocator</code> can be instantiated, but Catel instantiates one instance that can be used and shared amongst all objects inside the same <code>AppDomain</code>. The <code>ServiceLocator</code> can be retrieved by using <code>ServiceLocator</code>.<code>Default</code>.</p>
+<p>For more information how types are instantiated and dependency injection, take a look at the [TypeFactory documentation]({{&lt; relref &quot;catel-core/ioc/introduction-to-components/typefactory.md&quot; &gt;}})</p>
+<h2 id="registering-a-type">Registering a type</h2>
+<p>Use the following code to register a specific type in the <code>ServiceLocator</code>:</p>
+<pre><code>ServiceLocator.Default.RegisterType&lt;IPleaseWaitService, PleaseWaitService&gt;();
+</code></pre>
+<h2 id="registering-a-late-bound-type">Registering a late-bound type</h2>
+<p>Use the following code to register a late-bound type in the <code>ServiceLocator</code>:</p>
+<pre><code>ServiceLocator.Default.RegisterType&lt;IPleaseWaitService&gt;((typeFactory, serviceLocatorRegistration) =&gt; new PleaseWaitService());
+</code></pre>
+<h2 id="registering-an-instance-of-a-type">Registering an instance of a type</h2>
+<p>Catel uses the <code>TypeFactory</code> or <code>Activator.CreateInstance</code> to create the interface implementations when the object is first resolved. However, sometimes a service constructor requires parameters or takes a long time to construct. In such cases, it is recommended to create the type manually and register the instance of the type:</p>
+<pre><code>var pleaseWaitService = new PleaseWaitService();
+ServiceLocator.Default.RegisterInstance&lt;IPleaseWaitService&gt;(pleaseWaitService);
+</code></pre>
+<h2 id="registering-a-type-via-missingtype-event">Registering a type via MissingType event</h2>
+<p>The ServiceLocator gives the end-developer a last-resort chance to register a type when it is not registered in the ServiceLocator or any of the external containers. This event is very useful for logging (then the developer in the log knows exactly what type is missing from the IoC container) or it can be used to determine at runtime in a very late stage what implementation of the service must be used. To register a type via the event, subscribe to the event and then use the following code:</p>
+<pre><code>private void OnMissingType(object sender, MissingTypeEventArgs e)
+{
+    if (e.InterfaceType == typeof(IPleaseWaitService))
+    {
+        // Register an instance
+        e.ImplementingInstance = new PleaseWaitService();
+
+        // Or a type
+        e.ImplementingType = typeof(PleaseWaitService);
+    }
+}
+</code></pre>
+<p>If both theÂ ImplementingInstanceÂ andÂ ImplementingTypeÂ are filled, theÂ ImplementingIntanceÂ will be used.</p>
+<h2 id="resolving-a-type">Resolving a type</h2>
+<p>To retrieve the implementation of a service, use the following code:</p>
+<pre><code>var pleaseWaitService = ServiceLocator.Default.ResolveType&lt;IPleaseWaitService&gt;();
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/ioc/introduction-to-components/servicelocator.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

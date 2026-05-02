@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Introduction to services | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Introduction to services | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/introduction/mvvm/introduction-to-services.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Services are very important in MVVM. They define a way to interact with the user without using fixed controls such as <em>MessageBox</em> or <em>SaveFileDialog</em>. The interfaces defined in Catel only define generic functionality of what to expect from a specific service. Using services is a great way to abstract away all specific functionality from a view model into a service that can be mocked during unit testing and can be used by other view models as well.</p>
+<h2 id="servicelocator">ServiceLocator</h2>
+<p>The key behind services is theÂ <em>ServiceLocator</em>. TheÂ <em>ServiceLocator</em> is the IoC (Inversion of Control) container that Catel provides. This is a container that contains all registrations and service instances available throughout the application. Retrieving services from the defaultÂ <em>ServiceLocator</em> in Catel is very simple:</p>
+<pre><code>var dependencyResolver = this.GetDependencyResolver();
+var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
+</code></pre>
+<p>It is also possible to get services injected into the constructor, which is the recommended approach</p>
+<h2 id="dependency-injection">Dependency injection</h2>
+<p>A slightly better way to manage dependencies is to use dependency injection. The reason is that to instantiate a class, you always have to provide all the dependencies. This way, all dependencies are always known to the caller making it a bit complicated and encouraging high coupling. Using dependency injection however makes it a bit easier to control than having toÂ <em>know</em> what services are being used by a component (such as a view model).</p>
+<p>Catel fully supports dependency on view models. This means that a view model can have a constructor with several services. Catel will automatically inject the services via the constructor. An example is below:</p>
+<pre><code>public class PersonViewModel : ViewModelBase
+{ 
+    private readonly IMessageService _messageService;
+    private readonly IPleaseWaitService _pleaseWaitService;
+
+    public PersonViewModel(IMessageService messageService, IPleaseWaitService pleaseWaitService)
+    {
+        _messageService = messageService;
+        _pleaseWaitService = pleaseWaitService;
+    }
+}
+</code></pre>
+<h2 id="overview-of-services">Overview of services</h2>
+<p>The services below are available in Catel:</p>
+<p>Name</p>
+<p>Description</p>
+<p>IAccelerometerService</p>
+<p>Allows a developer to access the accelerometer of a Windows Phone device.</p>
+<p>ICameraService</p>
+<p>Allows a developer to use the PhotoCamera class in an MVVM manner.</p>
+<p>ICompassService</p>
+<p>Allows a developer to access the compass of a Windows Phone device.</p>
+<p>IGyroscopeService</p>
+<p>Allows a developer to access the compass of a Windows Phone device.</p>
+<p>ILocationService</p>
+<p>Allows a developer to use GPS devices inside a view model.</p>
+<p>IMessageService</p>
+<p>Allows a developer to show message boxes from a view model.</p>
+<p>INavigationService</p>
+<p>Allows a developer to navigate to other pages inside an application using view models only.</p>
+<p>IOpenFileService</p>
+<p>Allows a developer to let the user choose a file from inside a view model.</p>
+<p>IPleaseWaitService</p>
+<p>Allows a developer to show a please wait message (a.k.a. busy indicator) from a view model.</p>
+<p>IProcessService</p>
+<p>Allows a developer to run processes from inside a view model.</p>
+<p>ISaveFileService</p>
+<p>Allows a developer to let the user choose a file from inside a view model.</p>
+<p>IUIVisualizerService</p>
+<p>Allows a developer to show (modal) windows or dialogs without actually referencing a specific view.</p>
+<p>IVibrateService</p>
+<p>Allows a developer to start and stop vibration of the device via a service.</p>
+<p>Note that this section is not always fully up-to-date, Catel might provide more services than listed here</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/introduction/mvvm/introduction-to-services.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

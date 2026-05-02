@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Creating the WPF project | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Creating the WPF project | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/getting-started/wpf/creating-the-project.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>In this step we will create the project and add the relevant NuGet packages.</p>
+<p>This guide uses the on-line templates that are available in the Visual Studio gallery. If you can't find the templates on-line, please download themÂ <a href="http://www.catelproject.com/download/general-files/">here</a>.</p>
+<h2 id="creating-the-project">Creating the project</h2>
+<p>To create the project, start Visual Studio and chooseÂ <em>File =&gt; New Project</em>... Then switch to the <em>on-line template section</em> as you can see in the screenshot below and search for Catel:</p>
+<p><img src="../../../images/getting-started/wpf/creating-the-project/projecttemplate.png" alt=""></p>
+<p>Pick a good name, in our caseÂ <em>WPF.GettingStarted</em> and click OK. The template will now be downloaded and the project will be created.</p>
+<h2 id="adding-the-nuget-packages">Adding the NuGet packages</h2>
+<p>As soon as the project is created, theÂ <em>Readme.txt</em> will be opened and instruct your what to do. Right-click on the solution =&gt;Â *Manage NuGet packages...Â *Then search forÂ <code>Catel.MVVM</code> and clickÂ <em>Install</em>.</p>
+<p><img src="../../../images/getting-started/wpf/creating-the-project/nuget.png" alt=""></p>
+<h2 id="running-the-project">Running the project</h2>
+<p>Now the NuGet packages are installed, the project is created and can be built. The basics are created and the application is ready:</p>
+<p><img src="../../../images/getting-started/wpf/creating-the-project/example.png" alt=""></p>
+<h2 id="explanation-of-the-project-structure">Explanation of the project structure</h2>
+<p>The project template creates the project structure that fits best with Catel. Below is an explanation of the new project structure:</p>
+<p><img src="../../../images/getting-started/wpf/creating-the-project/solutionexplorer.png" alt=""></p>
+<p>The <code>ViewModels</code> folder contains the <code>MainWindowViewModel</code>, which contains the logic for the interaction with theÂ <code>MainWindow</code> view.</p>
+<p>TheÂ <code>Views</code> folder contains theÂ <code>MainWindow</code>, which represents the actual view.</p>
+<p>This structure ties to how Catel implements viewmodel location. You do not however have to follow this structure and could for example decide to place both the View and ViewModel under the same namespace/folder and implement a custom <code>IViewModelLocator</code>.</p>
+<h2 id="up-next">Up next</h2>
+<p>[Creating the models]({{&lt; relref &quot;getting-started/wpf/creating-the-models.md&quot; &gt;}})</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/getting-started/wpf/creating-the-project.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

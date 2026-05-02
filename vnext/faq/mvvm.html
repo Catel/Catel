@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MVVM | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MVVM | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/faq/mvvm.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<h2 id="how-to-support-example-data-with-view-models">How to support example data with view models?</h2>
+<p>To find out how to create design time data, see the <a href="Designers">designers</a>topic.</p>
+<h2 id="how-to-use-events-with-mvvm">How to use events with MVVM?</h2>
+<p>When writing MVVM, it's &quot;forbidden&quot; (read: not a best practice) to use click handlers (or other UI events) in your view-model. But then should you react to events?</p>
+<ol>
+<li><p>Start with creating a command like you are used to using MVVM. This command will be executed when the event occurs.</p>
+</li>
+<li><p>Add a reference to <em>System.Windows.Interactivity.dll</em> (ships with Catel). If you have used NuGet to add a reference, it is automatically included for you.</p>
+</li>
+<li><p>Add the following namespace definitions to your view declaration:</p>
+<pre><code>xmlns:i=&quot;clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity&quot;
+xmlns:catel=&quot;http://schemas.catelproject.com&quot;
+</code></pre>
+</li>
+<li><p>Use the following code to convert an event to a command:</p>
+<pre><code>&lt;i:Interaction.Triggers&gt;
+    &lt;i:EventTrigger EventName=&quot;[YourEvent]&quot;&gt;
+        &lt;catel:EventToCommand Command=&quot;{Binding [YourCommand]}&quot; DisableAssociatedObjectOnCannotExecute=&quot;False&quot; /&gt;
+    &lt;/i:EventTrigger&gt;
+&lt;/i:Interaction.Triggers&gt;
+</code></pre>
+</li>
+</ol>
+<p>An example for aÂ *ListBoxÂ *double click:</p>
+<pre><code>&lt;ListBox ItemsSource=&quot;{Binding PersonCollection}&quot; SelectedItem=&quot;{Binding SelectedPerson}&quot;&gt;
+    &lt;i:Interaction.Triggers&gt;
+        &lt;i:EventTrigger EventName=&quot;MouseDoubleClick&quot;&gt;
+            &lt;catel:EventToCommand Command=&quot;{Binding Edit}&quot; DisableAssociatedObjectOnCannotExecute=&quot;False&quot; /&gt;
+        &lt;/i:EventTrigger&gt;
+    &lt;/i:Interaction.Triggers&gt;
+
+    &lt;ListBox.ItemTemplate&gt;
+        &lt;DataTemplate&gt;
+            &lt;StackPanel Orientation=&quot;Horizontal&quot;&gt;
+                &lt;Label Content=&quot;{Binding FirstName}&quot; /&gt;
+                &lt;Label Content=&quot;{Binding MiddleName}&quot; /&gt;
+                &lt;Label Content=&quot;{Binding LastName}&quot; /&gt;
+            &lt;/StackPanel&gt;
+        &lt;/DataTemplate&gt;
+    &lt;/ListBox.ItemTemplate&gt;
+&lt;/ListBox&gt;
+</code></pre>
+<h2 id="how-can-i-add-the-mvvm-behaviors-via-code-programmatically">How can I add the MVVM behaviors via code (programmatically)?</h2>
+<p>Below is the code-behind of a view that adds the <em>UserControlBehavior</em> via code:</p>
+<pre><code>public partial class DynamicBehaviorView : UserControl, IViewModelContainer
+{
+   private Catel.Windows.Controls.MVVMProviders.UserControlBehavior _mvvmBehavior;
+
+   /// &lt;summary&gt;
+   /// Initializes a new instance of the &lt;see cref=&quot;DynamicBehaviorView&quot;/&gt; class.
+   /// &lt;/summary&gt;
+   public DynamicBehaviorView()
+   {
+      InitializeComponent();
+      _mvvmBehavior = new Catel.Windows.Controls.MVVMProviders.UserControlBehavior();
+      _mvvmBehavior.ViewModelType = typeof(ViewModels.MyViewModel);
+      System.Windows.Interactivity.Interaction.GetBehaviors(this).Add(_mvvmBehavior);
+      _mvvmBehavior.ViewModelChanged += (sender, e) =&gt; ViewModelChanged.SafeInvoke(this, e);
+      _mvvmBehavior.ViewModelPropertyChanged += (sender, e) =&gt; ViewModelPropertyChanged.SafeInvoke(this, e);
+   }
+
+   /// &lt;summary&gt;
+   /// Gets the view model that is contained by the container.
+   /// &lt;/summary&gt;
+   /// &lt;value&gt;The view model.&lt;/value&gt;
+   public IViewModel ViewModel
+   {
+      get { return _mvvmBehavior.ViewModel; }
+   }
+
+   /// &lt;summary&gt;
+   /// Occurs when the &lt;see cref=&quot;ViewModel&quot;/&gt; property has changed.
+   /// &lt;/summary&gt;
+   public event EventHandler&lt;EventArgs&gt; ViewModelChanged;
+
+   /// &lt;summary&gt;
+   /// Occurs when a property on the &lt;see cref=&quot;ViewModel&quot;/&gt; has changed.
+   /// &lt;/summary&gt;
+   public event EventHandler&lt;PropertyChangedEventArgs&gt; ViewModelPropertyChanged;
+
+   /// &lt;summary&gt;
+   /// Occurs when a property on the container has changed.
+   /// &lt;/summary&gt;
+   /// &lt;remarks&gt;
+   /// This event makes it possible to externally subscribe to property changes of a &lt;see cref=&quot;DependencyObject&quot;/&gt;
+   /// (mostly the container of a view model) because the .NET Framework does not allows us to.
+   /// &lt;/remarks&gt;
+   public event EventHandler&lt;PropertyChangedEventArgs&gt; PropertyChanged;
+
+   /// &lt;summary&gt;
+   /// Invoked whenever the effective value of any dependency property on this &lt;see cref=&quot;T:System.Windows.FrameworkElement&quot;/&gt; has been updated. The specific dependency property that changed is reported in the arguments parameter. Overrides &lt;see cref=&quot;M:System.Windows.DependencyObject.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)&quot;/&gt;.
+   /// &lt;/summary&gt;
+   /// &lt;param name=&quot;e&quot;&gt;The event data that describes the property that changed, as well as old and new values.&lt;/param&gt;
+   protected override void OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs e)
+   {
+      base.OnPropertyChanged(e);
+      PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.Property.Name));
+   }         
+}
+</code></pre>
+<p>Using this technique, it is even possible to determine the view model of any view dynamically at runtime.</p>
+<h2 id="how-can-i-inject-or-manipulate-the-view-model-of-a-usercontrol">How can I inject or manipulate the view model of a UserControl?</h2>
+<p>The <em>UserControl</em> is a very powerful control. It allows lazy loaded dynamic view model construction. However, sometimes you just don't want the user control to dynamically create the view model. Luckily, the user control instantiates a new view model with this logic:</p>
+<ol>
+<li>The <em>DataContext</em> of the control can be injected into a constructor of the view model</li>
+<li>The view model has an empty constructor</li>
+</ol>
+<p>Â You can set the DataContext of the control to a view model, and this way &quot;inject&quot; a view model into a control instead of letting it be created first. In fact, the user control first checks whether the DataContext is already a valid view model for the user control. If so, it keeps it that way.</p>
+<h2 id="how-can-i-prevent-validation-of-required-fields">How can I prevent validation of required fields?</h2>
+<p>Catel does not validate the properties with data annotations at startup. It will only validate the data annotations when properties change or when the view model is about to be saved. This is implemented this way to allow a developer to show required fields with an asterisk (*) instead of errors. If a developer still wants to initially display errors, only a single call has to be made in the constructor:</p>
+<pre><code>Validate(true, false);
+</code></pre>
+<p>If the validation is implemented in the models and not in the view model, set the <em>ValidateModelsOnInitialization</em> to false.</p>
+<p>Â</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/faq/mvvm.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>FileLogListener | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="FileLogListener | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../../toc.html">
+      <meta name="docfx:tocrel" content="../../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-core/logging/log-listeners/file-log-listener.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Catel also supports very lightweight listeners to allow external logging libraries to hook on. To create a listener, first create a new class that implements the <em>ILogListener</em> interface. Next, register it in the <em>LogManager</em> using the <em>LogManager.AddListener</em> method.</p>
+<p>The ILogListener has a separate method for each LogEvent, but also has a shared method that is called for each log event. For example, if a debug message is written to the log, both the Write and Debug methods are invoked on the ILogListener.</p>
+<p>For an example which writes to disk in batches, see the <a href="Batch_log_listeners">batch log event listeners</a></p>
+<p>Note that Catel already contains a FileLogListener and there is no need to reproduce this class. It only acts as an example that is easy to understand</p>
+<h2 id="specifying-the-path">Specifying the path</h2>
+<p>The defaultÂ <em>FileLogListener</em> that ships with Catel allows the customization of the file name and the size of the log file. If no size is specified, the max log file size will default to 10 MB.Â</p>
+<p>There are several constants inside the file name that can be used:</p>
+<p><em>{AppData}</em></p>
+<p>The application data directoryÂ that is used by all users.</p>
+<p>Based on the entry assembly. For example <code>%ProgramData%\[company]\[product]\.</code></p>
+<p>**Note: Currently this writes to <code>%ProgramData%</code> only if HttpContext.Current evaluates to an object (e.g. a web app); otherwise it uses %AppData%*.
+*</p>
+<p><em>{AppDataLocal}</em></p>
+<p>The local application data directory that is used by the current, non-roaming user.</p>
+<p>Based on the entry assembly. For example <code>%LocalAppData%\[company]\product]\</code>.</p>
+<p><em>{AppDataRoaming}</em></p>
+<p>The roaming application data directory that is used by the current roaming user.</p>
+<p>Based on the entry assembly. For example <code>%AppData%\[company]\[product]\</code>.</p>
+<p><em>{AppDataMachine}</em></p>
+<p>The application data directoryÂ that is used by all users.</p>
+<p>Based on the entry assembly. For example <code>%ProgramData%\[company]\[product]\</code>.</p>
+<p><em>{AppDir}</em></p>
+<p>The directory of the current application (i.e. <code>AppDomain.CurrentDomain.BaseDirectory</code>).</p>
+<p><em>{AssemblyCompany}</em></p>
+<p>The assembly company.</p>
+<p><em>{AssemblyName}</em></p>
+<p>The assembly name.</p>
+<p><em>{AssemblyProduct}</em></p>
+<p>The assembly product.</p>
+<p><em>{AutoLogFileName}</em></p>
+<p>Creates a log file with the following format: <code>{</code><em><code>AssemblyName}_{Date}_{Time}_{ProcessId}</code>.</em></p>
+<p><em>{Date}</em></p>
+<p>The date as <em><code>yyyy-MM-dd</code>.</em></p>
+<p><em>{Time}</em></p>
+<p>The time as <em><code>HHmmss</code>.</em></p>
+<p><em>{ProcessId}</em></p>
+<p>The process id.</p>
+<p><em>{WorkDir}</em></p>
+<p>The application execution directory.Â  Calls <code>Directory.GetCurrentDirectory()</code>, internally.</p>
+<p>A good example would be:</p>
+<pre><code>var fileLogListener = new FileLogListener();
+fileLogListener.FilePath = &quot;{AppDir}\{AutoLogFileName}&quot;;
+Â 
+LogManager.AddListener(fileLogListener);
+</code></pre>
+<p>Note that the default path of the <em>FileLogListener</em> is <em>{AppData}\{AutoLogFileName}</em></p>
+<h2 id="creating-a-custom-listener">Creating a custom listener</h2>
+<p>A listener can be created by creating a new class deriving from LogListenerBase.</p>
+<pre><code>public class FileLogListener : LogListenerBase
+{
+    private readonly TextWriter _textWriter;
+
+    public FileLogListener(string fileName)
+    {
+        Argument.IsNotNullOrWhitespace(&quot;fileName&quot;, fileName);
+        FileName = fileName;
+
+        _textWriter = new StreamWriter(fileName, true);
+    }
+
+    public string FileName { get; private set; }
+
+    public override void Write(ILog log, string message, LogEvent logEvent)
+    {
+        _textWriter.WriteLine(message);
+    }
+}
+</code></pre>
+<h2 id="registering-the-listener">Registering the listener</h2>
+<p>Â Last but not least, it is important to register the listener:</p>
+<pre><code>LogManager.AddListener(new FileLogListener(&quot;&lt;log_file_path&gt;&quot;));
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-core/logging/log-listeners/file-log-listener.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Dependency injection | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Dependency injection | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../../favicon.ico">
+      <link rel="stylesheet" href="../../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../../toc.html">
+      <meta name="docfx:tocrel" content="../../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/ioc/dependency-injection/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../../index.html">
+            <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>The ServiceLocator in Catel supports dependency injection.</p>
+<h2 id="introduction-to-dependency-injection">Introduction to dependency injection</h2>
+<p>Some people make dependency injection hard to understand, or maybe they don't understand it themselves. Dependency injection simply means that instead of hard referencing or instantiating other classes (dependendies), the dependencies are injected into the class via the constructor.</p>
+<p><strong>Example 1: bad, instantiates the dependencies itself</strong></p>
+<pre><code>public class MyClass
+{
+    private IFirstDependency _firstDependency;
+    private ISecondDependency _secondDependency;
+
+    public MyClass()
+    {
+        _firstDependency = new FirstDependency();
+        _secondDependency = new SecondDependency();
+    }
+}
+</code></pre>
+<p><strong>Example 2: good, retrieves the dependencies via the service locator</strong></p>
+<pre><code>public class MyClass
+{
+    private IFirstDependency _firstDependency;
+    private ISecondDependency _secondDependency;
+
+    public MyClass()
+    {
+        _firstDependency = ServiceLocator.Instance.ResolveType&lt;IFirstDependency&gt;();
+        _secondDependency = ServiceLocator.Instance.ResolveType&lt;ISecondDependency&gt;();
+    }
+}
+</code></pre>
+<p>Â</p>
+<p><strong>Example 3: good, gets the dependencies injected</strong></p>
+<pre><code>public class MyClass
+{
+    private IFirstDependency _firstDependency;
+    private ISecondDependency _secondDependency;
+
+    public MyClass(IFirstDependency firstDependency, ISecondDependency secondDepdenceny)
+    {
+        Argument.IsNotNull(&quot;firstDependency&quot;, firstDependency);
+        Argument.IsNotNull(&quot;secondDependency&quot;, secondDependency);
+
+        _firstDependency = firstDependency;
+        _secondDependency = secondDependency;
+    }
+}
+</code></pre>
+<p>There are other ways of using dependency injection, for example via attributes. This documentation will focus on dependency injection via the constructor only</p>
+<h2 id="using-dependency-injection-in-catel">Using dependency injection in Catel</h2>
+<h3 id="constructor-injection">Constructor injection</h3>
+<p>Dependency injection via the ServiceLocator in Catel is enabled by default. This means that when a type is resolved from the container, it will automatically use dependency injection to construct the type if it is not registered as instance.</p>
+<p>It will first search for all available constructors on the type that will be instantiated. Then, for each constructor, starting with the one with the most parameters, it will try to retrieve all values. If one fails, it will go to the next. If all fail, it will try to use the default constructor without parameters. If that fails as well, then the type cannot be constructed and an exception will be thrown.</p>
+<p>To get a better understanding of what happens, see the class below:</p>
+<pre><code>public class MyClass
+{
+    private IFirstDependency _firstDependency;
+    private ISecondDependency _secondDependency;
+
+    public MyClass()
+        : this(null) { }
+
+    public MyClass(IFirstDependency firstDependency)
+        : this(firstDependency, null) { }
+
+    public MyClass(IFirstDependency firstDependency, ISecondDependency secondDependency)
+    {
+        _firstDependency = firstDependency;
+        _secondDependency = secondDependency;
+    }
+}
+</code></pre>
+<p>When the MyClass will be retrieved from the ServiceLocator, this will happen:</p>
+<ol>
+<li>Find constructor with most parameters (the one with both firstDependency and secondDependency). If both IFirstDependency and ISecondDependency can be resolved from the ServiceLocator, the type will be constructed with the constructor. Otherwise it will proceed with step 2.</li>
+<li>Find next constructor with most parameters (the one with only firstDependency). If IFirstDependency can be resolved from the ServiceLocator, the type will be constructed with the constructor. Otherwise it will proceed with step 3.</li>
+<li>At this point, no constructor could be used. In this case, the ServiceLocator will try to use the default constructor (the one without parameters) as last resort to instantiate the type.</li>
+</ol>
+<h4 id="manually-defining-the-constructor-to-use-for-dependency-injection">Manually defining the constructor to use for dependency injection</h4>
+<p>Catel first sorts the constructors based on the number of parameters. Then it will &quot;sub-sort&quot; the same number of parameters and puts parameters with <em>Object</em> and <em>DynamicObject</em> as last so it will first try all constructors with the best possible matches</p>
+<p>If Catel is still unable to pick the right constructor in a class, this behavior can be overridden by decorating the constructor with theÂ DependencyInjectionConstructor attribute:</p>
+<pre><code>public MyClass(IPerson person)
+{
+Â 
+}
+Â 
+[InjectionConstructor]
+public MyClass(Person person)
+{
+    // Catel will now first try to use this constructor, no matter the order or number of parameters
+}
+</code></pre>
+<h4 id="advanced-dependency-injection">Advanced dependency injection</h4>
+<p>Starting with Catel 3.7, a new type of dependency injection is supported. It allows a developer to instantiate types that combine custom constructor injection with dependency injection. The class belows shows an interesting combination of custom values that need to be injected and dependencies that can be retrieved from the IoC container. Before Catel 3.7, one had to manually retrieve the dependencies from the IoC container when it also required other dependencies to be injected that were not registered in the IoC container:</p>
+<pre><code>public class PersonViewModel : ViewModelBase
+{
+    private readonly IMessageService _messageService;
+    private readonly IProcessService _processService;
+Â 
+    public PersonViewModel(IPerson person)
+    {
+        Argument.IsNotNull(() =&gt; person);
+
+        Person = person;
+
+        _messageService = ServiceLocator.Default.ResolveType&lt;IMessageService&gt;();
+        _processService = ServiceLocator.Default.ResolveType&lt;IProcessService&gt;();
+    }
+
+    ...
+}
+</code></pre>
+<p>With the new technology, such a constructor can be rewritten to truly support dependency injection:</p>
+<pre><code>public class PersonViewModel : ViewModelBase
+{
+    private readonly IMessageService _messageService;
+    private readonly IProcessService _processService;
+Â 
+    public PersonViewModel(IPerson person, IMessageService messageService, IProcessService processService)
+    {
+        Argument.IsNotNull(() =&gt; person);
+        Argument.IsNotNull(() =&gt; messageService);
+        Argument.IsNotNull(() =&gt; processService);
+
+        Person = person;
+
+        _messageService = messageService;
+        _processService = processService
+    }
+
+    ...
+}
+</code></pre>
+<p>This feature is initially written to support dependency injection in combination with <a href="Introduction_to_the_nested_user_controls_problem">nested user controls</a></p>
+<p>The advanced dependency injection can be used by using the TypeFactory class. Below is an example on how to create a new type using advanced dependency injection:</p>
+<pre><code>var personViewModel = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion&lt;PersonViewModel&gt;(new Person());
+</code></pre>
+<p>As you can see it is only required to pass in the objects that are not registered in the IoC container. All other dependencies will be automatically resolved from theÂ <em>ServiceLocator</em>.</p>
+<p>Note that the order of the parameters must be the same as the constructor, otherwise the <em>TypeFactory</em> cannot determine the right constructor to use</p>
+<h3 id="property-injection">Property injection</h3>
+<p>Starting with Catel 3.8, it is also possible to use property injection. The difference with constructor injection is that the TypeFactory will automatically set up all properties that required dependency injection.</p>
+<p>Note that the Catel team recommends using constructor injection over property injection. Property injection looks like a silver bullet, but is very tricky because:</p>
+<ol>
+<li><p>It does not allow you to check for <em>null</em> values and store dependencies in private fields (when)?</p>
+</li>
+<li><p>Dependency Injection is just a technique. When using a constructor, you can force a user to provide the value and check the input. With property injection, you can only <em>hope</em> that the user will set them for you, there is no way to check this (unless that is some <em>after constructor and dependency injection</em> initialization routine. This is never the case if a user manually creates a type though.</p>
+</li>
+</ol>
+<p>To use property injection, simply decorate the properties of a class with theÂ Inject attribute. Below are several options:</p>
+<h4 id="type-is-automatically-determined-based-on-property-type">Type is automatically determined based on property type</h4>
+<pre><code>public class MyClass
+{
+    [Inject]
+    public IMyDependency MyDependency { get; set; }
+}
+</code></pre>
+<h4 id="type-is-manually-defined">Type is manually defined</h4>
+<pre><code>public class MyClass
+{
+    [Inject(typeof(IMySubclassedDependency))]
+    public IMyDependency MyDependency { get; set; }
+}
+</code></pre>
+<h4 id="using-tags">Using tags</h4>
+<p>It is also possible to determine the tag of a registered dependency:</p>
+<pre><code>public class MyClass
+{
+    [Inject(Tag = &quot;myTag&quot;)]
+    public IMyDependency MyDependency { get; set; }
+}
+</code></pre>
+<h2 id="disabling-dependency-injection">Disabling dependency injection</h2>
+<p>Â Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:</p>
+<pre><code>ServiceLocator.Default.SupportedDependencyInjection = false
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/6.x/catel-core/ioc/dependency-injection/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
