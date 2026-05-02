@@ -42,22 +42,6 @@ Name
 
 Description
 
-IAccelerometerService
-
-Allows a developer to access the accelerometer of a Windows Phone device.
-
-ICameraService
-
-Allows a developer to use the PhotoCamera class in an MVVM manner.
-
-ICompassService
-
-Allows a developer to access the compass of a Windows Phone device.
-
-IGyroscopeService
-
-Allows a developer to access the compass of a Windows Phone device.
-
 ILocationService
 
 Allows a developer to use GPS devices inside a view model.
@@ -89,10 +73,6 @@ Allows a developer to let the user choose a file from inside a view model.
 IUIVisualizerService
 
 Allows a developer to show (modal) windows or dialogs without actually referencing a specific view.
-
-IVibrateService
-
-Allows a developer to start and stop vibration of the device via a service.
 
 Note that this section is not always fully up-to-date, Catel might provide more services than listed here
 
