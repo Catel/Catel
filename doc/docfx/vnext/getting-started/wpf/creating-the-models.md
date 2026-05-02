@@ -1,11 +1,11 @@
 ﻿---
 title: "Creating the models" 
 ---
-In this step we will create models.Â Since this application is about families and persons inside those families, we need to create the following models: *Settings*,Â *Family* and *Person*.Â 
+In this step we will create models. Since this application is about families and persons inside those families, we need to create the following models: *Settings*, *Family* and *Person*. 
 
 ## Creating the model classes
 
-The models that will be used in this application will derive from theÂ `ModelBase`, `ValidatableModelBase`Â or `SavableModelBase` class of Catel. These classes enable support for change notifications, validations and persistence. TheÂ `SavableModelBase` adds additional methods to save and load from/to streams or files without having to create a serializer first.
+The models that will be used in this application will derive from the `ModelBase`, `ValidatableModelBase` or `SavableModelBase` class of Catel. These classes enable support for change notifications, validations and persistence. The `SavableModelBase` adds additional methods to save and load from/to streams or files without having to create a serializer first.
 
 To create the model classes, create the following classes in the *Models* folder.
 
@@ -74,7 +74,7 @@ This will create a property in the property bag of the model. The next piece of 
 public ObservableCollection<Person> Persons
 {
     get { return GetValue<ObservableCollection<Person>>(PersonsProperty); }
-    set { SetValue(PersonsProperty, value); }Â 
+    set { SetValue(PersonsProperty, value); } 
 }
 ```
 
@@ -135,7 +135,7 @@ public class Family : ValidatableModelBase
     /// Register the Persons property so it is known in the class.
     /// </summary>
     public static readonly PropertyData PersonsProperty = RegisterProperty("Persons", typeof(ObservableCollection<Person>), () => new ObservableCollection<Person>());
-Â 
+
     public override string ToString()
     {
         return FamilyName;
@@ -175,7 +175,7 @@ public class Person : ValidatableModelBase
     /// Register the LastName property so it is known in the class.
     /// </summary>
     public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
-Â 
+
     public override string ToString()
     {
         string fullName = string.Empty;

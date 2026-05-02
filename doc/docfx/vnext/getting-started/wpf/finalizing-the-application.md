@@ -5,7 +5,7 @@ The application we have created so far is fully functional, but misses a bit of 
 
 ## Adding validation
 
-Adding validation with Catel is extremely easy. There are two flavors to pick from, but they work exactly the same (since both the models and view models internally derive fromÂ `ValidatableModelBase`). To add validation to theÂ `Person` model, use this code:
+Adding validation with Catel is extremely easy. There are two flavors to pick from, but they work exactly the same (since both the models and view models internally derive from `ValidatableModelBase`). To add validation to the `Person` model, use this code:
 
 ```
 protected override void ValidateFields(List<IFieldValidationResult> validationResults)
@@ -22,7 +22,7 @@ protected override void ValidateFields(List<IFieldValidationResult> validationRe
 }
 ```
 
-The validation for theÂ `Family` model is very easy as well:
+The validation for the `Family` model is very easy as well:
 
 ```
 protected override void ValidateFields(List<IFieldValidationResult> validationResults)
@@ -38,7 +38,7 @@ Note that this validation code can be used in both the model and/or the view mod
 
 ## Adding behaviors to enable double-click on the list boxes
 
-The user must manually click theÂ *Edit* buttons in the editable views to edit a specific model. To make it easier for the user, we can enable double click to command behaviors. To do so, navigate to theÂ `MainWindow` and add this to theÂ `ListBox` definition:
+The user must manually click the *Edit* buttons in the editable views to edit a specific model. To make it easier for the user, we can enable double click to command behaviors. To do so, navigate to the `MainWindow` and add this to the `ListBox` definition:
 
 ```
 <ListBox x:Name="listBox" ItemsSource="{Binding Families}" SelectedItem="{Binding SelectedFamily}">
@@ -72,14 +72,14 @@ The same goes for the `FamilyWindow`:
         </DataTemplate>
     </ListBox.ItemTemplate>
 </ListBox>
-Â 
+
 ```
 
 Note that the `xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"` must be added in order for the code above to compile
 
 ## Adding search functionality to the main window
 
-A functionality that is needed in a lot of applications is search functionality. To implement this we will need to modify theÂ `MainWindowViewModel`. Below are the steps required to implement search functionality.
+A functionality that is needed in a lot of applications is search functionality. To implement this we will need to modify the `MainWindowViewModel`. Below are the steps required to implement search functionality.
 
 ### Adding additional properties to the view model
 
@@ -117,7 +117,7 @@ public static readonly PropertyData SearchFilterProperty = RegisterProperty("Sea
 
 Note that this property contains an additional change callback function which will be called when the property has changed.
 
-Add the following import to the view model. You will needed becauseÂ native `ObservableCollection` class does not support `ReplaceRange()`
+Add the following import to the view model. You will needed because native `ObservableCollection` class does not support `ReplaceRange()`
 
 ```
 using Catel.Collections;
@@ -150,7 +150,7 @@ private void UpdateSearchFilter()
 }
 ```
 
-Then, add this code to theÂ `OnAddFamilyExecute` function:
+Then, add this code to the `OnAddFamilyExecute` function:
 
 ```
 private async Task OnAddFamilyExecuteAsync()
@@ -169,7 +169,7 @@ private async Task OnAddFamilyExecuteAsync()
 }
 ```
 
-Last but not least, add this to theÂ `InitializeAsync`Â methodÂ **after**Â theÂ `Families`Â is set from theÂ `IFamilyService`
+Last but not least, add this to the `InitializeAsync` method **after** the `Families` is set from the `IFamilyService`
 
 ```
 protected override async Task InitializeAsync()
@@ -186,7 +186,7 @@ protected override async Task InitializeAsync()
 Replace the xaml of the main window by the following content:
 
 ```
-Â <Grid>
+ <Grid>
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />

@@ -14,9 +14,9 @@ In Catel 4.0 a new mapping mechanism is introduced that makes it possible to con
 
 To use new mechanism you should declare this attributes:
 
--   ConverterType - declare a type of converter that converts properties, converter should implementÂ `IViewModelToModelConverter`. It is recommendedÂ to useÂ `ViewModelToModelConverterBase` as base class for custom converters. The default converter used isÂ `DefaultViewModelToModelMappingConverter` that provides basic 1:1 mappings between the model and view model.
--   AdditionalConstructorArgs -Â declare a arguments witch would be passed to converter constructor via reflection
--   AdditionalPropertiesToWatch -Â declare properties, which changes would trigger the converter
+-   ConverterType - declare a type of converter that converts properties, converter should implement `IViewModelToModelConverter`. It is recommended to use `ViewModelToModelConverterBase` as base class for custom converters. The default converter used is `DefaultViewModelToModelMappingConverter` that provides basic 1:1 mappings between the model and view model.
+-   AdditionalConstructorArgs - declare a arguments witch would be passed to converter constructor via reflection
+-   AdditionalPropertiesToWatch - declare properties, which changes would trigger the converter
 
 ## Code snippets
 
@@ -64,7 +64,7 @@ public string FirstName
 /// Register the FirstName property so it is known in the class.
 /// </summary>
 public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
-Â 
+
 /// <summary>
 /// Gets or sets the LastName of the person.
 /// </summary>
@@ -94,7 +94,7 @@ public string FirstName
 public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
 ```
 
-The `ViewModelToModelAttribute` in the code example above automatically maps the view model `FirstName`Â and `LastName` properties to the `Person.FirstName` andÂ `Person.LastName`Â properties. This way, you donâ€™t have to manually map the values from and to the model. Another nice effect is that the view model automatically validates all objects defined using the `ModelAttribute`, and all field and business errors mapped are automatically mapped to the view model.
+The `ViewModelToModelAttribute` in the code example above automatically maps the view model `FirstName` and `LastName` properties to the `Person.FirstName` and `Person.LastName` properties. This way, you don’t have to manually map the values from and to the model. Another nice effect is that the view model automatically validates all objects defined using the `ModelAttribute`, and all field and business errors mapped are automatically mapped to the view model.
 
 Sometimes you need the full name of a person, you can easily acquire it by creating a custom converter:
 
@@ -167,9 +167,9 @@ public string FullName
 public static readonly PropertyData FullNameProperty = RegisterProperty("FullName", typeof(string));
 ```
 
-TheÂ `ViewModelToModelAttribute`Â in the code example above automatically maps the view modelÂ `FullName` property to theÂ `Person.FirstName`Â andÂ `Person.LastName`Â properties and converts them with `CollapsMappingConverter`. This way, you donâ€™t have to manually map the values from the model and update `FullName` property when `FirstName`Â or `LastName` property changed.
+The `ViewModelToModelAttribute` in the code example above automatically maps the view model `FullName` property to the `Person.FirstName` and `Person.LastName` properties and converts them with `CollapsMappingConverter`. This way, you don’t have to manually map the values from the model and update `FullName` property when `FirstName` or `LastName` property changed.
 
 Summarized, the `Model` and `ViewModelToModel` attributes make sure no duplicate validation and no manual mappings are required.
 
-Â 
+
 

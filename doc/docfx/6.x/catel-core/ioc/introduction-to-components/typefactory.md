@@ -5,7 +5,7 @@ The *TypeFactory* is responsible for actually creating types inside Catel. It us
 
 1.  List all the constructors, order them from most parameters to least parameters
 2.  While (constructors available)
-    Â  Â  try to construct type using injection
+        try to construct type using injection
 3.  If all constructors fail, the `TypeFactory` will fallback to `Activator.CreateInstance()`
 
 ## Dependency injection
@@ -47,7 +47,7 @@ public class MyClass
     }
 }
 ```
-Â 
+
 
 **Example 3: good, gets the dependencies injected**
 
@@ -106,7 +106,7 @@ When the MyClass will be retrieved from the ServiceLocator, this will happen:
 
 ## Disabling dependency injection
 
-Â Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:
+Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:
 
 ```
 ServiceLocator.Default.SupportedDependencyInjection = false
@@ -114,8 +114,8 @@ ServiceLocator.Default.SupportedDependencyInjection = false
 
 ## Custom initialization
 
-All types created with theÂ `TypeFactory` can be initialized with custom code. This can be done by implementing theÂ `INeedCustomInitialization`Â interface.Â As soon as a type is created, theÂ TypeFactoryÂ will check whether it implements theÂ INeedCustomInitializationÂ interface. If so, it will call theÂ Initialize method of the interface.
+All types created with the `TypeFactory` can be initialized with custom code. This can be done by implementing the `INeedCustomInitialization` interface. As soon as a type is created, the TypeFactory will check whether it implements the INeedCustomInitialization interface. If so, it will call the Initialize method of the interface.
 
-To prevent misuse of theÂ `Initialize` method, it is best to implement the interface explicitly
+To prevent misuse of the `Initialize` method, it is best to implement the interface explicitly
 
 

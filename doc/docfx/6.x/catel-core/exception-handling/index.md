@@ -1,7 +1,7 @@
 ﻿---
 title: "Exception handling" 
 ---
-With exception handling in Catel, it is possible to create an exception handling policy and execute code in a safe way without have to check all the exception types manually.Â Catel exposes this technique via the IExceptionService.
+With exception handling in Catel, it is possible to create an exception handling policy and execute code in a safe way without have to check all the exception types manually. Catel exposes this technique via the IExceptionService.
 
 /\*\*/ Setting up the IExceptionService Executing code using the IExceptionService Executing an action Executing a function Use the retry capabilities Retry Immediately Retry defined Process with retry Subscribe to the retry events Handling exceptions manually Unregistering exceptions Buffering Define the way to buffer Subscribe to the buffering events Determine if an exception type are registered for handling Get a specific exception handler
 
@@ -20,7 +20,7 @@ var dependencyResolver = this.GetDependencyResolver();
 var exceptionService = dependencyResolver .Resolve<IExceptionService>();
 
 exceptionService.Register<FileNotFoundException>(exception => dependencyResolver.Resolve<IMessageService>().Show(exception.Message));
-exceptionService.Register<Exception>(exception =>Â 
+exceptionService.Register<Exception>(exception => 
 {
     Log.Error(exception);
     dependencyResolver.Resolve<IMessageService>().Show("An unknown exception occurred, please contact the developers"); 
@@ -61,7 +61,7 @@ Firstly, you need to define how the *IExceptionService* will retry your action i
 
 ### Retry Immediately
 
-When you setting up your exceptions on IExceptionService, you have to additionnallyÂ use the OnErrorRetryImmediatelyÂ method like shown below :
+When you setting up your exceptions on IExceptionService, you have to additionnally use the OnErrorRetryImmediately method like shown below :
 
 ```
 var dependencyResolver = this.GetDependencyResolver();
@@ -85,11 +85,11 @@ exceptionService.Register<ArgumentNullException>(exception => { /* Do something 
                 .OnErrorRetry(5, TimeSpan.FromMinutes(2));
 ```
 
-Where 5 represents the nombre of times the action will be retried andÂ *TimeSpan.FromMinutes(2)* the interval between theÂ retries.
+Where 5 represents the nombre of times the action will be retried and *TimeSpan.FromMinutes(2)* the interval between the retries.
 
 ### Process with retry
 
-If you have provided a retry policy, you can use theÂ *ProcessWithRetry* method to expect have your policy applied on error. Below an example :
+If you have provided a retry policy, you can use the *ProcessWithRetry* method to expect have your policy applied on error. Below an example :
 
 ```
 var dependencyResolver = this.GetDependencyResolver();
@@ -146,7 +146,7 @@ exceptionService.Unregister<ArgumentException>();
 
 ### Define the way to buffer
 
-You can want to throttle downÂ the number of exceptions you receive when a production process goes awry for example. You can do it through the *UsingTolerance* extension method as shown below :
+You can want to throttle down the number of exceptions you receive when a production process goes awry for example. You can do it through the *UsingTolerance* extension method as shown below :
 
 ```
 var dependencyResolver = this.GetDependencyResolver();
@@ -173,7 +173,7 @@ exceptionService.ExceptionBuffered +=
 
 ## Determine if an exception type are registered for handling
 
-If you want to know if an exception type have its policy registered on the *IExceptionService*, you can do this by using the *IsExceptionRegistered* method like shown belowÂ :
+If you want to know if an exception type have its policy registered on the *IExceptionService*, you can do this by using the *IsExceptionRegistered* method like shown below :
 
 ```
 var dependencyResolver = this.GetDependencyResolver();

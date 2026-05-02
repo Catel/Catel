@@ -19,7 +19,7 @@ When implementing a custom batch log listener, it is very wise to derive from th
 
 1.  The *BatchLogListenerBase* is thread-safe
 2.  The *BatchLogListenerBase* automatically flushes the listener every 5 seconds
-3.  You only need to implement theÂ *WriteBatch* which actually writes the entries to the persistence store
+3.  You only need to implement the *WriteBatch* which actually writes the entries to the persistence store
 
 Below is an example batch log listener:
 

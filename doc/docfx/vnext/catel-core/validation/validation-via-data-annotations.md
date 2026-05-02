@@ -26,5 +26,5 @@ public string MiddleName
 public readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string), string.Empty);
 ```
 
-For more information about data annotations, read the [official MSDN documentation](http://msdn.microsoft.com/en-us/library/dd901590(v=vs.95).aspx)Â .
+For more information about data annotations, read the [official MSDN documentation](http://msdn.microsoft.com/en-us/library/dd901590(v=vs.95).aspx) .
 

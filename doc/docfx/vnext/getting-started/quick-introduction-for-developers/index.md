@@ -81,7 +81,7 @@ It goes even further. Catel can create view models based on the data context. Fo
 
 ### Handling hierarchy and parent/child view models
 
-Note thatÂ CatelÂ is already fully aware of parent/child relations of view models so you donâ€™t have to do anything for this yourself. For more information,Â readÂ nested user controls.
+Note that Catel is already fully aware of parent/child relations of view models so you don’t have to do anything for this yourself. For more information, read nested user controls.
 
 ### Resolving views and view models
 

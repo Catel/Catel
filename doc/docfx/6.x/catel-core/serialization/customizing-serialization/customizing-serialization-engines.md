@@ -1,7 +1,7 @@
 ﻿---
 title: "Customizing the serialization engines" 
 ---
-Since theÂ *SerializerBase* does all the heavy lifting, it is very easy to customize the behavior of an existing serializer or create a completely new one.Â Each serializer implements its own interface and are registered in the *ServiceLocatorÂ *using the following interfaces:
+Since the *SerializerBase* does all the heavy lifting, it is very easy to customize the behavior of an existing serializer or create a completely new one. Each serializer implements its own interface and are registered in the *ServiceLocator *using the following interfaces:
 
 -   XmlSerializer =\> IXmlSerializer
 -   BinarySerializer =\> IBinarySerializer
@@ -31,7 +31,7 @@ The only thing to do now is to register this custom instance in the *ServiceLoca
 ServiceLocator.Default.RegisterType<IXmlSerializer, SafeXmlSerializer>();
 ```
 
-The following methods on theÂ serializer classes might be of interest when customizing the serialization:
+The following methods on the serializer classes might be of interest when customizing the serialization:
 
 -   ShouldIgnoreProperty
 

@@ -16,28 +16,28 @@ public partial class MyControl : UserControl
     {
         typeof(MyControl).AutoDetectViewPropertiesToSubscribe();
     }
-Â 
+
     public MyControl()
     {
         InitializeComponent();
     }
-Â 
+
     [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewModelToView)]
     public GeoCoordinate MapCenter
     {
         get { return (GeoCoordinate) GetValue(MapCenterProperty); }
         set { SetValue(MapCenterProperty, value); }
     }
-Â 
+
     // Using a DependencyProperty as the backing store for MapCenter.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty MapCenterProperty = DependencyProperty.Register("MapCenter", typeof (GeoCoordinate),
         typeof (MyControl), new PropertyMetadata(null, (sender, e) => ((MyControl) sender).UpdateMapCenter()));
-Â 
+
     private void UpdateMapCenter()
     {
         map.SetView(ViewModel.MapCenter, ViewModel.ZoomLevel);
     }
-Â 
+
     public new MainPageViewModel ViewModel
     {
         get { return base.ViewModel as MainPageViewModel; }
@@ -47,7 +47,7 @@ public partial class MyControl : UserControl
 
 ## Important note starting with Catel 4.0
 
-Starting with 4.0, Catel no longer subscribes to dependency properties automatically.Â It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, use theÂ `IViewPropertySelector.AddPropertyToSubscribe`Â method to add properties:
+Starting with 4.0, Catel no longer subscribes to dependency properties automatically. It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, use the `IViewPropertySelector.AddPropertyToSubscribe` method to add properties:
 
 ```
 var serviceLocator = ServiceLocator.Default;
@@ -56,7 +56,7 @@ var viewPropertySelector = serviceLocator.ResolveType<IViewPropertySelector>();
 viewPropertySelector.AddPropertyToSubscribe("MyProperty", typeof(MyView));
 ```
 
-In most cases, the only reason to subscribe to property changes is because of theÂ `ViewToViewModel` attribute. If that is the case, it is best to use the extension methodÂ `AutoDetectViewPropertiesToSubscribe`Â in the static constructor of the view:
+In most cases, the only reason to subscribe to property changes is because of the `ViewToViewModel` attribute. If that is the case, it is best to use the extension method `AutoDetectViewPropertiesToSubscribe` in the static constructor of the view:
 
 ```
 static MyView()

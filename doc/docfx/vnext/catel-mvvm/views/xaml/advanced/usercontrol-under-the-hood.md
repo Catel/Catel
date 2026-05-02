@@ -3,7 +3,7 @@ title: "UserControl - under the hood"
 ---
 The `UserControl` is a pretty sophisticated class. In this part of the documentation, the inner workings of the control are explained. What better way is there than to using flowcharts. There are a few events very important for the inner workings of the user control. The flowcharts are created per event.
 
-Keep in mind that the actual logic is implemented in theÂ `UserControlLogic`, which is used by theÂ `UserControl`. This way, the logic can be used by any user control via theÂ `UserControlBehavior`.
+Keep in mind that the actual logic is implemented in the `UserControlLogic`, which is used by the `UserControl`. This way, the logic can be used by any user control via the `UserControlBehavior`.
 
 ## Managing the custom DataContext
 
@@ -17,7 +17,7 @@ Another view can be found in the image below:
 
 ## Main flow
 
-The following flowchart shows what happens with a user control in the main flow (the startup). First, it checks whether the user control is loaded (which is not in a normal case). If the control is loaded, it goes directly to determining the datacontext. Otherwise, it will postpone the action until the `Loaded` event.Â 
+The following flowchart shows what happens with a user control in the main flow (the startup). First, it checks whether the user control is loaded (which is not in a normal case). If the control is loaded, it goes directly to determining the datacontext. Otherwise, it will postpone the action until the `Loaded` event. 
 
 ![](../../../../images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/mainflow.png)
 
@@ -37,7 +37,7 @@ Another event that is very important is the `Unloaded` event. In this event, the
 
 ## DataContextChanged
 
-TheÂ `DataContextChanged`Â event is used to react to changes of the datacontext. We use theÂ `DataContextHelper`Â class for that. If the new datacontext is new (thus not a view model that the control just set itself), it it continues to determine the datacontext. Otherwise, it will not take any action.
+The `DataContextChanged` event is used to react to changes of the datacontext. We use the `DataContextHelper` class for that. If the new datacontext is new (thus not a view model that the control just set itself), it it continues to determine the datacontext. Otherwise, it will not take any action.
 
 ![](../../../../images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/datacontextchanged.png)
 

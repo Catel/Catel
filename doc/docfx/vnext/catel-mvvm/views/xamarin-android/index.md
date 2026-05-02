@@ -82,7 +82,7 @@ protected override void AddBindings(BindingContext bindingContext, IViewModel vi
 
 ### Binding commands
 
-Â 
+
 
 ```
 protected override void AddBindings(BindingContext bindingContext, IViewModel viewModel)

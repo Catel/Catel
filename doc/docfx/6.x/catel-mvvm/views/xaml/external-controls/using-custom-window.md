@@ -16,7 +16,7 @@ Because the `RadWindow` of Telerik does not close the window when the `DialogRes
 public class Window : RadWindow, IDataWindow
 {
     private readonly WindowLogic _logic;
-Â 
+
     private event EventHandler<EventArgs> _viewLoaded;
     private event EventHandler<EventArgs> _viewUnloaded;
     private event EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
@@ -24,7 +24,7 @@ public class Window : RadWindow, IDataWindow
     public Window()
         : this(null)
     {
-Â 
+
     }
     public Window(IViewModel viewModel)
     {
@@ -35,7 +35,7 @@ public class Window : RadWindow, IDataWindow
         Loaded += (sender, e) => _viewLoaded.SafeInvoke(this);
         Unloaded += (sender, e) => _viewUnloaded.SafeInvoke(this);
         this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
-Â 
+
         // Because the RadWindow does not close when DialogResult is set, the following code is required
         ViewModelChanged += (sender, e) => OnViewModelChanged();
 
@@ -52,7 +52,7 @@ public class Window : RadWindow, IDataWindow
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
-Â 
+
     public event EventHandler<EventArgs> ViewModelChanged;
 
     event EventHandler<EventArgs> IView.Loaded
@@ -72,7 +72,7 @@ public class Window : RadWindow, IDataWindow
         add { _viewDataContextChanged += value; }
         remove { _viewDataContextChanged -= value; }
     }
-Â 
+
     private void OnViewModelChanged()
     {
         if (ViewModel != null && !ViewModel.IsClosed)

@@ -45,7 +45,7 @@ iOS not yet documented
 
 ## Binding properties with a converter
 
-Converters are a well-known topic in MVVM. Catel supports the use of converters in the binding system. The example below will convert an integer (*vm.Counter*) to a string with a format to *"{0} clicks!"*. The converter will automatically be instantiated using theÂ *TypeFactory*. Note that using converters in Catel support both *TwoWay* bindings and *ConverterHelper.UnsetValue* to prevent any changes in the binding system.
+Converters are a well-known topic in MVVM. Catel supports the use of converters in the binding system. The example below will convert an integer (*vm.Counter*) to a string with a format to *"{0} clicks!"*. The converter will automatically be instantiated using the *TypeFactory*. Note that using converters in Catel support both *TwoWay* bindings and *ConverterHelper.UnsetValue* to prevent any changes in the binding system.
 
 ### Android
 

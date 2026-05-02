@@ -1,17 +1,17 @@
 ---
 title: "Creating the views (windows)" 
 ---
-In this step we will create the windows for the application. In the previous step we already created the user controls.Â Windows are a great way to show in an edit-context. Catel provides great edit-windows in the form of theÂ `DataWindow`. This is a window that automatically addsÂ *OK*Â andÂ *Cancel*Â buttons (but of course allows customization of the buttons and behavior).
+In this step we will create the windows for the application. In the previous step we already created the user controls. Windows are a great way to show in an edit-context. Catel provides great edit-windows in the form of the `DataWindow`. This is a window that automatically adds *OK* and *Cancel* buttons (but of course allows customization of the buttons and behavior).
 
 ## Person window
 
 It is very important that the window derives from one of the Catel windows. This is required to make the binding system work (same as `UserControl`). Make sure that the window definition in the xaml is either `catel:Window` or `catel:DataWindow`
 
-To add a newÂ `DataWindow`,Â right-click theÂ *Views*Â folder in the solution =\>Â *Add*Â =\>Â *New item...*Â =\>Â *On-line*Â =\> and search for Catel as you can see in the screen below:
+To add a new `DataWindow`, right-click the *Views* folder in the solution =\> *Add* =\> *New item...* =\> *On-line* =\> and search for Catel as you can see in the screen below:
 
 ![](../../images/getting-started/wpf/creating-the-windows/itemtemplate.png)
 
-Give the new view the nameÂ `PersonWindow`. The view will be added to theÂ *Views*Â folder.
+Give the new view the name `PersonWindow`. The view will be added to the *Views* folder.
 
 Note that we can use the `PersonViewModel` for both the `PersonView` (user control) and `PersonWindow`. Both views represent the same models and view models, just a different context. To make sure that the `IUIVisualizerService` knows what view to pick first, register the `PersonWindow` in the `IUIVisualizerService` at application startup:
 
@@ -20,7 +20,7 @@ var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
 uiVisualizerService.Register(typeof(PersonViewModel), typeof(PersonWindow));
 ```
 
-The template will also create a constructor to inject a view model into the window. Please make sure that the constructor takes a view model of the typeÂ `PersonViewModel` instead of the generatedÂ `PersonWindowModel`. Then replace the content of the view with the xaml below:
+The template will also create a constructor to inject a view model into the window. Please make sure that the constructor takes a view model of the type `PersonViewModel` instead of the generated `PersonWindowModel`. Then replace the content of the view with the xaml below:
 
 ```
 <Grid>
@@ -44,17 +44,17 @@ The template will also create a constructor to inject a view model into the wind
 
 ## Family window
 
-TheÂ `FamilyWindow`Â is a bit different because we want additional logic in this window. We want to create add / edit / remove buttons for the family members. Therefore we need to create a separate view model which contains this logic.Â 
+The `FamilyWindow` is a bit different because we want additional logic in this window. We want to create add / edit / remove buttons for the family members. Therefore we need to create a separate view model which contains this logic. 
 
-### Creating theÂ FamilyWindowViewModel
+### Creating the FamilyWindowViewModel
 
-Since theÂ `FamilyWindowViewModel` will look a lot like theÂ `FamilyViewModel`,  just copy/paste theÂ `FamilyViewModel` and rename the copy toÂ `FamilyWindowViewModel`.
+Since the `FamilyWindowViewModel` will look a lot like the `FamilyViewModel`,  just copy/paste the `FamilyViewModel` and rename the copy to `FamilyWindowViewModel`.
 
 Note that the `FamilyWindowViewModel` needs additional logic, but that will be handled in the next part of this getting started guide
 
 ### Creating the FamilyWindow
 
-Once the `FamilyWindowViewModel` is created, the `FamilyWindow` must be created exactly the same way as theÂ `PersonWindow`. Again make sure to use the right view model (`FamilyWindowViewModel`) in the constructor of the window in the code-behind. Then use the following xaml:
+Once the `FamilyWindowViewModel` is created, the `FamilyWindow` must be created exactly the same way as the `PersonWindow`. Again make sure to use the right view model (`FamilyWindowViewModel`) in the constructor of the window in the code-behind. Then use the following xaml:
 
 ```
 <Grid>

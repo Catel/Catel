@@ -14,13 +14,13 @@ var validationContext = modelValidation.ValidationContext;
 
 ## Getting the number of or warnings and errors
 
-Â To retrieve the total number of warnings and errors, use the following code:
+To retrieve the total number of warnings and errors, use the following code:
 
 ```
 int count = validationContext.GetValidationCount();
 ```
 
-## Â Getting all the field errors
+##  Getting all the field errors
 
 To retrieve all the field errors, use the following code:
 
@@ -30,7 +30,7 @@ var fieldErrors = validationContext.GetFieldErrors();
 
 ## Getting all the field errors of a specific property
 
-Â To retrieve all the field errors of a specific property, use the following code:
+To retrieve all the field errors of a specific property, use the following code:
 
 ```
 var fieldErrors = validationContext.GetFieldErrors("MyProperty");

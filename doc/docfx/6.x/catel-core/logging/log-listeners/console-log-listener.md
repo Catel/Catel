@@ -1,7 +1,7 @@
 ---
 title: "ConsoleLogListener" 
 ---
-TheÂ `ConsoleLogListener` writes messages to the console with automatic colors:
+The `ConsoleLogListener` writes messages to the console with automatic colors:
 
 ![](../../../images/catel-core/logging/log-listeners/console-log-listener/console.png)
 

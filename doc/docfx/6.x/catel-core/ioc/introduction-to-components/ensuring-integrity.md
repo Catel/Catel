@@ -1,7 +1,7 @@
 ---
 title: "Ensuring integrity of the ServiceLocator" 
 ---
-Starting with Catel 3.6, a very useful feature has been added to the `ServiceLocator` and `TypeFactory`. This features is called "integrity checker" and will ensure you with useful information about type registration paths. This protection mechanism is very useful in complex applications. When people start building services, sometimes they accidentally inject other services that via injection to other services cause a stack overflow. Debugging and determining which type is causing the issue can be very time-consuming.Â To make the example a bit more simple, below are a few classes which demonstrate a common issue in enterprises.
+Starting with Catel 3.6, a very useful feature has been added to the `ServiceLocator` and `TypeFactory`. This features is called "integrity checker" and will ensure you with useful information about type registration paths. This protection mechanism is very useful in complex applications. When people start building services, sometimes they accidentally inject other services that via injection to other services cause a stack overflow. Debugging and determining which type is causing the issue can be very time-consuming. To make the example a bit more simple, below are a few classes which demonstrate a common issue in enterprises.
 
 ```
 public class X
@@ -20,7 +20,7 @@ public class Z
 }
 ```
 
-Note how a round-trip of dependencies is created which will result in a `StackOverflowException` somewhere in your code.Â Below is a graphical example what happens. Note that the dotted line is showing the circular dependency causing the StackOverflowException.
+Note how a round-trip of dependencies is created which will result in a `StackOverflowException` somewhere in your code. Below is a graphical example what happens. Note that the dotted line is showing the circular dependency causing the StackOverflowException.
 
 ![](../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/stackoverflow.png)
 
@@ -33,7 +33,7 @@ The first step for the integrity checker is to make sure that it knows what type
 
 ## TypeRequestPath
 
-Now we have detailed information about the types being constructed, it is very important to keep track of the types which are being created by the `TypeFactory`. During the construction of a type, the `TypeFactory` will request the `ServiceLocator` for a type, which will ask the `TypeFactory` to construct the type again.Â Each time the `TypeFactory` starts constructing a type (and currently has aÂ `TypeRequestPath`), it will create a new instance of theÂ `TypeRequestInfo`Â and add it to theÂ `TypeRequestPath`. The diagram below shows how the `TypeRequestPath` will evolve.
+Now we have detailed information about the types being constructed, it is very important to keep track of the types which are being created by the `TypeFactory`. During the construction of a type, the `TypeFactory` will request the `ServiceLocator` for a type, which will ask the `TypeFactory` to construct the type again. Each time the `TypeFactory` starts constructing a type (and currently has a `TypeRequestPath`), it will create a new instance of the `TypeRequestInfo` and add it to the `TypeRequestPath`. The diagram below shows how the `TypeRequestPath` will evolve.
 
 ![](../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/typerequestpath.png)
 
@@ -43,11 +43,11 @@ Note that this is a very simple example, but normally a type will have several s
 
 ## Checking the integrity of the type request
 
-To resolve and construct a type, a lot of communication will happen between the `TypeFactory` and the `ServiceLocator`.Â This flow is show in the diagram below.
+To resolve and construct a type, a lot of communication will happen between the `TypeFactory` and the `ServiceLocator`. This flow is show in the diagram below.
 
 ![](../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/flow.png)
 
-As you can see, there is a lot of communication between theÂ `ServiceLocator`Â andÂ `TypeFactory`. In the `TypeRequestPath` example we already saw how the path will become invalid when it contains a duplicate instance of the `TypeRequestInfo`. The `TypeRequestPath` will then throw a `CircularDependencyException` with all the necessary information to solve the issue:
+As you can see, there is a lot of communication between the `ServiceLocator` and `TypeFactory`. In the `TypeRequestPath` example we already saw how the path will become invalid when it contains a duplicate instance of the `TypeRequestInfo`. The `TypeRequestPath` will then throw a `CircularDependencyException` with all the necessary information to solve the issue:
 
 ![](../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/quickwatch.png)
 

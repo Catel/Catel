@@ -1,13 +1,13 @@
 ﻿---
 title: "Validation via special model validators" 
 ---
-By default, Catel registers the *AttributeValidatorProvider* as the *IValidatorProvider*. This way the *ModelBase* and all the classes that derive from it can easily add a custom validator by using theÂ *ValidateModelAttribute*.
+By default, Catel registers the *AttributeValidatorProvider* as the *IValidatorProvider*. This way the *ModelBase* and all the classes that derive from it can easily add a custom validator by using the *ValidateModelAttribute*.
 
 Note that it is still possible to register a custom *IValidatorProvider* to customize this behavior. It is even possible to set the *Validator* property of the *ModelBase* on a specific instance of a model
 
 ## Implementing the validator
 
-The first thing that needs to be done is to write a custom implementation of the *IValidator* interface. You can either implement all the members yourself or derive from *ValidatorBaseÂ *as is shown below:
+The first thing that needs to be done is to write a custom implementation of the *IValidator* interface. You can either implement all the members yourself or derive from *ValidatorBase *as is shown below:
 
 ```
 public class PersonValidator : ValidatorBase<PersonModel>
@@ -18,13 +18,13 @@ public class PersonValidator : ValidatorBase<PersonModel>
         {
             validationResults.Add(FieldValidationResult.CreateError(PersonModel.FirstNameProperty, "First name is required"));
         }
-Â 
+
         if (string.IsNullOrWhiteSpace(instance.LastName))
         {
             validationResults.Add(FieldValidationResult.CreateError(PersonModel.FirstNameProperty, "First name is required"));
         }
     }
-Â 
+
     protected override void ValidateBusinessRules(PersonModel instance, List<IBusinessRuleValidationResult> validationResults)
     {
         // No business rules validations yet
@@ -34,7 +34,7 @@ public class PersonValidator : ValidatorBase<PersonModel>
 
 Decorating a model with the attribute
 
-Once a validator is available, the only thing that needs to be done is to decorate the model with theÂ *ValidateModelAttribute*:
+Once a validator is available, the only thing that needs to be done is to decorate the model with the *ValidateModelAttribute*:
 
 ```
 [ValidateModel(typeof(PersonValidator))]

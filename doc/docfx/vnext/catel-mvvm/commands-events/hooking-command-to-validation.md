@@ -3,7 +3,7 @@ title: "Hooking a command to validation automatically"
 ---
 It is possible to hook the `CanExecute` of a `Command` to the `IValidationSummary` automatically. This way, there is no need to check for errors manually in the `CanExecute` method. The example below first adds a validation summary to a view model to get the validation result. Then, it uses this validation summary to automatically determine whether a command can be executed.
 
-1.Â Add validation to a person view model (note how the validation adds the tag `PersonValidation` to a validation):
+1. Add validation to a person view model (note how the validation adds the tag `PersonValidation` to a validation):
 
 ```
 /// <summary>
@@ -25,7 +25,7 @@ protected override void ValidateFields(System.Collections.Generic.List<IFieldVal
 }
 ```
 
-2.Â Add a property to the view model containing the validation summary using the `ValidationToViewModel` attribute.
+2. Add a property to the view model containing the validation summary using the `ValidationToViewModel` attribute.
 
 ```
 [ValidationToViewModel(Tag = "PersonValidation")]

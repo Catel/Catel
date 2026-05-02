@@ -56,7 +56,7 @@ protected override void OnModelCreating(DbModelBuilder modelBuilder)
 {
    modelBuilder.Types().Configure(c => c.Ignore("IsDirty"));
    modelBuilder.Types().Configure(c => c.Ignore("IsReadOnly"));
-Â 
+
    base.OnModelCreating(modelBuilder);
 }
 ```

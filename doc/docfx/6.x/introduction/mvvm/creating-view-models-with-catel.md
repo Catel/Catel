@@ -3,7 +3,7 @@ title: "Creating view models with Catel"
 ---
 The View Models in Catel are very easy to write, and give the end-user a great flexibility in how to approach the Models. This part of the article will explain the classes that make it possible to easily create View Models.
 
-The `ViewModelBase` class is the most important class of all in the MVVM Framework of Catel. Of course, it can't do anything useful without the other classes, but all the View Models that are created using Catel derive of this class. `ViewModelBase` is based on the `ModelBase` class that ships with Catel. Thanks to the existence of that class, the MVVM framework was set up very quickly (although â€œvery quicklyâ€ is relative). Below is a class diagram that shows the class tree:
+The `ViewModelBase` class is the most important class of all in the MVVM Framework of Catel. Of course, it can't do anything useful without the other classes, but all the View Models that are created using Catel derive of this class. `ViewModelBase` is based on the `ModelBase` class that ships with Catel. Thanks to the existence of that class, the MVVM framework was set up very quickly (although “very quickly” is relative). Below is a class diagram that shows the class tree:
 
 ![](../../images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png)
 
@@ -17,7 +17,7 @@ To declare a View Model, use the following code snippet:
 
 -   vm - defines a new view model
 
-Â When using the *vm* code snippet, this is the result:
+When using the *vm* code snippet, this is the result:
 
 ```
 /// <summary>
@@ -219,7 +219,7 @@ Now that we know how to declare a property as a Model, it is time to learn how w
 -   Models are automatically being watched for changes, thus if a mapped property changes, the View Model is updated accordingly;
 -   When a View Model is changed, this property is automatically mapped to the Model;
 -   When the Model changes, the View Model is initialized automatically with the values of the new Model;
--   When a Model has an error or warning (business or field), the warnings are mapped to the View Model so you can â€œre-useâ€ the validation of the Model inside your View Model.
+-   When a Model has an error or warning (business or field), the warnings are mapped to the View Model so you can “re-use” the validation of the Model inside your View Model.
 
 So, you get all of this for free? No, you will have to decorate your property with *ViewModelToModelAttribute*, like shown below:
 
@@ -276,7 +276,7 @@ public static readonly PropertyData PersonProperty = RegisterProperty("Person", 
 
 ## Interaction with other view models
 
-Now that we've seen how easy it is to communicate between the View Model and the Model, you want more, right? I know how it is: â€œYou let 'em have one finger, they take your whole handâ€. No worries, you can have my right hand, as long as I can keep my left one. Anyway, the developers of Catel are prepared for this. So, let's talk about the interaction with other View Models.
+Now that we've seen how easy it is to communicate between the View Model and the Model, you want more, right? I know how it is: “You let 'em have one finger, they take your whole hand”. No worries, you can have my right hand, as long as I can keep my left one. Anyway, the developers of Catel are prepared for this. So, let's talk about the interaction with other View Models.
 
 Say, you have a multiple document interface (MDI as it was called in the old days). If you are following MVVM principles, every document (or tab) has its own View Model. Then, you want to be aware of updates of a single type of View Model. Say, for example, that there is a View Model representing a family called *FamilyViewModel*. This View Model is probably interested in changes in the *PersonViewModel*.
 

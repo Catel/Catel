@@ -1,7 +1,7 @@
 ﻿---
 title: "Introduction" 
 ---
-Welcome to the introduction of Catel. Catel is a Â framework (or enterprise library, just use whatever you like) with data handling, diagnostics, logging, WPF controls, and an MVVM-framework. So Catel is more than "just" another MVVM-framework or some nice Extension Methods that can be used. It's more like a library that you want to include in all the XAML applications you are going to develop in the near future.
+Welcome to the introduction of Catel. Catel is a  framework (or enterprise library, just use whatever you like) with data handling, diagnostics, logging, WPF controls, and an MVVM-framework. So Catel is more than "just" another MVVM-framework or some nice Extension Methods that can be used. It's more like a library that you want to include in all the XAML applications you are going to develop in the near future.
 
 Catel is primarily meant for Line of Business (LoB) applications
 

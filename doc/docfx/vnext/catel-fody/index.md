@@ -64,15 +64,15 @@ the *OnPropertyChanged* method will be also weaved into
 
 To enable Catel.Fody to weave assemblies, you need to perform the following steps:
 
-1. Install theÂ Catel.Fody NuGet package
-2. Update FodyWeavers.xmlÂ and make sure it contains <Catel />
+1. Install the Catel.Fody NuGet package
+2. Update FodyWeavers.xml and make sure it contains <Catel />
 
 > Note that the FodyWeavers.xml should be updated automatically when
 
 ## Disabling weaving for specific types or properties
 
-To disable the weaving of types or properties of a type, decorate it with theÂ 
-`NoWeaving`Â attribute as shown in the example below:
+To disable the weaving of types or properties of a type, decorate it with the 
+`NoWeaving` attribute as shown in the example below:
 
 	[NoWeaving]
 	public class MyClass : ModelBase
@@ -84,7 +84,7 @@ To disable the weaving of types or properties of a type, decorate it with theÂ�
 
 Though we recommend to leave the default settings (great for most people), it is possible to configure the weaver. Below is a list of options that can be configured.
 
-To configure an option, modifyÂ `FodyWeavers.xml` by adding the property and value to the Catel element. For example, the example below will disable argument and logging weaving:
+To configure an option, modify `FodyWeavers.xml` by adding the property and value to the Catel element. For example, the example below will disable argument and logging weaving:
 
 	<Catel WeaveArguments="false" WeaveLogging="false" />
 
@@ -132,10 +132,10 @@ will be weaved into:
 
 	public string Name
 	{
-	Â Â Â Â get { return GetValue<string>(NameProperty); }
-	Â Â Â Â set { SetValue(NameProperty, value); }
+	    get { return GetValue<string>(NameProperty); }
+	    set { SetValue(NameProperty, value); }
 	}
-	Â 
+
 	public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string));
 
 **ObservableObject**
@@ -154,28 +154,28 @@ will be weaved into:
 
 ### Support for computed properties
 
-If Â a computed property like this one exists:
+If  a computed property like this one exists:
 
 	public string FullName
 	{
-	Â Â Â Â get { return string.Format("{0} {1}", FirstName, LastName).Trim(); }
+	    get { return string.Format("{0} {1}", FirstName, LastName).Trim(); }
 	}
 
 the `OnPropertyChanged` method will be also weaved into
 
 	protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
 	{
-	Â Â Â Â base.OnPropertyChanged(e);
-	Â 
-	Â Â Â Â if (e.PropertyName.Equals("FirstName"))
-	Â Â Â Â {
-	Â Â Â Â Â Â Â Â base.RaisePropertyChanged("FullName");
-	Â Â Â Â }
-	Â 
-	Â Â Â Â if (e.PropertyName.Equals("LastName"))
-	Â Â Â Â {
-	Â Â Â Â Â Â Â Â base.RaisePropertyChanged("FullName");
-	Â Â Â Â }
+	    base.OnPropertyChanged(e);
+
+	    if (e.PropertyName.Equals("FirstName"))
+	    {
+	        base.RaisePropertyChanged("FullName");
+	    }
+
+	    if (e.PropertyName.Equals("LastName"))
+	    {
+	        base.RaisePropertyChanged("FullName");
+	    }
 	}
 
 In order to avoid this behavior, you can use the `NoWeaving` attribute on the computed property, just like this:
@@ -183,17 +183,17 @@ In order to avoid this behavior, you can use the `NoWeaving` attribute on the co
 	[NoWeaving]
 	public string FullName
 	{
-	Â Â Â Â get { return string.Format("{0} {1}", FirstName, LastName).Trim(); }
+	    get { return string.Format("{0} {1}", FirstName, LastName).Trim(); }
 	}
 
 In the background, `Catel.Fody` will handle the following workflow:
 
-1. Find all types in the assembly deriving from `ObservableObject`,Â `ModelBase` and `ViewModelBase`
+1. Find all types in the assembly deriving from `ObservableObject`, `ModelBase` and `ViewModelBase`
 2. Check if the type has an automatic property backing field (only those properties are weaved)
-3. Add theÂ `PropertyData` field for the property
-4. Instantiate theÂ `PropertyData`Â field in the static constructor of the type
-5. Replace the content of the getter and setter with the appropriate calls toÂ `GetValue`Â andÂ `SetValue`
-Â 
+3. Add the `PropertyData` field for the property
+4. Instantiate the `PropertyData` field in the static constructor of the type
+5. Replace the content of the getter and setter with the appropriate calls to `GetValue` and `SetValue`
+
 Note that this feature is automatically disabled for classes that already override the `OnPropertyChanged` method. It is too complex to determine where the logic should be added so the end-developer is responsible for implementing this feature when overriding `OnPropertyChanged`
 
 ### Automatically excluded properties
@@ -205,46 +205,46 @@ By default, Catel.Fody ignores the following properties and types by default bec
 
 ### Specifying default values for weaved properties
 
-By default, Catel usesÂ `null` as default values for reference types. For value types, it will use `default(T)`. To specify the default value of a weaved property, use theÂ `DefaultValue` attribute as shown in the example below:
+By default, Catel uses `null` as default values for reference types. For value types, it will use `default(T)`. To specify the default value of a weaved property, use the `DefaultValue` attribute as shown in the example below:
 
 	public class Person : ModelBase
 	{
-	Â Â Â Â [DefaultValue("Geert")]
-	Â Â Â Â public string FirstName { get; set; }
-	Â Â 
-	Â Â Â Â public string LastName { get; set; }
+	    [DefaultValue("Geert")]
+	    public string FirstName { get; set; }
+
+	    public string LastName { get; set; }
 	}
 
 This will be weaved into:
 
 	public class Person : ModelBase
 	{
-	Â Â Â Â public string FirstName
-	Â Â Â Â {
-	Â Â Â Â Â Â Â Â get { return GetValue<string>(FirstNameProperty); }
-	Â Â Â Â Â Â Â Â set { SetValue(FirstNameProperty, value); }
-	Â Â Â Â }
-	Â 
-	Â Â Â Â public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), "Geert");
-	Â 
-	Â Â Â Â public string LastName
-	Â Â Â Â {
-	Â Â Â Â Â Â Â Â get { return GetValue<string>(LastNameProperty); }
-	Â Â Â Â Â Â Â Â set { SetValue(LastNameProperty, value); }
-	Â Â Â Â }
-	Â 
-	Â Â Â Â public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+	    public string FirstName
+	    {
+	        get { return GetValue<string>(FirstNameProperty); }
+	        set { SetValue(FirstNameProperty, value); }
+	    }
+
+	    public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), "Geert");
+
+	    public string LastName
+	    {
+	        get { return GetValue<string>(LastNameProperty); }
+	        set { SetValue(LastNameProperty, value); }
+	    }
+
+	    public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
 	}
 
 ### How to get automatic change notifications
 
-The Fody plugin for Catel automatically searches for theÂ `On[PropertyName]Changed`Â methods. If a method is found, it will automatically be called when the property has changed. For example, theÂ `OnNameChanged`Â is automatically called when theÂ `Name`Â property is changed in the example below:
+The Fody plugin for Catel automatically searches for the `On[PropertyName]Changed` methods. If a method is found, it will automatically be called when the property has changed. For example, the `OnNameChanged` is automatically called when the `Name` property is changed in the example below:
 
 	public string Name { get; set; }
-	Â 
+
 	private void OnNameChanged()
 	{
-	Â Â Â Â // this method is automatically called when the Name property changes
+	    // this method is automatically called when the Name property changes
 	}
 
 ### Excluding properties from backup
@@ -258,10 +258,10 @@ will be weaved into:
 
 	public string Name
 	{
-	Â Â Â Â get { return GetValue<string>(NameProperty); }
-	Â Â Â Â set { SetValue(NameProperty, value); }
+	    get { return GetValue<string>(NameProperty); }
+	    set { SetValue(NameProperty, value); }
 	}
-	Â 
+
 	public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), includeInBackup: false);
 
 ## Weaving argument checks
@@ -294,8 +294,8 @@ Will be weaved into:
 
 	public void DoSomething(string myString, object myObject)
 	{
-	Â Â Â Â Argument.IsNotNullOrEmpty("myString", myString);
-	Â Â Â Â Argument.IsNotNull("myObject", myObject);
+	    Argument.IsNotNullOrEmpty("myString", myString);
+	    Argument.IsNotNull("myObject", myObject);
 	}
 
 In the background, Catel.Fody will handle the following workflow:
@@ -322,7 +322,7 @@ In the background, Catel.Fody will handle the following workflow:
 
 ## Exposing properties on view models
 
-The way to expose properties of a model to the view model in Catel is theÂ `ViewModelToModelAttribute`. The goal of these attributes is to easily map properties from a model to the view model so as much of the plumbing (setting/getting properties, rechecking validation, etc) is done automatically for the developer.
+The way to expose properties of a model to the view model in Catel is the `ViewModelToModelAttribute`. The goal of these attributes is to easily map properties from a model to the view model so as much of the plumbing (setting/getting properties, rechecking validation, etc) is done automatically for the developer.
 
 Using the `ViewModelToModelAttribute`, this is the syntax to map properties automatically:
 
@@ -332,31 +332,31 @@ Using the `ViewModelToModelAttribute`, this is the syntax to map properties auto
 	[Model]
 	public Person Person
 	{
-	Â Â Â Â get { return GetValue<Person>(PersonProperty); }
-	Â Â Â Â private set { SetValue(PersonProperty, value); }
+	    get { return GetValue<Person>(PersonProperty); }
+	    private set { SetValue(PersonProperty, value); }
 	}
-	Â Â 
+
 	/// <summary>
 	/// Register the Person property so it is known in the class.
 	/// </summary>
 	public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(Person));
-	Â Â 
+
 	/// <summary>
 	/// Gets or sets the first name.
 	/// </summary>
 	[ViewModelToModel("Person")]
 	public string FirstName
 	{
-	Â Â Â Â get { return GetValue<string>(FirstNameProperty); }
-	Â Â Â Â set { SetValue(FirstNameProperty, value); }
+	    get { return GetValue<string>(FirstNameProperty); }
+	    set { SetValue(FirstNameProperty, value); }
 	}
-	Â Â 
+
 	/// <summary>
 	/// Register the FirstName property so it is known in the class.
 	/// </summary>
 	public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
 
-However, if you only define theÂ `FirstName`Â property just to protect your model, then why should you define the whole property? This is where theÂ `ExposeAttribute`Â property comes in very handy. This attribute internally registers a new dynamic property on the view model, and then uses the same technique as theÂ `ViewModelToModelAttribute`.
+However, if you only define the `FirstName` property just to protect your model, then why should you define the whole property? This is where the `ExposeAttribute` property comes in very handy. This attribute internally registers a new dynamic property on the view model, and then uses the same technique as the `ViewModelToModelAttribute`.
 
 Below is the new way you can easily expose properties of a model and protect other properties of the model from the view:
 
@@ -367,12 +367,12 @@ Below is the new way you can easily expose properties of a model and protect oth
 	[Expose("FirstName")]
 	[Expose("MiddleName")]
 	[Expose("LastName")]
-	privateÂ Person Person
+	private Person Person
 	{
-	Â Â Â Â get { return GetValue<Person>(PersonProperty); }
-	Â Â Â Â set { SetValue(PersonProperty, value); }
+	    get { return GetValue<Person>(PersonProperty); }
+	    set { SetValue(PersonProperty, value); }
 	}
-	Â Â 
+
 	/// <summary>
 	/// Register the Person property so it is known in the class.
 	/// </summary>
@@ -386,7 +386,7 @@ In combination with the automatic property weaving, this could be written as cle
 	[Expose("FirstName")]
 	[Expose("MiddleName")]
 	[Expose("LastName")]
-	privateÂ Person Person { get; set; }
+	private Person Person { get; set; }
 
 ## XmlSchema generation
 
@@ -398,22 +398,22 @@ Starting with Catel.Fody 2.0, this feature is disabled by default. To enabled it
 
 	<Catel GenerateXmlSchemas="true" />
 
-When theÂ `XmlSchemaProvider` is available on the target platform where Catel is used, the changes will be made to classes deriving fromÂ `ModelBase`:
+When the `XmlSchemaProvider` is available on the target platform where Catel is used, the changes will be made to classes deriving from `ModelBase`:
 
-1.Â Decorate the class withÂ `XmlSchemaProvider` attribute:
+1. Decorate the class with `XmlSchemaProvider` attribute:
 
 	[XmlSchemaProvider("GetXmlSchemaForCatelFodyTestAssemblyInheritedClass")]
 	public class InheritedClass : BaseClass
 	{
-	Â Â Â Â // rest of the class definition
+	    // rest of the class definition
 	}
 
-2.Â Implement the class specificÂ `GetXmlSchema` method:
+2. Implement the class specific `GetXmlSchema` method:
 
 	[CompilerGenerated]
 	public static XmlQualifiedName GetXmlSchemaForCatelFodyTestAssemblyInheritedClass(XmlSchemaSet xmlSchemaSet)
 	{
-	Â Â Â Â Type type = typeof(InheritedClass);
-	Â Â Â Â return XmlSchemaManager.GetXmlSchema(type, xmlSchemaSet);
+	    Type type = typeof(InheritedClass);
+	    return XmlSchemaManager.GetXmlSchema(type, xmlSchemaSet);
 	}
 

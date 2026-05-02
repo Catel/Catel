@@ -11,7 +11,7 @@ It is possible to link converters. To link converters, simply set the `Link` pro
 
 ```
 <catel:NullableValueConverter x:Key="NullableValueConverter" />
-Â 
+
 <catel:BooleanToVisibilityConverter>
     <catel:BooleanToVisibilityConverter.Link>
         <code:NullToBoolConverter Link="{StaticResource NullableValueConverter}" />

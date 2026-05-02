@@ -1,7 +1,7 @@
 ﻿---
 title: "Configuration" 
 ---
-Catel makes it very easy to use configurations on all supported platforms.Â 
+Catel makes it very easy to use configurations on all supported platforms. 
 
 Below is a table to explain what technology is used per platform to retrieve and store configuration values.
 
@@ -51,7 +51,7 @@ public class DbConfigurationService : ConfigurationService
                     select config).Any();
         }
     }
-Â 
+
     protected override string GetValueFromStore(string key)
     {
         using (var context = new ConfigurationContext())

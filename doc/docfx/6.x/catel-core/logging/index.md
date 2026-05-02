@@ -37,7 +37,7 @@ Log.Error(ex, "Failed to delete file '{0}'", fileName);
 
 ## Logging in code with additional data
 
-Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the the bare minimum required for logging. To pass in additional information, use theÂ *[Level]WithData* methods (such asÂ *DebugWithData*):
+Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the the bare minimum required for logging. To pass in additional information, use the *[Level]WithData* methods (such as *DebugWithData*):
 
 ```
 Log.Debug("This is a message from a specific thread", new LogData
@@ -46,11 +46,11 @@ Log.Debug("This is a message from a specific thread", new LogData
 });
 ```
 
-Then the log data will be available in theÂ *LogData* of theÂ *LogEntry*:
+Then the log data will be available in the *LogData* of the *LogEntry*:
 
 ```
 var logData = logEntry.LogData;
-Â 
+
 var threadId = logData["ThreadId"];
 ```
 
@@ -66,13 +66,13 @@ LogManager.AddDebugListener();
 
 ## Overriding global log level flags
 
-Start with Catel 3.8, it is possible to override the global log level flags for all listeners. To do this, set the corresponding flag on theÂ *LogManager* to a value. For example, to force debug logging on all log listeners, use the code below:
+Start with Catel 3.8, it is possible to override the global log level flags for all listeners. To do this, set the corresponding flag on the *LogManager* to a value. For example, to force debug logging on all log listeners, use the code below:
 
 ```
 LogManager.IsDebugEnabled = true;
 ```
 
-To reset the override, set the value back toÂ *null*:
+To reset the override, set the value back to *null*:
 
 ```
 LogManager.IsDebugEnabled = null;

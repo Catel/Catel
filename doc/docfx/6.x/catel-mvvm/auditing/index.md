@@ -1,11 +1,11 @@
 ﻿---
 title: "Auditing" 
 ---
-There are lots of lightweight MVVM frameworks out there, which work great for the basics. However, if you are writing larger enterprise applications, notifying the UI of changed properties isn't enough. For example, did you think about Command Authentication? Or what about sensor emulation for Windows Phone 7 (that Microsoft donâ€™t provide)?
+There are lots of lightweight MVVM frameworks out there, which work great for the basics. However, if you are writing larger enterprise applications, notifying the UI of changed properties isn't enough. For example, did you think about Command Authentication? Or what about sensor emulation for Windows Phone 7 (that Microsoft don’t provide)?
 
 ## Why auditing
 
-Â There are many reasons why auditing should be added to an application. Most developers only add auditing to the database, but below are several reasons to add auditing to the client as well:
+There are many reasons why auditing should be added to an application. Most developers only add auditing to the database, but below are several reasons to add auditing to the client as well:
 
 -   Logging (what user did what on specific moments)
 -   Gather statistics (which views (view models) are used most)
@@ -55,7 +55,7 @@ public class CommandAuditor : AuditorBase
 
 ## Registering an auditor
 
-Â Registering a new auditor is extremely easy as you can see in the code below:
+Registering a new auditor is extremely easy as you can see in the code below:
 
 ```
 AuditingManager.RegisterAuditor(new CommandAuditor());

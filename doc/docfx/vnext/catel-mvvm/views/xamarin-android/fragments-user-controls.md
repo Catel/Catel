@@ -1,7 +1,7 @@
 ﻿---
 title: "Fragments (user controls)" 
 ---
-The user controls in Android are called fragments. This means that if a user control must be created, it must derive from theÂ `Fragment` class. Catel provides a base implementation of this class to ensure full compatibility with the MVVM framework that ships with Catel.
+The user controls in Android are called fragments. This means that if a user control must be created, it must derive from the `Fragment` class. Catel provides a base implementation of this class to ensure full compatibility with the MVVM framework that ships with Catel.
 
 ## Creating the view model
 
@@ -9,7 +9,7 @@ The view model can be created (or added as a linked file from another project) j
 
 ## Creating the view
 
-Make sure that aÂ `Views` folder exists in the project so the views and view models can automatically be hooked together by Catel. Then create a new class to the views folder, in this caseÂ `PersonView`:
+Make sure that a `Views` folder exists in the project so the views and view models can automatically be hooked together by Catel. Then create a new class to the views folder, in this case `PersonView`:
 
 ```
 public class PersonView : Catel.Android.App.Fragment
@@ -26,7 +26,7 @@ Note that the class derives from `Catel.Android.App.Fragment`
 
 ## Designing the view
 
-To create the actual user interface of the fragment, add a newÂ `xaml` file to the `Resources/layout` folder, in your caseÂ `Fragment\_Person` (but you can name it whatever you want). Then use the following source:
+To create the actual user interface of the fragment, add a new `xaml` file to the `Resources/layout` folder, in your case `Fragment\_Person` (but you can name it whatever you want). Then use the following source:
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -59,7 +59,7 @@ To create the actual user interface of the fragment, add a newÂ `xaml` file to
 
 ## Setting up synchronization
 
-In Android it is required to manually synchronize the values between the view and view model. Below is the fully extendedÂ `PersonView`Â class containing these mapping functionality:
+In Android it is required to manually synchronize the values between the view and view model. Below is the fully extended `PersonView` class containing these mapping functionality:
 
 ```
 public class PersonView : Catel.Android.App.Fragment

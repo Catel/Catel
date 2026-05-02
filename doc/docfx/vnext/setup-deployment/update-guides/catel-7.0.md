@@ -31,7 +31,7 @@ All Catel specific IoC components (ServiceLocator, TypeFactory, etc) have been r
 
 Use the native dependency injection from .NET.
 
-Catelâ€™s ServiceLocator allowed late-bound registration, but .NET requires all services to be registered up front. To keep initialization flexible, we introduced `IConstructAtStartup` and `IInitializeAtStartup`.
+Catel’s ServiceLocator allowed late-bound registration, but .NET requires all services to be registered up front. To keep initialization flexible, we introduced `IConstructAtStartup` and `IInitializeAtStartup`.
 
 * IoCContainer => contains the app-wide IoC container (IServiceProvider)
 * IConstructAtStartup => a type implementing this interface, registered in the service collection, will be automatically constructed at startup
@@ -117,12 +117,12 @@ public partial class App : Application
 
 The logging features have been removed from Catel. It's recommended to use the .NET standard logging features.
 
-.NET logging uses DI, but static classes shouldnâ€™t be forced to use DI just for logging. Our solution:
+.NET logging uses DI, but static classes shouldn’t be forced to use DI just for logging. Our solution:
 
 * Dependency injection: Inject `ILogger<T>` (even for views)
 * Static logger: Use `LogManager.GetLogger(typeof(X))`
 
-`LogManager` detects the hosting model and provides the right logger instance, or a `NullLogger` for unit tests. Itâ€™s also possible to register a custom logger factory as fallback.
+`LogManager` detects the hosting model and provides the right logger instance, or a `NullLogger` for unit tests. It’s also possible to register a custom logger factory as fallback.
 
 To upgrade, replace:
 
@@ -158,7 +158,7 @@ Alternatives:
 
 The view models have been refactored to remove any hidden dependencies. To minimize the risk of added dependencies in the future (that will cause breaking changes), a view model now requires the `IServiceProvider` as injected dependency.
 
-Catelâ€™s `ViewModelBase` is powerful, but most view models donâ€™t need all its features. With true DI, weâ€™re splitting it:
+Catel’s `ViewModelBase` is powerful, but most view models don’t need all its features. With true DI, we’re splitting it:
 
 * FeaturedViewModelBase: For advanced features (validation, throttling, etc.)
 * ViewModelBase: Lightweight, for most use cases

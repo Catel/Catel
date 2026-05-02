@@ -18,7 +18,7 @@ public class MyView : Catel.Windows.Controls.UserControl
 
 This means that the logic for MVVM is located in the view base (in this example, the UserControl).
 
-Â An item template where the logic is located in a behavior uses regular controls and uses one of the available MVVM behaviors to implement the logic. The behaviors are extremely powerful, but we still recommend the use of logic in the view base since that takes more work out of the hands from the developer.
+An item template where the logic is located in a behavior uses regular controls and uses one of the available MVVM behaviors to implement the logic. The behaviors are extremely powerful, but we still recommend the use of logic in the view base since that takes more work out of the hands from the developer.
 
 ## View model
 

@@ -5,7 +5,7 @@ Almost every respectable MVVM framework supports the `EventToCommand` trigger. I
 
 The usage is really simple, but requires the `System.Windows.Interactivity.dll` reference (ships with Catel). The example below shows how to add a trigger for the double click of a ListBox.
 
-Â 1) Add the following XML namespaces:
+1) Add the following XML namespaces:
 
 ```
 xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"

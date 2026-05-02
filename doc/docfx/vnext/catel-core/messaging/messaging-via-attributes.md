@@ -5,7 +5,7 @@ The message mediator is a great way to communicate between instances in an appli
 
 ## Subscribing and unsubscribing
 
-Â When attributes are using inside a class, it is required to call the *MessageMediatorHelper.SubscripeRecipient*. To unsubscribe an object, it is required to call *MessageMediatorHelper.UnsubscribeRecipient*.
+When attributes are using inside a class, it is required to call the *MessageMediatorHelper.SubscripeRecipient*. To unsubscribe an object, it is required to call *MessageMediatorHelper.UnsubscribeRecipient*.
 
 There are two options to decorate methods with the attribute. Either with or without tag.
 
@@ -43,7 +43,7 @@ private void ShowMessage(string value)
 
 ## Subscribing with a tag
 
-Â A tag can be used to specify some sort of grouping for messages. The MessageRecipient attribute also supports this as shown in the code below. First lets take a look how to send a message and specify a tag.
+A tag can be used to specify some sort of grouping for messages. The MessageRecipient attribute also supports this as shown in the code below. First lets take a look how to send a message and specify a tag.
 
 ```
 /// <summary>

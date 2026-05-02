@@ -1,7 +1,7 @@
 ﻿---
 title: "Commands authentication" 
 ---
-One of the questions an MVVM developer faces is how to control the executation state of a command by role or user authentication method. Catel offers an out-of-the-box solution for this problem to check the `CanExecute` state of the commands in the UI.Â 
+One of the questions an MVVM developer faces is how to control the executation state of a command by role or user authentication method. Catel offers an out-of-the-box solution for this problem to check the `CanExecute` state of the commands in the UI. 
 
 It is very important that this way of disabling commands is only used to easy the development of consistent user interfaces. It cannot replace the actual check whether a user can or cannot modify data. The actual and final responsibility still lays at the business layer.
 

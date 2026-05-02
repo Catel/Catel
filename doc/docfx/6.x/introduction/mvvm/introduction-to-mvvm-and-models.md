@@ -19,7 +19,7 @@ Finally, it is strongly recommended to have your Models implement the following 
 -   **IDataErrorInfo**
     If this interface is not implemented, errors cannot be shown to the user.
 -   **IEditableObject**
-    If this interface is not implemented, a Model cannot work with â€œstatesâ€. This means that a user cannot start editing an object and finally cancel it (because there is no stored â€œstateâ€ that can be used to restore the values).
+    If this interface is not implemented, a Model cannot work with “states”. This means that a user cannot start editing an object and finally cancel it (because there is no stored “state” that can be used to restore the values).
 
 ## View Models
 

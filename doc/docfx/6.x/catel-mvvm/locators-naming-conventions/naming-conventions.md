@@ -75,7 +75,7 @@ The following naming convention:
 [CURRENT].[VM]View
 ```
 
-for typeÂ *Catel.Examples.MyViewModel*Â will be resolved as:
+for type *Catel.Examples.MyViewModel* will be resolved as:
 
 ```
 Catel.Examples.MyView

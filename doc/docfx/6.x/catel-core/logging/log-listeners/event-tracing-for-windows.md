@@ -7,7 +7,7 @@ Starting with version 4.0.0, Catel supports [Event Tracking for Windows (ETW)](h
 var logListener = new EtwLogListener();
 logListener.IgnoreCatelLogging = true;
 // TODO: Customize options
-Â 
+
 LogManager.AddListener(logListener);
 ```
 

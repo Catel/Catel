@@ -9,11 +9,11 @@ Sometimes you need to change a batch of properties and don't want validation to 
 
 ```
 SuspendValidation = true;
-Â 
+
 // change several properties here
-Â 
+
 SuspendValidation = false;
-Â 
+
 // Now force validation
 Validate(true);
 ```

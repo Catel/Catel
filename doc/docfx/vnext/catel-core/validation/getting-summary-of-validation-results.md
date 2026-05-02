@@ -5,7 +5,7 @@ Sometimes you just need to get a summary of all warnings and errors of an object
 
 ## Creating a summary of all validations
 
-Â To retrieve a summary of all validations from a IValidationContext, use the following code:
+To retrieve a summary of all validations from a IValidationContext, use the following code:
 
 ```
 var validationSummary = validationContext.GetValidationSummary();
