@@ -89,7 +89,7 @@
 
 <p>The View Models in Catel are very easy to write, and give the end-user a great flexibility in how to approach the Models. This part of the article will explain the classes that make it possible to easily create View Models.</p>
 <p>The <code>ViewModelBase</code> class is the most important class of all in the MVVM Framework of Catel. Of course, it can't do anything useful without the other classes, but all the View Models that are created using Catel derive of this class. <code>ViewModelBase</code> is based on the <code>ModelBase</code> class that ships with Catel. Thanks to the existence of that class, the MVVM framework was set up very quickly (although â€œvery quicklyâ€ is relative). Below is a class diagram that shows the class tree:</p>
-<p><img src="../../../images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png" alt=""></p>
+<p><img src="../../images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png" alt=""></p>
 <p>The class diagram above shows how many default interfaces of the .NET Framework are supported in the <code>ModelBase</code> class. Since most of these interfaces are used by WPF as well, the <em>ViewModelBase</em> class itself can take huge advantage of the implementation of <code>ModelBase</code>.</p>
 <p>Because <code>ViewModelBase</code> derives from <code>ModelBase</code>, you can declare properties exactly the same way. Even better, you can simply use <code>ModelBase</code> (or the extended <code>SavableModelBase</code>) to create (and save) your Models, and use <code>ViewModelBase</code> as the base for all the View Models.</p>
 <h2 id="creating-a-view-model">Creating a view model</h2>

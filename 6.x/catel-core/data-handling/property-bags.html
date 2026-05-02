@@ -103,7 +103,7 @@ propertyBag.SetValue(&quot;MyStringValue&quot;, &quot;my string&quot;);
 <h2 id="typedpropertybag">TypedPropertyBag</h2>
 <p>The <code>TypedPropertyBag</code> uses separate dictionaries for each value type. To prevent excessive memory by default, each value type dictionary will only be instantiated when actually used for the first time.</p>
 <p>The advantage of storing values inside typed dictionaries is that it removes the requirement for boxing, therefore resulting in improved memory usage as shown below in the benchmarks comparing the different implementations:</p>
-<p><img src="../../../images/catel-core/data-handling/property-bags/benchmarks.png" alt=""></p>
+<p><img src="../../images/catel-core/data-handling/property-bags/benchmarks.png" alt=""></p>
 <p>The downside of the <code>TypedPropertyBag</code> is that it is <em>slightly</em> slower than the <code>PropertyBag</code>.</p>
 <p>The <code>TypedPropertyBag</code> will start showing (memory usage) benefits over the <code>PropertyBag</code> implementation when multiple value types are being stored in the property bag.</p>
 

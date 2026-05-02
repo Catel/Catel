@@ -95,18 +95,18 @@
 </ul>
 <p>Most MVVM developers just answer: â€œPut all the properties of the nested user controls on the main view modelâ€. Say that again? Are you kidding me? Thatâ€™s not a real world solution for a real world problem. So, we as developers of Catel offer you a real world solution for the â€œnested user controlsâ€ problem in the form of the <em>UserControl</em>.</p>
 <p>The real power of the UserControl class lays in the fact that it is able to construct view models dynamically based on its data context. So, the only thing the developers have to take care of is to set the right data context. Below is a graphical presentation of the â€œnested user controlsâ€ problem:</p>
-<p><img src="../../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/overview.png" alt=""></p>
+<p><img src="../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/overview.png" alt=""></p>
 <p>As the images above show, the method that Catel uses to solve the problem is much more professional. Below are a few reasons:</p>
 <ul>
 <li>Separation of concerns (each control has a view model only containing the information for itself, not for children);</li>
 <li>User controls are built so they can be re-used. Without the user controls to be able to have their own view models, how should one actually use user controls with MVVM?</li>
 </ul>
 <p>The idea behind the user control is pretty complex, especially because XAML frameworks aren't very good at runtime data context type changing. However, with a few workarounds (very well described in the source code of <em>UserControl</em>), it is possible to dynamically construct view models. The user control constructs the view model with or without a constructor as described earlier in this article. When the view model is constructed, the user control tries to find a (logical or visual) parent that implements the <em>IViewModelContainer</em> interface. Thanks to this interface, a view model can subscribe itself to a parent view model and the validation chain is created as shown below:</p>
-<p><img src="../../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/validation.png" alt=""></p>
+<p><img src="../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/validation.png" alt=""></p>
 <p>As the image above shows, all children in the chain are validated, and when the last child is validated, the view model reports the result of its children and itself back to its parent. This way, it is still possible to disable a command when one of the nested user control view models has an error.</p>
 <p>Saving a chain of nested view models works exactly the same as the validation. First, the view model saves all children, then itself and finally reports back its result to the parent.</p>
 <p>Now, letâ€™s go to some â€œreal-lifeâ€ example. I donâ€™t want to make it too complex, but not too easy as well, but donâ€™t want to put the focus on the content of the data, but on the user control and view model creation. Therefore, I have chosen for the data model below:</p>
-<p><img src="../../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/hierarchy.png" alt=""></p>
+<p><img src="../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/hierarchy.png" alt=""></p>
 <p>The image shows that we have a house. In that house, we have multiple rooms. In each room, there can be several tables with chairs and beds. This shows a â€œcomplexâ€ UI tree with lots of different user controls (each object has its own representation and thus user control). Now our goal is to create user controls that can be used in the window that shows the full house, but also in â€œsub-partsâ€ and we want to be fully independent of the <em>HouseWindowViewModel</em> (which is the only view model that would be created in a regular MVVM Framework).</p>
 <p>The example below shows only the <em>Room</em> control and the corresponding view model. The full source code of this article is provided in the source code repository of Catel, so the whole example is available if you are interested or need a more complete example.</p>
 <p>First, we start with a simple model. For the model, we use the <em>ModelBase</em> class. By using the provided code snippets, this model is setup within a minute:</p>
@@ -349,7 +349,7 @@ public partial class Room : UserControl
 </code></pre>
 <p>A few things are very important to notice in the xaml code shown above. The first thing to notice is that (like the code-behind), the base class is now <em>catel:UserControl</em> instead of <em>UserControl</em>.</p>
 <p>Thatâ€™s all that can be learned about solving the â€œnested user controlâ€ problem. We have set up the model, view model and finally the view. Now, letâ€™s take a look at how it looks in a screenshot (and notice the construction time of the view model, they are really constructed on-demand):</p>
-<p><img src="../../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/example.png" alt=""></p>
+<p><img src="../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/example.png" alt=""></p>
 <p>The red border is the control that we just created. It shows the name of the room, the view model construction time and the child objects (inside expanders).</p>
 
 </article>

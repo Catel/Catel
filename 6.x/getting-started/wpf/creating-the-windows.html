@@ -91,7 +91,7 @@
 <h2 id="person-window">Person window</h2>
 <p>It is very important that the window derives from one of the Catel windows. This is required to make the binding system work (same as <code>UserControl</code>). Make sure that the window definition in the xaml is either <code>catel:Window</code> or <code>catel:DataWindow</code></p>
 <p>To add a newÂ <code>DataWindow</code>,Â right-click theÂ <em>Views</em>Â folder in the solution =&gt;Â <em>Add</em>Â =&gt;Â *New item...*Â =&gt;Â <em>On-line</em>Â =&gt; and search for Catel as you can see in the screen below:</p>
-<p><img src="../../../images/getting-started/wpf/creating-the-windows/itemtemplate.png" alt=""></p>
+<p><img src="../../images/getting-started/wpf/creating-the-windows/itemtemplate.png" alt=""></p>
 <p>Give the new view the nameÂ <code>PersonWindow</code>. The view will be added to theÂ <em>Views</em>Â folder.</p>
 <p>Note that we can use the <code>PersonViewModel</code> for both the <code>PersonView</code> (user control) and <code>PersonWindow</code>. Both views represent the same models and view models, just a different context. To make sure that the <code>IUIVisualizerService</code> knows what view to pick first, register the <code>PersonWindow</code> in the <code>IUIVisualizerService</code> at application startup:</p>
 <pre><code>var uiVisualizerService = serviceLocator.ResolveType&lt;IUIVisualizerService&gt;();
