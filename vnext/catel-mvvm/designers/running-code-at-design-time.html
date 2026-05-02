@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>Sometimes one needs to run code during design-time. A good example is to register a customÂ <code>LanguageResourceSource</code> in theÂ <code>LanguageService</code> to show translations in the designer. Unfortunately it is not as easy as putting some code in the code-behind to get this working.</p>
+<p>Sometimes one needs to run code during design-time. A good example is to register a custom <code>LanguageResourceSource</code> in the <code>LanguageService</code> to show translations in the designer. Unfortunately it is not as easy as putting some code in the code-behind to get this working.</p>
 <p>Starting with Catel 4.3, calling <code>CatelEnvironment.IsInDesignTime</code> will automatically invoke <em>DesignTimeHelper.InitializeDesignTime</em> if in design mode. This means you only have to add classes deriving from <code>DesignTimeInitializer</code> and they will automatically be invoked when any code is checking if it's currently running inside a designer context (e.g. <code>LanguageBinding</code>)</p>
 <h2 id="introducing-the-designtimecode-attribute">Introducing the DesignTimeCode attribute</h2>
 <p>To allow users to run code in the designer (Visual Studio or Blend), Catel introduces the <code>DesignTimeCodeAttribute</code>. This is an assembly-wide attribute which will specify the class to create at design time. This means that it is possible to create multiple attributes. Below is an example of the usage of the attribute:</p>
@@ -96,7 +96,7 @@
 </code></pre>
 <p>When the attribute is found by Catel, it will automatically construct the types specified in the attribute. This will allow the constructor to execute any code during design time.</p>
 <h2 id="introducing-the-designtimeinitializer">Introducing the DesignTimeInitializer</h2>
-<p>TheÂ <code>DesignTimeCodeAttribute</code> contains the types that are constructed during design-time. Although the reflection in Catel is protected by only checking these arguments at design-time, it cannot be guaranteed for other systems. Therefore Catel also provides theÂ <code>DesignTimeInitializer</code> base class. This is a base class that checks whether the type being constructed is actually running inside a design tool.</p>
+<p>The <code>DesignTimeCodeAttribute</code> contains the types that are constructed during design-time. Although the reflection in Catel is protected by only checking these arguments at design-time, it cannot be guaranteed for other systems. Therefore Catel also provides the <code>DesignTimeInitializer</code> base class. This is a base class that checks whether the type being constructed is actually running inside a design tool.</p>
 <p>Below is an example of the usage, which registers custom language resource sources in the language service. This allows real-time updates of the <code>LanguageService</code> in the designer.</p>
 <pre><code>public class DesignTimeLanguageService : Catel.DesignTimeInitializer
 {

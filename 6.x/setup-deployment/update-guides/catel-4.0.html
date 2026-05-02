@@ -95,14 +95,14 @@
 <li>IDependencyPropertySelector =&gt; IViewPropertySelector</li>
 </ul>
 <h2 id="renaming-namespaces">Renaming namespaces</h2>
-<p>Some namespaces in Catel have been changed to match the functionality. For example, all services are now inÂ <em>Catel.Service</em> instead ofÂ <em>Catel.MVVM.Services</em> because they can be used without MVVM.</p>
+<p>Some namespaces in Catel have been changed to match the functionality. For example, all services are now in <em>Catel.Service</em> instead of <em>Catel.MVVM.Services</em> because they can be used without MVVM.</p>
 <p>Below is a list of changed namespaces:</p>
 <ul>
 <li><p>Catel.MVVM.Services =&gt; Catel.Services</p>
 </li>
 <li><p>Catel.Windows.Data.Converters =&gt; Catel.MVVM.Converters</p>
 </li>
-<li><p>Catel.Windows.Controls.MVVMProviders.Logic =&gt;Â Catel.MVVM.Providers</p>
+<li><p>Catel.Windows.Controls.MVVMProviders.Logic =&gt; Catel.MVVM.Providers</p>
 </li>
 </ul>
 <p>Some interfaces were moved (but not all classes in the namespace):</p>
@@ -110,7 +110,7 @@
 <li>Catel.Windows =&gt; Catel.MVVM.Views</li>
 </ul>
 <h2 id="simplied-modelbase-external-interfacing">Simplied ModelBase external interfacing</h2>
-<p>TheÂ <em>ModelBase</em> class exposed a lot of properties for validation such asÂ <em>HasErrors, HasFieldErrors, HasBusinessRuleErrors</em>, etc. These all these properties are now explicitly implemented into interfaces to make models usingÂ <em>ModelBase</em> cleaner to use for end-developers. Below is a list of properties that are now implemented as explicit interface implementations:</p>
+<p>The <em>ModelBase</em> class exposed a lot of properties for validation such as <em>HasErrors, HasFieldErrors, HasBusinessRuleErrors</em>, etc. These all these properties are now explicitly implemented into interfaces to make models using <em>ModelBase</em> cleaner to use for end-developers. Below is a list of properties that are now implemented as explicit interface implementations:</p>
 <p>Member name</p>
 <p>Explicit interface implementation</p>
 <p>Member type</p>
@@ -148,39 +148,39 @@
 <p>INotifyDataWarningInfo.WarningsChanged</p>
 <p>event</p>
 <h2 id="renamed-loadtabitemsbehavior">Renamed LoadTabItemsBehavior</h2>
-<p>TheÂ <em>LoadTabItemsBehavior</em> has been refactored with new names. The old names will be removed in v5, but will error in v4. Below are the renames:</p>
+<p>The <em>LoadTabItemsBehavior</em> has been refactored with new names. The old names will be removed in v5, but will error in v4. Below are the renames:</p>
 <ul>
 <li>Single =&gt; LazyLoading</li>
 <li>SingleUnloadOthers =&gt; LazyLoadingUnloadOthers</li>
-<li>AllOnStartup =&gt;Â EagerLoadingÂ</li>
-<li>AllOnFirstUse =&gt;Â EagerLoadingOnFirstUseÂ</li>
+<li>AllOnStartup =&gt; EagerLoading</li>
+<li>AllOnFirstUse =&gt; EagerLoadingOnFirstUse</li>
 </ul>
 <h2 id="add-additional-members-to-custom-iview-implementations">Add additional members to custom IView implementations</h2>
-<p>To support Xamarin, theÂ <em>IView</em> interface has been extended with new members. Make sure to implement the new members.</p>
+<p>To support Xamarin, the <em>IView</em> interface has been extended with new members. Make sure to implement the new members.</p>
 <h2 id="using-fastviewpropertyselector-by-default-for-major-performance-improvement">Using FastViewPropertySelector by default for major performance improvement</h2>
-<p>When not using theÂ <em>ViewToViewModel</em> attributes, it is not required to subscribe to all dependency properties in theÂ <em>UserControlLogic</em>. Starting from Catel 4.0, Catel uses theÂ <em>FastViewPropertySelector</em> by default which subscribes to no properties by default. This is a breaking change for users using theÂ <em>ViewToViewModel</em> attribute.</p>
+<p>When not using the <em>ViewToViewModel</em> attributes, it is not required to subscribe to all dependency properties in the <em>UserControlLogic</em>. Starting from Catel 4.0, Catel uses the <em>FastViewPropertySelector</em> by default which subscribes to no properties by default. This is a breaking change for users using the <em>ViewToViewModel</em> attribute.</p>
 <p>To get back the behavior, there are 2 ways:</p>
 <h3 id="manually-add-interesting-properties-recommended">Manually add interesting properties (recommended)</h3>
-<p>It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, use theÂ <em>IViewPropertySelector.AddPropertyToSubscribe</em> method to add properties:</p>
+<p>It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, use the <em>IViewPropertySelector.AddPropertyToSubscribe</em> method to add properties:</p>
 <pre><code>var serviceLocator = ServiceLocator.Default;
 var viewPropertySelector = serviceLocator.ResolveType&lt;IViewPropertySelector&gt;();
 
 viewPropertySelector.AddPropertyToSubscribe(&quot;MyProperty&quot;, typeof(MyView));
 </code></pre>
-<p>In most cases, the only reason to subscribe to property changes is because of theÂ *ViewToViewModelÂ *attribute. If that is the case, it is best to use the extension methodÂ <em>AutoDetectViewPropertiesToSubscribe</em> in the static constructor of the view:</p>
+<p>In most cases, the only reason to subscribe to property changes is because of the *ViewToViewModel *attribute. If that is the case, it is best to use the extension method <em>AutoDetectViewPropertiesToSubscribe</em> in the static constructor of the view:</p>
 <pre><code>static MyView()
 {
     typeof(MyView).AutoDetectViewPropertiesToSubscribe();
 }
 </code></pre>
 <h3 id="register-the-viewpropertyselector">Register the ViewPropertySelector</h3>
-<p>The default implementation of theÂ <em>ViewPropertySelector</em> subscribes to all properties by default. By registering it in theÂ <em>ServiceLocator</em> will ensure Catel subscribes to all dependency properties:</p>
+<p>The default implementation of the <em>ViewPropertySelector</em> subscribes to all properties by default. By registering it in the <em>ServiceLocator</em> will ensure Catel subscribes to all dependency properties:</p>
 <pre><code>var serviceLocator = ServiceLocator.Default;
 serviceLocator.RegisterType&lt;IViewPropertySelector, ViewPropertySelector&gt;();
 </code></pre>
 <h2 id="full-support-for-asynchronous-asyncawait">Full support for asynchronous (async/await)</h2>
 <h3 id="iviewmodel">IViewModel</h3>
-<p>TheÂ <em>IViewModel</em> interface now returns tasks instead of direct values to support async/await.</p>
+<p>The <em>IViewModel</em> interface now returns tasks instead of direct values to support async/await.</p>
 <h4 id="updating-initialize-method">Updating Initialize method</h4>
 <pre><code>public override void Initialize()
 {
@@ -225,9 +225,9 @@ serviceLocator.RegisterType&lt;IViewPropertySelector, ViewPropertySelector&gt;()
 }
 </code></pre>
 <h3 id="iuivisualizerservice">IUIVisualizerService</h3>
-<p>The use ofÂ <em>await</em>Â orÂ <em>Task.ContinueWith</em>Â to await the result is now necessary or use the code below:</p>
+<p>The use of <em>await</em> or <em>Task.ContinueWith</em> to await the result is now necessary or use the code below:</p>
 <pre><code>await uiVisualizerService.ShowDialog&lt;MyViewModel&gt;();
-Â 
+
 // Window is closed here thanks to the await keyword
 </code></pre>
 <h2 id="optimizing-views-especially-3rd-party">Optimizing views (especially 3rd party)</h2>
@@ -235,26 +235,24 @@ serviceLocator.RegisterType&lt;IViewPropertySelector, ViewPropertySelector&gt;()
 <ul>
 <li>Removed <em>GetViewModelType</em>() from view base classes. Instead use the <em>IViewModelLocator</em> to ensure Catel can find the view models. Note that it is possible to manually register a custom view with a view model in case the view / view model don't match any naming convention.</li>
 <li>Removed <em>GetViewModelInstance</em>() from view base classes. Customize the <em>IViewModelFactory</em> instead.</li>
-<li>RemovedÂ <em>ValidateData</em>,Â <em>DiscardChanges</em> andÂ <em>ApplyChanges</em> from all views except <em>DataWindow</em></li>
+<li>Removed <em>ValidateData</em>, <em>DiscardChanges</em> and <em>ApplyChanges</em> from all views except <em>DataWindow</em></li>
 <li>Merged <em>ViewLoaded</em> and <em>Loaded</em> events on <em>IViewModelContainer</em> and <em>IView</em> interfaces</li>
-<li>RenamedÂ <em>ViewLoading</em>Â and *ViewUnloadingÂ *events onÂ *IViewModelContainerÂ *toÂ <em>Loading</em> andÂ <em>Unloading</em></li>
-<li>Renamed *IViewLoadedManagerÂ *toÂ <em>IViewLoadManager</em></li>
+<li>Renamed <em>ViewLoading</em> and *ViewUnloading *events on *IViewModelContainer *to <em>Loading</em> and <em>Unloading</em></li>
+<li>Renamed *IViewLoadedManager *to <em>IViewLoadManager</em></li>
 </ul>
 <h2 id="removed-iservicelocatorremoveinstance-methods">Removed IServiceLocator.RemoveInstance methods</h2>
 <p>The <em>IServiceLocator.Remove[x]</em> methods are removed. Use the <em>RemoveType</em> methods instead.</p>
 <h2 id="changed-compositecommand">Changed CompositeCommand</h2>
-<p>The composite command will always allow execution, even when commands don't allow it. Therefore the *AllowPartialExecutionÂ *is now set to *falseÂ *by default.</p>
+<p>The composite command will always allow execution, even when commands don't allow it. Therefore the *AllowPartialExecution *is now set to *false *by default.</p>
 <p>If there is a requirement to allow partial invocation, set this property to <em>true</em>.</p>
 <h2 id="added-time-to-all-log-calls">Added time to all log calls</h2>
-<p>TheÂ <em>time</em> parameter has been added to all log calls. This is a breaking change for all classes implementing <em>ILogListener</em>.</p>
+<p>The <em>time</em> parameter has been added to all log calls. This is a breaking change for all classes implementing <em>ILogListener</em>.</p>
 <h2 id="behavior-changes">Behavior changes</h2>
 <p>To improve multiple platforms support, all parameters of the following methods on <em>BehaviorBase</em> have been removed:</p>
 <pre><code>OnAssociatedObjectLoaded(object sender, EventArgs e) =&gt; OnAssociatedObjectLoaded()
-Â 
+
 OnAssociatedObjectUnloaded(object sender, EventArgs e) =&gt; OnAssociatedObjectUnloaded()
 </code></pre>
-<p>Â</p>
-<p>Â</p>
 
 </article>
 

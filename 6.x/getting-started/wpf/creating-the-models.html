@@ -87,9 +87,9 @@
         <article data-uid="">
 
 
-<p>In this step we will create models.Â Since this application is about families and persons inside those families, we need to create the following models: <em>Settings</em>,Â <em>Family</em> and <em>Person</em>.Â</p>
+<p>In this step we will create models. Since this application is about families and persons inside those families, we need to create the following models: <em>Settings</em>, <em>Family</em> and <em>Person</em>.</p>
 <h2 id="creating-the-model-classes">Creating the model classes</h2>
-<p>The models that will be used in this application will derive from theÂ <code>ModelBase</code>, <code>ValidatableModelBase</code>Â or <code>SavableModelBase</code> class of Catel. These classes enable support for change notifications, validations and persistence. TheÂ <code>SavableModelBase</code> adds additional methods to save and load from/to streams or files without having to create a serializer first.</p>
+<p>The models that will be used in this application will derive from the <code>ModelBase</code>, <code>ValidatableModelBase</code> or <code>SavableModelBase</code> class of Catel. These classes enable support for change notifications, validations and persistence. The <code>SavableModelBase</code> adds additional methods to save and load from/to streams or files without having to create a serializer first.</p>
 <p>To create the model classes, create the following classes in the <em>Models</em> folder.</p>
 <p>The <em>model</em> code snippet is available to create models</p>
 <h3 id="settings-class">Settings class</h3>
@@ -138,7 +138,7 @@
 <pre><code>public ObservableCollection&lt;Person&gt; Persons
 {
     get { return GetValue&lt;ObservableCollection&lt;Person&gt;&gt;(PersonsProperty); }
-    set { SetValue(PersonsProperty, value); }Â 
+    set { SetValue(PersonsProperty, value); } 
 }
 </code></pre>
 <p>If you want to get the functionality in the <code>ModelBase</code> classes without the &quot;dependency-a-like&quot; properties you have the option to make use of normal properties and Catel.Fody.</p>
@@ -191,7 +191,7 @@
     /// Register the Persons property so it is known in the class.
     /// &lt;/summary&gt;
     public static readonly PropertyData PersonsProperty = RegisterProperty(&quot;Persons&quot;, typeof(ObservableCollection&lt;Person&gt;), () =&gt; new ObservableCollection&lt;Person&gt;());
-Â 
+
     public override string ToString()
     {
         return FamilyName;
@@ -228,7 +228,7 @@
     /// Register the LastName property so it is known in the class.
     /// &lt;/summary&gt;
     public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;LastName&quot;, typeof(string), null);
-Â 
+
     public override string ToString()
     {
         string fullName = string.Empty;

@@ -105,13 +105,13 @@
 <p>The <code>WarningAndErrorValidator</code> needs to be placed inside an <code>InfoBarMessageControl</code>. The control then subscribes to all property changed events to make sure it receives all change notifications. Then, on every property change, the control checks whether the sender either implements the <code>IDataErrorInfo</code> or <code>IDataWarningInfo</code> interfaces.</p>
 <p>When an error or warning is found on the changed property, the control invokes the corresponding events so the <code>InfoBarMessageControl</code> can show the right information. When an error or warning no longer exists in a model, a <em>Removed</em> event is invoked so the <code>InfoBarMessageControl</code> knows that the error or warning should be removed from the summary.</p>
 <h2 id="styling-in-datawindow">Styling in DataWindow</h2>
-<p>AÂ <code>InfoBarMessageControl</code> is automatically added to the <code>DataWindow</code>, if you want to use a different style for thisÂ <code>InfoBarMessageControl</code>,Â you must override the default style, add your ownÂ <code>InfoBarMessageControl</code>Â and disable the defaultÂ <code>InfoBarMessageControl</code> from the <code>DataWindow</code>.</p>
+<p>A <code>InfoBarMessageControl</code> is automatically added to the <code>DataWindow</code>, if you want to use a different style for this <code>InfoBarMessageControl</code>, you must override the default style, add your own <code>InfoBarMessageControl</code> and disable the default <code>InfoBarMessageControl</code> from the <code>DataWindow</code>.</p>
 <ol>
-<li><p>Create a custom style based on theÂ <a href="https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml">default style</a>.</p>
+<li><p>Create a custom style based on the <a href="https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml">default style</a>.</p>
 </li>
-<li><p>Change the x:Key fromÂ Â x:Key=&quot;{x:Type local:InfoBarMessageControl}&quot; toÂ Â x:Key=&quot;yourCustomStyleKey&quot;</p>
+<li><p>Change the x:Key from  x:Key=&quot;{x:Type local:InfoBarMessageControl}&quot; to  x:Key=&quot;yourCustomStyleKey&quot;</p>
 </li>
-<li><p>Set theÂ InfoBarMessageControlGenerationMode to None</p>
+<li><p>Set the InfoBarMessageControlGenerationMode to None</p>
 <pre><code>        /// &lt;summary&gt;
         /// Initializes a new instance of the &lt;see cref=&quot;DataWindow&quot;/&gt; class.
         /// &lt;/summary&gt;
@@ -126,7 +126,7 @@
         }
 </code></pre>
 </li>
-<li><p>Add a newÂ <code>InfoBarMessageControl</code> as root control to yourÂ <code>DataWindow</code> and set the style.</p>
+<li><p>Add a new <code>InfoBarMessageControl</code> as root control to your <code>DataWindow</code> and set the style.</p>
 <pre><code>&lt;catel:InfoBarMessageControl  Style=&quot;{DynamicResource yourCustomStyleKey}&quot;&gt;
         &lt;Grid&gt;
             &lt;catel:WarningAndErrorValidator Source=&quot;{Binding}&quot; /&gt;

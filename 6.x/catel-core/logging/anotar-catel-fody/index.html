@@ -87,17 +87,17 @@
         <article data-uid="">
 
 
-<p>Logging is a very important part of an application. It provides detailed information about the application workflow, even when an application is already deployed to several clients. Thatâ€™s the reason that logging is a first class citizen in the Catel framework.</p>
+<p>Logging is a very important part of an application. It provides detailed information about the application workflow, even when an application is already deployed to several clients. That’s the reason that logging is a first class citizen in the Catel framework.</p>
 <p>In general, logging works by defining an <em>ILog</em> instance on a class:</p>
 <pre><code>private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 </code></pre>
 <p>Then in any method, logging can be added like this:</p>
-<pre><code>Log.Info(â€œThis is a logging with a format â€˜{0}â€™â€, â€œtestâ€);
+<pre><code>Log.Info(“This is a logging with a format ‘{0}’”, “test”);
 </code></pre>
-<p>Writing the <em>Log</em> definition can be boring and repetitive. Luckily <a href="http://twitter.com/simoncropp">Simon Cropp</a> came up with a solution for that, namely <a href="http://www.nuget.org/packages/Anotar.Catel.Fody/">Anotar.Catel.Fody</a>. With the Anotar implementation, a reference will be added to the solution. Then after compilation the assembly will be removed and all calls to the <em>LogTo</em> class will be replaced by actual calls to the CatelÂ logging classes.</p>
+<p>Writing the <em>Log</em> definition can be boring and repetitive. Luckily <a href="http://twitter.com/simoncropp">Simon Cropp</a> came up with a solution for that, namely <a href="http://www.nuget.org/packages/Anotar.Catel.Fody/">Anotar.Catel.Fody</a>. With the Anotar implementation, a reference will be added to the solution. Then after compilation the assembly will be removed and all calls to the <em>LogTo</em> class will be replaced by actual calls to the Catel logging classes.</p>
 <h2 id="how-to-use-anotar">How to use Anotar</h2>
 <p>Using Anotar is really easy, just call the static methods on the <em>LogTo</em> class as you can see below:</p>
-<pre><code>LogTo.Info(&quot;This is a logging with a format â€˜{0}â€™&quot;, â€œtestâ€);
+<pre><code>LogTo.Info(&quot;This is a logging with a format ‘{0}’&quot;, “test”);
 </code></pre>
 <p>Note that it is no longer required to define the <em>Log</em> field, it will be added automatically by Anotar.</p>
 <p>Besides that it is really easy to use, another benefit is a very small performance improvement. The <em>GetCurrentClassLogger</em> uses reflection to determine the current class. This is a very slight hit on performance the first time a class is used (only once, the field is static). Anotar directly replaces the call by an implementation like this:</p>
@@ -115,7 +115,7 @@
 <pre><code>03:59:36:344 =&gt; [DEBUG] [AnotarDemo1.Program] this is a test
 </code></pre>
 <h3 id="logging-exceptions-automatically">Logging exceptions automatically</h3>
-<p>It is possible to automatically log exceptions inside a method. To accomplish this, decorate the method with theÂ <em>LogTo[LogLevel]OnException</em> attribute:</p>
+<p>It is possible to automatically log exceptions inside a method. To accomplish this, decorate the method with the <em>LogTo[LogLevel]OnException</em> attribute:</p>
 <pre><code>[LogToDebugOnException]
 public static void ExceptionalMethod()
 {

@@ -88,13 +88,13 @@
 
 
 <p>In this step we will create the project and add the relevant NuGet packages.</p>
-<p>This guide uses the on-line templates that are available in the Visual Studio gallery. If you can't find the templates on-line, please download themÂ <a href="http://www.catelproject.com/download/general-files/">here</a>.</p>
+<p>This guide uses the on-line templates that are available in the Visual Studio gallery. If you can't find the templates on-line, please download them <a href="http://www.catelproject.com/download/general-files/">here</a>.</p>
 <h2 id="creating-the-project">Creating the project</h2>
-<p>To create the project, start Visual Studio and chooseÂ <em>File =&gt; New Project</em>... Then switch to the <em>on-line template section</em> as you can see in the screenshot below and search for Catel:</p>
+<p>To create the project, start Visual Studio and choose <em>File =&gt; New Project</em>... Then switch to the <em>on-line template section</em> as you can see in the screenshot below and search for Catel:</p>
 <p><img src="../../images/getting-started/wpf/creating-the-project/projecttemplate.png" alt=""></p>
-<p>Pick a good name, in our caseÂ <em>WPF.GettingStarted</em> and click OK. The template will now be downloaded and the project will be created.</p>
+<p>Pick a good name, in our case <em>WPF.GettingStarted</em> and click OK. The template will now be downloaded and the project will be created.</p>
 <h2 id="adding-the-nuget-packages">Adding the NuGet packages</h2>
-<p>As soon as the project is created, theÂ <em>Readme.txt</em> will be opened and instruct your what to do. Right-click on the solution =&gt;Â *Manage NuGet packages...Â *Then search forÂ <code>Catel.MVVM</code> and clickÂ <em>Install</em>.</p>
+<p>As soon as the project is created, the <em>Readme.txt</em> will be opened and instruct your what to do. Right-click on the solution =&gt; *Manage NuGet packages... *Then search for <code>Catel.MVVM</code> and click <em>Install</em>.</p>
 <p><img src="../../images/getting-started/wpf/creating-the-project/nuget.png" alt=""></p>
 <h2 id="running-the-project">Running the project</h2>
 <p>Now the NuGet packages are installed, the project is created and can be built. The basics are created and the application is ready:</p>
@@ -102,8 +102,8 @@
 <h2 id="explanation-of-the-project-structure">Explanation of the project structure</h2>
 <p>The project template creates the project structure that fits best with Catel. Below is an explanation of the new project structure:</p>
 <p><img src="../../images/getting-started/wpf/creating-the-project/solutionexplorer.png" alt=""></p>
-<p>The <code>ViewModels</code> folder contains the <code>MainWindowViewModel</code>, which contains the logic for the interaction with theÂ <code>MainWindow</code> view.</p>
-<p>TheÂ <code>Views</code> folder contains theÂ <code>MainWindow</code>, which represents the actual view.</p>
+<p>The <code>ViewModels</code> folder contains the <code>MainWindowViewModel</code>, which contains the logic for the interaction with the <code>MainWindow</code> view.</p>
+<p>The <code>Views</code> folder contains the <code>MainWindow</code>, which represents the actual view.</p>
 <p>This structure ties to how Catel implements viewmodel location. You do not however have to follow this structure and could for example decide to place both the View and ViewModel under the same namespace/folder and implement a custom <code>IViewModelLocator</code>.</p>
 <h2 id="up-next">Up next</h2>
 <p>[Creating the models]({{&lt; relref &quot;getting-started/wpf/creating-the-models.md&quot; &gt;}})</p>

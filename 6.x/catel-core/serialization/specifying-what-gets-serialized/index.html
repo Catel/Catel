@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>By default, Catel only serializes the defined Catel properties on theÂ <em>ModelBase</em> or any deriving classes. It is possible to customize this behavior. Below is a class which will be used in all examples:</p>
+<p>By default, Catel only serializes the defined Catel properties on the <em>ModelBase</em> or any deriving classes. It is possible to customize this behavior. Below is a class which will be used in all examples:</p>
 <pre><code>public class MyModel : ModelBase
 {
     private string _fieldValue;
@@ -174,7 +174,7 @@
     private string _fieldValue;
 
     public string RegularProperty { get; set; }
-Â 
+
     [ExcludeFromSerialization]
     public string CatelProperty
     {
@@ -208,8 +208,7 @@
 </tbody>
 </table>
 <h2 id="serializing-a-modelbase-as-collection">Serializing a ModelBase as collection</h2>
-<p>There is a very edge case that a class derives fromÂ <em>ModelBase</em>, but also implements <em>IList&lt;T&gt;</em>. In this case, it's hard for the serializers to determine what to do. By default, it will treat the model as a Catel model (since it can contain more properties than just theÂ <em>Items</em> property. If such a class should be serialized as collection (meaning it will only serialize theÂ <em>Items</em> property), decorate it with theÂ <em>SerializeAsCollection</em> attribute:</p>
-<p>Â</p>
+<p>There is a very edge case that a class derives from <em>ModelBase</em>, but also implements <em>IList&lt;T&gt;</em>. In this case, it's hard for the serializers to determine what to do. By default, it will treat the model as a Catel model (since it can contain more properties than just the <em>Items</em> property. If such a class should be serialized as collection (meaning it will only serialize the <em>Items</em> property), decorate it with the <em>SerializeAsCollection</em> attribute:</p>
 <pre><code>[SerializeAsCollection]
 public class MyModel : ModelBase, IList&lt;int&gt;
 {
@@ -217,7 +216,7 @@ public class MyModel : ModelBase, IList&lt;int&gt;
 }
 </code></pre>
 <h2 id="implementing-a-custom-iserializationmanager">Implementing a custom ISerializationManager</h2>
-<p>Internally Catel uses a default implementation of theÂ <em>ISerializationManager</em> to determine what members of a type should be serialized. It is possible to customize this behavior by overriding a single method or by creating a brand new type. Below is an example which always excludesÂ <em>Password</em> properties and fields from serialization.</p>
+<p>Internally Catel uses a default implementation of the <em>ISerializationManager</em> to determine what members of a type should be serialized. It is possible to customize this behavior by overriding a single method or by creating a brand new type. Below is an example which always excludes <em>Password</em> properties and fields from serialization.</p>
 <pre><code>public class SafeSerializationManager : SerializationManager
 {
     public override HashSet&lt;string&gt; GetFieldsToSerialize(Type type)

@@ -95,7 +95,7 @@
 <li>Unregister message handlers</li>
 </ul>
 <h2 id="creating-messages-based-on-the-messagebase">Creating messages based on the MessageBase</h2>
-<p>Â It is very easy to create a new message. The message below is a message that contains a string and this little class provides lots of capabilities.</p>
+<p>It is very easy to create a new message. The message below is a message that contains a string and this little class provides lots of capabilities.</p>
 <pre><code>public class DemoMessage : MessageBase&lt;DemoMessage, string&gt;
 {
     public DemoMessage() { }
@@ -105,12 +105,12 @@
 }
 </code></pre>
 <p>Note that the message needs an empty constructor</p>
-<p>##Â Sending messages</p>
+<h2 id="sending-messages">Sending messages</h2>
 <p>A user can send a message by using the following code:</p>
 <pre><code>DemoMessage.SendWith(&quot;hello world&quot;);
 </code></pre>
 <p>Registering to messages</p>
-<p>Â A class that is interested in message can register to a message using the Register method:</p>
+<p>A class that is interested in message can register to a message using the Register method:</p>
 <pre><code>DemoMessage.Register(this, OnDemoMessage);
 </code></pre>
 <h2 id="unregistering-from-messages">Unregistering from messages</h2>

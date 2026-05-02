@@ -87,18 +87,18 @@
         <article data-uid="">
 
 
-<p>The <a href="../introduction-to-components/servicelocator.html">ServiceLocator</a> in Catel can be set up to automatically register types based on the conventions. Â</p>
+<p>The <a href="../introduction-to-components/servicelocator.html">ServiceLocator</a> in Catel can be set up to automatically register types based on the conventions.</p>
 <p>The convention based registration should to be run first than the others registration methods to be sure to have all your types registered correctly.</p>
 <p>Some conventions are provided by default to allow us to register types.</p>
 <h2 id="register-using-naming-convention"><strong>Register using Naming Convention</strong></h2>
-<p>You can want to register all types which match with the default naming convention, means when I have a *IServiceÂ *interface, I expect the convention to find and register theÂ <em>Service</em> class as implementation.</p>
+<p>You can want to register all types which match with the default naming convention, means when I have a *IService *interface, I expect the convention to find and register the <em>Service</em> class as implementation.</p>
 <p>To discover types for naming convention registration, we have to simply do :</p>
 <pre><code>var serviceLocator = new ServiceLocator();
 
 serviceLocator.RegisterTypesUsingDefaultNamingConvention();
 </code></pre>
-<h2 id="register-using-firstinterfaceâconvention"><strong>Register using FirstInterfaceÂ Convention</strong></h2>
-<p>You can want to register all types which match with the default first interface convention, means when I have a *ServiceÂ *class which implements more than one interface, I expect the convention to find the first interface and use it as service registration.</p>
+<h2 id="register-using-firstinterface-convention"><strong>Register using FirstInterface Convention</strong></h2>
+<p>You can want to register all types which match with the default first interface convention, means when I have a *Service *class which implements more than one interface, I expect the convention to find the first interface and use it as service registration.</p>
 <p>To discover types for first interface convention registration, we have to simply do :</p>
 <pre><code>var serviceLocator = new ServiceLocator();
 
@@ -107,7 +107,7 @@ serviceLocator.RegisterTypesUsingDefaultFirstInterfaceConvention();
 <h2 id="filter-types-to-register"><strong>Filter types to register</strong></h2>
 <p>You have the ability to apply filtering on the registration process to exclude for example or include some types.</p>
 <h3 id="exclude-all-types-of-the-namespace-containing-the-specified-type">Exclude all types of the namespace containing the specified type</h3>
-<p>If you want to exclude all types of the namespace which belong to a particular type, just do that:Â</p>
+<p>If you want to exclude all types of the namespace which belong to a particular type, just do that:</p>
 <pre><code>var serviceLocator = new ServiceLocator();
 
 serviceLocator.RegisterTypesUsingDefaultNamingConvention() 
@@ -131,8 +131,6 @@ serviceLocator.RegisterTypesUsingDefaultNamingConvention()
               .ExcludeTypesWhere(type =&gt; type == typeof(IFooService));
 </code></pre>
 <p>All <em>Exclude</em> methods have an <em>Include</em> version</p>
-<p>Â</p>
-<p>Â</p>
 
 </article>
 

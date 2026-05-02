@@ -105,7 +105,7 @@
 <h2 id="dependency-injection-di--inversion-of-control-ioc">Dependency Injection (DI) / Inversion of Control (IoC)</h2>
 <p>All Catel specific IoC components (ServiceLocator, TypeFactory, etc) have been removed.</p>
 <p>Use the native dependency injection from .NET.</p>
-<p>Catelâ€™s ServiceLocator allowed late-bound registration, but .NET requires all services to be registered up front. To keep initialization flexible, we introduced <code>IConstructAtStartup</code> and <code>IInitializeAtStartup</code>.</p>
+<p>Catel’s ServiceLocator allowed late-bound registration, but .NET requires all services to be registered up front. To keep initialization flexible, we introduced <code>IConstructAtStartup</code> and <code>IInitializeAtStartup</code>.</p>
 <ul>
 <li>IoCContainer =&gt; contains the app-wide IoC container (IServiceProvider)</li>
 <li>IConstructAtStartup =&gt; a type implementing this interface, registered in the service collection, will be automatically constructed at startup</li>
@@ -177,12 +177,12 @@ services.AddCatelMvvm();
 </code></pre>
 <h2 id="logging">Logging</h2>
 <p>The logging features have been removed from Catel. It's recommended to use the .NET standard logging features.</p>
-<p>.NET logging uses DI, but static classes shouldnâ€™t be forced to use DI just for logging. Our solution:</p>
+<p>.NET logging uses DI, but static classes shouldn’t be forced to use DI just for logging. Our solution:</p>
 <ul>
 <li>Dependency injection: Inject <code>ILogger&lt;T&gt;</code> (even for views)</li>
 <li>Static logger: Use <code>LogManager.GetLogger(typeof(X))</code></li>
 </ul>
-<p><code>LogManager</code> detects the hosting model and provides the right logger instance, or a <code>NullLogger</code> for unit tests. Itâ€™s also possible to register a custom logger factory as fallback.</p>
+<p><code>LogManager</code> detects the hosting model and provides the right logger instance, or a <code>NullLogger</code> for unit tests. It’s also possible to register a custom logger factory as fallback.</p>
 <p>To upgrade, replace:</p>
 <pre><code>private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 </code></pre>
@@ -205,7 +205,7 @@ services.AddCatelMvvm();
 <h1 id="catelmvvm">Catel.MVVM</h1>
 <h2 id="view-models">View models</h2>
 <p>The view models have been refactored to remove any hidden dependencies. To minimize the risk of added dependencies in the future (that will cause breaking changes), a view model now requires the <code>IServiceProvider</code> as injected dependency.</p>
-<p>Catelâ€™s <code>ViewModelBase</code> is powerful, but most view models donâ€™t need all its features. With true DI, weâ€™re splitting it:</p>
+<p>Catel’s <code>ViewModelBase</code> is powerful, but most view models don’t need all its features. With true DI, we’re splitting it:</p>
 <ul>
 <li>FeaturedViewModelBase: For advanced features (validation, throttling, etc.)</li>
 <li>ViewModelBase: Lightweight, for most use cases</li>

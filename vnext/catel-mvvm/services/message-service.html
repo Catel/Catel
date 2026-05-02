@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>TheÂ <code>IMessageService</code>Â allows a developer to show message boxes from a view model.</p>
+<p>The <code>IMessageService</code> allows a developer to show message boxes from a view model.</p>
 <h2 id="showing-a-message">Showing a message</h2>
 <p>To show a message from a view model, use the following code:</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
@@ -101,7 +101,7 @@ var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
 await messageService.ShowError(&quot;Whoops, something went wrong&quot;);
 </code></pre>
 <h2 id="requesting-confirmation">Requesting confirmation</h2>
-<p>It is also possible to request confirmation from the user. The number of possibilities depends on the target platform (for example, not all platforms supportÂ <code>YesNo</code>).</p>
+<p>It is also possible to request confirmation from the user. The number of possibilities depends on the target platform (for example, not all platforms support <code>YesNo</code>).</p>
 <p>The following code must be used to request confirmation:</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
@@ -115,7 +115,7 @@ if (await messageService.Show(&quot;Are you sure you want to do this?&quot;, &qu
 var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
 await messageService.Show(&quot;Are you sure you want to do this?&quot;, &quot;Are you sure?&quot;, MessageButton.YesNo, OnMessageServiceComplete);
 </code></pre>
-<p>There are two possible callbacks, one with a result of typeÂ <code>Func\&lt;MessageResult\&gt;</code>Â or one without a result of type Action.</p>
+<p>There are two possible callbacks, one with a result of type <code>Func\&lt;MessageResult\&gt;</code> or one without a result of type Action.</p>
 
 </article>
 

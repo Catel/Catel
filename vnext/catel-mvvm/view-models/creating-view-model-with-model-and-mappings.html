@@ -97,9 +97,9 @@
 <p>In Catel 4.0 a new mapping mechanism is introduced that makes it possible to convert types of properties of the mappings between the <code>Model</code> and <code>ViewModel</code>. It is also possible to map to a collection of properties to a single property as result (like <code>MultiBinding</code> and <code>Converter</code> in WPF).</p>
 <p>To use new mechanism you should declare this attributes:</p>
 <ul>
-<li>ConverterType - declare a type of converter that converts properties, converter should implementÂ <code>IViewModelToModelConverter</code>. It is recommendedÂ to useÂ <code>ViewModelToModelConverterBase</code> as base class for custom converters. The default converter used isÂ <code>DefaultViewModelToModelMappingConverter</code> that provides basic 1:1 mappings between the model and view model.</li>
-<li>AdditionalConstructorArgs -Â declare a arguments witch would be passed to converter constructor via reflection</li>
-<li>AdditionalPropertiesToWatch -Â declare properties, which changes would trigger the converter</li>
+<li>ConverterType - declare a type of converter that converts properties, converter should implement <code>IViewModelToModelConverter</code>. It is recommended to use <code>ViewModelToModelConverterBase</code> as base class for custom converters. The default converter used is <code>DefaultViewModelToModelMappingConverter</code> that provides basic 1:1 mappings between the model and view model.</li>
+<li>AdditionalConstructorArgs - declare a arguments witch would be passed to converter constructor via reflection</li>
+<li>AdditionalPropertiesToWatch - declare properties, which changes would trigger the converter</li>
 </ul>
 <h2 id="code-snippets">Code snippets</h2>
 <ul>
@@ -140,7 +140,7 @@ public string FirstName
 /// Register the FirstName property so it is known in the class.
 /// &lt;/summary&gt;
 public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string));
-Â 
+
 /// &lt;summary&gt;
 /// Gets or sets the LastName of the person.
 /// &lt;/summary&gt;
@@ -166,7 +166,7 @@ public string FirstName
 
 public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string));
 </code></pre>
-<p>The <code>ViewModelToModelAttribute</code> in the code example above automatically maps the view model <code>FirstName</code>Â and <code>LastName</code> properties to the <code>Person.FirstName</code> andÂ <code>Person.LastName</code>Â properties. This way, you donâ€™t have to manually map the values from and to the model. Another nice effect is that the view model automatically validates all objects defined using the <code>ModelAttribute</code>, and all field and business errors mapped are automatically mapped to the view model.</p>
+<p>The <code>ViewModelToModelAttribute</code> in the code example above automatically maps the view model <code>FirstName</code> and <code>LastName</code> properties to the <code>Person.FirstName</code> and <code>Person.LastName</code> properties. This way, you don’t have to manually map the values from and to the model. Another nice effect is that the view model automatically validates all objects defined using the <code>ModelAttribute</code>, and all field and business errors mapped are automatically mapped to the view model.</p>
 <p>Sometimes you need the full name of a person, you can easily acquire it by creating a custom converter:</p>
 <pre><code>      public class CollapsMappingConverter : DefaultViewModelToModelMappingConverter
     {
@@ -232,9 +232,8 @@ public string FullName
 /// &lt;/summary&gt;
 public static readonly PropertyData FullNameProperty = RegisterProperty(&quot;FullName&quot;, typeof(string));
 </code></pre>
-<p>TheÂ <code>ViewModelToModelAttribute</code>Â in the code example above automatically maps the view modelÂ <code>FullName</code> property to theÂ <code>Person.FirstName</code>Â andÂ <code>Person.LastName</code>Â properties and converts them with <code>CollapsMappingConverter</code>. This way, you donâ€™t have to manually map the values from the model and update <code>FullName</code> property when <code>FirstName</code>Â or <code>LastName</code> property changed.</p>
+<p>The <code>ViewModelToModelAttribute</code> in the code example above automatically maps the view model <code>FullName</code> property to the <code>Person.FirstName</code> and <code>Person.LastName</code> properties and converts them with <code>CollapsMappingConverter</code>. This way, you don’t have to manually map the values from the model and update <code>FullName</code> property when <code>FirstName</code> or <code>LastName</code> property changed.</p>
 <p>Summarized, the <code>Model</code> and <code>ViewModelToModel</code> attributes make sure no duplicate validation and no manual mappings are required.</p>
-<p>Â</p>
 
 </article>
 

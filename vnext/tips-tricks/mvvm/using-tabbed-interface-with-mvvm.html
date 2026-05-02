@@ -139,7 +139,7 @@
     }
 }
 </code></pre>
-<p>Because we subscribe to theÂ <em>ClosedAsync</em> event, we can close the tab from withing the view model.</p>
+<p>Because we subscribe to the <em>ClosedAsync</em> event, we can close the tab from withing the view model.</p>
 <h2 id="creating-the-service">Creating the service</h2>
 <h3 id="interface">Interface</h3>
 <pre><code>namespace TabDemo.Services
@@ -657,14 +657,13 @@
     }
 }
 </code></pre>
-<p>Â</p>
 <h2 id="using-the-service">Using the service</h2>
 <h3 id="adding-a-new-tab-and-activate-it">Adding a new tab and activate it</h3>
 <p>This adds and activates a new tab which the user is allowed to close:</p>
 <pre><code>_tabService.AddAndActivate&lt;DemoTabViewModel&gt;(null, true);
 </code></pre>
 <h3 id="closing-a-tab-from-withing-a-view-model">Closing a tab from withing a view model</h3>
-<p>This closes a tab from within a tab view model. Closing a view model causes theÂ <em>TabItem</em> to raise theÂ <em>Closed</em> event and theÂ <em>TabService</em> will correctly close the tab and update its selection.</p>
+<p>This closes a tab from within a tab view model. Closing a view model causes the <em>TabItem</em> to raise the <em>Closed</em> event and the <em>TabService</em> will correctly close the tab and update its selection.</p>
 <pre><code>this.SaveAndCloseViewModelAsync();
 </code></pre>
 <h3 id="closing-a-tab-from-outside-a-view-model">Closing a tab from outside a view model</h3>

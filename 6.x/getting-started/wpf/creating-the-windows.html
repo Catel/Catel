@@ -87,17 +87,17 @@
         <article data-uid="">
 
 
-<p>In this step we will create the windows for the application. In the previous step we already created the user controls.Â Windows are a great way to show in an edit-context. Catel provides great edit-windows in the form of theÂ <code>DataWindow</code>. This is a window that automatically addsÂ <em>OK</em>Â andÂ <em>Cancel</em>Â buttons (but of course allows customization of the buttons and behavior).</p>
+<p>In this step we will create the windows for the application. In the previous step we already created the user controls. Windows are a great way to show in an edit-context. Catel provides great edit-windows in the form of the <code>DataWindow</code>. This is a window that automatically adds <em>OK</em> and <em>Cancel</em> buttons (but of course allows customization of the buttons and behavior).</p>
 <h2 id="person-window">Person window</h2>
 <p>It is very important that the window derives from one of the Catel windows. This is required to make the binding system work (same as <code>UserControl</code>). Make sure that the window definition in the xaml is either <code>catel:Window</code> or <code>catel:DataWindow</code></p>
-<p>To add a newÂ <code>DataWindow</code>,Â right-click theÂ <em>Views</em>Â folder in the solution =&gt;Â <em>Add</em>Â =&gt;Â *New item...*Â =&gt;Â <em>On-line</em>Â =&gt; and search for Catel as you can see in the screen below:</p>
+<p>To add a new <code>DataWindow</code>, right-click the <em>Views</em> folder in the solution =&gt; <em>Add</em> =&gt; <em>New item...</em> =&gt; <em>On-line</em> =&gt; and search for Catel as you can see in the screen below:</p>
 <p><img src="../../images/getting-started/wpf/creating-the-windows/itemtemplate.png" alt=""></p>
-<p>Give the new view the nameÂ <code>PersonWindow</code>. The view will be added to theÂ <em>Views</em>Â folder.</p>
+<p>Give the new view the name <code>PersonWindow</code>. The view will be added to the <em>Views</em> folder.</p>
 <p>Note that we can use the <code>PersonViewModel</code> for both the <code>PersonView</code> (user control) and <code>PersonWindow</code>. Both views represent the same models and view models, just a different context. To make sure that the <code>IUIVisualizerService</code> knows what view to pick first, register the <code>PersonWindow</code> in the <code>IUIVisualizerService</code> at application startup:</p>
 <pre><code>var uiVisualizerService = serviceLocator.ResolveType&lt;IUIVisualizerService&gt;();
 uiVisualizerService.Register(typeof(PersonViewModel), typeof(PersonWindow));
 </code></pre>
-<p>The template will also create a constructor to inject a view model into the window. Please make sure that the constructor takes a view model of the typeÂ <code>PersonViewModel</code> instead of the generatedÂ <code>PersonWindowModel</code>. Then replace the content of the view with the xaml below:</p>
+<p>The template will also create a constructor to inject a view model into the window. Please make sure that the constructor takes a view model of the type <code>PersonViewModel</code> instead of the generated <code>PersonWindowModel</code>. Then replace the content of the view with the xaml below:</p>
 <pre><code>&lt;Grid&gt;
     &lt;Grid.RowDefinitions&gt;
         &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
@@ -117,12 +117,12 @@ uiVisualizerService.Register(typeof(PersonViewModel), typeof(PersonWindow));
 &lt;/Grid&gt;
 </code></pre>
 <h2 id="family-window">Family window</h2>
-<p>TheÂ <code>FamilyWindow</code>Â is a bit different because we want additional logic in this window. We want to create add / edit / remove buttons for the family members. Therefore we need to create a separate view model which contains this logic.Â</p>
-<h3 id="creating-theâfamilywindowviewmodel">Creating theÂ FamilyWindowViewModel</h3>
-<p>Since theÂ <code>FamilyWindowViewModel</code> will look a lot like theÂ <code>FamilyViewModel</code>,  just copy/paste theÂ <code>FamilyViewModel</code> and rename the copy toÂ <code>FamilyWindowViewModel</code>.</p>
+<p>The <code>FamilyWindow</code> is a bit different because we want additional logic in this window. We want to create add / edit / remove buttons for the family members. Therefore we need to create a separate view model which contains this logic.</p>
+<h3 id="creating-the-familywindowviewmodel">Creating the FamilyWindowViewModel</h3>
+<p>Since the <code>FamilyWindowViewModel</code> will look a lot like the <code>FamilyViewModel</code>,  just copy/paste the <code>FamilyViewModel</code> and rename the copy to <code>FamilyWindowViewModel</code>.</p>
 <p>Note that the <code>FamilyWindowViewModel</code> needs additional logic, but that will be handled in the next part of this getting started guide</p>
 <h3 id="creating-the-familywindow">Creating the FamilyWindow</h3>
-<p>Once the <code>FamilyWindowViewModel</code> is created, the <code>FamilyWindow</code> must be created exactly the same way as theÂ <code>PersonWindow</code>. Again make sure to use the right view model (<code>FamilyWindowViewModel</code>) in the constructor of the window in the code-behind. Then use the following xaml:</p>
+<p>Once the <code>FamilyWindowViewModel</code> is created, the <code>FamilyWindow</code> must be created exactly the same way as the <code>PersonWindow</code>. Again make sure to use the right view model (<code>FamilyWindowViewModel</code>) in the constructor of the window in the code-behind. Then use the following xaml:</p>
 <pre><code>&lt;Grid&gt;
     &lt;Grid.RowDefinitions&gt;
         &lt;RowDefinition Height=&quot;Auto&quot; /&gt;

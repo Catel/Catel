@@ -92,10 +92,10 @@
 <p>For an example which writes to disk in batches, see the <a href="batch-log-listeners.html">batch log event listeners</a></p>
 <p>Note that Catel already contains a FileLogListener and there is no need to reproduce this class. It only acts as an example that is easy to understand</p>
 <h2 id="specifying-the-path">Specifying the path</h2>
-<p>The defaultÂ <em>FileLogListener</em> that ships with Catel allows the customization of the file name and the size of the log file. If no size is specified, the max log file size will default to 10 MB.Â</p>
+<p>The default <em>FileLogListener</em> that ships with Catel allows the customization of the file name and the size of the log file. If no size is specified, the max log file size will default to 10 MB.</p>
 <p>There are several constants inside the file name that can be used:</p>
 <p><em>{AppData}</em></p>
-<p>The application data directoryÂ that is used by all users.</p>
+<p>The application data directory that is used by all users.</p>
 <p>Based on the entry assembly. For example <code>%ProgramData%\[company]\[product]\.</code></p>
 <p>**Note: Currently this writes to <code>%ProgramData%</code> only if HttpContext.Current evaluates to an object (e.g. a web app); otherwise it uses %AppData%*.
 *</p>
@@ -106,7 +106,7 @@
 <p>The roaming application data directory that is used by the current roaming user.</p>
 <p>Based on the entry assembly. For example <code>%AppData%\[company]\[product]\</code>.</p>
 <p><em>{AppDataMachine}</em></p>
-<p>The application data directoryÂ that is used by all users.</p>
+<p>The application data directory that is used by all users.</p>
 <p>Based on the entry assembly. For example <code>%ProgramData%\[company]\[product]\</code>.</p>
 <p><em>{AppDir}</em></p>
 <p>The directory of the current application (i.e. <code>AppDomain.CurrentDomain.BaseDirectory</code>).</p>
@@ -125,11 +125,11 @@
 <p><em>{ProcessId}</em></p>
 <p>The process id.</p>
 <p><em>{WorkDir}</em></p>
-<p>The application execution directory.Â  Calls <code>Directory.GetCurrentDirectory()</code>, internally.</p>
+<p>The application execution directory.  Calls <code>Directory.GetCurrentDirectory()</code>, internally.</p>
 <p>A good example would be:</p>
 <pre><code>var fileLogListener = new FileLogListener();
 fileLogListener.FilePath = &quot;{AppDir}\{AutoLogFileName}&quot;;
-Â 
+
 LogManager.AddListener(fileLogListener);
 </code></pre>
 <p>Note that the default path of the <em>FileLogListener</em> is <em>{AppData}\{AutoLogFileName}</em></p>
@@ -156,7 +156,7 @@ LogManager.AddListener(fileLogListener);
 }
 </code></pre>
 <h2 id="registering-the-listener">Registering the listener</h2>
-<p>Â Last but not least, it is important to register the listener:</p>
+<p>Last but not least, it is important to register the listener:</p>
 <pre><code>LogManager.AddListener(new FileLogListener(&quot;&lt;log_file_path&gt;&quot;));
 </code></pre>
 

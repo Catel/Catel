@@ -92,18 +92,18 @@
 <h2 id="replacing-default-components">Replacing default components</h2>
 <p>Starting with Catel 3.9, it is very easy to customize the components. This can be achieved by customizing the factory methods that are available on the <em>IoCConfiguration</em> class.</p>
 <p>Note that the customization of the IoCConfiguration is the **first **** thing that must be done at application start up</p>
-<p>To replace any component, first create a custom implementation of the specific component, for example the <em>IServiceLocator</em>. Then update the factory and callÂ <em>UpdateDefaultComponents</em>:</p>
+<p>To replace any component, first create a custom implementation of the specific component, for example the <em>IServiceLocator</em>. Then update the factory and call <em>UpdateDefaultComponents</em>:</p>
 <pre><code>Catel.IoC.IoCFactory.CreateServiceLocatorFunc = () =&gt; new MyCustomServiceLocator();
 Catel.IoC.IoCFactory.CreateTypeFactoryFunc = () =&gt; new MyCustomTypeFactory();
-Â 
+
 Catel.IoC.IoCConfiguration.UpdateDefaultComponents();
 </code></pre>
-<p>At this moment, Catel will fully replace the components (in this case the <em>IServiceLocator</em> and <em>ITypeFactory</em>), but will keep using the default implementation of theÂ <em>IDependencyResolver</em>.</p>
+<p>At this moment, Catel will fully replace the components (in this case the <em>IServiceLocator</em> and <em>ITypeFactory</em>), but will keep using the default implementation of the <em>IDependencyResolver</em>.</p>
 <h2 id="creating-ioc-components-in-code">Creating IoC components in code</h2>
-<p>It is best to respect the customization of the IoC components in the code. Therefore it is wise to always use theÂ <em>IoCFactory</em> to create a <em>ServiceLocator</em> when aÂ <strong>new instance</strong> is needed:</p>
+<p>It is best to respect the customization of the IoC components in the code. Therefore it is wise to always use the <em>IoCFactory</em> to create a <em>ServiceLocator</em> when a <strong>new instance</strong> is needed:</p>
 <pre><code>var serviceLocator = IoCFactory.CreateServiceLocator();
 </code></pre>
-<p>Catel will automatically create the rightÂ <em>IDependencyResolver</em> and <em>ITypeFactory</em> and register them in the newly createdÂ <em>IServiceLocator</em>.</p>
+<p>Catel will automatically create the right <em>IDependencyResolver</em> and <em>ITypeFactory</em> and register them in the newly created <em>IServiceLocator</em>.</p>
 
 </article>
 

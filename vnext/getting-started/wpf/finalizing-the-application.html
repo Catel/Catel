@@ -89,7 +89,7 @@
 
 <p>The application we have created so far is fully functional, but misses a bit of the &quot;magic&quot;. Below are some additional steps that might make your application more appealing and more user friendly. Of course you can go as far as you want by creating custom animations and such, but this guide focuses purely on making the basics more appealing.</p>
 <h2 id="adding-validation">Adding validation</h2>
-<p>Adding validation with Catel is extremely easy. There are two flavors to pick from, but they work exactly the same (since both the models and view models internally derive fromÂ <code>ValidatableModelBase</code>). To add validation to theÂ <code>Person</code> model, use this code:</p>
+<p>Adding validation with Catel is extremely easy. There are two flavors to pick from, but they work exactly the same (since both the models and view models internally derive from <code>ValidatableModelBase</code>). To add validation to the <code>Person</code> model, use this code:</p>
 <pre><code>protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
 {
     if (string.IsNullOrWhiteSpace(FirstName))
@@ -103,7 +103,7 @@
     }
 }
 </code></pre>
-<p>The validation for theÂ <code>Family</code> model is very easy as well:</p>
+<p>The validation for the <code>Family</code> model is very easy as well:</p>
 <pre><code>protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
 {
     if (string.IsNullOrWhiteSpace(FamilyName))
@@ -114,7 +114,7 @@
 </code></pre>
 <p>Note that this validation code can be used in both the model and/or the view models</p>
 <h2 id="adding-behaviors-to-enable-double-click-on-the-list-boxes">Adding behaviors to enable double-click on the list boxes</h2>
-<p>The user must manually click theÂ <em>Edit</em> buttons in the editable views to edit a specific model. To make it easier for the user, we can enable double click to command behaviors. To do so, navigate to theÂ <code>MainWindow</code> and add this to theÂ <code>ListBox</code> definition:</p>
+<p>The user must manually click the <em>Edit</em> buttons in the editable views to edit a specific model. To make it easier for the user, we can enable double click to command behaviors. To do so, navigate to the <code>MainWindow</code> and add this to the <code>ListBox</code> definition:</p>
 <pre><code>&lt;ListBox x:Name=&quot;listBox&quot; ItemsSource=&quot;{Binding Families}&quot; SelectedItem=&quot;{Binding SelectedFamily}&quot;&gt;
     &lt;ListBox.ItemTemplate&gt;
         &lt;DataTemplate&gt;
@@ -143,11 +143,11 @@
         &lt;/DataTemplate&gt;
     &lt;/ListBox.ItemTemplate&gt;
 &lt;/ListBox&gt;
-Â 
+
 </code></pre>
 <p>Note that the <code>xmlns:i=&quot;http://schemas.microsoft.com/expression/2010/interactivity&quot;</code> must be added in order for the code above to compile</p>
 <h2 id="adding-search-functionality-to-the-main-window">Adding search functionality to the main window</h2>
-<p>A functionality that is needed in a lot of applications is search functionality. To implement this we will need to modify theÂ <code>MainWindowViewModel</code>. Below are the steps required to implement search functionality.</p>
+<p>A functionality that is needed in a lot of applications is search functionality. To implement this we will need to modify the <code>MainWindowViewModel</code>. Below are the steps required to implement search functionality.</p>
 <h3 id="adding-additional-properties-to-the-view-model">Adding additional properties to the view model</h3>
 <p>Lets start by adding the additional properties required to implement searching in the <code>MainWindowViewModel</code>:</p>
 <pre><code>/// &lt;summary&gt;
@@ -179,7 +179,7 @@ public string SearchFilter
 public static readonly PropertyData SearchFilterProperty = RegisterProperty(&quot;SearchFilter&quot;, typeof(string), null, (sender, e) =&gt; ((MainWindowViewModel)sender).UpdateSearchFilter());
 </code></pre>
 <p>Note that this property contains an additional change callback function which will be called when the property has changed.</p>
-<p>Add the following import to the view model. You will needed becauseÂ native <code>ObservableCollection</code> class does not support <code>ReplaceRange()</code></p>
+<p>Add the following import to the view model. You will needed because native <code>ObservableCollection</code> class does not support <code>ReplaceRange()</code></p>
 <pre><code>using Catel.Collections;
 </code></pre>
 <p>Add this method to the view model:</p>
@@ -206,7 +206,7 @@ private void UpdateSearchFilter()
     }
 }
 </code></pre>
-<p>Then, add this code to theÂ <code>OnAddFamilyExecute</code> function:</p>
+<p>Then, add this code to the <code>OnAddFamilyExecute</code> function:</p>
 <pre><code>private async Task OnAddFamilyExecuteAsync()
 {
     var family = new Family();
@@ -222,7 +222,7 @@ private void UpdateSearchFilter()
     }
 }
 </code></pre>
-<p>Last but not least, add this to theÂ <code>InitializeAsync</code>Â methodÂ <strong>after</strong>Â theÂ <code>Families</code>Â is set from theÂ <code>IFamilyService</code></p>
+<p>Last but not least, add this to the <code>InitializeAsync</code> method <strong>after</strong> the <code>Families</code> is set from the <code>IFamilyService</code></p>
 <pre><code>protected override async Task InitializeAsync()
 {
     var families = _familyService.LoadFamilies();
@@ -233,7 +233,7 @@ private void UpdateSearchFilter()
 </code></pre>
 <h3 id="adding-the-search-functionality-to-the-view">Adding the search functionality to the view</h3>
 <p>Replace the xaml of the main window by the following content:</p>
-<pre><code>Â &lt;Grid&gt;
+<pre><code> &lt;Grid&gt;
     &lt;Grid.RowDefinitions&gt;
         &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
         &lt;RowDefinition Height=&quot;*&quot; /&gt;

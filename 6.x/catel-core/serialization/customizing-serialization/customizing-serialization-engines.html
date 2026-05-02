@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>Since theÂ <em>SerializerBase</em> does all the heavy lifting, it is very easy to customize the behavior of an existing serializer or create a completely new one.Â Each serializer implements its own interface and are registered in the *ServiceLocatorÂ *using the following interfaces:</p>
+<p>Since the <em>SerializerBase</em> does all the heavy lifting, it is very easy to customize the behavior of an existing serializer or create a completely new one. Each serializer implements its own interface and are registered in the *ServiceLocator *using the following interfaces:</p>
 <ul>
 <li>XmlSerializer =&gt; IXmlSerializer</li>
 <li>BinarySerializer =&gt; IBinarySerializer</li>
@@ -111,7 +111,7 @@
 <p>The only thing to do now is to register this custom instance in the <em>ServiceLocator</em>:</p>
 <pre><code>ServiceLocator.Default.RegisterType&lt;IXmlSerializer, SafeXmlSerializer&gt;();
 </code></pre>
-<p>The following methods on theÂ serializer classes might be of interest when customizing the serialization:</p>
+<p>The following methods on the serializer classes might be of interest when customizing the serialization:</p>
 <ul>
 <li><p>ShouldIgnoreProperty</p>
 </li>

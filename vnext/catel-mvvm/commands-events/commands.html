@@ -108,11 +108,11 @@
 <h3 id="async">Async</h3>
 <p>Code:</p>
 <pre><code>private readonly IMessageService _messageService;
-Â 
+
 public void MyViewModel(IMessageService messageService)
 {
     Argument.IsNotNull(() =&gt; messageService);
-Â 
+
     _messageService = messageService;
 
     // Add commands
@@ -137,11 +137,11 @@ private async Task MyAction_ExecuteAsync(object parameter)
 <h3 id="sync">Sync</h3>
 <p>Code:</p>
 <pre><code>private readonly IMessageService _messageService;
-Â 
+
 public void MyViewModel(IMessageService messageService)
 {
     Argument.IsNotNull(() =&gt; messageService);
-Â 
+
     _messageService = messageService;
 
     // Add commands

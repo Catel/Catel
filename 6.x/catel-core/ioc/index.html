@@ -94,9 +94,9 @@
 <li><strong>ServiceLocator</strong>
 Component that is responsible for the registrations of all types. This is the actual IoC container.</li>
 <li><strong>TypeFactory</strong>
-Component that is responsible to create types. This uses theÂ *IServiceLocatorÂ *to retrieve the types which are required to instantiate a type.</li>
+Component that is responsible to create types. This uses the *IServiceLocator *to retrieve the types which are required to instantiate a type.</li>
 <li><strong>DependencyResolver</strong>
-Light-weight implementation of theÂ <em>IServiceLocator</em> which does not expose any register methods, but only allows to resolve types.**
+Light-weight implementation of the <em>IServiceLocator</em> which does not expose any register methods, but only allows to resolve types.**
 **</li>
 </ul>
 <h2 id="getting-components-for-any-object">Getting components for any object</h2>
@@ -109,10 +109,10 @@ public class MyService
     {
         // If you need to create a type with the current scope type factory
         var typeFactory = this.GetTypeFactory();
-Â 
+
         // If you need to register a type with the current scope service locator
         var serviceLocator = this.GetServiceLocator();
-Â 
+
         // If you need to resolve a type with the current scope and the type is not injected via dependency injection
         var dependencyResolver = this.GetDependencyResolver();
     }

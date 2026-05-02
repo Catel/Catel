@@ -88,14 +88,14 @@
 
 
 <p>The <code>UserControl</code> is a pretty sophisticated class. In this part of the documentation, the inner workings of the control are explained. What better way is there than to using flowcharts. There are a few events very important for the inner workings of the user control. The flowcharts are created per event.</p>
-<p>Keep in mind that the actual logic is implemented in theÂ <code>UserControlLogic</code>, which is used by theÂ <code>UserControl</code>. This way, the logic can be used by any user control via theÂ <code>UserControlBehavior</code>.</p>
+<p>Keep in mind that the actual logic is implemented in the <code>UserControlLogic</code>, which is used by the <code>UserControl</code>. This way, the logic can be used by any user control via the <code>UserControlBehavior</code>.</p>
 <h2 id="managing-the-custom-datacontext">Managing the custom DataContext</h2>
 <p>The <code>UserControl</code> logic uses an additional layer to customize the DataContext. Below is a graphical representation of how it works.</p>
 <p><img src="../../../../images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/overview.png" alt=""></p>
 <p>Another view can be found in the image below:</p>
 <p><img src="../../../../images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/hierarchy.png" alt=""></p>
 <h2 id="main-flow">Main flow</h2>
-<p>The following flowchart shows what happens with a user control in the main flow (the startup). First, it checks whether the user control is loaded (which is not in a normal case). If the control is loaded, it goes directly to determining the datacontext. Otherwise, it will postpone the action until the <code>Loaded</code> event.Â</p>
+<p>The following flowchart shows what happens with a user control in the main flow (the startup). First, it checks whether the user control is loaded (which is not in a normal case). If the control is loaded, it goes directly to determining the datacontext. Otherwise, it will postpone the action until the <code>Loaded</code> event.</p>
 <p><img src="../../../../images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/mainflow.png" alt=""></p>
 <h2 id="loaded">Loaded</h2>
 <p>When the control is loaded, it starts checking for the first time whether the current datacontext can be used to create a view model. But, before it does this, it checks whether it should (and can) re-use an existing view model. To control whether view models should be re-used, use the <code>CloseViewModelOnUnloaded</code> property.</p>
@@ -105,7 +105,7 @@
 <p>Another event that is very important is the <code>Unloaded</code> event. In this event, the control either cleans up the view model or stores it so it can be re-used later. Then, it also restores the old datacontext so it never breaks existing application bindings. This way, the control won't leave any traces behind.</p>
 <p><img src="../../../../images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/unloaded.png" alt=""></p>
 <h2 id="datacontextchanged">DataContextChanged</h2>
-<p>TheÂ <code>DataContextChanged</code>Â event is used to react to changes of the datacontext. We use theÂ <code>DataContextHelper</code>Â class for that. If the new datacontext is new (thus not a view model that the control just set itself), it it continues to determine the datacontext. Otherwise, it will not take any action.</p>
+<p>The <code>DataContextChanged</code> event is used to react to changes of the datacontext. We use the <code>DataContextHelper</code> class for that. If the new datacontext is new (thus not a view model that the control just set itself), it it continues to determine the datacontext. Otherwise, it will not take any action.</p>
 <p><img src="../../../../images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/datacontextchanged.png" alt=""></p>
 <h2 id="determinedatacontext">DetermineDataContext</h2>
 <p>All other flowcharts eventually led to this flowchart, the determination of the datacontext. The determination of the datacontext is very important, because this is the moment where the user control transforms the datacontext into a new view model if possible. First it tries is to construct the view model with the datacontext. So, if the datacontext is an object of type Person, and the view model of the user control has a constructor that accepts a Person object, it injects the datacontext into the constructor of the view model. If that fails, or there is simply no constructor, the control checks whether the view model has an empty constructor. If so, it constructs the view model and sets it as the new datacontext. If not, it will leave the datacontext untouched.</p>

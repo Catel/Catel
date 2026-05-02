@@ -88,7 +88,7 @@
 
 
 <p>For the most part the resources declared within a Catel <code>UserControl</code> behave the exact same as resources defined in the standard
-<code>UserControl</code>. However because of the way the Catel <code>UserControl</code> operates (see [UserControl Under the hood]({{&lt; relref &quot;catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md&quot; &gt;}})) any bindings performed inside a Resource will not be found at runtime (exampleÂ CollectionViewSource Source)Â . Â The solution is to declare the resource inside an element within the UserControl, not at the UserControl level. Â Example below:</p>
+<code>UserControl</code>. However because of the way the Catel <code>UserControl</code> operates (see [UserControl Under the hood]({{&lt; relref &quot;catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md&quot; &gt;}})) any bindings performed inside a Resource will not be found at runtime (example CollectionViewSource Source) .  The solution is to declare the resource inside an element within the UserControl, not at the UserControl level.  Example below:</p>
 <p>Given this simple Model and ViewModel (Catel.Fody used for parameter declaration)</p>
 <pre><code>    public class DataSource : ModelBase
     {
@@ -219,14 +219,12 @@
     &lt;/Grid&gt;
 &lt;/catel:UserControl&gt;
 </code></pre>
-<p>Â</p>
 <p>Will produce this at runtime:</p>
 <p><img src="../../../images/catel-mvvm/views/xaml/usercontrol-resources/example.png" alt=""></p>
-<p>Â 
-Â The ListView on the left is not populated because the binding is not found and will produce this error:</p>
+<p>The ListView on the left is not populated because the binding is not found and will produce this error:</p>
 <pre><code>System.Windows.Data Error: 40 : BindingExpression path error: 'ProjectDataSources' property not found on 'object' ''MainWindowViewModel' (HashCode=-1500006600)'. BindingExpression:Path=ProjectDataSources; DataItem='MainWindowViewModel' (HashCode=-1500006600); target element is 'CollectionViewSource' (HashCode=5965360); target property is 'Source' (type 'Object')
 </code></pre>
-<p>While the ListView on the right has the correct content due to the proper binding. Â Further discussion on <a href="http://stackoverflow.com/questions/31488173/binding-from-within-a-resourcedictionary-in-a-catel-wpf-usercontrol">Stack Overflow</a>.</p>
+<p>While the ListView on the right has the correct content due to the proper binding.  Further discussion on <a href="http://stackoverflow.com/questions/31488173/binding-from-within-a-resourcedictionary-in-a-catel-wpf-usercontrol">Stack Overflow</a>.</p>
 
 </article>
 

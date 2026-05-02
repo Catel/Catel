@@ -100,8 +100,7 @@ public void DoTheWork()
     }
 }
 </code></pre>
-<p>Â</p>
-<p>But some times the scenario is not quite simple, then you need to use the Monitor class in order to synchronize cross method operations. Here is an example:Â</p>
+<p>But some times the scenario is not quite simple, then you need to use the Monitor class in order to synchronize cross method operations. Here is an example:</p>
 <pre><code>private readonly object _syncObj = new object();
 
 public void DoTheWork()
@@ -191,15 +190,15 @@ public void AfterValidateBusinessRules(object instance, List&lt;IBusinessRuleVal
 }
 </code></pre>
 <p>SynchronizationContext also allow you create asynchronous locking request.</p>
-<h2 id="âacquiring-a-lock">Â Acquiring a lock</h2>
+<h2 id="acquiring-a-lock">Acquiring a lock</h2>
 <p>To acquire a lock, only a call to Acquire is required:</p>
 <pre><code>_synchronizationContext.Acquire();
 </code></pre>
 <p>Releasing a lock</p>
-<p>Â To release a lock, only a call to Release is required:</p>
+<p>To release a lock, only a call to Release is required:</p>
 <pre><code>_synchronizationContext.Release();
 </code></pre>
-<h2 id="âautomatic-locking-of-a-method">Â Automatic locking of a method</h2>
+<h2 id="automatic-locking-of-a-method">Automatic locking of a method</h2>
 <p>It is also possible to automatically lock and release a method call. This can be accomplished using the Execute method.</p>
 <pre><code>_synchronizationContext.Execute(() =&gt; ThreadSafeCodeExecution());
 </code></pre>

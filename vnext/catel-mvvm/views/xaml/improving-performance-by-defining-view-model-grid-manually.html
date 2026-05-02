@@ -87,9 +87,9 @@
         <article data-uid="">
 
 
-<p>Catel wraps the content of each user control in a grid. This grid is the actual view model container as can be read in the [advanced documentation]({{&lt; relref &quot;catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md&quot; &gt;}}). This wrapper is very convenient, but does have (little) impact on the performance and visual state management.Â To prevent Catel to wrap the control for you, there are a few things you can do.</p>
+<p>Catel wraps the content of each user control in a grid. This grid is the actual view model container as can be read in the [advanced documentation]({{&lt; relref &quot;catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md&quot; &gt;}}). This wrapper is very convenient, but does have (little) impact on the performance and visual state management. To prevent Catel to wrap the control for you, there are a few things you can do.</p>
 <h2 id="creating-the-grid-manually">Creating the grid manually</h2>
-<p>The easiest way is to create the grid manually. The default implementation of the <code>IViewModelWrapperService</code> checks if the direct child control is a grid and has a specific nameÂ <code>__catelInnerWrapper</code>. To prevent Catel from creating the wrapper, simply specify the name on the root grid.</p>
+<p>The easiest way is to create the grid manually. The default implementation of the <code>IViewModelWrapperService</code> checks if the direct child control is a grid and has a specific name <code>__catelInnerWrapper</code>. To prevent Catel from creating the wrapper, simply specify the name on the root grid.</p>
 <p>Note that Catel will override the <code>DataContext</code> binding of this grid to reflect the view model.</p>
 <h2 id="customizing-the-iviewmodelwrapperservice">Customizing the <code>IViewModelWrapperService</code></h2>
 <p>Another way to prevent Catel from wrapping the grids is to implement the <code>IViewModelWrapperService</code> yourself.</p>

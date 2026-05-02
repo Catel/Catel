@@ -116,7 +116,6 @@
     }
 }
 </code></pre>
-<p>Â</p>
 <p><strong>Example 3: good, gets the dependencies injected</strong></p>
 <pre><code>public class MyClass
 {
@@ -165,12 +164,12 @@
 </ol>
 <h4 id="manually-defining-the-constructor-to-use-for-dependency-injection">Manually defining the constructor to use for dependency injection</h4>
 <p>Catel first sorts the constructors based on the number of parameters. Then it will &quot;sub-sort&quot; the same number of parameters and puts parameters with <em>Object</em> and <em>DynamicObject</em> as last so it will first try all constructors with the best possible matches</p>
-<p>If Catel is still unable to pick the right constructor in a class, this behavior can be overridden by decorating the constructor with theÂ DependencyInjectionConstructor attribute:</p>
+<p>If Catel is still unable to pick the right constructor in a class, this behavior can be overridden by decorating the constructor with the DependencyInjectionConstructor attribute:</p>
 <pre><code>public MyClass(IPerson person)
 {
-Â 
+
 }
-Â 
+
 [InjectionConstructor]
 public MyClass(Person person)
 {
@@ -183,7 +182,7 @@ public MyClass(Person person)
 {
     private readonly IMessageService _messageService;
     private readonly IProcessService _processService;
-Â 
+
     public PersonViewModel(IPerson person)
     {
         Argument.IsNotNull(() =&gt; person);
@@ -202,7 +201,7 @@ public MyClass(Person person)
 {
     private readonly IMessageService _messageService;
     private readonly IProcessService _processService;
-Â 
+
     public PersonViewModel(IPerson person, IMessageService messageService, IProcessService processService)
     {
         Argument.IsNotNull(() =&gt; person);
@@ -222,7 +221,7 @@ public MyClass(Person person)
 <p>The advanced dependency injection can be used by using the TypeFactory class. Below is an example on how to create a new type using advanced dependency injection:</p>
 <pre><code>var personViewModel = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion&lt;PersonViewModel&gt;(new Person());
 </code></pre>
-<p>As you can see it is only required to pass in the objects that are not registered in the IoC container. All other dependencies will be automatically resolved from theÂ <em>ServiceLocator</em>.</p>
+<p>As you can see it is only required to pass in the objects that are not registered in the IoC container. All other dependencies will be automatically resolved from the <em>ServiceLocator</em>.</p>
 <p>Note that the order of the parameters must be the same as the constructor, otherwise the <em>TypeFactory</em> cannot determine the right constructor to use</p>
 <h3 id="property-injection">Property injection</h3>
 <p>Starting with Catel 3.8, it is also possible to use property injection. The difference with constructor injection is that the TypeFactory will automatically set up all properties that required dependency injection.</p>
@@ -233,7 +232,7 @@ public MyClass(Person person)
 <li><p>Dependency Injection is just a technique. When using a constructor, you can force a user to provide the value and check the input. With property injection, you can only <em>hope</em> that the user will set them for you, there is no way to check this (unless that is some <em>after constructor and dependency injection</em> initialization routine. This is never the case if a user manually creates a type though.</p>
 </li>
 </ol>
-<p>To use property injection, simply decorate the properties of a class with theÂ Inject attribute. Below are several options:</p>
+<p>To use property injection, simply decorate the properties of a class with the Inject attribute. Below are several options:</p>
 <h4 id="type-is-automatically-determined-based-on-property-type">Type is automatically determined based on property type</h4>
 <pre><code>public class MyClass
 {
@@ -257,7 +256,7 @@ public MyClass(Person person)
 }
 </code></pre>
 <h2 id="disabling-dependency-injection">Disabling dependency injection</h2>
-<p>Â Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:</p>
+<p>Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:</p>
 <pre><code>ServiceLocator.Default.SupportedDependencyInjection = false
 </code></pre>
 

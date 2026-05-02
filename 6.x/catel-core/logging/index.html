@@ -105,15 +105,15 @@
 <pre><code>Log.Error(ex, &quot;Failed to delete file '{0}'&quot;, fileName); 
 </code></pre>
 <h2 id="logging-in-code-with-additional-data">Logging in code with additional data</h2>
-<p>Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the the bare minimum required for logging. To pass in additional information, use theÂ <em>[Level]WithData</em> methods (such asÂ <em>DebugWithData</em>):</p>
+<p>Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the the bare minimum required for logging. To pass in additional information, use the <em>[Level]WithData</em> methods (such as <em>DebugWithData</em>):</p>
 <pre><code>Log.Debug(&quot;This is a message from a specific thread&quot;, new LogData
 {
     { &quot;ThreadId&quot;, threadId }
 });
 </code></pre>
-<p>Then the log data will be available in theÂ <em>LogData</em> of theÂ <em>LogEntry</em>:</p>
+<p>Then the log data will be available in the <em>LogData</em> of the <em>LogEntry</em>:</p>
 <pre><code>var logData = logEntry.LogData;
-Â 
+
 var threadId = logData[&quot;ThreadId&quot;];
 </code></pre>
 <h2 id="logging-to-the-output-window-or-console">Logging to the output window or console</h2>
@@ -123,10 +123,10 @@ LogManager.AddDebugListener();
 #endif
 </code></pre>
 <h2 id="overriding-global-log-level-flags">Overriding global log level flags</h2>
-<p>Start with Catel 3.8, it is possible to override the global log level flags for all listeners. To do this, set the corresponding flag on theÂ <em>LogManager</em> to a value. For example, to force debug logging on all log listeners, use the code below:</p>
+<p>Start with Catel 3.8, it is possible to override the global log level flags for all listeners. To do this, set the corresponding flag on the <em>LogManager</em> to a value. For example, to force debug logging on all log listeners, use the code below:</p>
 <pre><code>LogManager.IsDebugEnabled = true;
 </code></pre>
-<p>To reset the override, set the value back toÂ <em>null</em>:</p>
+<p>To reset the override, set the value back to <em>null</em>:</p>
 <pre><code>LogManager.IsDebugEnabled = null;
 </code></pre>
 

@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>With exception handling in Catel, it is possible to create an exception handling policy and execute code in a safe way without have to check all the exception types manually.Â Catel exposes this technique via the IExceptionService.</p>
+<p>With exception handling in Catel, it is possible to create an exception handling policy and execute code in a safe way without have to check all the exception types manually. Catel exposes this technique via the IExceptionService.</p>
 <p>/**/ Setting up the IExceptionService Executing code using the IExceptionService Executing an action Executing a function Use the retry capabilities Retry Immediately Retry defined Process with retry Subscribe to the retry events Handling exceptions manually Unregistering exceptions Buffering Define the way to buffer Subscribe to the buffering events Determine if an exception type are registered for handling Get a specific exception handler</p>
 <p>Also see</p>
 <p>WPF implementation for exception handling</p>
@@ -98,7 +98,7 @@
 var exceptionService = dependencyResolver .Resolve&lt;IExceptionService&gt;();
 
 exceptionService.Register&lt;FileNotFoundException&gt;(exception =&gt; dependencyResolver.Resolve&lt;IMessageService&gt;().Show(exception.Message));
-exceptionService.Register&lt;Exception&gt;(exception =&gt;Â 
+exceptionService.Register&lt;Exception&gt;(exception =&gt; 
 {
     Log.Error(exception);
     dependencyResolver.Resolve&lt;IMessageService&gt;().Show(&quot;An unknown exception occurred, please contact the developers&quot;); 
@@ -123,7 +123,7 @@ var result = exceptionService.Process&lt;int&gt;(() =&gt; 1 + 1);
 <p>In some cases, you can want to have possibility to retry an action a certain number of times before finally handle your exception. Let see how the <em>IExceptionService</em> allows us to handle this kind of cases.</p>
 <p>Firstly, you need to define how the <em>IExceptionService</em> will retry your action in case of error, two possibilities are provided for that.</p>
 <h3 id="retry-immediately">Retry Immediately</h3>
-<p>When you setting up your exceptions on IExceptionService, you have to additionnallyÂ use the OnErrorRetryImmediatelyÂ method like shown below :</p>
+<p>When you setting up your exceptions on IExceptionService, you have to additionnally use the OnErrorRetryImmediately method like shown below :</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var exceptionService = dependencyResolver.Resolve&lt;IExceptionService&gt;();
 exceptionService.Register&lt;ArgumentNullException&gt;(exception =&gt; { /* Do something */ })
@@ -138,9 +138,9 @@ var exceptionService = dependencyResolver.Resolve&lt;IExceptionService&gt;();
 exceptionService.Register&lt;ArgumentNullException&gt;(exception =&gt; { /* Do something */ })
                 .OnErrorRetry(5, TimeSpan.FromMinutes(2));
 </code></pre>
-<p>Where 5 represents the nombre of times the action will be retried andÂ <em>TimeSpan.FromMinutes(2)</em> the interval between theÂ retries.</p>
+<p>Where 5 represents the nombre of times the action will be retried and <em>TimeSpan.FromMinutes(2)</em> the interval between the retries.</p>
 <h3 id="process-with-retry">Process with retry</h3>
-<p>If you have provided a retry policy, you can use theÂ <em>ProcessWithRetry</em> method to expect have your policy applied on error. Below an example :</p>
+<p>If you have provided a retry policy, you can use the <em>ProcessWithRetry</em> method to expect have your policy applied on error. Below an example :</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var exceptionService = dependencyResolver.Resolve&lt;IExceptionService&gt;();
 exceptionService.ProcessWithRetry(() =&gt;
@@ -179,7 +179,7 @@ exceptionService.Unregister&lt;ArgumentException&gt;();
 </code></pre>
 <h2 id="buffering">Buffering</h2>
 <h3 id="define-the-way-to-buffer">Define the way to buffer</h3>
-<p>You can want to throttle downÂ the number of exceptions you receive when a production process goes awry for example. You can do it through the <em>UsingTolerance</em> extension method as shown below :</p>
+<p>You can want to throttle down the number of exceptions you receive when a production process goes awry for example. You can do it through the <em>UsingTolerance</em> extension method as shown below :</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var exceptionService = dependencyResolver.Resolve&lt;IExceptionService&gt;();
 
@@ -197,7 +197,7 @@ exceptionService.ExceptionBuffered +=
                         eventArgs.BufferedException, eventArgs.DateTime);
 </code></pre>
 <h2 id="determine-if-an-exception-type-are-registered-for-handling">Determine if an exception type are registered for handling</h2>
-<p>If you want to know if an exception type have its policy registered on the <em>IExceptionService</em>, you can do this by using the <em>IsExceptionRegistered</em> method like shown belowÂ :</p>
+<p>If you want to know if an exception type have its policy registered on the <em>IExceptionService</em>, you can do this by using the <em>IsExceptionRegistered</em> method like shown below :</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var exceptionService = dependencyResolver.Resolve&lt;IExceptionService&gt;();
 if (exceptionService.IsExceptionRegistered&lt;ArgumentNullException&gt;())

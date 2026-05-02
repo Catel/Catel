@@ -87,9 +87,9 @@
         <article data-uid="">
 
 
-<p>The <code>ISelectDirectoryService</code>Â allows a developer to let the user choose a directory from inside a view model.</p>
+<p>The <code>ISelectDirectoryService</code> allows a developer to let the user choose a directory from inside a view model.</p>
 <h2 id="selecting-a-directory">Selecting a directory</h2>
-<p>To select a directory, it is required to set the right properties of the service and then make a call to theÂ <code>DetermineDirectory</code>Â method:</p>
+<p>To select a directory, it is required to set the right properties of the service and then make a call to the <code>DetermineDirectory</code> method:</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var selectDirectoryService = dependencyResolver.Resolve&lt;ISelectDirectoryService&gt;();
 if (selectDirectoryService.DetermineDirectory())

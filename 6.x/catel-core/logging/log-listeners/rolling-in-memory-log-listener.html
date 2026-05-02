@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>In memory logging can be very useful to be able to query the latest log messages. Catel provides this via the <em>RollingInMemoryLogListener</em> and <em>RollingInMemoryLogService</em>. TheÂ *RollingInMemoryLogServiceÂ *is a wrapper around theÂ <em>RollingInMemoryLogListener</em>Â to provide a simple way to use the listener.</p>
+<p>In memory logging can be very useful to be able to query the latest log messages. Catel provides this via the <em>RollingInMemoryLogListener</em> and <em>RollingInMemoryLogService</em>. The *RollingInMemoryLogService *is a wrapper around the <em>RollingInMemoryLogListener</em> to provide a simple way to use the listener.</p>
 <h2 id="enabling-the-feature">Enabling the feature</h2>
 <p>By default, the feature is disabled to not eat any CPU ticks when not being used. To use the feature, the only thing required is to resolve the type from the <em>ServiceLocator</em>:</p>
 <pre><code>var rollingInMemoryLogService = ServiceLocator.Default.ResolveType&lt;IRollingInMemoryLogService&gt;();

@@ -87,50 +87,50 @@
         <article data-uid="">
 
 
-<p>Making an application multilingual is a very common feature request nowadays. Therefore Catel provides the resources in several languages and provides theÂ <em>LanguageService</em> to give the developers full control over the translation process in their applications.</p>
+<p>Making an application multilingual is a very common feature request nowadays. Therefore Catel provides the resources in several languages and provides the <em>LanguageService</em> to give the developers full control over the translation process in their applications.</p>
 <h2 id="setting-up-the-languageservice">Setting up the LanguageService</h2>
 <h3 id="setting-cultures">Setting cultures</h3>
-<p>By default theÂ <code>LanguageService</code> will use the current UI culture to retrieve the right language values. These can easily be customized:</p>
+<p>By default the <code>LanguageService</code> will use the current UI culture to retrieve the right language values. These can easily be customized:</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var languageService = dependencyResolver.Resolve&lt;ILanguageService&gt;();
-Â 
+
 languageService.PreferredCulture = new CultureInfo(&quot;nl-NL&quot;);
 languageService.FallbackCulture = new CultureInfo(&quot;en-US&quot;);
 </code></pre>
 <h3 id="registering-custom-language-sources">Registering custom language sources</h3>
-<p>In order to customize the language sources, custom language sources can be registered via theÂ <em>RegisterLanguageSource</em>Â method.</p>
-<p>The code below shows how to add a newÂ <em>LanguageResourceSource</em>Â which represents a resource file in a specific assembly:</p>
+<p>In order to customize the language sources, custom language sources can be registered via the <em>RegisterLanguageSource</em> method.</p>
+<p>The code below shows how to add a new <em>LanguageResourceSource</em> which represents a resource file in a specific assembly:</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var languageService = dependencyResolver.Resolve&lt;ILanguageService&gt;();
-Â 
+
 // Create source for assembly MyApplication where the Resources.resx is located in the Properties folder
 var resourcesSource = new LanguageResourceSource(&quot;MyApplication&quot;, &quot;MyApplication.Properties&quot;, &quot;Resources&quot;);
 languageService.RegisterLanguageSource(resourcesSource );
-Â 
+
 // Create source for assembly MyApplication where the Exceptions.resx is located in the Properties folder
 var exceptionsSource = new LanguageResourceSource(&quot;MyApplication&quot;, &quot;MyApplication.Properties&quot;, &quot;Exceptions&quot;);
 languageService.RegisterLanguageSource(exceptionsSource );
 </code></pre>
-<p>TheÂ <em>LanguageService</em>Â will now automatically query these sources for the translations.</p>
+<p>The <em>LanguageService</em> will now automatically query these sources for the translations.</p>
 <h2 id="using-the-languageservice">Using the LanguageService</h2>
-<p>To use theÂ <code>LanguageService</code>, retrieve it via theÂ <code>DependencyResolver</code> (or let it be injected) and use the provided methods. The example below retrieves theÂ *WarningTitleÂ *resource string in theÂ <em>PreferredCulture</em>. If theÂ resource cannot be found in theÂ <em>PreferredCulture</em>, it will be retrieved for theÂ <em>FallbackCulture</em>. If that cannot be found, it will returnÂ <em>null</em>.</p>
+<p>To use the <code>LanguageService</code>, retrieve it via the <code>DependencyResolver</code> (or let it be injected) and use the provided methods. The example below retrieves the *WarningTitle *resource string in the <em>PreferredCulture</em>. If the resource cannot be found in the <em>PreferredCulture</em>, it will be retrieved for the <em>FallbackCulture</em>. If that cannot be found, it will return <em>null</em>.</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var languageService = dependencyResolver.Resolve&lt;ILanguageService&gt;();
 
 var warningTitle = languageService.GetString(&quot;WarningTitle&quot;);
 </code></pre>
 <h2 id="using-the-languageservice-in-xaml">Using the LanguageService in XAML</h2>
-<p>To use theÂ *LanguageServiceÂ *in XAML, Catel provides the markup extensions.</p>
-<h3 id="using-theâlanguagebinding-in">Using theÂ LanguageBinding in</h3>
-<p>To use theÂ <em>LanguageBinding</em> markup extension, use the following code:</p>
+<p>To use the *LanguageService *in XAML, Catel provides the markup extensions.</p>
+<h3 id="using-the-languagebinding-in">Using the LanguageBinding in</h3>
+<p>To use the <em>LanguageBinding</em> markup extension, use the following code:</p>
 <pre><code>&lt;TextBlock Text=&quot;{markup:LanguageBinding WarningTitle}&quot; /&gt;
 </code></pre>
 <h3 id="using-the-languagebinding-in-windows-phone">Using the LanguageBinding in Windows Phone</h3>
-<p>Since Windows Phone does not support markup extensions, a customÂ <em>MarkupExtension</em> implementation is used in Catel. This requires a little difference in the usage of the markup extension:</p>
+<p>Since Windows Phone does not support markup extensions, a custom <em>MarkupExtension</em> implementation is used in Catel. This requires a little difference in the usage of the markup extension:</p>
 <pre><code>&lt;TextBlock Text=&quot;{markup:LanguageBinding ResourceName=WarningTitle}&quot; /&gt;
 </code></pre>
 <h2 id="implementing-custom-languageservice-from-database">Implementing custom LanguageService (from database)</h2>
-<p>Implementing a customÂ <em>LanguageService</em> consists of several steps which are described below.</p>
+<p>Implementing a custom <em>LanguageService</em> consists of several steps which are described below.</p>
 <p>Note that this implementation queries the database for each translation. It is best to read all translations into memory at once to improve performance</p>
 <h3 id="creating-a-custom-ilanguagesource-implementation">Creating a custom ILanguageSource implementation</h3>
 <p>First of all, we need to implement a customized language source to allow the custom service to know what source to read for translations:</p>
@@ -152,7 +152,7 @@ var warningTitle = languageService.GetString(&quot;WarningTitle&quot;);
 }
 </code></pre>
 <h3 id="creating-a-custom-dblanguageservice">Creating a custom DbLanguageService</h3>
-<p>Below is a custom implementation of theÂ <em>LanguageService</em>. Note that we only have to derive a single method to fully customize the implementation:</p>
+<p>Below is a custom implementation of the <em>LanguageService</em>. Note that we only have to derive a single method to fully customize the implementation:</p>
 <pre><code>public class DbLanguageService : LanguageService
 {
     protected override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
@@ -181,14 +181,14 @@ var warningTitle = languageService.GetString(&quot;WarningTitle&quot;);
 }
 </code></pre>
 <h3 id="enabling-the-custom-dblanguageservice">Enabling the custom DbLanguageService</h3>
-<p>To enable the customÂ <em>DbLanguageService</em>, it must be registered in the <em>ServiceLocator</em>:</p>
+<p>To enable the custom <em>DbLanguageService</em>, it must be registered in the <em>ServiceLocator</em>:</p>
 <pre><code>var serviceLocator = ServiceLocator.Default;
-Â 
+
 var dbLanguageService = new DbLanguageService();
-Â 
+
 var dbLanguageSource = new DbLanguageSource(&quot;myConnectionString&quot;);
 dbLanguageService.RegisterLanguageSource(dbLanguageSource);
-Â 
+
 serviceLocator.RegisterInstance&lt;ILanguageService&gt;(dbLanguageService);
 </code></pre>
 

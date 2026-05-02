@@ -97,10 +97,10 @@
 <h1 id="binding-system-explained">Binding system explained</h1>
 <p>The binding system consists of several classes. Below is an architectural overview.</p>
 <p><img src="../../images/catel-mvvm/bindings/introduction/architecture.png" alt=""></p>
-<p>As the image shows, each view will have their ownÂ <code>BindingContext</code>. AÂ <code>BindingContext</code> contains all the bindings currently available in the view and allows adding / removing bindings dynamically when required. As soon as a major change occurs (such as a new view model), a newÂ <code>BindingContext</code> will be created and the old one will be cleaned up. The views in Catel will automatically take care of theÂ <code>BindingContext</code> initialization and lifetime management.</p>
-<p>Each <code>Binding</code> is a mapping from source to target. It also allows the specification of a converter like available in the XAML platforms.Â Each <code>Binding</code> also contains severalÂ <code>BindingParty</code> objects. The default value for <code>BindingMode</code> isÂ <code>BindingMode.TwoWay.</code></p>
-<p>AÂ <code>BindingParty</code> is an object that will take care of watching the source or target of the binding and inform the binding when a value has been changed. TheÂ binding parties are considered equal and contain the same logic for both the source and target of the binding.</p>
-<p>All bindings must be initialized in the <code>AddBindings</code> method that is available on all views provided by Catel.Â</p>
+<p>As the image shows, each view will have their own <code>BindingContext</code>. A <code>BindingContext</code> contains all the bindings currently available in the view and allows adding / removing bindings dynamically when required. As soon as a major change occurs (such as a new view model), a new <code>BindingContext</code> will be created and the old one will be cleaned up. The views in Catel will automatically take care of the <code>BindingContext</code> initialization and lifetime management.</p>
+<p>Each <code>Binding</code> is a mapping from source to target. It also allows the specification of a converter like available in the XAML platforms. Each <code>Binding</code> also contains several <code>BindingParty</code> objects. The default value for <code>BindingMode</code> is <code>BindingMode.TwoWay.</code></p>
+<p>A <code>BindingParty</code> is an object that will take care of watching the source or target of the binding and inform the binding when a value has been changed. The binding parties are considered equal and contain the same logic for both the source and target of the binding.</p>
+<p>All bindings must be initialized in the <code>AddBindings</code> method that is available on all views provided by Catel.</p>
 
 </article>
 

@@ -141,15 +141,15 @@ public string FirstName
 <h2 id="enabling-catelfody">Enabling Catel.Fody</h2>
 <p>To enable Catel.Fody to weave assemblies, you need to perform the following steps:</p>
 <ol>
-<li>Install theÂ Catel.Fody NuGet package</li>
-<li>Update FodyWeavers.xmlÂ and make sure it contains <catel></catel></li>
+<li>Install the Catel.Fody NuGet package</li>
+<li>Update FodyWeavers.xml and make sure it contains <catel></catel></li>
 </ol>
 <blockquote>
 <p>Note that the FodyWeavers.xml should be updated automatically when</p>
 </blockquote>
 <h2 id="disabling-weaving-for-specific-types-or-properties">Disabling weaving for specific types or properties</h2>
-<p>To disable the weaving of types or properties of a type, decorate it with theÂ 
-<code>NoWeaving</code>Â attribute as shown in the example below:</p>
+<p>To disable the weaving of types or properties of a type, decorate it with the
+<code>NoWeaving</code> attribute as shown in the example below:</p>
 <pre><code>[NoWeaving]
 public class MyClass : ModelBase
 {
@@ -158,7 +158,7 @@ public class MyClass : ModelBase
 </code></pre>
 <h2 id="configuring-catelfody">Configuring Catel.Fody</h2>
 <p>Though we recommend to leave the default settings (great for most people), it is possible to configure the weaver. Below is a list of options that can be configured.</p>
-<p>To configure an option, modifyÂ <code>FodyWeavers.xml</code> by adding the property and value to the Catel element. For example, the example below will disable argument and logging weaving:</p>
+<p>To configure an option, modify <code>FodyWeavers.xml</code> by adding the property and value to the Catel element. For example, the example below will disable argument and logging weaving:</p>
 <pre><code>&lt;Catel WeaveArguments=&quot;false&quot; WeaveLogging=&quot;false&quot; /&gt;
 </code></pre>
 <h3 id="weaveproperties">WeaveProperties</h3>
@@ -195,10 +195,10 @@ public class MyClass : ModelBase
 <p><strong>ModelBase &amp; ViewModelBase</strong></p>
 <pre><code>public string Name
 {
-Â Â Â Â get { return GetValue&lt;string&gt;(NameProperty); }
-Â Â Â Â set { SetValue(NameProperty, value); }
+    get { return GetValue&lt;string&gt;(NameProperty); }
+    set { SetValue(NameProperty, value); }
 }
-Â 
+
 public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&quot;, typeof(string));
 </code></pre>
 <p><strong>ObservableObject</strong></p>
@@ -215,45 +215,44 @@ public string Name
 }
 </code></pre>
 <h3 id="support-for-computed-properties">Support for computed properties</h3>
-<p>If Â a computed property like this one exists:</p>
+<p>If  a computed property like this one exists:</p>
 <pre><code>public string FullName
 {
-Â Â Â Â get { return string.Format(&quot;{0} {1}&quot;, FirstName, LastName).Trim(); }
+    get { return string.Format(&quot;{0} {1}&quot;, FirstName, LastName).Trim(); }
 }
 </code></pre>
 <p>the <code>OnPropertyChanged</code> method will be also weaved into</p>
 <pre><code>protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
 {
-Â Â Â Â base.OnPropertyChanged(e);
-Â 
-Â Â Â Â if (e.PropertyName.Equals(&quot;FirstName&quot;))
-Â Â Â Â {
-Â Â Â Â Â Â Â Â base.RaisePropertyChanged(&quot;FullName&quot;);
-Â Â Â Â }
-Â 
-Â Â Â Â if (e.PropertyName.Equals(&quot;LastName&quot;))
-Â Â Â Â {
-Â Â Â Â Â Â Â Â base.RaisePropertyChanged(&quot;FullName&quot;);
-Â Â Â Â }
+    base.OnPropertyChanged(e);
+
+    if (e.PropertyName.Equals(&quot;FirstName&quot;))
+    {
+        base.RaisePropertyChanged(&quot;FullName&quot;);
+    }
+
+    if (e.PropertyName.Equals(&quot;LastName&quot;))
+    {
+        base.RaisePropertyChanged(&quot;FullName&quot;);
+    }
 }
 </code></pre>
 <p>In order to avoid this behavior, you can use the <code>NoWeaving</code> attribute on the computed property, just like this:</p>
 <pre><code>[NoWeaving]
 public string FullName
 {
-Â Â Â Â get { return string.Format(&quot;{0} {1}&quot;, FirstName, LastName).Trim(); }
+    get { return string.Format(&quot;{0} {1}&quot;, FirstName, LastName).Trim(); }
 }
 </code></pre>
 <p>In the background, <code>Catel.Fody</code> will handle the following workflow:</p>
 <ol>
-<li>Find all types in the assembly deriving from <code>ObservableObject</code>,Â <code>ModelBase</code> and <code>ViewModelBase</code></li>
+<li>Find all types in the assembly deriving from <code>ObservableObject</code>, <code>ModelBase</code> and <code>ViewModelBase</code></li>
 <li>Check if the type has an automatic property backing field (only those properties are weaved)</li>
-<li>Add theÂ <code>PropertyData</code> field for the property</li>
-<li>Instantiate theÂ <code>PropertyData</code>Â field in the static constructor of the type</li>
-<li>Replace the content of the getter and setter with the appropriate calls toÂ <code>GetValue</code>Â andÂ <code>SetValue</code>
-Â 
-Note that this feature is automatically disabled for classes that already override the <code>OnPropertyChanged</code> method. It is too complex to determine where the logic should be added so the end-developer is responsible for implementing this feature when overriding <code>OnPropertyChanged</code></li>
+<li>Add the <code>PropertyData</code> field for the property</li>
+<li>Instantiate the <code>PropertyData</code> field in the static constructor of the type</li>
+<li>Replace the content of the getter and setter with the appropriate calls to <code>GetValue</code> and <code>SetValue</code></li>
 </ol>
+<p>Note that this feature is automatically disabled for classes that already override the <code>OnPropertyChanged</code> method. It is too complex to determine where the logic should be added so the end-developer is responsible for implementing this feature when overriding <code>OnPropertyChanged</code></p>
 <h3 id="automatically-excluded-properties">Automatically excluded properties</h3>
 <p>By default, Catel.Fody ignores the following properties and types by default because they shouldn't be weaved:</p>
 <ol>
@@ -261,42 +260,42 @@ Note that this feature is automatically disabled for classes that already overri
 <li>Properties without an automatically generated backing field (thus properties with a custom implementation)</li>
 </ol>
 <h3 id="specifying-default-values-for-weaved-properties">Specifying default values for weaved properties</h3>
-<p>By default, Catel usesÂ <code>null</code> as default values for reference types. For value types, it will use <code>default(T)</code>. To specify the default value of a weaved property, use theÂ <code>DefaultValue</code> attribute as shown in the example below:</p>
+<p>By default, Catel uses <code>null</code> as default values for reference types. For value types, it will use <code>default(T)</code>. To specify the default value of a weaved property, use the <code>DefaultValue</code> attribute as shown in the example below:</p>
 <pre><code>public class Person : ModelBase
 {
-Â Â Â Â [DefaultValue(&quot;Geert&quot;)]
-Â Â Â Â public string FirstName { get; set; }
-Â Â 
-Â Â Â Â public string LastName { get; set; }
+    [DefaultValue(&quot;Geert&quot;)]
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
 }
 </code></pre>
 <p>This will be weaved into:</p>
 <pre><code>public class Person : ModelBase
 {
-Â Â Â Â public string FirstName
-Â Â Â Â {
-Â Â Â Â Â Â Â Â get { return GetValue&lt;string&gt;(FirstNameProperty); }
-Â Â Â Â Â Â Â Â set { SetValue(FirstNameProperty, value); }
-Â Â Â Â }
-Â 
-Â Â Â Â public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), &quot;Geert&quot;);
-Â 
-Â Â Â Â public string LastName
-Â Â Â Â {
-Â Â Â Â Â Â Â Â get { return GetValue&lt;string&gt;(LastNameProperty); }
-Â Â Â Â Â Â Â Â set { SetValue(LastNameProperty, value); }
-Â Â Â Â }
-Â 
-Â Â Â Â public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;LastName&quot;, typeof(string), null);
+    public string FirstName
+    {
+        get { return GetValue&lt;string&gt;(FirstNameProperty); }
+        set { SetValue(FirstNameProperty, value); }
+    }
+
+    public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), &quot;Geert&quot;);
+
+    public string LastName
+    {
+        get { return GetValue&lt;string&gt;(LastNameProperty); }
+        set { SetValue(LastNameProperty, value); }
+    }
+
+    public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;LastName&quot;, typeof(string), null);
 }
 </code></pre>
 <h3 id="how-to-get-automatic-change-notifications">How to get automatic change notifications</h3>
-<p>The Fody plugin for Catel automatically searches for theÂ <code>On[PropertyName]Changed</code>Â methods. If a method is found, it will automatically be called when the property has changed. For example, theÂ <code>OnNameChanged</code>Â is automatically called when theÂ <code>Name</code>Â property is changed in the example below:</p>
+<p>The Fody plugin for Catel automatically searches for the <code>On[PropertyName]Changed</code> methods. If a method is found, it will automatically be called when the property has changed. For example, the <code>OnNameChanged</code> is automatically called when the <code>Name</code> property is changed in the example below:</p>
 <pre><code>public string Name { get; set; }
-Â 
+
 private void OnNameChanged()
 {
-Â Â Â Â // this method is automatically called when the Name property changes
+    // this method is automatically called when the Name property changes
 }
 </code></pre>
 <h3 id="excluding-properties-from-backup">Excluding properties from backup</h3>
@@ -307,10 +306,10 @@ public string Name { get; set; }
 <p>will be weaved into:</p>
 <pre><code>public string Name
 {
-Â Â Â Â get { return GetValue&lt;string&gt;(NameProperty); }
-Â Â Â Â set { SetValue(NameProperty, value); }
+    get { return GetValue&lt;string&gt;(NameProperty); }
+    set { SetValue(NameProperty, value); }
 }
-Â 
+
 public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&quot;, typeof(string), includeInBackup: false);
 </code></pre>
 <h2 id="weaving-argument-checks">Weaving argument checks</h2>
@@ -333,8 +332,8 @@ public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&q
 <p>Will be weaved into:</p>
 <pre><code>public void DoSomething(string myString, object myObject)
 {
-Â Â Â Â Argument.IsNotNullOrEmpty(&quot;myString&quot;, myString);
-Â Â Â Â Argument.IsNotNull(&quot;myObject&quot;, myObject);
+    Argument.IsNotNullOrEmpty(&quot;myString&quot;, myString);
+    Argument.IsNotNull(&quot;myObject&quot;, myObject);
 }
 </code></pre>
 <p>In the background, Catel.Fody will handle the following workflow:</p>
@@ -360,7 +359,7 @@ public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&q
 <li>InheritsFrom =&gt; Argument.InheritsFrom</li>
 </ul>
 <h2 id="exposing-properties-on-view-models">Exposing properties on view models</h2>
-<p>The way to expose properties of a model to the view model in Catel is theÂ <code>ViewModelToModelAttribute</code>. The goal of these attributes is to easily map properties from a model to the view model so as much of the plumbing (setting/getting properties, rechecking validation, etc) is done automatically for the developer.</p>
+<p>The way to expose properties of a model to the view model in Catel is the <code>ViewModelToModelAttribute</code>. The goal of these attributes is to easily map properties from a model to the view model so as much of the plumbing (setting/getting properties, rechecking validation, etc) is done automatically for the developer.</p>
 <p>Using the <code>ViewModelToModelAttribute</code>, this is the syntax to map properties automatically:</p>
 <pre><code>/// &lt;summary&gt;
 /// Gets or sets the person.
@@ -368,31 +367,31 @@ public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&q
 [Model]
 public Person Person
 {
-Â Â Â Â get { return GetValue&lt;Person&gt;(PersonProperty); }
-Â Â Â Â private set { SetValue(PersonProperty, value); }
+    get { return GetValue&lt;Person&gt;(PersonProperty); }
+    private set { SetValue(PersonProperty, value); }
 }
-Â Â 
+
 /// &lt;summary&gt;
 /// Register the Person property so it is known in the class.
 /// &lt;/summary&gt;
 public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
-Â Â 
+
 /// &lt;summary&gt;
 /// Gets or sets the first name.
 /// &lt;/summary&gt;
 [ViewModelToModel(&quot;Person&quot;)]
 public string FirstName
 {
-Â Â Â Â get { return GetValue&lt;string&gt;(FirstNameProperty); }
-Â Â Â Â set { SetValue(FirstNameProperty, value); }
+    get { return GetValue&lt;string&gt;(FirstNameProperty); }
+    set { SetValue(FirstNameProperty, value); }
 }
-Â Â 
+
 /// &lt;summary&gt;
 /// Register the FirstName property so it is known in the class.
 /// &lt;/summary&gt;
 public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string));
 </code></pre>
-<p>However, if you only define theÂ <code>FirstName</code>Â property just to protect your model, then why should you define the whole property? This is where theÂ <code>ExposeAttribute</code>Â property comes in very handy. This attribute internally registers a new dynamic property on the view model, and then uses the same technique as theÂ <code>ViewModelToModelAttribute</code>.</p>
+<p>However, if you only define the <code>FirstName</code> property just to protect your model, then why should you define the whole property? This is where the <code>ExposeAttribute</code> property comes in very handy. This attribute internally registers a new dynamic property on the view model, and then uses the same technique as the <code>ViewModelToModelAttribute</code>.</p>
 <p>Below is the new way you can easily expose properties of a model and protect other properties of the model from the view:</p>
 <pre><code>/// &lt;summary&gt;
 /// Gets or sets the person.
@@ -401,12 +400,12 @@ public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;F
 [Expose(&quot;FirstName&quot;)]
 [Expose(&quot;MiddleName&quot;)]
 [Expose(&quot;LastName&quot;)]
-privateÂ Person Person
+private Person Person
 {
-Â Â Â Â get { return GetValue&lt;Person&gt;(PersonProperty); }
-Â Â Â Â set { SetValue(PersonProperty, value); }
+    get { return GetValue&lt;Person&gt;(PersonProperty); }
+    set { SetValue(PersonProperty, value); }
 }
-Â Â 
+
 /// &lt;summary&gt;
 /// Register the Person property so it is known in the class.
 /// &lt;/summary&gt;
@@ -418,7 +417,7 @@ public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Pers
 [Expose(&quot;FirstName&quot;)]
 [Expose(&quot;MiddleName&quot;)]
 [Expose(&quot;LastName&quot;)]
-privateÂ Person Person { get; set; }
+private Person Person { get; set; }
 </code></pre>
 <h2 id="xmlschema-generation">XmlSchema generation</h2>
 <p>to start of metadata</p>
@@ -426,22 +425,24 @@ privateÂ Person Person { get; set; }
 <p>Starting with Catel.Fody 2.0, this feature is disabled by default. To enabled it, use the following option in <code>FodyWeavers.xml</code>:</p>
 <pre><code>&lt;Catel GenerateXmlSchemas=&quot;true&quot; /&gt;
 </code></pre>
-<p>When theÂ <code>XmlSchemaProvider</code> is available on the target platform where Catel is used, the changes will be made to classes deriving fromÂ <code>ModelBase</code>:</p>
-<p>1.Â Decorate the class withÂ <code>XmlSchemaProvider</code> attribute:</p>
-<pre><code>[XmlSchemaProvider(&quot;GetXmlSchemaForCatelFodyTestAssemblyInheritedClass&quot;)]
+<p>When the <code>XmlSchemaProvider</code> is available on the target platform where Catel is used, the changes will be made to classes deriving from <code>ModelBase</code>:</p>
+<ol>
+<li><p>Decorate the class with <code>XmlSchemaProvider</code> attribute:</p>
+<p>[XmlSchemaProvider(&quot;GetXmlSchemaForCatelFodyTestAssemblyInheritedClass&quot;)]
 public class InheritedClass : BaseClass
 {
-Â Â Â Â // rest of the class definition
-}
-</code></pre>
-<p>2.Â Implement the class specificÂ <code>GetXmlSchema</code> method:</p>
-<pre><code>[CompilerGenerated]
+// rest of the class definition
+}</p>
+</li>
+<li><p>Implement the class specific <code>GetXmlSchema</code> method:</p>
+<p>[CompilerGenerated]
 public static XmlQualifiedName GetXmlSchemaForCatelFodyTestAssemblyInheritedClass(XmlSchemaSet xmlSchemaSet)
 {
-Â Â Â Â Type type = typeof(InheritedClass);
-Â Â Â Â return XmlSchemaManager.GetXmlSchema(type, xmlSchemaSet);
-}
-</code></pre>
+Type type = typeof(InheritedClass);
+return XmlSchemaManager.GetXmlSchema(type, xmlSchemaSet);
+}</p>
+</li>
+</ol>
 
 </article>
 

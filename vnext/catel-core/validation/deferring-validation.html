@@ -91,11 +91,11 @@
 <h2 id="suspending-validation-for-a-batch-of-changes">Suspending validation for a batch of changes</h2>
 <p>Sometimes you need to change a batch of properties and don't want validation to be called after every property change. This can be accomplished by using the following code inside a <em>ModelBase</em> class:</p>
 <pre><code>SuspendValidation = true;
-Â 
+
 // change several properties here
-Â 
+
 SuspendValidation = false;
-Â 
+
 // Now force validation
 Validate(true);
 </code></pre>

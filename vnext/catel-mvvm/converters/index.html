@@ -92,7 +92,7 @@
 <h2 id="linking-converters">Linking converters</h2>
 <p>It is possible to link converters. To link converters, simply set the <code>Link</code> property in xaml:</p>
 <pre><code>&lt;catel:NullableValueConverter x:Key=&quot;NullableValueConverter&quot; /&gt;
-Â 
+
 &lt;catel:BooleanToVisibilityConverter&gt;
     &lt;catel:BooleanToVisibilityConverter.Link&gt;
         &lt;code:NullToBoolConverter Link=&quot;{StaticResource NullableValueConverter}&quot; /&gt;

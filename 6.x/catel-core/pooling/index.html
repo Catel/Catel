@@ -95,7 +95,7 @@
 <p>It is recommended that a pool manager gets registered in the <em>ServiceLocator</em> so it can be re-used by multiple components.</p>
 <p>Note that the pool manager does not limit the number of objects in memory. It has a <code>MaxSize</code> property so it will store only a maximum amount of objects inside the internal pool, but if the pool is running out of instances and a new object is requested, it will return a new instance (and thus creating a new object which could be garbage collected).</p>
 <h3 id="retrieving-objects-from-the-pool">Retrieving objects from the pool</h3>
-<p>Retrieving an object from the pool is very simple. WhenÂ an instance of the <code>PoolManager&lt;TPoolable&gt;</code> is available, use the code below:</p>
+<p>Retrieving an object from the pool is very simple. When an instance of the <code>PoolManager&lt;TPoolable&gt;</code> is available, use the code below:</p>
 <pre><code>var poolableBuffer = _poolManager.GetObject();
 </code></pre>
 <p>The <code>PoolManager&lt;TPoolable&gt;</code> will automatically create a new object when no objects are available in the pool.</p>
@@ -112,7 +112,7 @@
 </code></pre>
 <p>The flow chart below shows how the <code>PoolManager&lt;TPoolable&gt;</code> will handle the dispose:</p>
 <p><img src="../../images/catel-core/pooling/reachedmaxsize.png" alt=""></p>
-<h2 id="customizingâa-pool-manager">CustomizingÂ a pool manager</h2>
+<h2 id="customizing-a-pool-manager">Customizing a pool manager</h2>
 <p>Catel implements pooling via the <code>PoolManager&lt;TPoolable&gt;</code> class. This class allows the caller to retrieve an object. There is no need to explicitly derive a class from the <code>PoolManager&lt;TPoolable&gt;</code>. It can be customized though.</p>
 <h3 id="customizing-the-maximum-size">Customizing the maximum size</h3>
 <p>By default, the <code>PoolManager&lt;TPoolable&gt;</code> uses a maximum size of 5 MB per poolable type. If, for this example, the maximum size of byte buffers should be 1 MB, use the code below:</p>

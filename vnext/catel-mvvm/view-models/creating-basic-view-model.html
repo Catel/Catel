@@ -107,7 +107,7 @@ public class SimpleViewModel : ViewModelBase
    /// &lt;/summary&gt;
    /// &lt;value&gt;The title.&lt;/value&gt;
    public override string Title { get { return &quot;Just acknowledge&quot;; } }
-Â 
+
    /// &lt;summary&gt;
    /// Gets or sets whether the user has agreed to continue.
    /// &lt;/summary&gt;
@@ -135,7 +135,6 @@ public class SimpleViewModel : ViewModelBase
    }
 }
 </code></pre>
-<p>Â</p>
 <p>**XAML (assuming that the view model is set as datacontext)
 **</p>
 <pre><code>&lt;CheckBox Content=&quot;Check me to continue&quot; IsChecked=&quot;{Binding UserAgreedToContinue, NotifyOnValidationError=True, ValidatesOnDataErrors=True}&quot; /&gt;

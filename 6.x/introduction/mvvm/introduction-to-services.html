@@ -89,13 +89,13 @@
 
 <p>Services are very important in MVVM. They define a way to interact with the user without using fixed controls such as <em>MessageBox</em> or <em>SaveFileDialog</em>. The interfaces defined in Catel only define generic functionality of what to expect from a specific service. Using services is a great way to abstract away all specific functionality from a view model into a service that can be mocked during unit testing and can be used by other view models as well.</p>
 <h2 id="servicelocator">ServiceLocator</h2>
-<p>The key behind services is theÂ <em>ServiceLocator</em>. TheÂ <em>ServiceLocator</em> is the IoC (Inversion of Control) container that Catel provides. This is a container that contains all registrations and service instances available throughout the application. Retrieving services from the defaultÂ <em>ServiceLocator</em> in Catel is very simple:</p>
+<p>The key behind services is the <em>ServiceLocator</em>. The <em>ServiceLocator</em> is the IoC (Inversion of Control) container that Catel provides. This is a container that contains all registrations and service instances available throughout the application. Retrieving services from the default <em>ServiceLocator</em> in Catel is very simple:</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
 </code></pre>
 <p>It is also possible to get services injected into the constructor, which is the recommended approach</p>
 <h2 id="dependency-injection">Dependency injection</h2>
-<p>A slightly better way to manage dependencies is to use dependency injection. The reason is that to instantiate a class, you always have to provide all the dependencies. This way, all dependencies are always known to the caller making it a bit complicated and encouraging high coupling. Using dependency injection however makes it a bit easier to control than having toÂ <em>know</em> what services are being used by a component (such as a view model).</p>
+<p>A slightly better way to manage dependencies is to use dependency injection. The reason is that to instantiate a class, you always have to provide all the dependencies. This way, all dependencies are always known to the caller making it a bit complicated and encouraging high coupling. Using dependency injection however makes it a bit easier to control than having to <em>know</em> what services are being used by a component (such as a view model).</p>
 <p>Catel fully supports dependency on view models. This means that a view model can have a constructor with several services. Catel will automatically inject the services via the constructor. An example is below:</p>
 <pre><code>public class PersonViewModel : ViewModelBase
 { 

@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>Starting with Catel 3.6, a very useful feature has been added to the <code>ServiceLocator</code> and <code>TypeFactory</code>. This features is called &quot;integrity checker&quot; and will ensure you with useful information about type registration paths. This protection mechanism is very useful in complex applications. When people start building services, sometimes they accidentally inject other services that via injection to other services cause a stack overflow. Debugging and determining which type is causing the issue can be very time-consuming.Â To make the example a bit more simple, below are a few classes which demonstrate a common issue in enterprises.</p>
+<p>Starting with Catel 3.6, a very useful feature has been added to the <code>ServiceLocator</code> and <code>TypeFactory</code>. This features is called &quot;integrity checker&quot; and will ensure you with useful information about type registration paths. This protection mechanism is very useful in complex applications. When people start building services, sometimes they accidentally inject other services that via injection to other services cause a stack overflow. Debugging and determining which type is causing the issue can be very time-consuming. To make the example a bit more simple, below are a few classes which demonstrate a common issue in enterprises.</p>
 <pre><code>public class X
 {
     public X(Y y) { }
@@ -103,7 +103,7 @@ public class Z
     public Z(X x) { }
 }
 </code></pre>
-<p>Note how a round-trip of dependencies is created which will result in a <code>StackOverflowException</code> somewhere in your code.Â Below is a graphical example what happens. Note that the dotted line is showing the circular dependency causing the StackOverflowException.</p>
+<p>Note how a round-trip of dependencies is created which will result in a <code>StackOverflowException</code> somewhere in your code. Below is a graphical example what happens. Note that the dotted line is showing the circular dependency causing the StackOverflowException.</p>
 <p><img src="../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/stackoverflow.png" alt=""></p>
 <h2 id="typerequestinfo">TypeRequestInfo</h2>
 <p>The first step for the integrity checker is to make sure that it knows what types are being requested from the <code>ServiceLocator</code> (which will be instantiated by the <code>TypeFactory</code> if required). This class contains all the information about a type being created by the <code>TypeFactory:</code></p>
@@ -112,14 +112,14 @@ public class Z
 <li>Tag (optional, can be used to differentiate different instances of the same type registration)</li>
 </ul>
 <h2 id="typerequestpath">TypeRequestPath</h2>
-<p>Now we have detailed information about the types being constructed, it is very important to keep track of the types which are being created by the <code>TypeFactory</code>. During the construction of a type, the <code>TypeFactory</code> will request the <code>ServiceLocator</code> for a type, which will ask the <code>TypeFactory</code> to construct the type again.Â Each time the <code>TypeFactory</code> starts constructing a type (and currently has aÂ <code>TypeRequestPath</code>), it will create a new instance of theÂ <code>TypeRequestInfo</code>Â and add it to theÂ <code>TypeRequestPath</code>. The diagram below shows how the <code>TypeRequestPath</code> will evolve.</p>
+<p>Now we have detailed information about the types being constructed, it is very important to keep track of the types which are being created by the <code>TypeFactory</code>. During the construction of a type, the <code>TypeFactory</code> will request the <code>ServiceLocator</code> for a type, which will ask the <code>TypeFactory</code> to construct the type again. Each time the <code>TypeFactory</code> starts constructing a type (and currently has a <code>TypeRequestPath</code>), it will create a new instance of the <code>TypeRequestInfo</code> and add it to the <code>TypeRequestPath</code>. The diagram below shows how the <code>TypeRequestPath</code> will evolve.</p>
 <p><img src="../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/typerequestpath.png" alt=""></p>
 <p>Once the <code>TypeRequestPath</code> will contain a duplicate instance of a <code>TypeRequestInfo</code>, it will become invalid (which means there is a circular type dependency).</p>
 <p>Note that this is a very simple example, but normally a type will have several services injected which can have dependencies on their own as well which can cause a very complex type request path</p>
 <h2 id="checking-the-integrity-of-the-type-request">Checking the integrity of the type request</h2>
-<p>To resolve and construct a type, a lot of communication will happen between the <code>TypeFactory</code> and the <code>ServiceLocator</code>.Â This flow is show in the diagram below.</p>
+<p>To resolve and construct a type, a lot of communication will happen between the <code>TypeFactory</code> and the <code>ServiceLocator</code>. This flow is show in the diagram below.</p>
 <p><img src="../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/flow.png" alt=""></p>
-<p>As you can see, there is a lot of communication between theÂ <code>ServiceLocator</code>Â andÂ <code>TypeFactory</code>. In the <code>TypeRequestPath</code> example we already saw how the path will become invalid when it contains a duplicate instance of the <code>TypeRequestInfo</code>. The <code>TypeRequestPath</code> will then throw a <code>CircularDependencyException</code> with all the necessary information to solve the issue:</p>
+<p>As you can see, there is a lot of communication between the <code>ServiceLocator</code> and <code>TypeFactory</code>. In the <code>TypeRequestPath</code> example we already saw how the path will become invalid when it contains a duplicate instance of the <code>TypeRequestInfo</code>. The <code>TypeRequestPath</code> will then throw a <code>CircularDependencyException</code> with all the necessary information to solve the issue:</p>
 <p><img src="../../../images/catel-core/ioc/introduction-to-components/ensuring-integrity/quickwatch.png" alt=""></p>
 <p>Now you will find the issue in no-time and save yourself a lot of your valuable time!</p>
 

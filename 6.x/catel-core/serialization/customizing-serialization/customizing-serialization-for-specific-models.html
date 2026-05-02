@@ -87,9 +87,9 @@
         <article data-uid="">
 
 
-<p>Catel has a default behavior for what gets serialized. It can be tweaked by including / excluding fields and properties by using the <em>IncludeInSerialization</em> and <em>ExcludeFromSerialization</em> attributes. But sometimes one needs more specific customization of the serialization for a specific type. This customization is possible via theÂ <em>ISerializerModifier</em>.</p>
+<p>Catel has a default behavior for what gets serialized. It can be tweaked by including / excluding fields and properties by using the <em>IncludeInSerialization</em> and <em>ExcludeFromSerialization</em> attributes. But sometimes one needs more specific customization of the serialization for a specific type. This customization is possible via the <em>ISerializerModifier</em>.</p>
 <h2 id="creating-the-modifier">Creating the modifier</h2>
-<p>To customize the serialization of a specific model type, one needs to implement theÂ <em>ISerializerModifier</em> interface. The example belows shows how to encrypt theÂ <em>Password</em> property on theÂ <em>Person</em> model class.</p>
+<p>To customize the serialization of a specific model type, one needs to implement the <em>ISerializerModifier</em> interface. The example belows shows how to encrypt the <em>Password</em> property on the <em>Person</em> model class.</p>
 <pre><code>public class PersonSerializerModifier : SerializerModifierBase&lt;Person&gt;
 {
     public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
@@ -99,7 +99,7 @@
             memberValue.Value = EncryptionHelper.Encrypt(memberValue.Value);
         }
     }
-Â 
+
     public override void DeserializeMember(ISerializationContext context, MemberValue memberValue)
     {
         if (string.Equals(memberValue.Name, &quot;Password&quot;))
@@ -110,7 +110,7 @@
 }
 </code></pre>
 <h2 id="registering-the-modifier">Registering the modifier</h2>
-<p>To register a modifier for a specific class, define theÂ <em>SerializerModifier</em> attribute:</p>
+<p>To register a modifier for a specific class, define the <em>SerializerModifier</em> attribute:</p>
 <pre><code>[SerializerModifier(typeof(PersonSerializerModifier))]
 public class Person : ModelBase
 {

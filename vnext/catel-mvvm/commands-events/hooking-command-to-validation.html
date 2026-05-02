@@ -88,7 +88,9 @@
 
 
 <p>It is possible to hook the <code>CanExecute</code> of a <code>Command</code> to the <code>IValidationSummary</code> automatically. This way, there is no need to check for errors manually in the <code>CanExecute</code> method. The example below first adds a validation summary to a view model to get the validation result. Then, it uses this validation summary to automatically determine whether a command can be executed.</p>
-<p>1.Â Add validation to a person view model (note how the validation adds the tag <code>PersonValidation</code> to a validation):</p>
+<ol>
+<li>Add validation to a person view model (note how the validation adds the tag <code>PersonValidation</code> to a validation):</li>
+</ol>
 <pre><code>/// &lt;summary&gt;
 /// Validates the field values of this object. Override this method to enable
 /// validation of field values.
@@ -107,7 +109,9 @@ protected override void ValidateFields(System.Collections.Generic.List&lt;IField
     }
 }
 </code></pre>
-<p>2.Â Add a property to the view model containing the validation summary using the <code>ValidationToViewModel</code> attribute.</p>
+<ol start="2">
+<li>Add a property to the view model containing the validation summary using the <code>ValidationToViewModel</code> attribute.</li>
+</ol>
 <pre><code>[ValidationToViewModel(Tag = &quot;PersonValidation&quot;)]
 public IValidationSummary PersonValidationSummary { get; set; }
 </code></pre>

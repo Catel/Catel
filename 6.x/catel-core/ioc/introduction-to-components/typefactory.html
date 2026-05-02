@@ -91,7 +91,7 @@
 <ol>
 <li>List all the constructors, order them from most parameters to least parameters</li>
 <li>While (constructors available)
-Â  Â  try to construct type using injection</li>
+try to construct type using injection</li>
 <li>If all constructors fail, the <code>TypeFactory</code> will fallback to <code>Activator.CreateInstance()</code></li>
 </ol>
 <h2 id="dependency-injection">Dependency injection</h2>
@@ -124,7 +124,6 @@
     }
 }
 </code></pre>
-<p>Â</p>
 <p><strong>Example 3: good, gets the dependencies injected</strong></p>
 <pre><code>public class MyClass
 {
@@ -171,12 +170,12 @@
 <li>At this point, no constructor could be used. In this case, the ServiceLocator will try to use the default constructor (the one without parameters) as last resort to instantiate the type.</li>
 </ol>
 <h2 id="disabling-dependency-injection">Disabling dependency injection</h2>
-<p>Â Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:</p>
+<p>Maybe you don't want dependency injection because it does not give you what you need or you want a very, very small improvement in performance. In that case, the dependency injection can be disabled using the code below:</p>
 <pre><code>ServiceLocator.Default.SupportedDependencyInjection = false
 </code></pre>
 <h2 id="custom-initialization">Custom initialization</h2>
-<p>All types created with theÂ <code>TypeFactory</code> can be initialized with custom code. This can be done by implementing theÂ <code>INeedCustomInitialization</code>Â interface.Â As soon as a type is created, theÂ TypeFactoryÂ will check whether it implements theÂ INeedCustomInitializationÂ interface. If so, it will call theÂ Initialize method of the interface.</p>
-<p>To prevent misuse of theÂ <code>Initialize</code> method, it is best to implement the interface explicitly</p>
+<p>All types created with the <code>TypeFactory</code> can be initialized with custom code. This can be done by implementing the <code>INeedCustomInitialization</code> interface. As soon as a type is created, the TypeFactory will check whether it implements the INeedCustomInitialization interface. If so, it will call the Initialize method of the interface.</p>
+<p>To prevent misuse of the <code>Initialize</code> method, it is best to implement the interface explicitly</p>
 
 </article>
 

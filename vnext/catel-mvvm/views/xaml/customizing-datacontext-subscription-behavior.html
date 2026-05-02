@@ -87,16 +87,16 @@
         <article data-uid="">
 
 
-<p>Starting with Catel 4.0, the views watch both the direct and inheritedÂ <em>DataContext</em>. Starting with Catel 4.1, it is possible to mimick the pre 4.0 <code>DataContext</code> subscription behavior.</p>
+<p>Starting with Catel 4.0, the views watch both the direct and inherited <em>DataContext</em>. Starting with Catel 4.1, it is possible to mimick the pre 4.0 <code>DataContext</code> subscription behavior.</p>
 <h2 id="customizing-the-behavior-for-all-views">Customizing the behavior for all views</h2>
 <p>To mimick pre Catel 4.0, use the following code:</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var dataContextSubscriptionService = dependencyResolver.Resolve&lt;IDataContextSubscriptionService&gt;();
-Â 
+
 dataContextSubscriptionService.DefaultDataContextSubscriptionMode = DataContextSubscriptionMode.DirectDataContext;
 </code></pre>
 <h2 id="customizing-the-behavior-per-view">Customizing the behavior per view</h2>
-<p>It is also customize the behavior per view. This allows very customized fine tuning of the behavior. To use this feature, one needs to create a custom implementation of theÂ <code>IDataContextSubscriptionService</code>.</p>
+<p>It is also customize the behavior per view. This allows very customized fine tuning of the behavior. To use this feature, one needs to create a custom implementation of the <code>IDataContextSubscriptionService</code>.</p>
 <pre><code>public class CustomDataContextSubscriptionService : DataContextSubscriptionService
 {
     public override DataContextSubscriptionMode GetDataContextSubscriptionMode(Type viewType)

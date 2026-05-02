@@ -87,10 +87,10 @@
         <article data-uid="">
 
 
-<p>By default, Catel registers the <em>AttributeValidatorProvider</em> as the <em>IValidatorProvider</em>. This way the <em>ModelBase</em> and all the classes that derive from it can easily add a custom validator by using theÂ <em>ValidateModelAttribute</em>.</p>
+<p>By default, Catel registers the <em>AttributeValidatorProvider</em> as the <em>IValidatorProvider</em>. This way the <em>ModelBase</em> and all the classes that derive from it can easily add a custom validator by using the <em>ValidateModelAttribute</em>.</p>
 <p>Note that it is still possible to register a custom <em>IValidatorProvider</em> to customize this behavior. It is even possible to set the <em>Validator</em> property of the <em>ModelBase</em> on a specific instance of a model</p>
 <h2 id="implementing-the-validator">Implementing the validator</h2>
-<p>The first thing that needs to be done is to write a custom implementation of the <em>IValidator</em> interface. You can either implement all the members yourself or derive from *ValidatorBaseÂ *as is shown below:</p>
+<p>The first thing that needs to be done is to write a custom implementation of the <em>IValidator</em> interface. You can either implement all the members yourself or derive from *ValidatorBase *as is shown below:</p>
 <pre><code>public class PersonValidator : ValidatorBase&lt;PersonModel&gt;
 {
     protected override void ValidateFields(PersonModel instance, List&lt;IFieldValidationResult&gt; validationResults)
@@ -99,13 +99,13 @@
         {
             validationResults.Add(FieldValidationResult.CreateError(PersonModel.FirstNameProperty, &quot;First name is required&quot;));
         }
-Â 
+
         if (string.IsNullOrWhiteSpace(instance.LastName))
         {
             validationResults.Add(FieldValidationResult.CreateError(PersonModel.FirstNameProperty, &quot;First name is required&quot;));
         }
     }
-Â 
+
     protected override void ValidateBusinessRules(PersonModel instance, List&lt;IBusinessRuleValidationResult&gt; validationResults)
     {
         // No business rules validations yet
@@ -113,7 +113,7 @@
 }
 </code></pre>
 <p>Decorating a model with the attribute</p>
-<p>Once a validator is available, the only thing that needs to be done is to decorate the model with theÂ <em>ValidateModelAttribute</em>:</p>
+<p>Once a validator is available, the only thing that needs to be done is to decorate the model with the <em>ValidateModelAttribute</em>:</p>
 <pre><code>[ValidateModel(typeof(PersonValidator))]
 public class PersonModel : ModelBase
 {

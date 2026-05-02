@@ -87,10 +87,10 @@
         <article data-uid="">
 
 
-<p>In this step we will create the view models. Since this is a very simple application, just a few view models are required.Â A view model in essence is nothing more than a class that derives from theÂ <code>ViewModelBase</code> class</p>
+<p>In this step we will create the view models. Since this is a very simple application, just a few view models are required. A view model in essence is nothing more than a class that derives from the <code>ViewModelBase</code> class</p>
 <p>The <em>vm</em> code snippet is available to create view models. There is also an on-line item template available for Catel view models</p>
 <h2 id="creating-the-personviewmodel">Creating the PersonViewModel</h2>
-<p>Below is the class definition of theÂ <code>PersonViewModel</code>. This view model will be used to show the details of aÂ <code>Person</code> model.</p>
+<p>Below is the class definition of the <code>PersonViewModel</code>. This view model will be used to show the details of a <code>Person</code> model.</p>
 <pre><code>namespace WPF.GettingStarted.ViewModels
 {
     using Catel.MVVM;
@@ -162,7 +162,7 @@ public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;La
 </code></pre>
 <p>Note that the properties are decorated with the <em>ViewModelToModel</em> attribute which enables the automatic mappings feature in Catel.</p>
 <h2 id="creating-the-familyviewmodel">Creating the FamilyViewModel</h2>
-<p>TheÂ <code>FamilyViewModel</code> must be set up the same way as theÂ <code>PersonViewModel</code> above.</p>
+<p>The <code>FamilyViewModel</code> must be set up the same way as the <code>PersonViewModel</code> above.</p>
 <pre><code>namespace WPF.GettingStarted.ViewModels
 {
     using System.Collections.ObjectModel;
@@ -176,7 +176,7 @@ public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;La
         public FamilyViewModel(Family family)
         {
             Argument.IsNotNull(() =&gt; family);
-Â 
+
             Family = family; 
         }
 

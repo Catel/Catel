@@ -89,16 +89,16 @@
 <h2 id="serializing-a-model">Serializing a model</h2>
 <p>The code below shows how to save an object (which can, of course, be a complex graph of nested objects):</p>
 <pre><code>var myObject = new MyObject();
-Â 
+
 using (var fileStream = File.Create(@&quot;C:\myobject.dob&quot;))
 {
     myObject.Save(fileStream);
 }
 </code></pre>
-<p>Looks too easy, but this really is the only thing you need to do. You can specify the serialization mode in the several available overloads of theÂ SaveÂ method.</p>
+<p>Looks too easy, but this really is the only thing you need to do. You can specify the serialization mode in the several available overloads of the Save method.</p>
 <p>Loading is as easy as saving, as you can see in the following code:</p>
 <pre><code>MyObject myObject = null;
-Â 
+
 using (var fileStream = File.Open(@&quot;C:\myobject.dob&quot;, FileMode.Open))
 {
     myObject = ModelBase.Load&lt;MyObject&gt;(fileStream, SerializationMode.Xml);    
@@ -106,36 +106,36 @@ using (var fileStream = File.Open(@&quot;C:\myobject.dob&quot;, FileMode.Open))
 </code></pre>
 <p>Note that for a model to support the <code>Save</code> and <code>Load</code> methods, it must derive from <code>SavableModelBase</code></p>
 <h2 id="warming-up-serialization">Warming up serialization</h2>
-<p>The first time a serializerÂ needs to serialize an object, it needs to perform some reflection to gather all the required information. This can have a negative impact on performance for the end-user during serialization. This load cannot be prevented, but it is possible to warmup the serializer at any time when it is convenient (for example, during startup of the application).</p>
+<p>The first time a serializer needs to serialize an object, it needs to perform some reflection to gather all the required information. This can have a negative impact on performance for the end-user during serialization. This load cannot be prevented, but it is possible to warmup the serializer at any time when it is convenient (for example, during startup of the application).</p>
 <h3 id="warming-up-specific-types">Warming up specific types</h3>
 <p>This code will warm up all the specified types:</p>
 <pre><code>var typesToWarmup = new type[] {  typeof(Settings) };
-Â 
+
 var xmlSerializer = SerializationFactory.GetXmlSerializer();
 xmlSerializer.Warmup(typesToWarmup);
-Â 
+
 var binarySerializer = SerializationFactory.GetBinarySerializer();
 binarySerializer.Warmup(typesToWarmup);
 </code></pre>
 <h3 id="warming-up-automatically">Warming up automatically</h3>
-<p>This code will warm up all types implementing the *ModelBaseÂ *class:</p>
+<p>This code will warm up all types implementing the *ModelBase *class:</p>
 <pre><code>var xmlSerializer = SerializationFactory.GetXmlSerializer();
 xmlSerializer.Warmup();
-Â 
+
 var binarySerializer = SerializationFactory.GetBinarySerializer();
 binarySerialzier.Warmup();
 </code></pre>
 <p>Note that warming up for all types <strong>might</strong> take a serious amount of time and <strong>might</strong> increase the memory footprint of your application depending on the number of models</p>
 <h3 id="warming-up-using-multiple-threads">Warming up using multiple threads</h3>
-<p>By default, Catel will optimize the initialization and dispatch them to different threads. Using extensive testing, the Catel team discovered that approximately 1000 types / thread is the ideal load balancing (otherwise the spawning of the threads is more expensive than it handling it on the same thread). If this behavior needs to be customized, simply provide the number of types per thread. IfÂ <em>-1</em> is specified, all types will be warmed up in a single thread.</p>
+<p>By default, Catel will optimize the initialization and dispatch them to different threads. Using extensive testing, the Catel team discovered that approximately 1000 types / thread is the ideal load balancing (otherwise the spawning of the threads is more expensive than it handling it on the same thread). If this behavior needs to be customized, simply provide the number of types per thread. If <em>-1</em> is specified, all types will be warmed up in a single thread.</p>
 <p>The code example below shows how to initialize all types deriving from <em>ModelBase</em> on a single thread:</p>
 <pre><code>var xmlSerializer = SerializationFactory.GetXmlSerializer();
 xmlSerialzier.Warmup(null, -1);
 </code></pre>
 <h2 id="backwards-compatibility-for-binary-serialization">Backwards compatibility for binary serialization</h2>
-<p>This example shows how an â€œoldâ€ (standard .NET) data class that uses custom binary serialization can easily be converted to aÂ <em>ModelBase</em>Â to use theÂ <em>ModelBase</em>Â even for all your existing classes.</p>
-<p>Declare a newÂ <em>ModelBase</em>Â class (remember theÂ *â€˜dataobjectâ€™*Â code snippet). If the new class is in a new assembly, or has a new name or namespace, use theÂ <em>RedirectType</em>Â attribute to let theÂ <em>ModelBase</em>Â know that when it finds the old type, it shouldÂ deserialize that type into the new type.</p>
-<p>Then, by default, theÂ <em>ModelBase</em>Â class will try to deserialize the old object. If it fails to do so, it will fall back on the default values provided by the property declarations. However, it is also possible to override theÂ <em>GetDataFromSerializationInfo</em>Â method:</p>
+<p>This example shows how an “old” (standard .NET) data class that uses custom binary serialization can easily be converted to a <em>ModelBase</em> to use the <em>ModelBase</em> even for all your existing classes.</p>
+<p>Declare a new <em>ModelBase</em> class (remember the <em>‘dataobject’</em> code snippet). If the new class is in a new assembly, or has a new name or namespace, use the <em>RedirectType</em> attribute to let the <em>ModelBase</em> know that when it finds the old type, it should deserialize that type into the new type.</p>
+<p>Then, by default, the <em>ModelBase</em> class will try to deserialize the old object. If it fails to do so, it will fall back on the default values provided by the property declarations. However, it is also possible to override the <em>GetDataFromSerializationInfo</em> method:</p>
 <pre><code>/// &lt;summary&gt;
 /// Retrieves the actual data from the serialization info.
 /// &lt;/summary&gt;

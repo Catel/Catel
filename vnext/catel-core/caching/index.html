@@ -97,7 +97,7 @@
 <p>To retrieve data and store into a cache with a single statement use the following code:</p>
 <pre><code>var person = _personCache.GetFromCacheOrFetch(Id, () =&gt; service.FindPersonById(Id));
 </code></pre>
-<p>When this statement is executed with the same keyÂ more than once , the value will be retrieved from the cache storage instead of the service call. The service call will be executed just the first time or if the item is removed from the cache manually or automatically due to the expiration policy.</p>
+<p>When this statement is executed with the same key more than once , the value will be retrieved from the cache storage instead of the service call. The service call will be executed just the first time or if the item is removed from the cache manually or automatically due to the expiration policy.</p>
 <h2 id="using-cache-expiration-policies">Using cache expiration policies</h2>
 <p>The cache expiration policies add a removal behavior to the cache storage items. A policy signals that an item is expired to make that cache storage remove the item automatically.</p>
 <p>A default cache expiration policy initialization code can be specified during cache storage initialization constructor:</p>

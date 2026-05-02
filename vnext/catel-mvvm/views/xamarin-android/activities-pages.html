@@ -87,11 +87,11 @@
         <article data-uid="">
 
 
-<p>The user controls in Android are called fragments. This means that if a user control must be created, it must derive from theÂ <code>Fragment</code>Â class. Catel provides a base implementation of this class to ensure full compatibility with the MVVM framework that ships with Catel.</p>
+<p>The user controls in Android are called fragments. This means that if a user control must be created, it must derive from the <code>Fragment</code> class. Catel provides a base implementation of this class to ensure full compatibility with the MVVM framework that ships with Catel.</p>
 <h2 id="creating-the-view-model">Creating the view model</h2>
 <p>The view model can be created (or added as a linked file from another project) just like any platform using Catel (they are all equal on all platforms).</p>
 <h2 id="creating-the-view">Creating the view</h2>
-<p>Make sure that aÂ <code>Views</code>Â folder exists in the project so the views and view models can automatically be hooked together by Catel. Then create a new class to the views folder, in this caseÂ <code>MainActivity</code>:</p>
+<p>Make sure that a <code>Views</code> folder exists in the project so the views and view models can automatically be hooked together by Catel. Then create a new class to the views folder, in this case <code>MainActivity</code>:</p>
 <pre><code>[Activity(MainLauncher = true)]
 public class MainActivity : Catel.Android.App.Activity
 {
@@ -106,7 +106,7 @@ public class MainActivity : Catel.Android.App.Activity
 </code></pre>
 <p>Note that the class derives from <em>Catel.Android.App.Activity</em></p>
 <h2 id="designing-the-view">Designing the view</h2>
-<p>To create the actual user interface of the fragment, add a newÂ <code>xaml</code>Â file to theÂ <code>Resources/layout</code>Â folder, in your caseÂ <code>Page\_Main</code>Â (but you can name it whatever you want). Then use the following source:</p>
+<p>To create the actual user interface of the fragment, add a new <code>xaml</code> file to the <code>Resources/layout</code> folder, in your case <code>Page\_Main</code> (but you can name it whatever you want). Then use the following source:</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
     android:orientation=&quot;vertical&quot;

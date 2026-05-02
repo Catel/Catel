@@ -120,29 +120,29 @@
 <p>To gain the best performance possible using the json serializer, a model should implement the <em>ICustomJsonSerializable</em> interface.</p>
 <pre><code>public class CustomJsonSerializationModel : ModelBase, ICustomJsonSerializable
 {
-Â Â Â  public string FirstName
-Â Â Â  {
-Â Â Â Â Â Â Â  get { return GetValue&lt;string&gt;(FirstNameProperty); }
-Â Â Â Â Â Â Â  set { SetValue(FirstNameProperty, value); }
-Â Â Â  }
+    public string FirstName
+    {
+        get { return GetValue&lt;string&gt;(FirstNameProperty); }
+        set { SetValue(FirstNameProperty, value); }
+    }
 
-Â Â Â  public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), null);
+    public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), null);
 
-Â Â Â  void ICustomJsonSerializable.Serialize(JsonWriter jsonWriter)
-Â Â Â  {
-Â Â Â Â Â Â Â  jsonWriter.WriteStartObject();
-Â Â Â Â Â Â Â  jsonWriter.WritePropertyName(&quot;FirstName&quot;);
-Â Â Â Â Â Â Â  jsonWriter.WriteValue(FirstName);
-Â Â Â Â Â Â Â  jsonWriter.WriteEndObject();
-Â Â Â  }
+    void ICustomJsonSerializable.Serialize(JsonWriter jsonWriter)
+    {
+        jsonWriter.WriteStartObject();
+        jsonWriter.WritePropertyName(&quot;FirstName&quot;);
+        jsonWriter.WriteValue(FirstName);
+        jsonWriter.WriteEndObject();
+    }
 
-Â Â Â  void ICustomJsonSerializable.Deserialize(JsonReader jsonReader)
-Â Â Â  {
-Â Â Â Â Â Â Â  // Note: this is probably not the fastest way to deserialize, but it's used to show the possibilities of the engine
-Â Â Â Â Â Â Â  var jsonObject = JObject.Load(jsonReader);
-Â Â Â Â Â Â Â  var jsonProperties = jsonObject.Properties().ToDictionary(x =&gt; x.Name, x =&gt; x);
-Â Â Â Â Â Â Â  FirstName = (string)jsonProperties[&quot;FirstName&quot;].Value;
-Â Â Â  }
+    void ICustomJsonSerializable.Deserialize(JsonReader jsonReader)
+    {
+        // Note: this is probably not the fastest way to deserialize, but it's used to show the possibilities of the engine
+        var jsonObject = JObject.Load(jsonReader);
+        var jsonProperties = jsonObject.Properties().ToDictionary(x =&gt; x.Name, x =&gt; x);
+        FirstName = (string)jsonProperties[&quot;FirstName&quot;].Value;
+    }
 }
 </code></pre>
 

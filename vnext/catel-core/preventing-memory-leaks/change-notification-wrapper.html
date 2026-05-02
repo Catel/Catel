@@ -95,13 +95,13 @@ if (itemAsPropertyChanged != null)
 }
 </code></pre>
 <p>However, using this code one must be aware that if not unsubscribed, there might be a potential memory leak here. In Catel, there is a solution for such cases that can raise change notifications using weak events called the ChangeNotificationWrapper. It allows the subscription of both the INotifyPropertyChanged and INotifyCollectionChanged interfaces.</p>
-<h2 id="âsubscribing-to-events-of-an-observable-object">Â Subscribing to events of an observable object</h2>
+<h2 id="subscribing-to-events-of-an-observable-object">Subscribing to events of an observable object</h2>
 <p>Using the code below, one can subscribe to the PropertyChanged event of an object:</p>
 <pre><code>var wrapper = new ChangeNotificationWrapper(obj);
 wrapper.PropertyChanged += OnPropertyChanged;
 </code></pre>
 <p>Note that it is not required to check whether the object implements INotifyPropertyChanged, the wrapper does it automatically</p>
-<h2 id="âsubscribing-to-events-of-an-observable-collection">Â Subscribing to events of an observable collection</h2>
+<h2 id="subscribing-to-events-of-an-observable-collection">Subscribing to events of an observable collection</h2>
 <p>Using the code below, one can subscribe to the CollectionChanged event of an object:</p>
 <pre><code>var wrapper = new ChangeNotificationWrapper(observableCollection);
 wrapper.CollectionChanged += OnCollectionChanged;
@@ -118,7 +118,7 @@ wrapper.CollectionItemPropertyChanged += OnCollectionItemPropertyChanged;
 <p>When you are no longer interested in events from the source object, there are two options:</p>
 <ol>
 <li>Just leave them coming, as soon as the objects are no longer used, they will be garbage collected</li>
-<li>Â Unsubscribe using the following code:</li>
+<li>Unsubscribe using the following code:</li>
 </ol>
 <pre><code>wrapper.UnsubscribeFromAllEvents();
 </code></pre>

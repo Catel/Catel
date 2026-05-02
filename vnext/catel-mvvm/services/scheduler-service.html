@@ -87,16 +87,16 @@
         <article data-uid="">
 
 
-<p>TheÂ <code>ISchedulerService</code> allows a developer to schedule an action in the relative or absolute future. The <code>SchedulerService</code> will use theÂ <code>DispatcherTimer</code> to invoke the action.</p>
+<p>The <code>ISchedulerService</code> allows a developer to schedule an action in the relative or absolute future. The <code>SchedulerService</code> will use the <code>DispatcherTimer</code> to invoke the action.</p>
 <p>Note that the <code>SchedulerService</code> does not provide any persistence of actions and schedules. When the application is closed, all schedules are lost because they are kept in memory.</p>
 <h2 id="scheduling-an-action-in-the-relative-future">Scheduling an action in the relative future</h2>
-<p>To schedule an action in the relative future, use theÂ <code>Schedule</code> method with theÂ <code>TimeSpan</code> overload. The code below starts the action with a delay of 50 milliseconds.</p>
+<p>To schedule an action in the relative future, use the <code>Schedule</code> method with the <code>TimeSpan</code> overload. The code below starts the action with a delay of 50 milliseconds.</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var schedulerService = dependencyResolver.Resolve&lt;ISchedulerService&gt;();
 schedulerService.Schedule(() =&gt; DoSomething(), new TimeSpan(0, 0, 0, 0, 50));
 </code></pre>
 <h2 id="scheduling-an-action-in-the-absolute-future">Scheduling an action in the absolute future</h2>
-<p>To schedule an action in the absolute future, use theÂ <code>Schedule</code>Â method with the <code>DateTime</code>Â overload. The code below starts the action in 5 minutes.</p>
+<p>To schedule an action in the absolute future, use the <code>Schedule</code> method with the <code>DateTime</code> overload. The code below starts the action in 5 minutes.</p>
 <pre><code>var dependencyResolver = this.GetDependencyResolver();
 var schedulerService = dependencyResolver.Resolve&lt;ISchedulerService&gt;();
 schedulerService.Schedule(() =&gt; DoSomething(), DateTime.Now.AddMinutes(5));

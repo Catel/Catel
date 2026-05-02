@@ -109,7 +109,7 @@ xmlns:catel=&quot;http://schemas.catelproject.com&quot;
 </code></pre>
 </li>
 </ol>
-<p>An example for aÂ *ListBoxÂ *double click:</p>
+<p>An example for a *ListBox *double click:</p>
 <pre><code>&lt;ListBox ItemsSource=&quot;{Binding PersonCollection}&quot; SelectedItem=&quot;{Binding SelectedPerson}&quot;&gt;
     &lt;i:Interaction.Triggers&gt;
         &lt;i:EventTrigger EventName=&quot;MouseDoubleClick&quot;&gt;
@@ -193,13 +193,12 @@ xmlns:catel=&quot;http://schemas.catelproject.com&quot;
 <li>The <em>DataContext</em> of the control can be injected into a constructor of the view model</li>
 <li>The view model has an empty constructor</li>
 </ol>
-<p>Â You can set the DataContext of the control to a view model, and this way &quot;inject&quot; a view model into a control instead of letting it be created first. In fact, the user control first checks whether the DataContext is already a valid view model for the user control. If so, it keeps it that way.</p>
+<p>You can set the DataContext of the control to a view model, and this way &quot;inject&quot; a view model into a control instead of letting it be created first. In fact, the user control first checks whether the DataContext is already a valid view model for the user control. If so, it keeps it that way.</p>
 <h2 id="how-can-i-prevent-validation-of-required-fields">How can I prevent validation of required fields?</h2>
 <p>Catel does not validate the properties with data annotations at startup. It will only validate the data annotations when properties change or when the view model is about to be saved. This is implemented this way to allow a developer to show required fields with an asterisk (*) instead of errors. If a developer still wants to initially display errors, only a single call has to be made in the constructor:</p>
 <pre><code>Validate(true, false);
 </code></pre>
 <p>If the validation is implemented in the models and not in the view model, set the <em>ValidateModelsOnInitialization</em> to false.</p>
-<p>Â</p>
 
 </article>
 

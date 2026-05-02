@@ -94,15 +94,15 @@
 var validationContext = modelValidation.ValidationContext;
 </code></pre>
 <h2 id="getting-the-number-of-or-warnings-and-errors">Getting the number of or warnings and errors</h2>
-<p>Â To retrieve the total number of warnings and errors, use the following code:</p>
+<p>To retrieve the total number of warnings and errors, use the following code:</p>
 <pre><code>int count = validationContext.GetValidationCount();
 </code></pre>
-<h2 id="âgetting-all-the-field-errors">Â Getting all the field errors</h2>
+<h2 id="getting-all-the-field-errors">Getting all the field errors</h2>
 <p>To retrieve all the field errors, use the following code:</p>
 <pre><code>var fieldErrors = validationContext.GetFieldErrors();
 </code></pre>
 <h2 id="getting-all-the-field-errors-of-a-specific-property">Getting all the field errors of a specific property</h2>
-<p>Â To retrieve all the field errors of a specific property, use the following code:</p>
+<p>To retrieve all the field errors of a specific property, use the following code:</p>
 <pre><code>var fieldErrors = validationContext.GetFieldErrors(&quot;MyProperty&quot;);
 </code></pre>
 <h2 id="getting-all-the-business-rule-warnings">Getting all the business rule warnings</h2>

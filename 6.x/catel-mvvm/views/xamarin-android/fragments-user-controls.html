@@ -87,11 +87,11 @@
         <article data-uid="">
 
 
-<p>The user controls in Android are called fragments. This means that if a user control must be created, it must derive from theÂ <code>Fragment</code> class. Catel provides a base implementation of this class to ensure full compatibility with the MVVM framework that ships with Catel.</p>
+<p>The user controls in Android are called fragments. This means that if a user control must be created, it must derive from the <code>Fragment</code> class. Catel provides a base implementation of this class to ensure full compatibility with the MVVM framework that ships with Catel.</p>
 <h2 id="creating-the-view-model">Creating the view model</h2>
 <p>The view model can be created (or added as a linked file from another project) just like any platform using Catel (they are all equal on all platforms).</p>
 <h2 id="creating-the-view">Creating the view</h2>
-<p>Make sure that aÂ <code>Views</code> folder exists in the project so the views and view models can automatically be hooked together by Catel. Then create a new class to the views folder, in this caseÂ <code>PersonView</code>:</p>
+<p>Make sure that a <code>Views</code> folder exists in the project so the views and view models can automatically be hooked together by Catel. Then create a new class to the views folder, in this case <code>PersonView</code>:</p>
 <pre><code>public class PersonView : Catel.Android.App.Fragment
 {
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -103,7 +103,7 @@
 </code></pre>
 <p>Note that the class derives from <code>Catel.Android.App.Fragment</code></p>
 <h2 id="designing-the-view">Designing the view</h2>
-<p>To create the actual user interface of the fragment, add a newÂ <code>xaml</code> file to the <code>Resources/layout</code> folder, in your caseÂ <code>Fragment\_Person</code> (but you can name it whatever you want). Then use the following source:</p>
+<p>To create the actual user interface of the fragment, add a new <code>xaml</code> file to the <code>Resources/layout</code> folder, in your case <code>Fragment\_Person</code> (but you can name it whatever you want). Then use the following source:</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
     android:orientation=&quot;vertical&quot;
@@ -132,7 +132,7 @@
 &lt;/LinearLayout&gt;
 </code></pre>
 <h2 id="setting-up-synchronization">Setting up synchronization</h2>
-<p>In Android it is required to manually synchronize the values between the view and view model. Below is the fully extendedÂ <code>PersonView</code>Â class containing these mapping functionality:</p>
+<p>In Android it is required to manually synchronize the values between the view and view model. Below is the fully extended <code>PersonView</code> class containing these mapping functionality:</p>
 <pre><code>public class PersonView : Catel.Android.App.Fragment
 {
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
