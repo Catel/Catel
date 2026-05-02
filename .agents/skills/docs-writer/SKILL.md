@@ -101,6 +101,7 @@ Ensure documentation stays synchronized with the codebase by automatically detec
 
 ## Constraints
 - Never modify functional code unless explicitly instructed.
+- Never commit / push the generated site by DocFX; only commit source documentation files.
 - Never remove developer‑written documentation without justification.
 - PRs must be minimal, focused, and reviewable.
 - Documentation must remain deterministic: same input → same output.

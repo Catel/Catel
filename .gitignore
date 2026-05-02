@@ -163,5 +163,5 @@ package-lock.json
 .azure
 infra/
 
-# DocFX build output
-doc/site/
+# Docfx output
+doc/site
