@@ -110,7 +110,7 @@
 <pre><code>ServiceLocator.Default.RegisterType&lt;IViewModelFactory, CustomViewModelFactory&gt;();
 </code></pre>
 <h2 id="how-to-control-the-view-model-instantiation-using-a-usercontrol">How to control the view model instantiation using a UserControl</h2>
-<p>Note that it is best to use the <code>IViewModelFactory</code> for view model instantation because it is a more generic solution</p>
+<p>Note that it is best to use the <code>IViewModelFactory</code> for view model instantiation because it is a more generic solution</p>
 <p>Controlling the instantiation of the view model dynamically when using the <code>UserControl</code> is extremely easy. You can override the <code>GetViewModelInstance(object)</code> method like this:</p>
 <pre><code>protected override IViewModel GetViewModelInstance(object dataContext)
 {
@@ -124,7 +124,7 @@
 </code></pre>
 <p>When the method returns <code>null</code>, the logic will try to construct the view model by itself.</p>
 <h2 id="how-to-control-the-view-model-instantiation-using-a-behavior">How to control the view model instantiation using a behavior</h2>
-<p>Note that it is best to use the <code>IViewModelFactory</code> for view model instantation because it is a more generic solution</p>
+<p>Note that it is best to use the <code>IViewModelFactory</code> for view model instantiation because it is a more generic solution</p>
 <p>Controlling the instantiation of the view model dynamically when using behaviors must be done via the <code>DetermineViewModelInstance</code> event like this:</p>
 <pre><code>mvvmBehavior.DetermineViewModelInstance += (sender, e) =&gt;
 {

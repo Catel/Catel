@@ -105,7 +105,7 @@
 <pre><code>Log.Error(ex, &quot;Failed to delete file '{0}'&quot;, fileName); 
 </code></pre>
 <h2 id="logging-in-code-with-additional-data">Logging in code with additional data</h2>
-<p>Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the the bare minimum required for logging. To pass in additional information, use the <em>[Level]WithData</em> methods (such as <em>DebugWithData</em>):</p>
+<p>Sometimes additional data is required (for example, the thread id, or anything else like this). The logging is extensible and contains on the bare minimum required for logging. To pass in additional information, use the <em>[Level]WithData</em> methods (such as <em>DebugWithData</em>):</p>
 <pre><code>Log.Debug(&quot;This is a message from a specific thread&quot;, new LogData
 {
     { &quot;ThreadId&quot;, threadId }
