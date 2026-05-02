@@ -21,8 +21,7 @@ Ensure documentation stays synchronized with the codebase by automatically detec
   - XML documentation comments
   - Attributes and annotations
 - Generate DocFX‑compatible YAML and Markdown:
-  - API reference YAML (`doc/docfx/api/`)
-  - Conceptual documentation (`doc/docfx/articles/`)
+  - Conceptual documentation (`doc/docfx/vnext/`)
   - TOC files (`doc/docfx/toc.yml`)
 - Maintain consistent formatting, naming, and structure.
 - Detect missing or outdated documentation.
@@ -34,7 +33,7 @@ Ensure documentation stays synchronized with the codebase by automatically detec
 
 ## Inputs
 - C# source code files (`.cs`)
-- Project/solution files (`.csproj`, `.sln`)
+- Project/solution files (`.csproj`, `.sln`, `.slnx`)
 - Existing DocFX configuration (`docfx.json`)
 - Repository metadata (branch names, PR rules)
 - Developer‑provided context or architectural notes
@@ -43,8 +42,7 @@ Ensure documentation stays synchronized with the codebase by automatically detec
 
 ## Outputs
 - Updated DocFX documentation:
-  - `doc/docfx/api/*.yml`
-  - `doc/docfx/articles/*.md`
+  - `doc/docfx/vnext/*.md`
   - `doc/docfx/toc.yml`
 - Pull requests containing:
   - Regenerated documentation
@@ -106,6 +104,7 @@ Ensure documentation stays synchronized with the codebase by automatically detec
 - Never remove developer‑written documentation without justification.
 - PRs must be minimal, focused, and reviewable.
 - Documentation must remain deterministic: same input → same output.
+- Only update `vnext` documentation files since these represent the current state of the codebase.
 
 ---
 
