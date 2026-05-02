@@ -8,14 +8,6 @@ description: >
   "remove To be added placeholders", API documentation requests.
 ---
 
-# Agent Skills: XML API documentation writer
-
-## Identity
-**Name:** `api-docs`  
-**Role:** Improves C# source code by adding high‑quality XML documentation comments in small, reviewable pull requests.
-
----
-
 ## Mission
 Ensure every public API in the codebase is documented with clear, correct, and idiomatic XML documentation comments.
 

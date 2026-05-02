@@ -8,14 +8,6 @@ description: >
   "update docs", "review docs", any GitHub issue number referencing documentation.
 ---
 
-# Agent Skills: C# Documentation Writer
-
-## Identity
-**Name:** `docs-writer`  
-**Role:** Generates and maintains high‑quality DocFX documentation from C# source code and submits updates through pull requests.
-
----
-
 ## Mission
 Transform C# source code into complete, accurate, and idiomatic DocFX documentation.  
 Ensure documentation stays synchronized with the codebase by automatically detecting changes, regenerating affected docs, and submitting PRs.
