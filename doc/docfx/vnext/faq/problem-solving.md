@@ -5,7 +5,7 @@ As with every framework or toolkit, developers run into problems. This can be bu
 
 ## Enabling the log
 
-We take logging very serious in Catel. This means that a lot of information about the internals can be be seen in the output window. To enable logging in Catel, use the following code in your application startup code:
+We take logging very serious in Catel. This means that a lot of information about the internals can be seen in the output window. To enable logging in Catel, use the following code in your application startup code:
 
 ```
 #if DEBUG
