@@ -1,0 +1,31 @@
+name: Build and Publish DocFX
+
+permissions:
+  contents: write      # required to push to gh-pages
+  
+on:
+  push:
+    branches: [ develop ]
+    paths:
+      - 'doc/docfx/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
+
+    - name: Install DocFX
+      run: dotnet tool install -g docfx
+
+    - name: Build documentation
+      working-directory: doc/docfx
+      run: docfx build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # 4.0.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: doc/site
+        publish_branch: gh-pages
