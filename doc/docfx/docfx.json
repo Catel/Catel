@@ -1,0 +1,76 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": [
+          "index.md",
+          "toc.yml"
+        ],
+        "src": ".",
+        "dest": "."
+      },
+      {
+        "files": [
+          "**/*.md",
+          "**/*.yml"
+        ],
+        "src": "6.x",
+        "dest": "6.x"
+      },
+      {
+        "files": [
+          "**/*.md",
+          "**/*.yml"
+        ],
+        "src": "vnext",
+        "dest": "vnext"
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ],
+        "src": ".",
+        "dest": "."
+      },
+      {
+        "files": [
+          "images/**",
+          "downloads/**"
+        ],
+        "src": "6.x",
+        "dest": "6.x"
+      },
+      {
+        "files": [
+          "images/**",
+          "css/**",
+          "downloads/**"
+        ],
+        "src": "vnext",
+        "dest": "vnext"
+      }
+    ],
+    "output": "../site",
+    "template": [
+      "default",
+      "modern"
+    ],
+    "globalMetadata": {
+      "_appTitle": "Catel Documentation",
+      "_appFooter": "Catel is an application development platform with the focus on MVVM.",
+      "_gitContribute": {
+        "repo": "https://github.com/catel/catel",
+        "branch": "develop",
+        "apiSpecFolder": "doc/docfx"
+      },
+      "_gitUrlPattern": "github",
+      "_enableSearch": true,
+      "_disableContribution": false
+    },
+    "sitemap": {
+      "baseUrl": "https://docs.catelproject.com/"
+    }
+  }
+}

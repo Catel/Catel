@@ -1,0 +1,4 @@
+﻿---
+title: "Automatic type registration" 
+---
+

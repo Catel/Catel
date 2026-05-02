@@ -1,0 +1,344 @@
+﻿- name: Catel.Core
+  href: catel-core/index.md
+  items:
+  - name: Argument checking
+    href: catel-core/argument-checking/index.md
+  - name: Caching
+    href: catel-core/caching/index.md
+  - name: Configuration
+    href: catel-core/configuration/index.md
+  - name: Data handling
+    href: catel-core/data-handling/index.md
+    items:
+    - name: Advanced property change notifications
+      href: catel-core/data-handling/advanced-property-change-notifications
+    - name: ChildAwareModelBase
+      href: catel-core/data-handling/childawaremodelbase
+    - name: ComparableModelBase
+      href: catel-core/data-handling/comparablemodelbase
+    - name: DispatcherObservableObject
+      href: catel-core/data-handling/dispatcherobservableobject
+    - name: ModelBase
+      href: catel-core/data-handling/modelbase
+    - name: ObservableObject
+      href: catel-core/data-handling/observableobject
+    - name: Property bags
+      href: catel-core/data-handling/property-bags
+    - name: SavableModelBase
+      href: catel-core/data-handling/savablemodelbase
+    - name: Using ModelBase as base for entities
+      href: catel-core/data-handling/using-modelbase-as-base-for-entities
+    - name: ValidatableModelBase
+      href: catel-core/data-handling/validatablemodelbase
+  - name: Exception handling
+    href: catel-core/exception-handling/index.md
+    items:
+    - name: WPF implementation for exception handling
+      href: catel-core/exception-handling/wpf-implementation-for-exception-handling
+  - name: IoC (ServiceLocator and TypeFactory)
+    href: catel-core/ioc/index.md
+  - name: Logging
+    href: catel-core/logging/index.md
+  - name: Messaging
+    href: catel-core/messaging/index.md
+    items:
+    - name: MessageBase
+      href: catel-core/messaging/messagebase
+    - name: Message mediator
+      href: catel-core/messaging/message-mediator
+    - name: Messaging via attributes
+      href: catel-core/messaging/messaging-via-attributes
+  - name: Multilingual / Localization
+    href: catel-core/multilingual/index.md
+    items:
+    - name: DisplayAttribute
+      href: catel-core/multilingual/displayattribute
+    - name: DisplayNameAttribute
+      href: catel-core/multilingual/displaynameattribute
+  - name: Parallel invocation and tasks
+    href: catel-core/parallel-invocation-tasks/index.md
+    items:
+    - name: Thread safe code
+      href: catel-core/parallel-invocation-tasks/thread-safe-code
+  - name: Pooling
+    href: catel-core/pooling/index.md
+  - name: Preventing memory leaks
+    href: catel-core/preventing-memory-leaks/index.md
+    items:
+    - name: Change notification wrapper
+      href: catel-core/preventing-memory-leaks/change-notification-wrapper
+    - name: Weak events
+      href: catel-core/preventing-memory-leaks/weak-events
+  - name: Reflection
+    href: catel-core/reflection/index.md
+    items:
+    - name: Fast member invoker
+      href: catel-core/reflection/fastmemberinvoker
+    - name: Property helper
+      href: catel-core/reflection/propertyhelper
+    - name: Type cache
+      href: catel-core/reflection/typecache
+  - name: Scoping
+    href: catel-core/scoping/index.md
+  - name: Serialization
+    href: catel-core/serialization/index.md
+  - name: Validation
+    href: catel-core/validation/index.md
+    items:
+    - name: Deferring validation
+      href: catel-core/validation/deferring-validation
+    - name: Getting a summary of validation results
+      href: catel-core/validation/getting-summary-of-validation-results
+    - name: Using the validation context
+      href: catel-core/validation/using-validation-context
+    - name: Validation via data annotations
+      href: catel-core/validation/validation-via-data-annotations
+    - name: Validation via IValidator
+      href: catel-core/validation/validation-via-ivalidator
+    - name: Validation via special model validators
+      href: catel-core/validation/validation-via-special-model-validators
+    - name: Validation via validate methods
+      href: catel-core/validation/validation-via-validate-method
+- name: Catel.Fody
+  href: catel-fody/index.md
+- name: Catel.MVVM
+  href: catel-mvvm/index.md
+  items:
+  - name: Auditing
+    href: catel-mvvm/auditing/index.md
+  - name: Behaviors & triggers
+    href: catel-mvvm/behaviors-triggers/index.md
+    items:
+    - name: Authentication
+      href: catel-mvvm/behaviors-triggers/authentication
+    - name: AutoCompletionBehavior
+      href: catel-mvvm/behaviors-triggers/autocompletion
+    - name: AutoScroll
+      href: catel-mvvm/behaviors-triggers/autoscroll
+    - name: DelayBindingUpdate
+      href: catel-mvvm/behaviors-triggers/delay-binding-update
+    - name: DoubleClickToCommand
+      href: catel-mvvm/behaviors-triggers/double-click-to-command
+    - name: Focus
+      href: catel-mvvm/behaviors-triggers/focus
+    - name: focus-first-control
+      href: catel-mvvm/behaviors-triggers/focus-first-control
+    - name: focus-on-key-press
+      href: catel-mvvm/behaviors-triggers/focus-on-key-press
+    - name: HideUntilViewModelLoaded
+      href: catel-mvvm/behaviors-triggers/hide-until-view-model-loaded
+    - name: KeyPressToCommand
+      href: catel-mvvm/behaviors-triggers/key-press-to-command
+    - name: MouseInfo
+      href: catel-mvvm/behaviors-triggers/mouse-info
+    - name: Navigate
+      href: catel-mvvm/behaviors-triggers/navigate
+    - name: NumericTextBox
+      href: catel-mvvm/behaviors-triggers/numeric-textbox
+    - name: SelectTextOnFocus
+      href: catel-mvvm/behaviors-triggers/select-text-on-focus
+    - name: UpdateBindingOnPasswordChanged
+      href: catel-mvvm/behaviors-triggers/update-binding-on-password-changed
+    - name: UpdateBindingOnTextChanged
+      href: catel-mvvm/behaviors-triggers/update-binding-on-text-changed
+  - name: Bindings
+    href: catel-mvvm/bindings/index.md
+    items:
+    - name: Command bindings
+      href: catel-mvvm/bindings/command-bindings
+    - name: Property bindings
+      href: catel-mvvm/bindings/property-bindings
+  - name: Commands & events
+    href: catel-mvvm/commands-events/index.md
+    items:
+    - name: CommandManager and command containers (Application-wide commands)
+      href: catel-mvvm/commands-events/application-wide-commands
+    - name: Commands authentication
+      href: catel-mvvm/commands-events/authentication
+    - name: Commands
+      href: catel-mvvm/commands-events/commands
+    - name: Hooking a command to validation automatically
+      href: catel-mvvm/commands-events/hooking-command-to-validation
+  - name: Converters
+    href: catel-mvvm/converters/index.md
+  - name: Designers
+    href: catel-mvvm/designers/index.md
+    items:
+    - name: Design-time view models
+      href: catel-mvvm/designers/design-time-view-models
+    - name: Running code at design-time
+      href: catel-mvvm/designers/running-code-at-design-time
+  - name: Locators & naming conventions
+    href: catel-mvvm/locators-naming-conventions/index.md
+    items:
+    - name: Naming conventions
+      href: catel-mvvm/locators-naming-conventions/naming-conventions
+    - name: UrlLocator
+      href: catel-mvvm/locators-naming-conventions/url-locator
+    - name: ViewLocator
+      href: catel-mvvm/locators-naming-conventions/view-locator
+    - name: ViewModelLocator
+      href: catel-mvvm/locators-naming-conventions/view-model-locator
+  - name: Services
+    href: catel-mvvm/services/index.md
+    items:
+    - name: LocationService
+      href: catel-mvvm/services/location-service
+    - name: MessageService
+      href: catel-mvvm/services/message-service
+    - name: NavigationService
+      href: catel-mvvm/services/navigation-service
+    - name: OpenFileService
+      href: catel-mvvm/services/open-file-service
+    - name: PleaseWaitService
+      href: catel-mvvm/services/please-wait-service
+    - name: ProcessService
+      href: catel-mvvm/services/process-service
+    - name: SaveFileService
+      href: catel-mvvm/services/save-file-service
+    - name: SchedulerService
+      href: catel-mvvm/services/scheduler-service
+    - name: SelectDirectoryService
+      href: catel-mvvm/services/select-directory-service
+    - name: UIVisualizerService
+      href: catel-mvvm/services/ui-visualizer-service
+    - name: VibrateService
+      href: catel-mvvm/services/vibrate-service
+    - name: ViewExportService
+      href: catel-mvvm/services/view-export-service
+  - name: View models
+    href: catel-mvvm/view-models/index.md
+    items:
+    - name: Creating a basic view model
+      href: catel-mvvm/view-models/creating-basic-view-model
+    - name: Creating a view model with a model
+      href: catel-mvvm/view-models/creating-view-model-with-model
+    - name: Creating a view model with a model and mappings
+      href: catel-mvvm/view-models/creating-view-model-with-model-and-mappings
+    - name: Mapping properties from view to view model
+      href: catel-mvvm/view-models/mapping-properties-from-view-to-view-model
+    - name: Nested view models
+      href: catel-mvvm/view-models/nested-view-models
+    - name: Validation in view models
+      href: catel-mvvm/view-models/validation-in-view-models
+  - name: Views
+    href: catel-mvvm/views/index.md
+- name: Catel.ReSharper
+  href: catel-resharper/index.md
+- name: Examples
+  href: examples/index.md
+- name: FAQ
+  href: faq/index.md
+  items:
+  - name: General
+    href: faq/general
+  - name: MVVM
+    href: faq/mvvm
+  - name: Performance considerations
+    href: faq/performance-considerations
+  - name: Problem solving
+    href: faq/problem-solving
+- name: Getting started
+  href: getting-started/index.md
+  items:
+  - name: Quick introduction for developers
+    href: getting-started/quick-introduction-for-developers/index.md
+  - name: Getting started with WPF
+    href: getting-started/wpf/index.md
+    items:
+    - name: Creating the models
+      href: getting-started/wpf/creating-the-models
+    - name: Creating the WPF project
+      href: getting-started/wpf/creating-the-project
+    - name: Creating the views (user controls)
+      href: getting-started/wpf/creating-the-user-controls
+    - name: Creating the view models
+      href: getting-started/wpf/creating-the-view-models
+    - name: Creating the views (windows)
+      href: getting-started/wpf/creating-the-windows
+    - name: Finalizing the application
+      href: getting-started/wpf/finalizing-the-application
+    - name: Hooking up everything together
+      href: getting-started/wpf/hooking-up-everything-together
+    - name: Serializing data from/to disk
+      href: getting-started/wpf/serializing-data-from-to-disk
+- name: Introduction
+  href: introduction/index.md
+  items:
+  - name: Introduction to data objects
+    href: introduction/introduction-data-objects/index.md
+  - name: Introduction to MVVM
+    href: introduction/mvvm/index.md
+    items:
+    - name: Creating view models with Catel
+      href: introduction/mvvm/creating-view-models-with-catel
+    - name: Different interpretations of MVVM
+      href: introduction/mvvm/different-interpretations-of-mvvm
+    - name: Introduction to MVVM and models
+      href: introduction/mvvm/introduction-to-mvvm-and-models
+    - name: Introduction to the nested user controls problem
+      href: introduction/mvvm/introduction-to-nested-user-controls-problem
+    - name: Introduction to services
+      href: introduction/mvvm/introduction-to-services
+    - name: Validation in model or view model?
+      href: introduction/mvvm/validation-in-model-or-view-model
+  - name: Support for multiple platforms
+    href: introduction/platform-support/index.md
+    items:
+    - name: Caveats in Android
+      href: introduction/platform-support/caveats-in-android
+    - name: Caveats in iOS
+      href: introduction/platform-support/caveats-in-ios
+    - name: Caveats in UWP
+      href: introduction/platform-support/caveats-in-uwp
+    - name: Caveats in WPF
+      href: introduction/platform-support/caveats-in-wpf
+  - name: Why Catel
+    href: introduction/why-catel/index.md
+- name: Setup, deployment & projects
+  href: setup-deployment/index.md
+  items:
+  - name: Code snippets & templates
+    href: setup-deployment/code-snippets-templates/index.md
+    items:
+    - name: Using the code snippets
+      href: setup-deployment/code-snippets-templates/using-the-code-snippets
+    - name: Using the item templates
+      href: setup-deployment/code-snippets-templates/using-the-item-templates
+    - name: Using the project templates
+      href: setup-deployment/code-snippets-templates/using-the-project-templates
+  - name: Compiling from source
+    href: setup-deployment/compiling-from-source/index.md
+  - name: Getting prerelease (beta) versions via NuGet & MyGet
+    href: setup-deployment/getting-prerelease-versions-via-nuget/index.md
+  - name: Stepping through the code
+    href: setup-deployment/stepping-through-the-code/index.md
+  - name: Update guides
+    href: setup-deployment/update-guides/index.md
+    items:
+    - name: Catel 4.0
+      href: setup-deployment/update-guides/catel-4.0
+    - name: Catel 4.1
+      href: setup-deployment/update-guides/catel-4.1
+    - name: Catel 5.0
+      href: setup-deployment/update-guides/catel-5.0
+    - name: Catel 5.4
+      href: setup-deployment/update-guides/catel-5.4
+    - name: Catel 6.0
+      href: setup-deployment/update-guides/catel-6.0
+- name: Tips & tricks
+  href: tips-tricks/index.md
+  items:
+  - name: Core
+    href: tips-tricks/core/index.md
+  - name: MVVM
+    href: tips-tricks/mvvm/index.md
+    items:
+    - name: Finding the view of a view model
+      href: tips-tricks/mvvm/finding-view-of-view-model
+    - name: Requery commands automatically using CommandManager
+      href: tips-tricks/mvvm/requery-commands-automatically
+    - name: Using compiled bindings
+      href: tips-tricks/mvvm/using-compiled-bindings
+    - name: Using a tabbed interface with MVVM
+      href: tips-tricks/mvvm/using-tabbed-interface-with-mvvm

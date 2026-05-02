@@ -16,31 +16,22 @@ if ($Help) {
 }
 
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
-$srcPath = Join-Path $scriptPath "doc/docfx"
+$docfxPath = Join-Path $scriptPath "doc/docfx"
 $docsPath = Join-Path $scriptPath "doc/site"
 
 Write-Host "Catel Documentation Build Script"
 Write-Host ""
 
-$versions = @("home", "vnext", "6.x")
-
-foreach ($version in $versions) {
-    $versionPath = Join-Path $srcPath $version
-    $docfxPath = Join-Path $versionPath "docfx.json"
-    
-    if (-not (Test-Path $docfxPath)) {
-        Write-Host "SKIP: $version (docfx.json not found)"
-        continue
-    }
-    
-    Write-Host "Building: $version"
-    
-    Push-Location $versionPath
-    docfx build docfx.json
-    Pop-Location
-    
+if ($Clean -and (Test-Path $docsPath)) {
+    Write-Host "Cleaning output directory: $docsPath"
+    Remove-Item $docsPath -Recurse -Force
     Write-Host ""
 }
 
+Push-Location $docfxPath
+docfx build docfx.json
+Pop-Location
+
+Write-Host ""
 Write-Host "Build complete!"
 Write-Host "Output: $docsPath"
