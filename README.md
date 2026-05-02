@@ -8,13 +8,7 @@ NuGet stable version|![Version](https://img.shields.io/nuget/v/catel.core.svg)
 NuGet unstable version|![Pre-release version](https://img.shields.io/nuget/vpre/catel.core.svg)
 Open Collective|[![Backers on Open Collective](https://opencollective.com/Catel/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/Catel/sponsors/badge.svg)](#sponsors)
 
-Catel is an application development platform with the focus on MVVM (WPF, UWP, Xamarin.Android, Xamarin.iOS and Xamarin.Forms). 
-The goal of Catel is to provide a complete set of modular functionality for Line of Business applications written in any .NET 
-technology, from client to server.
-
-Catel distinguishes itself by unique features to aid in the development of MVVM applications and server-side application 
-development. Since Catel focuses on Line of Business applications, it provides professional support and excellent documentation 
-which ensures a safe bet by professional companies and developers.
+Catel is an application development platform with the focus on MVVM (WPF).
 
 For documentation, please visit the [documentation portal](https://docs.catelproject.com)
 
@@ -30,33 +24,27 @@ most important features are listed below:
 - Argument validation (e.g. `Argument.IsNotNull(() => myArgument)`)
 - Caching
 - Data (ModelBase, PropertyBag, Validation)
-- IoC (ServiceLocator, TypeFactory)
-- Logging (LogManager, Log, several log listeners)
 - Messaging
 - Reflection (same reflection API for *every supported platform*)
-- Serialization (BinarySerializer, XmlSerializer and more)
 - Weak references (WeakEventListener)
 
 And more.... 
 
 ### Catel.MVVM
 
-Catel.MVVM is the library you want to include when you are writing a UI project (e.g. WPF, UWP, Xamarin) and you want to use the MVVM pattern. Catel is the *only* MVVM library that has context-aware view and view-model creation, which can be used to solve the [nested user controls problem](https://docs.catelproject.com/vnext/introduction/mvvm/introduction-to-nested-user-controls-problem/). 
+Catel.MVVM is the library you want to include when you are writing a WPF UI project and you want to use the MVVM pattern. Catel provides context-aware view and view-model creation, which can be used to solve the [nested user controls problem](https://docs.catelproject.com/vnext/introduction/mvvm/introduction-to-nested-user-controls-problem/). 
 
-The most important
-features are listed below:
+The most important features are listed below:
 
 - Auditing
 - Collections (FastObservableCollection)
 - Commands (Command, TaskCommand, etc)
 - Converters (tons of converters out of the box)
 - Services
-	- CameraService	
-	- LocationService
 	- MessageService
 	- NavigationService
 	- OpenFileService
-	- PleaseWaitService
+	- BusyIndicatorService
 	- SaveFileService
 	- UIVisualizerService
 - View models
@@ -141,21 +129,9 @@ To add translations to Catel, the Multilingual App Toolkit (MAT) is required.
 
 **Prerequisites** 
 
-Catel requires Visual Studio 2019 to compile successfully. You also need to ensure you have the following features installed:
+Catel requires Visual Studio 2022 to compile successfully. You also need to ensure you have the following features installed:
 
 Note that the `.vsconfig` in the src root should notify about missing components when opening the solution.
-
-- .NET desktop development
-- Universal Windows Platform development
-- Mobile development with .NET
-- .NET Core cross-platform development
-- Select the following components from Individual components
-  - Windows 10 SDK (10.0.16299.0) 
-  - MSVC v141 and v142 (ARM, ARM64 and x64/x86) 
-  - C++ ATL v141 and v142 (ARM, ARM64 and x86 & x64)  build tools
-  - C++ MFC v141 and v142 (ARM, ARM64 and x86 & x64) build tools
-- [Latest Version of .NET Core 3.0 Preview SDK](https://dotnet.microsoft.com/download/dotnet-core/3.0)
-  - Ensure you enable **Use previews of the .NET Core SDK** under Tools -> Options -> Projects and Solutions -> .NET Core
 
 Note that you should run these commands using powershell in the root of the repository.
 
@@ -175,15 +151,6 @@ Note that this assumes a local packages directory at `C:\Source\_packages`, whic
 
 `.\build.ps1 -target buildandpackagelocal`
 
-## Apps using Catel
-
-There are a lot of (both free & commercial) apps using Catel. This list provides a few examples that are built 
-with Catel:
-
-// todo: add wpf
-
-// todo: add uwp
-
 ## WPF components based on Catel
 
 If you are planning on using WPF, there is a huge set (60+) of free open-source components 
@@ -193,9 +160,6 @@ maintained and being used in several commercial WPF applications.
 
 For more information, see https://github.com/wildgums
 
-## Tools for Catel
- * **[Analogy.LogViewer.CatelProject](https://github.com/Analogy-LogViewer/Analogy.LogViewer.CatelProject)** - Catel Log parser for [Analogy Log Viewer](https://github.com/Analogy-LogViewer/Analogy.LogViewer).
- 
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
