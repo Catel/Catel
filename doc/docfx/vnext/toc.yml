@@ -1,3 +1,79 @@
+- name: Getting started
+  href: getting-started/index.md
+  items:
+  - name: Quick introduction for developers
+    href: getting-started/quick-introduction-for-developers/index.md
+  - name: Getting started with WPF
+    href: getting-started/wpf/index.md
+    items:
+    - name: Creating the models
+      href: getting-started/wpf/creating-the-models.md
+    - name: Creating the WPF project
+      href: getting-started/wpf/creating-the-project.md
+    - name: Creating the views (user controls)
+      href: getting-started/wpf/creating-the-user-controls.md
+    - name: Creating the view models
+      href: getting-started/wpf/creating-the-view-models.md
+    - name: Creating the views (windows)
+      href: getting-started/wpf/creating-the-windows.md
+    - name: Finalizing the application
+      href: getting-started/wpf/finalizing-the-application.md
+    - name: Hooking up everything together
+      href: getting-started/wpf/hooking-up-everything-together.md
+    - name: Serializing data from/to disk
+      href: getting-started/wpf/serializing-data-from-to-disk.md
+- name: Introduction
+  href: introduction/index.md
+  items:
+  - name: Introduction to data objects
+    href: introduction/introduction-data-objects/index.md
+  - name: Introduction to MVVM
+    href: introduction/mvvm/index.md
+    items:
+    - name: Creating view models with Catel
+      href: introduction/mvvm/creating-view-models-with-catel.md
+    - name: Different interpretations of MVVM
+      href: introduction/mvvm/different-interpretations-of-mvvm.md
+    - name: Introduction to MVVM and models
+      href: introduction/mvvm/introduction-to-mvvm-and-models.md
+    - name: Introduction to the nested user controls problem
+      href: introduction/mvvm/introduction-to-nested-user-controls-problem.md
+    - name: Introduction to services
+      href: introduction/mvvm/introduction-to-services.md
+    - name: Validation in model or view model?
+      href: introduction/mvvm/validation-in-model-or-view-model.md
+  - name: Support for multiple platforms
+    href: introduction/platform-support/index.md
+    items:
+    - name: Caveats in WPF
+      href: introduction/platform-support/caveats-in-wpf.md
+  - name: Why Catel
+    href: introduction/why-catel/index.md
+- name: Setup, deployment & projects
+  href: setup-deployment/index.md
+  items:
+  - name: Code snippets & templates
+    href: setup-deployment/code-snippets-templates/index.md
+    items:
+    - name: Using the code snippets
+      href: setup-deployment/code-snippets-templates/using-the-code-snippets.md
+    - name: Using the item templates
+      href: setup-deployment/code-snippets-templates/using-the-item-templates.md
+    - name: Using the project templates
+      href: setup-deployment/code-snippets-templates/using-the-project-templates.md
+  - name: Compiling from source
+    href: setup-deployment/compiling-from-source/index.md
+  - name: Getting prerelease (beta) versions via NuGet
+    href: setup-deployment/getting-prerelease-versions-via-nuget/index.md
+  - name: Stepping through the code
+    href: setup-deployment/stepping-through-the-code/index.md
+  - name: Update guides
+    href: setup-deployment/update-guides/index.md
+    items:
+    - name: Catel 6.0
+      href: setup-deployment/update-guides/catel-6.0.md
+    - name: Catel 7.0
+      href: setup-deployment/update-guides/catel-7.0.md
 - name: Catel.Core
   href: catel-core/index.md
   items:
@@ -93,8 +169,6 @@
       href: catel-core/validation/validation-via-special-model-validators.md
     - name: Validation via validate methods
       href: catel-core/validation/validation-via-validate-method.md
-- name: Catel.Fody
-  href: catel-fody/index.md
 - name: Catel.MVVM
   href: catel-mvvm/index.md
   items:
@@ -272,6 +346,8 @@
       href: catel-mvvm/views/xamarin-forms/index.md
     - name: Xamarin.iOS
       href: catel-mvvm/views/xamarin-ios/index.md
+- name: Catel.Fody
+  href: catel-fody/index.md
 - name: Examples
   href: examples/index.md
 - name: FAQ
@@ -285,96 +361,6 @@
     href: faq/performance-considerations.md
   - name: Problem solving
     href: faq/problem-solving.md
-- name: Getting started
-  href: getting-started/index.md
-  items:
-  - name: Quick introduction for developers
-    href: getting-started/quick-introduction-for-developers/index.md
-  - name: Getting started with WPF
-    href: getting-started/wpf/index.md
-    items:
-    - name: Creating the models
-      href: getting-started/wpf/creating-the-models.md
-    - name: Creating the WPF project
-      href: getting-started/wpf/creating-the-project.md
-    - name: Creating the views (user controls)
-      href: getting-started/wpf/creating-the-user-controls.md
-    - name: Creating the view models
-      href: getting-started/wpf/creating-the-view-models.md
-    - name: Creating the views (windows)
-      href: getting-started/wpf/creating-the-windows.md
-    - name: Finalizing the application
-      href: getting-started/wpf/finalizing-the-application.md
-    - name: Hooking up everything together
-      href: getting-started/wpf/hooking-up-everything-together.md
-    - name: Serializing data from/to disk
-      href: getting-started/wpf/serializing-data-from-to-disk.md
-- name: Introduction
-  href: introduction/index.md
-  items:
-  - name: Introduction to data objects
-    href: introduction/introduction-data-objects/index.md
-  - name: Introduction to MVVM
-    href: introduction/mvvm/index.md
-    items:
-    - name: Creating view models with Catel
-      href: introduction/mvvm/creating-view-models-with-catel.md
-    - name: Different interpretations of MVVM
-      href: introduction/mvvm/different-interpretations-of-mvvm.md
-    - name: Introduction to MVVM and models
-      href: introduction/mvvm/introduction-to-mvvm-and-models.md
-    - name: Introduction to the nested user controls problem
-      href: introduction/mvvm/introduction-to-nested-user-controls-problem.md
-    - name: Introduction to services
-      href: introduction/mvvm/introduction-to-services.md
-    - name: Validation in model or view model?
-      href: introduction/mvvm/validation-in-model-or-view-model.md
-  - name: Support for multiple platforms
-    href: introduction/platform-support/index.md
-    items:
-    - name: Caveats in Android
-      href: introduction/platform-support/caveats-in-android.md
-    - name: Caveats in iOS
-      href: introduction/platform-support/caveats-in-ios.md
-    - name: Caveats in UWP
-      href: introduction/platform-support/caveats-in-uwp.md
-    - name: Caveats in WPF
-      href: introduction/platform-support/caveats-in-wpf.md
-  - name: Why Catel
-    href: introduction/why-catel/index.md
-- name: Setup, deployment & projects
-  href: setup-deployment/index.md
-  items:
-  - name: Code snippets & templates
-    href: setup-deployment/code-snippets-templates/index.md
-    items:
-    - name: Using the code snippets
-      href: setup-deployment/code-snippets-templates/using-the-code-snippets.md
-    - name: Using the item templates
-      href: setup-deployment/code-snippets-templates/using-the-item-templates.md
-    - name: Using the project templates
-      href: setup-deployment/code-snippets-templates/using-the-project-templates.md
-  - name: Compiling from source
-    href: setup-deployment/compiling-from-source/index.md
-  - name: Getting prerelease (beta) versions via NuGet & MyGet
-    href: setup-deployment/getting-prerelease-versions-via-nuget/index.md
-  - name: Stepping through the code
-    href: setup-deployment/stepping-through-the-code/index.md
-  - name: Update guides
-    href: setup-deployment/update-guides/index.md
-    items:
-    - name: Catel 4.0
-      href: setup-deployment/update-guides/catel-4.0.md
-    - name: Catel 4.1
-      href: setup-deployment/update-guides/catel-4.1.md
-    - name: Catel 5.0
-      href: setup-deployment/update-guides/catel-5.0.md
-    - name: Catel 5.4
-      href: setup-deployment/update-guides/catel-5.4.md
-    - name: Catel 6.0
-      href: setup-deployment/update-guides/catel-6.0.md
-    - name: Catel 7.0
-      href: setup-deployment/update-guides/catel-7.0.md
 - name: Tips & tricks
   href: tips-tricks/index.md
   items:

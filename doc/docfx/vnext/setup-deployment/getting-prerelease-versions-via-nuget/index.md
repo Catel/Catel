@@ -1,15 +1,6 @@
 ﻿---
-title: "Getting prerelease (beta) versions via NuGet & MyGet" 
+title: "Getting prerelease (beta) versions via NuGet" 
 ---
-## Adding the custom package source
-
-Starting with Catel v5, the alpha prereleases are only available on the [MyGet feed for Catel](https://www.myget.org/feed/Packages/catel). Therefore you must first add the custom url to the NuGet Package Manager. The easiest way to do this is via Visual Studio.
-
-1.  Go to *Tools* =\> *NuGet Package Manager* =\> *Package Manager Settings*
-2.  Select *Package Sources*
-3.  Click the + button at the right top and use the following values at the bottom:
-    Name: MyGet - Catel
-    Source: <https://www.myget.org/F/catel/api/v3/index.json>
 
 ## Installing via package manager
 
