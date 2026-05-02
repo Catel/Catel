@@ -335,17 +335,6 @@
           href: catel-mvvm/views/xaml/external-controls/using-custom-control.md
         - name: Using a custom window
           href: catel-mvvm/views/xaml/external-controls/using-custom-window.md
-    - name: Xamarin.Android
-      href: catel-mvvm/views/xamarin-android/index.md
-      items:
-      - name: Activities (pages)
-        href: catel-mvvm/views/xamarin-android/activities-pages.md
-      - name: Fragments (user controls)
-        href: catel-mvvm/views/xamarin-android/fragments-user-controls.md
-    - name: Xamarin.Forms
-      href: catel-mvvm/views/xamarin-forms/index.md
-    - name: Xamarin.iOS
-      href: catel-mvvm/views/xamarin-ios/index.md
 - name: Catel.Fody
   href: catel-fody/index.md
 - name: Examples
