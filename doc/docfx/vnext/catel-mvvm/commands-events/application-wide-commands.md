@@ -61,9 +61,9 @@ public class CommandSubscribingViewModel : ViewModelBase
 
     public Command ExampleCommand { get; private set; }
 
-    private void OnExampleCommandExecute()
+    private async void OnExampleCommandExecute()
     {
-        _messageService.Show("Application-wide command executed");
+        await _messageService.ShowAsync("Application-wide command executed");
     }
 }
 ```
