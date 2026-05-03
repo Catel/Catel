@@ -4201,6 +4201,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "vnext/getting-started/wpf/hosting-model.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/getting-started/wpf/hosting-model.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "vnext/getting-started/wpf/index.md",
       "output": {
         ".html": {
