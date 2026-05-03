@@ -11,7 +11,23 @@ Most MVVM developers just answer: “Put all the properties of the nested user c
 
 The real power of the UserControl class lays in the fact that it is able to construct view models dynamically based on its data context. So, the only thing the developers have to take care of is to set the right data context. Below is a graphical presentation of the “nested user controls” problem:
 
-![](../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/overview.png)
+```mermaid
+graph TD
+    subgraph Traditional["Traditional MVVM approach"]
+        direction TB
+        MW[MainWindow] --> MVM[MainWindowViewModel\ncontains ALL properties]
+        MVM --> P1[Control1 properties]
+        MVM --> P2[Control2 properties]
+        MVM --> P3[Control3 properties]
+    end
+    subgraph Catel["Catel approach"]
+        direction TB
+        CW[MainWindow] --> CMVM[MainWindowViewModel]
+        CW --> UC1[UserControl1\nown ViewModel]
+        CW --> UC2[UserControl2\nown ViewModel]
+        UC1 --> UC3[UserControl3\nown ViewModel]
+    end
+```
 
 As the images above show, the method that Catel uses to solve the problem is much more professional. Below are a few reasons:
 
@@ -20,7 +36,15 @@ As the images above show, the method that Catel uses to solve the problem is muc
 
 The idea behind the user control is pretty complex, especially because XAML frameworks aren't very good at runtime data context type changing. However, with a few workarounds (very well described in the source code of *UserControl*), it is possible to dynamically construct view models. The user control constructs the view model with or without a constructor as described earlier in this article. When the view model is constructed, the user control tries to find a (logical or visual) parent that implements the *IViewModelContainer* interface. Thanks to this interface, a view model can subscribe itself to a parent view model and the validation chain is created as shown below:
 
-![](../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/validation.png)
+```mermaid
+graph TD
+    A[HouseWindowViewModel] -->|validates children| B[RoomViewModel]
+    B -->|validates children| C[TableViewModel]
+    B -->|validates children| D[BedViewModel]
+    C -->|reports validation result| B
+    D -->|reports validation result| B
+    B -->|reports validation result| A
+```
 
 As the image above shows, all children in the chain are validated, and when the last child is validated, the view model reports the result of its children and itself back to its parent. This way, it is still possible to disable a command when one of the nested user control view models has an error.
 
@@ -28,7 +52,17 @@ Saving a chain of nested view models works exactly the same as the validation. F
 
 Now, let’s go to some “real-life” example. I don’t want to make it too complex, but not too easy as well, but don’t want to put the focus on the content of the data, but on the user control and view model creation. Therefore, I have chosen for the data model below:
 
-![](../../images/introduction/mvvm/introduction-to-nested-user-controls-problem/hierarchy.png)
+```mermaid
+graph TD
+    House --> Room1[Room]
+    House --> Room2[Room]
+    Room1 --> Table1[Table]
+    Room1 --> Table2[Table]
+    Room1 --> Bed1[Bed]
+    Table1 --> Chair1[Chair]
+    Table1 --> Chair2[Chair]
+    Table2 --> Chair3[Chair]
+```
 
 The image shows that we have a house. In that house, we have multiple rooms. In each room, there can be several tables with chairs and beds. This shows a “complex” UI tree with lots of different user controls (each object has its own representation and thus user control). Now our goal is to create user controls that can be used in the window that shows the full house, but also in “sub-parts” and we want to be fully independent of the *HouseWindowViewModel* (which is the only view model that would be created in a regular MVVM Framework).
 

@@ -13,7 +13,16 @@ A bit harder (it’s still very easy, don’t worry), but much more powerful is 
 
 Say, you want to write an application to manage company trees. The top-level of the data exists of a collection of `Company` objects (models). You want to display the companies inside an `ItemsControl`, which is a very good way to represent the companies. But how are you going to display the company details? You can simply create a template, but I wouldn't recommend that because the company representation can become very complex (and dynamic), because it consists of `Person` objects that can have children (employees), and the children are person objects as well, that can have children, etc. You might thing that this is a very simple scenario, which it actually is to make sure that all readers understand it correctly. But, there can be a lot of complex tree scenarios. For example, for a client, I had to write a complete treatment overview of a patient, which consists of a lot of different objects, which all have a child collection of other object types. Then you can save yourself with writing a simple and generic data template. Below is a graphical form of the example:
 
-![](../../../images/catel-mvvm/views/xaml/usercontrol/hierarchy.png)
+```mermaid
+graph TD
+    CompanyCollection[CompanyCollection] --> Company1[Company]
+    CompanyCollection --> Company2[Company]
+    Company1 --> Manager1[Manager]
+    Company1 --> Employee1[Employee]
+    Company1 --> Employee2[Employee]
+    Company2 --> Manager2[Manager]
+    Company2 --> Employee3[Employee]
+```
 
 Now comes the real power of `UserControl` in to play. For example, to show the company and its managers, one has to write an items control that contains the companies and then a user control containing the details of the company. For the sake of simplicity, I will leave the employees out for now. The usage might seem a bit complex, but once you get the hang of it, it’s actually quite simple. First of all, create a view model that has a constructor of the model that you want to accept, in our case the `Company` class of which we will show the details:
 

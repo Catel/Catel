@@ -3,7 +3,20 @@ title: "Different interpretations of MVVM"
 ---
 There are two different interpretations of MVVM, the "purist" way where the model is protected, or the "shortcut" way where the view model only provides the instance of the model and the view then binds directly to the model.
 
-![](../../images/introduction/mvvm/different-interpretations-of-mvvm/overview.png)
+```mermaid
+graph LR
+    subgraph Shortcut["Shortcut interpretation"]
+        direction TB
+        VS[View] -->|binds to| VMS[ViewModel]
+        VMS -->|exposes| MS[Model]
+        VS -->|also binds directly to| MS
+    end
+    subgraph Purist["Purist interpretation"]
+        direction TB
+        VP[View] -->|all bindings via| VMP[ViewModel]
+        VMP -->|maps to/from| MP[Model]
+    end
+```
 
 ## Shortcut interpretation
 
