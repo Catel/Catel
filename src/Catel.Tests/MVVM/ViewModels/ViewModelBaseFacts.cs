@@ -4,10 +4,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Auditing;
 using Catel.Data;
 using Catel.MVVM;
-using Catel.MVVM.Auditing;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using TestFeaturedViewModel = TestClasses.TestFeaturedViewModel;
@@ -22,7 +20,7 @@ public partial class ViewModelBaseFacts
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var vm = new TestViewModel(serviceProvider);
+        var vm = new TestFeaturedViewModel(serviceProvider);
 
         Assert.That(vm.IsDirty, Is.False);
     }
@@ -63,28 +61,29 @@ public partial class ViewModelBaseFacts
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+        var vm = new TestFeaturedViewModel(serviceProvider);
 
-        var auditor = new TestAuditor();
-        auditingManager.RegisterAuditor(auditor);
+        var canceledCalled = false;
+        var closedCalled = false;
 
-        var vm = new TestViewModel(serviceProvider);
+        vm.CanceledAsync += (_, _) => { canceledCalled = true; return Task.CompletedTask; };
+        vm.ClosedAsync += (_, _) => { closedCalled = true; return Task.CompletedTask; };
 
-        Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(false));
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
-
-        await vm.CancelAndCloseViewModelAsync();
-
-        Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(true));
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
-
-        auditor.OnViewModelCanceledCalled = false;
-        auditor.OnViewModelClosedCalled = false;
+        Assert.That(canceledCalled, Is.EqualTo(false));
+        Assert.That(closedCalled, Is.EqualTo(false));
 
         await vm.CancelAndCloseViewModelAsync();
 
-        Assert.That(auditor.OnViewModelCanceledCalled, Is.EqualTo(false));
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
+        Assert.That(canceledCalled, Is.EqualTo(true));
+        Assert.That(closedCalled, Is.EqualTo(true));
+
+        canceledCalled = false;
+        closedCalled = false;
+
+        await vm.CancelAndCloseViewModelAsync();
+
+        Assert.That(canceledCalled, Is.EqualTo(false));
+        Assert.That(closedCalled, Is.EqualTo(false));
     }
 
     [TestCase]
@@ -94,28 +93,29 @@ public partial class ViewModelBaseFacts
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+        var vm = new TestFeaturedViewModel(serviceProvider);
 
-        var auditor = new TestAuditor();
-        auditingManager.RegisterAuditor(auditor);
+        var savedCalled = false;
+        var closedCalled = false;
 
-        var vm = new TestViewModel(serviceProvider);
+        vm.SavedAsync += (_, _) => { savedCalled = true; return Task.CompletedTask; };
+        vm.ClosedAsync += (_, _) => { closedCalled = true; return Task.CompletedTask; };
 
-        Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(false));
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
-
-        await vm.SaveAndCloseViewModelAsync();
-
-        Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(true));
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
-
-        auditor.OnViewModelSavedCalled = false;
-        auditor.OnViewModelClosedCalled = false;
+        Assert.That(savedCalled, Is.EqualTo(false));
+        Assert.That(closedCalled, Is.EqualTo(false));
 
         await vm.SaveAndCloseViewModelAsync();
 
-        Assert.That(auditor.OnViewModelSavedCalled, Is.EqualTo(false));
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
+        Assert.That(savedCalled, Is.EqualTo(true));
+        Assert.That(closedCalled, Is.EqualTo(true));
+
+        savedCalled = false;
+        closedCalled = false;
+
+        await vm.SaveAndCloseViewModelAsync();
+
+        Assert.That(savedCalled, Is.EqualTo(false));
+        Assert.That(closedCalled, Is.EqualTo(false));
     }
 
     [TestCase]
@@ -125,24 +125,23 @@ public partial class ViewModelBaseFacts
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+        var vm = new TestFeaturedViewModel(serviceProvider);
 
-        var auditor = new TestAuditor();
-        auditingManager.RegisterAuditor(auditor);
+        var closedCalled = false;
 
-        var vm = new TestViewModel(serviceProvider);
+        vm.ClosedAsync += (_, _) => { closedCalled = true; return Task.CompletedTask; };
 
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
-
-        await vm.CloseViewModelAsync(null);
-
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(true));
-
-        auditor.OnViewModelClosedCalled = false;
+        Assert.That(closedCalled, Is.EqualTo(false));
 
         await vm.CloseViewModelAsync(null);
 
-        Assert.That(auditor.OnViewModelClosedCalled, Is.EqualTo(false));
+        Assert.That(closedCalled, Is.EqualTo(true));
+
+        closedCalled = false;
+
+        await vm.CloseViewModelAsync(null);
+
+        Assert.That(closedCalled, Is.EqualTo(false));
     }
 
     [Test]
