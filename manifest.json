@@ -3881,56 +3881,6 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xamarin-android/activities-pages.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xamarin-android/activities-pages.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xamarin-android/fragments-user-controls.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xamarin-android/fragments-user-controls.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xamarin-android/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xamarin-android/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xamarin-forms/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xamarin-forms/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xamarin-ios/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xamarin-ios/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "vnext/catel-mvvm/views/xaml/advanced/datawindow-under-the-hood.md",
       "output": {
         ".html": {
