@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public static class IDispatcherServiceExtensions
 {
     /// <summary>
-    /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+    /// Executes the specified delegate with the specified arguments on the thread that the Dispatcher was created on, returning a task that can be awaited.
     /// </summary>
     /// <param name="dispatcherService">The dispatcher service.</param>
     /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>

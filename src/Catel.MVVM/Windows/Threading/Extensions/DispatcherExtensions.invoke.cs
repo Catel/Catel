@@ -103,9 +103,10 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
-    /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// Executes the specified action on the thread that the Dispatcher was created on if required, returning a task that can be awaited.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// If the current thread already has access, the action is executed directly and a completed task is returned.
     /// </summary>
     /// <param name="dispatcher">The dispatcher.</param>
     /// <param name="action">The action.</param>
@@ -119,9 +120,10 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
-    /// Executes the specified action asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// Executes the specified action at the specified priority on the thread that the Dispatcher was created on if required, returning a task that can be awaited.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// If the current thread already has access, the action is executed directly and a completed task is returned.
     /// </summary>
     /// <param name="dispatcher">The dispatcher.</param>
     /// <param name="action">The action.</param>
@@ -136,9 +138,10 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
-    /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// Executes the specified delegate with the specified arguments on the thread that the Dispatcher was created on if required, returning a task that can be awaited.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// If the current thread already has access, the delegate is executed directly and a completed task is returned.
     /// </summary>
     /// <param name="dispatcher">The dispatcher.</param>
     /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
@@ -153,9 +156,10 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
-    /// Executes the specified delegate asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// Executes the specified delegate with the specified arguments at the specified priority on the thread that the Dispatcher was created on if required, returning a task that can be awaited.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// If the current thread already has access, the delegate is executed directly and a completed task is returned.
     /// </summary>
     /// <param name="dispatcher">The dispatcher.</param>
     /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
