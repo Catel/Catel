@@ -33,9 +33,9 @@ If a class, for example a view model, is interested in these messages, the only 
 /// </summary>
 /// <param name="value">The value.</param>
 [MessageRecipient]
-private void ShowMessage(string value)
+private async void ShowMessage(string value)
 {
-    _messageService.Show(value);
+    await _messageService.ShowAsync(value);
 }
 ```
 
@@ -61,9 +61,9 @@ The message is now sent with the tag. The attribute has to be used as shown belo
 /// </summary>
 /// <param name="value">The value.</param>
 [MessageRecipient(Tag = "myTag")]
-private void ShowMessage(string value)
+private async void ShowMessage(string value)
 {
-    _messageService.Show(value);
+    await _messageService.ShowAsync(value);
 }
 ```
 

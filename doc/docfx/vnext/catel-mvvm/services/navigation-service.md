@@ -22,7 +22,7 @@ public MyViewModel(IServiceProvider serviceProvider, INavigationService navigati
 ```
 
 ```csharp
-_navigationService.CloseApplication();
+await _navigationService.CloseApplicationAsync();
 ```
 
 ## Preventing an application to be closed
@@ -42,7 +42,7 @@ _navigationService.ApplicationClosing += (sender, e)
 To navigate to a new page, use the following code:
 
 ```csharp
-_navigationService.Navigate<EmployeeViewModel>();
+await _navigationService.NavigateAsync<EmployeeViewModel>();
 ```
 
 ## Navigating with parameters
@@ -53,7 +53,7 @@ It is easy to navigate to a new page with parameters. Use the following code:
 var parameters = new Dictionary<string, object>();
 parameters.Add("id", employee.EmployeeID);
 
-_navigationService.Navigate<EmployeeViewModel>(parameters);
+await _navigationService.NavigateAsync<EmployeeViewModel>(parameters);
 ```
 
 To read the navigation parameters in the receiving view model, use the `OnNavigationCompleted` method.
@@ -63,8 +63,8 @@ To read the navigation parameters in the receiving view model, use the `OnNaviga
 The service also supports navigating back and forward:
 
 ```csharp
-_navigationService.GoBack(); // navigates to the previous page, obviously
-_navigationService.GoForward(); // navigates to the next page, obviously
+await _navigationService.GoBackAsync(); // navigates to the previous page, obviously
+await _navigationService.GoForwardAsync(); // navigates to the next page, obviously
 ```
 
 

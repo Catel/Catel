@@ -18,9 +18,12 @@ public MyViewModel(IServiceProvider serviceProvider, ISelectDirectoryService sel
 ```
 
 ```csharp
-if (_selectDirectoryService.DetermineDirectory())
+var context = new DetermineDirectoryContext();
+
+var result = await _selectDirectoryService.DetermineDirectoryAsync(context);
+if (result.Result)
 {
-    // User selected a directory
+    // User selected a directory, available via result.DirectoryName
 }
 ```
 

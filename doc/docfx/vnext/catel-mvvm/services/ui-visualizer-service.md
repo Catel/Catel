@@ -43,7 +43,7 @@ To show a (modal or non-modal) window and get a callback as soon as the window i
 
 ```csharp
 var viewModel = new EmployeeViewModel();
-_uiVisualizerService.Show(viewModel, OnWindowClosed);
+await _uiVisualizerService.ShowAsync(viewModel, OnWindowClosed);
 ```
 
 ## Registering a window

@@ -18,7 +18,7 @@ public MyViewModel(IServiceProvider serviceProvider, IMessageService messageServ
 ```
 
 ```csharp
-await _messageService.Show("My first message via the service");
+await _messageService.ShowInformationAsync("My first message via the service");
 ```
 
 ## Showing an error
@@ -26,7 +26,7 @@ await _messageService.Show("My first message via the service");
 Showing a warning or error is easy. Use the following code:
 
 ```csharp
-await _messageService.ShowError("Whoops, something went wrong");
+await _messageService.ShowErrorAsync("Whoops, something went wrong");
 ```
 
 ## Requesting confirmation
@@ -34,7 +34,7 @@ await _messageService.ShowError("Whoops, something went wrong");
 It is also possible to request confirmation from the user. The following code must be used to request confirmation:
 
 ```csharp
-if (await _messageService.Show("Are you sure you want to do this?", "Are you sure?", MessageButton.YesNo) == MessageResult.Yes)
+if (await _messageService.ShowAsync("Are you sure you want to do this?", "Are you sure?", MessageButton.YesNo) == MessageResult.Yes)
 {
     // Do it!
 }
