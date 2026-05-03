@@ -89,10 +89,22 @@
 
 <p>In order to compile, the following 3rd party software is required:</p>
 <ul>
-<li>Visual Studio 2019</li>
-<li>Xamarin (if you want to compile this part)</li>
+<li>Visual Studio 2022</li>
 </ul>
-<p>All other libraries required are located inside the <em>lib</em> folder or are retrieved via NuGet.</p>
+<p>All other libraries required are retrieved via NuGet.</p>
+<p>Note that the <code>.vsconfig</code> in the <code>src</code> root should notify about missing components when opening the solution.</p>
+<h2 id="building">Building</h2>
+<p>Note that you should run these commands using PowerShell in the root of the repository.</p>
+<h3 id="running-a-build">Running a build</h3>
+<pre><code>.\build.ps1 -target build
+</code></pre>
+<h3 id="running-a-build-with-unit-tests">Running a build with unit tests</h3>
+<pre><code>.\build.ps1 -target buildandtest
+</code></pre>
+<h3 id="running-a-build-with-local-packages">Running a build with local packages</h3>
+<p>Note that this assumes a local packages directory at <code>C:\Source\_packages</code>, which can be added to the NuGet feeds.</p>
+<pre><code>.\build.ps1 -target buildandpackagelocal
+</code></pre>
 
 </article>
 
