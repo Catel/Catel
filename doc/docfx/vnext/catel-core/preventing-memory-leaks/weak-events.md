@@ -47,7 +47,7 @@ This weak event listener follows the rules of the .NET framework. So, it cannot 
 
 There are a few downsides about using a weak event listeners in general:
 
-- It is notation is ugly, the “original” .NET way looks way better
+- Its notation is more verbose than the standard .NET approach
 - You have to name the event by string, that sucks (if you know a better way, contact me!)
 - It can only handle events with a handler of EventHandler\<TEventArgs\>
 - You become a lazy developer not caring about subscriptions

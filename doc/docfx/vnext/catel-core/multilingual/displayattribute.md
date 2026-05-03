@@ -7,7 +7,7 @@ Note that this is still work in progress, we would love to support this, but MS 
 
 ## Using the attribute
 
-Using the attribute is really easy. put the attribute on top of any method, property, field or parameter like this:
+To use the attribute, place it on top of any method, property, field or parameter as shown below:
 
 ```
 public enum Condition

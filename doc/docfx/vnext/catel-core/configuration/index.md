@@ -83,6 +83,6 @@ public class DbConfigurationService : ConfigurationService
 }
 ```
 
-do not forget to register the customized *ConfigurationService* in the *ServiceLocator*
+Do not forget to register the customized *ConfigurationService* in the *ServiceLocator*
 
 

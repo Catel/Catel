@@ -1,7 +1,7 @@
 ﻿---
 title: "Auditing" 
 ---
-There are many lightweight MVVM frameworks out there, which work great for the basics. However, if you are writing larger enterprise applications, notifying the UI of changed properties is not enough. For example, did you think about Command Authentication? Or what about sensor emulation for Windows Phone 7 (that Microsoft do not provide)?
+There are many lightweight MVVM frameworks out there, which work great for the basics. However, if you are writing larger enterprise applications, notifying the UI of changed properties is not enough. For example, did you think about Command Authentication?
 
 ## Why auditing
 

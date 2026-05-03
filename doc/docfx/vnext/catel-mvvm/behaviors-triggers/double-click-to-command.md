@@ -1,7 +1,7 @@
 ﻿---
 title: "DoubleClickToCommand" 
 ---
-many times, a developer needs to handle a double click event. This trigger allows a developer to track a double click on any `FrameworkElement` and respond to that using a command.
+Many times, a developer needs to handle a double click event. This trigger allows a developer to track a double click on any `FrameworkElement` and respond to that using a command.
 
 1) Add the following XML namespaces:
 
