@@ -34,7 +34,7 @@ public partial class MessageService
 
         var tcs = new TaskCompletionSource<MessageResult>();
 
-        _dispatcherService.BeginInvokeAsync(() =>
+        _ = _dispatcherService.BeginInvokeAsync(() =>
         {
             MessageBoxResult result;
             var messageBoxButton = TranslateMessageButton(button);
