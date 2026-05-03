@@ -466,8 +466,8 @@ public void Execute_Throws_Exception()
 Add these packages to the test project:
 
 ```xml
-<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0" />
-<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
+<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 ```
 
 ```csharp
