@@ -337,6 +337,13 @@
           href: catel-mvvm/views/xaml/external-controls/using-custom-window.md
 - name: Catel.Fody
   href: catel-fody/index.md
+- name: Catel.SourceGenerators
+  href: catel-sourcegenerators/index.md
+  items:
+  - name: XAML Constructors
+    href: catel-sourcegenerators/xaml-constructors.md
+  - name: Debugging
+    href: catel-sourcegenerators/debugging.md
 - name: Examples
   href: examples/index.md
 - name: FAQ
