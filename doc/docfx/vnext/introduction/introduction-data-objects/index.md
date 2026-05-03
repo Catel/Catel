@@ -5,7 +5,7 @@ It is important to understand the data objects in Catel because they form the ba
 
 ## The ObservableObject class
 
-basic class implementing the `System.ComponentModel.INotifyPropertyChanging` and `System.ComponentModel.INotifyPropertyChanged` interfaces as well as Catels `Catel.Data.IAdvancedNotifyPropertyChanging` and Catels `Catel.Data.IAdvancedNotifyPropertyChanged`.
+Basic class implementing the `System.ComponentModel.INotifyPropertyChanging` and `System.ComponentModel.INotifyPropertyChanged` interfaces as well as Catels `Catel.Data.IAdvancedNotifyPropertyChanging` and Catels `Catel.Data.IAdvancedNotifyPropertyChanged`.
 
 ## The ModelBase class
 

@@ -41,7 +41,7 @@ namespace WPF.GettingStarted.Models
 
 The next step is to add properties to the models. An important concept to understand is that Catel uses specific "dependency-a-like" properties in order to provide all the functionality in the `ModelBase` classes. Below are the properties per model that need to be registered.
 
-At first sight, these properties might look very overwhelming. examine how the property system works. The most important thing is the actual property registration:
+At first sight, these properties might look very overwhelming. Examine how the property system works. The most important thing is the actual property registration:
 
 ```
 public static readonly PropertyData PersonsProperty = RegisterProperty("Persons", typeof(ObservableCollection<Person>), () => new ObservableCollection<Person>());
