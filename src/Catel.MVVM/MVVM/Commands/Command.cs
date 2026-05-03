@@ -289,7 +289,7 @@ public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICa
 
         if (dispatcherService is not null && AutomaticallyDispatchEvents)
         {
-            dispatcherService.BeginInvokeIfRequired(action);
+            dispatcherService.BeginInvokeIfRequiredAsync(action);
         }
         else
         {

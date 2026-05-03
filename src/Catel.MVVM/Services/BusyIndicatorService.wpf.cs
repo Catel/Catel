@@ -20,7 +20,7 @@ public partial class BusyIndicatorService
 
     partial void ShowBusyIndicator(bool indeterminate)
     {
-        _dispatcherService.BeginInvokeIfRequired(() =>
+        _dispatcherService.BeginInvokeIfRequiredAsync(() =>
         {
             var overrideCursor = Mouse.OverrideCursor;
 
@@ -37,7 +37,7 @@ public partial class BusyIndicatorService
 
     partial void HideBusyIndicator()
     {
-        _dispatcherService.BeginInvokeIfRequired(() =>
+        _dispatcherService.BeginInvokeIfRequiredAsync(() =>
         {
             _logger.LogDebug($"Restoring cursor '{_previousCursor}'");
 

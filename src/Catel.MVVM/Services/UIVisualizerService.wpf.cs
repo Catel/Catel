@@ -97,7 +97,7 @@ public partial class UIVisualizerService
     {
         var tcs = new TaskCompletionSource<FrameworkElement>();
 
-        _dispatcherService.BeginInvoke(() =>
+        _ = _dispatcherService.BeginInvokeAsync(() =>
         {
             try
             {

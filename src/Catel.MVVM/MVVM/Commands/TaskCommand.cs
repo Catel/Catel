@@ -369,7 +369,7 @@ public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : C
         var dispatcherService = DispatcherService;
         if (dispatcherService is not null && AutomaticallyDispatchEvents)
         {
-            dispatcherService.BeginInvokeIfRequired(action);
+            dispatcherService.BeginInvokeIfRequiredAsync(action);
         }
         else
         {

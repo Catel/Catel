@@ -21,7 +21,7 @@ public class SubscribeKeyboardEventsOnViewModelCreationAuditor : AuditorBase
     {
         base.OnViewModelCreated(viewModel);
 
-        _dispatcherService.BeginInvokeIfRequired(() =>
+        _dispatcherService.BeginInvokeIfRequiredAsync(() =>
         {
             _commandManager.SubscribeToKeyboardEvents();
         });

@@ -1,5 +1,4 @@
-﻿#pragma warning disable CL0002 // Methods returning Task without "Async" suffix - intentional for API backward compatibility
-namespace Catel.Windows.Threading;
+﻿namespace Catel.Windows.Threading;
 
 using System;
 using System.Threading.Tasks;
@@ -112,7 +111,7 @@ public static partial class DispatcherExtensions
     /// <param name="action">The action.</param>
     /// <returns>The task representing the action.</returns>
     /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
-    public static Task InvokeIfRequired(this Dispatcher dispatcher, Action action)
+    public static Task InvokeIfRequiredAsync(this Dispatcher dispatcher, Action action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
@@ -130,7 +129,7 @@ public static partial class DispatcherExtensions
     /// <param name="priority">The priority.</param>
     /// <returns>The task representing the action.</returns>
     /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
-    public static Task InvokeIfRequired(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
+    public static Task InvokeIfRequiredAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
     {
         ArgumentNullException.ThrowIfNull(action);
 
@@ -148,7 +147,7 @@ public static partial class DispatcherExtensions
     /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
     /// <returns>The task representing the action.</returns>
     /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
-    public static Task InvokeIfRequired(this Dispatcher dispatcher, Delegate method, params object[] args)
+    public static Task InvokeIfRequiredAsync(this Dispatcher dispatcher, Delegate method, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(method);
 
@@ -167,7 +166,7 @@ public static partial class DispatcherExtensions
     /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
     /// <returns>The task representing the action.</returns>
     /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
-    public static Task InvokeIfRequired(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
+    public static Task InvokeIfRequiredAsync(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
     {
         ArgumentNullException.ThrowIfNull(method);
 

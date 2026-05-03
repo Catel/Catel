@@ -1034,7 +1034,7 @@ public class FastObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>,
         {
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequired(() => PropertyChanged?.Invoke(this, eventArgs));
+                _dispatcherService.BeginInvokeIfRequiredAsync(() => PropertyChanged?.Invoke(this, eventArgs));
             }
             else
             {
@@ -1050,7 +1050,7 @@ public class FastObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>,
         {
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequired(() => CollectionChanged?.Invoke(this, eventArgs));
+                _dispatcherService.BeginInvokeIfRequiredAsync(() => CollectionChanged?.Invoke(this, eventArgs));
             }
             else
             {
@@ -1150,7 +1150,7 @@ public class FastObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>,
 
         if (AutomaticallyDispatchChangeNotifications)
         {
-            _dispatcherService.BeginInvokeIfRequired(action);
+            _dispatcherService.BeginInvokeIfRequiredAsync(action);
         }
         else
         {
