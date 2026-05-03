@@ -1063,6 +1063,22 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
     {
         UninitializeThrottling();
 
+        // If neither saved nor canceled, cancel the models to clean up subscriptions (prevents memory leaks)
+        if (!IsCanceled && !IsSaved)
+        {
+            lock (_modelLock)
+            {
+                foreach (var modelKeyValuePair in _modelObjects)
+                {
+                    var model = modelKeyValuePair.Value;
+                    if (model is not null)
+                    {
+                        UninitializeModelInternal(modelKeyValuePair.Key, model, ModelCleanUpMode.CancelEdit);
+                    }
+                }
+            }
+        }
+
         _viewModelManager.UnregisterAllModels(this);
 
         return base.CloseAsync();
