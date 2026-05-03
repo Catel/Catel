@@ -108,15 +108,13 @@ Weave all Argument check attributes into actual argument checks.
 
 ### WeaveLogging
 
-Weave all calls to `LogManager.GetCurrentClassLogger()` into `LogManager.GetLogger(typeof(classname))`.
+Weave all calls to `LogManager.GetLogger(classname)` into `LogManager.GetLogger(typeof(classname))`.
 
 > Default value is *true*
 
 ### GenerateXmlSchemas
 
-Generate xml schemas for all classes that inherit (directly or indirectly) from `Catel.Data.ModelBase`.
-
-> Default value is *false*
+> **Note:** `GenerateXmlSchemas` has been removed in Catel 7 along with the serialization engine.
 
 ## Weaving properties
 

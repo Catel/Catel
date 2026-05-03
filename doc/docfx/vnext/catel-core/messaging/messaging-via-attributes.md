@@ -13,21 +13,21 @@ There are two options to decorate methods with the attribute. Either with or wit
 
 In this case, the mediator will send the message to all the methods that has subscribe using the attribute to receive the message and not one especially. The code below broadcasts a message without any tag. This is just regular behavior of the message mediator.
 
-```
+Inject `IMessageMediator` via the constructor and send a message:
+
+```csharp
 /// <summary>
 /// Method to invoke when the command is executed.
 /// </summary>
 private void OnCmdExecute()
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var mediator = dependencyResolver.Resolve<IMessageMediator>();
-    mediator.SendMessage("Test Value");
+    _messageMediator.SendMessage("Test Value");
 }
 ```
 
 If a class, for example a view model, is interested in these messages, the only thing that needs to be done is to decorate a method with the MessageRecipient attribute as shown below:
 
-```
+```csharp
 /// <summary>
 /// Shows the message.
 /// </summary>
@@ -35,9 +35,7 @@ If a class, for example a view model, is interested in these messages, the only 
 [MessageRecipient]
 private void ShowMessage(string value)
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var messageService = dependencyResolver.Resolve<IMessageService>();
-    messageService.Show(value);
+    _messageService.Show(value);
 }
 ```
 
@@ -45,21 +43,19 @@ private void ShowMessage(string value)
 
 A tag can be used to specify some sort of grouping for messages. The MessageRecipient attribute also supports this as shown in the code below. First lets take a look how to send a message and specify a tag.
 
-```
+```csharp
 /// <summary>
 /// Method to invoke when the command is executed.
 /// </summary>
 private void OnCmdExecute()
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var mediator = dependencyResolver.Resolve<IMessageMediator>();
-    mediator.SendMessage("Test Value", "myTag");
+    _messageMediator.SendMessage("Test Value", "myTag");
 }
 ```
 
 The message is now sent with the tag. The attribute has to be used as shown below:
 
-```
+```csharp
 /// <summary>
 /// Shows the message.
 /// </summary>
@@ -67,9 +63,8 @@ The message is now sent with the tag. The attribute has to be used as shown belo
 [MessageRecipient(Tag = "myTag")]
 private void ShowMessage(string value)
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var messageService = dependencyResolver.Resolve<IMessageService>();
-    messageService.Show(value);
+    _messageService.Show(value);
 }
 ```
+
 

@@ -100,13 +100,13 @@
       href: catel-core/data-handling/observableobject.md
     - name: Property bags
       href: catel-core/data-handling/property-bags.md
-    - name: SavableModelBase
+    - name: SavableModelBase (removed)
       href: catel-core/data-handling/savablemodelbase.md
     - name: Using ModelBase as base for entities
       href: catel-core/data-handling/using-modelbase-as-base-for-entities.md
     - name: ValidatableModelBase
       href: catel-core/data-handling/validatablemodelbase.md
-  - name: Exception handling
+  - name: Exception handling (IExceptionService removed)
     href: catel-core/exception-handling/index.md
     items:
     - name: WPF implementation for exception handling
@@ -255,7 +255,9 @@
   - name: Services
     href: catel-mvvm/services/index.md
     items:
-    - name: LocationService
+    - name: BusyIndicatorService
+      href: catel-mvvm/services/please-wait-service.md
+    - name: LocationService (removed)
       href: catel-mvvm/services/location-service.md
     - name: MessageService
       href: catel-mvvm/services/message-service.md
@@ -263,21 +265,19 @@
       href: catel-mvvm/services/navigation-service.md
     - name: OpenFileService
       href: catel-mvvm/services/open-file-service.md
-    - name: PleaseWaitService
-      href: catel-mvvm/services/please-wait-service.md
     - name: ProcessService
       href: catel-mvvm/services/process-service.md
     - name: SaveFileService
       href: catel-mvvm/services/save-file-service.md
-    - name: SchedulerService
+    - name: SchedulerService (removed)
       href: catel-mvvm/services/scheduler-service.md
     - name: SelectDirectoryService
       href: catel-mvvm/services/select-directory-service.md
     - name: UIVisualizerService
       href: catel-mvvm/services/ui-visualizer-service.md
-    - name: VibrateService
+    - name: VibrateService (removed)
       href: catel-mvvm/services/vibrate-service.md
-    - name: ViewExportService
+    - name: ViewExportService (removed)
       href: catel-mvvm/services/view-export-service.md
   - name: View models
     href: catel-mvvm/view-models/index.md

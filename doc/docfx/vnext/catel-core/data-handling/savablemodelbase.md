@@ -1,10 +1,6 @@
 ﻿---
 title: "SavableModelBase" 
 ---
-The `SavableModelBase` class extends the `[ModelBase]({{< relref "catel-core/data-handling/modelbase.md" >}})` class with functionality to save the model to a persistence store.
-
-Note that the `SavableModelBase` is just a convenience implementation. The `ModelBase` can be serialized by any `ISerializer` implementation as well.
-
-More documentation should be written in the future
+> **Note:** `SavableModelBase` has been removed in Catel 7. The serialization engine was removed from Catel. Use alternatives such as `System.Text.Json`, `Newtonsoft.Json`, or `Orc.Serialization` for serializing models to a persistence store.
 
 

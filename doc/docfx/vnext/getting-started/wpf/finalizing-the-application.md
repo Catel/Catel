@@ -152,15 +152,12 @@ private void UpdateSearchFilter()
 
 Then, add this code to the `OnAddFamilyExecute` function:
 
-```
+```csharp
 private async Task OnAddFamilyExecuteAsync()
 {
     var family = new Family();
 
-    // Note that we use the type factory here because it will automatically take care of any dependencies
-    // that the FamilyWindowViewModel will add in the future
-    var typeFactory = this.GetTypeFactory();
-    var familyWindowViewModel = typeFactory.CreateInstanceWithParametersAndAutoCompletion<FamilyWindowViewModel>(family);
+    var familyWindowViewModel = _viewModelFactory.CreateViewModel<FamilyWindowViewModel>(family);
     if (await _uiVisualizerService.ShowDialog(familyWindowViewModel) ?? false)
     {
         Families.Add(family);

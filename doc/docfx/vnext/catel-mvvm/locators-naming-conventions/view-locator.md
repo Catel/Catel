@@ -1,7 +1,7 @@
 ﻿---
 title: "ViewLocator" 
 ---
-The `IViewLocator` class is responsible for resolving the right views for a view model. Before Catel 3.0, the `IUIVisualizerService` was responsible for resolving the view, but this responsibility is now taken over by the `IViewLocator`. The `UIVisualizerService` internally uses the `IViewLocator` to resolve the views. 
+The `IViewLocator` class is responsible for resolving the right views for a view model. The `UIVisualizerService` internally uses the `IViewLocator` to resolve the views. 
 
 ## Resolving by naming convention
 
@@ -21,11 +21,10 @@ Catel.Examples.Views.MyView
 
 ## Manually resolving a view using naming convention
 
-To manually resolve a view using naming convention, use the following code:
+To manually resolve a view using naming convention, inject `IViewLocator` via the constructor and use:
 
-```
-var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-var viewType = viewLocator.ResolveView(typeof(MyViewModel));
+```csharp
+var viewType = _viewLocator.ResolveView(typeof(MyViewModel));
 ```
 
 ## Customizing naming conventions
@@ -89,25 +88,24 @@ For more information about naming conventions, see [Naming conventions]({{< relr
 
 However, it is possible to add or remove new naming conventions to support your own naming convention. For example, to add a new naming convention for a different assembly, use this code:
 
-```
-var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-viewLocator.NamingConventions.Add("MyCustomAssembly.Views.[VM]View");
+```csharp
+_viewLocator.NamingConventions.Add("MyCustomAssembly.Views.[VM]View");
 ```
 
 ## Registering custom views
 
 Sometimes, a class doesn't follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:
 
-```
-var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-viewLocator.Register(typeof(MyViewModelNotFollowingNamingConvention), typeof(MyView));
+```csharp
+_viewLocator.Register(typeof(MyViewModelNotFollowingNamingConvention), typeof(MyView));
 ```
 
 ## Using a custom ViewLocator
 
-If you want to have total freedom to determine which view is provided per view model (maybe there are other services that have an impact on this), it is possible to create a custom `IViewLocator` implementation. Then the only thing to do is to register it using the following code:
+If you want to have total freedom to determine which view is provided per view model (maybe there are other services that have an impact on this), it is possible to create a custom `IViewLocator` implementation. Register it in the service collection:
 
+```csharp
+services.AddSingleton<IViewLocator, MyViewLocator>();
 ```
-ServiceLocator.Default.RegisterType<IViewLocator, MyViewLocator>();
-```
+
 

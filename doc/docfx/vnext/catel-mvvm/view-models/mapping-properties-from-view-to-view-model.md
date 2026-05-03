@@ -47,13 +47,10 @@ public partial class MyControl : UserControl
 
 ## Important note starting with Catel 4.0
 
-Starting with 4.0, Catel no longer subscribes to dependency properties automatically. It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, use the `IViewPropertySelector.AddPropertyToSubscribe` method to add properties:
+Starting with 4.0, Catel no longer subscribes to dependency properties automatically. It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, inject `IViewPropertySelector` via the constructor and use the `AddPropertyToSubscribe` method:
 
-```
-var serviceLocator = ServiceLocator.Default;
-var viewPropertySelector = serviceLocator.ResolveType<IViewPropertySelector>();
-
-viewPropertySelector.AddPropertyToSubscribe("MyProperty", typeof(MyView));
+```csharp
+_viewPropertySelector.AddPropertyToSubscribe("MyProperty", typeof(MyView));
 ```
 
 In most cases, the only reason to subscribe to property changes is because of the `ViewToViewModel` attribute. If that is the case, it is best to use the extension method `AutoDetectViewPropertiesToSubscribe` in the static constructor of the view:

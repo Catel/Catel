@@ -22,13 +22,18 @@ The `DesignTimeCodeAttribute` contains the types that are constructed during des
 
 Below is an example of the usage, which registers custom language resource sources in the language service. This allows real-time updates of the `LanguageService` in the designer.
 
-```
+```csharp
 public class DesignTimeLanguageService : Catel.DesignTimeInitializer
 {
     protected override void Initialize()
     {
-        var dependencyResolver = this.GetDependencyResolver();
-        var languageService = dependencyResolver.Resolve<ILanguageService>();
+        // Design-time initializers cannot use constructor injection because they are
+        // instantiated by Catel at design time. Use the IoC container directly here.
+        var languageService = IoCContainer.ServiceProvider?.GetService<ILanguageService>();
+        if (languageService is null)
+        {
+            return;
+        }
 
         languageService.CacheResults = false;
 

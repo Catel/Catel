@@ -154,10 +154,10 @@ public interface ICustomUIVisualizerService : IUIVisualizerService
 }
 ```
 
-Of course, this will need to be registered with the `ServiceLocator` to be utilized correctly:
+Of course, this will need to be registered with the service collection to be utilized correctly:
 
-```
-ServiceLocator.Default.RegisterType<ICustomUIVisualService, CustomUIVisualService>
+```csharp
+services.AddSingleton<ICustomUIVisualizerService, CustomUIVisualizerService>();
 ```
 
 ## Using the class

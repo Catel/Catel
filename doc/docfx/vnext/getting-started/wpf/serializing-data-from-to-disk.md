@@ -1,7 +1,12 @@
 ---
 title: "Serializing data from/to disk" 
 ---
-In this step we will create services that will serialize the models from/to disk. Services are a great way to abstract functionality that can be used in every part of the application. This guide will also register the service in the *ServiceLocator* so it can be injected in view models.
+> **Note:** The Catel serialization engine (`IXmlSerializer`, `SavableModelBase`) was removed in Catel 7. The `ServiceLocator` IoC container was also removed in Catel 7 in favor of standard .NET dependency injection.
+>
+> For serialization, use alternatives such as `System.Text.Json`, `Newtonsoft.Json`, or `Orc.Serialization`.
+> For dependency injection, register services in `IServiceCollection` using `services.AddCatelCore()` and `services.AddCatelMvvm()`.
+
+In this step we will create services that will serialize the models from/to disk. Services are a great way to abstract functionality that can be used in every part of the application.
 
 ## Creating the service definition
 
@@ -11,7 +16,7 @@ The first thing to do is to create the *Services* folder to group the services. 
 
 Then add a new interface to the `Interfaces` folder named `IFamilyService`. This will manage the families that are avaiable. Below is the interface defined:
 
-```
+```csharp
 namespace WPF.GettingStarted.Services
 {
     using WPF.GettingStarted.Models;
@@ -26,68 +31,56 @@ namespace WPF.GettingStarted.Services
 
 ## Creating the service implementation
 
-Below is the implementation of the service which will actually take care of saving and loading of the families:
+Below is an example implementation using `System.Text.Json` for serialization:
 
-```
+```csharp
 namespace WPF.GettingStarted.Services
 {
     using System.Collections.Generic;
     using System.IO;
-    using Catel.Collections;
-    using Catel.Data;
+    using System.Text.Json;
     using WPF.GettingStarted.Models;
 
     public class FamilyService : IFamilyService
     {
         private readonly string _path;
-        private readonly IXmlSerializer _xmlSerializer;
 
-        public FamilyService(IXmlSerializer xmlSerializer)
+        public FamilyService()
         {
-            Argument.IsNotNull(() => xmlSerializer);
+            string directory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "CatenaLogic", "WPF.GettingStarted");
 
-            _xmlSerializer = xmlSerializer;
-
-            string directory = Catel.IO.Path.GetApplicationDataDirectory("CatenaLogic", "WPF.GettingStarted");
-
-            _path = Path.Combine(directory, "family.xml");
+            Directory.CreateDirectory(directory);
+            _path = Path.Combine(directory, "family.json");
         }
 
         public IEnumerable<Family> LoadFamilies()
         {
             if (!File.Exists(_path))
             {
-                return new Family[] { };
+                return Array.Empty<Family>();
             }
 
-            using (var fileStream = File.Open(_path, FileMode.Open))
-            {
-                var settings = _xmlSerializer.Deserialize<Settings>(fileStream);
-                return settings.Families;
-            }
+            var json = File.ReadAllText(_path);
+            return JsonSerializer.Deserialize<List<Family>>(json) ?? new List<Family>();
         }
 
         public void SaveFamilies(IEnumerable<Family> families)
         {
-            var settings = new Settings();
-            settings.Families.ReplaceRange(families);
-
-            using (var fileStream = File.Open(_path, FileMode.Create))
-            {
-                _xmlSerializer.Serialize(settings, fileStream);
-            }
+            var json = JsonSerializer.Serialize(families);
+            File.WriteAllText(_path, json);
         }
     }
 }
 ```
 
-## Registering the service in the ServiceLocator
+## Registering the service in the service collection
 
-Now we have created the service, it is time to register it in the `ServiceLocator`. In the `App.xaml.cs`, add the following code:
+Now we have created the service, it is time to register it in the service collection. In the `App.xaml.cs`, add the following code:
 
-```
-var serviceLocator = ServiceLocator.Default;
-serviceLocator.RegisterType<IFamilyService, FamilyService>();
+```csharp
+services.AddSingleton<IFamilyService, FamilyService>();
 ```
 
 ## Adding the service usage to the MainWindowViewModel
@@ -98,27 +91,24 @@ Now the service is registered, it can be used anywhere in the application. A gre
 
 To get an instance of the service in the view model, change the constructor to the following definition.
 
-```
+```csharp
 private readonly IFamilyService _familyService;
 
 /// <summary>
 /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
 /// </summary>
-public MainWindowViewModel(IFamilyService familyService)
+public MainWindowViewModel(IServiceProvider serviceProvider, IFamilyService familyService)
+    : base(serviceProvider)
 {
-    Argument.IsNotNull(() => familyService);
-
     _familyService = familyService;
 }
 ```
 
-As you can see in the code above, a new field is created to store the dependency `IFamilyService`. Then the constructor ensures that the argument is not null and stores it in the field.
-
 ### Creating the Families property on the MainWindowViewModel
 
-The next thing we need is a `Families` property on the `MainWindowViewModel` to store the families in we load from disk. Below is the property definition for that:
+The next thing we need is a `Families` property on the `MainWindowViewModel` to store the families we load from disk. Below is the property definition for that:
 
-```
+```csharp
 /// <summary>
 /// Gets the families.
 /// </summary>
@@ -131,14 +121,14 @@ public ObservableCollection<Family> Families
 /// <summary>
 /// Register the Families property so it is known in the class.
 /// </summary>
-public static readonly PropertyData FamiliesProperty = RegisterProperty("Families", typeof(ObservableCollection<Family>), null);
+public static readonly PropertyData FamiliesProperty = RegisterProperty<ObservableCollection<Family>>(nameof(Families));
 ```
 
 ### Loading the families at startup
 
 Now we have the `IFamilyService` and the `Families` property, it is time to combine these two. To do this, we need to override the `InitializeAsync` method on the view model which is automatically called as soon as the view is loaded by Catel:
 
-```
+```csharp
 protected override async Task InitializeAsync()
 {
     var families = _familyService.LoadFamilies();
@@ -150,7 +140,7 @@ protected override async Task InitializeAsync()
 
 To save the families at shutdown, override the `CloseAsync` method on the view model which is automatically called as soon as the view is closed by Catel:
 
-```
+```csharp
 protected override async Task CloseAsync()
 {
     _familyService.SaveFamilies(Families);
@@ -164,4 +154,5 @@ After running the application once, a new file will be stored in the following d
 ## Up next
 
 [Creating the view models]({{< relref "getting-started/wpf/creating-the-view-models.md" >}})
+
 

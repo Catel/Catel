@@ -26,10 +26,10 @@ public class CustomViewModelFactory : ViewModelFactory
 }
 ```
 
-When a custom factory is used, it is important to register it in the `ServiceLocator`:
+When a custom factory is used, it is important to register it in the service collection:
 
-```
-ServiceLocator.Default.RegisterType<IViewModelFactory, CustomViewModelFactory>();
+```csharp
+services.AddSingleton<IViewModelFactory, CustomViewModelFactory>();
 ```
 
 ## How to control the view model instantiation using a UserControl

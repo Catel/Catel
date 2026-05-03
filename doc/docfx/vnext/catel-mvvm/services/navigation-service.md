@@ -11,20 +11,26 @@ The `NavigationService` uses the `IViewLocator` and `IViewModelLocator` do handl
 
 It is possible to close an application using the following code:
 
+```csharp
+private readonly INavigationService _navigationService;
+
+public MyViewModel(IServiceProvider serviceProvider, INavigationService navigationService)
+    : base(serviceProvider)
+{
+    _navigationService = navigationService;
+}
 ```
-var dependencyResolver = this.GetDependencyResolver();
-var navigationService = dependencyResolver.Resolve<INavigationService>();
-navigationService.CloseApplication();
+
+```csharp
+_navigationService.CloseApplication();
 ```
 
 ## Preventing an application to be closed
 
 To prevent an application to be closed, one can subscribe to the `ApplicationClosing` event:
 
-```
-var dependencyResolver = this.GetDependencyResolver();
-var navigationService = dependencyResolver.Resolve<INavigationService>();
-navigationService.ApplicationClosing += (sender, e) 
+```csharp
+_navigationService.ApplicationClosing += (sender, e) 
 =>
 {
    e.Cancel = true;
@@ -35,23 +41,19 @@ navigationService.ApplicationClosing += (sender, e)
 
 To navigate to a new page, use the following code:
 
-```
-var dependencyResolver = this.GetDependencyResolver();
-var navigationService = dependencyResolver.Resolve<INavigationService>();
-navigationService.Navigate<EmployeeViewModel>();
+```csharp
+_navigationService.Navigate<EmployeeViewModel>();
 ```
 
 ## Navigating with parameters
 
 It is very easy to navigate to a new page with parameters. Use the following code:
 
-```
+```csharp
 var parameters = new Dictionary<string, object>();
 parameters.Add("id", employee.EmployeeID);
 
-var dependencyResolver = this.GetDependencyResolver();
-var navigationService = dependencyResolver.Resolve<INavigationService>();
-navigationService.Navigate<EmployeeViewModel>(parameters);
+_navigationService.Navigate<EmployeeViewModel>(parameters);
 ```
 
 To read the navigation parameters in the receiving view model, use the `OnNavigationCompleted` method.
@@ -60,10 +62,9 @@ To read the navigation parameters in the receiving view model, use the `OnNaviga
 
 The service also supports navigating back and forward:
 
+```csharp
+_navigationService.GoBack(); // navigates to the previous page, obviously
+_navigationService.GoForward(); // navigates to the next page, obviously
 ```
-var dependencyResolver = this.GetDependencyResolver();
-var navigationService = dependencyResolver.Resolve<INavigationService>();
-navigationService.GoBack(); // navigates to the previous page, obviously
-navigationService.GoForward(); // navigates to the next page, obviously
-```
+
 

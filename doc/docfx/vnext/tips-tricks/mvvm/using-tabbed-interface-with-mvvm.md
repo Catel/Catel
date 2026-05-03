@@ -147,7 +147,7 @@ namespace TabDemo.Services
 
 ### Implementation
 
-```
+```csharp
 namespace TabDemo.Services
 {
     using System;
@@ -155,19 +155,18 @@ namespace TabDemo.Services
     using System.Linq;
     using System.Windows.Controls;
     using Catel;
-    using Catel.Logging;
     using Catel.MVVM;
-    using Catel.Windows.Threading;
+    using Microsoft.Extensions.Logging;
     using TabItem = TabDemo.TabItem;
 
     public class TabService : ITabService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<TabService> _logger;
+        private TabControl? _tabControl;
 
-        private TabControl _tabControl;
-
-        public TabService()
+        public TabService(ILogger<TabService> logger)
         {
+            _logger = logger;
         }
 
         public IEnumerable<TabItem> Tabs
@@ -287,7 +286,7 @@ namespace TabDemo.Services
             var isVisible = IsVisible(tabItem);
             if (!isVisible)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Tab item is not visible, use the Show() method first");
+                throw new InvalidOperationException("Tab item is not visible, use the Show() method first");
             }
 
             _tabControl.SelectedItem = tabItem;
@@ -485,9 +484,10 @@ namespace Tabdemo.Controls
 
 #### Code behind
 
-```
+```csharp
 namespace TabDemo.Views
 {
+    using Microsoft.Extensions.DependencyInjection;
     using Catel.IoC;
     using Services;
 
@@ -497,9 +497,9 @@ namespace TabDemo.Views
         {
             InitializeComponent();
 
-            var serviceLocator = this.GetServiceLocator();
-
-            var tabService = serviceLocator.ResolveType<ITabService>() as TabService;
+            // WPF views are constructed by the XAML engine and cannot use constructor injection.
+            // Use the IoC container directly to resolve services in this case.
+            var tabService = IoCContainer.ServiceProvider.GetService<ITabService>() as TabService;
             if (tabService != null)
             {
                 tabService.SetTabControl(tabControl);
@@ -515,22 +515,18 @@ Here are some useful extension methods
 
 ### ITabServiceExtensions
 
-```
+```csharp
 namespace TabDemo.Services
 {
     using Catel;
-    using Catel.IoC;
     using Catel.MVVM;
-    using Services;
 
     public static class ITabServiceExtensions
     {
-        public static TabItem Add<TViewModel>(this ITabService tabService, object dataContext = null, bool canClose = false)
+        public static TabItem Add<TViewModel>(this ITabService tabService, IViewModelFactory viewModelFactory, object dataContext = null, bool canClose = false)
             where TViewModel : IViewModel
         {
-            Argument.IsNotNull(() => tabService);
-
-            var tabItem = CreateTabItem<TViewModel>(tabService, dataContext);
+            var tabItem = CreateTabItem<TViewModel>(tabService, viewModelFactory, dataContext);
             tabItem.CanClose = canClose;
 
             tabService.Add(tabItem);
@@ -538,34 +534,24 @@ namespace TabDemo.Services
             return tabItem;
         }
 
-        public static TabItem AddAndActivate<TViewModel>(this ITabService tabService, object dataContext = null, bool canClose = false)
+        public static TabItem AddAndActivate<TViewModel>(this ITabService tabService, IViewModelFactory viewModelFactory, object dataContext = null, bool canClose = false)
             where TViewModel : IViewModel
         {
-            Argument.IsNotNull(() => tabService);
-
-            var tabItem = Add<TViewModel>(tabService, dataContext, canClose);
+            var tabItem = Add<TViewModel>(tabService, viewModelFactory, dataContext, canClose);
             tabService.Activate(tabItem);
 
             return tabItem;
         }
 
-        public static TabItem CreateTabItem<TViewModel>(this ITabService tabService, object dataContext)
+        public static TabItem CreateTabItem<TViewModel>(this ITabService tabService, IViewModelFactory viewModelFactory, object dataContext)
             where TViewModel : IViewModel
         {
-            Argument.IsNotNull(() => tabService);
-
-            var dependencyResolver = tabService.GetDependencyResolver();
-            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
-
             var vm = viewModelFactory.CreateViewModel<TViewModel>(dataContext);
             return new TabItem(vm);
         }
 
         public static void AddAndActivate(this ITabService tabService, TabItem tabItem)
         {
-            Argument.IsNotNull(() => tabService);
-            Argument.IsNotNull(() => tabItem);
-
             tabService.Add(tabItem);
             tabService.Activate(tabItem);
         }
