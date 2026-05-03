@@ -87,148 +87,149 @@
         <article data-uid="">
 
 
-<p>In this step we will create the view models. Since this is a simple application, just a few view models are required. A view model in essence is nothing more than a class that derives from the <code>ViewModelBase</code> class</p>
-<p>The <em>vm</em> code snippet is available to create view models. There is also an on-line item template available for Catel view models</p>
+<p>In this step we will create the view models. A view model is a class that derives from <code>ViewModelBase</code> (or <code>FeaturedViewModelBase</code> for additional features) and contains all the presentation logic for a view.</p>
 <h2 id="creating-the-personviewmodel">Creating the PersonViewModel</h2>
-<p>Below is the class definition of the <code>PersonViewModel</code>. This view model will be used to show the details of a <code>Person</code> model.</p>
-<pre><code>namespace WPF.GettingStarted.ViewModels
-{
-    using Catel.MVVM;
+<p>The <code>PersonViewModel</code> is responsible for editing a single <code>Person</code>. It receives the <code>Person</code> model via constructor injection (provided automatically by Catel's <code>IUIVisualizerService</code>).</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.ViewModels;
 
-    public class PersonViewModel : ViewModelBase
-    {
-    }
-}
-</code></pre>
-<h3 id="enabling-model-injection">Enabling model injection</h3>
-<p>In hierarchy views, it is important to manage the state of views and view models based on the actual context where the view (thus view model) is located. Catel does this by allowing model injection. The view models will only be created when the model is available within the context of the view.</p>
-<pre><code>public class PersonViewModel : ViewModelBase
-{
-    public PersonViewModel(Person person)
-    {
-        Argument.IsNotNull(() =&gt; person);
+using System;
+using System.Collections.Generic;
+using Catel.Data;
+using Catel.Examples.PersonApplication.Models;
+using Catel.MVVM;
 
+public class PersonViewModel : FeaturedViewModelBase
+{
+    public PersonViewModel(Person person, IServiceProvider serviceProvider)
+        : base(serviceProvider)
+    {
         Person = person;
+
+        Title = &quot;Person&quot;;
     }
 
-    /// &lt;summary&gt;
-    /// Gets or sets the person.
-    /// &lt;/summary&gt;
     [Model]
-    public Person Person
+    [Fody.Expose(&quot;FirstName&quot;)]
+    [Fody.Expose(&quot;MiddleName&quot;)]
+    public Person Person { get; private set; }
+
+    [ViewModelToModel(&quot;Person&quot;)]
+    public Gender Gender { get; set; }
+
+    [ViewModelToModel(&quot;Person&quot;)]
+    public string LastName { get; set; }
+}
+</code></pre>
+<h3 id="key-attributes-explained">Key attributes explained</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[Model]</code></td>
+<td>Marks the property as the backing model. Catel automatically calls <code>IEditableObject.BeginEdit</code> / <code>EndEdit</code> / <code>CancelEdit</code> when the view model is saved or cancelled.</td>
+</tr>
+<tr>
+<td><code>[Fody.Expose(&quot;FirstName&quot;)]</code></td>
+<td>Catel.Fody generates a <code>FirstName</code> property on the view model that is kept in sync with <code>Person.FirstName</code>.</td>
+</tr>
+<tr>
+<td><code>[ViewModelToModel(&quot;Person&quot;)]</code></td>
+<td>Catel keeps the view model property and the named model property in sync automatically, without manual mapping code.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="creating-the-mainwindowviewmodel">Creating the MainWindowViewModel</h2>
+<p>The <code>MainWindowViewModel</code> manages the list of persons shown in the main window and exposes commands for adding, editing, and removing persons.</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.ViewModels;
+
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Catel.Examples.PersonApplication.Models;
+using Catel.MVVM;
+using Catel.Services;
+
+public class MainWindowViewModel : ViewModelBase
+{
+    private readonly IMessageService _messageService;
+    private readonly IUIVisualizerService _uiVisualizerService;
+
+    public MainWindowViewModel(IServiceProvider serviceProvider, IUIVisualizerService uiVisualizerService,
+        IMessageService messageService)
+        : base(serviceProvider)
     {
-        get { return GetValue&lt;Person&gt;(PersonProperty); }
-        set { SetValue(PersonProperty, value); }
+        ArgumentNullException.ThrowIfNull(uiVisualizerService);
+        ArgumentNullException.ThrowIfNull(messageService);
+
+        _uiVisualizerService = uiVisualizerService;
+        _messageService = messageService;
+
+        Add = new TaskCommand(serviceProvider, OnAddExecuteAsync);
+        Edit = new TaskCommand(serviceProvider, OnEditExecuteAsync, OnEditCanExecute);
+        Remove = new TaskCommand(serviceProvider, OnRemoveExecuteAsync, OnRemoveCanExecute);
+
+        PersonCollection = new ObservableCollection&lt;Person&gt;();
+        PersonCollection.Add(new Person { Gender = Gender.Male, FirstName = &quot;Geert&quot;, MiddleName = &quot;van&quot;, LastName = &quot;Horrik&quot; });
+        PersonCollection.Add(new Person { Gender = Gender.Male, FirstName = &quot;Fred&quot;, MiddleName = string.Empty, LastName = &quot;Retteket&quot; });
+
+        Title = &quot;Person Application&quot;;
     }
 
-    /// &lt;summary&gt;
-    /// Register the Person property so it is known in the class.
-    /// &lt;/summary&gt;
-    public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person), null);
-}
-</code></pre>
-<p>Note that the <code>Person</code> property is decorated with the <code>Model</code> attribute. If the <code>Person</code> model implements <code>IEditableObject</code>, Catel will automatically call <code>IEditableObject.EndEdit</code> when the view model is saved, and <code>IEditableObject.CancelEdit</code> when the view model is canceled so that all changes on the model will be reverted. Note that <code>ModelBase</code> does not implement <code>IEditableObject</code> by default; if you want this behavior, implement <code>IEditableObject</code> in your model class.</p>
-<h3 id="exposing-properties-of-a-model">Exposing properties of a model</h3>
-<p>One powerful feature of Catel is that it can automatically map properties from a model to a view model. This way the user does not have to write repetitive code to map the properties from the model to the view model at startup and map the properties from view model to model when the view model is closed. Catel will take care of this all automatically.</p>
-<pre><code>/// &lt;summary&gt;
-/// Gets or sets the first name.
-/// &lt;/summary&gt;
-[ViewModelToModel(&quot;Person&quot;)]
-public string FirstName
-{
-    get { return GetValue&lt;string&gt;(FirstNameProperty); }
-    set { SetValue(FirstNameProperty, value); }
-}
+    public ObservableCollection&lt;Person&gt; PersonCollection { get; private set; }
 
-/// &lt;summary&gt;
-/// Register the FirstName property so it is known in the class.
-/// &lt;/summary&gt;
-public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), null);
+    public Person SelectedPerson { get; set; }
 
-/// &lt;summary&gt;
-/// Gets or sets the last name.
-/// &lt;/summary&gt;
-[ViewModelToModel(&quot;Person&quot;)]
-public string LastName
-{
-    get { return GetValue&lt;string&gt;(LastNameProperty); }
-    set { SetValue(LastNameProperty, value); }
-}
+    public TaskCommand Add { get; private set; }
 
-/// &lt;summary&gt;
-/// Register the LastName property so it is known in the class.
-/// &lt;/summary&gt;
-public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;LastName&quot;, typeof(string), null);
-</code></pre>
-<p>Note that the properties are decorated with the <em>ViewModelToModel</em> attribute which enables the automatic mappings feature in Catel.</p>
-<h2 id="creating-the-familyviewmodel">Creating the FamilyViewModel</h2>
-<p>The <code>FamilyViewModel</code> must be set up the same way as the <code>PersonViewModel</code> above.</p>
-<pre><code>namespace WPF.GettingStarted.ViewModels
-{
-    using System.Collections.ObjectModel;
-    using Catel;
-    using Catel.Data;
-    using Catel.MVVM;
-    using WPF.GettingStarted.Models;
-
-    public class FamilyViewModel : ViewModelBase
+    private async Task OnAddExecuteAsync()
     {
-        public FamilyViewModel(Family family)
+        var person = new Person();
+
+        var result = await _uiVisualizerService.ShowDialogAsync&lt;PersonViewModel&gt;(person);
+        if (result.DialogResult ?? false)
         {
-            Argument.IsNotNull(() =&gt; family);
-
-            Family = family; 
+            PersonCollection.Add(person);
         }
+    }
 
-        /// &lt;summary&gt;
-        /// Gets the family.
-        /// &lt;/summary&gt;
-        [Model]
-        public Family Family
+    public TaskCommand Edit { get; private set; }
+
+    private bool OnEditCanExecute()
+    {
+        return (SelectedPerson is not null);
+    }
+
+    private async Task OnEditExecuteAsync()
+    {
+        await _uiVisualizerService.ShowDialogAsync&lt;PersonViewModel&gt;(SelectedPerson);
+    }
+
+    public TaskCommand Remove { get; private set; }
+
+    private bool OnRemoveCanExecute()
+    {
+        return (SelectedPerson is not null);
+    }
+
+    private async Task OnRemoveExecuteAsync()
+    {
+        if (await _messageService.ShowAsync(&quot;Are you sure you want to remove this person?&quot;, &quot;Are you sure?&quot;, MessageButton.YesNo) == MessageResult.Yes)
         {
-            get { return GetValue&lt;Family&gt;(FamilyProperty); }
-            private set { SetValue(FamilyProperty, value); }
+            PersonCollection.Remove(SelectedPerson);
         }
-
-        /// &lt;summary&gt;
-        /// Register the Family property so it is known in the class.
-        /// &lt;/summary&gt;
-        public static readonly PropertyData FamilyProperty = RegisterProperty(&quot;Family&quot;, typeof(Family), null);
-
-        /// &lt;summary&gt;
-        /// Gets the family members.
-        /// &lt;/summary&gt;
-        [ViewModelToModel(&quot;Family&quot;)]
-        public ObservableCollection&lt;Person&gt; Persons
-        {
-            get { return GetValue&lt;ObservableCollection&lt;Person&gt;&gt;(PersonsProperty); }
-            private set { SetValue(PersonsProperty, value); }
-        }
-
-        /// &lt;summary&gt;
-        /// Register the Persons property so it is known in the class.
-        /// &lt;/summary&gt;
-        public static readonly PropertyData PersonsProperty = RegisterProperty(&quot;Persons&quot;, typeof(ObservableCollection&lt;Person&gt;), null);
-
-        /// &lt;summary&gt;
-        /// Gets or sets the family name.
-        /// &lt;/summary&gt;
-        [ViewModelToModel(&quot;Family&quot;)]
-        public string FamilyName
-        {
-            get { return GetValue&lt;string&gt;(FamilyNameProperty); }
-            set { SetValue(FamilyNameProperty, value); }
-        }
-
-        /// &lt;summary&gt;
-        /// Register the FamilyName property so it is known in the class.
-        /// &lt;/summary&gt;
-        public static readonly PropertyData FamilyNameProperty = RegisterProperty(&quot;FamilyName&quot;, typeof(string));
     }
 }
 </code></pre>
+<h3 id="dependency-injection">Dependency injection</h3>
+<p>Both services (<code>IUIVisualizerService</code> and <code>IMessageService</code>) are registered automatically by <code>services.AddCatelMvvm()</code> and are injected via the constructor.</p>
+<p><code>TaskCommand</code> requires the <code>IServiceProvider</code> so that Catel can manage command execution correctly on the dispatcher thread.</p>
 <h2 id="up-next">Up next</h2>
-<p>[Creating the views (user controls)]({{&lt; relref &quot;getting-started/wpf/creating-the-user-controls.md&quot; &gt;}})</p>
+<p>[Creating the views (windows)]({{&lt; relref &quot;getting-started/wpf/creating-the-windows.md&quot; &gt;}})</p>
 
 </article>
 

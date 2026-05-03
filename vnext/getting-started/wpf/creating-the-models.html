@@ -87,143 +87,59 @@
         <article data-uid="">
 
 
-<p>In this step we will create models. Since this application is about families and persons inside those families, we need to create the following models: <em>Family</em> and <em>Person</em>.</p>
-<h2 id="creating-the-model-classes">Creating the model classes</h2>
-<p>The models that will be used in this application will derive from the <code>ModelBase</code> or <code>ValidatableModelBase</code> class of Catel. These classes enable support for change notifications and validations.</p>
-<p>To create the model classes, create the following classes in the <em>Models</em> folder.</p>
-<p>The <em>model</em> code snippet is available to create models</p>
-<h3 id="family-class">Family class</h3>
-<pre><code class="lang-csharp">namespace WPF.GettingStarted.Models
-{
-    using Catel.Data;
+<p>In this step we will create the models. The application manages persons, so we need a <code>Person</code> model and a <code>Gender</code> enum.</p>
+<h2 id="creating-the-gender-enum">Creating the Gender enum</h2>
+<p>Add a new file <code>Gender.cs</code> to the <code>Models</code> folder:</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.Models;
 
-    public class Family : ValidatableModelBase
-    {
-    }
+public enum Gender
+{
+    Unknown,
+    Male,
+    Female
 }
 </code></pre>
-<h3 id="person-class">Person class</h3>
-<pre><code class="lang-csharp">namespace WPF.GettingStarted.Models
+<h2 id="creating-the-person-model">Creating the Person model</h2>
+<p>Models in Catel derive from <code>ModelBase</code> or <code>ValidatableModelBase</code>. <code>ValidatableModelBase</code> adds built-in support for validation via <code>ValidateFields</code> and <code>ValidateBusinessRules</code>.</p>
+<p>When <strong>Catel.Fody</strong> is installed, you can write plain auto-properties and Catel.Fody will automatically generate the backing <code>PropertyData</code> registration and change notification at compile time. This removes all the repetitive boilerplate code.</p>
+<p>Add a new file <code>Person.cs</code> to the <code>Models</code> folder:</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.Models;
+
+using System.Collections.Generic;
+using Catel.Data;
+
+public class Person : ValidatableModelBase
 {
-    using Catel.Data;
+    public string FirstName { get; set; }
 
-    public class Person : ValidatableModelBase
+    public string MiddleName { get; set; }
+
+    public string LastName { get; set; }
+
+    public Gender Gender { get; set; }
+
+    protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
     {
-    }
-}
-</code></pre>
-<h2 id="adding-properties-to-the-models">Adding properties to the models</h2>
-<p>The next step is to add properties to the models. An important concept to understand is that Catel uses specific &quot;dependency-a-like&quot; properties in order to provide all the functionality in the <code>ModelBase</code> classes. Below are the properties per model that need to be registered.</p>
-<p>At first sight, these properties might look very overwhelming. Examine how the property system works. The most important thing is the actual property registration:</p>
-<pre><code>public static readonly PropertyData PersonsProperty = RegisterProperty(&quot;Persons&quot;, typeof(ObservableCollection&lt;Person&gt;), () =&gt; new ObservableCollection&lt;Person&gt;());
-</code></pre>
-<p>This defines a property on the model with the following data:</p>
-<ul>
-<li>Name =&gt; Persons</li>
-<li>Type =&gt; ObservableCollection&lt;Person&gt;</li>
-<li>DefaultValue =&gt; new ObservableCollection&lt;Person&gt;()</li>
-</ul>
-<p>This will create a property in the property bag of the model. The next piece of the property is the actual wrapper around the property value which is managed by the property bag. The Catel properties always need a wrapper to be exposed to the &quot;outside world&quot; of the class.</p>
-<pre><code>public ObservableCollection&lt;Person&gt; Persons
-{
-    get { return GetValue&lt;ObservableCollection&lt;Person&gt;&gt;(PersonsProperty); }
-    set { SetValue(PersonsProperty, value); } 
-}
-</code></pre>
-<p>If you want to get the functionality in the <code>ModelBase</code> classes without the &quot;dependency-a-like&quot; properties you have the option to make use of normal properties and Catel.Fody.</p>
-<p>The <em>modelprop</em> code snippet is available to create models</p>
-<h3 id="family-class-1">Family class</h3>
-<pre><code class="lang-csharp">public class Family : ValidatableModelBase
-{
-    /// &lt;summary&gt;
-    /// Gets or sets the family name.
-    /// &lt;/summary&gt;
-    public string FamilyName
-    {
-        get { return GetValue&lt;string&gt;(FamilyNameProperty); }
-        set { SetValue(FamilyNameProperty, value); }
-    }
-
-    /// &lt;summary&gt;
-    /// Register the FamilyName property so it is known in the class.
-    /// &lt;/summary&gt;
-    public static readonly PropertyData FamilyNameProperty = RegisterProperty(&quot;FamilyName&quot;, typeof(string), null);
-
-    /// &lt;summary&gt;
-    /// Gets or sets the list of persons in this family.
-    /// &lt;/summary&gt;
-    public ObservableCollection&lt;Person&gt; Persons
-    {
-        get { return GetValue&lt;ObservableCollection&lt;Person&gt;&gt;(PersonsProperty); }
-        set { SetValue(PersonsProperty, value); }
-    }
-
-    /// &lt;summary&gt;
-    /// Register the Persons property so it is known in the class.
-    /// &lt;/summary&gt;
-    public static readonly PropertyData PersonsProperty = RegisterProperty(&quot;Persons&quot;, typeof(ObservableCollection&lt;Person&gt;), () =&gt; new ObservableCollection&lt;Person&gt;());
-
-    public override string ToString()
-    {
-        return FamilyName;
-    }
-}
-</code></pre>
-<h3 id="person-class-1">Person class</h3>
-<pre><code class="lang-csharp">public class Person : ValidatableModelBase
-{
-    /// &lt;summary&gt;
-    /// Gets or sets the first name.
-    /// &lt;/summary&gt;
-    public string FirstName
-    {
-        get { return GetValue&lt;string&gt;(FirstNameProperty); }
-        set { SetValue(FirstNameProperty, value); }
-    }
-
-    /// &lt;summary&gt;
-    /// Register the FirstName property so it is known in the class.
-    /// &lt;/summary&gt;
-    public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), null);
-
-    /// &lt;summary&gt;
-    /// Gets or sets the last name.
-    /// &lt;/summary&gt;
-    public string LastName
-    {
-        get { return GetValue&lt;string&gt;(LastNameProperty); }
-        set { SetValue(LastNameProperty, value); }
-    }
-
-    /// &lt;summary&gt;
-    /// Register the LastName property so it is known in the class.
-    /// &lt;/summary&gt;
-    public static readonly PropertyData LastNameProperty = RegisterProperty(&quot;LastName&quot;, typeof(string), null);
-
-    public override string ToString()
-    {
-        string fullName = string.Empty;
-        if (!string.IsNullOrEmpty(FirstName))
+        if (string.IsNullOrEmpty(FirstName))
         {
-            fullName += FirstName;
+            validationResults.Add(FieldValidationResult.CreateError(nameof(FirstName), &quot;First name is required&quot;));
         }
 
-        if (!string.IsNullOrEmpty(FirstName) &amp;&amp; !string.IsNullOrWhiteSpace(LastName))
+        if (string.IsNullOrEmpty(LastName))
         {
-            fullName += &quot; &quot;;
+            validationResults.Add(FieldValidationResult.CreateError(nameof(LastName), &quot;Last name is required&quot;));
         }
 
-        if (!string.IsNullOrWhiteSpace(LastName))
+        if (Gender == Gender.Unknown)
         {
-            fullName += LastName;
+            validationResults.Add(FieldValidationResult.CreateError(nameof(Gender), &quot;Gender cannot be unknown&quot;));
         }
-
-        return fullName;
     }
 }
 </code></pre>
+<p>Note that validation is built directly into the model. Catel will automatically surface these validation errors through <code>IDataErrorInfo</code> so that WPF validation bindings work out of the box.</p>
 <h2 id="up-next">Up next</h2>
-<p>[Serializing data from/to disk]({{&lt; relref &quot;getting-started/wpf/serializing-data-from-to-disk.md&quot; &gt;}})</p>
+<p>[Creating the view models]({{&lt; relref &quot;getting-started/wpf/creating-the-view-models.md&quot; &gt;}})</p>
 
 </article>
 

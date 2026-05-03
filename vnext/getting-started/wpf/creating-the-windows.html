@@ -87,81 +87,196 @@
         <article data-uid="">
 
 
-<p>In this step we will create the windows for the application. In the previous step we already created the user controls. Windows are a great way to show in an edit-context. Catel provides great edit-windows in the form of the <code>DataWindow</code>. This is a window that automatically adds <em>OK</em> and <em>Cancel</em> buttons (but allows customization of the buttons and behavior).</p>
-<h2 id="person-window">Person window</h2>
-<p>It is important that the window derives from one of the Catel windows. This is required to make the binding system work (same as <code>UserControl</code>). Ensure that the window definition in the XAML is either <code>catel:Window</code> or <code>catel:DataWindow</code></p>
-<p>To add a new <code>DataWindow</code>, right-click the <em>Views</em> folder in the solution =&gt; <em>Add</em> =&gt; <em>New item...</em> =&gt; <em>On-line</em> =&gt; and search for Catel as shown, in the screen below:</p>
-<p><img src="../../images/getting-started/wpf/creating-the-windows/itemtemplate.png" alt=""></p>
-<p>Give the new view the name <code>PersonWindow</code>. The view will be added to the <em>Views</em> folder.</p>
-<p>Note that we can use the <code>PersonViewModel</code> for both the <code>PersonView</code> (user control) and <code>PersonWindow</code>. Both views represent the same models and view models, just a different context. To ensure that the <code>IUIVisualizerService</code> knows what view to pick first, register the <code>PersonWindow</code> in the <code>IUIVisualizerService</code> at application startup:</p>
-<pre><code>var uiVisualizerService = serviceLocator.ResolveType&lt;IUIVisualizerService&gt;();
-uiVisualizerService.Register(typeof(PersonViewModel), typeof(PersonWindow));
-</code></pre>
-<p>The template will also create a constructor to inject a view model into the window. Please ensure that the constructor takes a view model of the type <code>PersonViewModel</code> instead of the generated <code>PersonWindowModel</code>. Then replace the content of the view with the xaml below:</p>
-<pre><code>&lt;Grid&gt;
-    &lt;Grid.RowDefinitions&gt;
-        &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
-        &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
-    &lt;/Grid.RowDefinitions&gt;
+<p>In this step we will create the two windows of the application: <code>MainWindow</code> and <code>PersonWindow</code>.</p>
+<h2 id="mainwindow">MainWindow</h2>
+<p><code>MainWindow</code> is the application's main view. It derives from <code>catel:Window</code> (a Catel-aware WPF window) and displays the list of persons with Add, Edit, and Remove buttons.</p>
+<h3 id="xaml">XAML</h3>
+<pre><code class="lang-xml">&lt;catel:Window x:Class=&quot;Catel.Examples.PersonApplication.Views.MainWindow&quot;
+              xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+              xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+              xmlns:catel=&quot;http://schemas.catelproject.com&quot;
+              xmlns:xamlbehaviors=&quot;http://schemas.microsoft.com/xaml/behaviors&quot;
+              MinHeight=&quot;350&quot;
+              MinWidth=&quot;525&quot;
+              ShowInTaskbar=&quot;True&quot;
+              SizeToContent=&quot;Manual&quot;
+              WindowStartupLocation=&quot;Manual&quot;
+              ResizeMode=&quot;CanResizeWithGrip&quot;
+              WindowState=&quot;Maximized&quot;&gt;
 
-    &lt;Grid.ColumnDefinitions&gt;
-        &lt;ColumnDefinition Width=&quot;Auto&quot; /&gt;
-        &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
-    &lt;/Grid.ColumnDefinitions&gt;
+    &lt;Window.Resources&gt;
+        &lt;Style x:Key=&quot;ImageButtonStyle&quot; TargetType=&quot;Button&quot;&gt;
+            &lt;Setter Property=&quot;Width&quot; Value=&quot;48&quot; /&gt;
+            &lt;Setter Property=&quot;Height&quot; Value=&quot;48&quot; /&gt;
+            &lt;Setter Property=&quot;Margin&quot; Value=&quot;6&quot; /&gt;
+            &lt;Setter Property=&quot;Padding&quot; Value=&quot;6&quot; /&gt;
+        &lt;/Style&gt;
+    &lt;/Window.Resources&gt;
 
-    &lt;Label Grid.Row=&quot;0&quot; Grid.Column=&quot;0&quot; Content=&quot;First name&quot; /&gt;
-    &lt;TextBox Grid.Row=&quot;0&quot; Grid.Column=&quot;1&quot; Text=&quot;{Binding FirstName, ValidatesOnDataErrors=True, NotifyOnValidationError=True}&quot; /&gt;
+    &lt;DockPanel LastChildFill=&quot;True&quot;&gt;
+        &lt;!-- Action buttons --&gt;
+        &lt;StackPanel DockPanel.Dock=&quot;Right&quot; Orientation=&quot;Vertical&quot;&gt;
+            &lt;WrapPanel Orientation=&quot;Vertical&quot;&gt;
+                &lt;Button Command=&quot;{Binding Add}&quot; ToolTip=&quot;Add&quot; Style=&quot;{StaticResource ImageButtonStyle}&quot;&gt;
+                    &lt;Image Source=&quot;/Resources/Images/add.png&quot; /&gt;
+                &lt;/Button&gt;
+                &lt;Button Command=&quot;{Binding Edit}&quot; ToolTip=&quot;Edit&quot; Style=&quot;{StaticResource ImageButtonStyle}&quot;&gt;
+                    &lt;Image Source=&quot;/Resources/Images/edit.png&quot; /&gt;
+                &lt;/Button&gt;
+                &lt;Button Command=&quot;{Binding Remove}&quot; ToolTip=&quot;Remove&quot; Style=&quot;{StaticResource ImageButtonStyle}&quot;&gt;
+                    &lt;Image Source=&quot;/Resources/Images/delete.png&quot; /&gt;
+                &lt;/Button&gt;
+            &lt;/WrapPanel&gt;
+        &lt;/StackPanel&gt;
 
-    &lt;Label Grid.Row=&quot;1&quot; Grid.Column=&quot;0&quot; Content=&quot;Last name&quot; /&gt;
-    &lt;TextBox Grid.Row=&quot;1&quot; Grid.Column=&quot;1&quot; Text=&quot;{Binding LastName, ValidatesOnDataErrors=True, NotifyOnValidationError=True}&quot; /&gt;
-&lt;/Grid&gt;
-</code></pre>
-<h2 id="family-window">Family window</h2>
-<p>The <code>FamilyWindow</code> is somewhat different because we want additional logic in this window. We want to create add / edit / remove buttons for the family members. Therefore we need to create a separate view model which contains this logic.</p>
-<h3 id="creating-the-familywindowviewmodel">Creating the FamilyWindowViewModel</h3>
-<p>Since the <code>FamilyWindowViewModel</code> will look a lot like the <code>FamilyViewModel</code>, just copy/paste the <code>FamilyViewModel</code> and rename the copy to <code>FamilyWindowViewModel</code>.</p>
-<p>Note that the <code>FamilyWindowViewModel</code> needs additional logic, but that will be handled in the next part of this getting started guide</p>
-<h3 id="creating-the-familywindow">Creating the FamilyWindow</h3>
-<p>Once the <code>FamilyWindowViewModel</code> is created, the <code>FamilyWindow</code> must be created exactly the same way as the <code>PersonWindow</code>. Again ensure to use the right view model (<code>FamilyWindowViewModel</code>) in the constructor of the window in the code-behind. Then use the following xaml:</p>
-<pre><code>&lt;Grid&gt;
-    &lt;Grid.RowDefinitions&gt;
-        &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
-        &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
-        &lt;RowDefinition Height=&quot;*&quot; /&gt;
-    &lt;/Grid.RowDefinitions&gt;
+        &lt;!-- List of persons --&gt;
+        &lt;ListBox DockPanel.Dock=&quot;Left&quot;
+                 ItemsSource=&quot;{Binding PersonCollection}&quot;
+                 SelectedItem=&quot;{Binding SelectedPerson}&quot;&gt;
+            &lt;xamlbehaviors:Interaction.Triggers&gt;
+                &lt;xamlbehaviors:EventTrigger EventName=&quot;MouseDoubleClick&quot;&gt;
+                    &lt;catel:EventToCommand Command=&quot;{Binding Edit}&quot;
+                                          DisableAssociatedObjectOnCannotExecute=&quot;False&quot; /&gt;
+                &lt;/xamlbehaviors:EventTrigger&gt;
+            &lt;/xamlbehaviors:Interaction.Triggers&gt;
 
-    &lt;Grid.ColumnDefinitions&gt;
-        &lt;ColumnDefinition Width=&quot;Auto&quot; /&gt;
-        &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
-    &lt;/Grid.ColumnDefinitions&gt;
-
-    &lt;Label Grid.Row=&quot;0&quot; Grid.Column=&quot;1&quot; Content=&quot;Family name&quot; /&gt;
-    &lt;TextBox Grid.Row=&quot;0&quot; Grid.Column=&quot;1&quot; Text=&quot;{Binding FamilyName, NotifyOnValidationError=True, ValidatesOnDataErrors=True}&quot; /&gt;
-
-    &lt;Label Grid.Row=&quot;1&quot; Grid.ColumnSpan=&quot;2&quot; Content=&quot;Persons&quot; /&gt;
-
-    &lt;Grid Grid.Row=&quot;2&quot; Grid.ColumnSpan=&quot;2&quot;&gt;
-        &lt;Grid.ColumnDefinitions&gt;
-            &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
-            &lt;ColumnDefinition Width=&quot;Auto&quot; /&gt;
-        &lt;/Grid.ColumnDefinitions&gt;
-
-        &lt;ListBox Grid.Column=&quot;0&quot; ItemsSource=&quot;{Binding Persons}&quot; SelectedItem=&quot;{Binding SelectedPerson}&quot;&gt;
             &lt;ListBox.ItemTemplate&gt;
                 &lt;DataTemplate&gt;
-                    &lt;views:PersonView DataContext=&quot;{Binding}&quot; /&gt;
+                    &lt;StackPanel Orientation=&quot;Horizontal&quot;&gt;
+                        &lt;Label Content=&quot;{Binding FirstName}&quot; /&gt;
+                        &lt;Label Content=&quot;{Binding MiddleName}&quot; /&gt;
+                        &lt;Label Content=&quot;{Binding LastName}&quot; /&gt;
+                    &lt;/StackPanel&gt;
                 &lt;/DataTemplate&gt;
             &lt;/ListBox.ItemTemplate&gt;
         &lt;/ListBox&gt;
-
-        &lt;StackPanel Grid.Column=&quot;1&quot;&gt;
-            &lt;Button Command=&quot;{Binding AddPerson}&quot; Content=&quot;Add...&quot; /&gt;
-            &lt;Button Command=&quot;{Binding EditPerson}&quot; Content=&quot;Edit...&quot; /&gt;
-            &lt;Button Command=&quot;{Binding RemovePerson}&quot; Content=&quot;Remove&quot; /&gt;
-        &lt;/StackPanel&gt;
-    &lt;/Grid&gt;
-&lt;/Grid&gt;
+    &lt;/DockPanel&gt;
+&lt;/catel:Window&gt;
 </code></pre>
+<h3 id="code-behind">Code-behind</h3>
+<p>The code-behind is minimal — Catel resolves the view model automatically by naming convention (<code>MainWindow</code> → <code>MainWindowViewModel</code>):</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.Views;
+
+public partial class MainWindow
+{
+}
+</code></pre>
+<h2 id="personwindow">PersonWindow</h2>
+<p><code>PersonWindow</code> is a <code>catel:DataWindow</code>. The <code>DataWindow</code> automatically provides <strong>OK</strong> and <strong>Cancel</strong> buttons and integrates with <code>IEditableObject</code> so that cancelling the dialog reverts all model changes.</p>
+<h3 id="value-converter">Value converter</h3>
+<p>The <code>PersonWindow</code> uses a <code>GenderToIsSelectedConverter</code> to bind <code>RadioButton.IsChecked</code> to the <code>Gender</code> enum. Add the converter to the <code>Converters</code> folder:</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.Converters;
+
+using System;
+using System.Windows.Data;
+using Catel.Examples.PersonApplication.Models;
+using Catel.MVVM.Converters;
+
+[ValueConversion(typeof(Gender), typeof(bool), ParameterType = typeof(Gender))]
+public class GenderToIsSelectedConverter : ValueConverterBase&lt;Gender&gt;
+{
+    protected override object Convert(Gender value, Type targetType, object parameter)
+    {
+        Gender genderRepresented = ParseGenderParameter(parameter);
+        return (value == genderRepresented);
+    }
+
+    protected override object ConvertBack(object value, Type targetType, object parameter)
+    {
+        Gender genderRepresented = ParseGenderParameter(parameter);
+
+        bool isChecked = value is bool b &amp;&amp; b;
+        return isChecked ? genderRepresented : Binding.DoNothing;
+    }
+
+    private static Gender ParseGenderParameter(object parameter) =&gt; parameter switch
+    {
+        Gender g =&gt; g,
+        string s =&gt; (Gender)Enum.Parse(typeof(Gender), s),
+        _ =&gt; Gender.Unknown
+    };
+}
+</code></pre>
+<h3 id="xaml-1">XAML</h3>
+<pre><code class="lang-xml">&lt;catel:DataWindow x:Class=&quot;Catel.Examples.PersonApplication.Views.PersonWindow&quot;
+                  xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+                  xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+                  xmlns:converters=&quot;clr-namespace:Catel.Examples.PersonApplication.Converters&quot;
+                  xmlns:catel=&quot;http://schemas.catelproject.com&quot;
+                  xmlns:Models=&quot;clr-namespace:Catel.Examples.PersonApplication.Models&quot;&gt;
+
+    &lt;catel:DataWindow.Resources&gt;
+        &lt;converters:GenderToIsSelectedConverter x:Key=&quot;GenderToIsSelectedConverter&quot; /&gt;
+    &lt;/catel:DataWindow.Resources&gt;
+
+    &lt;Grid&gt;
+        &lt;Grid.RowDefinitions&gt;
+            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
+            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
+            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
+            &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
+        &lt;/Grid.RowDefinitions&gt;
+        &lt;Grid.ColumnDefinitions&gt;
+            &lt;ColumnDefinition Width=&quot;Auto&quot; /&gt;
+            &lt;ColumnDefinition Width=&quot;*&quot; MinWidth=&quot;300&quot; /&gt;
+        &lt;/Grid.ColumnDefinitions&gt;
+
+        &lt;!-- Gender --&gt;
+        &lt;Label Grid.Row=&quot;0&quot; Grid.Column=&quot;0&quot; Content=&quot;Gender&quot; /&gt;
+        &lt;StackPanel Grid.Row=&quot;0&quot; Grid.Column=&quot;1&quot; Orientation=&quot;Horizontal&quot; x:Name=&quot;genderStackPanel&quot;&gt;
+            &lt;RadioButton Content=&quot;Male&quot;
+                         IsChecked=&quot;{Binding Gender, Converter={StaticResource GenderToIsSelectedConverter},
+                                     ConverterParameter={x:Static Models:Gender.Male},
+                                     ValidatesOnDataErrors=True, NotifyOnValidationError=True}&quot;
+                         Validation.ValidationAdornerSiteFor=&quot;{Binding ElementName=genderStackPanel}&quot; /&gt;
+            &lt;RadioButton Content=&quot;Female&quot;
+                         IsChecked=&quot;{Binding Gender, Converter={StaticResource GenderToIsSelectedConverter},
+                                     ConverterParameter={x:Static Models:Gender.Female},
+                                     ValidatesOnDataErrors=True, NotifyOnValidationError=True}&quot;
+                         Validation.ValidationAdornerSiteFor=&quot;{Binding ElementName=genderStackPanel}&quot; /&gt;
+        &lt;/StackPanel&gt;
+
+        &lt;!-- First name --&gt;
+        &lt;Label Grid.Row=&quot;1&quot; Grid.Column=&quot;0&quot; Content=&quot;First name&quot; /&gt;
+        &lt;TextBox Grid.Row=&quot;1&quot; Grid.Column=&quot;1&quot;
+                 Text=&quot;{Binding FirstName, ValidatesOnDataErrors=True, NotifyOnValidationError=True}&quot; /&gt;
+
+        &lt;!-- Middle name --&gt;
+        &lt;Label Grid.Row=&quot;2&quot; Grid.Column=&quot;0&quot; Content=&quot;Middle name&quot; /&gt;
+        &lt;TextBox Grid.Row=&quot;2&quot; Grid.Column=&quot;1&quot;
+                 Text=&quot;{Binding MiddleName, ValidatesOnDataErrors=True, NotifyOnValidationError=True}&quot; /&gt;
+
+        &lt;!-- Last name --&gt;
+        &lt;Label Grid.Row=&quot;3&quot; Grid.Column=&quot;0&quot; Content=&quot;Last name&quot; /&gt;
+        &lt;TextBox Grid.Row=&quot;3&quot; Grid.Column=&quot;1&quot;
+                 Text=&quot;{Binding LastName, ValidatesOnDataErrors=True, NotifyOnValidationError=True}&quot; /&gt;
+    &lt;/Grid&gt;
+&lt;/catel:DataWindow&gt;
+</code></pre>
+<h3 id="code-behind-1">Code-behind</h3>
+<p>The code-behind configures the window mode and registers any additional custom buttons:</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.Views;
+
+using Catel.Examples.PersonApplication.ViewModels;
+using Catel.Services;
+using Catel.Windows;
+using System;
+
+public partial class PersonWindow
+{
+    public PersonWindow(PersonViewModel viewModel, IServiceProvider serviceProvider,
+        IWrapControlService wrapControlService, ILanguageService languageService)
+        : base(viewModel, serviceProvider, wrapControlService, languageService)
+    {
+        Mode = DataWindowMode.OkCancel;
+        DefaultButton = DataWindowDefaultButton.OK;
+        InfoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline;
+
+        InitializeComponent();
+    }
+}
+</code></pre>
+<p><code>DataWindowMode.OkCancel</code> tells the <code>DataWindow</code> to show standard <strong>OK</strong> and <strong>Cancel</strong> buttons. Clicking <strong>OK</strong> saves the view model; clicking <strong>Cancel</strong> reverts all changes via <code>IEditableObject.CancelEdit</code>.</p>
 <h2 id="up-next">Up next</h2>
 <p>[Hooking up everything together]({{&lt; relref &quot;getting-started/wpf/hooking-up-everything-together.md&quot; &gt;}})</p>
 

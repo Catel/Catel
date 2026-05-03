@@ -88,23 +88,54 @@
 
 
 <p>In this step we will create the project and add the relevant NuGet packages.</p>
-<p>This guide uses the on-line templates that are available in the Visual Studio gallery. If you cannot find the templates on-line, please download them <a href="http://www.catelproject.com/download/general-files/">here</a>.</p>
 <h2 id="creating-the-project">Creating the project</h2>
-<p>To create the project, start Visual Studio and choose <em>File =&gt; New Project</em>... Then switch to the <em>on-line template section</em> as shown, in the screenshot below and search for Catel:</p>
-<p><img src="../../images/getting-started/wpf/creating-the-project/projecttemplate.png" alt=""></p>
-<p>Pick a good name, in our case <em>WPF.GettingStarted</em> and click OK. The template will now be downloaded and the project will be created.</p>
+<p>Create a new WPF Application project targeting <code>net10.0-windows</code> (or another supported .NET version). You can do this via Visual Studio (<em>File =&gt; New Project =&gt; WPF Application</em>) or from the command line:</p>
+<pre><code>dotnet new wpf -n Catel.Examples.WPF.PersonApplication
+</code></pre>
 <h2 id="adding-the-nuget-packages">Adding the NuGet packages</h2>
-<p>As soon as the project is created, the <em>Readme.txt</em> will be opened and instruct your what to do. Right-click on the solution =&gt; *Manage NuGet packages... *Then search for <code>Catel.MVVM</code> and click <em>Install</em>.</p>
-<p><img src="../../images/getting-started/wpf/creating-the-project/nuget.png" alt=""></p>
-<h2 id="running-the-project">Running the project</h2>
-<p>Now the NuGet packages are installed, the project is created and can be built. The basics are created and the application is ready:</p>
-<p><img src="../../images/getting-started/wpf/creating-the-project/example.png" alt=""></p>
-<h2 id="explanation-of-the-project-structure">Explanation of the project structure</h2>
-<p>The project template creates the project structure that fits best with Catel. Below is an explanation of the new project structure:</p>
-<p><img src="../../images/getting-started/wpf/creating-the-project/solutionexplorer.png" alt=""></p>
-<p>The <code>ViewModels</code> folder contains the <code>MainWindowViewModel</code>, which contains the logic for the interaction with the <code>MainWindow</code> view.</p>
-<p>The <code>Views</code> folder contains the <code>MainWindow</code>, which represents the actual view.</p>
-<p>This structure ties to how Catel implements viewmodel location. You do not however have to follow this structure and could for example decide to place both the View and ViewModel under the same namespace/folder and implement a custom <code>IViewModelLocator</code>.</p>
+<p>Add the following NuGet packages to the project:</p>
+<pre><code class="lang-xml">&lt;PackageReference Include=&quot;Catel.MVVM&quot; Version=&quot;7.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Catel.Fody&quot; Version=&quot;7.0.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+&lt;PackageReference Include=&quot;Catel.SourceGenerators&quot; Version=&quot;7.0.1&quot; PrivateAssets=&quot;all&quot; /&gt;
+&lt;PackageReference Include=&quot;Fody&quot; Version=&quot;6.9.3&quot; PrivateAssets=&quot;all&quot; /&gt;
+&lt;PackageReference Include=&quot;Microsoft.Extensions.Hosting&quot; Version=&quot;10.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Debug&quot; Version=&quot;10.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Console&quot; Version=&quot;10.0.0&quot; /&gt;
+</code></pre>
+<ul>
+<li><strong>Catel.MVVM</strong> – the core Catel MVVM library.</li>
+<li><strong>Catel.Fody</strong> – a Fody weaver that auto-generates Catel property boilerplate at compile time.</li>
+<li><strong>Catel.SourceGenerators</strong> – Roslyn source generators that complement Catel.</li>
+<li><strong>Microsoft.Extensions.Hosting</strong> – provides the .NET generic host for DI and application lifecycle management.</li>
+</ul>
+<h2 id="project-structure">Project structure</h2>
+<p>Create the following folders to organise the application:</p>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Models</code></td>
+<td>Data models (<code>Person</code>, <code>Gender</code>)</td>
+</tr>
+<tr>
+<td><code>ViewModels</code></td>
+<td>View models (<code>MainWindowViewModel</code>, <code>PersonViewModel</code>)</td>
+</tr>
+<tr>
+<td><code>Views</code></td>
+<td>Views (<code>MainWindow</code>, <code>PersonWindow</code>)</td>
+</tr>
+<tr>
+<td><code>Converters</code></td>
+<td>Value converters (<code>GenderToIsSelectedConverter</code>)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="up-next">Up next</h2>
 <p>[Creating the models]({{&lt; relref &quot;getting-started/wpf/creating-the-models.md&quot; &gt;}})</p>
 
