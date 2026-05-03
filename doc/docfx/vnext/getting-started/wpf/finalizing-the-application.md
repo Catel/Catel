@@ -1,230 +1,82 @@
 ﻿---
 title: "Finalizing the application" 
 ---
-The application we have created so far is fully functional, but misses somewhat of the "magic". Below are some additional steps that might make your application more appealing and more user friendly. you can go as far as you want by creating custom animations and such, but this guide focuses purely on making the basics more appealing.
+The application we have created so far is fully functional. Below are some additional steps that make it more polished and user-friendly.
 
-## Adding validation
+## Validation
 
-Adding validation with Catel is extremely easy. There are two flavors to pick from, but they work exactly the same (since both the models and view models internally derive from `ValidatableModelBase`). To add validation to the `Person` model, use this code:
+Validation with Catel is straightforward. Both models and view models internally derive from `ValidatableModelBase`, so validation can be added in either layer.
 
-```
-protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-{
-    if (string.IsNullOrWhiteSpace(FirstName))
-    {
-        validationResults.Add(FieldValidationResult.CreateError(FirstNameProperty, "The first name is required"));
-    }
+### Model validation
 
-    if (string.IsNullOrWhiteSpace(LastName))
-    {
-        validationResults.Add(FieldValidationResult.CreateError(LastNameProperty, "The last name is required"));
-    }
-}
-```
-
-The validation for the `Family` model is easy as well:
-
-```
-protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-{
-    if (string.IsNullOrWhiteSpace(FamilyName))
-    {
-        validationResults.Add(FieldValidationResult.CreateError(FamilyNameProperty, "The family name is required"));
-    }
-}
-```
-
-Note that this validation code can be used in both the model and/or the view models
-
-## Adding behaviors to enable double-click on the list boxes
-
-The user must manually click the *Edit* buttons in the editable views to edit a specific model. To make it easier for the user, we can enable double click to command behaviors. To do so, navigate to the `MainWindow` and add this to the `ListBox` definition:
-
-```
-<ListBox x:Name="listBox" ItemsSource="{Binding Families}" SelectedItem="{Binding SelectedFamily}">
-    <ListBox.ItemTemplate>
-        <DataTemplate>
-            <Grid>
-                <i:Interaction.Behaviors>
-                    <catel:DoubleClickToCommand Command="{Binding ElementName=listBox, Path=DataContext.EditFamily}" />
-                </i:Interaction.Behaviors>
-
-                <views:FamilyView DataContext="{Binding}" />
-            </Grid>
-        </DataTemplate>
-    </ListBox.ItemTemplate>
-</ListBox>
-```
-
-The same goes for the `FamilyWindow`:
-
-```
-<ListBox x:Name="listBox" ItemsSource="{Binding Persons}" SelectedItem="{Binding SelectedPerson}">
-    <ListBox.ItemTemplate>
-        <DataTemplate>
-            <Grid>
-                <i:Interaction.Behaviors>
-                    <catel:DoubleClickToCommand Command="{Binding ElementName=listBox, Path=DataContext.EditPerson}" />
-                </i:Interaction.Behaviors>
-
-                <views:PersonView DataContext="{Binding}" />
-            </Grid>
-        </DataTemplate>
-    </ListBox.ItemTemplate>
-</ListBox>
-
-```
-
-Note that the `xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"` must be added in order for the code above to compile
-
-## Adding search functionality to the main window
-
-A functionality that is needed in many applications is search functionality. To implement this we will need to modify the `MainWindowViewModel`. Below are the steps required to implement search functionality.
-
-### Adding additional properties to the view model
-
-Lets start by adding the additional properties required to implement searching in the `MainWindowViewModel`:
-
-```
-/// <summary>
-/// Gets the filtered families.
-/// </summary>
-public ObservableCollection<Family> FilteredFamilies
-{
-    get { return GetValue<ObservableCollection<Family>>(FilteredFamiliesProperty); }
-    private set { SetValue(FilteredFamiliesProperty, value); }
-}
-
-/// <summary>
-/// Register the FilteredFamilies property so it is known in the class.
-/// </summary>
-public static readonly PropertyData FilteredFamiliesProperty = RegisterProperty("FilteredFamilies", typeof(ObservableCollection<Family>));
-
-/// <summary>
-/// Gets or sets the search filter.
-/// </summary>
-public string SearchFilter
-{
-    get { return GetValue<string>(SearchFilterProperty); }
-    set { SetValue(SearchFilterProperty, value); }
-}
-
-/// <summary>
-/// Register the SearchFilter property so it is known in the class.
-/// </summary>
-public static readonly PropertyData SearchFilterProperty = RegisterProperty("SearchFilter", typeof(string), null, (sender, e) => ((MainWindowViewModel)sender).UpdateSearchFilter());
-```
-
-Note that this property contains an additional change callback function which will be called when the property has changed.
-
-Add the following import to the view model. You will needed because native `ObservableCollection` class does not support `ReplaceRange()`
-
-```
-using Catel.Collections;
-```
-
-Add this method to the view model:
-
-```
-/// <summary>
-/// Updates the filtered items.
-/// </summary>
-private void UpdateSearchFilter()
-{
-    if (FilteredFamilies == null)
-    {
-        FilteredFamilies = new ObservableCollection<Family>();
-    }
-
-    if (string.IsNullOrWhiteSpace(SearchFilter))
-    {
-        FilteredFamilies.ReplaceRange(Families);
-    }
-    else
-    {
-        var lowerSearchFilter = SearchFilter.ToLower();
-        FilteredFamilies.ReplaceRange(from family in Families
-                                      where !string.IsNullOrWhiteSpace(family.FamilyName) && family.FamilyName.ToLower().Contains(lowerSearchFilter)
-                                      select family);
-    }
-}
-```
-
-Then, add this code to the `OnAddFamilyExecute` function:
+The `Person` model already contains field validation (added in the *Creating the models* step):
 
 ```csharp
-private async Task OnAddFamilyExecuteAsync()
+protected override void ValidateFields(List<IFieldValidationResult> validationResults)
 {
-    var family = new Family();
-
-    if (await _uiVisualizerService.ShowDialogAsync<FamilyWindowViewModel>(family) ?? false)
+    if (string.IsNullOrEmpty(FirstName))
     {
-        Families.Add(family);
-        UpdateSearchFilter();
+        validationResults.Add(FieldValidationResult.CreateError(nameof(FirstName), "First name is required"));
+    }
+
+    if (string.IsNullOrEmpty(LastName))
+    {
+        validationResults.Add(FieldValidationResult.CreateError(nameof(LastName), "Last name is required"));
+    }
+
+    if (Gender == Gender.Unknown)
+    {
+        validationResults.Add(FieldValidationResult.CreateError(nameof(Gender), "Gender cannot be unknown"));
     }
 }
 ```
 
-Last but not least, add this to the `InitializeAsync` method **after** the `Families` is set from the `IFamilyService`
+Because the `PersonWindow` binds with `ValidatesOnDataErrors=True, NotifyOnValidationError=True`, WPF will automatically display the validation errors next to the relevant fields.
 
-```
-protected override async Task InitializeAsync()
+### View model validation
+
+You can also add validation at the view model level. This is useful for cross-field or business-rule validation that does not belong in the model:
+
+```csharp
+protected override void ValidateFields(List<IFieldValidationResult> validationResults)
 {
-    var families = _familyService.LoadFamilies();
-    Families = new ObservableCollection<Family>(families);
-
-    UpdateSearchFilter();
+    if (!string.IsNullOrEmpty(CustomError))
+    {
+        validationResults.Add(FieldValidationResult.CreateError(nameof(CustomError), CustomError));
+    }
 }
 ```
 
-### Adding the search functionality to the view
+## Double-click to edit
 
-Replace the xaml of the main window by the following content:
+To allow the user to double-click a person in the `MainWindow` list to open the editor, use the `xamlbehaviors:EventTrigger` together with `catel:EventToCommand`. This is already included in the `MainWindow` XAML shown in the *Creating the views (windows)* step:
 
+```xml
+<xamlbehaviors:Interaction.Triggers>
+    <xamlbehaviors:EventTrigger EventName="MouseDoubleClick">
+        <catel:EventToCommand Command="{Binding Edit}"
+                               DisableAssociatedObjectOnCannotExecute="False" />
+    </xamlbehaviors:EventTrigger>
+</xamlbehaviors:Interaction.Triggers>
 ```
- <Grid>
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
 
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="100" />
-    </Grid.ColumnDefinitions>
+Add `xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors"` to the window declaration if it is not already present.
 
-    <Grid Grid.Row="0" Grid.ColumnSpan="2">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+## Adding custom buttons to DataWindow
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Filter:" />
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SearchFilter}">
-            <i:Interaction.Behaviors>
-                <catel:UpdateBindingOnTextChanged UpdateDelay="500" />
-            </i:Interaction.Behaviors>
-        </TextBox>
-    </Grid>
+The `DataWindow` base class supports custom buttons in addition to the standard **OK** / **Cancel** pair. Pass a command name (matching a `TaskCommand` or `Command` property on the view model) to `AddCustomButton`:
 
-    <ListBox Grid.Row="1" Grid.Column="0" x:Name="listBox" ItemsSource="{Binding FilteredFamilies}" SelectedItem="{Binding SelectedFamily}">
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <Grid>
-                    <i:Interaction.Behaviors>
-                        <catel:DoubleClickToCommand Command="{Binding ElementName=listBox, Path=DataContext.EditFamily}" />
-                    </i:Interaction.Behaviors>
-                    <views:FamilyView DataContext="{Binding}" />
-                </Grid>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
-
-    <StackPanel Grid.Row="1" Grid.Column="1">
-        <Button Command="{Binding AddFamily}" Content="Add..." />
-        <Button Command="{Binding EditFamily}" Content="Edit..." />
-        <Button Command="{Binding RemoveFamily}" Content="Remove" />
-    </StackPanel>
-</Grid>
+```csharp
+AddCustomButton(new DataWindowButton("Generate data", nameof(PersonViewModel.GenerateData)));
+AddCustomButton(new DataWindowButton("Toggle error", nameof(PersonViewModel.ToggleCustomError)));
 ```
+
+Each button will automatically be enabled or disabled based on the command's `CanExecute` status.
+
+## Complete example
+
+The complete source code for this example is available at:
+
+<https://github.com/Catel/Catel.Examples/tree/master/src/Catel.Examples.WPF.PersonApplication>
+
 

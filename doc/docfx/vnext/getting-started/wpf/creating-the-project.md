@@ -3,39 +3,43 @@ title: "Creating the WPF project"
 ---
 In this step we will create the project and add the relevant NuGet packages.
 
-This guide uses the on-line templates that are available in the Visual Studio gallery. If you cannot find the templates on-line, please download them [here](http://www.catelproject.com/download/general-files/).
-
 ## Creating the project
 
-To create the project, start Visual Studio and choose *File =\> New Project*... Then switch to the *on-line template section* as shown, in the screenshot below and search for Catel:
+Create a new WPF Application project targeting `net10.0-windows` (or another supported .NET version). You can do this via Visual Studio (*File => New Project => WPF Application*) or from the command line:
 
-![](../../images/getting-started/wpf/creating-the-project/projecttemplate.png)
-
-Pick a good name, in our case *WPF.GettingStarted* and click OK. The template will now be downloaded and the project will be created.
+```
+dotnet new wpf -n Catel.Examples.WPF.PersonApplication
+```
 
 ## Adding the NuGet packages
 
-As soon as the project is created, the *Readme.txt* will be opened and instruct your what to do. Right-click on the solution =\> *Manage NuGet packages... *Then search for `Catel.MVVM` and click *Install*.
+Add the following NuGet packages to the project:
 
-![](../../images/getting-started/wpf/creating-the-project/nuget.png)
+```xml
+<PackageReference Include="Catel.MVVM" Version="7.0.0" />
+<PackageReference Include="Catel.Fody" Version="7.0.0" PrivateAssets="all" />
+<PackageReference Include="Catel.SourceGenerators" Version="7.0.1" PrivateAssets="all" />
+<PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all" />
+<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
+```
 
-## Running the project
+- **Catel.MVVM** – the core Catel MVVM library.
+- **Catel.Fody** – a Fody weaver that auto-generates Catel property boilerplate at compile time.
+- **Catel.SourceGenerators** – Roslyn source generators that complement Catel.
+- **Microsoft.Extensions.Hosting** – provides the .NET generic host for DI and application lifecycle management.
 
-Now the NuGet packages are installed, the project is created and can be built. The basics are created and the application is ready:
+## Project structure
 
-![](../../images/getting-started/wpf/creating-the-project/example.png)
+Create the following folders to organise the application:
 
-## Explanation of the project structure
-
-The project template creates the project structure that fits best with Catel. Below is an explanation of the new project structure:
-
-![](../../images/getting-started/wpf/creating-the-project/solutionexplorer.png)
-
-The `ViewModels` folder contains the `MainWindowViewModel`, which contains the logic for the interaction with the `MainWindow` view.
-
-The `Views` folder contains the `MainWindow`, which represents the actual view.
-
-This structure ties to how Catel implements viewmodel location. You do not however have to follow this structure and could for example decide to place both the View and ViewModel under the same namespace/folder and implement a custom `IViewModelLocator`.
+| Folder | Contents |
+|--------|----------|
+| `Models` | Data models (`Person`, `Gender`) |
+| `ViewModels` | View models (`MainWindowViewModel`, `PersonViewModel`) |
+| `Views` | Views (`MainWindow`, `PersonWindow`) |
+| `Converters` | Value converters (`GenderToIsSelectedConverter`) |
 
 ## Up next
 

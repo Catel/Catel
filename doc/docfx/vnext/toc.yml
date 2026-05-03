@@ -6,24 +6,24 @@
   - name: Getting started with WPF
     href: getting-started/wpf/index.md
     items:
-    - name: Creating the models
-      href: getting-started/wpf/creating-the-models.md
     - name: Creating the WPF project
       href: getting-started/wpf/creating-the-project.md
-    - name: Creating the views (user controls)
-      href: getting-started/wpf/creating-the-user-controls.md
+    - name: Creating the models
+      href: getting-started/wpf/creating-the-models.md
     - name: Creating the view models
       href: getting-started/wpf/creating-the-view-models.md
+    - name: Creating the views (user controls)
+      href: getting-started/wpf/creating-the-user-controls.md
     - name: Creating the views (windows)
       href: getting-started/wpf/creating-the-windows.md
-    - name: Finalizing the application
-      href: getting-started/wpf/finalizing-the-application.md
     - name: Hooking up everything together
       href: getting-started/wpf/hooking-up-everything-together.md
-    - name: Serializing data from/to disk
-      href: getting-started/wpf/serializing-data-from-to-disk.md
+    - name: Finalizing the application
+      href: getting-started/wpf/finalizing-the-application.md
     - name: Hosting model
       href: getting-started/wpf/hosting-model.md
+    - name: Serializing data from/to disk
+      href: getting-started/wpf/serializing-data-from-to-disk.md
 - name: Introduction
   href: introduction/index.md
   items:
