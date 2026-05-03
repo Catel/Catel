@@ -98,10 +98,15 @@ public MyViewModel(IServiceProvider serviceProvider, IOpenFileService openFileSe
     _openFileService = openFileService;
 }
 </code></pre>
-<pre><code class="lang-csharp">_openFileService.Filter = &quot;All files|*.*&quot;;
-if (_openFileService.DetermineFile())
+<pre><code class="lang-csharp">var context = new DetermineOpenFileContext
 {
-    // User selected a file
+    Filter = &quot;All files|*.*&quot;
+};
+
+var result = await _openFileService.DetermineFileAsync(context);
+if (result.Result)
+{
+    // User selected a file, available via result.FileName
 }
 </code></pre>
 

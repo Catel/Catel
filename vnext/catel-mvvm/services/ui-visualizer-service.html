@@ -112,7 +112,7 @@ await _uiVisualizerService.ShowDialogAsync&lt;EmployeeViewModel&gt;(employee);
 <h2 id="showing-a-window-with-callback">Showing a window with callback</h2>
 <p>To show a (modal or non-modal) window and get a callback as soon as the window is closed, use the following code:</p>
 <pre><code class="lang-csharp">var viewModel = new EmployeeViewModel();
-_uiVisualizerService.Show(viewModel, OnWindowClosed);
+await _uiVisualizerService.ShowAsync(viewModel, OnWindowClosed);
 </code></pre>
 <h2 id="registering-a-window">Registering a window</h2>
 <p>To register a custom window which is not automatically detected via reflection, it is required to use the Register method:</p>

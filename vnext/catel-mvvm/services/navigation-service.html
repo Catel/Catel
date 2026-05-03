@@ -100,7 +100,7 @@ public MyViewModel(IServiceProvider serviceProvider, INavigationService navigati
     _navigationService = navigationService;
 }
 </code></pre>
-<pre><code class="lang-csharp">_navigationService.CloseApplication();
+<pre><code class="lang-csharp">await _navigationService.CloseApplicationAsync();
 </code></pre>
 <h2 id="preventing-an-application-to-be-closed">Preventing an application to be closed</h2>
 <p>To prevent an application to be closed, one can subscribe to the <code>ApplicationClosing</code> event:</p>
@@ -112,20 +112,20 @@ public MyViewModel(IServiceProvider serviceProvider, INavigationService navigati
 </code></pre>
 <h2 id="navigating-to-a-new-view">Navigating to a new view</h2>
 <p>To navigate to a new page, use the following code:</p>
-<pre><code class="lang-csharp">_navigationService.Navigate&lt;EmployeeViewModel&gt;();
+<pre><code class="lang-csharp">await _navigationService.NavigateAsync&lt;EmployeeViewModel&gt;();
 </code></pre>
 <h2 id="navigating-with-parameters">Navigating with parameters</h2>
 <p>It is easy to navigate to a new page with parameters. Use the following code:</p>
 <pre><code class="lang-csharp">var parameters = new Dictionary&lt;string, object&gt;();
 parameters.Add(&quot;id&quot;, employee.EmployeeID);
 
-_navigationService.Navigate&lt;EmployeeViewModel&gt;(parameters);
+await _navigationService.NavigateAsync&lt;EmployeeViewModel&gt;(parameters);
 </code></pre>
 <p>To read the navigation parameters in the receiving view model, use the <code>OnNavigationCompleted</code> method.</p>
 <h2 id="navigating-back-and-forward">Navigating back and forward</h2>
 <p>The service also supports navigating back and forward:</p>
-<pre><code class="lang-csharp">_navigationService.GoBack(); // navigates to the previous page, obviously
-_navigationService.GoForward(); // navigates to the next page, obviously
+<pre><code class="lang-csharp">await _navigationService.GoBackAsync(); // navigates to the previous page, obviously
+await _navigationService.GoForwardAsync(); // navigates to the next page, obviously
 </code></pre>
 
 </article>

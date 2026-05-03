@@ -108,9 +108,9 @@ private void OnCmdExecute()
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;value&quot;&gt;The value.&lt;/param&gt;
 [MessageRecipient]
-private void ShowMessage(string value)
+private async void ShowMessage(string value)
 {
-    _messageService.Show(value);
+    await _messageService.ShowAsync(value);
 }
 </code></pre>
 <h2 id="subscribing-with-a-tag">Subscribing with a tag</h2>
@@ -129,9 +129,9 @@ private void OnCmdExecute()
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;value&quot;&gt;The value.&lt;/param&gt;
 [MessageRecipient(Tag = &quot;myTag&quot;)]
-private void ShowMessage(string value)
+private async void ShowMessage(string value)
 {
-    _messageService.Show(value);
+    await _messageService.ShowAsync(value);
 }
 </code></pre>
 

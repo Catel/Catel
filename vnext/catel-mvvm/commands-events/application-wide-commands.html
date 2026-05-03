@@ -133,9 +133,9 @@ public MyInitializationClass(ICommandManager commandManager)
 
     public Command ExampleCommand { get; private set; }
 
-    private void OnExampleCommandExecute()
+    private async void OnExampleCommandExecute()
     {
-        _messageService.Show(&quot;Application-wide command executed&quot;);
+        await _messageService.ShowAsync(&quot;Application-wide command executed&quot;);
     }
 }
 </code></pre>

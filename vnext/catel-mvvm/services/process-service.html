@@ -88,8 +88,8 @@
 
 
 <p>The <code>IProcessService</code> allows a developer to run processes from inside a view model.</p>
-<h2 id="starting-a-process-with-arguments">Starting a process with arguments</h2>
-<p>To start a process with arguments, inject the service via the constructor and use:</p>
+<h2 id="running-a-process-asynchronously">Running a process asynchronously</h2>
+<p>To run a process and await its completion, inject the service via the constructor and use:</p>
 <pre><code class="lang-csharp">private readonly IProcessService _processService;
 
 public MyViewModel(IServiceProvider serviceProvider, IProcessService processService)
@@ -98,6 +98,16 @@ public MyViewModel(IServiceProvider serviceProvider, IProcessService processServ
     _processService = processService;
 }
 </code></pre>
+<pre><code class="lang-csharp">var context = new ProcessContext
+{
+    FileName = &quot;notepad.exe&quot;,
+    Arguments = @&quot;C:\mytextfile.txt&quot;
+};
+
+var result = await _processService.RunAsync(context);
+</code></pre>
+<h2 id="starting-a-process-with-arguments">Starting a process with arguments</h2>
+<p>To start a process without waiting for it to complete, use the following code:</p>
 <pre><code class="lang-csharp">_processService.StartProcess(&quot;notepad.exe&quot;, @&quot;C:\mytextfile.txt&quot;);
 </code></pre>
 <h2 id="starting-a-process-with-arguments-and-completed-callback">Starting a process with arguments and completed callback</h2>

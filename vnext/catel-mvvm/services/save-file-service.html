@@ -98,10 +98,15 @@ public MyViewModel(IServiceProvider serviceProvider, ISaveFileService saveFileSe
     _saveFileService = saveFileService;
 }
 </code></pre>
-<pre><code class="lang-csharp">_saveFileService.Filter = &quot;C# File|*.cs&quot;;
-if (_saveFileService.DetermineFile())
+<pre><code class="lang-csharp">var context = new DetermineSaveFileContext
 {
-    // User selected a file
+    Filter = &quot;C# File|*.cs&quot;
+};
+
+var result = await _saveFileService.DetermineFileAsync(context);
+if (result.Result)
+{
+    // User selected a file, available via result.FileName
 }
 </code></pre>
 
