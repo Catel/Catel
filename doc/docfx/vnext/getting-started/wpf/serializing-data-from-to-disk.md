@@ -31,55 +31,64 @@ namespace WPF.GettingStarted.Services
 
 ## Creating the service implementation
 
-First, add the `Orc.Serialization.Json` NuGet package to the project:
+First, add the `Orc.Serialization.Json` and `Orc.FileSystem` NuGet packages to the project:
 
 ```
 dotnet add package Orc.Serialization.Json
+dotnet add package Orc.FileSystem
 ```
 
-Below is an example implementation using `Orc.Serialization.Json` for serialization:
+Below is an example implementation using `Orc.Serialization.Json` for serialization and `Orc.FileSystem` for file access:
 
 ```csharp
 namespace WPF.GettingStarted.Services
 {
     using System.Collections.Generic;
     using System.IO;
+    using Orc.FileSystem;
     using Orc.Serialization.Json;
     using WPF.GettingStarted.Models;
 
     public class FamilyService : IFamilyService
     {
         private readonly string _path;
+        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public FamilyService(IJsonSerializerFactory jsonSerializerFactory)
+        public FamilyService(IFileService fileService, IDirectoryService directoryService,
+            IJsonSerializerFactory jsonSerializerFactory)
         {
+            ArgumentNullException.ThrowIfNull(fileService);
+            ArgumentNullException.ThrowIfNull(directoryService);
             ArgumentNullException.ThrowIfNull(jsonSerializerFactory);
 
+            _fileService = fileService;
+            _directoryService = directoryService;
             _jsonSerializer = jsonSerializerFactory.CreateSerializer();
 
             string directory = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "CatenaLogic", "WPF.GettingStarted");
 
-            Directory.CreateDirectory(directory);
+            _directoryService.Create(directory);
             _path = Path.Combine(directory, "family.json");
         }
 
         public IEnumerable<Family> LoadFamilies()
         {
-            if (!File.Exists(_path))
+            if (!_fileService.Exists(_path))
             {
                 return Array.Empty<Family>();
             }
 
-            using var stream = File.OpenRead(_path);
+            using var stream = _fileService.Open(_path, FileMode.Open, FileAccess.Read, FileShare.Read);
             return _jsonSerializer.Deserialize<List<Family>>(stream) ?? new List<Family>();
         }
 
         public void SaveFamilies(IEnumerable<Family> families)
         {
-            using var stream = File.Create(_path);
+            using var stream = _fileService.Create(_path);
             _jsonSerializer.Serialize(stream, families);
         }
     }
@@ -91,12 +100,14 @@ namespace WPF.GettingStarted.Services
 Now we have created the service, it is time to register it in the service collection. In the `App.xaml.cs`, add the following code:
 
 ```csharp
+// AddOrcFileSystem registers IFileService and IDirectoryService, which FamilyService depends on
+services.AddOrcFileSystem();
 // AddOrcSerializationJson registers IJsonSerializerFactory, which FamilyService depends on
 services.AddOrcSerializationJson();
 services.AddSingleton<IFamilyService, FamilyService>();
 ```
 
-The call to `AddOrcSerializationJson()` registers the `IJsonSerializerFactory` which is injected into `FamilyService`.
+The call to `AddOrcFileSystem()` registers `IFileService` and `IDirectoryService`. The call to `AddOrcSerializationJson()` registers the `IJsonSerializerFactory` which is injected into `FamilyService`.
 
 ## Adding the service usage to the MainWindowViewModel
 
