@@ -3,7 +3,7 @@ title: "Serializing data from/to disk"
 ---
 > **Note:** The Catel serialization engine (`IXmlSerializer`, `SavableModelBase`) was removed in Catel 7. The `ServiceLocator` IoC container was also removed in Catel 7 in favor of standard .NET dependency injection.
 >
-> For serialization, use alternatives such as `System.Text.Json`, `Newtonsoft.Json`, or `Orc.Serialization`.
+> For serialization, this guide uses `Orc.Serialization.Json`. Other alternatives include `System.Text.Json` and `Newtonsoft.Json`.
 > For dependency injection, register services in `IServiceCollection` using `services.AddCatelCore()` and `services.AddCatelMvvm()`.
 
 In this step we will create services that will serialize the models from/to disk. Services are a great way to abstract functionality that can be used in every part of the application.
@@ -31,22 +31,33 @@ namespace WPF.GettingStarted.Services
 
 ## Creating the service implementation
 
-Below is an example implementation using `System.Text.Json` for serialization:
+First, add the `Orc.Serialization.Json` NuGet package to the project:
+
+```
+dotnet add package Orc.Serialization.Json
+```
+
+Below is an example implementation using `Orc.Serialization.Json` for serialization:
 
 ```csharp
 namespace WPF.GettingStarted.Services
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Text.Json;
+    using Orc.Serialization.Json;
     using WPF.GettingStarted.Models;
 
     public class FamilyService : IFamilyService
     {
         private readonly string _path;
+        private readonly IJsonSerializer _jsonSerializer;
 
-        public FamilyService()
+        public FamilyService(IJsonSerializerFactory jsonSerializerFactory)
         {
+            ArgumentNullException.ThrowIfNull(jsonSerializerFactory);
+
+            _jsonSerializer = jsonSerializerFactory.CreateSerializer();
+
             string directory = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "CatenaLogic", "WPF.GettingStarted");
@@ -62,14 +73,14 @@ namespace WPF.GettingStarted.Services
                 return Array.Empty<Family>();
             }
 
-            var json = File.ReadAllText(_path);
-            return JsonSerializer.Deserialize<List<Family>>(json) ?? new List<Family>();
+            using var stream = File.OpenRead(_path);
+            return _jsonSerializer.Deserialize<List<Family>>(stream) ?? new List<Family>();
         }
 
         public void SaveFamilies(IEnumerable<Family> families)
         {
-            var json = JsonSerializer.Serialize(families);
-            File.WriteAllText(_path, json);
+            using var stream = File.Create(_path);
+            _jsonSerializer.Serialize(stream, families);
         }
     }
 }
@@ -80,8 +91,12 @@ namespace WPF.GettingStarted.Services
 Now we have created the service, it is time to register it in the service collection. In the `App.xaml.cs`, add the following code:
 
 ```csharp
+// AddOrcSerializationJson registers IJsonSerializerFactory, which FamilyService depends on
+services.AddOrcSerializationJson();
 services.AddSingleton<IFamilyService, FamilyService>();
 ```
+
+The call to `AddOrcSerializationJson()` registers the `IJsonSerializerFactory` which is injected into `FamilyService`.
 
 ## Adding the service usage to the MainWindowViewModel
 
