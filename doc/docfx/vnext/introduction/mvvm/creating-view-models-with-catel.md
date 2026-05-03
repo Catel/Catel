@@ -5,7 +5,45 @@ The View Models in Catel are very easy to write, and give the end-user a great f
 
 The `ViewModelBase` class is the most important class of all in the MVVM Framework of Catel. Of course, it can't do anything useful without the other classes, but all the View Models that are created using Catel derive of this class. `ViewModelBase` is based on the `ModelBase` class that ships with Catel. Thanks to the existence of that class, the MVVM framework was set up very quickly (although “very quickly” is relative). Below is a class diagram that shows the class tree:
 
-![](../../images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png)
+```mermaid
+classDiagram
+    direction TB
+    class ObservableObject {
+        <<abstract>>
+    }
+    class ModelBase {
+        <<abstract>>
+    }
+    class ValidatableModelBase {
+        <<abstract>>
+    }
+    class ViewModelBase {
+        <<abstract>>
+    }
+    class INotifyPropertyChanged {
+        <<interface>>
+    }
+    class IModel {
+        <<interface>>
+    }
+    class IValidatableModel {
+        <<interface>>
+    }
+    class IDataErrorInfo {
+        <<interface>>
+    }
+    class IViewModel {
+        <<interface>>
+    }
+    INotifyPropertyChanged <|.. ObservableObject
+    ObservableObject <|-- ModelBase
+    IModel <|.. ModelBase
+    ModelBase <|-- ValidatableModelBase
+    IValidatableModel <|.. ValidatableModelBase
+    IDataErrorInfo <|.. ValidatableModelBase
+    ValidatableModelBase <|-- ViewModelBase
+    IViewModel <|.. ViewModelBase
+```
 
 The class diagram above shows how many default interfaces of the .NET Framework are supported in the `ModelBase` class. Since most of these interfaces are used by WPF as well, the *ViewModelBase* class itself can take huge advantage of the implementation of `ModelBase`.
 

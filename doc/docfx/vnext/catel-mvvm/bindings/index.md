@@ -14,7 +14,16 @@ For examples, check out the following pages:
 
 The binding system consists of several classes. Below is an architectural overview.
 
-![](../../images/catel-mvvm/bindings/introduction/architecture.png)
+```mermaid
+graph TD
+    View --> BindingContext
+    BindingContext --> Binding1[Binding]
+    BindingContext --> Binding2[Binding]
+    Binding1 --> Source1[BindingParty\nsource]
+    Binding1 --> Target1[BindingParty\ntarget]
+    Binding2 --> Source2[BindingParty\nsource]
+    Binding2 --> Target2[BindingParty\ntarget]
+```
 
 As the image shows, each view will have their own `BindingContext`. A `BindingContext` contains all the bindings currently available in the view and allows adding / removing bindings dynamically when required. As soon as a major change occurs (such as a new view model), a new `BindingContext` will be created and the old one will be cleaned up. The views in Catel will automatically take care of the `BindingContext` initialization and lifetime management.
 

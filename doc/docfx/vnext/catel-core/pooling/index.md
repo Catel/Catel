@@ -9,7 +9,14 @@ The documentation uses a byte array of 4096 as poolable object as example. If `_
 
 The pool manager internally uses a stack to manage the available objects in the pool. It's important to understand how a pool works. The flow diagram below shows how the pool manager deals with objects:
 
-![](../../images/catel-core/pooling/hasobjects.png)
+```mermaid
+flowchart TD
+    A([GetObject called]) --> B{pool has\navailable objects?}
+    B -- yes --> C[return pooled object]
+    B -- no --> D[create new object]
+    C --> E([return object to caller])
+    D --> E
+```
 
 It is recommended that a pool manager gets registered in the *ServiceLocator* so it can be re-used by multiple components.
 
@@ -42,7 +49,15 @@ using (var poolableBuffer = _poolManager.GetObject())
 
 The flow chart below shows how the `PoolManager<TPoolable>` will handle the dispose:
 
-![](../../images/catel-core/pooling/reachedmaxsize.png)
+```mermaid
+flowchart TD
+    A([object disposed]) --> B[reset object state]
+    B --> C{pool reached\nMaxSize?}
+    C -- yes --> D[discard object\nleave for GC]
+    C -- no --> E[return object to pool]
+    D --> F([end])
+    E --> F
+```
 
 ## Customizing a pool manager
 
