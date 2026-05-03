@@ -47,7 +47,7 @@ classDiagram
 
 The class diagram above shows how many default interfaces of the .NET Framework are supported in the `ModelBase` class. Since most of these interfaces are used by WPF as well, the *ViewModelBase* class itself can take huge advantage of the implementation of `ModelBase`.
 
-Because `ViewModelBase` derives from `ModelBase`, you can declare properties exactly the same way. Even better, you can simply use `ModelBase` (or the extended `SavableModelBase`) to create (and save) your Models, and use `ViewModelBase` as the base for all the View Models.
+Because `ViewModelBase` derives from `ModelBase`, you can declare properties exactly the same way. Even better, you can simply use `ModelBase` to create your Models, and use `ViewModelBase` as the base for all the View Models.
 
 ## Creating a view model
 

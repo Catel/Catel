@@ -1,7 +1,7 @@
 ﻿---
 title: "UrlLocator" 
 ---
-The `IUrlLocator` class is responsible for resolving the right urls for the xaml views for a view model in navigation based applications. Before Catel 3.0, the `INavigationService` was responsible for resolving the url, but this responsibility is now taken over by the `IUrlLocator`. The `NavigationService` internally uses the `IUrlLocator` to resolve the views.
+The `IUrlLocator` class is responsible for resolving the right urls for the xaml views for a view model in navigation based applications. The `NavigationService` internally uses the `IUrlLocator` to resolve the views.
 
 ## Resolving by naming convention
 
@@ -23,11 +23,10 @@ Note that the `UrlLocator` checks whether the resource actually exists. If the r
 
 ## Manually resolving a naming convention
 
-To manually resolve a naming convention, use the following code:
+To manually resolve a naming convention, inject `IUrlLocator` via the constructor and use:
 
-```
-var urlLocator = ServiceLocator.Instance.ResolveType<IUrlLocator>();
-var url = urlLocator.ResolveUrl(typeof(MyViewModel));
+```csharp
+var url = _urlLocator.ResolveUrl(typeof(MyViewModel));
 ```
 
 ## Customizing naming conventions
@@ -65,25 +64,24 @@ For more information about naming conventions, see [Naming conventions]({{< relr
 
 However, it is possible to add or remove new naming conventions to support your own naming convention. For example, to add a new naming convention for a different assembly, use this code:
 
-```
-var urlLocator = ServiceLocator.Instance.ResolveType<IUrlLocator>();
-urlLocator.NamingConventions.Add("/MyPages/[VM]Page.xaml");
+```csharp
+_urlLocator.NamingConventions.Add("/MyPages/[VM]Page.xaml");
 ```
 
 ## Registering custom urls
 
 Sometimes, a class doesn't follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:
 
-```
-var urlLocator = ServiceLocator.Instance.ResolveType<IUrlLocator>();
-urlLocator.Register(typeof(MyViewModelNotFollowingNamingConvention), "/MyVerySpecialUrl.xaml");
+```csharp
+_urlLocator.Register(typeof(MyViewModelNotFollowingNamingConvention), "/MyVerySpecialUrl.xaml");
 ```
 
 ## Using a custom UrlLocator
 
-If you want to have total freedom to determine which url is provided per view model (maybe there are other services that have an impact on this), it is possible to create a custom `IUrlLocator` implementation. Then the only thing to do is to register it using the following code:
+If you want to have total freedom to determine which url is provided per view model (maybe there are other services that have an impact on this), it is possible to create a custom `IUrlLocator` implementation. Register it in the service collection:
 
+```csharp
+services.AddSingleton<IUrlLocator, MyUrlLocator>();
 ```
-ServiceLocator.Default.Register<IUrlLocator, MyUrlLocator>();
-```
+
 

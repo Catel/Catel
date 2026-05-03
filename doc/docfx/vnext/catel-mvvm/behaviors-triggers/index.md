@@ -13,17 +13,15 @@ Note that the *InteractivityManager* is only compatible with behaviors and trigg
 
 The manager contains both events and methods to retrieve information about triggers. For example, if one is interested in all the *Focus* triggers, one could do the following:
 
-```
+```csharp
 public class FocusWatcher
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+    private readonly ILogger<FocusWatcher> _logger;
     private readonly IInteractivityManager _interactivityManager;
 
-    public FocusWatcher(IInteractivityManager interactivityManager)
+    public FocusWatcher(ILogger<FocusWatcher> logger, IInteractivityManager interactivityManager)
     {
-        Argument.IsNotNull(() => interactivityManager);
-
+        _logger = logger;
         _interactivityManager = interactivityManager;
         _interactivityManager.BehaviorLoaded += OnBehaviorLoaded;
         _interactivityManager.BehaviorUnloaded += OnBehaviorUnloaded;
@@ -34,7 +32,7 @@ public class FocusWatcher
         var focus = e.Behavior as Focus;
         if (focus != null)
         {
-            Log.Info("Focus behavior loaded");
+            _logger.LogInformation("Focus behavior loaded");
         }
     }
 
@@ -43,7 +41,7 @@ public class FocusWatcher
         var focus = e.Behavior as Focus;
         if (focus != null)
         {
-            Log.Info("Focus behavior unloaded");
+            _logger.LogInformation("Focus behavior unloaded");
         }
     }
 }

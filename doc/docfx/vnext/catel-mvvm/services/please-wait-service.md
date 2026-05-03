@@ -1,69 +1,62 @@
 ﻿---
-title: "PleaseWaitService" 
+title: "BusyIndicatorService" 
 ---
-The `IPleaseWaitService` allows a developer to show a please wait message (a.k.a. busy indicator) from a view model. 
+The `IBusyIndicatorService` (formerly `IPleaseWaitService`) allows a developer to show a busy indicator from a view model. 
 
 ## Showing
 
-```
-using Catel.IoC;
+```csharp
+private readonly IBusyIndicatorService _busyIndicatorService;
+
+public MyViewModel(IServiceProvider serviceProvider, IBusyIndicatorService busyIndicatorService)
+    : base(serviceProvider)
+{
+    _busyIndicatorService = busyIndicatorService;
+}
 ```
 
-```
-var dependencyResolver = this.GetDependencyResolver();
-var pleaseWaitService = dependencyResolver.Resolve<IPleaseWaitService>();
-pleaseWaitService.Show();
+```csharp
+_busyIndicatorService.Show();
 ```
 
 ## Hiding
 
-```
-var dependencyResolver = this.GetDependencyResolver();
-var pleaseWaitService = dependencyResolver.Resolve<IPleaseWaitService>();
-pleaseWaitService.Hide();
+```csharp
+_busyIndicatorService.Hide();
 ```
 
 ## Showing and automatically hide
 
-The `IPleaseWaitService` can automatically hide itself when an action is completed. To use this feature, simply pass a delegate to the `Show` method and the service will hide the window as soon as the delegate has completed.
+The `IBusyIndicatorService` can automatically hide itself when an action is completed. To use this feature, simply pass a delegate to the `Show` method and the service will hide the window as soon as the delegate has completed.
 
-```
-using Catel.IoC;
-```
-
-```
-var dependencyResolver = this.GetDependencyResolver();
-var pleaseWaitService = dependencyResolver.Resolve<IPleaseWaitService>();
-pleaseWaitService.Show(() => Thread.Sleep(1500));
+```csharp
+_busyIndicatorService.Show(() => Thread.Sleep(1500));
 ```
 
 ## Changing the status
 
-```
-var dependencyResolver = this.GetDependencyResolver();
-var pleaseWaitService = dependencyResolver.Resolve<IPleaseWaitService>();
-pleaseWaitService.UpdateStatus("new status");
+```csharp
+_busyIndicatorService.UpdateStatus("new status");
 ```
 
-## Showing a determinate please wait window
+## Showing a determinate busy indicator
 
-By default, the `IPleaseWaitService` shows an indeterminate state (no actual progress is visible).
+By default, the `IBusyIndicatorService` shows an indeterminate state (no actual progress is visible).
 
-The `UpdateStatus` method can be used to show the window. The `statusFormat` argument can contain '{0}' (represents the current item) and '{1}' (represents the total items). However, they can also be left out.
+The `UpdateStatus` method can be used to show progress. The `statusFormat` argument can contain `{0}` (represents the current item) and `{1}` (represents the total items). However, they can also be left out.
 
-```
-var dependencyResolver = this.GetDependencyResolver();
-var pleaseWaitService = dependencyResolver.Resolve<IPleaseWaitService>();
-pleaseWaitService.UpdateStatus(1, 5, "Updating item {0} of {1}");
+```csharp
+_busyIndicatorService.UpdateStatus(1, 5, "Updating item {0} of {1}");
 ```
 
-The determinate version can be hidden via a call to *Hide* or when the currentItem argument is larger than the number of totalItems.
+The determinate version can be hidden via a call to `Hide` or when the `currentItem` argument is larger than the number of `totalItems`.
 
 ## Push/Pop
 
-Sometimes, multiple view models or multiple actions use the service. It's not possible to hide the window when the first action is completed, because the user will still have to wait for the other actions to complete (without a please wait window). To implement this correctly, it is possible to use the `Push` and `Pop` methods.
+Sometimes, multiple view models or multiple actions use the service. It's not possible to hide the window when the first action is completed, because the user will still have to wait for the other actions to complete (without a busy indicator window). To implement this correctly, it is possible to use the `Push` and `Pop` methods.
 
 The `Push` method shows the window if it is not already visible and then increases an internal counter. At the start of each (asynchronous) action, the developer can call the `Push` method. When the action is completed, the developer calls `Pop` which will internally decrease the counter. If the counter hits zero (0), the window is automatically hidden.
 
 It is possible to hide the window, even when the internal counter is not yet zero. A call to `Hide` will reset the counter to zero and thus hide the window.
+
 

@@ -25,13 +25,16 @@ public class SomeWindow
 
 ## Creating application-wide commands
 
-To create application-wide commands, one must resolve the *ICommandManager* from the *DependencyResolver *and create the command:
+To create application-wide commands, inject the *ICommandManager* via the constructor and create the command:
 
-```
-var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-var commandManager = dependencyResolver.Resolve<ICommandManager>();
+```csharp
+private readonly ICommandManager _commandManager;
 
-commandManager.CreateCommand("Refresh", new InputGesture(Key.F5));
+public MyInitializationClass(ICommandManager commandManager)
+{
+    _commandManager = commandManager;
+    _commandManager.CreateCommand("Refresh", new InputGesture(Key.F5));
+}
 ```
 
 It is recommended to put all the command creation in a single place so they are easily manageable.
@@ -144,31 +147,27 @@ It is recommended to keep a well formed structure for your command definitions t
 
 #### Registering the command container
 
-Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container:
+Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container. Inject `ICommandManager` via the constructor and use:
 
-```
-var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
-
-commandManager.CreateCommandWithGesture(typeof(Commands.Application), "About");
+```csharp
+_commandManager.CreateCommandWithGesture(typeof(Commands.Application), "About");
 ```
 
 This will keep the command registration very readable and maintainable when using a lot of commands:
 
-```
-var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
+```csharp
+_commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "Exit");
+_commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "About");
 
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "Exit");
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "About");
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Open");
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Save");
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "SaveAs");
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Refresh");
 
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Open");
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Save");
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), "SaveAs");
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Refresh");
+_commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), "ToggleTooltips");
+_commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), "ToggleQuickFilters");
 
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), "ToggleTooltips");
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), "ToggleQuickFilters");
-
-commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), "Extensions");
-commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), "ExtensionsSettings");
+_commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), "Extensions");
+_commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), "ExtensionsSettings");
 ```
 

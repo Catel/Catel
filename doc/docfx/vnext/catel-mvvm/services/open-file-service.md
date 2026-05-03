@@ -5,15 +5,24 @@ The `IOpenFileService` allows a developer to let the user choose a file from ins
 
 ## Opening a file
 
-To open a file, it is required to set the right properties of the service and then make a call to the `DetermineFile` method:
+To open a file, inject the service via the constructor and use:
 
+```csharp
+private readonly IOpenFileService _openFileService;
+
+public MyViewModel(IServiceProvider serviceProvider, IOpenFileService openFileService)
+    : base(serviceProvider)
+{
+    _openFileService = openFileService;
+}
 ```
-var dependencyResolver = this.GetDependencyResolver();
-var openFileService = dependencyResolver.Resolve<IOpenFileService>();
-openFileService.Filter = "All files|*.*";
-if (openFileService.DetermineFile())
+
+```csharp
+_openFileService.Filter = "All files|*.*";
+if (_openFileService.DetermineFile())
 {
     // User selected a file
 }
 ```
+
 

@@ -1,34 +1,19 @@
 ﻿---
 title: "Creating the models" 
 ---
-In this step we will create models. Since this application is about families and persons inside those families, we need to create the following models: *Settings*, *Family* and *Person*. 
+In this step we will create models. Since this application is about families and persons inside those families, we need to create the following models: *Family* and *Person*. 
 
 ## Creating the model classes
 
-The models that will be used in this application will derive from the `ModelBase`, `ValidatableModelBase` or `SavableModelBase` class of Catel. These classes enable support for change notifications, validations and persistence. The `SavableModelBase` adds additional methods to save and load from/to streams or files without having to create a serializer first.
+The models that will be used in this application will derive from the `ModelBase` or `ValidatableModelBase` class of Catel. These classes enable support for change notifications and validations.
 
 To create the model classes, create the following classes in the *Models* folder.
 
 The *model* code snippet is available to create models
 
-### Settings class
-
-The settings class is the top container that will store all families and other settings (which might be added in the future).
-
-```
-namespace WPF.GettingStarted.Models
-{
-    using Catel.Data;
-
-    public class Settings : SavableModelBase<Settings>
-    {
-    }
-}
-```
-
 ### Family class
 
-```
+```csharp
 namespace WPF.GettingStarted.Models
 {
     using Catel.Data;
@@ -41,7 +26,7 @@ namespace WPF.GettingStarted.Models
 
 ### Person class
 
-```
+```csharp
 namespace WPF.GettingStarted.Models
 {
     using Catel.Data;
@@ -82,30 +67,9 @@ If you want to get the functionality in the `ModelBase` classes without the "dep
 
 The *modelprop* code snippet is available to create models
 
-### Settings class
-
-```
-public class Settings : SavableModelBase<Settings>
-{
-    /// <summary>
-    /// Gets or sets all the families.
-    /// </summary>
-    public ObservableCollection<Family> Families
-    {
-        get { return GetValue<ObservableCollection<Family>>(FamiliesProperty); }
-        set { SetValue(FamiliesProperty, value); }
-    }
-
-    /// <summary>
-    /// Register the Families property so it is known in the class.
-    /// </summary>
-    public static readonly PropertyData FamiliesProperty = RegisterProperty("Families", typeof(ObservableCollection<Family>), () => new ObservableCollection<Family>());
-}
-```
-
 ### Family class
 
-```
+```csharp
 public class Family : ValidatableModelBase
 {
     /// <summary>
@@ -145,7 +109,7 @@ public class Family : ValidatableModelBase
 
 ### Person class
 
-```
+```csharp
 public class Person : ValidatableModelBase
 {
     /// <summary>
@@ -202,4 +166,5 @@ public class Person : ValidatableModelBase
 ## Up next
 
 [Serializing data from/to disk]({{< relref "getting-started/wpf/serializing-data-from-to-disk.md" >}})
+
 

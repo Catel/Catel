@@ -88,22 +88,22 @@ if (modelValidation != null)
 }
 ```
 
-If an IValidatorProvider instance is available, the following code can be used to allow a more generic approach. This code assumes that the IValidatorProvider is registered in the ServiceLocator.
+If an IValidatorProvider instance is available, the following code can be used to allow a more generic approach. Inject `IValidatorProvider` via the constructor:
 
-```
-var validatorProvider = ServiceLocator.Instance.ResolveType<IValidatorProvider>();
-myObject.Validator = validatorProvider.GetValidator(myObject.GetType());
+```csharp
+var validator = _validatorProvider.GetValidator(myObject.GetType());
+myObject.Validator = validator;
 ```
 
 If the IValidatorProvider returns null (which is allowed), no custom validator will be used.
 
 ## Setting the validator in ViewModelBase
 
-The ViewModelBase has it's own ServiceLocator. The easiest way to support a validator is to register an IValidatorProvider instance in the ServiceLocator:
+The easiest way to support a validator in a ViewModelBase is to register an `IValidatorProvider` instance in the service collection:
 
-```
-ServiceLocator.Instance.RegisterType<IValidatorProvider, MyValidatorProvider>();
+```csharp
+services.AddSingleton<IValidatorProvider, MyValidatorProvider>();
 ```
 
-The ViewModelBase will automatically retrieve the right IValidator for the view model. If no IValidatorProvider is registered in the ServiceLocator, no validator will be set automatically. It is also possible to set the Validator property manually, but it is recommended to use an IValidatorProvider and register it.
+The ViewModelBase will automatically retrieve the right IValidator for the view model. If no IValidatorProvider is registered, no validator will be set automatically. It is also possible to set the Validator property manually, but it is recommended to use an IValidatorProvider and register it.
 

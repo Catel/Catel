@@ -11,19 +11,24 @@ Remember that only view classes implementing *IView* are supported by the *IView
 
 ## Retrieving the view of a view model
 
-To find the view of a view model, use the steps below:
+To find the view of a view model, inject `IViewManager` via the constructor:
 
-1) Resolve the view from *IViewManager* from the *ServiceLocator*:
+```csharp
+private readonly IViewManager _viewManager;
 
+public MyViewModel(IServiceProvider serviceProvider, IViewManager viewManager)
+    : base(serviceProvider)
+{
+    _viewManager = viewManager;
+}
 ```
-var viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
-```
 
-2) Resolve the view:
+Then resolve the views for a specific view model:
 
-```
-var views = viewManager.GetViewsOfViewModel(myViewModel);
+```csharp
+var views = _viewManager.GetViewsOfViewModel(myViewModel);
 ```
 
 Note that it is possible that multiple views are linked to the same view model
+
 

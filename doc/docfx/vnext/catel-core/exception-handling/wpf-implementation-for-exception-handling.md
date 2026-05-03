@@ -1,84 +1,37 @@
 ﻿---
 title: "WPF implementation for exception handling" 
 ---
-## Creating a watcher
+> **Note:** `IExceptionService` has been removed in Catel 7. Use standard .NET exception handling patterns for WPF application-wide exception handling.
 
-The watcher below is a self-managed watcher that takes care of exception handling in case of unhandled exceptions in both the *AppDomain* and *Dispatcher*.
+For WPF applications, subscribe directly to the `AppDomain.CurrentDomain.UnhandledException` and `Dispatcher.UnhandledException` events in `App.xaml.cs`:
 
-```
-public class ExceptionWatcher
+```csharp
+public partial class App : Application
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private readonly ILogger<App> _logger;
 
-    private readonly IExceptionService _exceptionService;
-    private readonly IMessageService _messageService;
-
-    public ExceptionWatcher(IExceptionService exceptionService, IMessageService messageService)
+    public App(ILogger<App> logger)
     {
-        Argument.IsNotNull(() => exceptionService);
-        Argument.IsNotNull(() => messageService);
+        _logger = logger;
 
-        _exceptionService = exceptionService;
-        _messageService = messageService;
-
-        exceptionService.Register<Exception>(async exception =>
-        {
-            await _messageService.ShowAsync("An unknown exception occurred, please contact the developers");
-        });
-
-        var appDomain = AppDomain.CurrentDomain;
-        appDomain.FirstChanceException += OnAppDomainFirstChanceException;
-        appDomain.UnhandledException += OnAppDomainUnhandledException;
-
-        var dispatcher = DispatcherHelper.CurrentDispatcher;
-        if (dispatcher != null)
-        {
-            dispatcher.UnhandledException += OnDispatcherUnhandledException;
-        }
-    }
-
-    private void OnAppDomainFirstChanceException(object sender, FirstChanceExceptionEventArgs e)
-    {
-        //var exception = e.Exception;
-        //if (exception != null)
-        //{
-        //    _exceptionService.HandleException(exception);
-        //}
+        AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
+        DispatcherUnhandledException += OnDispatcherUnhandledException;
     }
 
     private void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
-        var exception = e.ExceptionObject as Exception;
-        if (exception != null)
+        if (e.ExceptionObject is Exception exception)
         {
-            Log.Error(exception, "AppDomain.UnhandledException occurred");
-
-            _exceptionService.HandleException(exception);
+            _logger.LogError(exception, "AppDomain.UnhandledException occurred");
         }
     }
 
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        var exception = e.Exception;
-        if (exception != null)
-        {
-            Log.Error(exception, "Dispatcher.UnhandledException occurred");
-
-            if (_exceptionService.HandleException(exception))
-            {
-                e.Handled = true;
-            }
-        }
+        _logger.LogError(e.Exception, "Dispatcher.UnhandledException occurred");
+        e.Handled = true;
     }
 }
 ```
 
-## Registering the exception watcher
-
-In order for this exception handler to work, you need to register it so it stays alive in the application. Use the code below:
-
-```
-var serviceLocator = ServiceLocator.Default;
-serviceLocator.RegisterTypeAndInstantiate<ExceptionWatcher>();
-```
 

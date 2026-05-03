@@ -47,8 +47,8 @@ public interface IAuthenticationProvider
 
 To register a custom implementation of the command authentication provider, use the code below:
 
-```
-Catel.IoC.ServiceLocator.Instance.RegisterType<IAuthenticationProvider, RoleAuthenticationProvider>();
+```csharp
+services.AddSingleton<IAuthenticationProvider, RoleAuthenticationProvider>();
 ```
 
 The code above registers a custom made command authentication provider that checks whether a specific role can execute the command.

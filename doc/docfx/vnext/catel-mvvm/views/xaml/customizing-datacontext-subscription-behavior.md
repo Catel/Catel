@@ -5,13 +5,20 @@ Starting with Catel 4.0, the views watch both the direct and inherited *DataCont
 
 ## Customizing the behavior for all views
 
-To mimick pre Catel 4.0, use the following code:
+To customize the data context subscription behavior, inject `IDataContextSubscriptionService` via the constructor and modify its configuration:
 
+```csharp
+private readonly IDataContextSubscriptionService _dataContextSubscriptionService;
+
+public MyViewModel(IServiceProvider serviceProvider, IDataContextSubscriptionService dataContextSubscriptionService)
+    : base(serviceProvider)
+{
+    _dataContextSubscriptionService = dataContextSubscriptionService;
+}
 ```
-var dependencyResolver = this.GetDependencyResolver();
-var dataContextSubscriptionService = dependencyResolver.Resolve<IDataContextSubscriptionService>();
 
-dataContextSubscriptionService.DefaultDataContextSubscriptionMode = DataContextSubscriptionMode.DirectDataContext;
+```csharp
+_dataContextSubscriptionService.DefaultDataContextSubscriptionMode = DataContextSubscriptionMode.DirectDataContext;
 ```
 
 ## Customizing the behavior per view
