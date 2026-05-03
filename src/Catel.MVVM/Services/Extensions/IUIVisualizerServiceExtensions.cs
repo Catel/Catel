@@ -114,7 +114,7 @@ public static partial class IUIVisualizerServiceExtensions
         }
 
         bool? result = false;
-        window.Dispatcher.InvokeIfRequired(() => result = (bool?)activateMethodInfo.Invoke(window, null));
+        window.Dispatcher.InvokeIfRequired(() => result = (bool?)activateMethodInfo.Invoke(window, null)).GetAwaiter().GetResult();
         return result;
     }
 }

@@ -2626,13 +2626,13 @@ namespace Catel.Services
     }
     public static class IDispatcherServiceExtensions
     {
-        public static void BeginInvoke(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
-        public static void BeginInvoke(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
-        public static void BeginInvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
-        public static void BeginInvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
-        public static void Invoke(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
-        public static void InvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
-        public static void InvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
+        public static System.Threading.Tasks.Task BeginInvoke(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
+        public static System.Threading.Tasks.Task BeginInvoke(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
+        public static System.Threading.Tasks.Task BeginInvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
+        public static System.Threading.Tasks.Task BeginInvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
+        public static System.Threading.Tasks.Task Invoke(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
+        public static System.Threading.Tasks.Task InvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
+        public static System.Threading.Tasks.Task InvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
     }
     public interface ILanguageService
     {
