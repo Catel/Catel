@@ -51,7 +51,7 @@ public class PersonViewModel : ViewModelBase
 }
 ```
 
-Note that the `Person` property is decorated with the `Model` attribute. This automatically makes sure that if a view model is saved, the `IEditableObject.EndEdit` is called. When the view model is canceled, the `IEditableObject.CancelEdit` is called and all changes on the model will be reverted.
+Note that the `Person` property is decorated with the `Model` attribute. If the `Person` model implements `IEditableObject`, Catel will automatically call `IEditableObject.EndEdit` when the view model is saved, and `IEditableObject.CancelEdit` when the view model is canceled so that all changes on the model will be reverted. Note that `ModelBase` does not implement `IEditableObject` by default; if you want this behavior, implement `IEditableObject` in your model class.
 
 ### Exposing properties of a model
 
