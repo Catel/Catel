@@ -101,7 +101,7 @@ If this interface is not implemented, changes will not be reflected to the UI vi
 <li><strong>IDataErrorInfo</strong>
 If this interface is not implemented, errors cannot be shown to the user.</li>
 <li><strong>IEditableObject</strong>
-If this interface is not implemented, a Model cannot work with “states”. This means that a user cannot start editing an object and finally cancel it (because there is no stored “state” that can be used to restore the values).</li>
+If this interface is not implemented, a Model cannot work with “states”. This means that a user cannot start editing an object and finally cancel it (because there is no stored “state” that can be used to restore the values). Note that <code>ModelBase</code> does not implement <code>IEditableObject</code> out of the box; if you need this behavior, implement it in a derived class.</li>
 </ul>
 <h2 id="view-models">View Models</h2>
 <p>View models are the classes that contain the view logic. They can be seen as a container for all models in a specific view, including the behavior to interact with these models (for example adding or removing them from a collection). It is important that a view model also implements the <em>INotifyPropertyChanged</em> interfaces just like the models do.</p>

@@ -124,7 +124,7 @@ public IPerson Person
 /// &lt;/summary&gt;
 public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(IPerson));
 </code></pre>
-<p>Using the <code>ModelAttribute</code> is powerful. Basically, this is the extended functionality in the view model. If the model supports <code>IEditableObject</code>, <code>BeginEdit</code> is automatically called in the initialization of the view model. When the view model is canceled, the <code>CancelEdit</code> is called so the changes are undone.</p>
+<p>Using the <code>ModelAttribute</code> is powerful. Basically, this is the extended functionality in the view model. If the model implements <code>IEditableObject</code>, <code>BeginEdit</code> is automatically called when the view model initializes. When the view model is canceled, <code>CancelEdit</code> is called so the changes are undone. Note that <code>ModelBase</code> does not implement <code>IEditableObject</code> by default; if you want this behavior, implement <code>IEditableObject</code> in your model class.</p>
 <p>When a model is defined, it is possible to use the <code>ViewModelToModelAttribute</code>, as shown, in the code below:</p>
 <pre><code>/// &lt;summary&gt;
 /// Gets or sets the FirstName of the person.

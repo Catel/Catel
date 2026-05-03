@@ -92,7 +92,7 @@
 <li><strong>Support property changed notifications</strong>
 The class supports the <em>INotifyPropertyChanging</em> and <em>INotifyPropertyChanged</em> interfaces so this class can be used in applications to reflect changes to the user.</li>
 <li><strong>Backup &amp; revert</strong>
-The class implements the <em>IEditableObject</em> interface which makes it possible to create a state of the object. Then all properties can be edited, and finally, the changes can be applied or cancelled.</li>
+To support backup and revert functionality, implement the <em>IEditableObject</em> interface in a derived class. If the model implements <em>IEditableObject</em>, the view model framework will automatically call <em>BeginEdit</em>, <em>EndEdit</em>, and <em>CancelEdit</em> at the appropriate times.</li>
 </ul>
 <h2 id="using-the-class">Using the class</h2>
 <p>Using the class is extremely simple. Just declare a new class that derives from <em>ModelBase</em> and you are ready to go:</p>
@@ -143,7 +143,7 @@ public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&q
 <p><strong>INotifyPropertyChanged</strong></p>
 <p>All properties registered using the <em>RegisterProperty</em> method automatically take care of change notifications.</p>
 <p><strong>IEditableObject</strong></p>
-<p>The data object can automatically create an internal backup and restore it, if required, using the <em>IEditableObject</em> interface.</p>
+<p><code>ModelBase</code> does not implement <code>IEditableObject</code>. If you need backup and restore functionality on your model, implement the <code>IEditableObject</code> interface in a derived class. When the model implements <code>IEditableObject</code>, the view model framework will automatically call <code>BeginEdit</code>, <code>EndEdit</code>, and <code>CancelEdit</code> at the appropriate times.</p>
 <p>Note that this class is not suitable for database communication, there are much better ways to handle this (ORM mappers such as Entity Framework, NHibernate, LLBLGen Pro, etc.).</p>
 
 </article>

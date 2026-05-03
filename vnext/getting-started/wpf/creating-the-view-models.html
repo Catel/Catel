@@ -127,7 +127,7 @@
     public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person), null);
 }
 </code></pre>
-<p>Note that the <code>Person</code> property is decorated with the <code>Model</code> attribute. This automatically makes sure that if a view model is saved, the <code>IEditableObject.EndEdit</code> is called. When the view model is canceled, the <code>IEditableObject.CancelEdit</code> is called and all changes on the model will be reverted.</p>
+<p>Note that the <code>Person</code> property is decorated with the <code>Model</code> attribute. If the <code>Person</code> model implements <code>IEditableObject</code>, Catel will automatically call <code>IEditableObject.EndEdit</code> when the view model is saved, and <code>IEditableObject.CancelEdit</code> when the view model is canceled so that all changes on the model will be reverted. Note that <code>ModelBase</code> does not implement <code>IEditableObject</code> by default; if you want this behavior, implement <code>IEditableObject</code> in your model class.</p>
 <h3 id="exposing-properties-of-a-model">Exposing properties of a model</h3>
 <p>One powerful feature of Catel is that it can automatically map properties from a model to a view model. This way the user does not have to write repetitive code to map the properties from the model to the view model at startup and map the properties from view model to model when the view model is closed. Catel will take care of this all automatically.</p>
 <pre><code>/// &lt;summary&gt;
