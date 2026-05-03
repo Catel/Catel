@@ -41,7 +41,12 @@ public partial class UIVisualizerServiceFacts
                     {
                         action();
                     });
-
+                dispatcherServiceMock.Setup(x => x.InvokeAsync(It.IsAny<Action>()))
+                    .Callback<Action>(async (action) =>
+                    {
+                        action();
+                    });
+                
                 var viewModelFactoryMock = new Mock<IViewModelFactory>();
 
                 var uiVisualizerService = new UIVisualizerService(new NullLogger<UIVisualizerService>(), 
