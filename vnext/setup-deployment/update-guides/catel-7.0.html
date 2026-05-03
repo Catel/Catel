@@ -88,43 +88,72 @@
 
 
 <p>This guide describes how to update your code to be fully compatible with Catel 7.0.</p>
-<p>Catel 7.x is a massive breaking changes released, aimed to use as much features from .NET (core) as possible. This release drops the following features from Catel and uses the standardized .NET replacements:</p>
+<p>Catel 7.x is a major breaking-change release aimed at using as much functionality from .NET (Core) as possible. This release drops the following Catel-specific features in favor of standardized .NET replacements:</p>
 <ul>
-<li>Logging</li>
-<li>IoC</li>
-<li>Serialization</li>
+<li>Logging (replaced by <code>Microsoft.Extensions.Logging</code>)</li>
+<li>IoC / Dependency injection (replaced by <code>Microsoft.Extensions.DependencyInjection</code>)</li>
+<li>Serialization (removed; use <code>Orc.Serialization.Json</code> or <code>Orc.Serialization.Yaml</code>)</li>
 </ul>
 <p>This guide assumes that you are coming from Catel 6.x. If not, please read that guide first.</p>
 <p>Encountered issues while upgrading to this version? Add them here to help out others!</p>
 <h1 id="generic">Generic</h1>
-<h2 id="source-code-generator">Source code generator</h2>
-<p>A new source code generator (Catel.SourceGenerators) has been developed to assist in generating boiler-plate code. It is still possible to develop projects without it, but with the lack of dependency injection in XAML, it is strongly recommended to use the source generator.</p>
-<p>Add this to the csproj file:</p>
-<pre><code>&lt;PackageReference Include=&quot;Catel.SourceGenerators&quot; Version=&quot;1.0.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+<h2 id="nuget-package-updates">NuGet package updates</h2>
+<p>Update all Catel NuGet package references to version 7.x:</p>
+<pre><code class="lang-xml">&lt;PackageReference Include=&quot;Catel.Core&quot; Version=&quot;7.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Catel.MVVM&quot; Version=&quot;7.0.0&quot; /&gt;
 </code></pre>
-<h2 id="dependency-injection-di--inversion-of-control-ioc">Dependency Injection (DI) / Inversion of Control (IoC)</h2>
-<p>All Catel specific IoC components (ServiceLocator, TypeFactory, etc) have been removed.</p>
-<p>Use the native dependency injection from .NET.</p>
-<p>Catel’s ServiceLocator allowed late-bound registration, but .NET requires all services to be registered up front. To keep initialization flexible, we introduced <code>IConstructAtStartup</code> and <code>IInitializeAtStartup</code>.</p>
+<p>If you use Catel.Fody, update it to version 7.x as well:</p>
+<pre><code class="lang-xml">&lt;PackageReference Include=&quot;Catel.Fody&quot; Version=&quot;7.0.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+</code></pre>
+<h2 id="source-code-generator">Source code generator</h2>
+<p>A new source code generator (<code>Catel.SourceGenerators</code>) has been developed to generate boilerplate code. It is still possible to develop projects without it, but because dependency injection in XAML requires a parameterless constructor, using the source generator is strongly recommended.</p>
+<p>Add this to the <code>.csproj</code> file:</p>
+<pre><code class="lang-xml">&lt;PackageReference Include=&quot;Catel.SourceGenerators&quot; Version=&quot;7.0.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+</code></pre>
+<h2 id="dependency-injection-di--inversion-of-control-ioc">Dependency injection (DI) / Inversion of Control (IoC)</h2>
+<p>All Catel-specific IoC components (<code>ServiceLocator</code>, <code>TypeFactory</code>, <code>IDependencyResolver</code>, etc.) have been removed.</p>
+<p>Use the native dependency injection from .NET (<code>Microsoft.Extensions.DependencyInjection</code>) instead.</p>
+<p>Catel's <code>ServiceLocator</code> allowed late-bound registration, but .NET DI requires all services to be registered up front. To keep initialization flexible, two new interfaces have been introduced:</p>
 <ul>
-<li>IoCContainer =&gt; contains the app-wide IoC container (IServiceProvider)</li>
-<li>IConstructAtStartup =&gt; a type implementing this interface, registered in the service collection, will be automatically constructed at startup</li>
-<li>IInitializeAtStartup =&gt; a type implementing this interface, registered in the serviec collection, will be automatically constructed at startup and the <code>Initialize</code> method will be called to allow custom initialization.</li>
+<li><code>IoCContainer</code> — static wrapper around the app-wide <code>IServiceProvider</code></li>
+<li><code>IConstructAtStartup</code> — a singleton type implementing this interface is automatically constructed at startup when <code>CreateTypesThatMustBeConstructedAtStartup()</code> is called</li>
+<li><code>IInitializeAtStartup</code> — extends <code>IConstructAtStartup</code>; the <code>Initialize()</code> method is also called automatically at startup</li>
 </ul>
-<p>It is important to call this code at a point where it makes sense:</p>
-<pre><code>serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
+<p>Call the following at a point in startup where the service provider is ready:</p>
+<pre><code class="lang-csharp">serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
+</code></pre>
+<h3 id="before-catel-6">Before (Catel 6)</h3>
+<pre><code class="lang-csharp">// Registration
+var serviceLocator = ServiceLocator.Default;
+serviceLocator.RegisterType&lt;IMyService, MyService&gt;();
+
+// Resolving
+var myService = serviceLocator.ResolveType&lt;IMyService&gt;();
+
+// Constructor injection via TypeFactory
+var obj = TypeFactory.Default.CreateInstance&lt;MyViewModel&gt;();
+</code></pre>
+<h3 id="after-catel-7">After (Catel 7)</h3>
+<pre><code class="lang-csharp">// Registration
+var services = new ServiceCollection();
+services.AddSingleton&lt;IMyService, MyService&gt;();
+
+// Resolving
+var myService = serviceProvider.GetRequiredService&lt;IMyService&gt;();
+
+// Constructor injection is automatic — just declare constructor parameters
 </code></pre>
 <h2 id="modular-service-registration">Modular service registration</h2>
-<p>Each Catel library (and also all the Orc libraries) have module definitions. This means that no features are automatically registered and are now opt-in.</p>
-<p>To add Catel to an application, use the following code:</p>
-<pre><code>var services = new ServiceCollection();
+<p>Each Catel library now provides an extension method to register its services. No features are registered automatically; registration is opt-in.</p>
+<p>To add Catel to an application:</p>
+<pre><code class="lang-csharp">var services = new ServiceCollection();
 
 services.AddCatelCore();
 services.AddCatelMvvm();
 </code></pre>
 <h2 id="hosting-model">Hosting model</h2>
-<p>Catel now supports the .NET hosting model. It is possible to create an app host, similar to ASP.NET.</p>
-<pre><code>public partial class App : Application
+<p>Catel now supports the .NET generic hosting model, similar to ASP.NET Core.</p>
+<pre><code class="lang-csharp">public partial class App : Application
 {
 #pragma warning disable IDISP006 // Implement IDisposable
     private readonly IHost _host;
@@ -176,143 +205,258 @@ services.AddCatelMvvm();
 }
 </code></pre>
 <h2 id="logging">Logging</h2>
-<p>The logging features have been removed from Catel. It is recommended to use the .NET standard logging features.</p>
-<p>.NET logging uses DI, but static classes should not be forced to use DI just for logging. Our solution:</p>
+<p>The Catel-specific logging infrastructure has been removed. Use the .NET standard logging abstractions instead.</p>
+<p>.NET logging uses DI, but static classes should not be forced to use DI just for logging. Catel provides a thin <code>LogManager</code> bridge:</p>
 <ul>
-<li>Dependency injection: Inject <code>ILogger&lt;T&gt;</code> (even for views)</li>
-<li>Static logger: Use <code>LogManager.GetLogger(typeof(X))</code></li>
+<li><strong>Dependency injection:</strong> Inject <code>ILogger&lt;T&gt;</code> (works in views, view models, services, etc.)</li>
+<li><strong>Static logger:</strong> Use <code>LogManager.GetLogger(typeof(MyClass))</code></li>
 </ul>
-<p><code>LogManager</code> detects the hosting model and provides the right logger instance, or a <code>NullLogger</code> for unit tests. It is also possible to register a custom logger factory as fallback.</p>
-<p>To upgrade, replace:</p>
-<pre><code>private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+<p><code>LogManager</code> resolves the logger from the hosting <code>IServiceProvider</code>, or falls back to <code>LogManager.FallbackLoggerFactory</code> (useful in unit tests), or returns a <code>NullLogger</code> when neither is available.</p>
+<h3 id="before-catel-6-1">Before (Catel 6)</h3>
+<pre><code class="lang-csharp">private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+Log.Info(&quot;Starting...&quot;);
+Log.Warning(&quot;Something went wrong: {0}&quot;, message);
+Log.Error(exception, &quot;An error occurred&quot;);
 </code></pre>
-<p>with:</p>
-<pre><code>private static readonly ILogger Logger = LogManager.GetLogger(typeof());
+<h3 id="after-catel-7-1">After (Catel 7)</h3>
+<pre><code class="lang-csharp">private static readonly ILogger Logger = LogManager.GetLogger(typeof(MyClass));
+
+Logger.LogInformation(&quot;Starting...&quot;);
+Logger.LogWarning(&quot;Something went wrong: {Message}&quot;, message);
+Logger.LogError(exception, &quot;An error occurred&quot;);
 </code></pre>
-<p>Then replace</p>
-<ul>
-<li><code>Log.</code> with <code>Logger.Log</code></li>
-<li><code>Logger.LogInfo(</code> with <code>Logger.LogInformation(</code></li>
-</ul>
+<p>Migration summary:</p>
+<table>
+<thead>
+<tr>
+<th>Catel 6</th>
+<th>Catel 7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LogManager.GetCurrentClassLogger()</code></td>
+<td><code>LogManager.GetLogger(typeof(MyClass))</code></td>
+</tr>
+<tr>
+<td><code>ILog</code></td>
+<td><code>ILogger</code> (from <code>Microsoft.Extensions.Logging</code>)</td>
+</tr>
+<tr>
+<td><code>Log.Info(</code></td>
+<td><code>Logger.LogInformation(</code></td>
+</tr>
+<tr>
+<td><code>Log.Warning(</code></td>
+<td><code>Logger.LogWarning(</code></td>
+</tr>
+<tr>
+<td><code>Log.Error(</code></td>
+<td><code>Logger.LogError(</code></td>
+</tr>
+<tr>
+<td><code>Log.Debug(</code></td>
+<td><code>Logger.LogDebug(</code></td>
+</tr>
+<tr>
+<td><code>LogListenerBase</code> / custom log listeners</td>
+<td><code>ILoggerProvider</code> (standard .NET)</td>
+</tr>
+<tr>
+<td><code>DebugLogListener</code> / <code>ConsoleLogListener</code></td>
+<td><code>x.AddDebug()</code> / <code>x.AddConsole()</code> in <code>AddLogging(...)</code></td>
+</tr>
+</tbody>
+</table>
 <h1 id="catelcore">Catel.Core</h1>
 <h2 id="serialization">Serialization</h2>
-<p>The serialization engine has been fully removed from Catel.</p>
-<p>Alternatives:</p>
+<p>The built-in Catel serialization engine has been fully removed. This includes <code>SavableModelBase&lt;T&gt;</code>, <code>ISavableModel</code>, <code>IModelSerialization</code>, and all XML/JSON serialization infrastructure.</p>
+<h3 id="migration-options">Migration options</h3>
+<p>Use one of the following libraries instead:</p>
 <ul>
-<li>Orc.Serialization.Json</li>
-<li>Orc.Serialization.Yaml</li>
+<li><code>Orc.Serialization.Json</code> — JSON serialization</li>
+<li><code>Orc.Serialization.Yaml</code> — YAML serialization</li>
 </ul>
-<h1 id="catelmvvm">Catel.MVVM</h1>
-<h2 id="view-models">View models</h2>
-<p>The view models have been refactored to remove any hidden dependencies. To minimize the risk of added dependencies in the future (that will cause breaking changes), a view model now requires the <code>IServiceProvider</code> as injected dependency.</p>
-<p>Catel’s <code>ViewModelBase</code> is powerful, but most view models do not need all its features. With true DI, we’re splitting it:</p>
-<ul>
-<li>FeaturedViewModelBase: For advanced features (validation, throttling, etc.)</li>
-<li>ViewModelBase: Lightweight, for most use cases</li>
-</ul>
-<p>Only use <code>FeaturedViewModelBase</code> if you intend to or are already using advanced features such as:</p>
-<ul>
-<li><code>Model</code> and <code>ModelToViewModel</code> attributes</li>
-<li>Data validation</li>
-<li>Throttling</li>
-<li>Etc</li>
-</ul>
-<h2 id="views">Views</h2>
-<p>Dependency injection and XAML is hard. Although the main window can be constructed using the service provider, XAML requires a few things:</p>
-<ul>
-<li>Objects defined in XAML must have an empty constructor</li>
-<li>The service provider is not available to (all) xaml types</li>
-</ul>
-<p>After trying different approaches, Catel introduces source code generators. This allows any XAML type used with Catel to use dependency injection.</p>
-<p><strong>Example: View Constructor with DI</strong></p>
-<pre><code>public partial class MyWindow
+<h3 id="before-catel-6-2">Before (Catel 6)</h3>
+<pre><code class="lang-csharp">public class MyModel : SavableModelBase&lt;MyModel&gt;
 {
-    public MyWindow(ILogger&lt;MyWindow&gt;, IServiceProvider serviceProvider, 
-        IWrapControlService wrapControlService, ILanguageService languageService)
-        : base(serviceProvider, wrapControlService, languageService)
+    public static readonly IPropertyData NameProperty = RegisterProperty&lt;string&gt;(nameof(Name));
+
+    public string Name
+    {
+        get =&gt; GetValue&lt;string&gt;(NameProperty);
+        set =&gt; SetValue(NameProperty, value);
+    }
+}
+
+// Save / load
+var model = new MyModel { Name = &quot;test&quot; };
+model.Save(&quot;path/to/file.xml&quot;);
+
+var loaded = MyModel.Load(&quot;path/to/file.xml&quot;);
+</code></pre>
+<h3 id="after-catel-7-2">After (Catel 7)</h3>
+<pre><code class="lang-csharp">// Model no longer needs SavableModelBase — use plain ModelBase or a POCO
+public class MyModel : ModelBase
+{
+    public static readonly IPropertyData NameProperty = RegisterProperty&lt;string&gt;(nameof(Name));
+
+    public string Name
+    {
+        get =&gt; GetValue&lt;string&gt;(NameProperty);
+        set =&gt; SetValue(NameProperty, value);
+    }
+}
+
+// Serialize using Orc.Serialization.Json
+var serializer = serviceProvider.GetRequiredService&lt;IJsonSerializer&gt;();
+await serializer.SerializeToFileAsync(model, &quot;path/to/file.json&quot;);
+
+var loaded = await serializer.DeserializeFromFileAsync&lt;MyModel&gt;(&quot;path/to/file.json&quot;);
+</code></pre>
+<h2 id="ieditableobject-and-iadvancededitableobject-removed-from-modelbase">IEditableObject and IAdvancedEditableObject removed from ModelBase</h2>
+<p><code>ModelBase</code> no longer implements <code>IEditableObject</code> or <code>IAdvancedEditableObject</code>. The related event args (<code>BeginEditEventArgs</code>, <code>CancelEditEventArgs</code>, <code>EndEditEventArgs</code>, etc.) and the <code>IAdvancedEditableObject</code> interface have also been removed.</p>
+<p>If your code relies on <code>BeginEdit()</code> / <code>EndEdit()</code> / <code>CancelEdit()</code>, implement <code>IEditableObject</code> explicitly in your own model class.</p>
+<h1 id="catelmvvm">Catel.MVVM</h1>
+<h2 id="auditing-removed">Auditing removed</h2>
+<p>The entire Catel auditing infrastructure has been removed. This includes <code>AuditingManager</code>, <code>AuditorBase</code>, <code>IAuditor</code>, <code>AuditingHelper</code>, and the built-in auditors (<code>InvalidateCommandManagerOnViewModelInitializationAuditor</code>, <code>SubscribeKeyboardEventsOnViewModelCreationAuditor</code>).</p>
+<p>If you have custom auditors, replace them with a different mechanism. For example:</p>
+<ul>
+<li>Handle the <code>ViewModelManager.ViewModelCreated</code> event to react when view models are created.</li>
+<li>Use middleware or decorators in the DI container to intercept service calls.</li>
+</ul>
+<h2 id="view-model-hierarchy">View model hierarchy</h2>
+<p>The view model hierarchy has been reorganized. In Catel 7 there are three base classes:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ViewModelBase</code></td>
+<td>Lightweight base. Requires <code>IServiceProvider</code> in the constructor. Handles basic VM lifecycle (initialize, save, cancel, close).</td>
+</tr>
+<tr>
+<td><code>NavigationViewModelBase</code></td>
+<td>Extends <code>ViewModelBase</code> with navigation context support.</td>
+</tr>
+<tr>
+<td><code>FeaturedViewModelBase</code></td>
+<td>Extends <code>NavigationViewModelBase</code> with <code>[Model]</code>/<code>[ViewModelToModel]</code> attribute processing, data validation, and throttling. Use this when migrating from Catel 6's <code>ViewModelBase</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>In Catel 6, <code>ViewModelBase</code> contained all features. In Catel 7, most existing view models that use <code>[Model]</code>, <code>[ViewModelToModel]</code>, or validation should derive from <code>FeaturedViewModelBase</code>.</p>
+<h3 id="before-catel-6-3">Before (Catel 6)</h3>
+<pre><code class="lang-csharp">public class PersonViewModel : ViewModelBase
+{
+    public PersonViewModel(IPerson person)
+    {
+        Person = person;
+    }
+
+    [Model]
+    public IPerson Person { get; private set; }
+
+    [ViewModelToModel(nameof(Person))]
+    public string FirstName { get; set; }
+}
+</code></pre>
+<h3 id="after-catel-7-3">After (Catel 7)</h3>
+<pre><code class="lang-csharp">public class PersonViewModel : FeaturedViewModelBase
+{
+    public PersonViewModel(IServiceProvider serviceProvider, IPerson person)
+        : base(serviceProvider)
+    {
+        Person = person;
+    }
+
+    [Model]
+    public IPerson Person { get; private set; }
+
+    [ViewModelToModel(nameof(Person))]
+    public string FirstName { get; set; }
+}
+</code></pre>
+<h2 id="commands">Commands</h2>
+<p><code>Command</code> and <code>TaskCommand</code> now require <code>IServiceProvider</code> as the first constructor parameter. This makes the authentication provider and dispatcher service injectable rather than resolved from the old <code>ServiceLocator</code>.</p>
+<h3 id="before-catel-6-4">Before (Catel 6)</h3>
+<pre><code class="lang-csharp">public ICommand SaveCommand { get; } = new Command(ExecuteSave, CanExecuteSave);
+
+public ICommand LoadCommand { get; } = new TaskCommand(ExecuteLoadAsync);
+</code></pre>
+<h3 id="after-catel-7-4">After (Catel 7)</h3>
+<pre><code class="lang-csharp">// Constructed inside a view model where IServiceProvider is already available
+public ICommand SaveCommand { get; }
+public ICommand LoadCommand { get; }
+
+public MyViewModel(IServiceProvider serviceProvider)
+    : base(serviceProvider)
+{
+    SaveCommand = new Command(serviceProvider, ExecuteSave, CanExecuteSave);
+    LoadCommand = new TaskCommand(serviceProvider, ExecuteLoadAsync);
+}
+</code></pre>
+<h2 id="views">Views</h2>
+<p>Dependency injection and XAML conflict because XAML requires parameterless constructors and the service provider is not available to all XAML types.</p>
+<p>Catel solves this with the <code>Catel.SourceGenerators</code> package, which automatically generates a parameterless constructor that resolves all dependencies from <code>IoCContainer.ServiceProvider</code>.</p>
+<h3 id="usercontrol">UserControl</h3>
+<h4 id="before-catel-6-5">Before (Catel 6)</h4>
+<pre><code class="lang-csharp">public partial class MyUserControl : UserControl
+{
+    public MyUserControl() { }
+
+    public MyUserControl(IMyViewModel viewModel)
+        : base(viewModel) { }
+}
+</code></pre>
+<h4 id="after-catel-7--with-source-generator">After (Catel 7 — with source generator)</h4>
+<p>Declare only the DI constructor. The source generator creates the parameterless constructor automatically:</p>
+<pre><code class="lang-csharp">public partial class MyUserControl : UserControl
+{
+    public MyUserControl(IServiceProvider serviceProvider,
+        IViewModelWrapperService viewModelWrapperService,
+        IDataContextSubscriptionService dataContextSubscriptionService)
+        : base(serviceProvider, viewModelWrapperService, dataContextSubscriptionService)
     {
         InitializeComponent();
     }
 }
 </code></pre>
-<p>The source generator creates a default constructor for runtime:</p>
-<pre><code>public partial class MyWindow
+<p>Or omit all constructors entirely — the source generator generates everything:</p>
+<pre><code class="lang-csharp">// No constructors needed; the source generator handles it
+public partial class MyUserControl : UserControl { }
+</code></pre>
+<p>The generated code uses <code>OnInitializingComponent</code> and <code>OnInitializedComponent</code> partial methods for custom initialization hooks.</p>
+<h3 id="datawindow--window">DataWindow / Window</h3>
+<h4 id="before-catel-6-6">Before (Catel 6)</h4>
+<pre><code class="lang-csharp">public partial class MyWindow : DataWindow
 {
-	private static T GetService&lt;T&gt;()
-		where T : class
-	{
-		if (Catel.CatelEnvironment.IsInDesignMode)
-		{
-			return null!;
-		}
-
-		return Catel.IoC.IoCContainer.ServiceProvider.GetRequiredService&lt;T&gt;();
-	}
-
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
-	public MyWindow()
-		: this(GetService&lt;ILogger&lt;MyWindow&gt;&gt;(), GetService&lt;IServiceProvider&gt;(), 
-		       GetService&lt;IWrapControlService&gt;(), GetService&lt;ILanguageService&gt;())
-	{
-	}
+    public MyWindow() : base(DataWindowMode.OkCancel) { }
 }
 </code></pre>
-<p>You can even skip defining constructors, the source generators handle everything!</p>
-<p><strong>User controls without any constructors:</strong></p>
-<pre><code>public partial class MyUserControl
+<h4 id="after-catel-7-5">After (Catel 7)</h4>
+<pre><code class="lang-csharp">public partial class MyWindow : DataWindow
 {
-	private static T GetService&lt;T&gt;()
-		where T : class
-	{
-		if (Catel.CatelEnvironment.IsInDesignMode)
-		{
-			return null!;
-		}
-
-		return Catel.IoC.IoCContainer.ServiceProvider.GetRequiredService&lt;T&gt;();
-	}
-
-	partial void OnInitializingComponent();
-
-	partial void OnInitializedComponent();
-
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
-	[ActivatorUtilitiesConstructor]
-	public MyUserControl(System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService)
-		: base(serviceProvider, viewModelWrapperService, dataContextSubscriptionService)
-	{
-		OnInitializingComponent();
-		InitializeComponent();
-		OnInitializedComponent();
-	}
-
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
-	public MyUserControl()
-		: this(GetService&lt;System.IServiceProvider&gt;(), GetService&lt;Catel.Services.IViewModelWrapperService&gt;(), GetService&lt;Catel.MVVM.IDataContextSubscriptionService&gt;())
-	{
-	}
-
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
-	public MyUserControl(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService)
-		: base(viewModel, serviceProvider, viewModelWrapperService, dataContextSubscriptionService)
-	{
-		OnInitializingComponent();
-		InitializeComponent();
-		OnInitializedComponent();
-	}
+    public MyWindow(IServiceProvider serviceProvider,
+        IWrapControlService wrapControlService,
+        ILanguageService languageService)
+        : base(serviceProvider, wrapControlService, languageService, DataWindowMode.OkCancel)
+    {
+        InitializeComponent();
+    }
 }
 </code></pre>
-<p>Add custom logic in the partial <code>OnInitializingComponent</code> or <code>OnInitializedComponent</code>.</p>
+<p>With the source generator, the parameterless constructor is generated automatically.</p>
 <h1 id="unit-testing">Unit testing</h1>
-<p>With the new dependency injection approach, it is much easier to isolate unit / integration tests.</p>
+<p>With the new dependency injection approach, isolating unit and integration tests is easier.</p>
 <h2 id="service-collection-initialization">Service collection initialization</h2>
-<p>It is recommended to create a single helper class in the test project to set up the basics:</p>
-<pre><code>namespace Orc.FeatureToggles.Tests;
-
-using Catel;
-using Microsoft.Extensions.DependencyInjection;
-
-internal static class ServiceCollectionHelper
+<p>Create a shared helper in the test project to set up the service collection:</p>
+<pre><code class="lang-csharp">internal static class ServiceCollectionHelper
 {
     public static IServiceCollection CreateServiceCollection()
     {
@@ -320,15 +464,14 @@ internal static class ServiceCollectionHelper
 
         serviceCollection.AddLogging();
         serviceCollection.AddCatelCore();
-        serviceCollection.AddOrcFeatureToggles();
-        serviceCollection.AddOrcFeatureTogglesXaml();
+        // Add additional services here
 
         return serviceCollection;
     }
 }
 </code></pre>
-<p>Inside a unit test, it can be used like this:</p>
-<pre><code>[Test]
+<p>Inside a unit test:</p>
+<pre><code class="lang-csharp">[Test]
 public void Execute_Throws_Exception()
 {
     var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
@@ -340,11 +483,11 @@ public void Execute_Throws_Exception()
 }
 </code></pre>
 <h2 id="global-initialization">Global initialization</h2>
-<p>Add these dependencies to the test project:</p>
-<pre><code>&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Console&quot; Version=&quot;10.0.1&quot; /&gt;
-&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Debug&quot; Version=&quot;10.0.1&quot; /&gt;
+<p>Add these packages to the test project:</p>
+<pre><code class="lang-xml">&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Console&quot; Version=&quot;10.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Debug&quot; Version=&quot;10.0.0&quot; /&gt;
 </code></pre>
-<pre><code>[SetUpFixture]
+<pre><code class="lang-csharp">[SetUpFixture]
 public class GlobalInitialization
 {
     [OneTimeSetUp]
@@ -354,8 +497,7 @@ public class GlobalInitialization
         {
             if (Debugger.IsAttached)
             {
-                x.AddFilter(x =&gt; x == LogLevel.Debug);
-
+                x.SetMinimumLevel(LogLevel.Debug);
                 x.AddDebug();
             }
 
@@ -363,16 +505,16 @@ public class GlobalInitialization
         });
 
         var culture = new CultureInfo(&quot;en-US&quot;);
-        System.Threading.Thread.CurrentThread.CurrentCulture = culture;
-        System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+        Thread.CurrentThread.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
 
-        // Required since we do multithreaded initialization
+        // Required for deterministic type cache initialization
         TypeCache.InitializeTypes(allowMultithreadedInitialization: false);
 
         // Set a global service provider for helpers such as LanguageHelper
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
-        Catel.IoC.IoCContainer.ServiceProvider = serviceCollection.BuildServiceProvider();
+        IoCContainer.ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 }
 </code></pre>
