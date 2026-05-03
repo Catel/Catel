@@ -103,7 +103,7 @@ public MyViewModel(IServiceProvider serviceProvider, IBusyIndicatorService busyI
 <pre><code class="lang-csharp">_busyIndicatorService.Hide();
 </code></pre>
 <h2 id="showing-and-automatically-hide">Showing and automatically hide</h2>
-<p>The <code>IBusyIndicatorService</code> can automatically hide itself when an action is completed. To use this feature, simply pass a delegate to the <code>Show</code> method and the service will hide the window as soon as the delegate has completed.</p>
+<p>The <code>IBusyIndicatorService</code> can automatically hide itself when an action is completed. To use this feature, pass a delegate to the <code>Show</code> method and the service will hide the window as soon as the delegate has completed.</p>
 <pre><code class="lang-csharp">_busyIndicatorService.Show(() =&gt; Thread.Sleep(1500));
 </code></pre>
 <h2 id="changing-the-status">Changing the status</h2>
@@ -116,7 +116,7 @@ public MyViewModel(IServiceProvider serviceProvider, IBusyIndicatorService busyI
 </code></pre>
 <p>The determinate version can be hidden via a call to <code>Hide</code> or when the <code>currentItem</code> argument is larger than the number of <code>totalItems</code>.</p>
 <h2 id="pushpop">Push/Pop</h2>
-<p>Sometimes, multiple view models or multiple actions use the service. It's not possible to hide the window when the first action is completed, because the user will still have to wait for the other actions to complete (without a busy indicator window). To implement this correctly, it is possible to use the <code>Push</code> and <code>Pop</code> methods.</p>
+<p>Sometimes, multiple view models or multiple actions use the service. It is not possible to hide the window when the first action is completed, because the user will still have to wait for the other actions to complete (without a busy indicator window). To implement this correctly, it is possible to use the <code>Push</code> and <code>Pop</code> methods.</p>
 <p>The <code>Push</code> method shows the window if it is not already visible and then increases an internal counter. At the start of each (asynchronous) action, the developer can call the <code>Push</code> method. When the action is completed, the developer calls <code>Pop</code> which will internally decrease the counter. If the counter hits zero (0), the window is automatically hidden.</p>
 <p>It is possible to hide the window, even when the internal counter is not yet zero. A call to <code>Hide</code> will reset the counter to zero and thus hide the window.</p>
 

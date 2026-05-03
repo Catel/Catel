@@ -97,7 +97,7 @@
 }
 </code></pre>
 <h3 id="getting-mode-information-from-the-outside">Getting mode information from the outside</h3>
-<p>Getting the information from outside the objects is a bit more work. This is because the <code>PropertyChanged</code> event still provides a value of the <code>PropertyChangedEventArgs</code> class. Therefore, it is required to cast the value:</p>
+<p>Getting the information from outside the objects is somewhat more work. This is because the <code>PropertyChanged</code> event still provides a value of the <code>PropertyChangedEventArgs</code> class. Therefore, it is required to cast the value:</p>
 <pre><code>private void OnObjectPropertyChanged(PropertyChangedEventArgs e)
 {
     var advancedArgs = e as AdvancedPropertyChangedEventArgs;
@@ -124,7 +124,7 @@ public string FirstName
 </code></pre>
 <p>When the values are not provided, the old and new value are set to null.</p>
 <h2 id="some-sidenotes">Some sidenotes</h2>
-<p>As you might have noticed, the <code>AdvancedPropertyChangedEventArgs</code> also provide the <code>IsOldValueMeaningful</code> and the <code>IsNewValueMeaningful</code>. These are introduced because it is not always possible to determine the old or new value (for example, when the property name is string.Empty, there is no old value or new value). Therefore, the <code>OldValue</code> and <code>NewValue</code> properties are null, but doesn't mean that those are the actual old and new values.</p>
+<p>As you might have noticed, the <code>AdvancedPropertyChangedEventArgs</code> also provide the <code>IsOldValueMeaningful</code> and the <code>IsNewValueMeaningful</code>. These are introduced because it is not always possible to determine the old or new value (for example, when the property name is string.Empty, there is no old value or new value). Therefore, the <code>OldValue</code> and <code>NewValue</code> properties are null, but does not mean that those are the actual old and new values.</p>
 <p>It is always required to check whether the values are meaningful before actually handing them:</p>
 <pre><code>protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
 {

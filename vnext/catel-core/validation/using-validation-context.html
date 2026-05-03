@@ -88,7 +88,7 @@
 
 
 <p>The <em>ViewModelBase</em> derives from <em>ModelBase</em>, thus all information here also applies to the <em>ViewModelBase</em></p>
-<p>Sometimes detailed information about validation is required. This is possible in Catel thanks to the ValidationContext class. The ValidationContext serves as the container for all validation results that are gathered via the available validation methods. The ValidationContext has lots of methods that all return lists of either IFieldValidationResult or IBusinessRuleValidationResult.</p>
+<p>Sometimes detailed information about validation is required. This is possible in Catel thanks to the ValidationContext class. The ValidationContext serves as the container for all validation results that are gathered via the available validation methods. The ValidationContext has many methods that all return lists of either IFieldValidationResult or IBusinessRuleValidationResult.</p>
 <p>The examples below are shown a starter examples, but you can gather every type of validation result by using the <em>ValidationContext</em>. To retrieve the validation context of an object, use the following code:</p>
 <pre><code>var modelValidation = new MyViewModel() as IModelValidation;
 var validationContext = modelValidation.ValidationContext;

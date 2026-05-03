@@ -89,7 +89,7 @@
 
 <p>In this part of the documentation, the <code>RadWindow</code> of Telerik will be used as an example on how to create a <code>WindowBase</code> that behaves like the <code>DataWindow</code>.</p>
 <h2 id="creating-the-base-class-with-behavior">Creating the base class with behavior</h2>
-<p>The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it <code>WindowBase</code> (to make it as &quot;external control company independent&quot; as possible). Below is the code for the window definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as you can see in the code below.</p>
+<p>The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it <code>WindowBase</code> (to make it as &quot;external control company independent&quot; as possible). Below is the code for the window definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as shown, in the code below.</p>
 <p>Because the <code>RadWindow</code> of Telerik does not close the window when the <code>DialogResult</code> is set, this window subscribes to the <code>ViewModelClosed</code> event to close the window</p>
 <pre><code>/// &lt;summary&gt;
 /// Base class for a window with the Catel mvvm behavior.
@@ -168,7 +168,7 @@ public class Window : RadWindow, IDataWindow
     }
 }
 </code></pre>
-<p>You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) can't handle abstract base classes</p>
+<p>You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) cannot handle abstract base classes</p>
 <h2 id="handling-close-event">Handling Close Event</h2>
 <p>Since the latest upgrade to Catel 5.x, the [UIVisualizerService]({{&lt; relref &quot;catel-mvvm/services/ui-visualizer-service.md&quot; &gt;}}) has been modified in terms of how <code>Close</code> events are handled. Currently, a non-generic <code>EventHandler</code> is utilized; this would present a problem if a window other than <code>DataWindow</code> is utilized and the <code>Close</code> event handler is generic; a simple cast from <code>EventHandler</code> to <code>EventHandler&lt;&gt;</code> is not possible without reflection. For our example here, the <code>RadWindow</code> utilizes <code>EventHandler&lt;WindowClosedEventArgs&gt;</code>. In order to be able to utilize <code>UIVisualizerService</code> without any exception, the <code>HandleCloseSubscription</code> will need to be overridden. See example below:</p>
 <pre><code>public class CustomUIVisualService : UIVisualizerService, ICustomUIVisualizerService
@@ -226,7 +226,7 @@ public class Window : RadWindow, IDataWindow
 {
 }
 </code></pre>
-<p>Of course, this will need to be registered with the service collection to be utilized correctly:</p>
+<p>this will need to be registered with the service collection to be utilized correctly:</p>
 <pre><code class="lang-csharp">services.AddSingleton&lt;ICustomUIVisualizerService, CustomUIVisualizerService&gt;();
 </code></pre>
 <h2 id="using-the-class">Using the class</h2>

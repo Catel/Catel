@@ -113,7 +113,7 @@ public MyInitializationClass(ICommandManager commandManager)
     _commandManager.CreateCommand(&quot;Refresh&quot;, new InputGesture(Key.F5));
 }
 </code></pre>
-<p>It is recommended to put all the command creation in a single place so they are easily manageable.</p>
+<p>It is recommended to put all the command creation in a single place so they are manageable.</p>
 <h3 id="registering-a-custom-command">Registering a custom command</h3>
 <p>When a view model wants to use application-wide specific commands, the only thing it has to do is register the command in the <em>CommandManager</em>.</p>
 <pre><code>public class CommandSubscribingViewModel : ViewModelBase
@@ -152,9 +152,9 @@ public MyInitializationClass(ICommandManager commandManager)
 </code></pre>
 <p>As the code shows, the <em>CommandManagerBinding</em> extension automatically resolves the <em>Refresh</em> command from the <em>CommandManager</em>.</p>
 <h2 id="command-containers">Command containers</h2>
-<p>When implementing a ribbon or any menu structure inside an application can result in a very complex view model containing all the commands. Catel solves this issue by implementing so-called command containers. These are containers that have only 1 purpose: contain a command so the logic can easily be viewed / edited and the commands will be available during the whole lifetime of the app. Internally command containers use the <em>ICommandManager</em> to register commands, so the <em>ICommandManager</em> is still responsible for the commands.</p>
+<p>When implementing a ribbon or any menu structure inside an application can result in a very complex view model containing all the commands. Catel solves this issue by implementing so-called command containers. These are containers that have only 1 purpose: contain a command so the logic can be viewed / edited and the commands will be available during the whole lifetime of the app. Internally command containers use the <em>ICommandManager</em> to register commands, so the <em>ICommandManager</em> is still responsible for the commands.</p>
 <h3 id="creating-a-command-container">Creating a command container</h3>
-<p>Creating a command container is very simple. It can be done by creating a class deriving from <em>CommandContainerBase</em> as shown in the example below:</p>
+<p>Creating a command container is simple. It can be done by creating a class deriving from <em>CommandContainerBase</em> as shown in the example below:</p>
 <pre><code>public class ApplicationAboutCommandContainer : CommandContainerBase
 {
     private readonly IAboutService _aboutService;
@@ -173,11 +173,11 @@ public MyInitializationClass(ICommandManager commandManager)
     }
 }
 </code></pre>
-<p>As you can see the implementation is very clean and won't pollute any other view models.</p>
+<p>As shown, the implementation is very clean and will not pollute any other view models.</p>
 <h3 id="registering-a-command-container">Registering a command container</h3>
-<p>If you don't use the extension methods below, you must register the command container inside the service locator and register the command inside the <em>ICommandManager</em>. To make this process easier, use a definition file and the code below.</p>
+<p>If you do not use the extension methods below, you must register the command container inside the service locator and register the command inside the <em>ICommandManager</em>. To make this process easier, use a definition file and the code below.</p>
 <h4 id="command-definitions">Command definitions</h4>
-<p>To make it very easy to register new commands, Catel uses naming conventions and extension methods. The name of the command (for example, <em>About</em> must be a constant on the command definitions class). If the command definition also contains a <em>&lt;CommandName&gt;InputGesture</em>, in this case <em>AboutInputGesture</em>, it will use that input gesture as a default to register the command with.</p>
+<p>To make it easy to register new commands, Catel uses naming conventions and extension methods. The name of the command (for example, <em>About</em> must be a constant on the command definitions class). If the command definition also contains a <em>&lt;CommandName&gt;InputGesture</em>, in this case <em>AboutInputGesture</em>, it will use that input gesture as a default to register the command with.</p>
 <pre><code>public static class Commands
 {
     public static class Application
@@ -196,12 +196,12 @@ public MyInitializationClass(ICommandManager commandManager)
     }
 }
 </code></pre>
-<p>It is recommended to keep a well formed structure for your command definitions to keep them manageable, even in very large applications</p>
+<p>It is recommended to keep a well formed structure for your command definitions to keep them manageable, even in large applications</p>
 <h4 id="registering-the-command-container">Registering the command container</h4>
 <p>Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container. Inject <code>ICommandManager</code> via the constructor and use:</p>
 <pre><code class="lang-csharp">_commandManager.CreateCommandWithGesture(typeof(Commands.Application), &quot;About&quot;);
 </code></pre>
-<p>This will keep the command registration very readable and maintainable when using a lot of commands:</p>
+<p>This will keep the command registration very readable and maintainable when using many commands:</p>
 <pre><code class="lang-csharp">_commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), &quot;Exit&quot;);
 _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), &quot;About&quot;);
 

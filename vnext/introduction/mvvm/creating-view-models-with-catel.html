@@ -87,8 +87,8 @@
         <article data-uid="">
 
 
-<p>The View Models in Catel are very easy to write, and give the end-user a great flexibility in how to approach the Models. This part of the article will explain the classes that make it possible to easily create View Models.</p>
-<p>The <code>ViewModelBase</code> class is the most important class of all in the MVVM Framework of Catel. Of course, it can't do anything useful without the other classes, but all the View Models that are created using Catel derive of this class. <code>ViewModelBase</code> is based on the <code>ModelBase</code> class that ships with Catel. Thanks to the existence of that class, the MVVM framework was set up very quickly (although “very quickly” is relative). Below is a class diagram that shows the class tree:</p>
+<p>The View Models in Catel are easy to write, and give the end-user a great flexibility in how to approach the Models. This part of the article will explain the classes that make it possible to create View Models.</p>
+<p>The <code>ViewModelBase</code> class is the most important class of all in the MVVM Framework of Catel. It cannot do anything useful without the other classes, but all the View Models that are created using Catel derive of this class. <code>ViewModelBase</code> is based on the <code>ModelBase</code> class that ships with Catel. Thanks to the existence of that class, the MVVM framework was set up very quickly (although “very quickly” is relative). Below is a class diagram that shows the class tree:</p>
 <pre><code class="lang-mermaid">classDiagram
     direction TB
     class ObservableObject {
@@ -128,7 +128,7 @@
     IViewModel &lt;|.. ViewModelBase
 </code></pre>
 <p>The class diagram above shows how many default interfaces of the .NET Framework are supported in the <code>ModelBase</code> class. Since most of these interfaces are used by WPF as well, the <em>ViewModelBase</em> class itself can take huge advantage of the implementation of <code>ModelBase</code>.</p>
-<p>Because <code>ViewModelBase</code> derives from <code>ModelBase</code>, you can declare properties exactly the same way. Even better, you can simply use <code>ModelBase</code> to create your Models, and use <code>ViewModelBase</code> as the base for all the View Models.</p>
+<p>Because <code>ViewModelBase</code> derives from <code>ModelBase</code>, you can declare properties exactly the same way. Even better, you can use <code>ModelBase</code> to create your Models, and use <code>ViewModelBase</code> as the base for all the View Models.</p>
 <h2 id="creating-a-view-model">Creating a view model</h2>
 <p>To declare a View Model, use the following code snippet:</p>
 <ul>
@@ -239,7 +239,7 @@ private void OnAddExecute(object parameter)
 <li>Field errors</li>
 <li>Business errors</li>
 </ul>
-<p><em>ViewModelBase</em> uses smart validation. This means that if the object is already validated, the object is not validated again to make sure that the View Models don't hit too much on the performance. Only when a property on the View Model changes, validation will be invoked. Of course, if required, it is still possible to force validation when the View Model must be validated, even when no properties have changed.</p>
+<p><em>ViewModelBase</em> uses smart validation. This means that if the object is already validated, the object is not validated again to ensure that the View Models do not hit too much on the performance. Only when a property on the View Model changes, validation will be invoked. If required, it is still possible to force validation when the View Model must be validated, even when no properties have changed.</p>
 <p>To implement field or business rule validation, you only have to override <em>ValidateFields</em> and/or the <em>ValidateBusinessRules</em> method:</p>
 <pre><code>/// &lt;summary&gt;
 /// Validates the field values of this object. Override this method to enable
@@ -276,7 +276,7 @@ protected override void ValidateBusinessRules(List&lt;BusinessRuleValidationResu
 <p>The great thing is that Catel will gather all validation results from all different mappings and combine these into the <em>ValidationContext</em>. This context can be used to query all sorts of validation info about an object.</p>
 <h2 id="interaction-with-models">Interaction with models</h2>
 <p>One of the most important reasons why a View Model is created is because it serves as the glue between a View and the Model. The communication between the View and the View Model is fully taken care of by WPF in the form of Bindings. The problem is that most of the time, a View Model is used to show a subset of a Model (which is, for example, a database entity).</p>
-<p>Most MVVM frameworks (actually, I haven't seen anyone not requiring manual updating) require manual updating, which brings us back to the stone age (remember the WinForms time setting the controls at startup, and reading the values at the end?). Catel solves this issue by providing convenience attributes that take care of this dumb getting/setting story between the View Model and the Model. Catel fully supports getting/setting the values from/to the Model, but believe me: you will love the attributes that are described next.</p>
+<p>Most MVVM frameworks require manual updating between the View Model and the Model. Catel solves this issue by providing convenience attributes that handle this mapping automatically. Catel fully supports getting/setting the values from/to the Model, and the attributes described next greatly simplify this process.</p>
 <h3 id="modelattribute">ModelAttribute</h3>
 <p>To be able to map values from/to a Model, it is important to know the actual Model. So, to let the View Model know what property represents the Model, <em>ModelAttribute</em> can be used like shown below:</p>
 <pre><code>/// &lt;summary&gt;
@@ -294,11 +294,11 @@ public Person Person
 /// &lt;/summary&gt;
 public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
 </code></pre>
-<p>A Model setter is normally written as private (you normally don't want a UI to be able to change a Model), but the getter is public because you might want to read info from it.</p>
+<p>A Model setter is normally written as private (you normally do not want a UI to be able to change a Model), but the getter is public because you might want to read info from it.</p>
 <p>Note that you should use the <em>vmpropmodel</em> code snippet to create Model properties</p>
-<p>Models in Catel are handled as very, very special objects. This means that as soon as a Model is set, Catel tries to call the <em>IEditableObject.BeginEdit</em> method. Then, as soon as the Model is changed without being saved, or if the View Model is canceled, the Model is correctly canceled via <em>IEditableObject.CancelEdit</em>. If the Model is saved, the active Models will be committed via <em>IEditableObject.EndEdit</em>. I will leave the rest of the magic out of this article, but if you have any questions about it, don't hesitate to contact us!</p>
+<p>Models in Catel are handled as special objects. This means that as soon as a Model is set, Catel tries to call the <em>IEditableObject.BeginEdit</em> method. Then, as soon as the Model is changed without being saved, or if the View Model is canceled, the Model is correctly canceled via <em>IEditableObject.CancelEdit</em>. If the Model is saved, the active Models will be committed via <em>IEditableObject.EndEdit</em>. The remaining implementation details are beyond the scope of this article.</p>
 <h3 id="viewmodeltomodelattribute">ViewModelToModelAttribute</h3>
-<p>Now that we know how to declare a property as a Model, it is time to learn how we can communicate with it. Normally, you would have to watch the Model to make sure it is synchronized correctly when the Model is updated. With Catel, this is not necessary any longer. Simply use <em>ViewModelToModelAttribute</em>, and you will get the following advantages:</p>
+<p>Now that we know how to declare a property as a Model, it is time to learn how we can communicate with it. Normally, you would have to watch the Model to ensure it is synchronized correctly when the Model is updated. With Catel, this is not necessary any longer. use <em>ViewModelToModelAttribute</em>, and you will get the following advantages:</p>
 <ul>
 <li>Models are automatically being watched for changes, thus if a mapped property changes, the View Model is updated accordingly;</li>
 <li>When a View Model is changed, this property is automatically mapped to the Model;</li>
@@ -348,10 +348,10 @@ private Person Person
 public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
 </code></pre>
 <h2 id="interaction-with-other-view-models">Interaction with other view models</h2>
-<p>Now that we've seen how easy it is to communicate between the View Model and the Model, you want more, right? I know how it is: “You let 'em have one finger, they take your whole hand”. No worries, you can have my right hand, as long as I can keep my left one. Anyway, the developers of Catel are prepared for this. So, let's talk about the interaction with other View Models.</p>
+<p>Now that we have seen how easy it is to communicate between the View Model and the Model, the following section discusses interaction with other View Models.</p>
 <p>Say, you have a multiple document interface (MDI as it was called in the old days). If you are following MVVM principles, every document (or tab) has its own View Model. Then, you want to be aware of updates of a single type of View Model. Say, for example, that there is a View Model representing a family called <em>FamilyViewModel</em>. This View Model is probably interested in changes in the <em>PersonViewModel</em>.</p>
 <h3 id="viewmodelmanager">ViewModelManager</h3>
-<p>Let's start with the basics. As we have learned earlier in this article, all View Models created with the help of Catel derive from the <em>ViewModelBase</em> class. One of the things that this class does is that it registers itself with the <em>ViewModelManager</em> class when it is being created, and it unregisters itself again when it is closed. So, simply said, <em>ViewModelManager</em> is a class that holds a reference to all existing View Models at the moment.</p>
+<p>Starting with the basics: as discussed earlier in this article, all View Models created with the help of Catel derive from the <em>ViewModelBase</em> class. One of the things that this class does is that it registers itself with the <em>ViewModelManager</em> class when it is being created, and it unregisters itself again when it is closed. As noted, <em>ViewModelManager</em> is a class that holds a reference to all existing View Models at the moment.</p>
 <h3 id="messagemediator">MessageMediator</h3>
 <p>Catel also offers a solution to the message mediator pattern in the form of the <em>MessageMediator</em> class. This is all described in the next section &quot;Message mediator&quot;.</p>
 

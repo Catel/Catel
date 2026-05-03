@@ -89,7 +89,7 @@
 
 <p>In this part of the documentation, the <code>RadTabItem</code> of Telerik will be used as an example on how to create a <code>RadTabItem</code> that behaves like the <code>UserControl</code>.</p>
 <h2 id="creating-the-base-class-with-behavior">Creating the base class with behavior</h2>
-<p>The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it <code>TabItem</code> (to make it as &quot;external control company independent&quot; as possible). Below is the code for the control definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as you can see in the code below.</p>
+<p>The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it <code>TabItem</code> (to make it as &quot;external control company independent&quot; as possible). Below is the code for the control definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as shown, in the code below.</p>
 <pre><code>/// &lt;summary&gt;
 /// Base class for a control with the Catel mvvm behavior.
 /// &lt;/summary&gt;
@@ -162,7 +162,7 @@ public class TabItem : RadTabItem, IUserControl
     }
 }
 </code></pre>
-<p>You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) can't handle abstract base classes</p>
+<p>You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) cannot handle abstract base classes</p>
 <h2 id="using-the-class">Using the class</h2>
 <p>The class can now be used the same as the <code>UserControl</code> class. For more information, see [UserControl explained]({{&lt; relref &quot;catel-mvvm/views/xaml/usercontrol.md&quot; &gt;}}).</p>
 

@@ -128,7 +128,7 @@
 <pre><code class="lang-csharp">_viewModelLocator.NamingConventions.Add(&quot;MyCustomAssembly.ViewModels.[VW]ViewModel&quot;);
 </code></pre>
 <h2 id="registering-custom-view-models">Registering custom view models</h2>
-<p>Sometimes, a class doesn't follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:</p>
+<p>Sometimes, a class does not follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:</p>
 <pre><code class="lang-csharp">_viewModelLocator.Register(typeof(MyViewNotFollowingNamingConvention), typeof(MyViewModel));
 </code></pre>
 <h2 id="using-a-custom-viewmodellocator">Using a custom ViewModelLocator</h2>

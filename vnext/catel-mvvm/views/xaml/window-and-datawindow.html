@@ -96,10 +96,10 @@
 <li>Close button on windows for action windows.</li>
 </ul>
 <p>Creating these windows is just boring and the steps are always the same:</p>
-<p>The <code>DataWindow</code> class makes it much easier to create these basic windows, simply by specifying the mode of the <em>Window</em>. By using this window, you can concentrate on the actual implementation and you don’t have to worry about the implementation of the buttons itself, which saves you time!</p>
+<p>The <code>DataWindow</code> class makes it much easier to create these basic windows, by specifying the mode of the <em>Window</em>. By using this window, you can concentrate on the actual implementation and you do not have to worry about the implementation of the buttons itself, which saves you time!</p>
 <h2 id="using-the-datawindow-in-mvvm">Using the DataWindow in MVVM</h2>
 <p>The easiest object to use with the MVVM Framework is the <code>DataWindow</code> class. The <code>DataWindow</code> takes fully care of the construction of the view models and the validation of the view models.</p>
-<p>The usage of the <code>DataWindow</code> class is very simple, once you know how to do it. First of all, you will have to specify the base class in the xaml file like shown below:</p>
+<p>The usage of the <code>DataWindow</code> class is simple, once you know how to do it. First of all, you will have to specify the base class in the xaml file like shown below:</p>
 <pre><code>&lt;catel:DataWindow x:Class=&quot;Catel.Articles._03___MVVM.Examples.DataWindow.PersonWindow&quot;
                   xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
                   xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
@@ -109,7 +109,7 @@
 
 &lt;/catel:DataWindow&gt;
 </code></pre>
-<p>As you can see, one thing has changed in regard to a “normal” window definition:</p>
+<p>As shown, one thing has changed in regard to a “normal” window definition:</p>
 <ol>
 <li>The type definition has changed from <code>Window</code> to <code>catel:DataWindow</code>;</li>
 </ol>
@@ -140,10 +140,10 @@ This is the best option you can use. This way, it is possible to inject view mod
 <li><strong>Constructor with model</strong>
 It is possible to save a developer from creating a view model manually by accepting a model as input. Then, the data window will have to construct the view model manually and pass it through to its base constructor.</li>
 <li><strong>Empty constructor</strong>
-If you use an empty constructor, the developer will have to set the data context manually. This something you really should avoid. But hey, it’s all up to you.</li>
+If you use an empty constructor, the developer will have to set the data context manually. This something you really should avoid. But hey, it is all up to you.</li>
 </ul>
 <h2 id="automatic-validation">Automatic validation</h2>
-<p>The cool thing about the <code>DataWindow</code> is that it automatically wraps the content that a developer defines into an <code>InfoBarMessageControl</code>. This way, errors and warnings are shown at the top of the window. Another feature of the <code>DataWindow</code> is that it automatically creates a <code>WarningAndErrorValidator</code> control and sets the view model as source. This way, all the warnings of the view model are also shown in the <code>InfoBarMessageControl</code>. In other words: you don’t have to do anything to implementation validation, except for actually setting the warnings and errors in your view model. And if the validation takes place in the model, you can use the <code>ViewModelToModelAttribute</code> so you don’t have to worry about that either.</p>
+<p>The cool thing about the <code>DataWindow</code> is that it automatically wraps the content that a developer defines into an <code>InfoBarMessageControl</code>. This way, errors and warnings are shown at the top of the window. Another feature of the <code>DataWindow</code> is that it automatically creates a <code>WarningAndErrorValidator</code> control and sets the view model as source. This way, all the warnings of the view model are also shown in the <code>InfoBarMessageControl</code>. In other words: you do not have to do anything to implementation validation, except for actually setting the warnings and errors in your view model. And if the validation takes place in the model, you can use the <code>ViewModelToModelAttribute</code> so you do not have to worry about that either.</p>
 <h2 id="customizing-the-buttons">Customizing the buttons</h2>
 <p>It is possible to use custom buttons and still be able to use the <code>DataWindow</code>.</p>
 <ol>

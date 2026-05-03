@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>Catel makes it very easy to use configurations on all supported platforms.</p>
+<p>Catel makes it easy to use configurations on all supported platforms.</p>
 <p>Below is a table to explain what technology is used per platform to retrieve and store configuration values.</p>
 <table>
 <thead>
@@ -117,15 +117,15 @@
 var mySetting = configurationService.GetValue&lt;int&gt;(&quot;mySetting&quot;, 42);
 </code></pre>
 <p>The code above will retrieve the values from the configuration. If the configuration value does not exist, it will return <em>42</em> as default value.</p>
-<p>It's best to retrieve the service from the dependency resolver or let it be injected into the classes using it</p>
+<p>It is best to retrieve the service from the dependency resolver or let it be injected into the classes using it</p>
 <h2 id="setting-values-to-the-configuration">Setting values to the configuration</h2>
 <p>To store values in the configuration, use the following code:</p>
 <pre><code>var configurationService = new ConfigurationService();
 configurationService.SetValue(&quot;mySetting&quot;, 42);
 </code></pre>
-<p>It's best to retrieve the service from the dependency resolver or let it be injected into the classes using it</p>
+<p>It is best to retrieve the service from the dependency resolver or let it be injected into the classes using it</p>
 <h2 id="customizing-the-way-values-are-stored">Customizing the way values are stored</h2>
-<p>The <em>ConfigurationService</em> is written with extensibility in mind. Though it defaults to the .NET local storage system, it is very easy to create a customized configuration service. Below is an example on how to customize the service so it reads and writes values from/to a database.</p>
+<p>The <em>ConfigurationService</em> is written with extensibility in mind. Though it defaults to the .NET local storage system, it is easy to create a customized configuration service. Below is an example on how to customize the service so it reads and writes values from/to a database.</p>
 <pre><code>public class DbConfigurationService : ConfigurationService
 {
     protected override bool ValueExists(string key)
@@ -168,7 +168,7 @@ configurationService.SetValue(&quot;mySetting&quot;, 42);
     }
 }
 </code></pre>
-<p>Don't forget to register the customized <em>ConfigurationService</em> in the <em>ServiceLocator</em></p>
+<p>Do not forget to register the customized <em>ConfigurationService</em> in the <em>ServiceLocator</em></p>
 
 </article>
 

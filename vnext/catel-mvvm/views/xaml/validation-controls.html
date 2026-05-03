@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>There are some very important controls in Catel which help with visualizing the validation results.</p>
+<p>There are some important controls in Catel which help with visualizing the validation results.</p>
 <h2 id="infobarmessagecontrol">InfoBarMessageControl</h2>
 <p>Ever wanted to show the details of error messages to your end-users? Then, the <code>InfoBarMessageControl</code> is the control to use! The control shows a summary of all business and field errors provided by bindings on objects that implement the <code>IDataErrorInfo</code> interface.</p>
 <p><img src="../../../images/catel-mvvm/views/xaml/validation-controls/infobarmessagecontrol.png" alt=""></p>
@@ -102,40 +102,40 @@
 <p>The <code>WarningAndErrorValidator</code> control is not visible to the end user. The only thing this control takes care of is to forward business errors and warnings to controls that are interested in them. The only control that ships with Catel is the <code>InfoBarMessageControl</code>. Thanks to the <code>WarningAndErrorValidator</code>, the <code>InfoBarMessageControl</code> is able to show business errors and warnings to the end user.</p>
 <pre><code>&lt;catel:WarningAndErrorValidator Source=&quot;{Binding MyObject}&quot; /&gt;
 </code></pre>
-<p>The <code>WarningAndErrorValidator</code> needs to be placed inside an <code>InfoBarMessageControl</code>. The control then subscribes to all property changed events to make sure it receives all change notifications. Then, on every property change, the control checks whether the sender either implements the <code>IDataErrorInfo</code> or <code>IDataWarningInfo</code> interfaces.</p>
+<p>The <code>WarningAndErrorValidator</code> needs to be placed inside an <code>InfoBarMessageControl</code>. The control then subscribes to all property changed events to ensure it receives all change notifications. Then, on every property change, the control checks whether the sender either implements the <code>IDataErrorInfo</code> or <code>IDataWarningInfo</code> interfaces.</p>
 <p>When an error or warning is found on the changed property, the control invokes the corresponding events so the <code>InfoBarMessageControl</code> can show the right information. When an error or warning no longer exists in a model, a <em>Removed</em> event is invoked so the <code>InfoBarMessageControl</code> knows that the error or warning should be removed from the summary.</p>
 <h2 id="styling-in-datawindow">Styling in DataWindow</h2>
 <p>A <code>InfoBarMessageControl</code> is automatically added to the <code>DataWindow</code>, if you want to use a different style for this <code>InfoBarMessageControl</code>, you must override the default style, add your own <code>InfoBarMessageControl</code> and disable the default <code>InfoBarMessageControl</code> from the <code>DataWindow</code>.</p>
 <ol>
-<li><p>Create a custom style based on the <a href="https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml">default style</a>.</p>
-</li>
-<li><p>Change the x:Key from  x:Key=&quot;{x:Type local:InfoBarMessageControl}&quot; to  x:Key=&quot;yourCustomStyleKey&quot;</p>
-</li>
-<li><p>Set the InfoBarMessageControlGenerationMode to None</p>
-<pre><code>        /// &lt;summary&gt;
-        /// Initializes a new instance of the &lt;see cref=&quot;DataWindow&quot;/&gt; class.
-        /// &lt;/summary&gt;
-        /// &lt;param name=&quot;viewModel&quot;&gt;The view model to inject.&lt;/param&gt;
-        /// &lt;remarks&gt;
-        /// This constructor can be used to use view-model injection.
-        /// &lt;/remarks&gt;
-        public DataWindow(DataWindowViewModel viewModel)
-            : base(viewModel, DataWindowMode.Custom, null, DataWindowDefaultButton.None, true, InfoBarMessageControlGenerationMode.None)
-        {
-            InitializeComponent();
-        }
+<li>Create a custom style based on the <a href="https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml">default style</a>.</li>
+<li>Change the x:Key from x:Key=&quot;{x:Type local:InfoBarMessageControl}&quot; to x:Key=&quot;yourCustomStyleKey&quot;</li>
+<li>Set the InfoBarMessageControlGenerationMode to None</li>
+</ol>
+<pre><code>           /// &lt;summary&gt;
+           /// Initializes a new instance of the &lt;see cref=&quot;DataWindow&quot;/&gt; class.
+           /// &lt;/summary&gt;
+           /// &lt;param name=&quot;viewModel&quot;&gt;The view model to inject.&lt;/param&gt;
+           /// &lt;remarks&gt;
+           /// This constructor can be used to use view-model injection.
+           /// &lt;/remarks&gt;
+           public DataWindow(DataWindowViewModel viewModel)
+               : base(viewModel, DataWindowMode.Custom, null, DataWindowDefaultButton.None, true, InfoBarMessageControlGenerationMode.None)
+           {
+               InitializeComponent();
+           }
+   ```
+
+4. Add a new `InfoBarMessageControl` as root control to your `DataWindow` and set the style.
+
 </code></pre>
-</li>
-<li><p>Add a new <code>InfoBarMessageControl</code> as root control to your <code>DataWindow</code> and set the style.</p>
 <pre><code>&lt;catel:InfoBarMessageControl  Style=&quot;{DynamicResource yourCustomStyleKey}&quot;&gt;
         &lt;Grid&gt;
             &lt;catel:WarningAndErrorValidator Source=&quot;{Binding}&quot; /&gt;
             //Your content 
         &lt;/Grid&gt;
 &lt;/catel:InfoBarMessageControl&gt;
+```
 </code></pre>
-</li>
-</ol>
 
 </article>
 

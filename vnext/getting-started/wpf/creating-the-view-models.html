@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>In this step we will create the view models. Since this is a very simple application, just a few view models are required. A view model in essence is nothing more than a class that derives from the <code>ViewModelBase</code> class</p>
+<p>In this step we will create the view models. Since this is a simple application, just a few view models are required. A view model in essence is nothing more than a class that derives from the <code>ViewModelBase</code> class</p>
 <p>The <em>vm</em> code snippet is available to create view models. There is also an on-line item template available for Catel view models</p>
 <h2 id="creating-the-personviewmodel">Creating the PersonViewModel</h2>
 <p>Below is the class definition of the <code>PersonViewModel</code>. This view model will be used to show the details of a <code>Person</code> model.</p>
@@ -129,7 +129,7 @@
 </code></pre>
 <p>Note that the <code>Person</code> property is decorated with the <code>Model</code> attribute. This automatically makes sure that if a view model is saved, the <code>IEditableObject.EndEdit</code> is called. When the view model is canceled, the <code>IEditableObject.CancelEdit</code> is called and all changes on the model will be reverted.</p>
 <h3 id="exposing-properties-of-a-model">Exposing properties of a model</h3>
-<p>One very powerful feature of Catel is that it can automatically map properties from a model to a view model. This way the user does not have to write repetitive code to map the properties from the model to the view model at startup and map the properties from view model to model when the view model is closed. Catel will take care of this all automatically.</p>
+<p>One powerful feature of Catel is that it can automatically map properties from a model to a view model. This way the user does not have to write repetitive code to map the properties from the model to the view model at startup and map the properties from view model to model when the view model is closed. Catel will take care of this all automatically.</p>
 <pre><code>/// &lt;summary&gt;
 /// Gets or sets the first name.
 /// &lt;/summary&gt;

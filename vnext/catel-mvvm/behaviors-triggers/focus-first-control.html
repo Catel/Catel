@@ -87,13 +87,13 @@
         <article data-uid="">
 <h1 id="focusfirstcontrol">FocusFirstControl</h1>
 
-<p>The Focus behavior is very powerful, but sometimes you just need to focus the first control on a window or control. This can be done by using the FocusFirstControl behavior instead. This behavior will focus the first control on a window or control and has only one property: <code>FocusParentFirst</code>.</p>
+<p>The Focus behavior is powerful, but sometimes you just need to focus the first control on a window or control. This can be done by using the FocusFirstControl behavior instead. This behavior will focus the first control on a window or control and has only one property: <code>FocusParentFirst</code>.</p>
 <p>Add the following XML namespaces:</p>
 <pre><code>xmlns:i=&quot;clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity&quot;
 xmlns:catel=&quot;http://schemas.catelproject.com&quot;
 </code></pre>
 <h2 id="focus-when-the-control-is-loaded">Focus when the control is loaded</h2>
-<p>The easiest and default method is to focus the first control. The parent is also focused by default (just in case if it doesn't have any focus):</p>
+<p>The easiest and default method is to focus the first control. The parent is also focused by default (just in case if it does not have any focus):</p>
 <pre><code>&lt;Window ...&gt;
     &lt;i:Interaction.Behaviors&gt;
         &lt;catel:FocusFirstControl /&gt;

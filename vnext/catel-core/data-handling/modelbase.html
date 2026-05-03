@@ -90,7 +90,7 @@
 <p>The <em>ModelBase</em> class is a generic base class that can be used for all your data classes.</p>
 <ul>
 <li><strong>Support property changed notifications</strong>
-The class supports the <em>INotifyPropertyChanging</em> and <em>INotifyPropertyChanged</em> interfaces so this class can easily be used in applications to reflect changes to the user.</li>
+The class supports the <em>INotifyPropertyChanging</em> and <em>INotifyPropertyChanged</em> interfaces so this class can be used in applications to reflect changes to the user.</li>
 <li><strong>Backup &amp; revert</strong>
 The class implements the <em>IEditableObject</em> interface which makes it possible to create a state of the object. Then all properties can be edited, and finally, the changes can be applied or cancelled.</li>
 </ul>
@@ -108,7 +108,7 @@ public class MyObject : ModelBase
 }
 </code></pre>
 <h3 id="defining-properties">Defining properties</h3>
-<p>Defining properties for the class is very easy, and works the same like dependency properties. The advantages of this way of defining properties are:</p>
+<p>Defining properties for the class is easy, and works the same like dependency properties. The advantages of this way of defining properties are:</p>
 <ul>
 <li>You can specify a default value for a property which will be used when the class is constructed;</li>
 <li>The <em>PropertyData</em> object can be used to retrieve property values so the compiler checks for errors;</li>
@@ -130,7 +130,7 @@ public string Name
 public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&quot;, typeof(string), string.Empty);
 </code></pre>
 <h3 id="default-values-for-reference-types">Default values for reference types</h3>
-<p>In lots of cases, a default value for reference types is required in the property definitions. However, and you might have noticed this behavior in for example dependency properties, using an instance as default value can result in unexpected behavior.</p>
+<p>In many cases, a default value for reference types is required in the property definitions. However, and you might have noticed this behavior in for example dependency properties, using an instance as default value can result in unexpected behavior.</p>
 <p>Below is an example of a &quot;regular&quot; property registration using a default value for a collection property:</p>
 <pre><code>public static readonly PropertyData NameProperty = RegisterProperty(&quot;PersonCollection&quot;, typeof(Collection&lt;Person&gt;), new Collection&lt;Person&gt;());
 </code></pre>
@@ -139,12 +139,12 @@ public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&q
 </code></pre>
 <p>This way, every time a new value is needed, the callback will be invoked to create the default value and you will have a true default value for reference types.</p>
 <h2 id="functionality-provided-out-of-the-box">Functionality provided out of the box</h2>
-<p>The <code>ModelBase</code> provides a lot of functionality out of the box. A few points I want to mention are:</p>
+<p>The <code>ModelBase</code> provides many functionality out of the box. A few points I want to mention are:</p>
 <p><strong>INotifyPropertyChanged</strong></p>
 <p>All properties registered using the <em>RegisterProperty</em> method automatically take care of change notifications.</p>
 <p><strong>IEditableObject</strong></p>
 <p>The data object can automatically create an internal backup and restore it, if required, using the <em>IEditableObject</em> interface.</p>
-<p>Keep in mind that this class is not suitable for database communication, there are much better ways to handle this (ORM mappers such as Entity Framework, NHibernate, LLBLGen Pro, etc.).</p>
+<p>Note that this class is not suitable for database communication, there are much better ways to handle this (ORM mappers such as Entity Framework, NHibernate, LLBLGen Pro, etc.).</p>
 
 </article>
 

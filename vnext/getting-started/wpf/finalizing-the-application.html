@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>The application we have created so far is fully functional, but misses a bit of the &quot;magic&quot;. Below are some additional steps that might make your application more appealing and more user friendly. Of course you can go as far as you want by creating custom animations and such, but this guide focuses purely on making the basics more appealing.</p>
+<p>The application we have created so far is fully functional, but misses somewhat of the &quot;magic&quot;. Below are some additional steps that might make your application more appealing and more user friendly. you can go as far as you want by creating custom animations and such, but this guide focuses purely on making the basics more appealing.</p>
 <h2 id="adding-validation">Adding validation</h2>
 <p>Adding validation with Catel is extremely easy. There are two flavors to pick from, but they work exactly the same (since both the models and view models internally derive from <code>ValidatableModelBase</code>). To add validation to the <code>Person</code> model, use this code:</p>
 <pre><code>protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
@@ -103,7 +103,7 @@
     }
 }
 </code></pre>
-<p>The validation for the <code>Family</code> model is very easy as well:</p>
+<p>The validation for the <code>Family</code> model is easy as well:</p>
 <pre><code>protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
 {
     if (string.IsNullOrWhiteSpace(FamilyName))
@@ -147,7 +147,7 @@
 </code></pre>
 <p>Note that the <code>xmlns:i=&quot;http://schemas.microsoft.com/expression/2010/interactivity&quot;</code> must be added in order for the code above to compile</p>
 <h2 id="adding-search-functionality-to-the-main-window">Adding search functionality to the main window</h2>
-<p>A functionality that is needed in a lot of applications is search functionality. To implement this we will need to modify the <code>MainWindowViewModel</code>. Below are the steps required to implement search functionality.</p>
+<p>A functionality that is needed in many applications is search functionality. To implement this we will need to modify the <code>MainWindowViewModel</code>. Below are the steps required to implement search functionality.</p>
 <h3 id="adding-additional-properties-to-the-view-model">Adding additional properties to the view model</h3>
 <p>Lets start by adding the additional properties required to implement searching in the <code>MainWindowViewModel</code>:</p>
 <pre><code>/// &lt;summary&gt;

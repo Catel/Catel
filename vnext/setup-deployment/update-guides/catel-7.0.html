@@ -98,7 +98,7 @@
 <p>Encountered issues while upgrading to this version? Add them here to help out others!</p>
 <h1 id="generic">Generic</h1>
 <h2 id="source-code-generator">Source code generator</h2>
-<p>A new source code generator (Catel.SourceGenerators) has been developed to assist in generating boiler-plate code. It's still possible to develop projects without it, but with the lack of dependency injection in XAML, it's strongly recommended to use the source generator.</p>
+<p>A new source code generator (Catel.SourceGenerators) has been developed to assist in generating boiler-plate code. It is still possible to develop projects without it, but with the lack of dependency injection in XAML, it is strongly recommended to use the source generator.</p>
 <p>Add this to the csproj file:</p>
 <pre><code>&lt;PackageReference Include=&quot;Catel.SourceGenerators&quot; Version=&quot;1.0.0&quot; PrivateAssets=&quot;all&quot; /&gt;
 </code></pre>
@@ -123,7 +123,7 @@ services.AddCatelCore();
 services.AddCatelMvvm();
 </code></pre>
 <h2 id="hosting-model">Hosting model</h2>
-<p>Catel now supports the .NET hosting model. It's possible to create an app host, similar to ASP.NET.</p>
+<p>Catel now supports the .NET hosting model. It is possible to create an app host, similar to ASP.NET.</p>
 <pre><code>public partial class App : Application
 {
 #pragma warning disable IDISP006 // Implement IDisposable
@@ -176,13 +176,13 @@ services.AddCatelMvvm();
 }
 </code></pre>
 <h2 id="logging">Logging</h2>
-<p>The logging features have been removed from Catel. It's recommended to use the .NET standard logging features.</p>
-<p>.NET logging uses DI, but static classes shouldn’t be forced to use DI just for logging. Our solution:</p>
+<p>The logging features have been removed from Catel. It is recommended to use the .NET standard logging features.</p>
+<p>.NET logging uses DI, but static classes should not be forced to use DI just for logging. Our solution:</p>
 <ul>
 <li>Dependency injection: Inject <code>ILogger&lt;T&gt;</code> (even for views)</li>
 <li>Static logger: Use <code>LogManager.GetLogger(typeof(X))</code></li>
 </ul>
-<p><code>LogManager</code> detects the hosting model and provides the right logger instance, or a <code>NullLogger</code> for unit tests. It’s also possible to register a custom logger factory as fallback.</p>
+<p><code>LogManager</code> detects the hosting model and provides the right logger instance, or a <code>NullLogger</code> for unit tests. It is also possible to register a custom logger factory as fallback.</p>
 <p>To upgrade, replace:</p>
 <pre><code>private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 </code></pre>
@@ -205,7 +205,7 @@ services.AddCatelMvvm();
 <h1 id="catelmvvm">Catel.MVVM</h1>
 <h2 id="view-models">View models</h2>
 <p>The view models have been refactored to remove any hidden dependencies. To minimize the risk of added dependencies in the future (that will cause breaking changes), a view model now requires the <code>IServiceProvider</code> as injected dependency.</p>
-<p>Catel’s <code>ViewModelBase</code> is powerful, but most view models don’t need all its features. With true DI, we’re splitting it:</p>
+<p>Catel’s <code>ViewModelBase</code> is powerful, but most view models do not need all its features. With true DI, we’re splitting it:</p>
 <ul>
 <li>FeaturedViewModelBase: For advanced features (validation, throttling, etc.)</li>
 <li>ViewModelBase: Lightweight, for most use cases</li>
@@ -304,9 +304,9 @@ services.AddCatelMvvm();
 </code></pre>
 <p>Add custom logic in the partial <code>OnInitializingComponent</code> or <code>OnInitializedComponent</code>.</p>
 <h1 id="unit-testing">Unit testing</h1>
-<p>With the new dependency injection approach, it's much easier to isolate unit / integration tests.</p>
+<p>With the new dependency injection approach, it is much easier to isolate unit / integration tests.</p>
 <h2 id="service-collection-initialization">Service collection initialization</h2>
-<p>It's recommended to create a single helper class in the test project to set up the basics:</p>
+<p>It is recommended to create a single helper class in the test project to set up the basics:</p>
 <pre><code>namespace Orc.FeatureToggles.Tests;
 
 using Catel;

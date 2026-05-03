@@ -87,11 +87,11 @@
         <article data-uid="">
 
 
-<p>This is a quick introduction for developers who don't have a lot of time to read all the docs. This document contains the absolute basics of what a developer needs to know.</p>
+<p>This is a quick introduction for developers who do not have much time to read all the docs. This document contains the absolute basics of what a developer needs to know.</p>
 <h2 id="core">Core</h2>
 <p>This pare contains the core functionality of Catel and what you should know when using Catel.</p>
 <h3 id="logging--debugging">Logging / debugging</h3>
-<p>If you ever think Catel is behaving strange or does not work as expected, make sure to enable the logging. Below is an example on how to enable the logging:</p>
+<p>If you ever think Catel is behaving strange or does not work as expected, ensure to enable the logging. Below is an example on how to enable the logging:</p>
 <pre><code>#if DEBUG
     LogManager.RegisterDebugListener();
 #endif
@@ -123,7 +123,7 @@ public string FirstName
 public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string), null);
 </code></pre>
 <p>Catel will automatically take care of change notifications.</p>
-<p>Note that you can use the <em>modelprop</em> or <em>vmprop</em> to easily create these properties using code snippets. You can also use [Catel.Fody]({{&lt; relref &quot;catel-fody/_index.md&quot; &gt;}}) instead</p>
+<p>Note that you can use the <em>modelprop</em> or <em>vmprop</em> to create these properties using code snippets. You can also use [Catel.Fody]({{&lt; relref &quot;catel-fody/_index.md&quot; &gt;}}) instead</p>
 <h2 id="mvvm">MVVM</h2>
 <p>This part is especially meant for the MVVM part.</p>
 <h3 id="handling-of-viewmodels">Handling of viewmodels</h3>
@@ -137,7 +137,7 @@ view.DataContext = new PersonViewModel();
 </code></pre>
 <p>It goes even further. Catel can create view models based on the data context. For more information, read <a href="../../introduction/mvvm/introduction-to-nested-user-controls-problem.html">nested user controls</a>.</p>
 <h3 id="handling-hierarchy-and-parentchild-view-models">Handling hierarchy and parent/child view models</h3>
-<p>Note that Catel is already fully aware of parent/child relations of view models so you don’t have to do anything for this yourself. For more information, read nested user controls.</p>
+<p>Note that Catel is already fully aware of parent/child relations of view models so you do not have to do anything for this yourself. For more information, read nested user controls.</p>
 <h3 id="resolving-views-and-view-models">Resolving views and view models</h3>
 <p>Catel resolves views and view models by naming convention. This means that based on the name of a view, the view model can be determined. This also works the other way around where the view model can be determined based on the view. For more information, read about <a href="https://catelproject.atlassian.net/wiki/display/CTL/Locators+and+naming+conventions">naming conventions</a>.</p>
 

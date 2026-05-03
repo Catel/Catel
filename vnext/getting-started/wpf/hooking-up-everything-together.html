@@ -105,7 +105,7 @@
     _messageService = messageService;
 }
 </code></pre>
-<p>Don't forget to create the right backing fields <code>_uiVisualizerService</code> and <code>_messageService</code></p>
+<p>Do not forget to create the right backing fields <code>_uiVisualizerService</code> and <code>_messageService</code></p>
 <h4 id="adding-the-properties">Adding the properties</h4>
 <p>We need a property representing the currently selected person in edit mode of a family. Below is the property definition which needs to be added to the view model:</p>
 <pre><code>/// &lt;summary&gt;
@@ -312,7 +312,7 @@ private async Task OnRemoveFamilyExecuteAsync()
 }
 </code></pre>
 <h2 id="hooking-up-the-views">Hooking up the views</h2>
-<p>We now have all the views ready, but we don't see anything yet. The reason for this is that we haven't modified the <code>MainWindow</code> view yet. To do so, replace the xaml content with the xaml below:</p>
+<p>All views are now ready, but nothing is visible yet because the <code>MainWindow</code> view has not been modified. To do so, replace the xaml content with the xaml below:</p>
 <pre><code> &lt;Grid&gt;
     &lt;Grid.ColumnDefinitions&gt;
         &lt;ColumnDefinition Width=&quot;*&quot; /&gt;

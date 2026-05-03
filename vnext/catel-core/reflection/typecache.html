@@ -89,7 +89,7 @@
 
 <p>The <code>TypeCache</code> is the centralized cache by Catel for type information. It should be used by any class to gather type information since most of the calls are being cached by Catel.</p>
 <h2 id="getting-types-without-versioning">Getting types without versioning</h2>
-<p>Sometimes you know what type to get and what assembly it is living in. However, you don't want to be version-dependent by specifying the fully qualified assembly name. By using the <code>TypeCache.GetType</code> method, it is possible to get a type by only the assembly name (e.g. <code>Catel.Core</code>) and the type name (e.g. <code>Catel.Data.ObservableObject</code>).</p>
+<p>Sometimes you know what type to get and what assembly it is living in. However, you do not want to be version-dependent by specifying the fully qualified assembly name. By using the <code>TypeCache.GetType</code> method, it is possible to get a type by only the assembly name (e.g. <code>Catel.Core</code>) and the type name (e.g. <code>Catel.Data.ObservableObject</code>).</p>
 <pre><code>var type = TypeCache.GetType(&quot;Catel.Data.ObservableObject&quot;, &quot;Catel.Core&quot;);
 </code></pre>
 <p>More documentation should be written in the future</p>

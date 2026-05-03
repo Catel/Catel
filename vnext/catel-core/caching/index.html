@@ -87,8 +87,8 @@
         <article data-uid="">
 
 
-<p>Caching is about improving applications performance. The most expensive performance costs of the applications are related with data retrieving, typically when this data requires to be moved across the network or loaded from disk. But some data have a slow changing behavior (a.k.a non-volatile) and doesn't require to be re-read with the same frequency of the volatile data.</p>
-<p>So, to improve your application's performance and handling this &quot;nonvolatile&quot; data from a pretty clean approach, Catel comes with a CacheStorage class. Notice that the first generic parameter is the type of the key and the second the type of the value the will be stored, just like a Dictionary but CacheStorage isn't it just a Dictionary. This class allows you to retrieve data and store it into the cache with single statement and also helps you to handle expiration policy if you need it.</p>
+<p>Caching is about improving applications performance. The most expensive performance costs of the applications are related with data retrieving, typically when this data requires to be moved across the network or loaded from disk. But some data have a slow changing behavior (a.k.a non-volatile) and does not require to be re-read with the same frequency of the volatile data.</p>
+<p>So, to improve your application's performance and handling this &quot;nonvolatile&quot; data from a clean approach, Catel comes with a CacheStorage class. Notice that the first generic parameter is the type of the key and the second the type of the value the will be stored, just like a Dictionary but CacheStorage is not it just a Dictionary. This class allows you to retrieve data and store it into the cache with single statement and also helps you to handle expiration policy if you need it.</p>
 <h2 id="initializing-a-cache-storage">Initializing a cache storage</h2>
 <p>To initialize a cache storage field into your class use the following code:</p>
 <pre><code>private readonly CacheStorage&lt;string, Person&gt; _personCache = new CacheStorage&lt;string, Person&gt;(storeNullValues: true);
@@ -103,7 +103,7 @@
 <p>A default cache expiration policy initialization code can be specified during cache storage initialization constructor:</p>
 <pre><code>CacheStorage&lt;string, Person&gt; _personCache = new CacheStorage&lt;string, Person&gt;(() =&gt; ExpirationPolicy.Duration(TimeSpan.FromMinutes(5)), true);
 </code></pre>
-<p>You can specify a specific expiration policy for an item when it's storing:</p>
+<p>You can specify a specific expiration policy for an item when it is storing:</p>
 <pre><code>_personCache.GetFromCacheOrFetch(id, () =&gt; service.GetPersonById(id), ExpirationPolicy.Duration(TimeSpan.FromMinutes(10)));
 </code></pre>
 <p>The default cache policy specified at cache storage initialization will be used if the item storing the expiration policy is not specified.</p>
@@ -156,22 +156,22 @@
 <p>To implement an expiration cache policy use the following code template:</p>
 <pre><code>public class MyExpirationPolicy : ExpirationPolicy
 {
-   public MyExpirationPolicy():base(true)
-   {
-   }
+ public MyExpirationPolicy():base(true)
+ {
+ }
 
-   public override bool IsExpired
-   {
-      get
-      {
-         // Add your custom expiration code to detect if the item expires
-      }
-   }
+ public override bool IsExpired
+ {
+ get
+ {
+ // Add your custom expiration code to detect if the item expires
+ }
+ }
 
-   public override void OnReset()
-   {
-      // Add your custom code to reset the policy if the item is read.
-   }
+ public override void OnReset()
+ {
+ // Add your custom code to reset the policy if the item is read.
+ }
 }
 </code></pre>
 <p>The base constructor has a parameter to indicate if the policy can be reset. Therefore, if you call the base constructor with false then the OnReset method will never called.</p>

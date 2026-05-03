@@ -88,12 +88,12 @@
 
 
 <p>Note that this behavior is only available for WPF</p>
-<p>The <code>Hyperlink</code> control in WPF is very powerful, but it is hard to make them work outside pages.</p>
+<p>The <code>Hyperlink</code> control in WPF is powerful, but it is hard to make them work outside pages.</p>
 <p>Add the following XML namespaces:</p>
 <pre><code>xmlns:i=&quot;clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity&quot;
 xmlns:catel=&quot;http://schemas.catelproject.com&quot;
 </code></pre>
-<p>To execute the NavigateUrl, simply use the behavior as shown below:</p>
+<p>To execute the NavigateUrl, use the behavior as shown below:</p>
 <pre><code>&lt;TextBlock&gt;
     &lt;Hyperlink NavigateUri=&quot;http://schemas.catelproject.com&quot;&gt;
         &lt;i:Interaction.Behaviors&gt;

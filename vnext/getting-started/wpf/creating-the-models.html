@@ -114,7 +114,7 @@
 </code></pre>
 <h2 id="adding-properties-to-the-models">Adding properties to the models</h2>
 <p>The next step is to add properties to the models. An important concept to understand is that Catel uses specific &quot;dependency-a-like&quot; properties in order to provide all the functionality in the <code>ModelBase</code> classes. Below are the properties per model that need to be registered.</p>
-<p>At first sight, these properties might look very overwhelming. Let's take a look at how the property system works. The most important thing is the actual property registration:</p>
+<p>At first sight, these properties might look very overwhelming. Examine how the property system works. The most important thing is the actual property registration:</p>
 <pre><code>public static readonly PropertyData PersonsProperty = RegisterProperty(&quot;Persons&quot;, typeof(ObservableCollection&lt;Person&gt;), () =&gt; new ObservableCollection&lt;Person&gt;());
 </code></pre>
 <p>This defines a property on the model with the following data:</p>

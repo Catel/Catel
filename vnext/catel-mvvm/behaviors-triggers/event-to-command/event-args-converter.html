@@ -91,10 +91,10 @@
 <p>However many implementations of the behavior come with the caveat, they cause a ViewModel to have knowledge of View specific types as well as causing a ViewModel to be directly dependent on the View.</p>
 <p>To resolve that concern, Catel provides support for an <code>EventArgsConverter</code> that can be attached to an <code>EventToCommand</code> binding. This allows a developer to provide a more agnostic transport object between the View and the ViewModel for event handling. Be aware that usage of an <code>EventArgsConverter</code> does come with its own caveats.</p>
 <p>As the ViewModel will no longer have any direct knowledge of the <code>EventArgs</code> being passed (because the <code>EventArgsConverter</code> translates it to an agnostic object), you will not be able to execute any behavior against the <code>EventArgs</code> (such as an <code>e.Handled</code> call) and any short-circuiting you must do must be done within the <code>EventArgsConverter</code>.</p>
-<p>If you need more fine grain behavior, you'll need to stick with what's called a <strong>Mixed-Mode Implementation</strong> where the Event is implemented in the View Code-Behind and it manipulates the ViewModel through an Interface.</p>
-<p>With that, let's proceed with a basic implementation of an <code>EventArgsConverter</code> that will handle the <code>PreviewMouseDoubleClick</code> event against a <code>ListBoxItem</code>.</p>
+<p>If you need more fine grain behavior, you will need to stick with what's called a <strong>Mixed-Mode Implementation</strong> where the Event is implemented in the View Code-Behind and it manipulates the ViewModel through an Interface.</p>
+<p>With that, proceed with a basic implementation of an <code>EventArgsConverter</code> that will handle the <code>PreviewMouseDoubleClick</code> event against a <code>ListBoxItem</code>.</p>
 <hr>
-<p>First we'll create a <code>PersonModel</code> that will hold some basic information about a person.</p>
+<p>The following code creates a <code>PersonModel</code> that will hold some basic information about a person.</p>
 <pre><code>public class PersonModel : ModelBase
 {
     private static int _nextId;
@@ -111,7 +111,7 @@
     public string LastName { get; set; }
 }
 </code></pre>
-<p>Now let's create our ViewModel to aid in the display and manipulation of people:</p>
+<p>The following code creates our ViewModel to aid in the display and manipulation of people:</p>
 <pre><code>public class MainViewModel : ViewModelBase
 {
     private readonly IMessageService _messageService;
@@ -180,7 +180,7 @@
     }
 }
 </code></pre>
-<p>As you can see the <code>Convert</code> method is an event handler that will handle <code>MouseEventArgs</code> and does the following:</p>
+<p>As shown, the <code>Convert</code> method is an event handler that will handle <code>MouseEventArgs</code> and does the following:</p>
 <ul>
 <li>Checks if the <code>OriginalSource</code> implements a <code>DependencyObject</code></li>
 <li>Grabs the <code>ListBoxItem</code> from the <code>DependencyObject</code> using <code>ParentyOfType&lt;T&gt;</code></li>

@@ -90,7 +90,7 @@
 <p>Garbage collection in .NET can be very expensive, especially for objects on the Large Object Heap (LOH). .NET itself already uses pooling for threads to prevent the costly creation of threads but instead re-uses the already created threads using a thread pool. Catel provides an implementation of pooling using the <code>PoolManager&lt;TPoolable&gt;</code>. This allows both Catel and third party developers to create a pool for large objects so they can be reused.</p>
 <p>The documentation uses a byte array of 4096 as poolable object as example. If <code>_poolManager</code> is used in the code below, it represents an instance of <code>PoolManager&lt;Buffer4096Poolable&gt;</code></p>
 <h2 id="introduction-to-the-pool-manager">Introduction to the pool manager</h2>
-<p>The pool manager internally uses a stack to manage the available objects in the pool. It's important to understand how a pool works. The flow diagram below shows how the pool manager deals with objects:</p>
+<p>The pool manager internally uses a stack to manage the available objects in the pool. it is important to understand how a pool works. The flow diagram below shows how the pool manager deals with objects:</p>
 <pre><code class="lang-mermaid">flowchart TD
     A([GetObject called]) --&gt; B{pool has\navailable objects?}
     B -- yes --&gt; C[return pooled object]
@@ -101,12 +101,12 @@
 <p>It is recommended that a pool manager gets registered in the <em>ServiceLocator</em> so it can be re-used by multiple components.</p>
 <p>Note that the pool manager does not limit the number of objects in memory. It has a <code>MaxSize</code> property so it will store only a maximum amount of objects inside the internal pool, but if the pool is running out of instances and a new object is requested, it will return a new instance (and thus creating a new object which could be garbage collected).</p>
 <h3 id="retrieving-objects-from-the-pool">Retrieving objects from the pool</h3>
-<p>Retrieving an object from the pool is very simple. When an instance of the <code>PoolManager&lt;TPoolable&gt;</code> is available, use the code below:</p>
+<p>Retrieving an object from the pool is simple. When an instance of the <code>PoolManager&lt;TPoolable&gt;</code> is available, use the code below:</p>
 <pre><code>var poolableBuffer = _poolManager.GetObject();
 </code></pre>
 <p>The <code>PoolManager&lt;TPoolable&gt;</code> will automatically create a new object when no objects are available in the pool.</p>
 <h3 id="returning-objects-to-the-pool">Returning objects to the pool</h3>
-<p>Objects should be automatically returned to the pool when the objects are disposed. This means the objects are not really disposed but the state is being reset and the object is being returned to the pool. To automatically take care of this, it's best to use the <code>PoolManager&lt;TPoolable&gt;</code> as shown below:</p>
+<p>Objects should be automatically returned to the pool when the objects are disposed. This means the objects are not really disposed but the state is being reset and the object is being returned to the pool. To automatically take care of this, it is best to use the <code>PoolManager&lt;TPoolable&gt;</code> as shown below:</p>
 <pre><code>using (var poolableBuffer = _poolManager.GetObject())
 {
     var buffer = poolableBuffer.Data;
@@ -134,7 +134,7 @@ poolManager.MaxSize = 1024 * 1024 * 1;
 </code></pre>
 <p>If the <code>MaxSize</code> is reached, objects will not be added back to the internal pool but be left out and, if no other references exist to this object, be ready for garbage collection.</p>
 <h2 id="creating-a-poolable-object">Creating a poolable object</h2>
-<p>Since the objects need to be re-used, it's very important that the <code>PoolManager&lt;TPoolable&gt;</code> knows how to reset objects to the initial state. Therefore every poolable object needs to implement <code>IPoolable</code> which also implements <code>IDisposable</code>. Below is an example implementation of a poolable object.</p>
+<p>Since the objects need to be re-used, it is important that the <code>PoolManager&lt;TPoolable&gt;</code> knows how to reset objects to the initial state. Therefore every poolable object needs to implement <code>IPoolable</code> which also implements <code>IDisposable</code>. Below is an example implementation of a poolable object.</p>
 <pre><code>public class Buffer4096Poolable : IPoolable
 {
     private const int BufferSize = 4096;

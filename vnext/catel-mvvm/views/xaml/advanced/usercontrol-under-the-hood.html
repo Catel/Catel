@@ -87,8 +87,8 @@
         <article data-uid="">
 
 
-<p>The <code>UserControl</code> is a pretty sophisticated class. In this part of the documentation, the inner workings of the control are explained. What better way is there than to using flowcharts. There are a few events very important for the inner workings of the user control. The flowcharts are created per event.</p>
-<p>Keep in mind that the actual logic is implemented in the <code>UserControlLogic</code>, which is used by the <code>UserControl</code>. This way, the logic can be used by any user control via the <code>UserControlBehavior</code>.</p>
+<p>The <code>UserControl</code> is a sophisticated class. In this part of the documentation, the inner workings of the control are explained. What better way is there than to using flowcharts. There are a few events important for the inner workings of the user control. The flowcharts are created per event.</p>
+<p>Note that the actual logic is implemented in the <code>UserControlLogic</code>, which is used by the <code>UserControl</code>. This way, the logic can be used by any user control via the <code>UserControlBehavior</code>.</p>
 <h2 id="managing-the-custom-datacontext">Managing the custom DataContext</h2>
 <p>The <code>UserControl</code> logic uses an additional layer to customize the DataContext. Below is a graphical representation of how it works.</p>
 <pre><code class="lang-mermaid">block-beta
@@ -119,7 +119,7 @@
 </code></pre>
 <h2 id="loaded">Loaded</h2>
 <p>When the control is loaded, it starts checking for the first time whether the current datacontext can be used to create a view model. But, before it does this, it checks whether it should (and can) re-use an existing view model. To control whether view models should be re-used, use the <code>CloseViewModelOnUnloaded</code> property.</p>
-<p>If a view model can and should be re-used, it sets the view model as data context and that's it. If there is no view model, or the previous view model should not be re-used, the control continues to determine the datacontext.</p>
+<p>If a view model can and should be re-used, it sets the view model as data context and that is it. If there is no view model, or the previous view model should not be re-used, the control continues to determine the datacontext.</p>
 <pre><code class="lang-mermaid">flowchart TD
     A([start]) --&gt; B{re-use existing VM?}
     B -- yes --&gt; C[set existing VM as datacontext]
@@ -128,7 +128,7 @@
     D --&gt; E
 </code></pre>
 <h2 id="unloaded">Unloaded</h2>
-<p>Another event that is very important is the <code>Unloaded</code> event. In this event, the control either cleans up the view model or stores it so it can be re-used later. Then, it also restores the old datacontext so it never breaks existing application bindings. This way, the control won't leave any traces behind.</p>
+<p>Another event that is important is the <code>Unloaded</code> event. In this event, the control either cleans up the view model or stores it so it can be re-used later. Then, it also restores the old datacontext so it never breaks existing application bindings. This way, the control will not leave any traces behind.</p>
 <pre><code class="lang-mermaid">flowchart TD
     A([start]) --&gt; B{CloseViewModelOnUnloaded?}
     B -- yes --&gt; C[close and clean up view model]
@@ -138,7 +138,7 @@
     E --&gt; F([end])
 </code></pre>
 <h2 id="datacontextchanged">DataContextChanged</h2>
-<p>The <code>DataContextChanged</code> event is used to react to changes of the datacontext. We use the <code>DataContextHelper</code> class for that. If the new datacontext is new (thus not a view model that the control just set itself), it it continues to determine the datacontext. Otherwise, it will not take any action.</p>
+<p>The <code>DataContextChanged</code> event is used to react to changes of the datacontext. We use the <code>DataContextHelper</code> class for that. If the new datacontext is new (thus not a view model that the control set itself), it it continues to determine the datacontext. Otherwise, it will not take any action.</p>
 <pre><code class="lang-mermaid">flowchart TD
     A([start]) --&gt; B{is DataContext changed\nby the control itself?}
     B -- yes --&gt; E([end])
@@ -146,8 +146,8 @@
     C --&gt; E
 </code></pre>
 <h2 id="determinedatacontext">DetermineDataContext</h2>
-<p>All other flowcharts eventually led to this flowchart, the determination of the datacontext. The determination of the datacontext is very important, because this is the moment where the user control transforms the datacontext into a new view model if possible. First it tries is to construct the view model with the datacontext. So, if the datacontext is an object of type Person, and the view model of the user control has a constructor that accepts a Person object, it injects the datacontext into the constructor of the view model. If that fails, or there is simply no constructor, the control checks whether the view model has an empty constructor. If so, it constructs the view model and sets it as the new datacontext. If not, it will leave the datacontext untouched.</p>
-<p>Basically, this is all that happens on a higher level to transform a datacontext into a view model. Under the hood, it's a bit more complicated but again, on a higher level this is what happens.</p>
+<p>All other flowcharts eventually led to this flowchart, the determination of the datacontext. The determination of the datacontext is important, because this is the moment where the user control transforms the datacontext into a new view model if possible. First it tries is to construct the view model with the datacontext. So, if the datacontext is an object of type Person, and the view model of the user control has a constructor that accepts a Person object, it injects the datacontext into the constructor of the view model. If that fails, or there is no constructor, the control checks whether the view model has an empty constructor. If so, it constructs the view model and sets it as the new datacontext. If not, it will leave the datacontext untouched.</p>
+<p>Basically, this is all that happens on a higher level to transform a datacontext into a view model. Under the hood, it is somewhat more complicated but again, on a higher level this is what happens.</p>
 <pre><code class="lang-mermaid">flowchart TD
     A([start]) --&gt; B[try construct VM\nwith datacontext as parameter]
     B --&gt; C{construction\nsuccessful?}

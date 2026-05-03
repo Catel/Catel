@@ -89,26 +89,26 @@
 <h2 id="how-to-support-example-data-with-view-models">How to support example data with view models?</h2>
 <p>To find out how to create design time data, see the <a href="../catel-mvvm/designers/index.html">designers</a> topic.</p>
 <h2 id="how-to-use-events-with-mvvm">How to use events with MVVM?</h2>
-<p>When writing MVVM, it's &quot;forbidden&quot; (read: not a best practice) to use click handlers (or other UI events) in your view-model. But then should you react to events?</p>
+<p>When writing MVVM, it is &quot;forbidden&quot; (read: not a best practice) to use click handlers (or other UI events) in your view-model. But then should you react to events?</p>
 <ol>
-<li><p>Start with creating a command like you are used to using MVVM. This command will be executed when the event occurs.</p>
-</li>
-<li><p>Add a reference to <em>System.Windows.Interactivity.dll</em> (ships with Catel). If you have used NuGet to add a reference, it is automatically included for you.</p>
-</li>
-<li><p>Add the following namespace definitions to your view declaration:</p>
-<pre><code>xmlns:i=&quot;clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity&quot;
-xmlns:catel=&quot;http://schemas.catelproject.com&quot;
+<li>Start with creating a command like you are used to using MVVM. This command will be executed when the event occurs.</li>
+<li>Add a reference to <em>System.Windows.Interactivity.dll</em> (ships with Catel). If you have used NuGet to add a reference, it is automatically included for you.</li>
+<li>Add the following namespace definitions to your view declaration:</li>
+</ol>
+<pre><code>   xmlns:i=&quot;clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity&quot;
+   xmlns:catel=&quot;http://schemas.catelproject.com&quot;
+   ```
+
+4. Use the following code to convert an event to a command:
+
 </code></pre>
-</li>
-<li><p>Use the following code to convert an event to a command:</p>
 <pre><code>&lt;i:Interaction.Triggers&gt;
     &lt;i:EventTrigger EventName=&quot;[YourEvent]&quot;&gt;
         &lt;catel:EventToCommand Command=&quot;{Binding [YourCommand]}&quot; DisableAssociatedObjectOnCannotExecute=&quot;False&quot; /&gt;
     &lt;/i:EventTrigger&gt;
 &lt;/i:Interaction.Triggers&gt;
+```
 </code></pre>
-</li>
-</ol>
 <p>An example for a *ListBox *double click:</p>
 <pre><code>&lt;ListBox ItemsSource=&quot;{Binding PersonCollection}&quot; SelectedItem=&quot;{Binding SelectedPerson}&quot;&gt;
     &lt;i:Interaction.Triggers&gt;
@@ -188,7 +188,7 @@ xmlns:catel=&quot;http://schemas.catelproject.com&quot;
 </code></pre>
 <p>Using this technique, it is even possible to determine the view model of any view dynamically at runtime.</p>
 <h2 id="how-can-i-inject-or-manipulate-the-view-model-of-a-usercontrol">How can I inject or manipulate the view model of a UserControl?</h2>
-<p>The <em>UserControl</em> is a very powerful control. It allows lazy loaded dynamic view model construction. However, sometimes you just don't want the user control to dynamically create the view model. Luckily, the user control instantiates a new view model with this logic:</p>
+<p>The <em>UserControl</em> is a powerful control. It allows lazy loaded dynamic view model construction. However, sometimes you do not want the user control to dynamically create the view model. Luckily, the user control instantiates a new view model with this logic:</p>
 <ol>
 <li>The <em>DataContext</em> of the control can be injected into a constructor of the view model</li>
 <li>The view model has an empty constructor</li>

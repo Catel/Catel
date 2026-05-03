@@ -87,7 +87,7 @@
         <article data-uid="">
 
 
-<p>The MessageMediator is a very powerful class to send messages to other objects inside an application. However, it can sometimes by cumbersome to register and create messages. Therefore the MessageBase class is a very nice convenience class to create messages and allow easier registration.</p>
+<p>The MessageMediator is a powerful class to send messages to other objects inside an application. However, it can sometimes by cumbersome to register and create messages. Therefore the MessageBase class is a very nice convenience class to create messages and allow easier registration.</p>
 <p>The MessageBase provides the following additional functionality out of the box:</p>
 <ul>
 <li>Send messages with data without instantiating a message</li>
@@ -95,7 +95,7 @@
 <li>Unregister message handlers</li>
 </ul>
 <h2 id="creating-messages-based-on-the-messagebase">Creating messages based on the MessageBase</h2>
-<p>It is very easy to create a new message. The message below is a message that contains a string and this little class provides lots of capabilities.</p>
+<p>It is easy to create a new message. The message below is a message that contains a string and this little class provides many capabilities.</p>
 <pre><code>public class DemoMessage : MessageBase&lt;DemoMessage, string&gt;
 {
     public DemoMessage() { }

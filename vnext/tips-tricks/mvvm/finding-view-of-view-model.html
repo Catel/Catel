@@ -90,7 +90,7 @@
 <p>Sometimes it is required to find the view of a view model. For example, this comes in handy when implementing drag and drop where you only want to support code via view models.</p>
 <p>Internally, Catel uses with the <em>IViewManager</em> for this. As soon as a view is loaded (via the Loaded event), the view is registered to the view manager. The view manager will keep an eye on the events of the view and notice view model changes.</p>
 <p>A view is removed from the manager as soon as it is unloaded (via the <em>Unloaded</em> event). From this moment on, it is no longer possible to retrieve a view via its view model.</p>
-<p>Remember that only view classes implementing <em>IView</em> are supported by the <em>IViewManager</em></p>
+<p>Note that only view classes implementing <em>IView</em> are supported by the <em>IViewManager</em></p>
 <h2 id="retrieving-the-view-of-a-view-model">Retrieving the view of a view model</h2>
 <p>To find the view of a view model, inject <code>IViewManager</code> via the constructor:</p>
 <pre><code class="lang-csharp">private readonly IViewManager _viewManager;
