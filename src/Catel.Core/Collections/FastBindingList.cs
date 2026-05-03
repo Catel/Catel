@@ -409,7 +409,7 @@ public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCol
 
         if (AutomaticallyDispatchChangeNotifications)
         {
-            _dispatcherService.BeginInvokeIfRequiredAsync(action);
+            _dispatcherService.BeginInvokeIfRequired(action);
         }
         else
         {
@@ -449,7 +449,7 @@ public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCol
 
         if (AutomaticallyDispatchChangeNotifications)
         {
-            _dispatcherService.BeginInvokeIfRequiredAsync(() => base.OnListChanged(e));
+            _dispatcherService.BeginInvokeIfRequired(() => base.OnListChanged(e));
         }
         else
         {

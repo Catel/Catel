@@ -151,7 +151,7 @@ public partial class FeaturedViewModelBase
 
         if (DispatchPropertyChangedEvent)
         {
-            _dispatcherService.BeginInvokeIfRequiredAsync(() => base.RaisePropertyChanged(sender, e));
+            _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanged(sender, e));
         }
         else
         {

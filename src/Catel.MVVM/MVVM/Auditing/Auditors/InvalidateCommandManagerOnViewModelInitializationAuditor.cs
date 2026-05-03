@@ -37,7 +37,7 @@ public class InvalidateCommandManagerOnViewModelInitializationAuditor : AuditorB
 
     private void OnTimerTick(object? e)
     {
-        _dispatcherService.BeginInvokeIfRequiredAsync(() =>
+        _dispatcherService.BeginInvokeIfRequired(() =>
         {
             _commandManager.InvalidateCommands();
         });

@@ -102,6 +102,21 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
+    /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcher">The dispatcher.</param>
+    /// <param name="action">The action.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+    /// <remarks>For target frameworks where the <see cref="Dispatcher" /> class does not contain the <c>Invoke</c> method, the <c>BeginInvoke</c>
+    /// method will be used instead.</remarks>
+    public static void InvokeIfRequired(this Dispatcher dispatcher, Action action)
+    {
+        Invoke(dispatcher, action, true);
+    }
+
+    /// <summary>
     /// Executes the specified action on the thread that the Dispatcher was created on if required, returning a task that can be awaited.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
@@ -116,6 +131,22 @@ public static partial class DispatcherExtensions
         ArgumentNullException.ThrowIfNull(action);
 
         return InvokeAsync(dispatcher, (Delegate)action);
+    }
+
+    /// <summary>
+    /// Executes the specified action synchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcher">The dispatcher.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="priority">The priority.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+    /// <remarks>For target frameworks where the <see cref="Dispatcher" /> class does not contain the <c>Invoke</c> method, the <c>BeginInvoke</c>
+    /// method will be used instead.</remarks>
+    public static void InvokeIfRequired(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
+    {
+        Invoke(dispatcher, action, priority, true);
     }
 
     /// <summary>
@@ -137,6 +168,22 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
+    /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcher">The dispatcher.</param>
+    /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+    /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+    public static void InvokeIfRequired(this Dispatcher dispatcher, Delegate method, params object[] args)
+    {
+        ArgumentNullException.ThrowIfNull(method);
+
+        Invoke(dispatcher, () => method.DynamicInvoke(args), true);
+    }
+
+    /// <summary>
     /// Executes the specified delegate with the specified arguments on the thread that the Dispatcher was created on if required, returning a task that can be awaited.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
@@ -152,6 +199,23 @@ public static partial class DispatcherExtensions
         ArgumentNullException.ThrowIfNull(method);
 
         return InvokeAsync(dispatcher, method, args);
+    }
+
+    /// <summary>
+    /// Executes the specified delegate synchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcher">The dispatcher.</param>
+    /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+    /// <param name="priority">The priority.</param>
+    /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+    public static void InvokeIfRequired(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
+    {
+        ArgumentNullException.ThrowIfNull(method);
+
+        Invoke(dispatcher, () => method.DynamicInvoke(args), priority, true);
     }
 
     /// <summary>

@@ -432,7 +432,7 @@ public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChan
 
         if (AutomaticallyDispatchChangeNotifications)
         {
-            _dispatcherService.BeginInvokeIfRequiredAsync(action);
+            _dispatcherService.BeginInvokeIfRequired(action);
         }
         else
         {
@@ -450,7 +450,7 @@ public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChan
         {
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequiredAsync(() => base.OnCollectionChanged(e));
+                _dispatcherService.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
             }
             else
             {
@@ -476,7 +476,7 @@ public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChan
         {
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequiredAsync(() => base.OnPropertyChanged(e));
+                _dispatcherService.BeginInvokeIfRequired(() => base.OnPropertyChanged(e));
             }
             else
             {

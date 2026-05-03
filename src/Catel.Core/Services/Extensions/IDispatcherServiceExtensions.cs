@@ -9,6 +9,31 @@ using System.Threading.Tasks;
 public static class IDispatcherServiceExtensions
 {
     /// <summary>
+    /// Executes the specified delegate with the specified arguments synchronously on the thread the Dispatcher is associated with.
+    /// </summary>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+    /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+    public static void Invoke(this IDispatcherService dispatcherService, Delegate method, params object[] args)
+    {
+        dispatcherService.Invoke(() => method.DynamicInvoke(args), true);
+    }
+
+    /// <summary>
+    /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="action">The action.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+    public static void InvokeIfRequired(this IDispatcherService dispatcherService, Action action)
+    {
+        dispatcherService.Invoke(action, true);
+    }
+
+    /// <summary>
     /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
@@ -20,6 +45,20 @@ public static class IDispatcherServiceExtensions
     public static Task InvokeIfRequiredAsync(this IDispatcherService dispatcherService, Action action)
     {
         return dispatcherService.InvokeAsync(action);
+    }
+
+    /// <summary>
+    /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+    /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+    public static void InvokeIfRequired(this IDispatcherService dispatcherService, Delegate method, params object[] args)
+    {
+        dispatcherService.Invoke(() => method.DynamicInvoke(args), true);
     }
 
     /// <summary>
@@ -43,11 +82,34 @@ public static class IDispatcherServiceExtensions
     /// <param name="dispatcherService">The dispatcher service.</param>
     /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
     /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+    public static void BeginInvoke(this IDispatcherService dispatcherService, Delegate method, params object[] args)
+    {
+        dispatcherService.BeginInvoke(() => method.DynamicInvoke(args), false);
+    }
+
+    /// <summary>
+    /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+    /// </summary>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+    /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
     /// <returns>The task representing the action.</returns>
     /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
     public static Task BeginInvokeAsync(this IDispatcherService dispatcherService, Delegate method, params object[] args)
     {
         return dispatcherService.InvokeAsync(method, args);
+    }
+
+    /// <summary>
+    /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+    /// </summary>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="action">The action.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+    public static void BeginInvoke(this IDispatcherService dispatcherService, Action action)
+    {
+        dispatcherService.BeginInvoke(action, false);
     }
 
     /// <summary>
@@ -69,11 +131,38 @@ public static class IDispatcherServiceExtensions
     /// </summary>
     /// <param name="dispatcherService">The dispatcher service.</param>
     /// <param name="action">The action.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+    public static void BeginInvokeIfRequired(this IDispatcherService dispatcherService, Action action)
+    {
+        dispatcherService.BeginInvoke(action, true);
+    }
+
+    /// <summary>
+    /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="action">The action.</param>
     /// <returns>The task representing the action.</returns>
     /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
     public static Task BeginInvokeIfRequiredAsync(this IDispatcherService dispatcherService, Action action)
     {
         return dispatcherService.InvokeAsync(action);
+    }
+
+    /// <summary>
+    /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// <para />
+    /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+    /// </summary>
+    /// <param name="dispatcherService">The dispatcher service.</param>
+    /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+    /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+    public static void BeginInvokeIfRequired(this IDispatcherService dispatcherService, Delegate method, params object[] args)
+    {
+        dispatcherService.BeginInvoke(() => method.DynamicInvoke(args), true);
     }
 
     /// <summary>

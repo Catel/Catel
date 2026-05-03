@@ -26,6 +26,6 @@ public class DispatcherObservableObject : ObservableObject
     /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
     protected override void RaisePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        _dispatcherService.BeginInvokeIfRequiredAsync(() => base.RaisePropertyChanged(sender, e));
+        _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanged(sender, e));
     }
 }

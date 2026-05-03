@@ -2970,6 +2970,10 @@ namespace Catel.Windows.Threading
         public static System.Threading.Tasks.Task InvokeIfRequiredAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static System.Threading.Tasks.Task InvokeIfRequiredAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static System.Threading.Tasks.Task InvokeIfRequiredAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
+        public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
+        public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
+        public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
+        public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
     }
     public class DispatcherTimerEx
     {
