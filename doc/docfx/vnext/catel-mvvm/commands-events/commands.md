@@ -5,8 +5,8 @@ Commands are supported in Catel. The base class for commands is `Command`.
 
 ## Code snippets
 
--   vmcommand - declare a command on a view model
--   vmcommandwithcanexecute - declare a command with support for CanExecute on a view model
+- vmcommand - declare a command on a view model
+- vmcommandwithcanexecute - declare a command with support for CanExecute on a view model
 
 ## Explanation
 

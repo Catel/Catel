@@ -2,7 +2,7 @@
 title: "UserControl Resources" 
 ---
 For the most part the resources declared within a Catel `UserControl` behave the exact same as resources defined in the standard 
-`UserControl`. However because of the way the Catel `UserControl` operates (see [UserControl Under the hood]({{< relref "catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md" >}})) any bindings performed inside a Resource will not be found at runtime (example CollectionViewSource Source) .  The solution is to declare the resource inside an element within the UserControl, not at the UserControl level.  Example below:
+`UserControl`. However because of the way the Catel `UserControl` operates (see [UserControl Under the hood]({{< relref "catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md" >}})) any bindings performed inside a Resource will not be found at runtime (example CollectionViewSource Source) . The solution is to declare the resource inside an element within the UserControl, not at the UserControl level. Example below:
 
 Given this simple Model and ViewModel (Catel.Fody used for parameter declaration)
 
@@ -154,5 +154,5 @@ The ListView on the left is not populated because the binding is not found and w
 System.Windows.Data Error: 40 : BindingExpression path error: 'ProjectDataSources' property not found on 'object' ''MainWindowViewModel' (HashCode=-1500006600)'. BindingExpression:Path=ProjectDataSources; DataItem='MainWindowViewModel' (HashCode=-1500006600); target element is 'CollectionViewSource' (HashCode=5965360); target property is 'Source' (type 'Object')
 ```
 
-While the ListView on the right has the correct content due to the proper binding.  Further discussion on [Stack Overflow](http://stackoverflow.com/questions/31488173/binding-from-within-a-resourcedictionary-in-a-catel-wpf-usercontrol).
+While the ListView on the right has the correct content due to the proper binding. Further discussion on [Stack Overflow](http://stackoverflow.com/questions/31488173/binding-from-within-a-resourcedictionary-in-a-catel-wpf-usercontrol).
 

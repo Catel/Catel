@@ -19,7 +19,7 @@ protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
 
 ### Getting mode information from the outside
 
-Getting the information from outside the objects is a bit more work. This is because the `PropertyChanged` event still provides a value of the `PropertyChangedEventArgs` class. Therefore, it is required to cast the value:
+Getting the information from outside the objects is somewhat more work. This is because the `PropertyChanged` event still provides a value of the `PropertyChangedEventArgs` class. Therefore, it is required to cast the value:
 
 ```
 private void OnObjectPropertyChanged(PropertyChangedEventArgs e)
@@ -55,7 +55,7 @@ When the values are not provided, the old and new value are set to null.
 
 ## Some sidenotes
 
-As you might have noticed, the `AdvancedPropertyChangedEventArgs` also provide the `IsOldValueMeaningful` and the `IsNewValueMeaningful`. These are introduced because it is not always possible to determine the old or new value (for example, when the property name is string.Empty, there is no old value or new value). Therefore, the `OldValue` and `NewValue` properties are null, but doesn't mean that those are the actual old and new values.
+As you might have noticed, the `AdvancedPropertyChangedEventArgs` also provide the `IsOldValueMeaningful` and the `IsNewValueMeaningful`. These are introduced because it is not always possible to determine the old or new value (for example, when the property name is string.Empty, there is no old value or new value). Therefore, the `OldValue` and `NewValue` properties are null, but does not mean that those are the actual old and new values.
 
 It is always required to check whether the values are meaningful before actually handing them:
 

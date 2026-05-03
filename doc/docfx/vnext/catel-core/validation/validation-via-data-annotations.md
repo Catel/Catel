@@ -7,7 +7,7 @@ Data annotations are validation when the specific property is set. For example, 
 
 ## Decorating properties with data annotations
 
-Decorating properties is very simple. For example, to make a property mandatory, use the following definition (note the Required attribute):
+Decorating properties is simple. For example, to make a property mandatory, use the following definition (note the Required attribute):
 
 ```
 /// <summary>

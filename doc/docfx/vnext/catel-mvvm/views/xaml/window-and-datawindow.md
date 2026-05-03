@@ -9,19 +9,19 @@ The Window is a simplified class representing the same logic as the regular `Sys
 
 When developing software in XAML, most developers always need the following three types of windows:
 
--   OK / Cancel buttons for data windows;
--   OK / Cancel / Apply buttons for application settings / options;
--   Close button on windows for action windows.
+- OK / Cancel buttons for data windows;
+- OK / Cancel / Apply buttons for application settings / options;
+- Close button on windows for action windows.
 
 Creating these windows is just boring and the steps are always the same:
 
-The `DataWindow` class makes it much easier to create these basic windows, simply by specifying the mode of the *Window*. By using this window, you can concentrate on the actual implementation and you don’t have to worry about the implementation of the buttons itself, which saves you time! 
+The `DataWindow` class makes it much easier to create these basic windows, by specifying the mode of the *Window*. By using this window, you can concentrate on the actual implementation and you do not have to worry about the implementation of the buttons itself, which saves you time! 
 
 ## Using the DataWindow in MVVM
 
 The easiest object to use with the MVVM Framework is the `DataWindow` class. The `DataWindow` takes fully care of the construction of the view models and the validation of the view models.
 
-The usage of the `DataWindow` class is very simple, once you know how to do it. First of all, you will have to specify the base class in the xaml file like shown below:
+The usage of the `DataWindow` class is simple, once you know how to do it. First of all, you will have to specify the base class in the xaml file like shown below:
 
 ```
 <catel:DataWindow x:Class="Catel.Articles._03___MVVM.Examples.DataWindow.PersonWindow"
@@ -34,9 +34,9 @@ The usage of the `DataWindow` class is very simple, once you know how to do it. 
 </catel:DataWindow>
 ```
 
-As you can see, one thing has changed in regard to a “normal” window definition:
+As shown, one thing has changed in regard to a “normal” window definition:
 
-1.  The type definition has changed from `Window` to `catel:DataWindow`;
+1. The type definition has changed from `Window` to `catel:DataWindow`;
 
 The code-behind is even simpler:
 
@@ -66,16 +66,16 @@ The easiest way to create a new `DataWindow` is to use item templates
 
 There are multiple ways to construct a window with a view model. There are three options that you have to construct a view model:
 
--   **Constructor with view model**
-    This is the best option you can use. This way, it is possible to inject view models into the data window.
--   **Constructor with model**
-    It is possible to save a developer from creating a view model manually by accepting a model as input. Then, the data window will have to construct the view model manually and pass it through to its base constructor.
--   **Empty constructor**
-    If you use an empty constructor, the developer will have to set the data context manually. This something you really should avoid. But hey, it’s all up to you.
+- **Constructor with view model**
+ This is the best option you can use. This way, it is possible to inject view models into the data window.
+- **Constructor with model**
+ It is possible to save a developer from creating a view model manually by accepting a model as input. Then, the data window will have to construct the view model manually and pass it through to its base constructor.
+- **Empty constructor**
+ If you use an empty constructor, the developer will have to set the data context manually. This something you really should avoid. But hey, it is all up to you.
 
 ## Automatic validation
 
-The cool thing about the `DataWindow` is that it automatically wraps the content that a developer defines into an `InfoBarMessageControl`. This way, errors and warnings are shown at the top of the window. Another feature of the `DataWindow` is that it automatically creates a `WarningAndErrorValidator` control and sets the view model as source. This way, all the warnings of the view model are also shown in the `InfoBarMessageControl`. In other words: you don’t have to do anything to implementation validation, except for actually setting the warnings and errors in your view model. And if the validation takes place in the model, you can use the `ViewModelToModelAttribute` so you don’t have to worry about that either.
+The cool thing about the `DataWindow` is that it automatically wraps the content that a developer defines into an `InfoBarMessageControl`. This way, errors and warnings are shown at the top of the window. Another feature of the `DataWindow` is that it automatically creates a `WarningAndErrorValidator` control and sets the view model as source. This way, all the warnings of the view model are also shown in the `InfoBarMessageControl`. In other words: you do not have to do anything to implementation validation, except for actually setting the warnings and errors in your view model. And if the validation takes place in the model, you can use the `ViewModelToModelAttribute` so you do not have to worry about that either.
 
 ## Customizing the buttons
 

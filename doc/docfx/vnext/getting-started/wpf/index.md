@@ -1,7 +1,7 @@
 ﻿---
 title: "Getting started with WPF" 
 ---
-Welcome to the *Getting started* guide for Catel and WPF. In this guide, a very simple application will be created with the most commonly used aspects of Catel and WPF.
+Welcome to the *Getting started* guide for Catel and WPF. In this guide, a simple application will be created with the most commonly used aspects of Catel and WPF.
 
 The application will manage family members and will display the families in separate views.
 

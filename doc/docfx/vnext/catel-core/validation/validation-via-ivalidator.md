@@ -35,7 +35,7 @@ public class ValidatorProvider : ValidatorProviderBase
 
 ## Implementing the IValidator
 
-The IValidator exposes lots of methods to gain the as much freedom as possible. However, most of the methods that are exposed by the interface are hardly used. Therefore there is a convenience base class named ValidatorBase. To create a basic validator, derive from the class and override the methods required for validation.
+The IValidator exposes many methods to gain the as much freedom as possible. However, most of the methods that are exposed by the interface are hardly used. Therefore there is a convenience base class named ValidatorBase. To create a basic validator, derive from the class and override the methods required for validation.
 
 ```
 public class Validator : ValidatorBase<TargetClass>

@@ -47,7 +47,7 @@ _navigationService.Navigate<EmployeeViewModel>();
 
 ## Navigating with parameters
 
-It is very easy to navigate to a new page with parameters. Use the following code:
+It is easy to navigate to a new page with parameters. Use the following code:
 
 ```csharp
 var parameters = new Dictionary<string, object>();

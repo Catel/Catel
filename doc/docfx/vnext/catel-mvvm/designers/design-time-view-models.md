@@ -1,13 +1,13 @@
 ---
 title: "Design-time view models" 
 ---
-Lots of developers are using designers such as the built-in designer in Visual Studio or Expression Blend to design their xaml based applications. Although you should use designers with lots of care, we strive to fully support all designers.
+many developers are using designers such as the built-in designer in Visual Studio or Expression Blend to design their xaml based applications. Although you should use designers with many care, we strive to fully support all designers.
 
 Since Catel 1.3, it is possible to create design-time versions of a view model. This way, you can preview the `UserControl` or `DataWindow` implementations using example data.
 
 To create design-time support for a data window, use the following steps:
 
-1. Create a design time view model. Normally, this can easily be achieved by deriving a new class from the actual view-model and inject the model. Below is an example of a design time version of a person view model:
+1. Create a design time view model. Normally, this can be achieved by deriving a new class from the actual view-model and inject the model. Below is an example of a design time version of a person view model:
 
 ```
 /// <summary>

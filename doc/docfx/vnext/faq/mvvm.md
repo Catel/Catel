@@ -7,20 +7,20 @@ To find out how to create design time data, see the [designers](../catel-mvvm/de
 
 ## How to use events with MVVM?
 
-When writing MVVM, it's "forbidden" (read: not a best practice) to use click handlers (or other UI events) in your view-model. But then should you react to events?
+When writing MVVM, it is "forbidden" (read: not a best practice) to use click handlers (or other UI events) in your view-model. But then should you react to events?
 
-1.  Start with creating a command like you are used to using MVVM. This command will be executed when the event occurs.
-2.  Add a reference to *System.Windows.Interactivity.dll* (ships with Catel). If you have used NuGet to add a reference, it is automatically included for you.
-3.  Add the following namespace definitions to your view declaration:
+1. Start with creating a command like you are used to using MVVM. This command will be executed when the event occurs.
+2. Add a reference to *System.Windows.Interactivity.dll* (ships with Catel). If you have used NuGet to add a reference, it is automatically included for you.
+3. Add the following namespace definitions to your view declaration:
 
-    ```
+ ```
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:catel="http://schemas.catelproject.com"
     ```
 
-4.  Use the following code to convert an event to a command:
+4. Use the following code to convert an event to a command:
 
-    ```
+ ```
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="[YourEvent]">
             <catel:EventToCommand Command="{Binding [YourCommand]}" DisableAssociatedObjectOnCannotExecute="False" />
@@ -116,10 +116,10 @@ Using this technique, it is even possible to determine the view model of any vie
 
 ## How can I inject or manipulate the view model of a UserControl?
 
-The *UserControl* is a very powerful control. It allows lazy loaded dynamic view model construction. However, sometimes you just don't want the user control to dynamically create the view model. Luckily, the user control instantiates a new view model with this logic:
+The *UserControl* is a powerful control. It allows lazy loaded dynamic view model construction. However, sometimes you do not want the user control to dynamically create the view model. Luckily, the user control instantiates a new view model with this logic:
 
-1.  The *DataContext* of the control can be injected into a constructor of the view model
-2.  The view model has an empty constructor
+1. The *DataContext* of the control can be injected into a constructor of the view model
+2. The view model has an empty constructor
 
 You can set the DataContext of the control to a view model, and this way "inject" a view model into a control instead of letting it be created first. In fact, the user control first checks whether the DataContext is already a valid view model for the user control. If so, it keeps it that way.
 

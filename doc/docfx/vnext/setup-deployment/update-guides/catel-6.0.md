@@ -9,7 +9,7 @@ Encountered issues while upgrading to this version? Add them here to help out ot
 
 ## Generic property registrations
 
-It's recommended to use `Catel.Fody`. This tool will automatically detect the version of Catel being used and use the correct syntax to register properties.
+It is recommended to use `Catel.Fody`. This tool will automatically detect the version of Catel being used and use the correct syntax to register properties.
 
 If not using `Catel.Fody`, the property registrations of the (view) models has changed to be generic by default. This is done to improve performance of the underlying property bag.
 

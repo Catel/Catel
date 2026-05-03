@@ -1,7 +1,7 @@
 ﻿---
 title: "UpdateBindingOnTextChanged" 
 ---
-The `UpdateBindingOnTextChange` is a very useful behavior which allows to delay a binding update on the `TextChanged` event of a `TextBox`. This way, it is possible to implement search boxes that only start a search after a specific time when no new key presses have occurred. For example, when a user types a new search string, and the user doesn't enter a new key for 500 ms, the binding is updated.
+The `UpdateBindingOnTextChange` is a useful behavior which allows to delay a binding update on the `TextChanged` event of a `TextBox`. This way, it is possible to implement search boxes that only start a search after a specific time when no new key presses have occurred. For example, when a user types a new search string, and the user does not enter a new key for 500 ms, the binding is updated.
 
 1) Add the following XML namespaces:
 

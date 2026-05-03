@@ -33,24 +33,24 @@ var viewModelType = _viewModelLocator.ResolveViewModel(typeof(MyView));
 
 By default, the *IViewModelLocator* uses the following naming conventions to resolve view models:
 
--   [UP].ViewModels.[VW]ViewModel
--   [UP].ViewModels.[VW]ControlViewModel
--   [UP].ViewModels.[VW]WindowViewModel
--   [UP].ViewModels.[VW]PageViewModel
--   [UP].ViewModels.[VW]ActivityViewModel
--   [UP].ViewModels.[VW]FragmentViewModel
--   [AS].ViewModels.[VW]ViewModel
--   [AS].ViewModels.[VW]ControlViewModel
--   [AS].ViewModels.[VW]WindowViewModel
--   [AS].ViewModels.[VW]PageViewModel
--   [AS].ViewModels.[VW]ActivityViewModel
--   [AS].ViewModels.[VW]FragmentViewModel
--   [CURRENT].[VW]ViewModel
--   [CURRENT].[VW]ControlViewModel
--   [CURRENT].[VW]WindowViewModel
--   [CURRENT].[VW]PageViewModel
--   [CURRENT].[VW]ActivityViewModel
--   [CURRENT].[VW]FragmentViewModel
+- [UP].ViewModels.[VW]ViewModel
+- [UP].ViewModels.[VW]ControlViewModel
+- [UP].ViewModels.[VW]WindowViewModel
+- [UP].ViewModels.[VW]PageViewModel
+- [UP].ViewModels.[VW]ActivityViewModel
+- [UP].ViewModels.[VW]FragmentViewModel
+- [AS].ViewModels.[VW]ViewModel
+- [AS].ViewModels.[VW]ControlViewModel
+- [AS].ViewModels.[VW]WindowViewModel
+- [AS].ViewModels.[VW]PageViewModel
+- [AS].ViewModels.[VW]ActivityViewModel
+- [AS].ViewModels.[VW]FragmentViewModel
+- [CURRENT].[VW]ViewModel
+- [CURRENT].[VW]ControlViewModel
+- [CURRENT].[VW]WindowViewModel
+- [CURRENT].[VW]PageViewModel
+- [CURRENT].[VW]ActivityViewModel
+- [CURRENT].[VW]FragmentViewModel
 
 For more information about naming conventions, see [Naming conventions]({{< relref "catel-mvvm/locators-naming-conventions/naming-conventions.md" >}})
 
@@ -62,7 +62,7 @@ _viewModelLocator.NamingConventions.Add("MyCustomAssembly.ViewModels.[VW]ViewMod
 
 ## Registering custom view models
 
-Sometimes, a class doesn't follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:
+Sometimes, a class does not follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:
 
 ```csharp
 _viewModelLocator.Register(typeof(MyViewNotFollowingNamingConvention), typeof(MyViewModel));

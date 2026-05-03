@@ -3,8 +3,8 @@ title: "AutoCompletionBehavior"
 ---
 To enable auto completion features, once can use the services and behaviors provided by Catel. There are two components required for auto completion:
 
-1.  AutoCompletionService =\> takes care of the actual filtering
-2.  AutoCompletionBehavior =\> can be attached to a TextBox to support a dropdown with recommended values
+1. AutoCompletionService =\> takes care of the actual filtering
+2. AutoCompletionBehavior =\> can be attached to a TextBox to support a dropdown with recommended values
 
 The auto completion features looks like the screenshot below:
 

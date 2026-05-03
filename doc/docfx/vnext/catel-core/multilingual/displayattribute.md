@@ -1,13 +1,13 @@
 ﻿---
 title: "DisplayAttribute" 
 ---
-Catel implements a custom implementation of the `DisplayAttribute` known in the `DataAnnotations` namespace of .NET. This attribute uses the *ILanguageService* so you can easily have all translations in a single location when using Catel.
+Catel implements a custom implementation of the `DisplayAttribute` known in the `DataAnnotations` namespace of .NET. This attribute uses the *ILanguageService* so you can have all translations in a single location when using Catel.
 
 Note that this is still work in progress, we would love to support this, but MS sealed the class so we cannot derive from it (at the moment)
 
 ## Using the attribute
 
-Using the attribute is really easy. Just put the attribute on top of any method, property, field or parameter like this:
+Using the attribute is really easy. put the attribute on top of any method, property, field or parameter like this:
 
 ```
 public enum Condition

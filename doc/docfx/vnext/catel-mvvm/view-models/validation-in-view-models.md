@@ -1,13 +1,13 @@
 ﻿---
 title: "Validation in view models" 
 ---
-Validation is very important to provide both feedback to the user, but also to make sure that no invalid data reaches the model or database. Catel offers several ways to implement validation. All options are described in this part of the documentation.
+Validation is important to provide both feedback to the user, but also to ensure that no invalid data reaches the model or database. Catel offers several ways to implement validation. All options are described in this part of the documentation.
 
 ## Validation in models via mappings
 
 The best way is to put validation into a model. Most model objects nowadays implement `INotifyPropertyChanged` and `IDataErrorInfo`, the most important classes that are required to use mappings from/to a model inside a view model.
 
-The great advantage of mapping properties from/to models automatically using Catel is that you don't have to write lots of plumbing yourself (getting and setting values in the model and view model). However, if the model implements `INotifyPropertyChanged` and *IDataErrorInfo`, Catel also automatically uses the validation from the model. For example, if there is a `Person` model that checks if the `FirstName` and `LastName` are entered, why rewrite this validation again in the view model?
+The great advantage of mapping properties from/to models automatically using Catel is that you do not have to write many plumbing yourself (getting and setting values in the model and view model). However, if the model implements `INotifyPropertyChanged` and *IDataErrorInfo`, Catel also automatically uses the validation from the model. For example, if there is a `Person` model that checks if the `FirstName` and `LastName` are entered, why rewrite this validation again in the view model?
 
 There are two ways to use automatic mappings.
 
@@ -51,12 +51,12 @@ If the `Person.FirstName` provides an error via the `IDataErrorInfo` interface, 
 
 ### Mapping via ExposeAttribute
 
-Mapping a property via the `ExposeAttribute` is even more simple, but has some disadvantages. First, let's talk about the disadvantages before showing the code:
+Mapping a property via the `ExposeAttribute` is even more simple, but has some disadvantages. First, consider the disadvantages before showing the code:
 
-1.  Catel uses the *ICustomTypeDescriptor* interface to implement this behavior, and the interface is only available in WPF.
-2.  The properties are not actually created, so you cannot use them inside your view model as real properties.
+1. Catel uses the *ICustomTypeDescriptor* interface to implement this behavior, and the interface is only available in WPF.
+2. The properties are not actually created, so you cannot use them inside your view model as real properties.
 
-In other words, the `ExposeAttribute` is only very useful if 1) you are using WPF and 2) if the property is not used inside the view model but only declared to protect the model from the outside world. If both of these constraints are true, then the `ExposeAttribute` is definitely worth taking a look at. The usage is very simple:
+In other words, the `ExposeAttribute` is only useful if 1) you are using WPF and 2) if the property is not used inside the view model but only declared to protect the model from the outside world. If both of these constraints are true, then the `ExposeAttribute` is definitely worth taking a look at. The usage is simple:
 
 ```
 /// <summary>
@@ -78,18 +78,18 @@ private  Person Person
 public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(Person));
 ```
 
-Simply declare the model property and decorate it with one or multiple `ExposeAttribute` instances. Not only are the properties automatically available for binding, the view model also checks for errors and automatically maps these as well.
+declare the model property and decorate it with one or multiple `ExposeAttribute` instances. Not only are the properties automatically available for binding, the view model also checks for errors and automatically maps these as well.
 
 ## Validation in view models
 
 Until now, we only spoke about automatic validation for validation that was written in the model. However, sometimes it is required to write validation inside the view model as well. One reason might be that the model is a POCO object not providing any validation. Or, sometimes there is a logical error that has nothing to do with the model, but should be shown to the user anyway.
 
-In such a case, Catel offers lots of possibilities to write custom validation inside the view model. Below are the possibilities:
+In such a case, Catel offers many possibilities to write custom validation inside the view model. Below are the possibilities:
 
--   Field warnings
--   Field errors
--   Business rule warnings
--   Business rule errors
+- Field warnings
+- Field errors
+- Business rule warnings
+- Business rule errors
 
 The difference between a field and business rule is that a field error or warning is specific for a property. These are returned via `IDataErrorInfo["propertyName"]`. A business rule is a rule that applies to multiple fields or even a whole entity. Business rule validations are returned via `IDataErrorInfo.Error`.
 
@@ -135,13 +135,13 @@ protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult
 
 ## Translating model validation in the view model
 
-Thanks to the validation system in Catel, it is very easy to implement very advanced validation features in view models. The example below shows how to translate errors that are added to a model in the Data Access Layer or validation layer. Assume that the following pseudo code is used to set an error on a model in the DAL:
+Thanks to the validation system in Catel, it is easy to implement very advanced validation features in view models. The example below shows how to translate errors that are added to a model in the Data Access Layer or validation layer. Assume that the following pseudo code is used to set an error on a model in the DAL:
 
 ```
 SetFieldError(“FirstName”, “FirstNameRequired”);
 ```
 
-All errors that are mapped from the model to the view model automatically are available in the `validationResults` parameter. This way, the error can be easily translated:
+All errors that are mapped from the model to the view model automatically are available in the `validationResults` parameter. This way, the error can be translated:
 
 ```
 /// <summary>
@@ -161,7 +161,7 @@ protected override void ValidateFields(List<IFieldValidationResult> validationRe
 }
 ```
 
-Of course this is not something you want to actually do in your view model, so you’ll probably have to write a helper class that translates the validation for you. You might or might not like delaying the translation of the model errors to as close as the view, but it shows how extremely powerful the improved validation of Catel is. And if you think a bit about it, wouldn't it be a good idea to delay the translation from the server to the actual client to as close as the view…?
+this is not something you want to actually do in your view model, so you will probably have to write a helper class that translates the validation for you. You might or might not like delaying the translation of the model errors to as close as the view, but it shows how extremely powerful the improved validation of Catel is. And if you think somewhat about it, would not it be a good idea to delay the translation from the server to the actual client to as close as the view…?
 
 ## Validating via annotations
 

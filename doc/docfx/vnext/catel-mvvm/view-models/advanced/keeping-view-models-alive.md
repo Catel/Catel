@@ -11,7 +11,7 @@ CloseViewModelOnUnloaded = false;
 
 The view model will now be re-used when the view is loaded into the visual tree again.
 
-Keep in mind that the developer is responsible for actually closing the view model
+Note that the developer is responsible for actually closing the view model
 
 [Orc.Controls](https://github.com/wildgums/orc.controls) contains an implementation of a `TabControl` that gives more control over the lifetime of the tabs
 

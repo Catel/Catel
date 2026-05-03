@@ -1,7 +1,7 @@
 ---
 title: "Validation controls" 
 ---
-There are some very important controls in Catel which help with visualizing the validation results.
+There are some important controls in Catel which help with visualizing the validation results.
 
 ## InfoBarMessageControl
 
@@ -29,7 +29,7 @@ The `WarningAndErrorValidator` control is not visible to the end user. The only 
 <catel:WarningAndErrorValidator Source="{Binding MyObject}" />
 ```
 
-The `WarningAndErrorValidator` needs to be placed inside an `InfoBarMessageControl`. The control then subscribes to all property changed events to make sure it receives all change notifications. Then, on every property change, the control checks whether the sender either implements the `IDataErrorInfo` or `IDataWarningInfo` interfaces.
+The `WarningAndErrorValidator` needs to be placed inside an `InfoBarMessageControl`. The control then subscribes to all property changed events to ensure it receives all change notifications. Then, on every property change, the control checks whether the sender either implements the `IDataErrorInfo` or `IDataWarningInfo` interfaces.
 
 When an error or warning is found on the changed property, the control invokes the corresponding events so the `InfoBarMessageControl` can show the right information. When an error or warning no longer exists in a model, a *Removed* event is invoked so the `InfoBarMessageControl` knows that the error or warning should be removed from the summary.
 
@@ -37,11 +37,11 @@ When an error or warning is found on the changed property, the control invokes t
 
 A `InfoBarMessageControl` is automatically added to the `DataWindow`, if you want to use a different style for this `InfoBarMessageControl`, you must override the default style, add your own `InfoBarMessageControl` and disable the default `InfoBarMessageControl` from the `DataWindow`.
 
-1.  Create a custom style based on the [default style](https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml).
-2.  Change the x:Key from  x:Key="{x:Type local:InfoBarMessageControl}" to  x:Key="yourCustomStyleKey"
-3.  Set the InfoBarMessageControlGenerationMode to None
+1. Create a custom style based on the [default style](https://github.com/Catel/Catel/blob/master/src/Catel.MVVM/Themes/InfoBarMessageControl.generic.xaml).
+2. Change the x:Key from x:Key="{x:Type local:InfoBarMessageControl}" to x:Key="yourCustomStyleKey"
+3. Set the InfoBarMessageControlGenerationMode to None
 
-    ```
+ ```
             /// <summary>
             /// Initializes a new instance of the <see cref="DataWindow"/> class.
             /// </summary>
@@ -56,9 +56,9 @@ A `InfoBarMessageControl` is automatically added to the `DataWindow`, if you wan
             }
     ```
 
-4.  Add a new `InfoBarMessageControl` as root control to your `DataWindow` and set the style.
+4. Add a new `InfoBarMessageControl` as root control to your `DataWindow` and set the style.
 
-    ```
+ ```
     <catel:InfoBarMessageControl  Style="{DynamicResource yourCustomStyleKey}">
             <Grid>
                 <catel:WarningAndErrorValidator Source="{Binding}" />

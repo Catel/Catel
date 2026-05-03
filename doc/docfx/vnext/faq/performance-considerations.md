@@ -1,7 +1,7 @@
 ﻿---
 title: "Performance considerations" 
 ---
-While developing software, it is very important to keep an eye on the performance. Catel itself does perform very well, but there are some caveats that you should be aware of. If you have the feeling that the application is laggy or slow, or if you want to make sure to squeeze the best performance out of Catel, consider taking a closer look at the checklist below.
+While developing software, it is important to keep an eye on the performance. Catel itself does perform very well, but there are some caveats that you should be aware of. If you have the feeling that the application is laggy or slow, or if you want to ensure to squeeze the best performance out of Catel, consider taking a closer look at the checklist below.
 
 Use the [ApiCop feature]({{< relref "catel-core/apicop/_index.md" >}}) to get a detailed advisory report on your software
 
@@ -9,7 +9,7 @@ Use the [ApiCop feature]({{< relref "catel-core/apicop/_index.md" >}}) to get a 
 
 ### Disable the call to LogManager.AddDebugListener
 
-The `DebugListener` is a very useful class while developing an application. It throws all the logging of Catel to the output window of Visual Studio which allows you to view exactly what happens behind the scenes. However, writing all these logs to the output window is very expensive and might cause an application to perform badly.
+The `DebugListener` is a useful class while developing an application. It throws all the logging of Catel to the output window of Visual Studio which allows you to view exactly what happens behind the scenes. However, writing all these logs to the output window is very expensive and might cause an application to perform badly.
 
 Therefore, it is important to disable any call to `LogManager.AddDebugListener` when releasing an application or while performance testing.
 
@@ -23,7 +23,7 @@ Best way to deal with this is to wrap it inside the `DEBUG` define:
 
 ### Preloading assemblies into the AppDomain
 
-Preloading assemblies might result in a slower startup time, but will not cause slow downs for reflection or assembly loading during the actual application execution. To preload assemblies using Catel, simply call this extension method:
+Preloading assemblies might result in a slower startup time, but will not cause slow downs for reflection or assembly loading during the actual application execution. To preload assemblies using Catel, call this extension method:
 
 **
 **
@@ -54,9 +54,9 @@ To improve performance for serialization, [warm up the serializers]({{< relref "
 
 ### Set SkipSearchingForInfoBarMessageControl on UserControl to true
 
-By default, Catel assumes that an InfoBarMessageControl is located on any window. However, it might be that this control is not located on a window that contains an instance of the UserControl class. This might decrease the performance, especially when lots of user controls are used in a hierarchical way. The cause is that the UserControlLogic searches for an InfoBarMessageControl to register the view model to.
+By default, Catel assumes that an InfoBarMessageControl is located on any window. However, it might be that this control is not located on a window that contains an instance of the UserControl class. This might decrease the performance, especially when many user controls are used in a hierarchical way. The cause is that the UserControlLogic searches for an InfoBarMessageControl to register the view model to.
 
-If no *InfoBarMessageControl* is located on a container, make sure to set *SkipSearchingForInfoBarMessageControl* to *true*.
+If no *InfoBarMessageControl* is located on a container, ensure to set *SkipSearchingForInfoBarMessageControl* to *true*.
 
 ```
 // Use when not using styles and transitions
@@ -75,7 +75,7 @@ When modifying a large collection of items, it is not required to raise change e
 
 ### Use the FastObservableDictionary
 
-Designed in a similar fashion to the `FastObservableCollection`, the `FastObservableDictionary` is meant  for Views that need to leverage the power of a dictionary for controls such as `ComboBox` without sacrificing performance and providing real-time feedback to the user.
+Designed in a similar fashion to the `FastObservableCollection`, the `FastObservableDictionary` is meant for Views that need to leverage the power of a dictionary for controls such as `ComboBox` without sacrificing performance and providing real-time feedback to the user.
 
 In addition to implementing `FastObservableDictionary`, any implementations of a `ComboBox` should leverage a `VirtualizingStackPanel` to minimize the amount of elements rendered at a given time. An example is provided below:
 
@@ -93,7 +93,7 @@ In addition to implementing `FastObservableDictionary`, any implementations of a
 
 ### Specify throttling on the ViewModelBase
 
-The *ViewModelBase* allows the specify the throttling of the property change notifications. In normal situations it is best to directly raise property change notifications. However, when a lot of properties change a lot within a very short timeframe, it might be interesting to enable throttling. By using throttling, the change notifications are not directly sent to the UI but instead added to a dictionary. Then each time the *ThottlingRate* is reached, the change notifications are sent in batches to the view. If the same property has changed several times in a specific time frame, it will only be raised once which might give a performance boost in very specific situations.
+The *ViewModelBase* allows the specify the throttling of the property change notifications. In normal situations it is best to directly raise property change notifications. However, when many properties change a lot within a very short timeframe, it might be interesting to enable throttling. By using throttling, the change notifications are not directly sent to the UI but instead added to a dictionary. Then each time the *ThottlingRate* is reached, the change notifications are sent in batches to the view. If the same property has changed several times in a specific time frame, it will only be raised once which might give a performance boost in very specific situations.
 
 By default, throttling is disabled but can be enabled by setting the *ThrottlingRate* property:
 

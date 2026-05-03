@@ -7,7 +7,7 @@ For better performance, use the `FastMemberInvoker` instead
 
 ## Setting or getting properties of objects
 
-In lots of cases, you need to possibility to set or get properties of an object via reflection. This behavior is implemented in the `PropertyHelper` class. Below are a few examples.
+In many cases, you need to possibility to set or get properties of an object via reflection. This behavior is implemented in the `PropertyHelper` class. Below are a few examples.
 
 ### Check if a property is available on an object
 

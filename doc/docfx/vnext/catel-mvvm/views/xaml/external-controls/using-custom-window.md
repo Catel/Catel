@@ -5,7 +5,7 @@ In this part of the documentation, the `RadWindow` of Telerik will be used as an
 
 ## Creating the base class with behavior
 
-The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it `WindowBase` (to make it as "external control company independent" as possible). Below is the code for the window definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as you can see in the code below.
+The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it `WindowBase` (to make it as "external control company independent" as possible). Below is the code for the window definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as shown, in the code below.
 
 Because the `RadWindow` of Telerik does not close the window when the `DialogResult` is set, this window subscribes to the `ViewModelClosed` event to close the window
 
@@ -88,7 +88,7 @@ public class Window : RadWindow, IDataWindow
 }
 ```
 
-You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) can't handle abstract base classes
+You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) cannot handle abstract base classes
 
 ## Handling Close Event
 Since the latest upgrade to Catel 5.x, the [UIVisualizerService]({{< relref "catel-mvvm/services/ui-visualizer-service.md" >}}) has been modified in terms of how `Close` events are handled. Currently, a non-generic `EventHandler` is utilized; this would present a problem if a window other than `DataWindow` is utilized and the `Close` event handler is generic; a simple cast from `EventHandler` to `EventHandler<>` is not possible without reflection. For our example here, the `RadWindow` utilizes `EventHandler<WindowClosedEventArgs>`. In order to be able to utilize `UIVisualizerService` without any exception, the `HandleCloseSubscription` will need to be overridden. See example below:
@@ -154,7 +154,7 @@ public interface ICustomUIVisualizerService : IUIVisualizerService
 }
 ```
 
-Of course, this will need to be registered with the service collection to be utilized correctly:
+this will need to be registered with the service collection to be utilized correctly:
 
 ```csharp
 services.AddSingleton<ICustomUIVisualizerService, CustomUIVisualizerService>();

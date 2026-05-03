@@ -4,9 +4,9 @@ title: "ModelBase"
 The *ModelBase* class is a generic base class that can be used for all your data classes.
 
 - **Support property changed notifications**
-  The class supports the *INotifyPropertyChanging* and *INotifyPropertyChanged* interfaces so this class can easily be used in applications to reflect changes to the user.
+ The class supports the *INotifyPropertyChanging* and *INotifyPropertyChanged* interfaces so this class can be used in applications to reflect changes to the user.
 - **Backup & revert**
-  The class implements the *IEditableObject* interface which makes it possible to create a state of the object. Then all properties can be edited, and finally, the changes can be applied or cancelled.
+ The class implements the *IEditableObject* interface which makes it possible to create a state of the object. Then all properties can be edited, and finally, the changes can be applied or cancelled.
 
 ## Using the class
 
@@ -27,11 +27,11 @@ public class MyObject : ModelBase
 
 ### Defining properties
 
-Defining properties for the class is very easy, and works the same like dependency properties. The advantages of this way of defining properties are:
+Defining properties for the class is easy, and works the same like dependency properties. The advantages of this way of defining properties are:
 
--   You can specify a default value for a property which will be used when the class is constructed;
--   The *PropertyData* object can be used to retrieve property values so the compiler checks for errors;
--   You can directly subscribe to change notifications, and all properties automatically support *INotifyPropertyChanged* out of the box.
+- You can specify a default value for a property which will be used when the class is constructed;
+- The *PropertyData* object can be used to retrieve property values so the compiler checks for errors;
+- You can directly subscribe to change notifications, and all properties automatically support *INotifyPropertyChanged* out of the box.
 
 Below is the code that defines a new property Name of type string:
 
@@ -53,7 +53,7 @@ public static readonly PropertyData NameProperty = RegisterProperty("Name", type
 
 ### Default values for reference types
 
-In lots of cases, a default value for reference types is required in the property definitions. However, and you might have noticed this behavior in for example dependency properties, using an instance as default value can result in unexpected behavior.
+In many cases, a default value for reference types is required in the property definitions. However, and you might have noticed this behavior in for example dependency properties, using an instance as default value can result in unexpected behavior.
 
 Below is an example of a "regular" property registration using a default value for a collection property:
 
@@ -71,7 +71,7 @@ This way, every time a new value is needed, the callback will be invoked to crea
 
 ## Functionality provided out of the box
 
-The `ModelBase` provides a lot of functionality out of the box. A few points I want to mention are:
+The `ModelBase` provides many functionality out of the box. A few points I want to mention are:
 
 **INotifyPropertyChanged**
 
@@ -81,5 +81,5 @@ All properties registered using the *RegisterProperty* method automatically take
 
 The data object can automatically create an internal backup and restore it, if required, using the *IEditableObject* interface.
 
-Keep in mind that this class is not suitable for database communication, there are much better ways to handle this (ORM mappers such as Entity Framework, NHibernate, LLBLGen Pro, etc.).
+Note that this class is not suitable for database communication, there are much better ways to handle this (ORM mappers such as Entity Framework, NHibernate, LLBLGen Pro, etc.).
 

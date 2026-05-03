@@ -1,7 +1,7 @@
 ﻿---
 title: "Configuration" 
 ---
-Catel makes it very easy to use configurations on all supported platforms. 
+Catel makes it easy to use configurations on all supported platforms. 
 
 Below is a table to explain what technology is used per platform to retrieve and store configuration values.
 
@@ -22,7 +22,7 @@ var mySetting = configurationService.GetValue<int>("mySetting", 42);
 
 The code above will retrieve the values from the configuration. If the configuration value does not exist, it will return *42* as default value.
 
-It's best to retrieve the service from the dependency resolver or let it be injected into the classes using it
+It is best to retrieve the service from the dependency resolver or let it be injected into the classes using it
 
 ## Setting values to the configuration
 
@@ -33,11 +33,11 @@ var configurationService = new ConfigurationService();
 configurationService.SetValue("mySetting", 42);
 ```
 
-It's best to retrieve the service from the dependency resolver or let it be injected into the classes using it
+It is best to retrieve the service from the dependency resolver or let it be injected into the classes using it
 
 ## Customizing the way values are stored
 
-The *ConfigurationService* is written with extensibility in mind. Though it defaults to the .NET local storage system, it is very easy to create a customized configuration service. Below is an example on how to customize the service so it reads and writes values from/to a database.
+The *ConfigurationService* is written with extensibility in mind. Though it defaults to the .NET local storage system, it is easy to create a customized configuration service. Below is an example on how to customize the service so it reads and writes values from/to a database.
 
 ```
 public class DbConfigurationService : ConfigurationService
@@ -83,6 +83,6 @@ public class DbConfigurationService : ConfigurationService
 }
 ```
 
-Don't forget to register the customized *ConfigurationService* in the *ServiceLocator*
+do not forget to register the customized *ConfigurationService* in the *ServiceLocator*
 
 

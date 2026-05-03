@@ -1,7 +1,7 @@
 ﻿---
 title: "Commands & events" 
 ---
-Commanding is supported by Catel. Catel supports Command classes, which is also known as `RelayCommand` or `DelegateCommand` in other frameworks. Defining a command on a view model is very easy, as you can see in the code below:
+Commanding is supported by Catel. Catel supports Command classes, which is also known as `RelayCommand` or `DelegateCommand` in other frameworks. Defining a command on a view model is easy, as shown, in the code below:
 
 ```
 // TODO: Move code below to constructor
@@ -30,11 +30,11 @@ private void OnEditExecute()
 }
 ```
 
-There are some people who don’t like the `ICommand` implementations. For example, Caliburn (Micro) uses convention and does not require the creation of a command. There are a few downsides for that:
+There are some people who do not like the `ICommand` implementations. For example, Caliburn (Micro) uses convention and does not require the creation of a command. There are a few downsides for that:
 
--   It requires you to make sure the name of the control is the same as the method;
--   It is not clear that it is actually a command if you are not fully familiar with the conventions;
--   The methods need to be public (otherwise, how are you going to invoke the commands during unit tests?), which make them freely available (and that’s not something we like);
--   You will always have to invoke CanExecute yourself again in Execute, because you have no guarantee that the source of Execute is actually the convention mapping;
--   There is no way to manually refresh the CanExecute state on the bound controls.
+- It requires you to ensure the name of the control is the same as the method;
+- It is not clear that it is actually a command if you are not fully familiar with the conventions;
+- The methods need to be public (otherwise, how are you going to invoke the commands during unit tests?), which make them freely available (and that is not something we like);
+- You will always have to invoke CanExecute yourself again in Execute, because you have no guarantee that the source of Execute is actually the convention mapping;
+- There is no way to manually refresh the CanExecute state on the bound controls.
 

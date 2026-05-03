@@ -1,11 +1,11 @@
 ---
 title: 'Using the item templates'
 ---
-There are lots of item templates available for Catel so it is really easy to develop new views very fast.
+There are many item templates available for Catel so it is really easy to develop new views very fast.
 
 ## Difference between logic in view base or behavior
 
-As you might have noticed, there are lots of "double" item templates. However, there is a substantial difference between the item templates that implement the logic in the view base or the logic in a behavior.
+As you might have noticed, there are many "double" item templates. However, there is a substantial difference between the item templates that implement the logic in the view base or the logic in a behavior.
 
 Shortly said, a view with the logic in the view base is defined like this:
 
@@ -26,21 +26,21 @@ The view model is the easiest and smallest item template available. The question
 
 ## User control
 
-The user control templates create a user control deriving from UserControl. First it is very important to make a decision whether the logic should be implemented in the view base or a behavior. Then, select the appropriate template:
+The user control templates create a user control deriving from UserControl. First it is important to make a decision whether the logic should be implemented in the view base or a behavior. Then, select the appropriate template:
 
 ![](../../images/setup-deployment/code-snippets-templates/using-the-item-templates/usercontrol.png)
 
-The item template will assume that a view model with the same name is already created. For example, if a view with the name *PersonView* is created, the template assumes that the view model name is *PersonViewModel*. If you prefer a different naming convention, simply change the view model type name after the item has been created.
+The item template will assume that a view model with the same name is already created. For example, if a view with the name *PersonView* is created, the template assumes that the view model name is *PersonViewModel*. If you prefer a different naming convention, change the view model type name after the item has been created.
 
 Unfortunately, there is a bug in the item templates system of Visual Studio so it is not possible to also set the namespace of the view models to [ProjectRootNamespace].ViewModels, so this has to be done manually
 
 ## Window
 
-The window templates create a window deriving from DataWindow. First it is very important to make a decision whether the logic should be implemented in the view base or a behavior. Then, select the appropriate template:
+The window templates create a window deriving from DataWindow. First it is important to make a decision whether the logic should be implemented in the view base or a behavior. Then, select the appropriate template:
 
 ![](../../images/setup-deployment/code-snippets-templates/using-the-item-templates/window.png)
 
-The item template will assume that a view model with the same name is already created. For example, if a view with the name PersonView is created, the template assumes that the view model name is PersonViewModel. If you prefer a different naming convention, simply change the view model type name after the item has been created.
+The item template will assume that a view model with the same name is already created. For example, if a view with the name PersonView is created, the template assumes that the view model name is PersonViewModel. If you prefer a different naming convention, change the view model type name after the item has been created.
 
 Unfortunately, there is a bug in the item templates system of Visual Studio so it is not possible to also set the namespace of the view models to [ProjectRootNamespace].ViewModels, so this has to be done manually
 

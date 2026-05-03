@@ -1,7 +1,7 @@
 ﻿---
 title: "Multilingual / Localization" 
 ---
-Making an application multilingual is a very common feature request nowadays. Therefore Catel provides the resources in several languages and provides the *LanguageService* to give the developers full control over the translation process in their applications.
+Making an application multilingual is a common feature request nowadays. Therefore Catel provides the resources in several languages and provides the *LanguageService* to give the developers full control over the translation process in their applications.
 
 ## Setting up the LanguageService
 
