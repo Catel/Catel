@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Catel.Fody | Catel Documentation </title>
+      <title>Exposing model properties on view models | Catel Documentation </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Catel.Fody | Catel Documentation ">
+      <meta name="title" content="Exposing model properties on view models | Catel Documentation ">
       
       
       <link rel="icon" href="../../favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/index.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/exposing-properties.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -87,92 +87,53 @@
         <article data-uid="">
 
 
-<p>Catel.Fody is an add-in for <a href="https://github.com/Fody/Fody">Fody</a>, an extensible tool for weaving .NET assemblies at compile time. It automatically rewrites simple auto-properties into full Catel dependency-property style properties, weaves argument checks, improves logging calls, and more — all without you having to write boilerplate code.</p>
-<h2 id="features">Features</h2>
-<table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="weaving-properties.html">Property weaving</a></td>
-<td>Rewrites auto-properties on <code>ObservableObject</code>, <code>ModelBase</code>, and <code>ViewModelBase</code></td>
-</tr>
-<tr>
-<td><a href="weaving-properties.html#computed-properties">Computed property notifications</a></td>
-<td>Automatically raises <code>PropertyChanged</code> for calculated properties</td>
-</tr>
-<tr>
-<td><a href="weaving-arguments.html">Argument check weaving</a></td>
-<td>Converts argument-check attributes into actual guard code</td>
-</tr>
-<tr>
-<td><a href="#weaving-logging">Logging weaving</a></td>
-<td>Replaces <code>LogManager.GetCurrentClassLogger()</code> with the faster <code>LogManager.GetLogger(typeof(...))</code> form</td>
-</tr>
-<tr>
-<td><a href="exposing-properties.html">Exposed properties</a></td>
-<td>Exposes model properties on a view model using <code>[Expose]</code></td>
-</tr>
-<tr>
-<td><a href="configuration.html">Configuration</a></td>
-<td>Fine-grained control over which features are enabled</td>
-</tr>
-</tbody>
-</table>
-<h2 id="quick-start">Quick start</h2>
+<p>When using Catel's MVVM pattern, a view model often needs to forward properties from an underlying model. Without Catel.Fody, each forwarded property requires a full <code>ViewModelToModel</code> mapping plus a registered <code>PropertyData</code> field — a lot of repetitive code. The <code>[Expose]</code> attribute, weaved by Catel.Fody, eliminates this boilerplate.</p>
+<h2 id="the-problem-manual-property-forwarding">The problem: manual property forwarding</h2>
+<p>Using <code>[ViewModelToModel]</code> directly requires registering both the model property and the forwarded property:</p>
+<pre><code class="lang-csharp">[Model]
+public Person Person
+{
+    get { return GetValue&lt;Person&gt;(PersonProperty); }
+    private set { SetValue(PersonProperty, value); }
+}
+
+public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
+
+[ViewModelToModel(&quot;Person&quot;)]
+public string FirstName
+{
+    get { return GetValue&lt;string&gt;(FirstNameProperty); }
+    set { SetValue(FirstNameProperty, value); }
+}
+
+public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string));
+</code></pre>
+<p>For a model with many properties, this becomes very verbose.</p>
+<h2 id="the-solution-expose">The solution: [Expose]</h2>
+<p>The <code>[Expose]</code> attribute, combined with property weaving, lets you declare which model properties should be forwarded without writing the individual forwarded properties at all:</p>
+<pre><code class="lang-csharp">[Model]
+[Expose(&quot;FirstName&quot;)]
+[Expose(&quot;MiddleName&quot;)]
+[Expose(&quot;LastName&quot;)]
+private Person Person { get; set; }
+</code></pre>
+<p>Catel.Fody will:</p>
 <ol>
-<li>Install the NuGet package:</li>
+<li>Register a dynamic property on the view model for each exposed name.</li>
+<li>Set up a <code>ViewModelToModel</code> mapping between that dynamic property and the corresponding model property.</li>
 </ol>
-<pre><code>dotnet add package Catel.Fody
+<p>The result is functionally identical to defining each <code>[ViewModelToModel]</code> property by hand, including automatic validation synchronization between the model and the view model.</p>
+<h2 id="how-validation-synchronization-works">How validation synchronization works</h2>
+<p>When you expose properties from a model decorated with <code>[Model]</code>, Catel automatically copies validation results from the model to the view model. This means that validation errors on <code>Person.FirstName</code> are reflected directly on the <code>FirstName</code> property of the view model — no extra code required.</p>
+<h2 id="disabling-exposed-property-weaving">Disabling exposed property weaving</h2>
+<p>To disable this feature for the entire project, set <a href="configuration.html#weaveexposedproperties"><code>WeaveExposedProperties</code></a> to <code>false</code> in <code>FodyWeavers.xml</code>:</p>
+<pre><code class="lang-xml">&lt;Catel WeaveExposedProperties=&quot;false&quot; /&gt;
 </code></pre>
-<ol start="2">
-<li>Ensure <code>FodyWeavers.xml</code> exists in your project and contains the <code>&lt;Catel /&gt;</code> element:</li>
-</ol>
-<pre><code class="lang-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;Weavers&gt;
-  &lt;Catel /&gt;
-&lt;/Weavers&gt;
-</code></pre>
-<blockquote>
-<p>The <code>FodyWeavers.xml</code> file is created automatically when you first install the Fody NuGet package. If it already exists, just add <code>&lt;Catel /&gt;</code> to it.</p>
-</blockquote>
-<h2 id="disabling-weaving-for-specific-types-or-properties">Disabling weaving for specific types or properties</h2>
-<p>To prevent Catel.Fody from weaving a type or a specific property, decorate it with the <code>[NoWeaving]</code> attribute:</p>
-<pre><code class="lang-csharp">// Disable weaving for the entire class
-[NoWeaving]
-public class MyClass : ModelBase
-{
-    // ...
-}
-
-// Disable weaving for a single computed property
-public class Person : ModelBase
-{
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-
-    [NoWeaving]
-    public string FullName =&gt; $&quot;{FirstName} {LastName}&quot;.Trim();
-}
-</code></pre>
-<h2 id="weaving-logging">Weaving logging</h2>
-<p>Catel.Fody automatically converts calls to <code>LogManager.GetCurrentClassLogger()</code> into the slightly faster <code>LogManager.GetLogger(typeof(ClassName))</code> form at compile time:</p>
-<pre><code class="lang-csharp">// Before weaving
-private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-// After weaving (equivalent compiled output)
-private static readonly ILog Log = LogManager.GetLogger(typeof(MyClass));
-</code></pre>
-<p>This is a transparent optimization; no source-code changes are required.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/index.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/exposing-properties.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

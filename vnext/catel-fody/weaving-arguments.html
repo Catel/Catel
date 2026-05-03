@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Catel.Fody | Catel Documentation </title>
+      <title>Weaving argument checks | Catel Documentation </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Catel.Fody | Catel Documentation ">
+      <meta name="title" content="Weaving argument checks | Catel Documentation ">
       
       
       <link rel="icon" href="../../favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/index.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/weaving-arguments.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -87,92 +87,110 @@
         <article data-uid="">
 
 
-<p>Catel.Fody is an add-in for <a href="https://github.com/Fody/Fody">Fody</a>, an extensible tool for weaving .NET assemblies at compile time. It automatically rewrites simple auto-properties into full Catel dependency-property style properties, weaves argument checks, improves logging calls, and more — all without you having to write boilerplate code.</p>
-<h2 id="features">Features</h2>
+<p>Catel.Fody can automatically insert argument guard calls at the beginning of a method body based on attributes applied to the method parameters. It also optimises any existing expression-based <code>Argument</code> calls to use the faster name-and-value overload.</p>
+<h2 id="argument-checking-via-attributes">Argument checking via attributes</h2>
+<p>Decorating a method parameter with one of the Catel.Fody argument attributes causes the corresponding <code>Argument</code> check to be injected at the top of the method body at compile time.</p>
+<p><strong>Before weaving:</strong></p>
+<pre><code class="lang-csharp">public void DoSomething([NotNullOrEmpty] string myString, [NotNull] object myObject)
+{
+    // method body
+}
+</code></pre>
+<p><strong>After weaving:</strong></p>
+<pre><code class="lang-csharp">public void DoSomething(string myString, object myObject)
+{
+    Argument.IsNotNullOrEmpty(&quot;myString&quot;, myString);
+    Argument.IsNotNull(&quot;myObject&quot;, myObject);
+
+    // method body
+}
+</code></pre>
+<h3 id="how-it-works">How it works</h3>
+<ol>
+<li>Finds all types in the assembly.</li>
+<li>For each type, finds all methods.</li>
+<li>For each method, finds all parameters decorated with a Catel.Fody argument attribute.</li>
+<li>Inserts the corresponding <code>Argument</code> check as the first instruction(s) in the method body.</li>
+</ol>
+<h2 id="available-argument-check-attributes">Available argument-check attributes</h2>
 <table>
 <thead>
 <tr>
-<th>Feature</th>
-<th>Description</th>
+<th>Attribute</th>
+<th>Generates</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="weaving-properties.html">Property weaving</a></td>
-<td>Rewrites auto-properties on <code>ObservableObject</code>, <code>ModelBase</code>, and <code>ViewModelBase</code></td>
+<td><code>[NotNull]</code></td>
+<td><code>Argument.IsNotNull</code></td>
 </tr>
 <tr>
-<td><a href="weaving-properties.html#computed-properties">Computed property notifications</a></td>
-<td>Automatically raises <code>PropertyChanged</code> for calculated properties</td>
+<td><code>[NotNullOrEmptyArray]</code></td>
+<td><code>Argument.IsNotNullOrEmptyArray</code></td>
 </tr>
 <tr>
-<td><a href="weaving-arguments.html">Argument check weaving</a></td>
-<td>Converts argument-check attributes into actual guard code</td>
+<td><code>[NotNullOrEmpty]</code></td>
+<td><code>Argument.IsNotNullOrEmpty</code></td>
 </tr>
 <tr>
-<td><a href="#weaving-logging">Logging weaving</a></td>
-<td>Replaces <code>LogManager.GetCurrentClassLogger()</code> with the faster <code>LogManager.GetLogger(typeof(...))</code> form</td>
+<td><code>[NotNullOrWhitespace]</code></td>
+<td><code>Argument.IsNotNullOrWhitespace</code></td>
 </tr>
 <tr>
-<td><a href="exposing-properties.html">Exposed properties</a></td>
-<td>Exposes model properties on a view model using <code>[Expose]</code></td>
+<td><code>[Match]</code></td>
+<td><code>Argument.IsMatch</code></td>
 </tr>
 <tr>
-<td><a href="configuration.html">Configuration</a></td>
-<td>Fine-grained control over which features are enabled</td>
+<td><code>[NotMatch]</code></td>
+<td><code>Argument.IsNotMatch</code></td>
+</tr>
+<tr>
+<td><code>[NotOutOfRange]</code></td>
+<td><code>Argument.IsNotOutOfRange</code></td>
+</tr>
+<tr>
+<td><code>[Maximum]</code></td>
+<td><code>Argument.IsMaximum</code></td>
+</tr>
+<tr>
+<td><code>[Minimal]</code></td>
+<td><code>Argument.IsMinimal</code></td>
+</tr>
+<tr>
+<td><code>[OfType]</code></td>
+<td><code>Argument.IsOfType</code></td>
+</tr>
+<tr>
+<td><code>[ImplementsInterface]</code></td>
+<td><code>Argument.ImplementsInterface</code></td>
+</tr>
+<tr>
+<td><code>[InheritsFrom]</code></td>
+<td><code>Argument.InheritsFrom</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="quick-start">Quick start</h2>
-<ol>
-<li>Install the NuGet package:</li>
-</ol>
-<pre><code>dotnet add package Catel.Fody
+<h2 id="automatic-expression-check-optimisation">Automatic expression-check optimisation</h2>
+<p>Catel.Core provides an expression-based overload for argument checks that is convenient to write but slightly slower at runtime because it must parse the expression tree to extract the parameter name:</p>
+<pre><code class="lang-csharp">Argument.IsNotNull(() =&gt; myString);
 </code></pre>
-<ol start="2">
-<li>Ensure <code>FodyWeavers.xml</code> exists in your project and contains the <code>&lt;Catel /&gt;</code> element:</li>
-</ol>
-<pre><code class="lang-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;Weavers&gt;
-  &lt;Catel /&gt;
-&lt;/Weavers&gt;
+<p>Catel.Fody automatically rewrites these to the faster name-and-value overload at compile time:</p>
+<pre><code class="lang-csharp">Argument.IsNotNull(&quot;myString&quot;, myString);
 </code></pre>
+<p>This provides a noticeable performance improvement when argument checks are called at high frequency (e.g., more than 50 times per second), without requiring any source-code changes.</p>
 <blockquote>
-<p>The <code>FodyWeavers.xml</code> file is created automatically when you first install the Fody NuGet package. If it already exists, just add <code>&lt;Catel /&gt;</code> to it.</p>
+<p>Because Catel.Fody eliminates the runtime overhead of expression-based checks, you can freely use the expression overload for cleaner, refactoring-friendly code without paying a performance penalty.</p>
 </blockquote>
-<h2 id="disabling-weaving-for-specific-types-or-properties">Disabling weaving for specific types or properties</h2>
-<p>To prevent Catel.Fody from weaving a type or a specific property, decorate it with the <code>[NoWeaving]</code> attribute:</p>
-<pre><code class="lang-csharp">// Disable weaving for the entire class
-[NoWeaving]
-public class MyClass : ModelBase
-{
-    // ...
-}
-
-// Disable weaving for a single computed property
-public class Person : ModelBase
-{
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-
-    [NoWeaving]
-    public string FullName =&gt; $&quot;{FirstName} {LastName}&quot;.Trim();
-}
+<h2 id="disabling-argument-check-weaving">Disabling argument check weaving</h2>
+<p>To disable argument check weaving for the entire project, set <a href="configuration.html#weavearguments"><code>WeaveArguments</code></a> to <code>false</code> in <code>FodyWeavers.xml</code>:</p>
+<pre><code class="lang-xml">&lt;Catel WeaveArguments=&quot;false&quot; /&gt;
 </code></pre>
-<h2 id="weaving-logging">Weaving logging</h2>
-<p>Catel.Fody automatically converts calls to <code>LogManager.GetCurrentClassLogger()</code> into the slightly faster <code>LogManager.GetLogger(typeof(ClassName))</code> form at compile time:</p>
-<pre><code class="lang-csharp">// Before weaving
-private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-// After weaving (equivalent compiled output)
-private static readonly ILog Log = LogManager.GetLogger(typeof(MyClass));
-</code></pre>
-<p>This is a transparent optimization; no source-code changes are required.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/index.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/weaving-arguments.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

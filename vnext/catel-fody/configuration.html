@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Catel.Fody configuration | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Catel.Fody configuration | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/configuration.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>All Catel.Fody options are configured in <code>FodyWeavers.xml</code> by adding attributes to the <code>&lt;Catel /&gt;</code> element.</p>
+<pre><code class="lang-xml">&lt;Weavers&gt;
+  &lt;Catel WeaveArguments=&quot;false&quot; WeaveLogging=&quot;false&quot; /&gt;
+&lt;/Weavers&gt;
+</code></pre>
+<p>The sections below describe every available option together with its default value.</p>
+<h2 id="weaveproperties">WeaveProperties</h2>
+<p>Weave all regular auto-properties on classes that inherit (directly or indirectly) from <code>Catel.Data.ModelBase</code> into full Catel properties.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>true</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;Catel WeaveProperties=&quot;false&quot; /&gt;
+</code></pre>
+<p>See <a href="weaving-properties.html">Weaving properties</a> for details and examples.</p>
+<h2 id="weaveexposedproperties">WeaveExposedProperties</h2>
+<p>Weave all Catel properties decorated with both <code>[Model]</code> and <code>[Expose]</code> as automatic <code>ViewModelToModel</code> mappings.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>true</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;Catel WeaveExposedProperties=&quot;false&quot; /&gt;
+</code></pre>
+<p>See <a href="exposing-properties.html">Exposing properties on view models</a> for details.</p>
+<h2 id="weavecalculatedproperties">WeaveCalculatedProperties</h2>
+<p>Automatically raise <code>PropertyChanged</code> notifications for computed (calculated) properties when one of the source properties they reference changes.</p>
+<p>For example, given:</p>
+<pre><code class="lang-csharp">public string FirstName { get; set; }
+public string LastName { get; set; }
+public string FullName =&gt; $&quot;{FirstName} {LastName}&quot;.Trim();
+</code></pre>
+<p>Catel.Fody will automatically hook up change notifications so that <code>FullName</code> raises <code>PropertyChanged</code> whenever <code>FirstName</code> or <code>LastName</code> changes.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>true</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;Catel WeaveCalculatedProperties=&quot;false&quot; /&gt;
+</code></pre>
+<p>See <a href="weaving-properties.html#computed-properties">Computed properties</a> for more information.</p>
+<h2 id="weavearguments">WeaveArguments</h2>
+<p>Weave argument-check attributes on method parameters into actual guard calls at the beginning of the method body.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>true</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;Catel WeaveArguments=&quot;false&quot; /&gt;
+</code></pre>
+<p>See <a href="weaving-arguments.html">Weaving argument checks</a> for details.</p>
+<h2 id="weavelogging">WeaveLogging</h2>
+<p>Replace calls to <code>LogManager.GetCurrentClassLogger()</code> with the slightly faster <code>LogManager.GetLogger(typeof(ClassName))</code> form.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>true</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;Catel WeaveLogging=&quot;false&quot; /&gt;
+</code></pre>
+<h2 id="generatedpropertydataaccessibility">GeneratedPropertyDataAccessibility</h2>
+<p>Controls the accessibility modifier of the <code>PropertyData</code> fields that Catel.Fody generates. Accepted values are <code>Public</code>, <code>Internal</code>, and <code>Private</code>.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>Public</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;!-- Make all generated PropertyData fields internal --&gt;
+&lt;Catel GeneratedPropertyDataAccessibility=&quot;Internal&quot; /&gt;
+</code></pre>
+<p>Example — with the default (<code>Public</code>) accessibility a weaved property looks like:</p>
+<pre><code class="lang-csharp">public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&quot;, typeof(string));
+</code></pre>
+<p>With <code>Internal</code>:</p>
+<pre><code class="lang-csharp">internal static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&quot;, typeof(string));
+</code></pre>
+<h2 id="disablewarningsforautopropertyinitializers">DisableWarningsForAutoPropertyInitializers</h2>
+<p>When a property uses a C# auto-property initializer (introduced in C# 6), Catel.Fody emits a warning because the initializer value is moved into the constructor rather than used as the registered default value. Set this to <code>true</code> to suppress those warnings if you are aware of and comfortable with this behavior.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>false</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;Catel DisableWarningsForAutoPropertyInitializers=&quot;true&quot; /&gt;
+</code></pre>
+<p>See <a href="weaving-properties.html#auto-property-initializers">Auto-property initializers</a> for an explanation of how this feature works.</p>
+<h2 id="generatexmlschemas">GenerateXmlSchemas</h2>
+<blockquote>
+<p><strong>Note:</strong> XML schema generation has been removed in Catel 7 along with the serialization engine. This option has no effect in projects targeting Catel 7 or later.</p>
+</blockquote>
+<p>Generates <code>XmlSchemaProvider</code> attributes and the required static schema methods on all classes that inherit from <code>ModelBase</code>. Disabled by default because it is only needed for WCF-based serialization scenarios.</p>
+<blockquote>
+<p><strong>Default value:</strong> <code>false</code></p>
+</blockquote>
+<pre><code class="lang-xml">&lt;Catel GenerateXmlSchemas=&quot;true&quot; /&gt;
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-fody/configuration.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

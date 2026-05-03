@@ -3231,10 +3231,50 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "vnext/catel-fody/configuration.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-fody/configuration.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "vnext/catel-fody/exposing-properties.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-fody/exposing-properties.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "vnext/catel-fody/index.md",
       "output": {
         ".html": {
           "relative_path": "vnext/catel-fody/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "vnext/catel-fody/weaving-arguments.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-fody/weaving-arguments.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "vnext/catel-fody/weaving-properties.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-fody/weaving-properties.html"
         }
       },
       "version": ""
