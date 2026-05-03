@@ -22,6 +22,8 @@
       href: getting-started/wpf/hooking-up-everything-together.md
     - name: Serializing data from/to disk
       href: getting-started/wpf/serializing-data-from-to-disk.md
+    - name: Hosting model
+      href: getting-started/wpf/hosting-model.md
 - name: Introduction
   href: introduction/index.md
   items:
