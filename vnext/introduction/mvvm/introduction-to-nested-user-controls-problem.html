@@ -368,7 +368,7 @@ public partial class Room : UserControl
     }
 }
 </code></pre>
-<p>The only thing we changed from the default user control template is that the user control now derives from <em>Catel.Windows.Controls.UserControl</em> control instead of the default <em>System.Windows.Controls.UserControl</em> control. This is it for the code-behind, let’s move up to the view.</p>
+<p>The only thing we changed from the default user control template is that the user control now derives from <code>Catel.Windows.Controls.UserControl</code> control instead of the default <code>System.Windows.Controls.UserControl</code> control. This is it for the code-behind, let’s move up to the view.</p>
 <p>The last thing to do now is the actual xaml view. For the sake of simplicity, the actual content is left out (it’s just a grid with a textbox and itemscontrols for the children):</p>
 <pre><code>&lt;catel:UserControl x:Class=&quot;Catel.Articles._03___MVVM.Examples.NestedUserControls.Room&quot;
                       xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
