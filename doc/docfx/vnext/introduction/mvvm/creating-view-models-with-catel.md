@@ -248,7 +248,7 @@ A Model setter is normally written as private (you normally do not want a UI to 
 
 Note that you should use the *vmpropmodel* code snippet to create Model properties
 
-Models in Catel are handled as special objects. This means that as soon as a Model is set, Catel tries to call the *IEditableObject.BeginEdit* method. Then, as soon as the Model is changed without being saved, or if the View Model is canceled, the Model is correctly canceled via *IEditableObject.CancelEdit*. If the Model is saved, the active Models will be committed via *IEditableObject.EndEdit*. The remaining implementation details are beyond the scope of this article.
+Models in Catel are handled as special objects. If a model implements `IEditableObject`, Catel will call `BeginEdit` when the model is set on the view model. When the model is changed without being saved, or if the view model is canceled, `CancelEdit` is called. When the view model is saved, `EndEdit` is called on the active models. Note that `ModelBase` does not implement `IEditableObject` by default; if you want this behavior, implement `IEditableObject` in your model class. The remaining implementation details are beyond the scope of this article.
 
 ### ViewModelToModelAttribute
 

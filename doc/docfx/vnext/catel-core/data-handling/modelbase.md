@@ -6,7 +6,7 @@ The *ModelBase* class is a generic base class that can be used for all your data
 - **Support property changed notifications**
  The class supports the *INotifyPropertyChanging* and *INotifyPropertyChanged* interfaces so this class can be used in applications to reflect changes to the user.
 - **Backup & revert**
- The class implements the *IEditableObject* interface which makes it possible to create a state of the object. Then all properties can be edited, and finally, the changes can be applied or cancelled.
+ To support backup and revert functionality, implement the *IEditableObject* interface in a derived class. If the model implements *IEditableObject*, the view model framework will automatically call *BeginEdit*, *EndEdit*, and *CancelEdit* at the appropriate times.
 
 ## Using the class
 
@@ -79,7 +79,7 @@ All properties registered using the *RegisterProperty* method automatically take
 
 **IEditableObject**
 
-The data object can automatically create an internal backup and restore it, if required, using the *IEditableObject* interface.
+`ModelBase` does not implement `IEditableObject`. If you need backup and restore functionality on your model, implement the `IEditableObject` interface in a derived class. When the model implements `IEditableObject`, the view model framework will automatically call `BeginEdit`, `EndEdit`, and `CancelEdit` at the appropriate times.
 
 Note that this class is not suitable for database communication, there are much better ways to handle this (ORM mappers such as Entity Framework, NHibernate, LLBLGen Pro, etc.).
 

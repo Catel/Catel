@@ -45,7 +45,7 @@ public IPerson Person
 public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
 ```
 
-Using the `ModelAttribute` is powerful. Basically, this is the extended functionality in the view model. If the model supports `IEditableObject`, `BeginEdit` is automatically called in the initialization of the view model. When the view model is canceled, the `CancelEdit` is called so the changes are undone.
+Using the `ModelAttribute` is powerful. Basically, this is the extended functionality in the view model. If the model implements `IEditableObject`, `BeginEdit` is automatically called when the view model initializes. When the view model is canceled, `CancelEdit` is called so the changes are undone. Note that `ModelBase` does not implement `IEditableObject` by default; if you want this behavior, implement `IEditableObject` in your model class.
 
 When a model is defined, it is possible to use the `ViewModelToModelAttribute`, as shown, in the code below:
 
