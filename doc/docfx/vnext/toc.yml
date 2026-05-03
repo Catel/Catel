@@ -132,8 +132,6 @@
     items:
     - name: Thread safe code
       href: catel-core/parallel-invocation-tasks/thread-safe-code.md
-  - name: Pooling
-    href: catel-core/pooling/index.md
   - name: Preventing memory leaks
     href: catel-core/preventing-memory-leaks/index.md
     items:
