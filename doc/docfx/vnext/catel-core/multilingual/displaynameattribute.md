@@ -5,7 +5,7 @@ Catel implements a custom implementation of the `DisplayNameAttribute` known in 
 
 ## Using the attribute
 
-Using the attribute is really easy. put the attribute on top of any method, property, field or parameter like this:
+To use the attribute, place it on top of any method, property, field or parameter as shown below:
 
 ```
 public enum Condition

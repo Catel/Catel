@@ -1,9 +1,7 @@
 ﻿---
 title: "Bindings" 
 ---
-By default, all XAML technologies support binding out of the box. However other platforms (such as Xamarin.Android and Xamarin.iOS) do not. Catel provides a binding system for these platforms, which is described in this topic.
-
-Note that although the binding system in Catel is powerful, it will never be as flexible / powerful as the native XAML binding system. We do try to support as many features as possible though.
+Catel provides a supplemental binding system for non-XAML platforms, which is described in this topic.
 
 For examples, check out the following pages:
 

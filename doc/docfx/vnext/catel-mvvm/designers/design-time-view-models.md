@@ -1,7 +1,7 @@
 ---
 title: "Design-time view models" 
 ---
-many developers are using designers such as the built-in designer in Visual Studio or Expression Blend to design their xaml based applications. Although you should use designers with many care, we strive to fully support all designers.
+Many developers use designers such as the built-in designer in Visual Studio or Expression Blend to design their XAML-based applications. Although designers should be used with care, Catel strives to fully support all designers.
 
 Since Catel 1.3, it is possible to create design-time versions of a view model. This way, you can preview the `UserControl` or `DataWindow` implementations using example data.
 
