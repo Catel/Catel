@@ -21,9 +21,11 @@ public MyViewModel(IServiceProvider serviceProvider, IUIVisualizerService uiVisu
 }
 ```
 
+The recommended approach is to inject the model directly, which lets the `UIVisualizerService` create the view model automatically:
+
 ```csharp
-var viewModel = new EmployeeViewModel();
-_uiVisualizerService.Show(viewModel);
+var employee = new Employee();
+await _uiVisualizerService.ShowAsync<EmployeeViewModel>(employee);
 ```
 
 ## Showing a modal window
@@ -31,8 +33,8 @@ _uiVisualizerService.Show(viewModel);
 To show a modal window, use the following code:
 
 ```csharp
-var viewModel = new EmployeeViewModel();
-_uiVisualizerService.ShowDialog(viewModel);
+var employee = new Employee();
+await _uiVisualizerService.ShowDialogAsync<EmployeeViewModel>(employee);
 ```
 
 ## Showing a window with callback

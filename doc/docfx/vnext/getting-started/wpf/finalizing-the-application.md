@@ -157,8 +157,7 @@ private async Task OnAddFamilyExecuteAsync()
 {
     var family = new Family();
 
-    var familyWindowViewModel = _viewModelFactory.CreateViewModel<FamilyWindowViewModel>(family);
-    if (await _uiVisualizerService.ShowDialog(familyWindowViewModel) ?? false)
+    if (await _uiVisualizerService.ShowDialogAsync<FamilyWindowViewModel>(family) ?? false)
     {
         Families.Add(family);
         UpdateSearchFilter();

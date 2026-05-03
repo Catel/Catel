@@ -9,14 +9,14 @@ The `IUIVisualizerService` allows a developer to show (modal) windows or dialogs
 
 ## Showing a non-modal window
 
-To show a non-modal window, use the following code:
+To show a non-modal window, inject the service via the constructor and use it with model injection:
 
 ```
-var viewModel = new EmployeeViewModel();
-
 var dependencyResolver = this.GetDependencyResolver();
 var uiVisualizerService = dependencyResolver.Resolve<IUIVisualizerService>();
-uiVisualizerService.Show(viewModel);
+
+var employee = new Employee();
+await uiVisualizerService.ShowAsync<EmployeeViewModel>(employee);
 ```
 
 ## Showing a modal window
@@ -24,11 +24,11 @@ uiVisualizerService.Show(viewModel);
 To show a modal window, use the following code:
 
 ```
-var viewModel = new EmployeeViewModel();
-
 var dependencyResolver = this.GetDependencyResolver();
 var uiVisualizerService = dependencyResolver.Resolve<IUIVisualizerService>();
-uiVisualizerService.ShowDialog(viewModel);
+
+var employee = new Employee();
+await uiVisualizerService.ShowDialogAsync<EmployeeViewModel>(employee);
 ```
 
 ## Showing a window with callback
