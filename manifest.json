@@ -3071,16 +3071,6 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/pooling/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/pooling/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "vnext/catel-core/preventing-memory-leaks/change-notification-wrapper.md",
       "output": {
         ".html": {
