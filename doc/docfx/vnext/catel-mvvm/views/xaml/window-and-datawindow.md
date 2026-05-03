@@ -3,7 +3,7 @@ title: "Window and DataWindow"
 ---
 ## Introduction to the Window
 
-The Window is a simplified class representing the same logic as the regular System.Windows.Window but with the binding support of Catel.
+The Window is a simplified class representing the same logic as the regular `System.Windows.Window` but with the binding support of Catel.
 
 ## Introduction to the DataWindow
 
