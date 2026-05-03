@@ -58,7 +58,7 @@ services.AddCatelMvvm();
 
 ## Hosting model
 
-Catel now supports the .NET hosting model. it is possible to create an app host, similar to ASP.NET.
+Catel now supports the .NET hosting model. It is possible to create an app host, similar to ASP.NET.
 
 ```
 public partial class App : Application
@@ -115,7 +115,7 @@ public partial class App : Application
 
 ## Logging
 
-The logging features have been removed from Catel. it is recommended to use the .NET standard logging features.
+The logging features have been removed from Catel. It is recommended to use the .NET standard logging features.
 
 .NET logging uses DI, but static classes should not be forced to use DI just for logging. Our solution:
 
