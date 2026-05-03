@@ -17,7 +17,7 @@ Encountered issues while upgrading to this version? Add them here to help out ot
 
 ## Source code generator
 
-A new source code generator (Catel.SourceGenerators) has been developed to assist in generating boiler-plate code. it is still possible to develop projects without it, but with the lack of dependency injection in XAML, it is strongly recommended to use the source generator.
+A new source code generator (Catel.SourceGenerators) has been developed to assist in generating boiler-plate code. It is still possible to develop projects without it, but with the lack of dependency injection in XAML, it is strongly recommended to use the source generator.
 
 Add this to the csproj file:
 

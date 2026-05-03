@@ -28,7 +28,7 @@ public FamilyWindowViewModel(Family family, IUIVisualizerService uiVisualizerSer
 }
 ```
 
-do not forget to create the right backing fields `_uiVisualizerService` and `_messageService`
+Do not forget to create the right backing fields `_uiVisualizerService` and `_messageService`
 
 #### Adding the properties
 

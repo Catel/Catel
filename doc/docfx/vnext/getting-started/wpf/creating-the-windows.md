@@ -5,7 +5,7 @@ In this step we will create the windows for the application. In the previous ste
 
 ## Person window
 
-It is important that the window derives from one of the Catel windows. This is required to make the binding system work (same as `UserControl`). ensure that the window definition in the xaml is either `catel:Window` or `catel:DataWindow`
+It is important that the window derives from one of the Catel windows. This is required to make the binding system work (same as `UserControl`). Ensure that the window definition in the XAML is either `catel:Window` or `catel:DataWindow`
 
 To add a new `DataWindow`, right-click the *Views* folder in the solution =\> *Add* =\> *New item...* =\> *On-line* =\> and search for Catel as shown, in the screen below:
 
