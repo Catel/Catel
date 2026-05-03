@@ -177,14 +177,13 @@ public class MyClass : ModelBase
 <p>Default value is <em>true</em></p>
 </blockquote>
 <h3 id="weavelogging">WeaveLogging</h3>
-<p>Weave all calls to <code>LogManager.GetCurrentClassLogger()</code> into <code>LogManager.GetLogger(typeof(classname))</code>.</p>
+<p>Weave all calls to <code>LogManager.GetLogger(classname)</code> into <code>LogManager.GetLogger(typeof(classname))</code>.</p>
 <blockquote>
 <p>Default value is <em>true</em></p>
 </blockquote>
 <h3 id="generatexmlschemas">GenerateXmlSchemas</h3>
-<p>Generate xml schemas for all classes that inherit (directly or indirectly) from <code>Catel.Data.ModelBase</code>.</p>
 <blockquote>
-<p>Default value is <em>false</em></p>
+<p><strong>Note:</strong> <code>GenerateXmlSchemas</code> has been removed in Catel 7 along with the serialization engine.</p>
 </blockquote>
 <h2 id="weaving-properties">Weaving properties</h2>
 <p>It is possible to automatically weave a simple property into a Catel property (<code>ModelBase</code> or <code>ViewModelBase</code>) or a property with automatic change notifications (<code>ObservableObject</code>).</p>

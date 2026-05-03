@@ -87,19 +87,9 @@
         <article data-uid="">
 
 
-<p>The <code>IVibrateService</code> allows a developer to start and stop vibration of the device via a service.</p>
-<h2 id="starting-vibration">Starting vibration</h2>
-<p>To start the vibration, use the following code (will vibrate for 250 ms). Note that the time span must be between 0 and 5 seconds.</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var vibrateService = dependencyResolver.Resolve&lt;IVibrateService&gt;();
-vibrateService.Start(new TimeSpan(0, 0, 0, 0, 250);
-</code></pre>
-<h2 id="stopping-the-vibration-earlier-than-initially-planned">Stopping the vibration earlier than initially planned</h2>
-<p>By default, the vibration stops automatically after the specified time span has passed. However, it is possible to stop the vibration manually.</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var vibrateService = dependencyResolver.Resolve&lt;IVibrateService&gt;();
-vibrateService.Stop();
-</code></pre>
+<blockquote>
+<p><strong>Note:</strong> <code>IVibrateService</code> has been removed in Catel 7. Device vibration is no longer provided as part of Catel. Use the platform-native vibration APIs directly.</p>
+</blockquote>
 
 </article>
 

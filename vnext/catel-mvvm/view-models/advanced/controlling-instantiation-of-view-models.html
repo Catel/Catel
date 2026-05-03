@@ -106,8 +106,8 @@
     }
 }
 </code></pre>
-<p>When a custom factory is used, it is important to register it in the <code>ServiceLocator</code>:</p>
-<pre><code>ServiceLocator.Default.RegisterType&lt;IViewModelFactory, CustomViewModelFactory&gt;();
+<p>When a custom factory is used, it is important to register it in the service collection:</p>
+<pre><code class="lang-csharp">services.AddSingleton&lt;IViewModelFactory, CustomViewModelFactory&gt;();
 </code></pre>
 <h2 id="how-to-control-the-view-model-instantiation-using-a-usercontrol">How to control the view model instantiation using a UserControl</h2>
 <p>Note that it is best to use the <code>IViewModelFactory</code> for view model instantiation because it is a more generic solution</p>

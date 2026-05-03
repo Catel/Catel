@@ -89,45 +89,28 @@
 
 <p>The <em>ModelBase</em> class is a generic base class that can be used for all your data classes.</p>
 <ul>
-<li><strong>Fully serializable</strong>
-It is now really easy to store objects on disk or serialize them into memory, either binary or in XML. The data object supports this out of the box, and automatically handles the (de)serialization.</li>
 <li><strong>Support property changed notifications</strong>
 The class supports the <em>INotifyPropertyChanging</em> and <em>INotifyPropertyChanged</em> interfaces so this class can easily be used in applications to reflect changes to the user.</li>
-<li><strong>Backwards compatibility</strong>
-When serializing your objects to binary, it is hard to maintain the right versions. When you add a new property to a binary class, or change a namespace, the object cannot be loaded any longer. The data object base takes care of this issue and supports backwards compatibility.</li>
 <li><strong>Backup &amp; revert</strong>
 The class implements the <em>IEditableObject</em> interface which makes it possible to create a state of the object. Then all properties can be edited, and finally, the changes can be applied or cancelled.</li>
 </ul>
 <h2 id="using-the-class">Using the class</h2>
 <p>Using the class is extremely simple. Just declare a new class that derives from <em>ModelBase</em> and you are ready to go:</p>
 <pre><code>/// &lt;summary&gt;
-/// MyObject class which fully supports serialization,
-/// property changed notifications, backwards compatibility and error checking.
+/// MyObject class which fully supports property changed notifications and error checking.
 /// &lt;/summary&gt;
-[Serializable]
-public class MyObject : ModelBase&lt;MyObject&gt;
+public class MyObject : ModelBase
 {
     /// &lt;summary&gt;
     /// Initializes a new object from scratch.
     /// &lt;/summary&gt;
     public MyObject() { }
-
-/// &lt;summary&gt;
-/// Initializes a new object based on &lt;see cref=&quot;SerializationInfo&quot;/&gt;.
-/// &lt;/summary&gt;
-/// &lt;param name=&quot;info&quot;&gt;&lt;see cref=&quot;SerializationInfo&quot;/&gt;
-//     that contains the information.&lt;/param&gt;
-/// &lt;param name=&quot;context&quot;&gt;&lt;see cref=&quot;StreamingContext&quot;/&gt;.&lt;/param&gt;
-protected MyObject(SerializationInfo info, StreamingContext context)
-    : base(info, context) { }
 }
 </code></pre>
-<p>As you can see in the code above, the <em>MyObject</em> class derives from <em>ModelBase</em> and provides an empty constructor, but also a constructor that is used for binary deserialization. The code above might look complex, but it is created using the model code snippet, and you only have to type the name of the class.</p>
 <h3 id="defining-properties">Defining properties</h3>
 <p>Defining properties for the class is very easy, and works the same like dependency properties. The advantages of this way of defining properties are:</p>
 <ul>
-<li>Properties defined like this are automatically included during serialization; no need to specify complex data contracts;</li>
-<li>You can specify a default value for a property which will be used when the class is constructed or the property is not found during deserialization (in case this property is added to an existing class);</li>
+<li>You can specify a default value for a property which will be used when the class is constructed;</li>
 <li>The <em>PropertyData</em> object can be used to retrieve property values so the compiler checks for errors;</li>
 <li>You can directly subscribe to change notifications, and all properties automatically support <em>INotifyPropertyChanged</em> out of the box.</li>
 </ul>
@@ -146,7 +129,6 @@ public string Name
 /// &lt;/summary&gt;
 public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&quot;, typeof(string), string.Empty);
 </code></pre>
-<p>A registered property can be excluded from serialization if wanted. When the object is deserialized, the default value will be used for the property in that case.</p>
 <h3 id="default-values-for-reference-types">Default values for reference types</h3>
 <p>In lots of cases, a default value for reference types is required in the property definitions. However, and you might have noticed this behavior in for example dependency properties, using an instance as default value can result in unexpected behavior.</p>
 <p>Below is an example of a &quot;regular&quot; property registration using a default value for a collection property:</p>
@@ -162,8 +144,6 @@ public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&q
 <p>All properties registered using the <em>RegisterProperty</em> method automatically take care of change notifications.</p>
 <p><strong>IEditableObject</strong></p>
 <p>The data object can automatically create an internal backup and restore it, if required, using the <em>IEditableObject</em> interface.</p>
-<p><strong>Serialization</strong></p>
-<p>As told many times before, using the <code>[SavableModelBase]({{&lt; relref &quot;catel-core/data-handling/savablemodelbase.md&quot; &gt;}})</code>, you can simply save your file to a stream (file on disk, stream in memory, etc.).</p>
 <p>Keep in mind that this class is not suitable for database communication, there are much better ways to handle this (ORM mappers such as Entity Framework, NHibernate, LLBLGen Pro, etc.).</p>
 
 </article>

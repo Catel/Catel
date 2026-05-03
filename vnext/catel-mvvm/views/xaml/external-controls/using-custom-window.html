@@ -226,8 +226,8 @@ public class Window : RadWindow, IDataWindow
 {
 }
 </code></pre>
-<p>Of course, this will need to be registered with the <code>ServiceLocator</code> to be utilized correctly:</p>
-<pre><code>ServiceLocator.Default.RegisterType&lt;ICustomUIVisualService, CustomUIVisualService&gt;
+<p>Of course, this will need to be registered with the service collection to be utilized correctly:</p>
+<pre><code class="lang-csharp">services.AddSingleton&lt;ICustomUIVisualizerService, CustomUIVisualizerService&gt;();
 </code></pre>
 <h2 id="using-the-class">Using the class</h2>
 <p>The class can now be used the same as the <code>DataWindow</code> class. For more information, see [Window and DataWindow]({{&lt; relref &quot;catel-mvvm/views/xaml/window-and-datawindow.md&quot; &gt;}}).</p>

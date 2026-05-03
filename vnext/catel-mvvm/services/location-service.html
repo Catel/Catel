@@ -87,36 +87,9 @@
         <article data-uid="">
 
 
-<p>The <code>ILocationService</code> allows a developer to use GPS devices inside a view model.</p>
-<p>It is important that the service must be started and stopped to retrieve values</p>
-<h2 id="starting-the-service">Starting the service</h2>
-<p>The GPS service needs to be started and stopped. To start the GPS service, use the following code:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var locationService = dependencyResolver.Resolve&lt;ILocationService&gt;();
-locationService.LocationChanged += OnCurrentLocationChanged;
-locationService.Start();
-</code></pre>
-<p>The service will raise the <code>LocationChanged</code> event when a new location becomes available.</p>
-<h2 id="stopping-the-service">Stopping the service</h2>
-<p>It is required to stop the service when it is no longer needed. The service can be stopped using the following code:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var locationService = dependencyResolver.Resolve&lt;ILocationService&gt;();
-locationService.LocationChanged -= OnCurrentLocationChanged;
-locationService.Stop();
-</code></pre>
-<h2 id="emulating-gps-without-device">Emulating GPS without device</h2>
-<p>It is possible to emulate GPS without actually owning a device or emulate data in the emulator. To accomplish this, it is required to use the <code>Catel.MVVM.Services.Test.LocationService</code> class. This class can be used in the following way:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-Test.LocationService service = (Test.LocationService)dependencyResolver.Resolve&lt;ILocationService&gt;();
-
-// Queue the next location (and then wait 5 seconds)
-var locationTestData = new LocationTestData(new Location(100d, 100d), new TimeSpan(0, 0, 0, 5)));
-service.ExpectedLocations.Add(locationTestData);
-
-// Go to the next location manually
-service.ProceedToNextLocation();
-</code></pre>
-<p>It is also possible to enqueue lots of coordinates with a time span and emulate a path.</p>
+<blockquote>
+<p><strong>Note:</strong> <code>ILocationService</code> has been removed in Catel 7. GPS and location services are no longer provided as part of Catel. Use the platform-native location APIs directly.</p>
+</blockquote>
 
 </article>
 

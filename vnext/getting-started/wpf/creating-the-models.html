@@ -87,24 +87,13 @@
         <article data-uid="">
 
 
-<p>In this step we will create models. Since this application is about families and persons inside those families, we need to create the following models: <em>Settings</em>, <em>Family</em> and <em>Person</em>.</p>
+<p>In this step we will create models. Since this application is about families and persons inside those families, we need to create the following models: <em>Family</em> and <em>Person</em>.</p>
 <h2 id="creating-the-model-classes">Creating the model classes</h2>
-<p>The models that will be used in this application will derive from the <code>ModelBase</code>, <code>ValidatableModelBase</code> or <code>SavableModelBase</code> class of Catel. These classes enable support for change notifications, validations and persistence. The <code>SavableModelBase</code> adds additional methods to save and load from/to streams or files without having to create a serializer first.</p>
+<p>The models that will be used in this application will derive from the <code>ModelBase</code> or <code>ValidatableModelBase</code> class of Catel. These classes enable support for change notifications and validations.</p>
 <p>To create the model classes, create the following classes in the <em>Models</em> folder.</p>
 <p>The <em>model</em> code snippet is available to create models</p>
-<h3 id="settings-class">Settings class</h3>
-<p>The settings class is the top container that will store all families and other settings (which might be added in the future).</p>
-<pre><code>namespace WPF.GettingStarted.Models
-{
-    using Catel.Data;
-
-    public class Settings : SavableModelBase&lt;Settings&gt;
-    {
-    }
-}
-</code></pre>
 <h3 id="family-class">Family class</h3>
-<pre><code>namespace WPF.GettingStarted.Models
+<pre><code class="lang-csharp">namespace WPF.GettingStarted.Models
 {
     using Catel.Data;
 
@@ -114,7 +103,7 @@
 }
 </code></pre>
 <h3 id="person-class">Person class</h3>
-<pre><code>namespace WPF.GettingStarted.Models
+<pre><code class="lang-csharp">namespace WPF.GettingStarted.Models
 {
     using Catel.Data;
 
@@ -143,26 +132,8 @@
 </code></pre>
 <p>If you want to get the functionality in the <code>ModelBase</code> classes without the &quot;dependency-a-like&quot; properties you have the option to make use of normal properties and Catel.Fody.</p>
 <p>The <em>modelprop</em> code snippet is available to create models</p>
-<h3 id="settings-class-1">Settings class</h3>
-<pre><code>public class Settings : SavableModelBase&lt;Settings&gt;
-{
-    /// &lt;summary&gt;
-    /// Gets or sets all the families.
-    /// &lt;/summary&gt;
-    public ObservableCollection&lt;Family&gt; Families
-    {
-        get { return GetValue&lt;ObservableCollection&lt;Family&gt;&gt;(FamiliesProperty); }
-        set { SetValue(FamiliesProperty, value); }
-    }
-
-    /// &lt;summary&gt;
-    /// Register the Families property so it is known in the class.
-    /// &lt;/summary&gt;
-    public static readonly PropertyData FamiliesProperty = RegisterProperty(&quot;Families&quot;, typeof(ObservableCollection&lt;Family&gt;), () =&gt; new ObservableCollection&lt;Family&gt;());
-}
-</code></pre>
 <h3 id="family-class-1">Family class</h3>
-<pre><code>public class Family : ValidatableModelBase
+<pre><code class="lang-csharp">public class Family : ValidatableModelBase
 {
     /// &lt;summary&gt;
     /// Gets or sets the family name.
@@ -199,7 +170,7 @@
 }
 </code></pre>
 <h3 id="person-class-1">Person class</h3>
-<pre><code>public class Person : ValidatableModelBase
+<pre><code class="lang-csharp">public class Person : ValidatableModelBase
 {
     /// &lt;summary&gt;
     /// Gets or sets the first name.

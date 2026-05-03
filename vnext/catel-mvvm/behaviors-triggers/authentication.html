@@ -125,9 +125,9 @@ public class AuthenticationProvider : IAuthenticationProvider
 }
 </code></pre>
 <ol start="2">
-<li>Register the authentication provider in the ServiceLocator:</li>
+<li>Register the authentication provider in the service collection:</li>
 </ol>
-<pre><code>Catel.IoC.ServiceLocator.Instance.RegisterType&lt;IAuthenticationProvider, AuthenticationProvider&gt;();
+<pre><code class="lang-csharp">services.AddSingleton&lt;IAuthenticationProvider, AuthenticationProvider&gt;();
 </code></pre>
 <ol start="3">
 <li>Add the following XML namespaces to your view:</li>

@@ -93,52 +93,45 @@
 <p>There are two options to decorate methods with the attribute. Either with or without tag.</p>
 <h2 id="subscribing-without-a-tag">Subscribing without a tag</h2>
 <p>In this case, the mediator will send the message to all the methods that has subscribe using the attribute to receive the message and not one especially. The code below broadcasts a message without any tag. This is just regular behavior of the message mediator.</p>
-<pre><code>/// &lt;summary&gt;
+<p>Inject <code>IMessageMediator</code> via the constructor and send a message:</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
 /// Method to invoke when the command is executed.
 /// &lt;/summary&gt;
 private void OnCmdExecute()
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var mediator = dependencyResolver.Resolve&lt;IMessageMediator&gt;();
-    mediator.SendMessage(&quot;Test Value&quot;);
+    _messageMediator.SendMessage(&quot;Test Value&quot;);
 }
 </code></pre>
 <p>If a class, for example a view model, is interested in these messages, the only thing that needs to be done is to decorate a method with the MessageRecipient attribute as shown below:</p>
-<pre><code>/// &lt;summary&gt;
+<pre><code class="lang-csharp">/// &lt;summary&gt;
 /// Shows the message.
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;value&quot;&gt;The value.&lt;/param&gt;
 [MessageRecipient]
 private void ShowMessage(string value)
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
-    messageService.Show(value);
+    _messageService.Show(value);
 }
 </code></pre>
 <h2 id="subscribing-with-a-tag">Subscribing with a tag</h2>
 <p>A tag can be used to specify some sort of grouping for messages. The MessageRecipient attribute also supports this as shown in the code below. First lets take a look how to send a message and specify a tag.</p>
-<pre><code>/// &lt;summary&gt;
+<pre><code class="lang-csharp">/// &lt;summary&gt;
 /// Method to invoke when the command is executed.
 /// &lt;/summary&gt;
 private void OnCmdExecute()
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var mediator = dependencyResolver.Resolve&lt;IMessageMediator&gt;();
-    mediator.SendMessage(&quot;Test Value&quot;, &quot;myTag&quot;);
+    _messageMediator.SendMessage(&quot;Test Value&quot;, &quot;myTag&quot;);
 }
 </code></pre>
 <p>The message is now sent with the tag. The attribute has to be used as shown below:</p>
-<pre><code>/// &lt;summary&gt;
+<pre><code class="lang-csharp">/// &lt;summary&gt;
 /// Shows the message.
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;value&quot;&gt;The value.&lt;/param&gt;
 [MessageRecipient(Tag = &quot;myTag&quot;)]
 private void ShowMessage(string value)
 {
-    var dependencyResolver = this.GetDependencyResolver();
-    var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
-    messageService.Show(value);
+    _messageService.Show(value);
 }
 </code></pre>
 

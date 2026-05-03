@@ -89,33 +89,28 @@
 
 <p>The <code>IMessageService</code> allows a developer to show message boxes from a view model.</p>
 <h2 id="showing-a-message">Showing a message</h2>
-<p>To show a message from a view model, use the following code:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
-await messageService.Show(&quot;My first message via the service&quot;);
+<p>To show a message from a view model, inject the service via the constructor and use:</p>
+<pre><code class="lang-csharp">private readonly IMessageService _messageService;
+
+public MyViewModel(IServiceProvider serviceProvider, IMessageService messageService)
+    : base(serviceProvider)
+{
+    _messageService = messageService;
+}
+</code></pre>
+<pre><code class="lang-csharp">await _messageService.Show(&quot;My first message via the service&quot;);
 </code></pre>
 <h2 id="showing-an-error">Showing an error</h2>
 <p>Showing a warning or error is very easy. Use the following code:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
-await messageService.ShowError(&quot;Whoops, something went wrong&quot;);
+<pre><code class="lang-csharp">await _messageService.ShowError(&quot;Whoops, something went wrong&quot;);
 </code></pre>
 <h2 id="requesting-confirmation">Requesting confirmation</h2>
-<p>It is also possible to request confirmation from the user. The number of possibilities depends on the target platform (for example, not all platforms support <code>YesNo</code>).</p>
-<p>The following code must be used to request confirmation:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
-if (await messageService.Show(&quot;Are you sure you want to do this?&quot;, &quot;Are you sure?&quot;, MessageButton.YesNo) == MessageResult.Yes)
+<p>It is also possible to request confirmation from the user. The following code must be used to request confirmation:</p>
+<pre><code class="lang-csharp">if (await _messageService.Show(&quot;Are you sure you want to do this?&quot;, &quot;Are you sure?&quot;, MessageButton.YesNo) == MessageResult.Yes)
 {
     // Do it!
 }
 </code></pre>
-<h2 id="asynchronous-confirmation">Asynchronous confirmation</h2>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var messageService = dependencyResolver.Resolve&lt;IMessageService&gt;();
-await messageService.Show(&quot;Are you sure you want to do this?&quot;, &quot;Are you sure?&quot;, MessageButton.YesNo, OnMessageServiceComplete);
-</code></pre>
-<p>There are two possible callbacks, one with a result of type <code>Func\&lt;MessageResult\&gt;</code> or one without a result of type Action.</p>
 
 </article>
 

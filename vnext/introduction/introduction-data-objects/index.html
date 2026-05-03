@@ -91,7 +91,7 @@
 <h2 id="the-observableobject-class">The ObservableObject class</h2>
 <p>Very basic class implementing the <code>System.ComponentModel.INotifyPropertyChanging</code> and <code>System.ComponentModel.INotifyPropertyChanged</code> interfaces as well as Catels <code>Catel.Data.IAdvancedNotifyPropertyChanging</code> and Catels <code>Catel.Data.IAdvancedNotifyPropertyChanged</code>.</p>
 <h2 id="the-modelbase-class">The ModelBase class</h2>
-<p>The [ModelBase]({{&lt; relref &quot;catel-core/data-handling/modelbase.md&quot; &gt;}})(previously known as the <code>DataObjectBase</code>) class is a generic base class that can be used for all your data classes. This comes fully supporting serialization, property changed notifications, backwards compatibility and error checking.</p>
+<p>The [ModelBase]({{&lt; relref &quot;catel-core/data-handling/modelbase.md&quot; &gt;}})(previously known as the <code>DataObjectBase</code>) class is a generic base class that can be used for all your data classes. This comes fully supporting property changed notifications and error checking.</p>
 <h2 id="creating-your-first-data-object">Creating your first data object</h2>
 <p>First of all, it is very important to realize that you shouldn't bore yourself with writing all the code below yourself. Catel contains lots of code snippets that allow you to create data objects very easily in a short amount of time.</p>
 <p>This example shows the simplest way to declare a data object using the <em>ModelBase</em> class. By using a code snippet, the class is created in just 10 seconds.</p>
@@ -106,10 +106,8 @@
 </ol>
 <p><strong>Code</strong></p>
 <pre><code>/// &lt;summary&gt; 
-/// FirstModel class which fully supports serialization, property changed notifications,
-/// backwards compatibility and error checking.
+/// FirstModel class which fully supports property changed notifications and error checking.
 /// &lt;/summary&gt; 
-[Serializable]
 public class FirstModel : ModelBase
 {
     #region Fields
@@ -121,15 +119,6 @@ public class FirstModel : ModelBase
     /// &lt;/summary&gt; 
     public FirstModel()
     { }
-
-    /// &lt;summary&gt;
-    /// Initializes a new object based on &lt;see cref=&quot;SerializationInfo&quot;/&gt;.
-    /// &lt;/summary&gt; 
-    /// &lt;param name=&quot;info&quot;&gt;&lt;see cref=&quot;SerializationInfo&quot;/&gt; that contains the information.
-    /// &lt;/param&gt; 
-    /// &lt;param name=&quot;context&quot;&gt;&lt;see cref=&quot;StreamingContext&quot;/&gt;.&lt;/param&gt; 
-    protected FirstModel(SerializationInfo info, StreamingContext context)
-        : base(info, context) { }
     #endregion 
 
     #region Properties
@@ -310,104 +299,9 @@ protected override void ValidateBusinessRules(List&lt;BusinessRuleValidationResu
 <p>The great thing is that Catel will gather all validation results from all different mappings and combine these into the <em>ValidationContext</em>. This context can be used to query all sorts of validation info about an object.</p>
 <p>Note that this is just an introduction, more information about validation can be found in other parts of the documentation</p>
 <h2 id="saving-objects">Saving objects</h2>
-<p>Saving and loading objects out of the box has never been so easy. <em>SavableModelBase</em> can automatically save/load objects in several ways, such as memory, file in different modes (binary and XML). This example shows that making your objects savable is very easy and does not take any time!</p>
-<p><strong>Code snippets</strong></p>
-<ul>
-<li>model - Declare a model based on the <em>ModelBase</em> class</li>
-<li>modelprop - Declare a simple property on a model</li>
-</ul>
-<p><strong>Steps</strong></p>
-<ol>
-<li>Create a new class file called <em>Person.cs</em>.</li>
-<li>Inside the namespace, use the <em>model</em> codesnippet and fill in the name of the class, in this case <em>Person</em>.</li>
-<li>Change the base class from <em>ModelBase</em> to <em>SavableModelBase</em>.</li>
-<li>In the Properties region, use the code snippet <em>modelprop</em>, and use the following values:</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>Code snippet item</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>description</td>
-<td>Gets or sets the name</td>
-</tr>
-<tr>
-<td>type</td>
-<td>string</td>
-</tr>
-<tr>
-<td>name</td>
-<td>Name</td>
-</tr>
-<tr>
-<td>defaultvalue</td>
-<td>&quot;MyName&quot;</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Code</strong></p>
-<pre><code>/// &lt;summary&gt; 
-/// Person class which fully supports serialization, property changed notifications,
-/// backwards compatibility and error checking.
-/// &lt;/summary&gt; 
-[Serializable]
-public class Person : SavableModelBase&lt;Person&gt;
-{
-    #region Fields
-    #endregion 
-
-    #region Constructors
-    /// &lt;summary&gt; 
-    /// Initializes a new object from scratch.
-    /// &lt;/summary&gt; 
-    public Person()
-    { }
-
-    /// &lt;summary&gt; 
-    /// Initializes a new object based on &lt;see cref=&quot;SerializationInfo&quot;/&gt;.
-    /// &lt;/summary&gt; 
-    /// &lt;param name=&quot;info&quot;&gt;&lt;see
-    ///     cref=&quot;SerializationInfo&quot;/&gt; that contains the information.
-    /// &lt;/param&gt; 
-    /// &lt;param name=&quot;context&quot;&gt;&lt;see
-    //       cref=&quot;StreamingContext&quot;/&gt;.&lt;/param&gt; 
-    protected Person(SerializationInfo info, StreamingContext context)
-        : base(info, context) { }
-    #endregion 
-
-    #region Properties
-    /// &lt;summary&gt; 
-    /// Gets or sets the name.
-    /// &lt;/summary&gt; 
-    public string Name
-    {
-        get { return GetValue&lt;string&gt;(NameProperty); }
-        set { SetValue(NameProperty, value); }
-    }
-    /// &lt;summary&gt; 
-    /// Register the Name property so it is known in the class.
-    /// &lt;/summary&gt; 
-    public static readonly PropertyData NameProperty = RegisterProperty(&quot;Name&quot;, typeof(string), &quot;MyName&quot;);
-    #endregion 
-
-    #region Methods
-    #endregion 
-}
-</code></pre>
-<h3 id="loading-an-object">Loading an object</h3>
-<p>Loading an object is really simple once the class has been created. It is important to use the static method on the class:</p>
-<pre><code>var person = Person.Load(@&quot;c:\person.dob&quot;);
-</code></pre>
-<h3 id="saving-an-object">Saving an object</h3>
-<p>To save an object, an instance is required. Then simply call the <em>Save</em> method.</p>
-<pre><code>var person = new Person();
-person.Name = &quot;John Doe&quot;;
-person.Save(@&quot;c:\person.dob&quot;);
-</code></pre>
+<blockquote>
+<p><strong>Note:</strong> <code>SavableModelBase</code> has been removed in Catel 7. The built-in serialization engine was removed. For serializing objects to disk, use alternatives such as <code>System.Text.Json</code>, <code>Newtonsoft.Json</code>, or <code>Orc.Serialization</code>.</p>
+</blockquote>
 
 </article>
 

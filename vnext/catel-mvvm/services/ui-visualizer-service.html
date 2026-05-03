@@ -91,34 +91,31 @@
 <h2 id="screenshot">Screenshot</h2>
 <p><img src="../../images/catel-mvvm/services/ui-visualizer-service/example.png" alt=""></p>
 <h2 id="showing-a-non-modal-window">Showing a non-modal window</h2>
-<p>To show a non-modal window, use the following code:</p>
-<pre><code>var viewModel = new EmployeeViewModel();
+<p>To show a non-modal window, inject the service via the constructor and use:</p>
+<pre><code class="lang-csharp">private readonly IUIVisualizerService _uiVisualizerService;
 
-var dependencyResolver = this.GetDependencyResolver();
-var uiVisualizerService = dependencyResolver.Resolve&lt;IUIVisualizerService&gt;();
-uiVisualizerService.Show(viewModel);
+public MyViewModel(IServiceProvider serviceProvider, IUIVisualizerService uiVisualizerService)
+    : base(serviceProvider)
+{
+    _uiVisualizerService = uiVisualizerService;
+}
+</code></pre>
+<pre><code class="lang-csharp">var viewModel = new EmployeeViewModel();
+_uiVisualizerService.Show(viewModel);
 </code></pre>
 <h2 id="showing-a-modal-window">Showing a modal window</h2>
 <p>To show a modal window, use the following code:</p>
-<pre><code>var viewModel = new EmployeeViewModel();
-
-var dependencyResolver = this.GetDependencyResolver();
-var uiVisualizerService = dependencyResolver.Resolve&lt;IUIVisualizerService&gt;();
-uiVisualizerService.ShowDialog(viewModel);
+<pre><code class="lang-csharp">var viewModel = new EmployeeViewModel();
+_uiVisualizerService.ShowDialog(viewModel);
 </code></pre>
 <h2 id="showing-a-window-with-callback">Showing a window with callback</h2>
 <p>To show a (modal or non-modal) window and get a callback as soon as the window is closed, use the following code:</p>
-<pre><code>var viewModel = new EmployeeViewModel();
-
-var dependencyResolver = this.GetDependencyResolver();
-var uiVisualizerService = dependencyResolver.Resolve&lt;IUIVisualizerService&gt;();
-uiVisualizerService.Show(viewModel, OnWindowClosed);
+<pre><code class="lang-csharp">var viewModel = new EmployeeViewModel();
+_uiVisualizerService.Show(viewModel, OnWindowClosed);
 </code></pre>
 <h2 id="registering-a-window">Registering a window</h2>
 <p>To register a custom window which is not automatically detected via reflection, it is required to use the Register method:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var uiVisualizerService = dependencyResolver.Resolve&lt;IUIVisualizerService&gt;();
-uiVisualizerService.Register(typeof(EmployeeViewModel), typeof(EmployeeView));
+<pre><code class="lang-csharp">_uiVisualizerService.Register(typeof(EmployeeViewModel), typeof(EmployeeView));
 </code></pre>
 <h2 id="using-naming-conventions-to-find-windows">Using naming conventions to find windows</h2>
 <p>Please see the [ViewLocator]({{&lt; relref &quot;catel-mvvm/locators-naming-conventions/view-locator.md&quot; &gt;}}) topic.</p>

@@ -133,14 +133,9 @@ EditPerson = new TaskCommand(OnEditPersonExecuteAsync, OnEditPersonCanExecute);
 RemovePerson = new TaskCommand(OnRemovePersonExecuteAsync, OnRemovePersonCanExecute);
 </code></pre>
 <ol start="2">
-<li>You must import <code>Catel.IoC</code> namespace since it contains <code>ViewModelBase</code>'s <code>GetTypeFactory()</code> extension method used below.</li>
-</ol>
-<pre><code>using Catel.IoC;
-</code></pre>
-<ol start="3">
 <li>Add this code to the view model itself:</li>
 </ol>
-<pre><code> /// &lt;summary&gt;
+<pre><code class="lang-csharp"> /// &lt;summary&gt;
 /// Gets the AddPerson command.
 /// &lt;/summary&gt;
 public TaskCommand AddPerson { get; private set; }
@@ -152,10 +147,7 @@ private async Task OnAddPersonExecuteAsync()
 {
     var person = new Person();
     person.LastName = FamilyName;
-    // Note that we use the type factory here because it will automatically take care of any dependencies
-    // that the PersonViewModel will add in the future
-    var typeFactory = this.GetTypeFactory();
-    var personViewModel = typeFactory.CreateInstanceWithParametersAndAutoCompletion&lt;PersonViewModel&gt;(person);
+    var personViewModel = _viewModelFactory.CreateViewModel&lt;PersonViewModel&gt;(person);
     if (await _uiVisualizerService.ShowDialogAsync(personViewModel) ?? false)
     {
         Persons.Add(person);
@@ -181,10 +173,7 @@ private bool OnEditPersonCanExecute()
 /// &lt;/summary&gt;
 private async Task OnEditPersonExecuteAsync()
 {
-    // Note that we use the type factory here because it will automatically take care of any dependencies
-    // that the PersonViewModel will add in the future
-    var typeFactory = this.GetTypeFactory();
-    var personViewModel = typeFactory.CreateInstanceWithParametersAndAutoCompletion&lt;PersonViewModel&gt;(SelectedPerson);
+    var personViewModel = _viewModelFactory.CreateViewModel&lt;PersonViewModel&gt;(SelectedPerson);
     await _uiVisualizerService.ShowDialogAsync(personViewModel);
 }
 
@@ -258,7 +247,7 @@ RemoveFamily = new TaskCommand(OnRemoveFamilyExecuteAsync, OnRemoveFamilyCanExec
 <ol start="2">
 <li>Add this code to the view model itself:</li>
 </ol>
-<pre><code>/// &lt;summary&gt;
+<pre><code class="lang-csharp">/// &lt;summary&gt;
 /// Gets the AddFamily command.
 /// &lt;/summary&gt;
 public TaskCommand AddFamily { get; private set; }
@@ -269,10 +258,7 @@ public TaskCommand AddFamily { get; private set; }
 private async Task OnAddFamilyExecuteAsync()
 {
     var family = new Family();
-    // Note that we use the type factory here because it will automatically take care of any dependencies
-    // that the FamilyWindowViewModel will add in the future
-    var typeFactory = this.GetTypeFactory();
-    var familyWindowViewModel = typeFactory.CreateInstanceWithParametersAndAutoCompletion&lt;FamilyWindowViewModel&gt;(family);
+    var familyWindowViewModel = _viewModelFactory.CreateViewModel&lt;FamilyWindowViewModel&gt;(family);
     if (await _uiVisualizerService.ShowDialogAsync(familyWindowViewModel) ?? false)
     {
         Families.Add(family);
@@ -298,10 +284,7 @@ private bool OnEditFamilyCanExecute()
 /// &lt;/summary&gt;
 private async Task OnEditFamilyExecuteAsync()
 {
-    // Note that we use the type factory here because it will automatically take care of any dependencies
-    // that the PersonViewModel will add in the future
-    var typeFactory = this.GetTypeFactory();
-    var familyWindowViewModel = typeFactory.CreateInstanceWithParametersAndAutoCompletion&lt;FamilyWindowViewModel&gt;(SelectedFamily);
+    var familyWindowViewModel = _viewModelFactory.CreateViewModel&lt;FamilyWindowViewModel&gt;(SelectedFamily);
     await _uiVisualizerService.ShowDialogAsync(familyWindowViewModel);
 }
 

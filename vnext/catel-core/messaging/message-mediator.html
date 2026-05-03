@@ -87,21 +87,27 @@
         <article data-uid="">
 
 
-<p>Catel allows sending messages to unknown targets by implementing the mediator pattern. The mediator is assured memory leak free, and can be used safely in any .NET environment (even ASP.NET). Below are a few usage examples of the MessageMediator class.</p>
+<p>Catel allows sending messages to unknown targets by implementing the mediator pattern. The mediator is assured memory leak free, and can be used safely in any .NET environment. Below are a few usage examples of the <code>MessageMediator</code> class.</p>
+<p>Inject <code>IMessageMediator</code> via the constructor:</p>
+<pre><code class="lang-csharp">private readonly IMessageMediator _messageMediator;
+
+public MyViewModel(IServiceProvider serviceProvider, IMessageMediator messageMediator)
+    : base(serviceProvider)
+{
+    _messageMediator = messageMediator;
+}
+</code></pre>
 <h2 id="registering-to-a-message">Registering to a message</h2>
 <p>To register a handler for a specific message type, in this case a string, use the following code:</p>
-<pre><code>var mediator = ServiceLocator.Default.ResolveType&lt;IMessageMediator&gt;();
-mediator.Register&lt;string&gt;(this, OnMessage);
+<pre><code class="lang-csharp">_messageMediator.Register&lt;string&gt;(this, OnMessage);
 </code></pre>
 <h2 id="sending-out-a-message">Sending out a message</h2>
 <p>To send a message to all recipients, use the following code:</p>
-<pre><code>var mediator = ServiceLocator.Default.ResolveType&lt;IMessageMediator&gt;();
-mediator.SendMessage&lt;string&gt;(&quot;message&quot;);
+<pre><code class="lang-csharp">_messageMediator.SendMessage&lt;string&gt;(&quot;message&quot;);
 </code></pre>
 <h2 id="sending-out-a-message-with-a-tag">Sending out a message with a tag</h2>
 <p>Sometimes, you want to send messages only based on a tag. For example, you want to let other view models know that you just added a person. All recipients that registered to the string message type with the Person tag will receive the message:</p>
-<pre><code>var mediator = ServiceLocator.Default.ResolveType&lt;IMessageMediator&gt;();
-mediator.SendMessage&lt;string&gt;(&quot;Person added&quot;, &quot;Person&quot;);
+<pre><code class="lang-csharp">_messageMediator.SendMessage&lt;string&gt;(&quot;Person added&quot;, &quot;Person&quot;);
 </code></pre>
 
 </article>

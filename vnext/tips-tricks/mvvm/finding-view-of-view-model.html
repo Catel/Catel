@@ -92,16 +92,17 @@
 <p>A view is removed from the manager as soon as it is unloaded (via the <em>Unloaded</em> event). From this moment on, it is no longer possible to retrieve a view via its view model.</p>
 <p>Remember that only view classes implementing <em>IView</em> are supported by the <em>IViewManager</em></p>
 <h2 id="retrieving-the-view-of-a-view-model">Retrieving the view of a view model</h2>
-<p>To find the view of a view model, use the steps below:</p>
-<ol>
-<li>Resolve the view from <em>IViewManager</em> from the <em>ServiceLocator</em>:</li>
-</ol>
-<pre><code>var viewManager = ServiceLocator.Default.ResolveType&lt;IViewManager&gt;();
+<p>To find the view of a view model, inject <code>IViewManager</code> via the constructor:</p>
+<pre><code class="lang-csharp">private readonly IViewManager _viewManager;
+
+public MyViewModel(IServiceProvider serviceProvider, IViewManager viewManager)
+    : base(serviceProvider)
+{
+    _viewManager = viewManager;
+}
 </code></pre>
-<ol start="2">
-<li>Resolve the view:</li>
-</ol>
-<pre><code>var views = viewManager.GetViewsOfViewModel(myViewModel);
+<p>Then resolve the views for a specific view model:</p>
+<pre><code class="lang-csharp">var views = _viewManager.GetViewsOfViewModel(myViewModel);
 </code></pre>
 <p>Note that it is possible that multiple views are linked to the same view model</p>
 

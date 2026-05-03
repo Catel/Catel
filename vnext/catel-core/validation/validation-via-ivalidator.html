@@ -160,16 +160,16 @@ if (modelValidation != null)
     modelValidation .Validator = new MyValidator();
 }
 </code></pre>
-<p>If an IValidatorProvider instance is available, the following code can be used to allow a more generic approach. This code assumes that the IValidatorProvider is registered in the ServiceLocator.</p>
-<pre><code>var validatorProvider = ServiceLocator.Instance.ResolveType&lt;IValidatorProvider&gt;();
-myObject.Validator = validatorProvider.GetValidator(myObject.GetType());
+<p>If an IValidatorProvider instance is available, the following code can be used to allow a more generic approach. Inject <code>IValidatorProvider</code> via the constructor:</p>
+<pre><code class="lang-csharp">var validator = _validatorProvider.GetValidator(myObject.GetType());
+myObject.Validator = validator;
 </code></pre>
 <p>If the IValidatorProvider returns null (which is allowed), no custom validator will be used.</p>
 <h2 id="setting-the-validator-in-viewmodelbase">Setting the validator in ViewModelBase</h2>
-<p>The ViewModelBase has it's own ServiceLocator. The easiest way to support a validator is to register an IValidatorProvider instance in the ServiceLocator:</p>
-<pre><code>ServiceLocator.Instance.RegisterType&lt;IValidatorProvider, MyValidatorProvider&gt;();
+<p>The easiest way to support a validator in a ViewModelBase is to register an <code>IValidatorProvider</code> instance in the service collection:</p>
+<pre><code class="lang-csharp">services.AddSingleton&lt;IValidatorProvider, MyValidatorProvider&gt;();
 </code></pre>
-<p>The ViewModelBase will automatically retrieve the right IValidator for the view model. If no IValidatorProvider is registered in the ServiceLocator, no validator will be set automatically. It is also possible to set the Validator property manually, but it is recommended to use an IValidatorProvider and register it.</p>
+<p>The ViewModelBase will automatically retrieve the right IValidator for the view model. If no IValidatorProvider is registered, no validator will be set automatically. It is also possible to set the Validator property manually, but it is recommended to use an IValidatorProvider and register it.</p>
 
 </article>
 

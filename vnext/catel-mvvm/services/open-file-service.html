@@ -89,11 +89,17 @@
 
 <p>The <code>IOpenFileService</code> allows a developer to let the user choose a file from inside a view model.</p>
 <h2 id="opening-a-file">Opening a file</h2>
-<p>To open a file, it is required to set the right properties of the service and then make a call to the <code>DetermineFile</code> method:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var openFileService = dependencyResolver.Resolve&lt;IOpenFileService&gt;();
-openFileService.Filter = &quot;All files|*.*&quot;;
-if (openFileService.DetermineFile())
+<p>To open a file, inject the service via the constructor and use:</p>
+<pre><code class="lang-csharp">private readonly IOpenFileService _openFileService;
+
+public MyViewModel(IServiceProvider serviceProvider, IOpenFileService openFileService)
+    : base(serviceProvider)
+{
+    _openFileService = openFileService;
+}
+</code></pre>
+<pre><code class="lang-csharp">_openFileService.Filter = &quot;All files|*.*&quot;;
+if (_openFileService.DetermineFile())
 {
     // User selected a file
 }

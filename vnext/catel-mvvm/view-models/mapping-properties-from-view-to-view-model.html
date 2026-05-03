@@ -126,11 +126,8 @@
 }
 </code></pre>
 <h2 id="important-note-starting-with-catel-40">Important note starting with Catel 4.0</h2>
-<p>Starting with 4.0, Catel no longer subscribes to dependency properties automatically. It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, use the <code>IViewPropertySelector.AddPropertyToSubscribe</code> method to add properties:</p>
-<pre><code>var serviceLocator = ServiceLocator.Default;
-var viewPropertySelector = serviceLocator.ResolveType&lt;IViewPropertySelector&gt;();
-
-viewPropertySelector.AddPropertyToSubscribe(&quot;MyProperty&quot;, typeof(MyView));
+<p>Starting with 4.0, Catel no longer subscribes to dependency properties automatically. It is best to let Catel only subscribe to the properties that it should (for the best performance). To do so, inject <code>IViewPropertySelector</code> via the constructor and use the <code>AddPropertyToSubscribe</code> method:</p>
+<pre><code class="lang-csharp">_viewPropertySelector.AddPropertyToSubscribe(&quot;MyProperty&quot;, typeof(MyView));
 </code></pre>
 <p>In most cases, the only reason to subscribe to property changes is because of the <code>ViewToViewModel</code> attribute. If that is the case, it is best to use the extension method <code>AutoDetectViewPropertiesToSubscribe</code> in the static constructor of the view:</p>
 <pre><code>static MyView()

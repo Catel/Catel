@@ -89,11 +89,17 @@
 
 <p>The <code>ISaveFileService</code> allows a developer to let the user choose a file from inside a view model.</p>
 <h2 id="choosing-a-file">Choosing a file</h2>
-<p>To select a file to save, it is required to set the right properties of the service and then make a call to the <code>DetermineFile</code> method:</p>
-<pre><code>var dependencyResolver = this.GetDependencyResolver();
-var saveFileService = dependencyResolver.Resolve&lt;ISaveFileService&gt;();
-saveFileService.Filter = &quot;C# File|*.cs&quot;;
-if (saveFileService.DetermineFile())
+<p>To select a file to save, inject the service via the constructor and use:</p>
+<pre><code class="lang-csharp">private readonly ISaveFileService _saveFileService;
+
+public MyViewModel(IServiceProvider serviceProvider, ISaveFileService saveFileService)
+    : base(serviceProvider)
+{
+    _saveFileService = saveFileService;
+}
+</code></pre>
+<pre><code class="lang-csharp">_saveFileService.Filter = &quot;C# File|*.cs&quot;;
+if (_saveFileService.DetermineFile())
 {
     // User selected a file
 }

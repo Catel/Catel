@@ -128,7 +128,7 @@
     IViewModel &lt;|.. ViewModelBase
 </code></pre>
 <p>The class diagram above shows how many default interfaces of the .NET Framework are supported in the <code>ModelBase</code> class. Since most of these interfaces are used by WPF as well, the <em>ViewModelBase</em> class itself can take huge advantage of the implementation of <code>ModelBase</code>.</p>
-<p>Because <code>ViewModelBase</code> derives from <code>ModelBase</code>, you can declare properties exactly the same way. Even better, you can simply use <code>ModelBase</code> (or the extended <code>SavableModelBase</code>) to create (and save) your Models, and use <code>ViewModelBase</code> as the base for all the View Models.</p>
+<p>Because <code>ViewModelBase</code> derives from <code>ModelBase</code>, you can declare properties exactly the same way. Even better, you can simply use <code>ModelBase</code> to create your Models, and use <code>ViewModelBase</code> as the base for all the View Models.</p>
 <h2 id="creating-a-view-model">Creating a view model</h2>
 <p>To declare a View Model, use the following code snippet:</p>
 <ul>

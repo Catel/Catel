@@ -104,11 +104,14 @@
 }
 </code></pre>
 <h2 id="creating-application-wide-commands">Creating application-wide commands</h2>
-<p>To create application-wide commands, one must resolve the <em>ICommandManager</em> from the *DependencyResolver *and create the command:</p>
-<pre><code>var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-var commandManager = dependencyResolver.Resolve&lt;ICommandManager&gt;();
+<p>To create application-wide commands, inject the <em>ICommandManager</em> via the constructor and create the command:</p>
+<pre><code class="lang-csharp">private readonly ICommandManager _commandManager;
 
-commandManager.CreateCommand(&quot;Refresh&quot;, new InputGesture(Key.F5));
+public MyInitializationClass(ICommandManager commandManager)
+{
+    _commandManager = commandManager;
+    _commandManager.CreateCommand(&quot;Refresh&quot;, new InputGesture(Key.F5));
+}
 </code></pre>
 <p>It is recommended to put all the command creation in a single place so they are easily manageable.</p>
 <h3 id="registering-a-custom-command">Registering a custom command</h3>
@@ -195,27 +198,23 @@ commandManager.CreateCommand(&quot;Refresh&quot;, new InputGesture(Key.F5));
 </code></pre>
 <p>It is recommended to keep a well formed structure for your command definitions to keep them manageable, even in very large applications</p>
 <h4 id="registering-the-command-container">Registering the command container</h4>
-<p>Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container:</p>
-<pre><code>var commandManager = ServiceLocator.Default.ResolveType&lt;ICommandManager&gt;();
-
-commandManager.CreateCommandWithGesture(typeof(Commands.Application), &quot;About&quot;);
+<p>Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container. Inject <code>ICommandManager</code> via the constructor and use:</p>
+<pre><code class="lang-csharp">_commandManager.CreateCommandWithGesture(typeof(Commands.Application), &quot;About&quot;);
 </code></pre>
 <p>This will keep the command registration very readable and maintainable when using a lot of commands:</p>
-<pre><code>var commandManager = ServiceLocator.Default.ResolveType&lt;ICommandManager&gt;();
+<pre><code class="lang-csharp">_commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), &quot;Exit&quot;);
+_commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), &quot;About&quot;);
 
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), &quot;Exit&quot;);
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), &quot;About&quot;);
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;Open&quot;);
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;Save&quot;);
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;SaveAs&quot;);
+_commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;Refresh&quot;);
 
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;Open&quot;);
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;Save&quot;);
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;SaveAs&quot;);
-commandManager.CreateCommandWithGesture(typeof(Commands.Project), &quot;Refresh&quot;);
+_commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), &quot;ToggleTooltips&quot;);
+_commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), &quot;ToggleQuickFilters&quot;);
 
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), &quot;ToggleTooltips&quot;);
-commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), &quot;ToggleQuickFilters&quot;);
-
-commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), &quot;Extensions&quot;);
-commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), &quot;ExtensionsSettings&quot;);
+_commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), &quot;Extensions&quot;);
+_commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), &quot;ExtensionsSettings&quot;);
 </code></pre>
 
 </article>
