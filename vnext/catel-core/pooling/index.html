@@ -91,7 +91,13 @@
 <p>The documentation uses a byte array of 4096 as poolable object as example. If <code>_poolManager</code> is used in the code below, it represents an instance of <code>PoolManager&lt;Buffer4096Poolable&gt;</code></p>
 <h2 id="introduction-to-the-pool-manager">Introduction to the pool manager</h2>
 <p>The pool manager internally uses a stack to manage the available objects in the pool. It's important to understand how a pool works. The flow diagram below shows how the pool manager deals with objects:</p>
-<p><img src="../../images/catel-core/pooling/hasobjects.png" alt=""></p>
+<pre><code class="lang-mermaid">flowchart TD
+    A([GetObject called]) --&gt; B{pool has\navailable objects?}
+    B -- yes --&gt; C[return pooled object]
+    B -- no --&gt; D[create new object]
+    C --&gt; E([return object to caller])
+    D --&gt; E
+</code></pre>
 <p>It is recommended that a pool manager gets registered in the <em>ServiceLocator</em> so it can be re-used by multiple components.</p>
 <p>Note that the pool manager does not limit the number of objects in memory. It has a <code>MaxSize</code> property so it will store only a maximum amount of objects inside the internal pool, but if the pool is running out of instances and a new object is requested, it will return a new instance (and thus creating a new object which could be garbage collected).</p>
 <h3 id="retrieving-objects-from-the-pool">Retrieving objects from the pool</h3>
@@ -111,7 +117,14 @@
 // outside the scope, the object is automatically disposed and returned to the pool
 </code></pre>
 <p>The flow chart below shows how the <code>PoolManager&lt;TPoolable&gt;</code> will handle the dispose:</p>
-<p><img src="../../images/catel-core/pooling/reachedmaxsize.png" alt=""></p>
+<pre><code class="lang-mermaid">flowchart TD
+    A([object disposed]) --&gt; B[reset object state]
+    B --&gt; C{pool reached\nMaxSize?}
+    C -- yes --&gt; D[discard object\nleave for GC]
+    C -- no --&gt; E[return object to pool]
+    D --&gt; F([end])
+    E --&gt; F
+</code></pre>
 <h2 id="customizing-a-pool-manager">Customizing a pool manager</h2>
 <p>Catel implements pooling via the <code>PoolManager&lt;TPoolable&gt;</code> class. This class allows the caller to retrieve an object. There is no need to explicitly derive a class from the <code>PoolManager&lt;TPoolable&gt;</code>. It can be customized though.</p>
 <h3 id="customizing-the-maximum-size">Customizing the maximum size</h3>

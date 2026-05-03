@@ -96,7 +96,15 @@
 </ul>
 <h1 id="binding-system-explained">Binding system explained</h1>
 <p>The binding system consists of several classes. Below is an architectural overview.</p>
-<p><img src="../../images/catel-mvvm/bindings/introduction/architecture.png" alt=""></p>
+<pre><code class="lang-mermaid">graph TD
+    View --&gt; BindingContext
+    BindingContext --&gt; Binding1[Binding]
+    BindingContext --&gt; Binding2[Binding]
+    Binding1 --&gt; Source1[BindingParty\nsource]
+    Binding1 --&gt; Target1[BindingParty\ntarget]
+    Binding2 --&gt; Source2[BindingParty\nsource]
+    Binding2 --&gt; Target2[BindingParty\ntarget]
+</code></pre>
 <p>As the image shows, each view will have their own <code>BindingContext</code>. A <code>BindingContext</code> contains all the bindings currently available in the view and allows adding / removing bindings dynamically when required. As soon as a major change occurs (such as a new view model), a new <code>BindingContext</code> will be created and the old one will be cleaned up. The views in Catel will automatically take care of the <code>BindingContext</code> initialization and lifetime management.</p>
 <p>Each <code>Binding</code> is a mapping from source to target. It also allows the specification of a converter like available in the XAML platforms. Each <code>Binding</code> also contains several <code>BindingParty</code> objects. The default value for <code>BindingMode</code> is <code>BindingMode.TwoWay.</code></p>
 <p>A <code>BindingParty</code> is an object that will take care of watching the source or target of the binding and inform the binding when a value has been changed. The binding parties are considered equal and contain the same logic for both the source and target of the binding.</p>
