@@ -24,7 +24,9 @@ public class TestFeaturedViewModel : FeaturedViewModelBase
     {
     }
 
+#pragma warning disable CTL0012 // Concrete types should go first
     private TestFeaturedViewModel(IPerson person, SpecialValidationModel specialValidationModel, IServiceProvider serviceProvider)
+#pragma warning restore CTL0012 // Concrete types should go first
         : base(serviceProvider)
     {
         Person = person;
