@@ -2,7 +2,7 @@
 title: "Hosting model"
 ---
 
-Catel 7 supports the .NET (core) hosted application model, similar to ASP.NET Core. This model provides a standardized way to configure services, logging, and application lifetime management using `Microsoft.Extensions.Hosting`.
+Catel supports the .NET (core) hosted application model, similar to ASP.NET Core. This model provides a standardized way to configure services, logging, and application lifetime management using `Microsoft.Extensions.Hosting`.
 
 ## Why use the hosted model?
 
@@ -19,9 +19,9 @@ Add the following packages to your WPF project:
 ```xml
 <PackageReference Include="Catel.Core" Version="7.0.0" />
 <PackageReference Include="Catel.MVVM" Version="7.0.0" />
-<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
+<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 ```
 
 ## Setting up the application
