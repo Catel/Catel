@@ -1,11 +1,11 @@
 ﻿---
 title: "Introduction to data objects" 
 ---
-It is very important to understand the data objects in Catel because they form the base pillar of all components used by the MVVM framework.
+It is important to understand the data objects in Catel because they form the base pillar of all components used by the MVVM framework.
 
 ## The ObservableObject class
 
-Very basic class implementing the `System.ComponentModel.INotifyPropertyChanging` and `System.ComponentModel.INotifyPropertyChanged` interfaces as well as Catels `Catel.Data.IAdvancedNotifyPropertyChanging` and Catels `Catel.Data.IAdvancedNotifyPropertyChanged`.
+basic class implementing the `System.ComponentModel.INotifyPropertyChanging` and `System.ComponentModel.INotifyPropertyChanged` interfaces as well as Catels `Catel.Data.IAdvancedNotifyPropertyChanging` and Catels `Catel.Data.IAdvancedNotifyPropertyChanged`.
 
 ## The ModelBase class
 
@@ -13,18 +13,18 @@ The [ModelBase]({{< relref "catel-core/data-handling/modelbase.md" >}})(previous
 
 ## Creating your first data object
 
-First of all, it is very important to realize that you shouldn't bore yourself with writing all the code below yourself. Catel contains lots of code snippets that allow you to create data objects very easily in a short amount of time.
+First of all, it is important to realize that you should not bore yourself with writing all the code below yourself. Catel contains many code snippets that allow you to create data objects in a short amount of time.
 
 This example shows the simplest way to declare a data object using the *ModelBase* class. By using a code snippet, the class is created in just 10 seconds.
 
 **Code snippets**
 
--   model - Declares a data object based on the *ModelBase* class
+- model - Declares a data object based on the *ModelBase* class
 
 **Steps**
 
-1.  Create a new class file called *FirstModel.cs*.
-2.  Inside the namespace, use the *model* codesnippet and fill in the name of the class, in this case *FirstModel*.
+1. Create a new class file called *FirstModel.cs*.
+2. Inside the namespace, use the *model* codesnippet and fill in the name of the class, in this case *FirstModel*.
 
 **Code**
 
@@ -83,12 +83,12 @@ This example shows how to declare the simplest property. In this example, a stri
 
 **Code snippets**
 
--   modelprop - Declares a simple property on a model
+- modelprop - Declares a simple property on a model
 
 **Steps**
 
-1.  Open *FirstModel.cs* created in the previous step.
-2.  In the Properties region, use the code snippet *modelprop*, and use the following values:
+1. Open *FirstModel.cs* created in the previous step.
+2. In the Properties region, use the code snippet *modelprop*, and use the following values:
 
 Code snippet item|Value
 ---|---
@@ -119,12 +119,12 @@ public static readonly PropertyDataSimplePropertyProperty = RegisterProperty("Si
 
 **Code snippets**
 
--   modelpropchanged - Declares a simple property on a model with a property changed callback
+- modelpropchanged - Declares a simple property on a model with a property changed callback
 
 **Steps**
 
-1.  Open *FirstModel.cs* created in the previous step.
-2.  In the Properties region, use the code snippet *modelpropchanged*, and use the following values:
+1. Open *FirstModel.cs* created in the previous step.
+2. In the Properties region, use the code snippet *modelpropchanged*, and use the following values:
 
 Code snippet item|Value
 ---|---
@@ -162,7 +162,7 @@ private void OnCallbackPropertyChanged()
 
 ## Adding validation
 
-It is very easy to add validation to a class (both the *ModelBase* and *ViewModelBase*). There are several ways, but this getting started guide will handle only the most simple one.
+It is easy to add validation to a class (both the *ModelBase* and *ViewModelBase*). There are several ways, but this getting started guide will handle only the most simple one.
 
 To enable validation, you must override at least one of the following methods:
 

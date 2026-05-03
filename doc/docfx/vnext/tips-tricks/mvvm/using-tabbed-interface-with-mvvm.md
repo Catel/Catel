@@ -5,8 +5,8 @@ A common scenario in WPF is to use a tabbed interface to give the user the optio
 
 For this example, we will have a few requirements:
 
--   Be able to add, close and activate tabs via a service
--   Be able to specify whether a tab can be closed by the end-user
+- Be able to add, close and activate tabs via a service
+- Be able to specify whether a tab can be closed by the end-user
 
 ![](../../images/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.gif)
 

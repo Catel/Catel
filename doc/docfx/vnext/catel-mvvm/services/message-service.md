@@ -23,7 +23,7 @@ await _messageService.Show("My first message via the service");
 
 ## Showing an error
 
-Showing a warning or error is very easy. Use the following code:
+Showing a warning or error is easy. Use the following code:
 
 ```csharp
 await _messageService.ShowError("Whoops, something went wrong");

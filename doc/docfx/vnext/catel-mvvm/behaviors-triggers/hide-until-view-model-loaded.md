@@ -12,7 +12,7 @@ xmlns:catel="http://schemas.catelproject.com"
 
 ## Focus when the control is loaded
 
-The easiest and default method is to focus the first control. The parent is also focused by default (just in case if it doesn't have any focus):
+The easiest and default method is to focus the first control. The parent is also focused by default (just in case if it does not have any focus):
 
 ```
 <local:MyUserControl ...>

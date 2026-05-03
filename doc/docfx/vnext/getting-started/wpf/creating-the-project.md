@@ -3,11 +3,11 @@ title: "Creating the WPF project"
 ---
 In this step we will create the project and add the relevant NuGet packages.
 
-This guide uses the on-line templates that are available in the Visual Studio gallery. If you can't find the templates on-line, please download them [here](http://www.catelproject.com/download/general-files/).
+This guide uses the on-line templates that are available in the Visual Studio gallery. If you cannot find the templates on-line, please download them [here](http://www.catelproject.com/download/general-files/).
 
 ## Creating the project
 
-To create the project, start Visual Studio and choose *File =\> New Project*... Then switch to the *on-line template section* as you can see in the screenshot below and search for Catel:
+To create the project, start Visual Studio and choose *File =\> New Project*... Then switch to the *on-line template section* as shown, in the screenshot below and search for Catel:
 
 ![](../../images/getting-started/wpf/creating-the-project/projecttemplate.png)
 

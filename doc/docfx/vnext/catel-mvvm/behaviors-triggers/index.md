@@ -1,9 +1,9 @@
 ﻿---
 title: "Behaviors & triggers" 
 ---
-Behaviors and triggers are very important to correctly separate the view from the view model. For example, to respond to an event in a view model, you cannot simply subscribe to the events in the view. The EventToCommand behavior is a great example to solve this problem.
+Behaviors and triggers are important to correctly separate the view from the view model. For example, to respond to an event in a view model, you cannot subscribe to the events in the view. The EventToCommand behavior is a great example to solve this problem.
 
-Catel offers lots of behaviors out of the box, so it is definitely worth taking a look at the behaviors.
+Catel offers many behaviors out of the box, so it is definitely worth taking a look at the behaviors.
 
 ## Managing interactivity classes
 

@@ -13,7 +13,7 @@ Below are a few major features that are available in Catel.
 
 ### Catel.Core
 
-Catel.Core is the library you want to include in all your projects, whether you are writing a UI project or not. It contains lots of useful helper methods. The
+Catel.Core is the library you want to include in all your projects, whether you are writing a UI project or not. It contains many useful helper methods. The
 most important features are listed below:
 
 - Argument validation (e.g. `Argument.IsNotNull(() => myArgument)`)
@@ -36,19 +36,19 @@ features are listed below:
 - Commands (Command, TaskCommand, etc)
 - Converters (tons of converters out of the box)
 - Services
-    - BusyIndicatorService
-    - MessageService
-    - NavigationService
-    - OpenFileService
-    - SaveFileService
-    - UIVisualizerService
+ - BusyIndicatorService
+ - MessageService
+ - NavigationService
+ - OpenFileService
+ - SaveFileService
+ - UIVisualizerService
 - View models
-    - Automatic validation
-    - Automatic mappings from model to view model
+ - Automatic validation
+ - Automatic mappings from model to view model
 - Views
-    - DataWindow
-    - UserControl
-    - Window
+ - DataWindow
+ - UserControl
+ - Window
 
 ## Example code
 

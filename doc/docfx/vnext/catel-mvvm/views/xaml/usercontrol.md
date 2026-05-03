@@ -1,17 +1,17 @@
 ---
 title: "UserControl" 
 ---
-The `UserControl` is a very interesting class of Catel, and fully shows the power of the MVVM Framework that ships with Catel. The user control is able to fully integrate MVVM on a user control level and solves the “nested user control” problem, which is explained in detail a bit further in this documentation.
+The `UserControl` is a very interesting class of Catel, and fully shows the power of the MVVM Framework that ships with Catel. The user control is able to fully integrate MVVM on a user control level and solves the “nested user control” problem, which is explained in detail somewhat further in this documentation.
 
 ## Automatic construction without parameter
 
-It simplest thing to do is to create a view model that has an empty constructor (thus without parameters). If the *UserControl* is added to the visual tree, the view model is instantly constructed and available for usage. A view model that is used inside a *UserControl* implementation is exactly the same as the *DataWindow* implementation. This way, the developers don’t have to worry about whether they can currently writing a view model that is meant for a window or a control.
+It simplest thing to do is to create a view model that has an empty constructor (thus without parameters). If the *UserControl* is added to the visual tree, the view model is instantly constructed and available for usage. A view model that is used inside a *UserControl* implementation is exactly the same as the *DataWindow* implementation. This way, the developers do not have to worry about whether they can currently writing a view model that is meant for a window or a control.
 
 ## Automatic construction with parameter
 
-A bit harder (it’s still very easy, don’t worry), but much more powerful is the construction with a parameter. This way, a control is forced to use the data context to create the view model. If there is no valid data context that can be used to construct the view model, no view model will be constructed. This sounds a little abstract, but let’s take a look to a more meaningful example.
+somewhat harder (it is still easy, do not worry), but much more powerful is the construction with a parameter. This way, a control is forced to use the data context to create the view model. If there is no valid data context that can be used to construct the view model, no view model will be constructed. The following example provides a more concrete illustration.
 
-Say, you want to write an application to manage company trees. The top-level of the data exists of a collection of `Company` objects (models). You want to display the companies inside an `ItemsControl`, which is a very good way to represent the companies. But how are you going to display the company details? You can simply create a template, but I wouldn't recommend that because the company representation can become very complex (and dynamic), because it consists of `Person` objects that can have children (employees), and the children are person objects as well, that can have children, etc. You might thing that this is a very simple scenario, which it actually is to make sure that all readers understand it correctly. But, there can be a lot of complex tree scenarios. For example, for a client, I had to write a complete treatment overview of a patient, which consists of a lot of different objects, which all have a child collection of other object types. Then you can save yourself with writing a simple and generic data template. Below is a graphical form of the example:
+Say, you want to write an application to manage company trees. The top-level of the data exists of a collection of `Company` objects (models). You want to display the companies inside an `ItemsControl`, which is a very good way to represent the companies. But how are you going to display the company details? You can create a template, but this is not recommended because the company representation can become very complex (and dynamic), because it consists of `Person` objects that can have children (employees), and the children are person objects as well, that can have children, etc. You might thing that this is a simple scenario, which it actually is to ensure that all readers understand it correctly. But, there can be many complex tree scenarios. For example, consider a complete treatment overview of a patient, which consists of many different objects, which all have a child collection of other object types. Then you can save yourself with writing a simple and generic data template. Below is a graphical form of the example:
 
 ```mermaid
 graph TD
@@ -24,7 +24,7 @@ graph TD
     Company2 --> Employee3[Employee]
 ```
 
-Now comes the real power of `UserControl` in to play. For example, to show the company and its managers, one has to write an items control that contains the companies and then a user control containing the details of the company. For the sake of simplicity, I will leave the employees out for now. The usage might seem a bit complex, but once you get the hang of it, it’s actually quite simple. First of all, create a view model that has a constructor of the model that you want to accept, in our case the `Company` class of which we will show the details:
+Now comes the real power of `UserControl` in to play. For example, to show the company and its managers, one has to write an items control that contains the companies and then a user control containing the details of the company. For simplicity, the employees are omitted in this example. The usage might seem somewhat complex, but once you get the hang of it, it is actually simple. First of all, create a view model that has a constructor of the model that you want to accept, in our case the `Company` class of which we will show the details:
 
 ```
 /// <summary>
@@ -39,7 +39,7 @@ public CompanyViewModel(Models.Company company)
 }
 ```
 
-As you can see, the view model can only be constructed by passing a company model. This is quite normal, because how can we show details of a non-existing (null) company? Now we have a view model, we can create our user control:
+As shown, the view model can only be constructed by passing a company model. This is normal, because how can we show details of a non-existing (null) company? Now we have a view model, we can create our user control:
 
 ```
 <catel:UserControl x:Class="Catel.Articles._03___MVVM.Examples.UserControlWithParameter.Company"
@@ -72,7 +72,7 @@ public partial class Company : UserControl
 }
 ```
 
-Now the control is created (I don’t want to focus on the actual control content here, since it’s not important), we can use the user control in our main window that has a collection of companies. The view model also has a `SelectedCompany` property representing the selected company inside the listbox. Then, we use the Company control and bind the data context to the `SelectedCompany` property:
+Now the control is created (I do not want to focus on the actual control content here, since it is not important), we can use the user control in our main window that has a collection of companies. The view model also has a `SelectedCompany` property representing the selected company inside the listbox. Then, we use the Company control and bind the data context to the `SelectedCompany` property:
 
 ```
 <!-- Items control of companies -->
@@ -97,7 +97,7 @@ As the code shows, there is a listbox containing all the companies. The data con
 
 In the image above, you see 2 controls. The first one is an items control that binds to the `CompaniesViewModel` because the window represents list of companies. The second one is the `CompanyControl`, which dynamically constructs the `CompanyViewModel` as soon as a company is selected at the left. This means that for every company selection, and new view model is constructed. This way, you can handle the saving, canceling and closing of the view model before the next is view model is constructed.
 
-The best thing about this is that you can actually start re-using user controls throughout your whole application. Instead of having the main view model have to define all the properties of (sub) controls, now each control has its own view model, and you don’t have to worry about the implementation in the parent of a control. Simply set the data context of the user control to the right type instance, and the user control will handle the rest.
+The best thing about this is that you can actually start re-using user controls throughout your whole application. Instead of having the main view model have to define all the properties of (sub) controls, now each control has its own view model, and you do not have to worry about the implementation in the parent of a control. set the data context of the user control to the right type instance, and the user control will handle the rest.
 
 The easiest way to create a new `UserControl` is to use item templates
 

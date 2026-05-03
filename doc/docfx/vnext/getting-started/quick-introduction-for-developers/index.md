@@ -1,7 +1,7 @@
 ﻿---
 title: "Quick introduction for developers" 
 ---
-This is a quick introduction for developers who don't have a lot of time to read all the docs. This document contains the absolute basics of what a developer needs to know.
+This is a quick introduction for developers who do not have much time to read all the docs. This document contains the absolute basics of what a developer needs to know.
 
 ## Core
 
@@ -9,7 +9,7 @@ This pare contains the core functionality of Catel and what you should know when
 
 ### Logging / debugging
 
-If you ever think Catel is behaving strange or does not work as expected, make sure to enable the logging. Below is an example on how to enable the logging:
+If you ever think Catel is behaving strange or does not work as expected, ensure to enable the logging. Below is an example on how to enable the logging:
 
 ```
 #if DEBUG
@@ -55,7 +55,7 @@ public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstN
 
 Catel will automatically take care of change notifications.
 
-Note that you can use the *modelprop* or *vmprop* to easily create these properties using code snippets. You can also use [Catel.Fody]({{< relref "catel-fody/_index.md" >}}) instead
+Note that you can use the *modelprop* or *vmprop* to create these properties using code snippets. You can also use [Catel.Fody]({{< relref "catel-fody/_index.md" >}}) instead
 
 ## MVVM
 
@@ -81,7 +81,7 @@ It goes even further. Catel can create view models based on the data context. Fo
 
 ### Handling hierarchy and parent/child view models
 
-Note that Catel is already fully aware of parent/child relations of view models so you don’t have to do anything for this yourself. For more information, read nested user controls.
+Note that Catel is already fully aware of parent/child relations of view models so you do not have to do anything for this yourself. For more information, read nested user controls.
 
 ### Resolving views and view models
 

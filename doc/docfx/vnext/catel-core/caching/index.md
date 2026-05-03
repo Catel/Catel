@@ -1,9 +1,9 @@
 ﻿---
 title: "Caching" 
 ---
-Caching is about improving applications performance. The most expensive performance costs of the applications are related with data retrieving, typically when this data requires to be moved across the network or loaded from disk. But some data have a slow changing behavior (a.k.a non-volatile) and doesn't require to be re-read with the same frequency of the volatile data.
+Caching is about improving applications performance. The most expensive performance costs of the applications are related with data retrieving, typically when this data requires to be moved across the network or loaded from disk. But some data have a slow changing behavior (a.k.a non-volatile) and does not require to be re-read with the same frequency of the volatile data.
 
-So, to improve your application's performance and handling this "nonvolatile" data from a pretty clean approach, Catel comes with a CacheStorage class. Notice that the first generic parameter is the type of the key and the second the type of the value the will be stored, just like a Dictionary but CacheStorage isn't it just a Dictionary. This class allows you to retrieve data and store it into the cache with single statement and also helps you to handle expiration policy if you need it.
+So, to improve your application's performance and handling this "nonvolatile" data from a clean approach, Catel comes with a CacheStorage class. Notice that the first generic parameter is the type of the key and the second the type of the value the will be stored, just like a Dictionary but CacheStorage is not it just a Dictionary. This class allows you to retrieve data and store it into the cache with single statement and also helps you to handle expiration policy if you need it.
 
 ## Initializing a cache storage
 
@@ -33,7 +33,7 @@ A default cache expiration policy initialization code can be specified during ca
 CacheStorage<string, Person> _personCache = new CacheStorage<string, Person>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(5)), true);
 ```
 
-You can specify a specific expiration policy for an item when it's storing:
+You can specify a specific expiration policy for an item when it is storing:
 
 ```
 _personCache.GetFromCacheOrFetch(id, () => service.GetPersonById(id), ExpirationPolicy.Duration(TimeSpan.FromMinutes(10)));
@@ -62,22 +62,22 @@ To implement an expiration cache policy use the following code template:
 ```
 public class MyExpirationPolicy : ExpirationPolicy
 {
-   public MyExpirationPolicy():base(true)
-   {
-   }
+ public MyExpirationPolicy():base(true)
+ {
+ }
 
-   public override bool IsExpired
-   {
-      get
-      {
-         // Add your custom expiration code to detect if the item expires
-      }
-   }
+ public override bool IsExpired
+ {
+ get
+ {
+ // Add your custom expiration code to detect if the item expires
+ }
+ }
 
-   public override void OnReset()
-   {
-      // Add your custom code to reset the policy if the item is read.
-   }
+ public override void OnReset()
+ {
+ // Add your custom code to reset the policy if the item is read.
+ }
 }
 ```
 

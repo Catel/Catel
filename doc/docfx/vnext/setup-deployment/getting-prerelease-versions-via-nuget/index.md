@@ -4,7 +4,7 @@ title: "Getting prerelease (beta) versions via NuGet"
 
 ## Installing via package manager
 
-Please make sure to select the same settings as in the screenshow below:
+Please ensure to select the same settings as in the screenshow below:
 
 ![](../../images/setup-deployment/getting-prerelease-versions-via-nuget/nuget.png)
 

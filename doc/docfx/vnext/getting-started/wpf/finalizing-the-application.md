@@ -1,7 +1,7 @@
 ﻿---
 title: "Finalizing the application" 
 ---
-The application we have created so far is fully functional, but misses a bit of the "magic". Below are some additional steps that might make your application more appealing and more user friendly. Of course you can go as far as you want by creating custom animations and such, but this guide focuses purely on making the basics more appealing.
+The application we have created so far is fully functional, but misses somewhat of the "magic". Below are some additional steps that might make your application more appealing and more user friendly. you can go as far as you want by creating custom animations and such, but this guide focuses purely on making the basics more appealing.
 
 ## Adding validation
 
@@ -22,7 +22,7 @@ protected override void ValidateFields(List<IFieldValidationResult> validationRe
 }
 ```
 
-The validation for the `Family` model is very easy as well:
+The validation for the `Family` model is easy as well:
 
 ```
 protected override void ValidateFields(List<IFieldValidationResult> validationResults)
@@ -79,7 +79,7 @@ Note that the `xmlns:i="http://schemas.microsoft.com/expression/2010/interactivi
 
 ## Adding search functionality to the main window
 
-A functionality that is needed in a lot of applications is search functionality. To implement this we will need to modify the `MainWindowViewModel`. Below are the steps required to implement search functionality.
+A functionality that is needed in many applications is search functionality. To implement this we will need to modify the `MainWindowViewModel`. Below are the steps required to implement search functionality.
 
 ### Adding additional properties to the view model
 

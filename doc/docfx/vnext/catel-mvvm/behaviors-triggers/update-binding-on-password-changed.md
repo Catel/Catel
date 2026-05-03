@@ -1,7 +1,7 @@
 ﻿---
 title: "UpdateBindingOnPasswordChanged" 
 ---
-The `UpdateBindingOnPasswordChanged` is a very useful behavior which allows to bind the `Password` property of the `PasswordBox` Control. Use it, it's really simple.
+The `UpdateBindingOnPasswordChanged` is a useful behavior which allows to bind the `Password` property of the `PasswordBox` Control. Use it, it is really simple.
 
 1) Add the following XML namespaces:
 

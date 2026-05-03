@@ -28,7 +28,7 @@ public FamilyWindowViewModel(Family family, IUIVisualizerService uiVisualizerSer
 }
 ```
 
-Don't forget to create the right backing fields `_uiVisualizerService` and `_messageService`
+do not forget to create the right backing fields `_uiVisualizerService` and `_messageService`
 
 #### Adding the properties
 
@@ -260,7 +260,7 @@ private async Task OnRemoveFamilyExecuteAsync()
 
 ## Hooking up the views
 
-We now have all the views ready, but we don't see anything yet. The reason for this is that we haven't modified the `MainWindow` view yet. To do so, replace the xaml content with the xaml below:
+All views are now ready, but nothing is visible yet because the `MainWindow` view has not been modified. To do so, replace the xaml content with the xaml below:
 
 ```
  <Grid>

@@ -1,11 +1,11 @@
 ---
 title: "Creating the views (user controls)" 
 ---
-In this step we will create the views for the application. There are several views that will be created and both user controls and windows will be handled in this part of the guide. Catel makes it very easy to create views as user controls with their own view models. In the previous step we already created the view models.
+In this step we will create the views for the application. There are several views that will be created and both user controls and windows will be handled in this part of the guide. Catel makes it easy to create views as user controls with their own view models. In the previous step we already created the view models.
 
 ## Person view
 
-To create a new view, right-click the *Views* folder in the solution =\> *Add* =\> *New item...* =\> *On-line* =\> and search for Catel as you can see in the screen below:
+To create a new view, right-click the *Views* folder in the solution =\> *Add* =\> *New item...* =\> *On-line* =\> and search for Catel as shown, in the screen below:
 
 ![](../../images/getting-started/wpf/creating-the-user-controls/itemtemplate.png)
 
@@ -13,7 +13,7 @@ Give the new view the name `PersonView`. The view will be added to the *Views* f
 
 Catel will automatically link the `PersonViewModel` and `PersonView` together by naming convention
 
-Now we only need to modify the view itself, the code-behind can stay untouched. Since xaml isn't very interesting for this guide, simply copy/paste the xaml below and set it as content of the view:
+Now we only need to modify the view itself, the code-behind can stay untouched. Since xaml is not very interesting for this guide, copy/paste the xaml below and set it as content of the view:
 
 ```
 <Grid>

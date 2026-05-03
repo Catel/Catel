@@ -5,7 +5,7 @@ The opinions about validation differ from person to person. Some people think it
 
 ## Suspending validation for a batch of changes
 
-Sometimes you need to change a batch of properties and don't want validation to be called after every property change. This can be accomplished by using the following code inside a *ModelBase* class:
+Sometimes you need to change a batch of properties and do not want validation to be called after every property change. This can be accomplished by using the following code inside a *ModelBase* class:
 
 ```
 SuspendValidation = true;

@@ -1,12 +1,12 @@
 ﻿---
 title: "Creating a basic view model" 
 ---
-This example shows how to create a view model without a model. This is useful when a UI item should simply acknowledge a step that doesn't need to be persisted to a persistence store. The view model does include validation.
+This example shows how to create a view model without a model. This is useful when a UI item should acknowledge a step that does not need to be persisted to a persistence store. The view model does include validation.
 
 ## Code snippets
 
--   vm - declare a view model
--   vmprop - declare a property on a view model
+- vm - declare a view model
+- vmprop - declare a property on a view model
 
 ## Explanation
 

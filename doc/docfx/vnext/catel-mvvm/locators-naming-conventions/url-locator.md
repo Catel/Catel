@@ -33,32 +33,32 @@ var url = _urlLocator.ResolveUrl(typeof(MyViewModel));
 
 By default, the `IUrlLocator` uses the following naming conventions to resolve urls:
 
--   /Views/[VM].xaml
--   /Views/[VM]View.xaml
--   /Views/[VM]Control.xaml
--   /Views/[VM]Page.xaml
--   /Views/[VM]Window.xaml
--   /Controls/[VM].xaml
--   /Controls/[VM]Control.xaml
--   /Pages/[VM].xaml
--   /Pages/[VM]Page.xaml
--   /Windows/[VM].xaml
--   /Windows/[VM]Window.xaml
--   /UI.Views/[VM].xaml
--   /UI.Views/[VM]View.xaml
--   /UI.Views/[VM]Control.xaml
--   /UI.Views/[VM]Page.xaml
--   /UI.Views/[VM]Window.xaml
--   /UI.Controls/[VM].xaml
--   /UI.Controls/[VM]Control.xaml
--   /UI.Pages/[VM].xaml
--   /UI.Pages/[VM]Page.xaml
--   /UI.Windows/[VM].xaml
--   /UI.Windows/[VM]Window.xaml
--   /[VM].xaml
--   /[VM]Control.xaml
--   /[VM]Page.xaml
--   /[VM]Window.xaml
+- /Views/[VM].xaml
+- /Views/[VM]View.xaml
+- /Views/[VM]Control.xaml
+- /Views/[VM]Page.xaml
+- /Views/[VM]Window.xaml
+- /Controls/[VM].xaml
+- /Controls/[VM]Control.xaml
+- /Pages/[VM].xaml
+- /Pages/[VM]Page.xaml
+- /Windows/[VM].xaml
+- /Windows/[VM]Window.xaml
+- /UI.Views/[VM].xaml
+- /UI.Views/[VM]View.xaml
+- /UI.Views/[VM]Control.xaml
+- /UI.Views/[VM]Page.xaml
+- /UI.Views/[VM]Window.xaml
+- /UI.Controls/[VM].xaml
+- /UI.Controls/[VM]Control.xaml
+- /UI.Pages/[VM].xaml
+- /UI.Pages/[VM]Page.xaml
+- /UI.Windows/[VM].xaml
+- /UI.Windows/[VM]Window.xaml
+- /[VM].xaml
+- /[VM]Control.xaml
+- /[VM]Page.xaml
+- /[VM]Window.xaml
 
 For more information about naming conventions, see [Naming conventions]({{< relref "catel-mvvm/locators-naming-conventions/naming-conventions.md" >}})
 
@@ -70,7 +70,7 @@ _urlLocator.NamingConventions.Add("/MyPages/[VM]Page.xaml");
 
 ## Registering custom urls
 
-Sometimes, a class doesn't follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:
+Sometimes, a class does not follow a naming convention (for whatever reason possible). In such a case, it is possible to register a mapping manually using the following code:
 
 ```csharp
 _urlLocator.Register(typeof(MyViewModelNotFollowingNamingConvention), "/MyVerySpecialUrl.xaml");

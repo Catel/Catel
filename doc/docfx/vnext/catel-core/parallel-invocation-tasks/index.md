@@ -1,11 +1,11 @@
 ﻿---
 title: "Parallel invocation and tasks" 
 ---
-This page contains helper classes in Catel to invoke specific actions on very large collections in parallel.
+This page contains helper classes in Catel to invoke specific actions on large collections in parallel.
 
 ## Running batches on large sets in parallel
 
-When handling a lot of items and invoking a method per item, it might be a viable option to execute the actions in batches. This normally requires quite some code to split up the large collection into batches and execute the method for each item. To make this process much easier, Catel introduces the *ParallelHelper* class.
+When handling many items and invoking a method per item, it might be a viable option to execute the actions in batches. This normally requires some code to split up the large collection into batches and execute the method for each item. To make this process much easier, Catel introduces the *ParallelHelper* class.
 
 To invoke an *Initialize* method on all types currently loaded by Catel, in batches of 2500 types per batch, use the following code:
 

@@ -9,13 +9,13 @@ To resolve that concern, Catel provides support for an `EventArgsConverter` that
 
 As the ViewModel will no longer have any direct knowledge of the `EventArgs` being passed (because the `EventArgsConverter` translates it to an agnostic object), you will not be able to execute any behavior against the `EventArgs` (such as an `e.Handled` call) and any short-circuiting you must do must be done within the `EventArgsConverter`. 
 
-If you need more fine grain behavior, you'll need to stick with what's called a **Mixed-Mode Implementation** where the Event is implemented in the View Code-Behind and it manipulates the ViewModel through an Interface.
+If you need more fine grain behavior, you will need to stick with what's called a **Mixed-Mode Implementation** where the Event is implemented in the View Code-Behind and it manipulates the ViewModel through an Interface.
 
-With that, let's proceed with a basic implementation of an `EventArgsConverter` that will handle the `PreviewMouseDoubleClick` event against a `ListBoxItem`.
+With that, proceed with a basic implementation of an `EventArgsConverter` that will handle the `PreviewMouseDoubleClick` event against a `ListBoxItem`.
 
 ---
 
-First we'll create a `PersonModel` that will hold some basic information about a person.
+The following code creates a `PersonModel` that will hold some basic information about a person.
 
 ```
 public class PersonModel : ModelBase
@@ -35,7 +35,7 @@ public class PersonModel : ModelBase
 }
 ```
 
-Now let's create our ViewModel to aid in the display and manipulation of people:
+The following code creates our ViewModel to aid in the display and manipulation of people:
 
 ```
 public class MainViewModel : ViewModelBase
@@ -110,7 +110,7 @@ public class PersonListEventArgsConverter : EventArgsConverterBase<MouseEventArg
 }
 ```
 
-As you can see the `Convert` method is an event handler that will handle `MouseEventArgs` and does the following:
+As shown, the `Convert` method is an event handler that will handle `MouseEventArgs` and does the following:
 
 - Checks if the `OriginalSource` implements a `DependencyObject`
 - Grabs the `ListBoxItem` from the `DependencyObject` using `ParentyOfType<T>`

@@ -1,7 +1,7 @@
 ﻿---
 title: "DelayBindingUpdate" 
 ---
-Sometimes, a binding update should be delayed for performance reasons. This is possible using the `DelayBindingUpdate` behavior. This behavior modifies the binding mode to explicit and internally watches for property changes. If the bound dependency property changes, the behavior will wait for the time to pass and then update. If the value changes again within the timeframe, the timer is reset (so you won't get "double" updates).
+Sometimes, a binding update should be delayed for performance reasons. This is possible using the `DelayBindingUpdate` behavior. This behavior modifies the binding mode to explicit and internally watches for property changes. If the bound dependency property changes, the behavior will wait for the time to pass and then update. If the value changes again within the timeframe, the timer is reset (so you will not get "double" updates).
 
 1) Add the following XML namespaces:
 

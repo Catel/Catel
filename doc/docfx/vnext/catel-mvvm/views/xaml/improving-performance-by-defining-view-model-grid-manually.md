@@ -5,7 +5,7 @@ Catel wraps the content of each user control in a grid. This grid is the actual 
 
 ## Creating the grid manually
 
-The easiest way is to create the grid manually. The default implementation of the `IViewModelWrapperService` checks if the direct child control is a grid and has a specific name `__catelInnerWrapper`. To prevent Catel from creating the wrapper, simply specify the name on the root grid.
+The easiest way is to create the grid manually. The default implementation of the `IViewModelWrapperService` checks if the direct child control is a grid and has a specific name `__catelInnerWrapper`. To prevent Catel from creating the wrapper, specify the name on the root grid.
 
 Note that Catel will override the `DataContext` binding of this grid to reflect the view model.
 

@@ -17,7 +17,7 @@ Encountered issues while upgrading to this version? Add them here to help out ot
 
 ## Source code generator
 
-A new source code generator (Catel.SourceGenerators) has been developed to assist in generating boiler-plate code. It's still possible to develop projects without it, but with the lack of dependency injection in XAML, it's strongly recommended to use the source generator.
+A new source code generator (Catel.SourceGenerators) has been developed to assist in generating boiler-plate code. it is still possible to develop projects without it, but with the lack of dependency injection in XAML, it is strongly recommended to use the source generator.
 
 Add this to the csproj file:
 
@@ -58,7 +58,7 @@ services.AddCatelMvvm();
 
 ## Hosting model
 
-Catel now supports the .NET hosting model. It's possible to create an app host, similar to ASP.NET.
+Catel now supports the .NET hosting model. it is possible to create an app host, similar to ASP.NET.
 
 ```
 public partial class App : Application
@@ -115,14 +115,14 @@ public partial class App : Application
 
 ## Logging
 
-The logging features have been removed from Catel. It's recommended to use the .NET standard logging features.
+The logging features have been removed from Catel. it is recommended to use the .NET standard logging features.
 
-.NET logging uses DI, but static classes shouldn’t be forced to use DI just for logging. Our solution:
+.NET logging uses DI, but static classes should not be forced to use DI just for logging. Our solution:
 
 * Dependency injection: Inject `ILogger<T>` (even for views)
 * Static logger: Use `LogManager.GetLogger(typeof(X))`
 
-`LogManager` detects the hosting model and provides the right logger instance, or a `NullLogger` for unit tests. It’s also possible to register a custom logger factory as fallback.
+`LogManager` detects the hosting model and provides the right logger instance, or a `NullLogger` for unit tests. It is also possible to register a custom logger factory as fallback.
 
 To upgrade, replace:
 
@@ -158,7 +158,7 @@ Alternatives:
 
 The view models have been refactored to remove any hidden dependencies. To minimize the risk of added dependencies in the future (that will cause breaking changes), a view model now requires the `IServiceProvider` as injected dependency.
 
-Catel’s `ViewModelBase` is powerful, but most view models don’t need all its features. With true DI, we’re splitting it:
+Catel’s `ViewModelBase` is powerful, but most view models do not need all its features. With true DI, we’re splitting it:
 
 * FeaturedViewModelBase: For advanced features (validation, throttling, etc.)
 * ViewModelBase: Lightweight, for most use cases
@@ -271,11 +271,11 @@ Add custom logic in the partial `OnInitializingComponent` or `OnInitializedCompo
 
 # Unit testing
 
-With the new dependency injection approach, it's much easier to isolate unit / integration tests.
+With the new dependency injection approach, it is much easier to isolate unit / integration tests.
 
 ## Service collection initialization
 
-It's recommended to create a single helper class in the test project to set up the basics:
+It is recommended to create a single helper class in the test project to set up the basics:
 
 ```
 namespace Orc.FeatureToggles.Tests;

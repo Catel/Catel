@@ -3,7 +3,7 @@ title: 'Compiling from source'
 ---
 In order to compile, the following 3rd party software is required:
 
--   Visual Studio 2022
+- Visual Studio 2022
 
 All other libraries required are retrieved via NuGet.
 

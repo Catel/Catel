@@ -37,7 +37,7 @@ public MyInitializationClass(ICommandManager commandManager)
 }
 ```
 
-It is recommended to put all the command creation in a single place so they are easily manageable.
+It is recommended to put all the command creation in a single place so they are manageable.
 
 ### Registering a custom command
 
@@ -87,11 +87,11 @@ As the code shows, the *CommandManagerBinding* extension automatically resolves 
 
 ## Command containers
 
-When implementing a ribbon or any menu structure inside an application can result in a very complex view model containing all the commands. Catel solves this issue by implementing so-called command containers. These are containers that have only 1 purpose: contain a command so the logic can easily be viewed / edited and the commands will be available during the whole lifetime of the app. Internally command containers use the *ICommandManager* to register commands, so the *ICommandManager* is still responsible for the commands.
+When implementing a ribbon or any menu structure inside an application can result in a very complex view model containing all the commands. Catel solves this issue by implementing so-called command containers. These are containers that have only 1 purpose: contain a command so the logic can be viewed / edited and the commands will be available during the whole lifetime of the app. Internally command containers use the *ICommandManager* to register commands, so the *ICommandManager* is still responsible for the commands.
 
 ### Creating a command container
 
-Creating a command container is very simple. It can be done by creating a class deriving from *CommandContainerBase* as shown in the example below:
+Creating a command container is simple. It can be done by creating a class deriving from *CommandContainerBase* as shown in the example below:
 
 ```
 public class ApplicationAboutCommandContainer : CommandContainerBase
@@ -113,15 +113,15 @@ public class ApplicationAboutCommandContainer : CommandContainerBase
 }
 ```
 
-As you can see the implementation is very clean and won't pollute any other view models.
+As shown, the implementation is very clean and will not pollute any other view models.
 
 ### Registering a command container
 
-If you don't use the extension methods below, you must register the command container inside the service locator and register the command inside the *ICommandManager*. To make this process easier, use a definition file and the code below.
+If you do not use the extension methods below, you must register the command container inside the service locator and register the command inside the *ICommandManager*. To make this process easier, use a definition file and the code below.
 
 #### Command definitions
 
-To make it very easy to register new commands, Catel uses naming conventions and extension methods. The name of the command (for example, *About* must be a constant on the command definitions class). If the command definition also contains a *\<CommandName\>InputGesture*, in this case *AboutInputGesture*, it will use that input gesture as a default to register the command with.
+To make it easy to register new commands, Catel uses naming conventions and extension methods. The name of the command (for example, *About* must be a constant on the command definitions class). If the command definition also contains a *\<CommandName\>InputGesture*, in this case *AboutInputGesture*, it will use that input gesture as a default to register the command with.
 
 ```
 public static class Commands
@@ -143,7 +143,7 @@ public static class Commands
 }
 ```
 
-It is recommended to keep a well formed structure for your command definitions to keep them manageable, even in very large applications
+It is recommended to keep a well formed structure for your command definitions to keep them manageable, even in large applications
 
 #### Registering the command container
 
@@ -153,7 +153,7 @@ Once you have the command container and the command definition (command name and
 _commandManager.CreateCommandWithGesture(typeof(Commands.Application), "About");
 ```
 
-This will keep the command registration very readable and maintainable when using a lot of commands:
+This will keep the command registration very readable and maintainable when using many commands:
 
 ```csharp
 _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "Exit");

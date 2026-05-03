@@ -1,7 +1,7 @@
 ---
 title: "Property bags" 
 ---
-A property bag is a class that can hold multiple (dynamically registered) values. It can be compared to a dictionary, but does a bit more since it will also do integrity checks and change notifications.
+A property bag is a class that can hold multiple (dynamically registered) values. It can be compared to a dictionary, but does somewhat more since it will also do integrity checks and change notifications.
 
 Catel ships with multiple property bag implementations out of the box and uses a shared interface `IPropertyBag` to make it easy to switch between multiple implementations.
 

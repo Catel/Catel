@@ -5,17 +5,17 @@ This example shows how to create a "classical" view model without any Catel spec
 
 ## Code snippets
 
--   vm - declare a view model
--   vmprop - declare a property on a view model
+- vm - declare a view model
+- vmprop - declare a property on a view model
 
 ## Explanation
 
 To be in full control, the only thing required is to create a basic view model with the `vm` code snippet. Then, the following methods should be implemented:
 
--   Constructor - initialize the properties on the view model
--   ValidateFields - check for field errors in the view model
--   ValidateBusinessRules - check for business rules in the view model
--   Save - save the view model data to the model and then save the model
+- Constructor - initialize the properties on the view model
+- ValidateFields - check for field errors in the view model
+- ValidateBusinessRules - check for business rules in the view model
+- Save - save the view model data to the model and then save the model
 
 ## Code
 

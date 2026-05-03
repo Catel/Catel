@@ -7,7 +7,7 @@ The documentation uses a byte array of 4096 as poolable object as example. If `_
 
 ## Introduction to the pool manager
 
-The pool manager internally uses a stack to manage the available objects in the pool. It's important to understand how a pool works. The flow diagram below shows how the pool manager deals with objects:
+The pool manager internally uses a stack to manage the available objects in the pool. it is important to understand how a pool works. The flow diagram below shows how the pool manager deals with objects:
 
 ```mermaid
 flowchart TD
@@ -24,7 +24,7 @@ Note that the pool manager does not limit the number of objects in memory. It ha
 
 ### Retrieving objects from the pool
 
-Retrieving an object from the pool is very simple. When an instance of the `PoolManager<TPoolable>` is available, use the code below:
+Retrieving an object from the pool is simple. When an instance of the `PoolManager<TPoolable>` is available, use the code below:
 
 ```
 var poolableBuffer = _poolManager.GetObject();
@@ -34,7 +34,7 @@ The `PoolManager<TPoolable>` will automatically create a new object when no obje
 
 ### Returning objects to the pool
 
-Objects should be automatically returned to the pool when the objects are disposed. This means the objects are not really disposed but the state is being reset and the object is being returned to the pool. To automatically take care of this, it's best to use the `PoolManager<TPoolable>` as shown below:
+Objects should be automatically returned to the pool when the objects are disposed. This means the objects are not really disposed but the state is being reset and the object is being returned to the pool. To automatically take care of this, it is best to use the `PoolManager<TPoolable>` as shown below:
 
 ```
 using (var poolableBuffer = _poolManager.GetObject())
@@ -76,7 +76,7 @@ If the `MaxSize` is reached, objects will not be added back to the internal pool
 
 ## Creating a poolable object
 
-Since the objects need to be re-used, it's very important that the `PoolManager<TPoolable>` knows how to reset objects to the initial state. Therefore every poolable object needs to implement `IPoolable` which also implements `IDisposable`. Below is an example implementation of a poolable object.
+Since the objects need to be re-used, it is important that the `PoolManager<TPoolable>` knows how to reset objects to the initial state. Therefore every poolable object needs to implement `IPoolable` which also implements `IDisposable`. Below is an example implementation of a poolable object.
 
 ```
 public class Buffer4096Poolable : IPoolable

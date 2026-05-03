@@ -1,7 +1,7 @@
 ﻿---
 title: "Property bindings" 
 ---
-Property bindings are very important in the MVVM pattern. The binding system in Catel will automatically map properties when the binding system is used.
+Property bindings are important in the MVVM pattern. The binding system in Catel will automatically map properties when the binding system is used.
 
 ## Binding properties one way
 

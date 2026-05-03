@@ -1,7 +1,7 @@
 ﻿---
 title: "Introduction to services" 
 ---
-Services are very important in MVVM. They define a way to interact with the user without using fixed controls such as *MessageBox* or *SaveFileDialog*. The interfaces defined in Catel only define generic functionality of what to expect from a specific service. Using services is a great way to abstract away all specific functionality from a view model into a service that can be mocked during unit testing and can be used by other view models as well.
+Services are important in MVVM. They define a way to interact with the user without using fixed controls such as *MessageBox* or *SaveFileDialog*. The interfaces defined in Catel only define generic functionality of what to expect from a specific service. Using services is a great way to abstract away all specific functionality from a view model into a service that can be mocked during unit testing and can be used by other view models as well.
 
 ## Dependency injection
 

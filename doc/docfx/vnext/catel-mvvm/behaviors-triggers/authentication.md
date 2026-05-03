@@ -53,7 +53,7 @@ xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Inte
 xmlns:catel="http://schemas.catelproject.com"
 ```
 
-4) Add the behavior. As you can see, it is possible to provide a custom *AuthenticationTag*, which is passed to the *IAuthenticationProvider*:
+4) Add the behavior. As shown, it is possible to provide a custom *AuthenticationTag*, which is passed to the *IAuthenticationProvider*:
 
 ```
 <TextBox>

@@ -1,7 +1,7 @@
 ﻿---
 title: "Creating the view models" 
 ---
-In this step we will create the view models. Since this is a very simple application, just a few view models are required. A view model in essence is nothing more than a class that derives from the `ViewModelBase` class
+In this step we will create the view models. Since this is a simple application, just a few view models are required. A view model in essence is nothing more than a class that derives from the `ViewModelBase` class
 
 The *vm* code snippet is available to create view models. There is also an on-line item template available for Catel view models
 
@@ -55,7 +55,7 @@ Note that the `Person` property is decorated with the `Model` attribute. This au
 
 ### Exposing properties of a model
 
-One very powerful feature of Catel is that it can automatically map properties from a model to a view model. This way the user does not have to write repetitive code to map the properties from the model to the view model at startup and map the properties from view model to model when the view model is closed. Catel will take care of this all automatically.
+One powerful feature of Catel is that it can automatically map properties from a model to a view model. This way the user does not have to write repetitive code to map the properties from the model to the view model at startup and map the properties from view model to model when the view model is closed. Catel will take care of this all automatically.
 
 ```
 /// <summary>

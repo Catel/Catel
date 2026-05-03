@@ -3,7 +3,7 @@ title: "Navigate"
 ---
 Note that this behavior is only available for WPF
 
-The `Hyperlink` control in WPF is very powerful, but it is hard to make them work outside pages.
+The `Hyperlink` control in WPF is powerful, but it is hard to make them work outside pages.
 
 Add the following XML namespaces:
 
@@ -12,7 +12,7 @@ xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Inte
 xmlns:catel="http://schemas.catelproject.com"
 ```
 
-To execute the NavigateUrl, simply use the behavior as shown below:
+To execute the NavigateUrl, use the behavior as shown below:
 
 ```
 <TextBlock>

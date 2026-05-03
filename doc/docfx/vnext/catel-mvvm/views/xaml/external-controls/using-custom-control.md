@@ -5,7 +5,7 @@ In this part of the documentation, the `RadTabItem` of Telerik will be used as a
 
 ## Creating the base class with behavior
 
-The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it `TabItem` (to make it as "external control company independent" as possible). Below is the code for the control definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as you can see in the code below.
+The first thing to do is to create a new base class that accepts a view model type argument. In this example, we will call it `TabItem` (to make it as "external control company independent" as possible). Below is the code for the control definition. The downside of xaml based applications is that you cannot derive from controls or windows that have a partial class defined in xaml. Therefore, all controls and code must be initialized via code as shown, in the code below.
 
 ```
 /// <summary>
@@ -81,7 +81,7 @@ public class TabItem : RadTabItem, IUserControl
 }
 ```
 
-You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) can't handle abstract base classes
+You would expect an abstract class here, but the designers (both Visual Studio and Expression Blend) cannot handle abstract base classes
 
 ## Using the class
 

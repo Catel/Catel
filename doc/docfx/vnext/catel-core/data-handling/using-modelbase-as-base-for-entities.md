@@ -43,7 +43,7 @@ company.ClearDirtyFlag();
 return company;
 ```
 
-Note the *ClearDirtyFlag* call, which is very important to make the *IsDirty* property behave correctly.
+Note the *ClearDirtyFlag* call, which is important to make the *IsDirty* property behave correctly.
 
 4. Check the *IsDirty* of the model, not the view model when checking whether the model is dirty inside a view model.
 
