@@ -337,6 +337,15 @@
           href: catel-mvvm/views/xaml/external-controls/using-custom-window.md
 - name: Catel.Fody
   href: catel-fody/index.md
+  items:
+  - name: Configuration
+    href: catel-fody/configuration.md
+  - name: Weaving properties
+    href: catel-fody/weaving-properties.md
+  - name: Weaving argument checks
+    href: catel-fody/weaving-arguments.md
+  - name: Exposing model properties
+    href: catel-fody/exposing-properties.md
 - name: Catel.SourceGenerators
   href: catel-sourcegenerators/index.md
   items:
