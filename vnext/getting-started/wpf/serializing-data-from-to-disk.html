@@ -89,7 +89,7 @@
 
 <blockquote>
 <p><strong>Note:</strong> The Catel serialization engine (<code>IXmlSerializer</code>, <code>SavableModelBase</code>) was removed in Catel 7. The <code>ServiceLocator</code> IoC container was also removed in Catel 7 in favor of standard .NET dependency injection.</p>
-<p>For serialization, use alternatives such as <code>System.Text.Json</code>, <code>Newtonsoft.Json</code>, or <code>Orc.Serialization</code>.
+<p>For serialization, this guide uses <code>Orc.Serialization.Json</code>. Other alternatives include <code>System.Text.Json</code> and <code>Newtonsoft.Json</code>.
 For dependency injection, register services in <code>IServiceCollection</code> using <code>services.AddCatelCore()</code> and <code>services.AddCatelMvvm()</code>.</p>
 </blockquote>
 <p>In this step we will create services that will serialize the models from/to disk. Services are a great way to abstract functionality that can be used in every part of the application.</p>
@@ -109,51 +109,73 @@ For dependency injection, register services in <code>IServiceCollection</code> u
 }
 </code></pre>
 <h2 id="creating-the-service-implementation">Creating the service implementation</h2>
-<p>Below is an example implementation using <code>System.Text.Json</code> for serialization:</p>
+<p>First, add the <code>Orc.Serialization.Json</code> and <code>Orc.FileSystem</code> NuGet packages to the project:</p>
+<pre><code>dotnet add package Orc.Serialization.Json
+dotnet add package Orc.FileSystem
+</code></pre>
+<p>Below is an example implementation using <code>Orc.Serialization.Json</code> for serialization and <code>Orc.FileSystem</code> for file access:</p>
 <pre><code class="lang-csharp">namespace WPF.GettingStarted.Services
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Text.Json;
+    using Orc.FileSystem;
+    using Orc.Serialization.Json;
     using WPF.GettingStarted.Models;
 
     public class FamilyService : IFamilyService
     {
         private readonly string _path;
+        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
+        private readonly IJsonSerializer _jsonSerializer;
 
-        public FamilyService()
+        public FamilyService(IFileService fileService, IDirectoryService directoryService,
+            IJsonSerializerFactory jsonSerializerFactory)
         {
+            ArgumentNullException.ThrowIfNull(fileService);
+            ArgumentNullException.ThrowIfNull(directoryService);
+            ArgumentNullException.ThrowIfNull(jsonSerializerFactory);
+
+            _fileService = fileService;
+            _directoryService = directoryService;
+            _jsonSerializer = jsonSerializerFactory.CreateSerializer();
+
             string directory = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 &quot;CatenaLogic&quot;, &quot;WPF.GettingStarted&quot;);
 
-            Directory.CreateDirectory(directory);
+            _directoryService.Create(directory);
             _path = Path.Combine(directory, &quot;family.json&quot;);
         }
 
         public IEnumerable&lt;Family&gt; LoadFamilies()
         {
-            if (!File.Exists(_path))
+            if (!_fileService.Exists(_path))
             {
                 return Array.Empty&lt;Family&gt;();
             }
 
-            var json = File.ReadAllText(_path);
-            return JsonSerializer.Deserialize&lt;List&lt;Family&gt;&gt;(json) ?? new List&lt;Family&gt;();
+            using var stream = _fileService.Open(_path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            return _jsonSerializer.Deserialize&lt;List&lt;Family&gt;&gt;(stream) ?? new List&lt;Family&gt;();
         }
 
         public void SaveFamilies(IEnumerable&lt;Family&gt; families)
         {
-            var json = JsonSerializer.Serialize(families);
-            File.WriteAllText(_path, json);
+            using var stream = _fileService.Create(_path);
+            _jsonSerializer.Serialize(stream, families);
         }
     }
 }
 </code></pre>
 <h2 id="registering-the-service-in-the-service-collection">Registering the service in the service collection</h2>
 <p>Now we have created the service, it is time to register it in the service collection. In the <code>App.xaml.cs</code>, add the following code:</p>
-<pre><code class="lang-csharp">services.AddSingleton&lt;IFamilyService, FamilyService&gt;();
+<pre><code class="lang-csharp">// AddOrcFileSystem registers IFileService and IDirectoryService, which FamilyService depends on
+services.AddOrcFileSystem();
+// AddOrcSerializationJson registers IJsonSerializerFactory, which FamilyService depends on
+services.AddOrcSerializationJson();
+services.AddSingleton&lt;IFamilyService, FamilyService&gt;();
 </code></pre>
+<p>The call to <code>AddOrcFileSystem()</code> registers <code>IFileService</code> and <code>IDirectoryService</code>. The call to <code>AddOrcSerializationJson()</code> registers the <code>IJsonSerializerFactory</code> which is injected into <code>FamilyService</code>.</p>
 <h2 id="adding-the-service-usage-to-the-mainwindowviewmodel">Adding the service usage to the MainWindowViewModel</h2>
 <p>Now the service is registered, it can be used anywhere in the application. A great place to load and save the families is in the <code>MainWindowViewModel</code> which contains all the logic of the main application window.</p>
 <h3 id="injecting-the-service-via-dependency-injection">Injecting the service via dependency injection</h3>
