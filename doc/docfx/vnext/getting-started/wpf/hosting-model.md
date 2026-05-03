@@ -85,7 +85,11 @@ public partial class App
     {
         base.OnStartup(e);
 
-        var mainWindow = ActivatorUtilities.CreateInstance<MainWindow>(_host.Services);
+        var serviceProvider = _host.Services;
+
+        serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
+
+        var mainWindow = ActivatorUtilities.CreateInstance<MainWindow>(serviceProvider);
         mainWindow.Show();
     }
 
