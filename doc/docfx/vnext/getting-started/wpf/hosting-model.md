@@ -87,6 +87,8 @@ public partial class App
 
         var serviceProvider = _host.Services;
 
+        // Resolves and (optionally) initializes every singleton that implements
+        // IConstructAtStartup, ensuring they are ready before the UI is shown.
         serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
 
         var mainWindow = ActivatorUtilities.CreateInstance<MainWindow>(serviceProvider);
@@ -118,6 +120,7 @@ public partial class App
 | `AddCatelMvvm()` | Registers Catel MVVM services in the DI container. |
 | `AddLogging(...)` | Configures logging providers (console, debug). |
 | `IoCContainer.ServiceProvider` | Makes the built `IServiceProvider` available to Catel's IoC container and source-generated constructors. |
+| `CreateTypesThatMustBeConstructedAtStartup()` | Iterates all registered singleton services and immediately resolves any that implement `IConstructAtStartup`, so they are fully initialised before the UI is shown. If a service also implements `IInitializeAtStartup`, its `Initialize()` method is called at this point. |
 | `ActivatorUtilities.CreateInstance` | Creates the main window by resolving its dependencies from the service provider. |
 | `OnExit` | Gracefully stops the host and disposes resources on application exit. |
 
