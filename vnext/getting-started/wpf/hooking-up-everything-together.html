@@ -147,8 +147,7 @@ private async Task OnAddPersonExecuteAsync()
 {
     var person = new Person();
     person.LastName = FamilyName;
-    var personViewModel = _viewModelFactory.CreateViewModel&lt;PersonViewModel&gt;(person);
-    if (await _uiVisualizerService.ShowDialogAsync(personViewModel) ?? false)
+    if (await _uiVisualizerService.ShowDialogAsync&lt;PersonViewModel&gt;(person) ?? false)
     {
         Persons.Add(person);
     }
@@ -173,8 +172,7 @@ private bool OnEditPersonCanExecute()
 /// &lt;/summary&gt;
 private async Task OnEditPersonExecuteAsync()
 {
-    var personViewModel = _viewModelFactory.CreateViewModel&lt;PersonViewModel&gt;(SelectedPerson);
-    await _uiVisualizerService.ShowDialogAsync(personViewModel);
+    await _uiVisualizerService.ShowDialogAsync&lt;PersonViewModel&gt;(SelectedPerson);
 }
 
 /// &lt;summary&gt;
@@ -258,8 +256,7 @@ public TaskCommand AddFamily { get; private set; }
 private async Task OnAddFamilyExecuteAsync()
 {
     var family = new Family();
-    var familyWindowViewModel = _viewModelFactory.CreateViewModel&lt;FamilyWindowViewModel&gt;(family);
-    if (await _uiVisualizerService.ShowDialogAsync(familyWindowViewModel) ?? false)
+    if (await _uiVisualizerService.ShowDialogAsync&lt;FamilyWindowViewModel&gt;(family) ?? false)
     {
         Families.Add(family);
     }
@@ -284,8 +281,7 @@ private bool OnEditFamilyCanExecute()
 /// &lt;/summary&gt;
 private async Task OnEditFamilyExecuteAsync()
 {
-    var familyWindowViewModel = _viewModelFactory.CreateViewModel&lt;FamilyWindowViewModel&gt;(SelectedFamily);
-    await _uiVisualizerService.ShowDialogAsync(familyWindowViewModel);
+    await _uiVisualizerService.ShowDialogAsync&lt;FamilyWindowViewModel&gt;(SelectedFamily);
 }
 
 /// &lt;summary&gt;

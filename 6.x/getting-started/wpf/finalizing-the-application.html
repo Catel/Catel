@@ -211,11 +211,7 @@ private void UpdateSearchFilter()
 {
     var family = new Family();
 
-    // Note that we use the type factory here because it will automatically take care of any dependencies
-    // that the FamilyWindowViewModel will add in the future
-    var typeFactory = this.GetTypeFactory();
-    var familyWindowViewModel = typeFactory.CreateInstanceWithParametersAndAutoCompletion&lt;FamilyWindowViewModel&gt;(family);
-    if (await _uiVisualizerService.ShowDialog(familyWindowViewModel) ?? false)
+    if (await _uiVisualizerService.ShowDialogAsync&lt;FamilyWindowViewModel&gt;(family) ?? false)
     {
         Families.Add(family);
         UpdateSearchFilter();

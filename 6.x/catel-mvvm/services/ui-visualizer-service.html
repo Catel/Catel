@@ -91,20 +91,20 @@
 <h2 id="screenshot">Screenshot</h2>
 <p><img src="../../images/catel-mvvm/services/ui-visualizer-service/example.png" alt=""></p>
 <h2 id="showing-a-non-modal-window">Showing a non-modal window</h2>
-<p>To show a non-modal window, use the following code:</p>
-<pre><code>var viewModel = new EmployeeViewModel();
-
-var dependencyResolver = this.GetDependencyResolver();
+<p>To show a non-modal window, inject the service via the constructor and use it with model injection:</p>
+<pre><code>var dependencyResolver = this.GetDependencyResolver();
 var uiVisualizerService = dependencyResolver.Resolve&lt;IUIVisualizerService&gt;();
-uiVisualizerService.Show(viewModel);
+
+var employee = new Employee();
+await uiVisualizerService.ShowAsync&lt;EmployeeViewModel&gt;(employee);
 </code></pre>
 <h2 id="showing-a-modal-window">Showing a modal window</h2>
 <p>To show a modal window, use the following code:</p>
-<pre><code>var viewModel = new EmployeeViewModel();
-
-var dependencyResolver = this.GetDependencyResolver();
+<pre><code>var dependencyResolver = this.GetDependencyResolver();
 var uiVisualizerService = dependencyResolver.Resolve&lt;IUIVisualizerService&gt;();
-uiVisualizerService.ShowDialog(viewModel);
+
+var employee = new Employee();
+await uiVisualizerService.ShowDialogAsync&lt;EmployeeViewModel&gt;(employee);
 </code></pre>
 <h2 id="showing-a-window-with-callback">Showing a window with callback</h2>
 <p>To show a (modal or non-modal) window and get a callback as soon as the window is closed, use the following code:</p>

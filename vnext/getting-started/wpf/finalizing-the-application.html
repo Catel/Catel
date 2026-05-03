@@ -211,8 +211,7 @@ private void UpdateSearchFilter()
 {
     var family = new Family();
 
-    var familyWindowViewModel = _viewModelFactory.CreateViewModel&lt;FamilyWindowViewModel&gt;(family);
-    if (await _uiVisualizerService.ShowDialog(familyWindowViewModel) ?? false)
+    if (await _uiVisualizerService.ShowDialogAsync&lt;FamilyWindowViewModel&gt;(family) ?? false)
     {
         Families.Add(family);
         UpdateSearchFilter();
