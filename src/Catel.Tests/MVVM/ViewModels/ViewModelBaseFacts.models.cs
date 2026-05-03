@@ -97,6 +97,27 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
+    public async Task ModelsCanceledByCloseViewModelAsync_WhenNeitherSavedNorCanceled()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var person = new Person();
+        person.FirstName = "first name";
+        person.LastName = "last name";
+
+        var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+        Assert.That(person.IsInEditSession, Is.True);
+
+        await viewModel.CloseViewModelAsync(null);
+
+        Assert.That(person.IsInEditSession, Is.False);
+        Assert.That(person.CalledCancelEdit, Is.True);
+        Assert.That(person.CalledEndEdit, Is.False);
+    }
+
+    [TestCase]
     public void IsModelRegistered_ExistingModel()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
