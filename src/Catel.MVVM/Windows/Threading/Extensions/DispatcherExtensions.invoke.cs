@@ -102,7 +102,7 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
-    /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// Executes the specified action on the thread that the Dispatcher was created on if required.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
     /// </summary>
@@ -168,7 +168,7 @@ public static partial class DispatcherExtensions
     }
 
     /// <summary>
-    /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+    /// Executes the specified delegate on the thread that the Dispatcher was created on if required.
     /// <para />
     /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
     /// </summary>
