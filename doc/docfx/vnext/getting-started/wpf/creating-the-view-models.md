@@ -21,11 +21,6 @@ public class PersonViewModel : FeaturedViewModelBase
     public PersonViewModel(Person person, IServiceProvider serviceProvider)
         : base(serviceProvider)
     {
-        if (Catel.CatelEnvironment.IsInDesignMode)
-        {
-            return;
-        }
-
         Person = person;
 
         Title = "Person";
