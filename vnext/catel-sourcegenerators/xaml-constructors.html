@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>XAML Constructors | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="XAML Constructors | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-sourcegenerators/xaml-constructors.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="xaml-constructors">XAML Constructors</h1>
+
+<p>XAML requires that types it instantiates provide a parameterless (default) constructor. This conflicts with constructor-based dependency injection, which is the recommended approach in .NET.</p>
+<p><code>Catel.SourceGenerators</code> resolves this conflict by automatically generating a parameterless constructor that retrieves each dependency from <code>IoCContainer.ServiceProvider</code>. Developers write only the DI-friendly constructors they need; the generator handles the rest.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>The source generator looks for <code>partial</code> classes that:</p>
+<ul>
+<li>Inherit from a Catel XAML view base class (e.g., <code>UserControl</code>, <code>DataWindow</code>, <code>Window</code>).</li>
+<li>Have at least one constructor with parameters.</li>
+</ul>
+<p>For each such class, the generator creates a companion partial class file that contains:</p>
+<ul>
+<li>A private static helper method <code>GetService&lt;T&gt;()</code> that returns <code>null</code> when the application is in design mode (so the XAML designer does not attempt to resolve services).</li>
+<li>A generated parameterless constructor that delegates to the existing DI constructor.</li>
+</ul>
+<h2 id="using-an-explicit-constructor">Using an explicit constructor</h2>
+<p>Write the constructors you need with full dependency injection. The source generator will add the parameterless constructor automatically.</p>
+<p><strong>Developer-written code:</strong></p>
+<pre><code class="lang-csharp">public partial class MyUserControl : UserControl
+{
+    public MyUserControl(ILogger&lt;MyUserControl&gt; logger, IViewModelWrapperService viewModelWrapperService)
+        : base(logger, viewModelWrapperService)
+    {
+        InitializeComponent();
+    }
+}
+</code></pre>
+<p><strong>Generated code (added automatically by the source generator):</strong></p>
+<pre><code class="lang-csharp">public partial class MyUserControl
+{
+    private static T GetService&lt;T&gt;()
+        where T : class
+    {
+        if (Catel.CatelEnvironment.IsInDesignMode)
+        {
+            return null!;
+        }
+
+        return Catel.IoC.IoCContainer.ServiceProvider.GetRequiredService&lt;T&gt;();
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
+    public MyUserControl()
+        : this(GetService&lt;ILogger&lt;MyUserControl&gt;&gt;(), GetService&lt;IViewModelWrapperService&gt;())
+    {
+    }
+}
+</code></pre>
+<h2 id="without-any-developer-written-constructors">Without any developer-written constructors</h2>
+<p>If the class has no constructors at all, the source generator creates the full set of constructors automatically, including the DI-based constructor and the parameterless fallback.</p>
+<p><strong>Developer-written code (no constructors):</strong></p>
+<pre><code class="lang-csharp">public partial class MyUserControl : UserControl
+{
+}
+</code></pre>
+<p><strong>Generated code:</strong></p>
+<pre><code class="lang-csharp">public partial class MyUserControl
+{
+    private static T GetService&lt;T&gt;()
+        where T : class
+    {
+        if (Catel.CatelEnvironment.IsInDesignMode)
+        {
+            return null!;
+        }
+
+        return Catel.IoC.IoCContainer.ServiceProvider.GetRequiredService&lt;T&gt;();
+    }
+
+    partial void OnInitializingComponent();
+    partial void OnInitializedComponent();
+
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
+    [ActivatorUtilitiesConstructor]
+    public MyUserControl(
+        System.IServiceProvider serviceProvider,
+        Catel.Services.IViewModelWrapperService viewModelWrapperService,
+        Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService)
+        : base(serviceProvider, viewModelWrapperService, dataContextSubscriptionService)
+    {
+        OnInitializingComponent();
+        InitializeComponent();
+        OnInitializedComponent();
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
+    public MyUserControl()
+        : this(
+            GetService&lt;System.IServiceProvider&gt;(),
+            GetService&lt;Catel.Services.IViewModelWrapperService&gt;(),
+            GetService&lt;Catel.MVVM.IDataContextSubscriptionService&gt;())
+    {
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
+    public MyUserControl(
+        Catel.MVVM.IViewModel? viewModel,
+        System.IServiceProvider serviceProvider,
+        Catel.Services.IViewModelWrapperService viewModelWrapperService,
+        Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService)
+        : base(viewModel, serviceProvider, viewModelWrapperService, dataContextSubscriptionService)
+    {
+        OnInitializingComponent();
+        InitializeComponent();
+        OnInitializedComponent();
+    }
+}
+</code></pre>
+<p>The two <code>partial</code> methods <code>OnInitializingComponent</code> and <code>OnInitializedComponent</code> are hook points. Implement them in your own partial class file to execute custom logic before or after <code>InitializeComponent()</code> is called.</p>
+<h2 id="windows-and-datawindows">Windows and DataWindows</h2>
+<p>The same pattern applies to <code>Window</code> and <code>DataWindow</code> types.</p>
+<p><strong>Developer-written code:</strong></p>
+<pre><code class="lang-csharp">public partial class MyWindow : DataWindow
+{
+    public MyWindow(
+        ILogger&lt;MyWindow&gt; logger,
+        IServiceProvider serviceProvider,
+        IWrapControlService wrapControlService,
+        ILanguageService languageService)
+        : base(serviceProvider, wrapControlService, languageService)
+    {
+        InitializeComponent();
+    }
+}
+</code></pre>
+<p><strong>Generated parameterless constructor:</strong></p>
+<pre><code class="lang-csharp">public partial class MyWindow
+{
+    private static T GetService&lt;T&gt;()
+        where T : class
+    {
+        if (Catel.CatelEnvironment.IsInDesignMode)
+        {
+            return null!;
+        }
+
+        return Catel.IoC.IoCContainer.ServiceProvider.GetRequiredService&lt;T&gt;();
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(&quot;Catel.UserControlConstructors&quot;, &quot;1.0.0.0&quot;)]
+    public MyWindow()
+        : this(
+            GetService&lt;ILogger&lt;MyWindow&gt;&gt;(),
+            GetService&lt;IServiceProvider&gt;(),
+            GetService&lt;IWrapControlService&gt;(),
+            GetService&lt;ILanguageService&gt;())
+    {
+    }
+}
+</code></pre>
+<h2 id="design-time-support">Design-time support</h2>
+<p>The generated <code>GetService&lt;T&gt;()</code> helper always returns <code>null</code> when <code>Catel.CatelEnvironment.IsInDesignMode</code> is <code>true</code>. This prevents the XAML designer from attempting to resolve services from the DI container, which would fail at design time.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>The view class must be declared as <code>partial</code>.</li>
+<li>The project must reference <code>Catel.SourceGenerators</code> (with <code>PrivateAssets=&quot;all&quot;</code>).</li>
+<li>The DI container (<code>IoCContainer.ServiceProvider</code>) must be configured before any XAML view is instantiated at runtime.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-sourcegenerators/xaml-constructors.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

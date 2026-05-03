@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Catel.SourceGenerators | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Catel.SourceGenerators | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-sourcegenerators/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="catelsourcegenerators">Catel.SourceGenerators</h1>
+
+<p>Catel 7 introduces source generators to bridge the gap between .NET dependency injection (DI) and XAML. Because XAML requires parameterless constructors for types it instantiates, traditional constructor-based DI cannot be used directly. <code>Catel.SourceGenerators</code> solves this by automatically generating the required boilerplate constructors at compile time, letting developers write clean DI-friendly code while still satisfying XAML's requirements.</p>
+<p>The source code for <code>Catel.SourceGenerators</code> is available at <a href="https://github.com/Catel/Catel.SourceGenerators">https://github.com/Catel/Catel.SourceGenerators</a>.</p>
+<h2 id="installation">Installation</h2>
+<p>Add the following package reference to your <code>.csproj</code> file:</p>
+<pre><code class="lang-xml">&lt;PackageReference Include=&quot;Catel.SourceGenerators&quot; Version=&quot;1.0.0&quot; PrivateAssets=&quot;all&quot; /&gt;
+</code></pre>
+<blockquote>
+<p>The <code>PrivateAssets=&quot;all&quot;</code> attribute ensures that the source generator package is not treated as a runtime dependency.</p>
+</blockquote>
+<h2 id="features">Features</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="xaml-constructors.html">XAML Constructors</a></td>
+<td>Automatically generates parameterless constructors for XAML types (UserControls, Windows, etc.) that resolve services from the DI container.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-it-works">How it works</h2>
+<p>At compile time, the source generator:</p>
+<ol>
+<li>Scans partial classes that derive from Catel view types (e.g., <code>UserControl</code>, <code>DataWindow</code>, <code>Window</code>).</li>
+<li>Inspects any existing constructors that accept DI services.</li>
+<li>Generates an additional parameterless constructor that resolves each required service from <code>IoCContainer.ServiceProvider</code>.</li>
+</ol>
+<p>The generated code is placed in a separate partial class file and never overwrites developer-written code.</p>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="xaml-constructors.html">XAML Constructors</a> — learn how the source generator handles dependency injection for XAML types</li>
+<li><a href="debugging.html">Debugging</a> — diagnose issues with the source generator output</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/vnext/catel-sourcegenerators/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

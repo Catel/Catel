@@ -4010,6 +4010,36 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "vnext/catel-sourcegenerators/debugging.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-sourcegenerators/debugging.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "vnext/catel-sourcegenerators/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-sourcegenerators/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "vnext/catel-sourcegenerators/xaml-constructors.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-sourcegenerators/xaml-constructors.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Resource",
       "source_relative_path": "vnext/downloads/getting-started/wpf/wpf-getting-started.zip",
       "output": {
