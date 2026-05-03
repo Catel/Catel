@@ -4851,26 +4851,6 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/platform-support/caveats-in-wpf.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/platform-support/caveats-in-wpf.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/platform-support/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/platform-support/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "vnext/introduction/why-catel/index.md",
       "output": {
         ".html": {
