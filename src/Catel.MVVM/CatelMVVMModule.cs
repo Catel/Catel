@@ -1,7 +1,6 @@
 ﻿namespace Catel;
 
 using System.Linq;
-using Catel.MVVM.Auditing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MVVM;
@@ -55,16 +54,6 @@ public static class CatelMVVMModule
         serviceCollection.TryAddSingleton<ISelectDirectoryService, SelectDirectoryService>();
         serviceCollection.TryAddSingleton<IBusyIndicatorService, BusyIndicatorService>();
         serviceCollection.TryAddSingleton<IProcessService, ProcessService>();
-
-        // Auditing
-        serviceCollection.TryAddSingleton<IAuditingManager, AuditingManager>();
-
-        // TODO: How to instantiate these and register them?
-        //var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateRequiredInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
-        //AuditingManager.RegisterAuditor(invalidateCommandManagerOnViewModelInitializationAuditor);
-
-        //var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateRequiredInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
-        //AuditingManager.RegisterAuditor(subscribeKeyboardEventsOnViewModelCreationAuditor);
 
         serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
         serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));

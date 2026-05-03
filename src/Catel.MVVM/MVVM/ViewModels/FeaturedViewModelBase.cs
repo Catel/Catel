@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Auditing;
 using Collections;
 using Data;
 using Logging;
@@ -78,8 +77,6 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
     /// </summary>
     private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
 
-    private readonly AuditingWrapper? _auditingWrapper;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="FeaturedViewModelBase"/> class.
     /// <para/>
@@ -118,13 +115,6 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
             _viewModelManager.RegisterViewModelInstance(this);
 
             InitializeThrottling();
-        }
-
-        // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
-        var auditingManager = serviceProvider.GetService<IAuditingManager>();
-        if (auditingManager is not null)
-        {
-            _auditingWrapper = new AuditingWrapper(auditingManager, serviceProvider.GetRequiredService<IObjectAdapter>(), this);
         }
     }
 

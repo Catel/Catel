@@ -7,8 +7,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Data;
 using Catel.MVVM;
+using Catel.Tests.MVVM.ViewModels.TestClasses;
 using Microsoft.Extensions.DependencyInjection;
-using MVVM.Auditing;
 using NUnit.Framework;
 
 public class WeakEventListenerFacts
@@ -108,7 +108,7 @@ public class WeakEventListenerFacts
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            StaticEvent?.Invoke(null, new ViewModelClosedEventArgs(new TestViewModel(serviceProvider), true));
+            StaticEvent?.Invoke(null, new ViewModelClosedEventArgs(new TestFeaturedViewModel(serviceProvider), true));
         }
 
         public void RaisePublicEvent()
@@ -117,7 +117,7 @@ public class WeakEventListenerFacts
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            PublicEvent?.Invoke(this, new ViewModelClosedEventArgs(new TestViewModel(serviceProvider), true));
+            PublicEvent?.Invoke(this, new ViewModelClosedEventArgs(new TestFeaturedViewModel(serviceProvider), true));
         }
 
         public void RaisePrivateEvent()

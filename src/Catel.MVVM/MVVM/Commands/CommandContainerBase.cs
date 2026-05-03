@@ -2,7 +2,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Auditing;
 using Catel.Logging;
 using Catel.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -74,7 +73,6 @@ public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParamet
     private readonly ICatelCommand _command;
     private readonly ICommandManager _commandManager;
     private readonly IServiceProvider _serviceProvider;
-    private readonly IAuditingManager _auditingManager;
 
     private readonly ICompositeCommand _compositeCommand;
 
@@ -92,7 +90,6 @@ public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParamet
         CommandName = commandName;
         _commandManager = commandManager;
         _serviceProvider = serviceProvider;
-        _auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
 
         var compositeCommand = _commandManager.GetCommand(commandName) as ICompositeCommand;
         if (compositeCommand is null)
@@ -143,8 +140,6 @@ public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParamet
     private async Task ExecuteInternalAsync(TExecuteParameter? parameter)
     {
         await ExecuteAsync(parameter);
-
-        _auditingManager.OnCommandExecuted(null, CommandName, _command, parameter);
     }
 
     /// <summary>
