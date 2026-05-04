@@ -286,9 +286,9 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                 var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(valueProperty);
                 if (modelPropertyPropertyInfo is null)
                 {
-                    Logger.LogWarning("Mapped viewmodel property '{ViewModelProperty}' to model property '{ValueProperty}' is invalid because property '{ValueProperty}' is not found on the model '{ModelProperty}'.\n\n" +
+                    Logger.LogWarning("Mapped viewmodel property '{ViewModelProperty}' to model property '{ValueProperty}' is invalid because the property is not found on the model '{ModelProperty}'.\n\n" +
                             "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
-                        mapping.ViewModelProperty, valueProperty, valueProperty, mapping.ModelProperty);
+                        mapping.ViewModelProperty, valueProperty, mapping.ModelProperty);
 
                     modelPropertyPropertyTypes[i] = typeof(object);
                 }
