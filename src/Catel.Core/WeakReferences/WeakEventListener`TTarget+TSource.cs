@@ -209,7 +209,7 @@ public static class WeakEventListener<TTarget, TSource>
 
         if (eventArgsType is null)
         {
-            throw Logger.LogErrorAndCreateException<NotSupportedException>("Only handlers of type 'Action', 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs>' are supported. '{0}' does not belong to these supported types", handlerType.Name);
+            throw Logger.LogErrorAndCreateException<NotSupportedException>("Only handlers of type 'Action', 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs>' are supported. '{HandlerType}' does not belong to these supported types", handlerType.Name);
         }
 
         var targetType = typeof(TTarget);

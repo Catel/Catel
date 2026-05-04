@@ -39,7 +39,7 @@ public partial class ModelBase
         if ((value is null) && !property.Type.IsNullableType())
         {
             throw Logger.LogErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
-                "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().GetSafeFullName());
+                "Property '{PropertyName}' on type '{TypeName}' is not nullable, cannot set value to null", name, GetType().GetSafeFullName());
         }
 
         SetValue(property, value, notifyOnChange);
@@ -69,14 +69,14 @@ public partial class ModelBase
         {
             if (property != IsReadOnlyProperty)
             {
-                Logger.LogWarning("Cannot set property '{0}', object is currently read-only", property.Name);
+                Logger.LogWarning("Cannot set property '{PropertyName}', object is currently read-only", property.Name);
                 return;
             }
         }
 
         if (property.IsCalculatedProperty)
         {
-            Logger.LogWarning("Cannot set property '{0}', the property is a calculated property", property.Name);
+            Logger.LogWarning("Cannot set property '{PropertyName}', the property is a calculated property", property.Name);
             return;
         }
 
@@ -85,7 +85,7 @@ public partial class ModelBase
             if (!value.GetType().IsCOMObjectEx())
             {
                 throw Logger.LogErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
-                    "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().GetSafeFullName());
+                    "Cannot set value '{Value}' to property '{PropertyName}' of type '{TypeName}', the value is invalid", value, property.Name, GetType().GetSafeFullName());
             }
         }
 

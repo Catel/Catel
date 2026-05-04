@@ -93,7 +93,7 @@ public partial class BooleanToTextConverter : ValueConverterBase
         }
         catch (ArgumentException)
         {
-            Logger.LogError("Failed to parse '{0}' as '{1}'", parameter, "BooleanToTextConverterMode");
+            Logger.LogError("Failed to parse '{Parameter}' as '{TargetType}'", parameter, "BooleanToTextConverterMode");
             return mode;
         }
 

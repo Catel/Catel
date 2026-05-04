@@ -67,7 +67,7 @@ public class ViewModelCommandManager : IViewModelCommandManager
     {
         ArgumentNullException.ThrowIfNull(viewModel);
 
-        Logger.LogDebug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+        Logger.LogDebug("Creating a ViewModelCommandManager for view model '{TypeName}' with unique identifier '{UniqueIdentifier}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
         _viewModel = viewModel;
         _viewModelType = viewModel.GetType();
@@ -87,7 +87,7 @@ public class ViewModelCommandManager : IViewModelCommandManager
 
         RegisterCommands(false);
 
-        Logger.LogDebug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+        Logger.LogDebug("Created a ViewModelCommandManager for view model '{TypeName}' with unique identifier '{UniqueIdentifier}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public class ViewModelCommandManager : IViewModelCommandManager
                 UnregisterCommands();
             }
 
-            Logger.LogDebug("Registering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+            Logger.LogDebug("Registering commands on view model '{TypeName}' with unique identifier '{UniqueIdentifier}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
             foreach (var propertyInfo in _commandProperties)
             {
@@ -133,7 +133,7 @@ public class ViewModelCommandManager : IViewModelCommandManager
                     {
                         if (!_commands.ContainsKey(command))
                         {
-                            Logger.LogDebug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
+                            Logger.LogDebug("Found command '{CommandName}' on view model '{TypeName}'", propertyInfo.Name, _viewModelType.Name);
 
                             var commandAsICatelCommand = command as ICatelCommand;
                             if (commandAsICatelCommand is not null)
@@ -147,11 +147,11 @@ public class ViewModelCommandManager : IViewModelCommandManager
                 }
                 catch (Exception)
                 {
-                    Logger.LogError("Failed to get command from property '{0}'", propertyInfo.Name);
+                    Logger.LogError("Failed to get command from property '{PropertyName}'", propertyInfo.Name);
                 }
             }
 
-            Logger.LogDebug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+            Logger.LogDebug("Registered commands on view model '{TypeName}' with unique identifier '{UniqueIdentifier}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
         }
     }
 
@@ -197,7 +197,7 @@ public class ViewModelCommandManager : IViewModelCommandManager
     /// </summary>
     private void UnregisterCommands()
     {
-        Logger.LogDebug("Unregistering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+        Logger.LogDebug("Unregistering commands on view model '{TypeName}' with unique identifier '{UniqueIdentifier}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
         lock (_lock)
         {
@@ -213,7 +213,7 @@ public class ViewModelCommandManager : IViewModelCommandManager
             _commands.Clear();
         }
 
-        Logger.LogDebug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
+        Logger.LogDebug("Unregistered commands on view model '{TypeName}' with unique identifier '{UniqueIdentifier}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
     }
 
 #pragma warning disable AvoidAsyncVoid // Avoid async void

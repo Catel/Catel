@@ -82,7 +82,7 @@ public class CatelTypeInfo
             if (!_catelProperties.TryGetValue(name, out var catelProperty))
             {
                 throw Logger.LogErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
-                    "Property '{0}' on type '{1}' is not registered", name, Type.GetSafeFullName());
+                    "Property '{PropertyName}' on type '{TypeName}' is not registered", name, Type.GetSafeFullName());
             }
 
             return catelProperty;
@@ -183,7 +183,7 @@ public class CatelTypeInfo
             if (_catelProperties.ContainsKey(name))
             {
                 throw Logger.LogErrorAndCreateException(msg => new PropertyAlreadyRegisteredException(name, Type),
-                    "Property '{0}' on type '{1}' is already registered", name, Type.GetSafeFullName());
+                    "Property '{PropertyName}' on type '{TypeName}' is already registered", name, Type.GetSafeFullName());
             }
 
             _catelProperties[name] = propertyData;
@@ -262,7 +262,7 @@ public class CatelTypeInfo
         if (nonStaticProperties.Count > 0)
         {
             var nonStaticProperty = nonStaticProperties[0];
-            throw Logger.LogErrorAndCreateException<InvalidOperationException>("The property '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
+            throw Logger.LogErrorAndCreateException<InvalidOperationException>("The property '{PropertyName}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
         }
     }
 
@@ -316,7 +316,7 @@ public class CatelTypeInfo
         if (nonStaticFields.Count > 0)
         {
             var nonStaticField = nonStaticFields[0];
-            throw Logger.LogErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
+            throw Logger.LogErrorAndCreateException<InvalidOperationException>("The field '{FieldName}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
         }
     }
 }

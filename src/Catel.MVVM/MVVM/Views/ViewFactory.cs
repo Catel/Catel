@@ -23,7 +23,7 @@ public class ViewFactory : IViewFactory
     {
         ArgumentNullException.ThrowIfNull(viewType);
 
-        _logger.LogDebug("Constructing view for view type '{0}'", viewType.Name);
+        _logger.LogDebug("Constructing view for view type '{TypeName}'", viewType.Name);
 
         FrameworkElement? view = null;
 
@@ -33,7 +33,7 @@ public class ViewFactory : IViewFactory
         }
         catch (Exception ex)
         {
-            throw _logger.LogErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{0}' using default constructor", viewType.Name);
+            throw _logger.LogErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{TypeName}' using default constructor", viewType.Name);
         }
 
         _logger.LogDebug("Constructed view using default constructor");
@@ -56,7 +56,7 @@ public class ViewFactory : IViewFactory
     {
         ArgumentNullException.ThrowIfNull(viewType);
 
-        _logger.LogDebug("Constructing view for view type '{0}'", viewType.Name);
+        _logger.LogDebug("Constructing view for view type '{TypeName}'", viewType.Name);
 
         FrameworkElement? view = null;
 
@@ -69,7 +69,7 @@ public class ViewFactory : IViewFactory
             {
                 if (expectedViewModelType != dataContext.GetType())
                 {
-                    _logger.LogDebug("The provided data context is of type '{0}', but the expected view model type for view '{1}' is '{2}'",
+                    _logger.LogDebug("The provided data context is of type '{DataContextType}', but the expected view model type for view '{ViewTypeName}' is '{ExpectedTypeName}'",
                         ObjectToStringHelper.ToTypeString(dataContext), viewType.Name, ObjectToStringHelper.ToTypeString(expectedViewModelType));
 
                     dataContext = null;
@@ -98,7 +98,7 @@ public class ViewFactory : IViewFactory
             }
         }
 
-        _logger.LogDebug("No constructor with data (of type '{0}') injection found, trying default constructor", ObjectToStringHelper.ToTypeString(dataContext));
+        _logger.LogDebug("No constructor with data (of type '{TypeName}') injection found, trying default constructor", ObjectToStringHelper.ToTypeString(dataContext));
 
         try
         {
@@ -106,7 +106,7 @@ public class ViewFactory : IViewFactory
         }
         catch (Exception ex)
         {
-            throw _logger.LogErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{0}' with both injection and empty constructor", viewType.Name);
+            throw _logger.LogErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{TypeName}' with both injection and empty constructor", viewType.Name);
         }
 
         view!.DataContext = dataContext;

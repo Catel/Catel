@@ -66,7 +66,7 @@ public partial class FeaturedViewModelBase
         }
         set
         {
-            Logger.LogDebug("Updating throttling rate of view model to an interval of '{0}' ms", BoxingCache.GetBoxedValue(value.TotalMilliseconds));
+            Logger.LogDebug("Updating throttling rate of view model to an interval of '{ThrottlingRateMs}' ms", BoxingCache.GetBoxedValue(value.TotalMilliseconds));
 
             _throttlingRate = value;
             if (_throttlingRate.TotalMilliseconds.Equals(0d))
@@ -85,7 +85,7 @@ public partial class FeaturedViewModelBase
                 _throttlingTimer.Interval = _throttlingRate;
                 _throttlingTimer.Start();
 
-                Logger.LogDebug("Throttling is enabled because the throttling rate is set to '{0}' ms", BoxingCache.GetBoxedValue(_throttlingRate.TotalMilliseconds));
+                Logger.LogDebug("Throttling is enabled because the throttling rate is set to '{ThrottlingRateMs}' ms", BoxingCache.GetBoxedValue(_throttlingRate.TotalMilliseconds));
             }
         }
     }

@@ -200,7 +200,7 @@ public partial class NavigationService : NavigationServiceBase, INavigationServi
 
             RegisteredUris.Add(name, uri.ToString());
 
-            _logger.LogDebug("Registered view model '{0}' in combination with '{1}' in the NavigationService", name, uri);
+            _logger.LogDebug("Registered view model '{Name}' in combination with '{Uri}' in the NavigationService", name, uri);
         }
     }
 
@@ -232,7 +232,7 @@ public partial class NavigationService : NavigationServiceBase, INavigationServi
             var result = RegisteredUris.Remove(name);
             if (result)
             {
-                _logger.LogDebug("Unregistered view model '{0}' in NavigationService", name);
+                _logger.LogDebug("Unregistered view model '{Name}' in NavigationService", name);
             }
 
             return result;

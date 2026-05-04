@@ -130,7 +130,7 @@ public static class AssemblyHelper
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Failed to get types from assembly '{0}'", assembly.FullName);
+            Logger.LogError(ex, "Failed to get types from assembly '{Assembly}'", assembly.FullName);
 
             foundAssemblyTypes = Array.Empty<Type>();
         }
@@ -239,7 +239,7 @@ public static class AssemblyHelper
             }
             catch (Exception ex)
             {
-                Logger.LogWarning(ex, "Failed to retrieve the information about assembly '{0}'", assembly);
+                Logger.LogWarning(ex, "Failed to retrieve the information about assembly '{Assembly}'", assembly);
             }
         }
     }

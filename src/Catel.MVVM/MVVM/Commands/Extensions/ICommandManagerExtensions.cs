@@ -73,7 +73,7 @@ public static partial class ICommandManagerExtensions
         var commandNameField = containerType.GetFieldEx(commandNameFieldName, bindingFlags);
         if (commandNameField is null)
         {
-            throw Logger.LogErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
+            throw Logger.LogErrorAndCreateException<InvalidOperationException>("Command '{CommandName}' is not available on container type '{TypeName}'",
                 commandNameFieldName, containerType.GetSafeFullName(false));
         }
 
@@ -85,7 +85,7 @@ public static partial class ICommandManagerExtensions
 
         if (commandManager.IsCommandCreated(commandName))
         {
-            Logger.LogDebug("Command '{0}' is already created, skipping...", commandName);
+            Logger.LogDebug("Command '{CommandName}' is already created, skipping...", commandName);
             return;
         }
 
@@ -106,11 +106,11 @@ public static partial class ICommandManagerExtensions
                                     select type).FirstOrDefault();
         if (commandContainerType is null)
         {
-            Logger.LogDebug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
+            Logger.LogDebug("Couldn't find command container '{CommandContainer}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
             return;
         }
 
-        Logger.LogDebug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
+        Logger.LogDebug("Found command container '{CommandContainer}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
 
         if (!serviceProvider.IsRegistered(commandContainerType))
         {
@@ -122,7 +122,7 @@ public static partial class ICommandManagerExtensions
             }
             else
             {
-                Logger.LogWarning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
+                Logger.LogWarning("Cannot create command container '{TypeName}', skipping registration", commandContainerType.GetSafeFullName(false));
             }
         }
     }

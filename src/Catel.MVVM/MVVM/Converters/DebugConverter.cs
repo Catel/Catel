@@ -21,9 +21,9 @@ public partial class DebugConverter : ValueConverterBase
     protected override object? Convert(object? value, Type targetType, object? parameter)
     {
         Logger.LogDebug("Debugging converter");
-        Logger.LogDebug("  Value: {0}", ObjectToStringHelper.ToString(value));
-        Logger.LogDebug("  TargetType: {0}", targetType.Name);
-        Logger.LogDebug("  Parameter: {0}", ObjectToStringHelper.ToString(parameter));
+        Logger.LogDebug("  Value: {Value}", ObjectToStringHelper.ToString(value));
+        Logger.LogDebug("  TargetType: {TargetType}", targetType.Name);
+        Logger.LogDebug("  Parameter: {Parameter}", ObjectToStringHelper.ToString(parameter));
 
         return value;
     }

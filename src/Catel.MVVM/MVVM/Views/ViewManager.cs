@@ -51,13 +51,13 @@ public class ViewManager : IViewManager
 
         var viewType = view.GetType().FullName;
 
-        _logger.LogDebug("Registering view '{0}'", viewType);
+        _logger.LogDebug("Registering view '{TypeName}'", viewType);
 
         lock (_syncObj)
         {
             if (_registeredViews.ContainsKey(view))
             {
-                _logger.LogWarning("View '{0}' is already registered", viewType);
+                _logger.LogWarning("View '{TypeName}' is already registered", viewType);
                 return;
             }
 
@@ -66,7 +66,7 @@ public class ViewManager : IViewManager
             SyncViewModelOfView(view);
         }
 
-        _logger.LogDebug("Registered view '{0}'", viewType);
+        _logger.LogDebug("Registered view '{TypeName}'", viewType);
     }
 
     /// <summary>
@@ -80,13 +80,13 @@ public class ViewManager : IViewManager
 
         var viewType = view.GetType().FullName;
 
-        _logger.LogDebug("Unregistering view '{0}'", viewType);
+        _logger.LogDebug("Unregistering view '{TypeName}'", viewType);
 
         lock (_syncObj)
         {
             if (!_registeredViews.ContainsKey(view))
             {
-                _logger.LogWarning("View '{0}' is not registered", viewType);
+                _logger.LogWarning("View '{TypeName}' is not registered", viewType);
                 return;
             }
 
@@ -95,7 +95,7 @@ public class ViewManager : IViewManager
             _registeredViews.Remove(view);
         }
 
-        _logger.LogDebug("Unregistered view '{0}'", viewType);
+        _logger.LogDebug("Unregistered view '{TypeName}'", viewType);
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class ViewManager : IViewManager
     {
         ArgumentNullException.ThrowIfNull(viewModel);
 
-        _logger.LogDebug("Getting the views of view model '{0}'", BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+        _logger.LogDebug("Getting the views of view model '{UniqueIdentifier}'", BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
         var views = new List<IView>();
 
@@ -119,7 +119,7 @@ public class ViewManager : IViewManager
                            select registeredView.Key);
         }
 
-        _logger.LogDebug("Found '{0}' views for view model '{1}'", BoxingCache.GetBoxedValue(views.Count), BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
+        _logger.LogDebug("Found '{Count}' views for view model '{UniqueIdentifier}'", BoxingCache.GetBoxedValue(views.Count), BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
         return views.ToArray();
     }

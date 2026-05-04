@@ -161,7 +161,7 @@ public static class DependencyPropertyChangedHelper
         Argument.IsNotNullOrWhitespace("propertyName", propertyName);
         ArgumentNullException.ThrowIfNull(handler);
 
-        //Log.Debug("Subscribing to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+        //Log.Debug("Subscribing to changed event of '{PropertyName}' for framework element '{TypeName}'", frameworkElement.GetType().FullName, propertyName);
 
         var dependencyProperty = GetDependencyProperty<object>(frameworkElement, propertyName);
         if (frameworkElement.GetValue(dependencyProperty) is null)
@@ -186,7 +186,7 @@ public static class DependencyPropertyChangedHelper
         internalHandler += handler;
         frameworkElement.SetValue(handlerDependencyProperty, internalHandler);
 
-        //Log.Debug("Subscribed to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+        //Log.Debug("Subscribed to changed event of '{PropertyName}' for framework element '{TypeName}'", frameworkElement.GetType().FullName, propertyName);
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public static class DependencyPropertyChangedHelper
         Argument.IsNotNullOrWhitespace("propertyName", propertyName);
         ArgumentNullException.ThrowIfNull(handler);
 
-        //Log.Debug("Unsubscribing from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+        //Log.Debug("Unsubscribing from changed event of '{PropertyName}' for framework element '{TypeName}'", frameworkElement.GetType().FullName, propertyName);
 
         var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
         var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
@@ -226,7 +226,7 @@ public static class DependencyPropertyChangedHelper
             frameworkElement.ClearValue(dependencyProperty);
         }
 
-        //Log.Debug("Unsubcribed from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
+        //Log.Debug("Unsubcribed from changed event of '{PropertyName}' for framework element '{TypeName}'", frameworkElement.GetType().FullName, propertyName);
     }
 
     /// <summary>
@@ -248,7 +248,7 @@ public static class DependencyPropertyChangedHelper
             return;
         }
 
-        //Log.Debug("OnDependencyPropertyChanged: '{0}' to {1}", propertyName, e.NewValue);
+        //Log.Debug("OnDependencyPropertyChanged: '{PropertyName}' to {NewValue}", propertyName, e.NewValue);
 
         var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
         var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);

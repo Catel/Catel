@@ -175,7 +175,7 @@ public partial class LanguageService : LanguageServiceBase, ILanguageService
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Failed to get string for resource name '{0}' from resource file '{1}'", resourceName, resourceFile);
+                    _logger.LogError(ex, "Failed to get string for resource name '{ResourceName}' from resource file '{FileName}'", resourceName, resourceFile);
                 }
             }
         }

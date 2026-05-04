@@ -52,7 +52,7 @@ public static class MessageMediatorHelper
                         break;
 
                     default:
-                        throw Logger.LogErrorAndCreateException<InvalidCastException>("Cannot cast '{0}' to Action or Action<T> delegate type.", methodInfo.Name);
+                        throw Logger.LogErrorAndCreateException<InvalidCastException>("Cannot cast '{MethodName}' to Action or Action<T> delegate type.", methodInfo.Name);
                 }
 
                 var tag = attribute.Tag;

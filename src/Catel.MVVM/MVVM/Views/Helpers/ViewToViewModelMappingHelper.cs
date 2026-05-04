@@ -158,7 +158,7 @@ internal class ViewToViewModelMappingHelper
     {
         var viewModelType = ObjectToStringHelper.ToTypeString(viewModel);
 
-        Logger.LogDebug("Initializing view model '{0}'", viewModelType);
+        Logger.LogDebug("Initializing view model '{TypeName}'", viewModelType);
 
         UninitializeViewModel(_previousViewModel);
 
@@ -185,7 +185,7 @@ internal class ViewToViewModelMappingHelper
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, "Failed to transfer value from view property '{0}' to the view model property '{1}' for the ViewToViewModelMapping", 
+                    Logger.LogError(ex, "Failed to transfer value from view property '{ViewPropertyName}' to the view model property '{ViewModelPropertyName}' for the ViewToViewModelMapping", 
                         mapping.ViewPropertyName, mapping.ViewModelPropertyName);
                 }
             }
@@ -193,7 +193,7 @@ internal class ViewToViewModelMappingHelper
             viewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
 
-        Logger.LogDebug("Initialized view model '{0}'", viewModelType);
+        Logger.LogDebug("Initialized view model '{TypeName}'", viewModelType);
     }
 
     /// <summary>
@@ -209,11 +209,11 @@ internal class ViewToViewModelMappingHelper
 
         var viewModelType = viewModel.GetType().Name;
 
-        Logger.LogDebug("Uninitializing view model '{0}'", viewModelType);
+        Logger.LogDebug("Uninitializing view model '{TypeName}'", viewModelType);
 
         viewModel.PropertyChanged -= OnViewModelPropertyChanged;
 
-        Logger.LogDebug("Uninitialized view model '{0}'", viewModelType);
+        Logger.LogDebug("Uninitialized view model '{TypeName}'", viewModelType);
     }
 
     /// <summary>
@@ -252,7 +252,7 @@ internal class ViewToViewModelMappingHelper
             var mapping = viewToViewModelMappingContainer.GetViewModelToViewMapping(e.PropertyName);
             if (_ignoredViewModelChanges.Contains(mapping.ViewPropertyName))
             {
-                Logger.LogDebug("Ignored property changed event for ViewModel.'{0}'", mapping.ViewPropertyName);
+                Logger.LogDebug("Ignored property changed event for ViewModel.'{PropertyName}'", mapping.ViewPropertyName);
             }
             else
             {
@@ -293,7 +293,7 @@ internal class ViewToViewModelMappingHelper
             var mapping = viewToViewModelMappingContainer.GetViewToViewModelMapping(e.PropertyName);
             if (_ignoredViewChanges.Contains(mapping.ViewPropertyName))
             {
-                Logger.LogDebug("Ignored property changed event for view.'{0}'", mapping.ViewPropertyName);
+                Logger.LogDebug("Ignored property changed event for view.'{PropertyName}'", mapping.ViewPropertyName);
             }
             else
             {
@@ -333,7 +333,7 @@ internal class ViewToViewModelMappingHelper
             return;
         }
 
-        Logger.LogDebug("Ignore next property changed event for view model.'{0}'", viewModelPropertyName);
+        Logger.LogDebug("Ignore next property changed event for view model.'{PropertyName}'", viewModelPropertyName);
 
         // Ignore this property (we will soon receive an event that it has changed)
         if (!_ignoredViewModelChanges.Contains(viewModelPropertyName))
@@ -343,7 +343,7 @@ internal class ViewToViewModelMappingHelper
 
         TransferValue(ViewModelContainer, viewPropertyName, viewModel, viewModelPropertyName);
 
-        Logger.LogDebug("No longer ignoring next property changed event for view model.'{0}'", viewModelPropertyName);
+        Logger.LogDebug("No longer ignoring next property changed event for view model.'{PropertyName}'", viewModelPropertyName);
 
         _ignoredViewModelChanges.Remove(viewModelPropertyName);
     }
@@ -373,7 +373,7 @@ internal class ViewToViewModelMappingHelper
             return;
         }
 
-        Logger.LogDebug("Ignore next property changed event for view.'{0}'", viewPropertyName);
+        Logger.LogDebug("Ignore next property changed event for view.'{PropertyName}'", viewPropertyName);
 
         if (!_ignoredViewChanges.Contains(viewPropertyName))
         {
@@ -382,7 +382,7 @@ internal class ViewToViewModelMappingHelper
 
         TransferValue(viewModel, viewModelPropertyName, ViewModelContainer, viewPropertyName);
 
-        Logger.LogDebug("No longer ignoring next property changed event for view.'{0}'", viewPropertyName);
+        Logger.LogDebug("No longer ignoring next property changed event for view.'{PropertyName}'", viewPropertyName);
 
         _ignoredViewChanges.Remove(viewPropertyName);
     }
@@ -414,7 +414,7 @@ internal class ViewToViewModelMappingHelper
             return;
         }
 
-        Logger.LogDebug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
+        Logger.LogDebug("Transferring value of {SourceTypeName}.{SourcePropertyName} to {TargetTypeName}.{TargetPropertyName}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
 
         if (!ObjectAdapter.TrySetMemberValue(target, targetPropertyName, valueToTransfer))
         {

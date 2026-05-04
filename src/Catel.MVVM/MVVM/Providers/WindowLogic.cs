@@ -44,7 +44,7 @@ public class WindowLogic : LogicBase
 
         _targetWindowClosedEventName = eventName;
 
-        Logger.LogDebug("Using '{0}.{1}' event to determine window closing", targetWindowType.FullName, eventName);
+        Logger.LogDebug("Using '{TypeName}.{EventName}' event to determine window closing", targetWindowType.FullName, eventName);
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public class WindowLogic : LogicBase
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogWarning("Failed to set the 'DialogResult' exception: {0}", ex);
+                    Logger.LogWarning("Failed to set the 'DialogResult' exception: {Exception}", ex);
                     result = false;
                 }
             }
@@ -152,7 +152,7 @@ public class WindowLogic : LogicBase
             {
                 if (canSetDialogResult)
                 {
-                    Logger.LogWarning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", targetWindow.GetType().Name);
+                    Logger.LogWarning("Failed to set the 'DialogResult' property of window type '{TypeName}', closing window via method", targetWindow.GetType().Name);
                 }
 
                 InvokeCloseDynamically();
@@ -193,7 +193,7 @@ public class WindowLogic : LogicBase
             bool? dialogResult = null;
             if (!PropertyHelper.TryGetPropertyValue(targetWindow, "DialogResult", out dialogResult))
             {
-                Logger.LogWarning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", targetWindow.GetType().Name);
+                Logger.LogWarning("Failed to get the 'DialogResult' property of window type '{TypeName}', using 'null' as dialog result", targetWindow.GetType().Name);
             }
 
             if (dialogResult is null)
@@ -227,7 +227,7 @@ public class WindowLogic : LogicBase
         var closeMethod = targetWindow.GetType().GetMethodEx("Close");
         if (closeMethod is null)
         {
-            throw Logger.LogErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", targetWindow.GetType().Name);
+            throw Logger.LogErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{TypeName}'", targetWindow.GetType().Name);
         }
 
         closeMethod.Invoke(TargetWindow, null);

@@ -43,7 +43,7 @@ public class ReflectionObjectAdapter : IObjectAdapter
         }
         catch (Exception ex)
         {
-            Logger.LogWarning(ex, "Failed to get value of member '{0}.{1}', skipping item", instance.GetType().GetSafeFullName(false), memberName);
+            Logger.LogWarning(ex, "Failed to get value of member '{TypeName}.{MemberName}', skipping item", instance.GetType().GetSafeFullName(false), memberName);
         }
 
         value = default!;

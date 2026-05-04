@@ -403,11 +403,11 @@ public static class TypeCache
             }
             catch (System.IO.FileLoadException fle)
             {
-                Logger.LogDebug(fle, "Failed to load type '{0}' using Type.GetType(), failed to load file", typeNameWithAssembly);
+                Logger.LogDebug(fle, "Failed to load type '{TypeName}' using Type.GetType(), failed to load file", typeNameWithAssembly);
             }
             catch (Exception ex)
             {
-                Logger.LogDebug(ex, "Failed to load type '{0}' using Type.GetType()", typeNameWithAssembly);
+                Logger.LogDebug(ex, "Failed to load type '{TypeName}' using Type.GetType()", typeNameWithAssembly);
             }
 
             // Fallback for this assembly only

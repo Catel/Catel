@@ -219,7 +219,7 @@ public partial class NavigationAdapter : NavigationAdapterBase
             return;
         }
 
-        Logger.LogDebug("Navigated to '{0}'", NavigationTargetType);
+        Logger.LogDebug("Navigated to '{NavigationTarget}'", NavigationTargetType);
 
         DetermineNavigationContext();
 
@@ -237,7 +237,7 @@ public partial class NavigationAdapter : NavigationAdapterBase
             return;
         }
 
-        Logger.LogDebug("Navigating away from '{0}'", NavigationTargetType);
+        Logger.LogDebug("Navigating away from '{NavigationTarget}'", NavigationTargetType);
 
         NavigatingAway?.Invoke(this, e);
 
@@ -248,7 +248,7 @@ public partial class NavigationAdapter : NavigationAdapterBase
 
         if (e.Cancel)
         {
-            Logger.LogDebug("Navigating away from '{0}' was canceled", NavigationTargetType);
+            Logger.LogDebug("Navigating away from '{NavigationTarget}' was canceled", NavigationTargetType);
         }
     }
 
@@ -263,7 +263,7 @@ public partial class NavigationAdapter : NavigationAdapterBase
             return;
         }
 
-        Logger.LogDebug("Navigated away from '{0}'", NavigationTargetType);
+        Logger.LogDebug("Navigated away from '{NavigationTarget}'", NavigationTargetType);
 
         NavigatedAway?.Invoke(this, e);
     }

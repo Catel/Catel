@@ -256,20 +256,20 @@ public partial class NumericTextBox : BehaviorBase<TextBox>
             var text = (string)e.DataObject.GetData(typeof(string));
             if (!IsDecimalAllowed && !IsDigitsOnly(text))
             {
-                Logger.LogWarning("Pasted text '{0}' contains decimal separator which is not allowed, paste is not allowed", text);
+                Logger.LogWarning("Pasted text '{Text}' contains decimal separator which is not allowed, paste is not allowed", text);
 
                 e.CancelCommand();
             }
             else if (!IsNegativeAllowed && text.Contains(MinusCharacter))
             {
-                Logger.LogWarning("Pasted text '{0}' contains negative value which is not allowed, paste is not allowed", text);
+                Logger.LogWarning("Pasted text '{Text}' contains negative value which is not allowed, paste is not allowed", text);
 
                 e.CancelCommand();
             }
 
             if (!double.TryParse(text, NumberStyles.Any, Culture, out var tempDouble))
             {
-                Logger.LogWarning("Pasted text '{0}' could not be parsed as double (wrong culture?), paste is not allowed", text);
+                Logger.LogWarning("Pasted text '{Text}' could not be parsed as double (wrong culture?), paste is not allowed", text);
 
                 e.CancelCommand();
             }

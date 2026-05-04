@@ -115,7 +115,7 @@ public abstract class LocatorBase : ILocator
 
             var fullResolvedTypeName = (resolvedType is not null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.GetSafeFullName(true)) : null;
 
-            _logger.LogDebug("Resolved type '{0}' for type '{1}'", fullResolvedTypeName, valueToResolve);
+            _logger.LogDebug("Resolved type '{TypeName}' for type '{ResolvedTypeName}'", fullResolvedTypeName, valueToResolve);
 
             var newSet = new HashSet<string>();
 

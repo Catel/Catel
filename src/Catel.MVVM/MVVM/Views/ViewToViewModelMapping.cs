@@ -28,7 +28,7 @@ internal class ViewToViewModelMapping
         ViewModelPropertyName = viewModelPropertyName;
         MappingType = mapping;
 
-        Logger.LogDebug("Created a '{0}' view to viewmodel mapping from '{1}' to '{2}'", Enum<ViewToViewModelMappingType>.ToString(mapping), viewPropertyName, viewModelPropertyName);
+        Logger.LogDebug("Created a '{MappingType}' view to viewmodel mapping from '{ViewPropertyName}' to '{ViewModelPropertyName}'", Enum<ViewToViewModelMappingType>.ToString(mapping), viewPropertyName, viewModelPropertyName);
     }
 
     /// <summary>
