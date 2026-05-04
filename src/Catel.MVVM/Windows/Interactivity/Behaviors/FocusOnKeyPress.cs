@@ -85,7 +85,7 @@ public partial class FocusOnKeyPress : FocusBehaviorBase
         _layoutRoot = AssociatedObject.FindLogicalRoot() as FrameworkElement;
         if (_layoutRoot is not null)
         {
-            Logger.LogDebug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName(false));
+            Logger.LogDebug("Found layout root '{TypeName}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName(false));
 
             _layoutRoot.KeyDown += OnKeyDown;
         }

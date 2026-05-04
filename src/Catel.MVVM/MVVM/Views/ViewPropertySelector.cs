@@ -40,7 +40,7 @@ public class ViewPropertySelector : IViewPropertySelector
 
         if (targetViewType is null)
         {
-            _logger.LogDebug("Added property '{0}' on all views to subscribe to", propertyName);
+            _logger.LogDebug("Added property '{PropertyName}' on all views to subscribe to", propertyName);
 
             if (!_allViewsProperties.Contains(propertyName))
             {
@@ -49,7 +49,7 @@ public class ViewPropertySelector : IViewPropertySelector
         }
         else
         {
-            _logger.LogDebug("Added property '{0}.{1}' to subscribe to", targetViewType.Name, propertyName);
+            _logger.LogDebug("Added property '{TypeName}.{PropertyName}' to subscribe to", targetViewType.Name, propertyName);
 
             if (!_viewProperties.TryGetValue(targetViewType, out var properties))
             {

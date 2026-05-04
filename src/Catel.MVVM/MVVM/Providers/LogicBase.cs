@@ -1213,7 +1213,7 @@ public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdent
             if (determineViewModelInstanceEventArgs.ViewModel is not null)
             {
                 var viewModel = determineViewModelInstanceEventArgs.ViewModel;
-                Logger.LogDebug("ViewModel instance is overridden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
+                Logger.LogDebug("ViewModel instance is overridden by the DetermineViewModelInstance event, using view model of type '{TypeName}'", viewModel.GetType().Name);
 
                 return viewModel;
             }
@@ -1232,7 +1232,7 @@ public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdent
             determineViewModelTypeHandler(this, determineViewModelTypeEventArgs);
             if (determineViewModelTypeEventArgs.ViewModelType is not null)
             {
-                Logger.LogDebug("ViewModelType is overridden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
+                Logger.LogDebug("ViewModelType is overridden by the DetermineViewModelType event, using '{TypeName}' instead of '{OriginalTypeName}'",
                     determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
 
                 viewModelType = determineViewModelTypeEventArgs.ViewModelType;
@@ -1246,18 +1246,18 @@ public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdent
 
             if (_viewModelFactory.CanReuseViewModel(targetViewType, viewModelType, injectionObjectViewModelType, injectionObjectAsViewModel))
             {
-                Logger.LogDebug("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
+                Logger.LogDebug("DataContext of type '{TypeName}' is allowed to be reused by view '{ViewTypeName}', using the current DataContext as view model",
                          viewModelType.GetSafeFullName(), targetViewType.GetSafeFullName());
 
                 return injectionObjectAsViewModel;
             }
         }
 
-        Logger.LogDebug("Using IViewModelFactory '{0}' to instantiate the view model", _viewModelFactory.GetType().GetSafeFullName());
+        Logger.LogDebug("Using IViewModelFactory '{TypeName}' to instantiate the view model", _viewModelFactory.GetType().GetSafeFullName());
 
         var viewModelInstance = _viewModelFactory.CreateViewModel(viewModelType, injectionObject);
 
-        Logger.LogDebug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
+        Logger.LogDebug("Used IViewModelFactory to instantiate view model, the factory did{DidReturn} return a valid view model",
             (viewModelInstance is not null) ? string.Empty : " NOT");
 
         return viewModelInstance;

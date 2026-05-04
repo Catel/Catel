@@ -88,13 +88,13 @@ public class UrlLocator : LocatorBase, IUrlLocator
 
             if (ResourceHelper.XamlPageExists(viewAsResourceUri))
             {
-                _logger.LogDebug("Found view '{0}' for '{1}' via naming convention '{2}'", viewUri, viewModelTypeName, convention);
+                _logger.LogDebug("Found view '{ViewUri}' for '{ViewModelTypeName}' via naming convention '{Convention}'", viewUri, viewModelTypeName, convention);
                 AddItemToCache(viewModelTypeNameWithAssembly, viewUri);
                 return viewUri;
             }
         }
 
-        _logger.LogWarning("Tried resolving the view for '{0}' via all naming conventions, but it did not succeed", viewModelTypeName);
+        _logger.LogWarning("Tried resolving the view for '{ViewModelTypeName}' via all naming conventions, but it did not succeed", viewModelTypeName);
         return null;
     }
 

@@ -42,35 +42,35 @@ public static partial class ILoggerExtensions
         ArgumentNullException.ThrowIfNull(logger);
 
         
-        logger.Log(LogLevel.Information, string.Empty);
-        logger.Log(LogLevel.Information, "**************************************************************************");
-        logger.Log(LogLevel.Information, string.Empty);
-        logger.Log(LogLevel.Information, "PRODUCT INFO");
-        logger.Log(LogLevel.Information, string.Empty);
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("**************************************************************************");
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("PRODUCT INFO");
+        logger.LogInformation(string.Empty);
 
         var assembly = AssemblyHelper.GetEntryAssembly();
         if (assembly is not null)
         {
-            logger.Log(LogLevel.Information, "Assembly:              {0}", assembly.Title() ?? string.Empty);
-            logger.Log(LogLevel.Information, "Version:               {0}", assembly.Version());
+            logger.LogInformation("Assembly:              {Assembly}", assembly.Title() ?? string.Empty);
+            logger.LogInformation("Version:               {Version}", assembly.Version());
 
             try
             {
-                logger.Log(LogLevel.Information, "Informational version: {0}", assembly.InformationalVersion() ?? string.Empty);
+                logger.LogInformation("Informational version: {InformationalVersion}", assembly.InformationalVersion() ?? string.Empty);
             }
             catch (Exception)
             {
                 // Ignore
             }
 
-            logger.Log(LogLevel.Information, string.Empty);
-            logger.Log(LogLevel.Information, "Company:               {0}", assembly.Company() ?? string.Empty);
-            logger.Log(LogLevel.Information, "Copyright:             {0}", assembly.Copyright() ?? string.Empty);
+            logger.LogInformation(string.Empty);
+            logger.LogInformation("Company:               {Company}", assembly.Company() ?? string.Empty);
+            logger.LogInformation("Copyright:             {Copyright}", assembly.Copyright() ?? string.Empty);
         }
 
-        logger.Log(LogLevel.Information, string.Empty);
-        logger.Log(LogLevel.Information, "**************************************************************************");
-        logger.Log(LogLevel.Information, string.Empty);
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("**************************************************************************");
+        logger.LogInformation(string.Empty);
     }
 
     /// <summary>
@@ -79,25 +79,25 @@ public static partial class ILoggerExtensions
     /// <param name="logger">The log.</param>
     public static void LogDeviceInfo(this ILogger logger)
     {
-        logger.Log(LogLevel.Information, string.Empty);
-        logger.Log(LogLevel.Information, "**************************************************************************");
-        logger.Log(LogLevel.Information, string.Empty);
-        logger.Log(LogLevel.Information, "DEVICE INFO");
-        logger.Log(LogLevel.Information, string.Empty);
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("**************************************************************************");
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("DEVICE INFO");
+        logger.LogInformation(string.Empty);
 
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-        logger.Log(LogLevel.Information, "Platform:              {0}", Environment.OSVersion.Platform);
+        logger.LogInformation("Platform:              {Platform}", Environment.OSVersion.Platform);
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
-        logger.Log(LogLevel.Information, "OS Version:            {0}", Environment.OSVersion.Version);
+        logger.LogInformation("OS Version:            {OsVersion}", Environment.OSVersion.Version);
 
-        logger.Log(LogLevel.Information, "64-bit OS:             {0}", Environment.Is64BitOperatingSystem.ToString());
-        logger.Log(LogLevel.Information, "64-bit process:        {0}", Environment.Is64BitProcess.ToString());
-        logger.Log(LogLevel.Information, "Processor count:       {0}", Environment.ProcessorCount.ToString());
-        logger.Log(LogLevel.Information, "System page size:      {0}", Environment.SystemPageSize.ToString());
+        logger.LogInformation("64-bit OS:             {Is64BitOs}", Environment.Is64BitOperatingSystem.ToString());
+        logger.LogInformation("64-bit process:        {Is64BitProcess}", Environment.Is64BitProcess.ToString());
+        logger.LogInformation("Processor count:       {ProcessorCount}", Environment.ProcessorCount.ToString());
+        logger.LogInformation("System page size:      {SystemPageSize}", Environment.SystemPageSize.ToString());
 
-        logger.Log(LogLevel.Information, string.Empty);
-        logger.Log(LogLevel.Information, "**************************************************************************");
-        logger.Log(LogLevel.Information, string.Empty);
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("**************************************************************************");
+        logger.LogInformation(string.Empty);
     }
 
     /// <summary>

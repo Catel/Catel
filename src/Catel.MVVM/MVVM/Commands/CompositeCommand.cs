@@ -528,7 +528,7 @@ public class CompositeCommand : TaskCommand<object?, object?, ITaskProgressRepor
 
         private Task OnViewModelClosedAsync(object? sender, ViewModelClosedEventArgs e)
         {
-            Logger.LogDebug("ViewModel '{0}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
+            Logger.LogDebug("ViewModel '{ViewModel}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
 
             _compositeCommand.UnregisterCommand(Command);
 

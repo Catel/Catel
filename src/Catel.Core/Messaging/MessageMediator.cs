@@ -102,7 +102,7 @@ public class MessageMediator : IMessageMediator
 
             if (IsRegistered(recipient, handler, tag))
             {
-                _logger.LogWarning("Same handler for message type '{0}' with tag '{1}' is already registered, skipping registration", messageType.Name, ObjectToStringHelper.ToString(tag));
+                _logger.LogWarning("Same handler for message type '{MessageType}' with tag '{Tag}' is already registered, skipping registration", messageType.Name, ObjectToStringHelper.ToString(tag));
 
                 return false;
             }
@@ -129,7 +129,7 @@ public class MessageMediator : IMessageMediator
 
             list.Add(handlerInfo);
 
-            _logger.LogDebug("Registered handler for message type '{0}' with tag '{1}'", messageType.Name, ObjectToStringHelper.ToString(tag));
+            _logger.LogDebug("Registered handler for message type '{MessageType}' with tag '{Tag}'", messageType.Name, ObjectToStringHelper.ToString(tag));
 
             return true;
         }
@@ -181,14 +181,14 @@ public class MessageMediator : IMessageMediator
                     {
                         messageHandlers.RemoveAt(i--);
 
-                        _logger.LogDebug("Unregistered handler for message type '{0}' with tag '{1}'", messageType.Name, ObjectToStringHelper.ToString(tag));
+                        _logger.LogDebug("Unregistered handler for message type '{MessageType}' with tag '{Tag}'", messageType.Name, ObjectToStringHelper.ToString(tag));
 
                         return true;
                     }
                 }
             }
 
-            _logger.LogWarning("Failed to unregister handler for message type '{0}' with tag '{1}' because handler was not registered", messageType.Name, ObjectToStringHelper.ToString(tag));
+            _logger.LogWarning("Failed to unregister handler for message type '{MessageType}' with tag '{Tag}' because handler was not registered", messageType.Name, ObjectToStringHelper.ToString(tag));
 
             return false;
         }
@@ -240,7 +240,7 @@ public class MessageMediator : IMessageMediator
     public bool SendMessage<TMessage>(TMessage message, object? tag = null)
         where TMessage : notnull
     {
-        _logger.LogDebug("Sending message of type '{0}' with tag '{1}'", message.GetType().FullName, ObjectToStringHelper.ToString(tag));
+        _logger.LogDebug("Sending message of type '{MessageType}' with tag '{Tag}'", message.GetType().FullName, ObjectToStringHelper.ToString(tag));
 
         var invokedHandlersCount = 0;
 
@@ -296,7 +296,7 @@ public class MessageMediator : IMessageMediator
                     {
                         handlers.RemoveAt(i--);
 
-                        _logger.LogDebug("Removed handler for message type '{0}' with tag '{1}' because target is no longer alive",
+                        _logger.LogDebug("Removed handler for message type '{MessageType}' with tag '{Tag}' because target is no longer alive",
                                   handlerKeyPair.Key.Name, ObjectToStringHelper.ToString(handler.Tag));
                     }
                 }
@@ -336,13 +336,13 @@ public class MessageMediator : IMessageMediator
                             messageHandlers.RemoveAt(i--);
                             handlerCounter++;
 
-                            _logger.LogDebug("Unregistered handler for message type '{0}' with tag '{1}'", key.Name, ObjectToStringHelper.ToString(tag));
+                            _logger.LogDebug("Unregistered handler for message type '{MessageType}' with tag '{Tag}'", key.Name, ObjectToStringHelper.ToString(tag));
                         }
                     }
                 }
             }
 
-            _logger.LogDebug("Unregistered '{0}' handlers for the recipient with tag '{1}'", BoxingCache.GetBoxedValue(handlerCounter), ObjectToStringHelper.ToString(tag));
+            _logger.LogDebug("Unregistered '{HandlerCount}' handlers for the recipient with tag '{Tag}'", BoxingCache.GetBoxedValue(handlerCounter), ObjectToStringHelper.ToString(tag));
 
             return true;
         }

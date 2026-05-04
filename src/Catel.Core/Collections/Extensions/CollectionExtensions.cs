@@ -159,7 +159,7 @@ public static class CollectionExtensions
 
         if (list.Count < index - 1)
         {
-            Logger.LogError("Number of items in list is {0}, cannot move index {1} up", list.Count.ToString(), index.ToString());
+            Logger.LogError("Number of items in list is {Count}, cannot move index {Index} up", list.Count.ToString(), index.ToString());
             return false;
         }
 
@@ -214,7 +214,7 @@ public static class CollectionExtensions
 
         if (list.Count < index - 1)
         {
-            Logger.LogError("Number of items in list is {0}, cannot move index {1} down", list.Count.ToString(), index.ToString());
+            Logger.LogError("Number of items in list is {Count}, cannot move index {Index} down", list.Count.ToString(), index.ToString());
             return false;
         }
 

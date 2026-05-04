@@ -57,7 +57,7 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
         _objectIdGenerator = serviceProvider.GetRequiredService<IObjectIdGenerator<IViewModel, int>>();
         UniqueIdentifier = GetObjectId(_objectIdGenerator);
 
-        Logger.LogDebug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
+        Logger.LogDebug("Creating view model of type '{TypeName}' with unique identifier {UniqueIdentifier}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
         ViewModelCommandManager = new MVVM.ViewModelCommandManager(this);
         ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
@@ -376,21 +376,21 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
 
         if (eventArgs.Cancel)
         {
-            Logger.LogDebug("Canceling of view model '{0}' is canceled via the Canceling event", GetType());
+            Logger.LogDebug("Canceling of view model '{TypeName}' is canceled via the Canceling event", GetType());
             IsCanceling = false;
             return false;
         }
 
         var cancel = await CancelAsync();
 
-        Logger.LogDebug(cancel ? "Canceled view model '{0}'" : "Failed to cancel view model '{0}'", GetType());
+        Logger.LogDebug(cancel ? "Canceled view model '{TypeName}'" : "Failed to cancel view model '{TypeName}'", GetType());
         if (!cancel)
         {
             IsCanceling = false;
             return false;
         }
 
-        Logger.LogDebug("Canceled view model '{0}'", GetType());
+        Logger.LogDebug("Canceled view model '{TypeName}'", GetType());
 
         await CanceledAsync.SafeInvokeAsync(this);
 
@@ -434,13 +434,13 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
         {
             IsSaving = false;
 
-            Logger.LogDebug("Saving of view model '{0}' is canceled via the Saving event", GetType());
+            Logger.LogDebug("Saving of view model '{TypeName}' is canceled via the Saving event", GetType());
             return false;
         }
 
         var saved = await SaveAsync();
 
-        Logger.LogDebug(saved ? "Saved view model '{0}'" : "Failed to save view model '{0}'", GetType());
+        Logger.LogDebug(saved ? "Saved view model '{TypeName}'" : "Failed to save view model '{TypeName}'", GetType());
 
         if (saved)
         {
@@ -485,7 +485,7 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
 
         var type = GetType();
 
-        Logger.LogDebug("Closed view model '{0}'", type);
+        Logger.LogDebug("Closed view model '{TypeName}'", type);
 
         _viewModelManager.UnregisterViewModelInstance(this);
 

@@ -490,11 +490,11 @@ public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListene
                 return;
             }
 
-            Logger.LogWarning("Failed to unsubscribe from event '{0}'", eventName);
+            Logger.LogWarning("Failed to unsubscribe from event '{EventName}'", eventName);
         }
         catch (Exception ex)
         {
-            Logger.LogWarning(ex, "Failed to unsubscribe from event '{0}'", eventName);
+            Logger.LogWarning(ex, "Failed to unsubscribe from event '{EventName}'", eventName);
         }
     }
 
@@ -632,7 +632,7 @@ public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListene
     {
         if (!IsStaticEvent && (Source is null))
         {
-            Logger.LogWarning("Event on source '{0}' is not static, yet the source does no longer exists", typeof(TSource).FullName);
+            Logger.LogWarning("Event on source '{TypeName}' is not static, yet the source does no longer exists", typeof(TSource).FullName);
             return;
         }
 

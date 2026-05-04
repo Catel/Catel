@@ -91,7 +91,7 @@ internal class ManagedViewModel
         if (viewModel.GetType() != ViewModelType)
         {
             throw Logger.LogErrorAndCreateException(msg => new WrongViewModelTypeException(viewModel.GetType(), ViewModelType),
-                "Cannot use view model type '{0}', expected type '{1}'", viewModel.GetType().GetSafeFullName(false), ViewModelType.GetSafeFullName(false));
+                "Cannot use view model type '{ActualTypeName}', expected type '{ExpectedTypeName}'", viewModel.GetType().GetSafeFullName(false), ViewModelType.GetSafeFullName(false));
         }
 
         lock (_lock)
@@ -101,7 +101,7 @@ internal class ManagedViewModel
             {
                 _viewModelInstances.Add(vmId, viewModel);
 
-                Logger.LogDebug("Added view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
+                Logger.LogDebug("Added view model instance, currently containing '{Count}' instances of type '{TypeName}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
             }
         }
     }
@@ -120,7 +120,7 @@ internal class ManagedViewModel
             var vmId = viewModel.UniqueIdentifier;
             if (_viewModelInstances.Remove(vmId))
             {
-                Logger.LogDebug("Removed view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
+                Logger.LogDebug("Removed view model instance, currently containing '{Count}' instances of type '{TypeName}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
             }
         }
     }

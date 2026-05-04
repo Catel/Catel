@@ -58,7 +58,7 @@ public static class AppDomainExtensions
 
         if (!File.Exists(assemblyFilename))
         {
-            Logger.LogWarning("Assembly file '{0}' does not exist, cannot preload assembly", assemblyFilename);
+            Logger.LogWarning("Assembly file '{FileName}' does not exist, cannot preload assembly", assemblyFilename);
             return;
         }
 
@@ -69,7 +69,7 @@ public static class AppDomainExtensions
         }
         catch (Exception ex)
         {
-            Logger.LogWarning(ex, "Failed to retrieve the assembly name of file '{0}', cannot preload assembly", assemblyFilename);
+            Logger.LogWarning(ex, "Failed to retrieve the assembly name of file '{FileName}', cannot preload assembly", assemblyFilename);
         }
     }
 
@@ -140,18 +140,18 @@ public static class AppDomainExtensions
 
             alreadyLoadedAssemblies.Add(assemblyName.FullName);
 
-            Logger.LogDebug("Preloading assembly '{0}'", assemblyName);
+            Logger.LogDebug("Preloading assembly '{Assembly}'", assemblyName);
 
             var loadedAssembly = appDomain.Load(assemblyName);
 
             // Note: actually load a type so the assembly is loaded
             var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => x.IsClassEx() && !x.IsInterfaceEx());
 
-            Logger.LogDebug("Loaded assembly, found '{0}' as first class type", type?.GetSafeFullName(false) ?? "[no type]");
+            Logger.LogDebug("Loaded assembly, found '{TypeName}' as first class type", type?.GetSafeFullName(false) ?? "[no type]");
 
             if (includeReferencedAssemblies)
             {
-                Logger.LogDebug("Loading referenced assemblies of assembly '{0}'", assemblyName);
+                Logger.LogDebug("Loading referenced assemblies of assembly '{Assembly}'", assemblyName);
 
                 var referencedAssemblies = loadedAssembly.GetReferencedAssemblies();
                 foreach (var referencedAssembly in referencedAssemblies)
@@ -164,7 +164,7 @@ public static class AppDomainExtensions
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Failed to load assembly '{0}'", assemblyName);
+            Logger.LogError(ex, "Failed to load assembly '{Assembly}'", assemblyName);
         }
     }
 }

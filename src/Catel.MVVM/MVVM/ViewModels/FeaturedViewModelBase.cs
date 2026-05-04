@@ -101,7 +101,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
 
         var type = GetType();
 
-        Logger.LogDebug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
+        Logger.LogDebug("Creating view model of type '{TypeName}' with unique identifier {UniqueIdentifier}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
         DeferValidationUntilFirstSaveCall = true;
         InvalidateCommandsOnPropertyChanged = true;
@@ -271,7 +271,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
             if (!modelObjectsInfo.ContainsKey(mapping.ModelProperty))
             {
                 throw Logger.LogErrorAndCreateException(msg => new ModelNotRegisteredException(mapping.ModelProperty, mapping.ViewModelProperty),
-                    "There is no model '{0}' registered with the model attribute, so the ViewModelToModel attribute on property '{1}' is invalid",
+                    "There is no model '{ModelProperty}' registered with the model attribute, so the ViewModelToModel attribute on property '{ViewModelProperty}' is invalid",
                     mapping.ModelProperty, mapping.ViewModelProperty);
             }
 
@@ -300,7 +300,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
 
             if (!mapping.Converter.CanConvert(modelPropertyPropertyTypes, viewModelPropertyType, viewModelType))
             {
-                Logger.LogWarning("Property '{0}' mapped on model properties '{1}' cannot be converted via given converter '{2}'",
+                Logger.LogWarning("Property '{PropertyName}' mapped on model properties '{ModelProperties}' cannot be converted via given converter '{ConverterType}'",
                     mapping.ViewModelProperty, string.Join(", ", mapping.ValueProperties), mapping.ConverterType);
             }
         }
@@ -362,7 +362,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                 {
                     if (_modelObjects.Count > 1)
                     {
-                        Logger.LogWarning("The view model {0} implements {1} models.\n\n" +
+                        Logger.LogWarning("The view model {TypeName} implements {ModelCount} models.\n\n" +
                                     "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
                             GetType().Name, BoxingCache.GetBoxedValue(_modelObjects.Count));
                     }
@@ -563,11 +563,11 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                 {
                     if (_objectAdapter.TrySetMemberValue(model, mapping.ValueProperties[i], modelValues[i]))
                     {
-                        Logger.LogDebug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
+                        Logger.LogDebug("Updated property '{PropertyName}' on model type '{TypeName}' to '{Value}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
                     }
                     else
                     {
-                        Logger.LogWarning("Failed to set property '{0}' on model type '{1}'", mapping.ValueProperties, model.GetType().Name);
+                        Logger.LogWarning("Failed to set property '{PropertyName}' on model type '{TypeName}'", mapping.ValueProperties, model.GetType().Name);
                     }
                 }
             }
@@ -684,7 +684,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                                 var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
                                 if (propertiesToSet.Length != valuesToSet.Length)
                                 {
-                                    Logger.LogError("Properties - values count mismatch, properties '{0}', values '{1}'",
+                                    Logger.LogError("Properties - values count mismatch, properties '{Properties}', values '{Values}'",
                                         string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
                                 }
 
@@ -709,14 +709,14 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
 
                                         if (_objectAdapter.TrySetMemberValue(model, propertyToUpdate, valueToSet))
                                         {
-                                            Logger.LogDebug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valueToSet));
+                                            Logger.LogDebug("Updated property '{PropertyName}' on model type '{TypeName}' to '{Value}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valueToSet));
 
                                             // Force validation, see https://github.com/Catel/Catel/issues/1108
                                             validate = true;
                                         }
                                         else
                                         {
-                                            Logger.LogWarning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                            Logger.LogWarning("Failed to set property '{PropertyName}' on model type '{TypeName}'", propertiesToSet[index], model.GetType().Name);
                                         }
                                     }
                                     finally
@@ -732,7 +732,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                     }
                     else
                     {
-                        Logger.LogWarning("Value for model property '{0}' is null, cannot map properties from view model to model", mapping.ModelProperty);
+                        Logger.LogWarning("Value for model property '{ModelProperty}' is null, cannot map properties from view model to model", mapping.ModelProperty);
                     }
                 }
             }
@@ -933,7 +933,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                         }
                         catch (Exception ex)
                         {
-                            Logger.LogWarning(ex, "Failed to cancel the edit of object for model '{0}'", modelProperty);
+                            Logger.LogWarning(ex, "Failed to cancel the edit of object for model '{ModelProperty}'", modelProperty);
                         }
                         finally
                         {
@@ -948,7 +948,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                         }
                         catch (Exception ex)
                         {
-                            Logger.LogWarning(ex, "Failed to end the edit of object for model '{0}'", modelProperty);
+                            Logger.LogWarning(ex, "Failed to end the edit of object for model '{ModelProperty}'", modelProperty);
                         }
                         break;
                 }

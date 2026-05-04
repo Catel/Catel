@@ -41,7 +41,7 @@ internal class ViewToViewModelMappingContainer
             var viewToViewModelAttributes = property.GetCustomAttributesEx(typeof(ViewToViewModelAttribute), false);
             if (viewToViewModelAttributes.Length > 0)
             {
-                Logger.LogDebug("Property '{0}' is decorated with the ViewToViewModelAttribute, creating a mapping", property.Name);
+                Logger.LogDebug("Property '{PropertyName}' is decorated with the ViewToViewModelAttribute, creating a mapping", property.Name);
 
                 var viewToViewModelAttribute = (ViewToViewModelAttribute)viewToViewModelAttributes[0];
 

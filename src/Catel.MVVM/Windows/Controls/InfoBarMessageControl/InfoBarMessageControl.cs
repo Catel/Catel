@@ -380,7 +380,7 @@ public class InfoBarMessageControl : ContentControl
         {
             if (!string.IsNullOrEmpty(bindingObjectAsIDataErrorInfo[bindingInErrorAsBindingExpression.ParentBinding.Path.Path]))
             {
-                Logger.LogDebug("Received 'Remove' action for error '{0}', but it is invalid because the error still exists on the object", message);
+                Logger.LogDebug("Received 'Remove' action for error '{Message}', but it is invalid because the error still exists on the object", message);
                 return;
             }
         }
@@ -450,7 +450,7 @@ public class InfoBarMessageControl : ContentControl
 
         if (_objectsToIgnore.Contains(bindingObject) && (action != ValidationEventAction.ClearAll))
         {
-            Logger.LogDebug("Object '{0}' is in the ignore list, thus messages will not be handled", bindingObject);
+            Logger.LogDebug("Object '{Element}' is in the ignore list, thus messages will not be handled", bindingObject);
             return;
         }
 

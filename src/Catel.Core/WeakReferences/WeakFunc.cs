@@ -102,7 +102,7 @@ public class WeakFunc<TResult> : WeakActionBase, IWeakFunc<TResult>
                 return true;
             }
 
-            Logger.LogDebug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
+            Logger.LogDebug("Target for '{MethodName}' is no longer alive, weak event being garbage collected", MethodName);
 
             _action = null;
         }
@@ -202,7 +202,7 @@ public class WeakFunc<TParameter, TResult> : WeakActionBase, IWeakFunc<TParamete
                 return true;
             }
 
-            Logger.LogDebug("Target for '{0}' is no longer alive, weak event being garbage collected", MethodName);
+            Logger.LogDebug("Target for '{MethodName}' is no longer alive, weak event being garbage collected", MethodName);
 
             _action = null;
         }

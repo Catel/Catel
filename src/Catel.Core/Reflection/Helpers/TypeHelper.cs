@@ -66,7 +66,7 @@ public static class TypeHelper
         var typedInstance = instance as TTargetType;
         if (typedInstance is null)
         {
-            throw Logger.LogErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
+            throw Logger.LogErrorAndCreateException<NotSupportedException>("Expected an instance of '{TypeName}', but retrieved an instance of '{ActualTypeName}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
         }
 
         return typedInstance;

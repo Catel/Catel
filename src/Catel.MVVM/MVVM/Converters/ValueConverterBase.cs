@@ -109,7 +109,7 @@ public abstract class ValueConverterBase<TConvert, TConvertBack> : MarkupExtensi
 
         if (!IsConvertable<TConvert>(returnValue))
         {
-            Logger.LogWarning("Cannot convert value of type '{0}', expected type '{1}', ignoring converter results",
+            Logger.LogWarning("Cannot convert value of type '{TypeName}', expected type '{ExpectedType}', ignoring converter results",
                 ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvert));
 
             return ConverterHelper.UnsetValue;
@@ -139,7 +139,7 @@ public abstract class ValueConverterBase<TConvert, TConvertBack> : MarkupExtensi
 
         if (!IsConvertable<TConvertBack>(returnValue))
         {
-            Logger.LogWarning("Cannot convert back value of type '{0}', expected type '{1}', ignoring converter results",
+            Logger.LogWarning("Cannot convert back value of type '{TypeName}', expected type '{ExpectedType}', ignoring converter results",
                 ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvertBack));
 
             returnValue = ConverterHelper.UnsetValue;

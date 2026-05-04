@@ -95,7 +95,7 @@ public static class ParallelHelper
             }
             catch (Exception ex)
             {
-                Logger.LogWarning(ex, "{0} An error occurred while executing a batch action", finalName);
+                Logger.LogWarning(ex, "{BatchName} An error occurred while executing a batch action", finalName);
             }
         }
 

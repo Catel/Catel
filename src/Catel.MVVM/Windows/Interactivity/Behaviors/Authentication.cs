@@ -93,7 +93,7 @@ public partial class Authentication : BehaviorBase<FrameworkElement>
     {
         if (!_authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))
         {
-            Logger.LogDebug("User has no access to UI element with tag '{0}' and authentication tag '{1}'",
+            Logger.LogDebug("User has no access to UI element with tag '{Tag}' and authentication tag '{AuthenticationTag}'",
                 ObjectToStringHelper.ToString(AssociatedObject.Tag), ObjectToStringHelper.ToString(AuthenticationTag));
 
             switch (Action)

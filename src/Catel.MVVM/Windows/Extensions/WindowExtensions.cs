@@ -264,7 +264,7 @@ public static class WindowExtensions
 
                 if (window.Dispatcher.GetThreadId() != ownerWindow.Dispatcher.GetThreadId())
                 {
-                    Logger.LogWarning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
+                    Logger.LogWarning("The owner window '{OwnerTypeName}' is not created on the same thread as the current window '{TypeName}', cannot set owner window",
                         ownerWindow.GetType().GetSafeFullName(false), window.GetType().GetSafeFullName(false));
                     return;
                 }

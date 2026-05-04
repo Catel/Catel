@@ -158,7 +158,7 @@ public partial class DelayBindingUpdate : BehaviorBase<FrameworkElement>
         associatedObject.ClearValue(dependencyProperty);
         associatedObject.SetBinding(dependencyProperty, newBinding);
 
-        Logger.LogDebug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", dependencyPropertyName);
+        Logger.LogDebug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{PropertyName}'", dependencyPropertyName);
 
         var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
         if (finalDependencyPropertyName is null)
@@ -186,7 +186,7 @@ public partial class DelayBindingUpdate : BehaviorBase<FrameworkElement>
             associatedObject.ClearValue(dependencyProperty);
             associatedObject.SetBinding(dependencyProperty, _originalBinding);
 
-            Logger.LogDebug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
+            Logger.LogDebug("Restored binding for dependency property '{PropertyName}'", UsedDependencyPropertyName);
 
             var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
             if (finalDependencyPropertyName is null)
@@ -256,7 +256,7 @@ public partial class DelayBindingUpdate : BehaviorBase<FrameworkElement>
         var dependencyProperty = GetDependencyProperty();
         if (dependencyProperty is null)
         {
-            Logger.LogError("No dependency property found on '{0}'", dependencyPropertyName);
+            Logger.LogError("No dependency property found on '{PropertyName}'", dependencyPropertyName);
             return;
         }
 
@@ -319,11 +319,11 @@ public partial class DelayBindingUpdate : BehaviorBase<FrameworkElement>
         var property = AssociatedObject.GetDependencyPropertyByName(dependencyPropertyName);
         if (property is null)
         {
-            Logger.LogError("Failed to retrieve dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
+            Logger.LogError("Failed to retrieve dependency property '{PropertyName}' from object '{TypeName}'", dependencyPropertyName, AssociatedObject.GetType());
         }
         else
         {
-            Logger.LogDebug("Retrieved dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
+            Logger.LogDebug("Retrieved dependency property '{PropertyName}' from object '{TypeName}'", dependencyPropertyName, AssociatedObject.GetType());
         }
 
         return property;

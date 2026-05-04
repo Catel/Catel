@@ -63,7 +63,7 @@ public abstract class FocusBehaviorBase : BehaviorBase<FrameworkElement>
             focusDelay = 5000;
         }
 
-        Logger.LogDebug("Starting focus on element '{0}' with a delay of '{1}' ms", AssociatedObject.GetType().GetSafeFullName(false), focusDelay);
+        Logger.LogDebug("Starting focus on element '{TypeName}' with a delay of '{FocusDelay}' ms", AssociatedObject.GetType().GetSafeFullName(false), focusDelay);
 
         if (focusDelay > 25)
         {
@@ -108,7 +108,7 @@ public abstract class FocusBehaviorBase : BehaviorBase<FrameworkElement>
 
         if (AssociatedObject.Focus())
         {
-            Logger.LogDebug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
+            Logger.LogDebug("Focused '{TypeName}'", AssociatedObject.GetType().GetSafeFullName(false));
 
             var textBox = AssociatedObject as TextBox;
             if (textBox is not null)
@@ -119,7 +119,7 @@ public abstract class FocusBehaviorBase : BehaviorBase<FrameworkElement>
             return true;
         }
 
-        Logger.LogDebug("Failed to focus '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
+        Logger.LogDebug("Failed to focus '{TypeName}'", AssociatedObject.GetType().GetSafeFullName(false));
 
         return false;
     }

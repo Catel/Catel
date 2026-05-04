@@ -97,7 +97,7 @@ public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerSe
 
             RegisteredWindows[name] = windowType;
 
-            _logger.LogDebug("Registered view model '{0}' in combination with '{1}' in the UIVisualizerService", name, windowType.FullName);
+            _logger.LogDebug("Registered view model '{Name}' in combination with '{TypeName}' in the UIVisualizerService", name, windowType.FullName);
         }
     }
 
@@ -115,7 +115,7 @@ public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerSe
             var result = RegisteredWindows.Remove(name);
             if (result)
             {
-                _logger.LogDebug("Unregistered view model '{0}' in UIVisualizerService", name);
+                _logger.LogDebug("Unregistered view model '{Name}' in UIVisualizerService", name);
             }
 
             return result;

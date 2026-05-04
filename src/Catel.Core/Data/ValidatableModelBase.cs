@@ -535,7 +535,7 @@ public abstract class ValidatableModelBase : ModelBase, IValidatableModel
         {
             propertiesNotCausingValidationForType.Add(propertyName);
 
-            Logger.LogWarning(ex, "Failed to validate property '{0}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
+            Logger.LogWarning(ex, "Failed to validate property '{PropertyName}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
         }
 
         return true;
@@ -730,7 +730,7 @@ public abstract class ValidatableModelBase : ModelBase, IValidatableModel
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogWarning(ex, "Failed to validate property '{0}.{1}', adding it to the ignore list", type.Name, propertyInfo.Key);
+                    Logger.LogWarning(ex, "Failed to validate property '{TypeName}.{PropertyName}', adding it to the ignore list", type.Name, propertyInfo.Key);
                     ignoredOrFailedPropertyValidations.Add(propertyInfo.Key);
                 }
             }

@@ -80,7 +80,7 @@ public partial class LanguageService
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to get the resource manager for source '{0}'", source);
+                _logger.LogWarning(ex, "Failed to get the resource manager for source '{Source}'", source);
                 return null;
             }
         };

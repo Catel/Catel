@@ -46,7 +46,7 @@ public abstract class Disposable : IDisposable
             if (IsDisposed)
             {
                 throw Logger.LogErrorAndCreateException(msg => new ObjectDisposedException(GetType().GetSafeFullName(false)),
-                    "Object '{0}' is already disposed", GetType().GetSafeFullName(false));
+                    "Object '{TypeName}' is already disposed", GetType().GetSafeFullName(false));
             }
         }
     }
@@ -91,7 +91,7 @@ public abstract class Disposable : IDisposable
                             throw;
                         }
 
-                        Logger.LogError(ex, "Error while disposing managed resources of '{0}'.", GetType().GetSafeFullName(false));
+                        Logger.LogError(ex, "Error while disposing managed resources of '{TypeName}'.", GetType().GetSafeFullName(false));
                     }
                 }
 
@@ -106,7 +106,7 @@ public abstract class Disposable : IDisposable
                         throw;
                     }
 
-                    Logger.LogError(ex, "Error while disposing unmanaged resources of '{0}'.", GetType().GetSafeFullName(false));
+                    Logger.LogError(ex, "Error while disposing unmanaged resources of '{TypeName}'.", GetType().GetSafeFullName(false));
                 }
 
                 IsDisposed = true;

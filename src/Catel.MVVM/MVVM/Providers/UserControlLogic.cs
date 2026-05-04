@@ -474,7 +474,7 @@ public class UserControlLogic : LogicBase
 
         if (parentViewModelContainer is not null)
         {
-            Logger.LogDebug("Found the parent view model container '{0}' for '{1}'", parentViewModelContainer.GetType().Name, TargetView?.GetType().Name);
+            Logger.LogDebug("Found the parent view model container '{ContainerTypeName}' for '{ViewTypeName}'", parentViewModelContainer.GetType().Name, TargetView?.GetType().Name);
         }
         else
         {
@@ -526,7 +526,7 @@ public class UserControlLogic : LogicBase
             parentViewModel.CancelingAsync += OnParentViewModelCancelingAsync;
             parentViewModel.ClosingAsync += OnParentViewModelClosingAsync;
 
-            Logger.LogDebug("Subscribed to parent view model '{0}'", parentViewModel.GetType());
+            Logger.LogDebug("Subscribed to parent view model '{TypeName}'", parentViewModel.GetType());
         }
     }
 
@@ -792,17 +792,17 @@ public class UserControlLogic : LogicBase
         {
             if (ReferenceEquals(sender, viewModel))
             {
-                Logger.LogWarning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Canceling event", sender.GetType().FullName);
+                Logger.LogWarning("Parent view model '{TypeName}' is exactly the same instance as the current view model, ignore Canceling event", sender.GetType().FullName);
                 return;
             }
 
             if (e.Cancel)
             {
-                Logger.LogDebug("Parent view model '{0}' is canceling, but canceling is canceled by another view model, canceling of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
+                Logger.LogDebug("Parent view model '{ParentTypeName}' is canceling, but canceling is canceled by another view model, canceling of view model '{TypeName}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                 return;
             }
 
-            Logger.LogDebug("Parent view model '{0}' is canceled, cancelling view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
+            Logger.LogDebug("Parent view model '{ParentTypeName}' is canceled, cancelling view model '{TypeName}' as well", parentViewModel.GetType(), viewModel.GetType());
 
             if (!viewModel.IsClosed)
             {
@@ -830,17 +830,17 @@ public class UserControlLogic : LogicBase
         {
             if (ReferenceEquals(sender, viewModel))
             {
-                Logger.LogWarning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Saving event", sender.GetType().FullName);
+                Logger.LogWarning("Parent view model '{TypeName}' is exactly the same instance as the current view model, ignore Saving event", sender.GetType().FullName);
                 return;
             }
 
             if (e.Cancel)
             {
-                Logger.LogDebug("Parent view model '{0}' is saving, but saving is canceled by another view model, saving of view model '{1}' will not continue", parentViewModel.GetType(), viewModel.GetType());
+                Logger.LogDebug("Parent view model '{ParentTypeName}' is saving, but saving is canceled by another view model, saving of view model '{TypeName}' will not continue", parentViewModel.GetType(), viewModel.GetType());
                 return;
             }
 
-            Logger.LogDebug("Parent view model '{0}' is saving, saving view model '{1}' as well", parentViewModel.GetType(), viewModel.GetType());
+            Logger.LogDebug("Parent view model '{ParentTypeName}' is saving, saving view model '{TypeName}' as well", parentViewModel.GetType(), viewModel.GetType());
 
             if (!viewModel.IsClosed)
             {
@@ -867,7 +867,7 @@ public class UserControlLogic : LogicBase
         {
             if (ReferenceEquals(sender, viewModel))
             {
-                Logger.LogWarning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
+                Logger.LogWarning("Parent view model '{TypeName}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
                 return;
             }
 
@@ -905,7 +905,7 @@ public class UserControlLogic : LogicBase
         {
             _infoBarMessageControl.ClearObjectMessages(obj);
 
-            Logger.LogDebug("Cleared all warnings and errors caused by '{0}' since this is caused by a DataContext issue in the .NET Framework", obj);
+            Logger.LogDebug("Cleared all warnings and errors caused by '{Element}' since this is caused by a DataContext issue in the .NET Framework", obj);
         }
     }
 }

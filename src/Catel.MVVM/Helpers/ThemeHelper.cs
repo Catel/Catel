@@ -68,7 +68,7 @@ public static class ThemeHelper
 
                 if (!predicate())
                 {
-                    Logger.LogInformation("Loading resource dictionary '{0}'", resourceUri.ToString());
+                    Logger.LogInformation("Loading resource dictionary '{ResourceUri}'", resourceUri.ToString());
 
                     resources.MergedDictionaries.Add(new ResourceDictionary
                     {
@@ -79,7 +79,7 @@ public static class ThemeHelper
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Failed to resource dictionary '{0}'", resourceUri.ToString());
+            Logger.LogError(ex, "Failed to resource dictionary '{ResourceUri}'", resourceUri.ToString());
         }
     }
 
