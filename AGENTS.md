@@ -15,7 +15,7 @@ These rules are **non-negotiable**. Violating them causes broken builds, crashes
 
 ### 1. Never Edit Generated Files
 
-Files matching `*.generated.cs` and `docs/` are auto-generated.
+Files matching `*.generated.cs`, `*.generated.xaml` are auto-generated.
 
 - **NEVER** manually edit these files
 
@@ -92,6 +92,7 @@ Catel.MVVM => Windows / WPF specific
 | Directory | Editable? | Notes |
 |-----------|-----------|-------|
 | `*.generated.cs` | No | Leave as-is |
+| `*.generated.xaml` | No | Leave as-is |
 | `deployment` | No | Deployment / build scripts |
 | `doc/dev/` | Yes | Architecture guides |
 | `doc/docfx/releases/` | Yes | Website release notes (template-formatted) |
@@ -106,7 +107,7 @@ Catel.MVVM => Windows / WPF specific
 | Anti-Pattern | Why |
 |-------------|-----|
 | Modifying method signatures | ABI breaking |
-| Manual edits to `*.generated.cs` | Overwritten on regenerate |
+| Manual edits to `*.generated.cs`, `*.generated.xaml` | Overwritten on regenerate |
 | Using default parameters in public APIs | ABI breaking |
 | **Skipping failing tests** | **Unacceptable — tests must pass** |
 
