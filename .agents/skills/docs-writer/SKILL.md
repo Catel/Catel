@@ -20,7 +20,7 @@ Ensure documentation stays synchronized with the codebase by automatically detec
   - Methods, properties, fields, events
   - XML documentation comments
   - Attributes and annotations
-- Generate DocFX‑compatible YAML and Markdown:
+- Generate DocFX compatible YAML and Markdown:
   - Conceptual documentation (`doc/docfx/vnext/`)
   - TOC files (`doc/docfx/toc.yml`)
 - Maintain consistent formatting, naming, and structure.
