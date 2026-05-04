@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Reflection;
 
@@ -41,7 +42,7 @@ public static partial class ILoggerExtensions
     {
         ArgumentNullException.ThrowIfNull(logger);
 
-        
+
         logger.LogInformation(string.Empty);
         logger.LogInformation("**************************************************************************");
         logger.LogInformation(string.Empty);
@@ -122,7 +123,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, string messageFormat, object? arg1)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, (Exception?)null, string.Format(messageFormat, arg1));
+        return LogErrorAndCreateException<TException>(logger, (Exception?)null, messageFormat, [arg1]);
     }
 
     /// <summary>
@@ -148,7 +149,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, string messageFormat, object? arg1, object? arg2)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, (Exception?)null, string.Format(messageFormat, arg1, arg2));
+        return LogErrorAndCreateException<TException>(logger, (Exception?)null, messageFormat, [arg1, arg2]);
     }
 
     /// <summary>
@@ -175,7 +176,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, string messageFormat, object? arg1, object? arg2, object arg3)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, (Exception?)null, string.Format(messageFormat, arg1, arg2, arg3));
+        return LogErrorAndCreateException<TException>(logger, (Exception?)null, messageFormat, [arg1, arg2, arg3]);
     }
 
     /// <summary>
@@ -225,7 +226,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, Func<string, TException> createExceptionCallback, string messageFormat, object? arg1)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, null, createExceptionCallback, string.Format(messageFormat, arg1));
+        return LogErrorAndCreateException<TException>(logger, null, createExceptionCallback, messageFormat, [arg1]);
     }
 
     /// <summary>
@@ -251,7 +252,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, Func<string, TException> createExceptionCallback, string messageFormat, object? arg1, object? arg2)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, null, createExceptionCallback, string.Format(messageFormat, arg1, arg2));
+        return LogErrorAndCreateException<TException>(logger, null, createExceptionCallback, messageFormat, [arg1, arg2]);
     }
 
     /// <summary>
@@ -278,7 +279,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, Func<string, TException> createExceptionCallback, string messageFormat, object? arg1, object? arg2, object? arg3)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, null, createExceptionCallback, string.Format(messageFormat, arg1, arg2, arg3));
+        return LogErrorAndCreateException<TException>(logger, null, createExceptionCallback, messageFormat, [arg1, arg2, arg3]);
     }
 
     /// <summary>
@@ -329,7 +330,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, Exception innerException, string messageFormat, object? arg0)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, innerException, string.Format(messageFormat, arg0));
+        return LogErrorAndCreateException<TException>(logger, innerException, messageFormat, [arg0]);
     }
 
     /// <summary>
@@ -356,7 +357,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, Exception innerException, string messageFormat, object? arg0, object? arg1)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, innerException, string.Format(messageFormat, arg0, arg1));
+        return LogErrorAndCreateException<TException>(logger, innerException, messageFormat, [arg0, arg1]);
     }
 
     /// <summary>
@@ -384,7 +385,7 @@ public static partial class ILoggerExtensions
     public static Exception LogErrorAndCreateException<TException>(this ILogger logger, Exception innerException, string messageFormat, object? arg0, object? arg1, object? arg2)
         where TException : Exception
     {
-        return LogErrorAndCreateException<TException>(logger, innerException, string.Format(messageFormat, arg0, arg1, arg2));
+        return LogErrorAndCreateException<TException>(logger, innerException, messageFormat, [arg0, arg1, arg2]);
     }
 
     /// <summary>
@@ -457,7 +458,21 @@ public static partial class ILoggerExtensions
         var message = messageFormat ?? string.Empty;
         if (args is not null && args.Length > 0)
         {
-            message = string.Format(message, args);
+            if (message.Contains("{0}"))
+            {
+                message = string.Format(message, args);
+            }
+            else
+            {
+                var indexCounter = 0;
+
+                var renderedMessage = LogMessageRegEx().Replace(message, m =>
+                {
+                    return args[indexCounter++]?.ToString() ?? "null";
+                });
+
+                message = renderedMessage;
+            }
         }
 
         var exception = createExceptionCallback(message);
@@ -473,24 +488,6 @@ public static partial class ILoggerExtensions
         return exception;
     }
 
-    /// <summary>
-    /// Formats the exception for logging with an additional message.
-    /// </summary>
-    /// <param name="exception">The exception.</param>
-    /// <param name="message">The message.</param>
-    /// <returns>Formatted string.</returns>
-    /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-    private static string FormatException(Exception exception, string message)
-    {
-        ArgumentNullException.ThrowIfNull(exception);
-
-        var formattedException = $"[{exception.GetType().Name}] {exception}";
-
-        if (string.IsNullOrEmpty(message))
-        {
-            return formattedException;
-        }
-
-        return $"{message} | {formattedException}";
-    }
+    [GeneratedRegex("{(.*?)}")]
+    private static partial Regex LogMessageRegEx();
 }
