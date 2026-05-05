@@ -115,6 +115,32 @@ private void OnNameChanged()
 }
 ```
 
+### Parameterized OnXChanged methods
+
+Catel.Fody can only weave the parameterless form of `On<PropertyName>Changed`. If the method has parameters, Catel.Fody cannot inject the call and previously emitted a build warning.
+
+Since Catel.Fody [v6.x](https://github.com/Catel/Catel.Fody/pull/682), decorating the parameterized method with `[NoWeaving]` silences that warning. This lets you keep a parameterized overload (called manually or via a subscription) alongside the auto-woven parameterless one:
+
+```csharp
+public string Name { get; set; }
+
+// Woven automatically — called by Catel whenever Name changes
+private void OnNameChanged()
+{
+    // react to the change without knowing old / new value
+}
+
+// Not woven — call this manually when you need the old and new values
+[NoWeaving]
+private void OnNameChanged(string oldValue, string newValue)
+{
+    // react to the change with access to old and new value
+}
+```
+
+> **Note:** The parameterized overload is never called automatically by Catel.Fody. You are responsible for invoking it yourself (for example, from the parameterless overload using `GetValue` or by subscribing to `PropertyChanged`).
+
+
 ## Specifying default values
 
 By default, Catel uses `null` for reference types and `default(T)` for value types as the registered default value. To specify a custom default, use the `[DefaultValue]` attribute:
