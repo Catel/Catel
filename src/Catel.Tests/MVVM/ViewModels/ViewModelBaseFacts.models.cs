@@ -123,7 +123,7 @@ public partial class ViewModelBaseFacts
     /// session so that subsequent saves and cancels still work correctly.
     /// </summary>
     [TestCase]
-    public async Task ModelStillInEditSessionAfterSaveViewModelAsync()
+    public async Task Model_Still_In_Edit_Session_After_SaveViewModelAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -150,7 +150,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public async Task ModelsSavedTwiceBySaveViewModelAsync_SecondSaveSucceeds()
+    public async Task Models_Saved_Twice_By_SaveViewModelAsync_Second_Save_Succeeds()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -180,7 +180,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public async Task ModelsCanceledAfterSaveViewModelAsync_RevertsPostApplyChanges()
+    public async Task Models_Canceled_After_SaveViewModelAsync_Reverts_Post_Apply_Changes()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
