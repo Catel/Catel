@@ -55,7 +55,8 @@
     "output": "../site",
     "template": [
       "default",
-      "modern"
+      "modern",
+      "templates/custom"
     ],
     "globalMetadata": {
       "_appTitle": "Catel Documentation",
