@@ -159,6 +159,12 @@ public partial class LanguageBindingExtension : UpdatableMarkupExtension
     /// </summary>
     protected override void OnTargetObjectUnloaded()
     {
+        if (_onLanguageServiceLanguageUpdatedWeakListener is not null)
+        {
+            _onLanguageServiceLanguageUpdatedWeakListener.Detach();
+            _onLanguageServiceLanguageUpdatedWeakListener = null;
+        }
+
         //_languageService.LanguageUpdated -= OnLanguageUpdated;
     }
 
