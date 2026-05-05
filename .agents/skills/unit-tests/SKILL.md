@@ -1,7 +1,7 @@
 ---
 name: unit-tests
 description: >
-  Write unit tests for Catel using NUnit following repository best practices.
+  Write unit tests for this repository using NUnit following repository best practices.
 
   Triggers: "write unit tests", "add tests", "create tests", "add unit tests",
   "test coverage", "missing tests", any GitHub issue number referencing unit tests.
@@ -15,7 +15,7 @@ Produce small, focused pull requests — a maximum of **10 new tests per PR** �
 ---
 
 ## Responsibilities
-- Identify untested or undertested public members in `src/Catel.Core` and `src/Catel.MVVM`.
+- Identify untested or undertested public members
 - Write NUnit test cases that cover:
   - Happy paths (expected inputs → expected outputs)
   - Edge cases (boundary values, empty collections, null inputs)
@@ -27,15 +27,15 @@ Produce small, focused pull requests — a maximum of **10 new tests per PR** �
 ---
 
 ## Inputs
-- C# source files in `src/Catel.Core/` and `src/Catel.MVVM/`
-- Existing test files in `src/Catel.Tests/` (conventions reference)
-- Project file `src/Catel.Tests/Catel.Tests.csproj`
+- C# source files
+- Existing test files in the test project (conventions reference)
+- Test project file
 - Repository contribution guidelines (`AGENTS.md`, `CONTRIBUTING.md`)
 
 ---
 
 ## Outputs
-- New or updated `.cs` test files inside `src/Catel.Tests/`, mirroring the production namespace hierarchy.
+- New or updated `.cs` test files inside the test project, mirroring the production namespace hierarchy.
 - Pull requests containing:
   - At most **10 new test methods**
   - A concise description of what was tested and why
@@ -46,7 +46,7 @@ Produce small, focused pull requests — a maximum of **10 new tests per PR** �
 ## Workflow
 
 ### 1. Identify what to test
-- Browse the production source under `src/Catel.Core/` or `src/Catel.MVVM/`.
+- Browse the production source.
 - Search for public types and members that have no corresponding test class or insufficient coverage.
 - Prioritize:
   1. Public methods with complex branching logic.
@@ -54,13 +54,14 @@ Produce small, focused pull requests — a maximum of **10 new tests per PR** �
   3. Methods that fire events or change observable state.
 
 ### 2. Locate or create the test file
-- Test files live in `src/Catel.Tests/` and mirror the production namespace.
+- Check if the component relative test project first (e.g. `Catel.Core` => `Catel.Core.Tests`). If the relative test project does not exist, use the generic test project (e.g. `Catel.Core` => `Catel.Tests`).
+- Test files live in the test project and mirror the production namespace.
   - Example: `Catel.Configuration.ConfigurationService` → `src/Catel.Tests/Configuration/ConfigurationServiceFacts.cs`
 - If the file does not exist, create it.
 - If the existing file already contains many tests, create a new **partial file** named with a descriptive suffix:
   ```
-  ConfigurationServiceFacts.set-value.cs
-  ConfigurationServiceFacts.get-value.cs
+  ConfigurationServiceFacts.SetValue.cs
+  ConfigurationServiceFacts.GetValue.cs
   ```
 - Every partial file must declare `public partial class <TypeName>Facts` at its top level.
 
@@ -177,8 +178,8 @@ When a single `*Facts` class grows large, split it across multiple files by memb
 ```
 src/Catel.Tests/Configuration/
   ConfigurationServiceFacts.cs               ← shared helpers + constructor tests
-  ConfigurationServiceFacts.get-value.cs     ← The_GetValue_Method fixture
-  ConfigurationServiceFacts.set-value.cs     ← The_SetValue_Method fixture
+  ConfigurationServiceFacts.GetValue.cs     ← The_GetValue_Method fixture
+  ConfigurationServiceFacts.SetValue.cs     ← The_SetValue_Method fixture
   ConfigurationServiceFacts.events.cs        ← event fixtures
 ```
 
