@@ -1,7 +1,7 @@
 ---
 name: code-writer
 description: >
-  Write production C# code for Catel following repository coding standards and architecture.
+  Write production C# code following repository coding standards and architecture.
 
   Triggers: "write code", "implement feature", "add feature", "fix bug", "create class",
   "add method", "implement interface", "refactor", "add property", "extend functionality",
@@ -9,7 +9,7 @@ description: >
 ---
 
 ## Mission
-Implement high-quality, maintainable production C# code for the Catel codebase that fully
+Implement high-quality, maintainable production C# code that fully
 respects the project's coding standards, architecture, and ABI stability requirements.
 
 Produce small, focused pull requests so that maintainers can review and merge them efficiently.
@@ -17,7 +17,7 @@ Produce small, focused pull requests so that maintainers can review and merge th
 ---
 
 ## Responsibilities
-- Implement new features and bug fixes in `src/Catel.Core/` and `src/Catel.MVVM/`.
+- Implement new features and bug fixes in the correct project.
 - Follow all coding conventions enforced by `.editorconfig` and `AGENTS.md`.
 - Maintain ABI/API stability: never remove or modify existing public members.
 - Write XML documentation comments for every new public member.
@@ -28,8 +28,8 @@ Produce small, focused pull requests so that maintainers can review and merge th
 
 ## Inputs
 - GitHub issue description or feature request.
-- C# source files in `src/Catel.Core/` and `src/Catel.MVVM/`.
-- Existing test files in `src/Catel.Tests/` (for understanding expected behavior).
+- C# source files in the projects.
+- Existing test files in the test projects (for understanding expected behavior).
 - Project/solution files (`.csproj`, `.slnx`).
 - Repository contribution guidelines (`AGENTS.md`, `CONTRIBUTING.md`).
 - `.editorconfig` (authoritative formatting and style rules).
@@ -37,8 +37,8 @@ Produce small, focused pull requests so that maintainers can review and merge th
 ---
 
 ## Outputs
-- New or updated `.cs` source files inside `src/Catel.Core/` or `src/Catel.MVVM/`.
-- Corresponding new or updated test files inside `src/Catel.Tests/`.
+- New or updated `.cs` source files inside the source code projects.
+- Corresponding new or updated test files inside the test projects.
 - Pull requests containing:
   - A concise description of what was implemented or fixed.
   - References to the issue being resolved.
@@ -50,7 +50,7 @@ Produce small, focused pull requests so that maintainers can review and merge th
 
 ### 1. Understand the requirement
 - Read the issue or feature request thoroughly.
-- Identify which layer is affected: `Catel.Core` (cross-platform) or `Catel.MVVM` (WPF).
+- Identify which layer is affected.
 - Study adjacent code to understand patterns, naming, and existing conventions.
 - Determine whether the change is additive (safe) or requires modifying existing members.
 
@@ -64,7 +64,7 @@ Produce small, focused pull requests so that maintainers can review and merge th
 
 #### File layout
 ```csharp
-namespace Catel.<Namespace>;    // file-scoped namespace
+namespace <Namespace>;    // file-scoped namespace
 
 using System;
 // other using directives (inside namespace, sorted — System.* first)
@@ -109,12 +109,12 @@ public class MyClass
 #### Naming conventions
 | Element | Convention | Example |
 |---------|-----------|---------|
-| Namespace, class, struct, enum, delegate | PascalCase | `MessageMediator` |
-| Interface | `I` + PascalCase | `IMessageMediator` |
+| Namespace, class, struct, enum, delegate | PascalCase | `MyClass` |
+| Interface | `I` + PascalCase | `IMyClass` |
 | Public/internal/protected member | PascalCase | `GetValue`, `IsEnabled` |
 | Parameter | camelCase | `propertyName`, `container` |
 | Private instance field | `_` + camelCase | `_logger`, `_lockObject` |
-| Private static field | PascalCase | `Log` |
+| Private static field | PascalCase | `Logger` |
 | Constant | PascalCase | `DefaultTimeout` |
 | Local variable | `var` (preferred) | `var result = ...` |
 
@@ -154,7 +154,7 @@ public class MyClass
 | Add interface default implementations only when all existing target frameworks support it (C# 8.0+ / .NET Core 3.0+, .NET Standard 2.1+, or .NET 5+) | Break existing callers |
 
 ### 4. Write or update tests
-- Add or update tests in `src/Catel.Tests/`, mirroring the production namespace.
+- Add or update tests in the test projects, mirroring the production namespace.
 - Follow the NUnit conventions described in the `unit-tests` skill.
 - Ensure every new public method has at least:
   - A happy-path test.
