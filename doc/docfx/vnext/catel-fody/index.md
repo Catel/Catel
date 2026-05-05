@@ -34,9 +34,9 @@ dotnet add package Catel.Fody
 
 > The `FodyWeavers.xml` file is created automatically when you first install the Fody NuGet package. If it already exists, just add `<Catel />` to it.
 
-## Disabling weaving for specific types or properties
+## Disabling weaving for specific types, properties or methods
 
-To prevent Catel.Fody from weaving a type or a specific property, decorate it with the `[NoWeaving]` attribute:
+To prevent Catel.Fody from weaving a type, a specific property, or a method, decorate it with the `[NoWeaving]` attribute:
 
 ```csharp
 // Disable weaving for the entire class
@@ -56,6 +56,8 @@ public class Person : ModelBase
     public string FullName => $"{FirstName} {LastName}".Trim();
 }
 ```
+
+`[NoWeaving]` can also be applied to a parameterized `On<PropertyName>Changed` method to suppress the build warning that Catel.Fody emits when it finds such a method but cannot weave it. See [Parameterized OnXChanged methods](weaving-properties.md#parameterized-onxchanged-methods) for details.
 
 ## Weaving logging
 
