@@ -1041,7 +1041,12 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                 var model = modelKeyValuePair.Value;
                 if (model is not null)
                 {
+                    // Commit the current edit session
                     UninitializeModelInternal(modelKeyValuePair.Key, model, ModelCleanUpMode.EndEdit);
+
+                    // Re-initialize the model so further edits (e.g. via the Apply button) are supported.
+                    // This starts a new edit session via BeginEdit and re-subscribes to model events.
+                    InitializeModelInternal(modelKeyValuePair.Key, model);
                 }
             }
         }
@@ -1053,9 +1058,16 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
     {
         UninitializeThrottling();
 
-        // If neither saved nor canceled, cancel the models to clean up subscriptions (prevents memory leaks)
-        if (!IsCanceled && !IsSaved)
+        // Always clean up model subscriptions when closing, unless the models were already cleaned
+        // up by CancelAsync (which calls UninitializeModelInternal for every model AND sets
+        // IsCanceled = true). Re-running cleanup here when IsCanceled is true would cause a
+        // redundant second call to EndEdit/CancelEdit on the model.
+        // When IsSaved is true the models were re-initialized after the last save (a new BeginEdit
+        // session was started), so we end that pending edit; otherwise we cancel it.
+        if (!IsCanceled)
         {
+            var cleanUpMode = IsSaved ? ModelCleanUpMode.EndEdit : ModelCleanUpMode.CancelEdit;
+
             lock (_modelLock)
             {
                 foreach (var modelKeyValuePair in _modelObjects)
@@ -1063,7 +1075,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
                     var model = modelKeyValuePair.Value;
                     if (model is not null)
                     {
-                        UninitializeModelInternal(modelKeyValuePair.Key, model, ModelCleanUpMode.CancelEdit);
+                        UninitializeModelInternal(modelKeyValuePair.Key, model, cleanUpMode);
                     }
                 }
             }
