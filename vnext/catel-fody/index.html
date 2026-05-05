@@ -140,8 +140,8 @@
 <blockquote>
 <p>The <code>FodyWeavers.xml</code> file is created automatically when you first install the Fody NuGet package. If it already exists, just add <code>&lt;Catel /&gt;</code> to it.</p>
 </blockquote>
-<h2 id="disabling-weaving-for-specific-types-or-properties">Disabling weaving for specific types or properties</h2>
-<p>To prevent Catel.Fody from weaving a type or a specific property, decorate it with the <code>[NoWeaving]</code> attribute:</p>
+<h2 id="disabling-weaving-for-specific-types-properties-or-methods">Disabling weaving for specific types, properties or methods</h2>
+<p>To prevent Catel.Fody from weaving a type, a specific property, or a method, decorate it with the <code>[NoWeaving]</code> attribute:</p>
 <pre><code class="lang-csharp">// Disable weaving for the entire class
 [NoWeaving]
 public class MyClass : ModelBase
@@ -159,6 +159,7 @@ public class Person : ModelBase
     public string FullName =&gt; $&quot;{FirstName} {LastName}&quot;.Trim();
 }
 </code></pre>
+<p><code>[NoWeaving]</code> can also be applied to a parameterized <code>On&lt;PropertyName&gt;Changed</code> method to suppress the build warning that Catel.Fody emits when it finds such a method but cannot weave it. See <a href="weaving-properties.html#parameterized-onxchanged-methods">Parameterized OnXChanged methods</a> for details.</p>
 <h2 id="weaving-logging">Weaving logging</h2>
 <p>Catel.Fody automatically converts calls to <code>LogManager.GetCurrentClassLogger()</code> into the slightly faster <code>LogManager.GetLogger(typeof(ClassName))</code> form at compile time:</p>
 <pre><code class="lang-csharp">// Before weaving
