@@ -25,16 +25,20 @@ public class ConfigurationExtensionsFacts
         }
 
         [Test]
-        public void Returns_True_When_Key_Is_Null_Or_Whitespace()
+        public void Returns_True_When_EventArgs_Key_Is_Null_Or_Whitespace_Indicating_Full_Scope_Update()
         {
+            // A null or whitespace key in ConfigurationChangedEventArgs signals a full scope update,
+            // so IsConfigurationKey should return true regardless of the expected key.
             Assert.That(((string)null!).IsConfigurationKey("MyKey"), Is.True);
             Assert.That("   ".IsConfigurationKey("MyKey"), Is.True);
         }
 
         [Test]
-        public void Performs_Case_Insensitive_Comparison()
+        public void Performs_Case_Insensitive_Comparison_Via_EventArgs()
         {
-            Assert.That("mykey".IsConfigurationKey("MyKey"), Is.True);
+            var args = new ConfigurationChangedEventArgs(ConfigurationContainer.Local, "mykey", null);
+
+            Assert.That(args.IsConfigurationKey("MyKey"), Is.True);
         }
     }
 }
