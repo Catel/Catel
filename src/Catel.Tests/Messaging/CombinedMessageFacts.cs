@@ -5,10 +5,10 @@ using Catel.Messaging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
-public class AdditionalMessagingCoverageFacts
+public class CombinedMessageFacts
 {
     [TestFixture]
-    public class The_CombinedMessage_Class
+    public class The_SendWith_Method
     {
         [Test]
         public void SendWith_Sends_Data_And_Exception()
@@ -17,7 +17,7 @@ public class AdditionalMessagingCoverageFacts
             CombinedMessage? receivedMessage = null;
             Action<CombinedMessage> handler = x => receivedMessage = x;
 
-            messageMediator.Register(typeof(AdditionalMessagingCoverageFacts), handler);
+            messageMediator.Register(typeof(CombinedMessageFacts), handler);
 
             try
             {
@@ -31,34 +31,8 @@ public class AdditionalMessagingCoverageFacts
             }
             finally
             {
-                messageMediator.Unregister(typeof(AdditionalMessagingCoverageFacts), handler);
+                messageMediator.Unregister(typeof(CombinedMessageFacts), handler);
             }
-        }
-    }
-
-    [TestFixture]
-    public class The_SimpleMessage_Class
-    {
-        [Test]
-        public void With_Sets_Data()
-        {
-            var message = SimpleMessage.With("hello");
-
-            Assert.That(message.Data, Is.EqualTo("hello"));
-        }
-    }
-
-    [TestFixture]
-    public class The_MessageRecipientAttribute_Class
-    {
-        [Test]
-        public void Allows_Setting_Tag()
-        {
-            var attribute = new MessageRecipientAttribute();
-
-            attribute.Tag = "my-tag";
-
-            Assert.That(attribute.Tag, Is.EqualTo("my-tag"));
         }
     }
 }
