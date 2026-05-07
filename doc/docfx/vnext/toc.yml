@@ -351,6 +351,8 @@
   items:
   - name: XAML Constructors
     href: catel-sourcegenerators/xaml-constructors.md
+  - name: Injected services and models
+    href: catel-sourcegenerators/injected-services-and-models.md
   - name: Debugging
     href: catel-sourcegenerators/debugging.md
 - name: Examples

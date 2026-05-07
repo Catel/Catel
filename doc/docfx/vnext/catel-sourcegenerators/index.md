@@ -22,6 +22,7 @@ Add the following package reference to your `.csproj` file:
 | Feature | Description |
 |---------|-------------|
 | [XAML Constructors](xaml-constructors.md) | Automatically generates parameterless constructors for XAML types (UserControls, Windows, etc.) that resolve services from the DI container. |
+| [Injected services and models](injected-services-and-models.md) | Use `[InjectedService]` and `[InjectedModel]` to generate constructor overloads without writing complex constructors by hand. |
 
 ## How it works
 
@@ -36,4 +37,5 @@ The generated code is placed in a separate partial class file and never overwrit
 ## Next steps
 
 - [XAML Constructors](xaml-constructors.md) — learn how the source generator handles dependency injection for XAML types
+- [Injected services and models](injected-services-and-models.md) — use attributes to replace complex constructor overloads in views, behaviors, markup extensions, and view models
 - [Debugging](debugging.md) — diagnose issues with the source generator output
