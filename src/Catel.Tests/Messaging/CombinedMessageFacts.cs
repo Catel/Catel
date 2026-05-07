@@ -14,10 +14,11 @@ public class CombinedMessageFacts
         public void SendWith_Sends_Data_And_Exception()
         {
             var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
+            var recipient = new object();
             CombinedMessage? receivedMessage = null;
             Action<CombinedMessage> handler = x => receivedMessage = x;
 
-            messageMediator.Register(typeof(CombinedMessageFacts), handler);
+            messageMediator.Register(recipient, handler);
 
             try
             {
@@ -31,7 +32,7 @@ public class CombinedMessageFacts
             }
             finally
             {
-                messageMediator.Unregister(typeof(CombinedMessageFacts), handler);
+                messageMediator.Unregister(recipient, handler);
             }
         }
     }
