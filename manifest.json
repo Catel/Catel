@@ -4061,6 +4061,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "vnext/catel-sourcegenerators/injected-services-and-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "vnext/catel-sourcegenerators/injected-services-and-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "vnext/catel-sourcegenerators/xaml-constructors.md",
       "output": {
         ".html": {
