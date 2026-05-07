@@ -6,7 +6,7 @@ using NUnit.Framework;
 public class ApplicationClosingEventArgsFacts
 {
     [TestFixture]
-    public class The_ApplicationClosingEventArgs_Class
+    public class The_Cancel_Property
     {
         [Test]
         public void Defaults_Cancel_To_False_And_Allows_Updates()

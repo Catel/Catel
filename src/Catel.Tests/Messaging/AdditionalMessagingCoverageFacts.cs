@@ -15,18 +15,24 @@ public class AdditionalMessagingCoverageFacts
         {
             var messageMediator = new MessageMediator(NullLogger<MessageMediator>.Instance);
             CombinedMessage? receivedMessage = null;
+            Action<CombinedMessage> handler = x => receivedMessage = x;
 
-            messageMediator.Register<CombinedMessage>(typeof(AdditionalMessagingCoverageFacts), x => receivedMessage = x);
+            messageMediator.Register(typeof(AdditionalMessagingCoverageFacts), handler);
 
-            var expectedException = new InvalidOperationException("boom");
+            try
+            {
+                var expectedException = new InvalidOperationException("boom");
 
-            CombinedMessage.SendWith(messageMediator, true, expectedException);
+                CombinedMessage.SendWith(messageMediator, true, expectedException);
 
-            messageMediator.Unregister<CombinedMessage>(typeof(AdditionalMessagingCoverageFacts), x => receivedMessage = x);
-
-            Assert.That(receivedMessage, Is.Not.Null);
-            Assert.That(receivedMessage!.Data, Is.True);
-            Assert.That(receivedMessage.Exception, Is.EqualTo(expectedException));
+                Assert.That(receivedMessage, Is.Not.Null);
+                Assert.That(receivedMessage!.Data, Is.True);
+                Assert.That(receivedMessage.Exception, Is.EqualTo(expectedException));
+            }
+            finally
+            {
+                messageMediator.Unregister(typeof(AdditionalMessagingCoverageFacts), handler);
+            }
         }
     }
 

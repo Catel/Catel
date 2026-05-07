@@ -183,7 +183,7 @@ public class AdditionalCoreCoverageFacts
     public class The_FileBasedThirdPartyNotice_Class
     {
         [Test]
-        public void Reads_File_Content()
+        public void Reads_File_Content_From_Constructor()
         {
             var fileName = Path.GetTempFileName();
 
@@ -199,7 +199,10 @@ public class AdditionalCoreCoverageFacts
             }
             finally
             {
-                File.Delete(fileName);
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
             }
         }
     }
