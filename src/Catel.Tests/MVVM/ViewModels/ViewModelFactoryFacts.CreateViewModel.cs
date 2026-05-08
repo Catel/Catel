@@ -8,7 +8,7 @@ using TestClasses;
 
 public partial class ViewModelFactoryFacts
 {
-    [TestCase]
+    [Test]
     public void ViewModelFactory_CreateViewModel_Returns_Null_For_Model_Injection_Only_View_Model_Without_Data_Context()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
@@ -21,7 +21,7 @@ public partial class ViewModelFactoryFacts
         Assert.That(viewModel, Is.Null);
     }
 
-    [TestCase]
+    [Test]
     public void ViewModelFactory_CreateViewModel_Creates_View_Model_Using_Dependency_Injection_When_First_Constructor_Parameter_Is_Registered()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();

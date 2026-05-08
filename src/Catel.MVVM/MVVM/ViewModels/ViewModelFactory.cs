@@ -192,7 +192,7 @@ public class ViewModelFactory : IViewModelFactory
         if (!CanConstructViewModelUsingDependencyInjection(viewModelType))
         {
             _logger.LogDebug("Skipping dependency injection construction for view model '{TypeName}' because it requires argument injection", viewModelType.FullName);
-            return viewModel;
+            return null;
         }
 
         try
