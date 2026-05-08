@@ -21,6 +21,7 @@ public class ViewModelFactory : IViewModelFactory
     private readonly IServiceProvider _serviceProvider;
 
     private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
+    private readonly ICacheStorage<Type, bool> _viewModelSupportsDependencyInjectionCache = new CacheStorage<Type, bool>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
@@ -66,6 +67,33 @@ public class ViewModelFactory : IViewModelFactory
         });
 
         return isViewModelWithModelInjection;
+    }
+
+    private bool CanConstructViewModelUsingDependencyInjection(Type viewModelType)
+    {
+        var canConstructViewModelUsingDependencyInjection = _viewModelSupportsDependencyInjectionCache.GetFromCacheOrFetch(viewModelType, () =>
+        {
+            var constructors = viewModelType.GetConstructorsEx();
+
+            foreach (var constructor in constructors)
+            {
+                var parameters = constructor.GetParameters();
+                if (parameters.Length == 0)
+                {
+                    return true;
+                }
+
+                var firstParameter = parameters[0];
+                if (_serviceProvider.IsRegistered(firstParameter.ParameterType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        return canConstructViewModelUsingDependencyInjection;
     }
 
     /// <summary>
@@ -159,6 +187,12 @@ public class ViewModelFactory : IViewModelFactory
                 _logger.LogDebug("Constructed view model '{TypeName}' using injection of data context", viewModelType.FullName);
                 return viewModel;
             }
+        }
+
+        if (!CanConstructViewModelUsingDependencyInjection(viewModelType))
+        {
+            _logger.LogDebug("Skipping dependency injection construction for view model '{TypeName}' because it requires argument injection", viewModelType.FullName);
+            return viewModel;
         }
 
         try
