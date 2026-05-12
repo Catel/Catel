@@ -145,29 +145,56 @@ public static class Commands
 
 It is recommended to keep a well formed structure for your command definitions to keep them manageable, even in large applications
 
-#### Registering the command container
+#### Registering the command container using ICommandManager
 
-Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container. Inject `ICommandManager` via the constructor and use:
+Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container. Inject `ICommandManager` and `IServiceProvider` via the constructor and use:
 
 ```csharp
-_commandManager.CreateCommandWithGesture(typeof(Commands.Application), "About");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Application), "About");
 ```
 
 This will keep the command registration very readable and maintainable when using many commands:
 
 ```csharp
-_commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "Exit");
-_commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), "About");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Application), "Exit");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Application), "About");
 
-_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Open");
-_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Save");
-_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "SaveAs");
-_commandManager.CreateCommandWithGesture(typeof(Commands.Project), "Refresh");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), "Open");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), "Save");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), "SaveAs");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), "Refresh");
 
-_commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), "ToggleTooltips");
-_commandManager.CreateCommandWithGesture(typeof(AppCommands.Settings), "ToggleQuickFilters");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Settings), "ToggleTooltips");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Settings), "ToggleQuickFilters");
 
-_commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), "Extensions");
-_commandManager.CreateCommandWithGesture(typeof(ExtensibilityCommands.Application), "ExtensionsSettings");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(ExtensibilityCommands.Application), "Extensions");
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(ExtensibilityCommands.Application), "ExtensionsSettings");
 ```
+
+#### Registering command containers using the service collection
+
+When building a DI-first application, commands can be registered declaratively during service collection setup using the `IServiceCollectionExtensions` from the `Catel.MVVM` namespace. This approach defers command and container creation until startup, which is the recommended pattern for applications using `Microsoft.Extensions.DependencyInjection`.
+
+Use the `AddCommandWithInputGesture` extension method on `IServiceCollection`:
+
+```csharp
+services.AddCommandWithInputGesture(typeof(AppCommands.Application), "Exit");
+services.AddCommandWithInputGesture(typeof(AppCommands.Application), "About");
+
+services.AddCommandWithInputGesture(typeof(Commands.Project), "Open");
+services.AddCommandWithInputGesture(typeof(Commands.Project), "Save");
+services.AddCommandWithInputGesture(typeof(Commands.Project), "SaveAs");
+services.AddCommandWithInputGesture(typeof(Commands.Project), "Refresh");
+
+services.AddCommandWithInputGesture(typeof(AppCommands.Settings), "ToggleTooltips");
+services.AddCommandWithInputGesture(typeof(AppCommands.Settings), "ToggleQuickFilters");
+```
+
+Each call registers a `CommandContainerRegistration` as a singleton in the container. `CommandContainerRegistration` implements `IInitializeAtStartup`, which means all commands are registered in the `ICommandManager` and their corresponding command containers are created when the application calls:
+
+```csharp
+serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
+```
+
+This ensures all command containers are fully initialized before the application begins handling user interactions, following the standard Catel startup pattern.
 
