@@ -112,6 +112,13 @@ public static class TypeCache
 
             if (value)
             {
+                // Fix for https://github.com/Catel/Catel/issues/2530
+                if (_typesWithAssemblyIgnoreCase.Count == 0)
+                {
+                    // First call, initialize the types for already loaded assemblies
+                    InitializeTypes();
+                }
+
                 AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
             }
             else
