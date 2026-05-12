@@ -38,7 +38,13 @@ public static class IServiceProviderExtensions
                 continue;
             }
 
-            if (service.ImplementationType?.ImplementsInterfaceEx<IConstructAtStartup>() ?? false)
+            var typeToCheck = service.ImplementationType;
+            if (typeToCheck is null)
+            {
+                typeToCheck = service.ServiceType;
+            }
+
+            if (typeToCheck?.ImplementsInterfaceEx<IConstructAtStartup>() ?? false)
             {
                 IConstructAtStartup? instance = null;
 

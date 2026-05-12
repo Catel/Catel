@@ -248,6 +248,7 @@ namespace Catel
             where TImplementation :  class, TService { }
         public static void AddParentServiceProviderRegistrations(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.IServiceProvider serviceProvider) { }
         public static void AddServiceCollectionRegistrations(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, Microsoft.Extensions.DependencyInjection.IServiceCollection otherServiceCollection) { }
+        public static bool IsRegistered(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Type serviceType) { }
         public static bool IsRegistered<TService>(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
     public static class IServiceProviderExtensions
