@@ -104,7 +104,9 @@ public static class AssemblyHelper
 
         try
         {
-            foundAssemblyTypes = assembly.GetTypesEx();
+            // Only exported types to prevent eager assembly loading
+            //foundAssemblyTypes = assembly.GetTypesEx();
+            foundAssemblyTypes = assembly.GetExportedTypesEx();
         }
         catch (ReflectionTypeLoadException typeLoadException)
         {
