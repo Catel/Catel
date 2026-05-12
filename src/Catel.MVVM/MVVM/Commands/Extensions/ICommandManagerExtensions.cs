@@ -110,21 +110,9 @@ public static partial class ICommandManagerExtensions
             return;
         }
 
-        Logger.LogDebug("Found command container '{CommandContainer}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
+        Logger.LogDebug("Creating command container '{CommandContainer}'", commandContainerType.GetSafeFullName(false));
 
-        if (!serviceProvider.IsRegistered(commandContainerType))
-        {
-            var commandContainer = ActivatorUtilities.CreateInstance(serviceProvider, commandContainerType);
-            if (commandContainer is not null)
-            {
-                // TODO: How to keep alive?
-                //serviceLocator.RegisterInstance(commandContainerType, commandContainer);
-            }
-            else
-            {
-                Logger.LogWarning("Cannot create command container '{TypeName}', skipping registration", commandContainerType.GetSafeFullName(false));
-            }
-        }
+        _ = ActivatorUtilities.CreateInstance(serviceProvider, commandContainerType);
     }
 
     /// <summary>
