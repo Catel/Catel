@@ -91,6 +91,11 @@ public static class IServiceCollectionExtensions
 
     public static bool IsRegistered<TService>(this IServiceCollection serviceCollection)
     {
-        return serviceCollection.Any(x => x.ServiceType == typeof(TService));
+        return serviceCollection.IsRegistered(typeof(TService));
+    }
+
+    public static bool IsRegistered(this IServiceCollection serviceCollection, Type serviceType)
+    {
+        return serviceCollection.Any(x => x.ServiceType == serviceType);
     }
 }

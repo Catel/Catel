@@ -135,6 +135,11 @@ namespace Catel.MVVM
         public virtual System.Threading.Tasks.Task ExecuteAsync(TExecuteParameter? parameter) { }
         public virtual void InvalidateCommand() { }
     }
+    public class CommandContainerRegistration : Catel.IoC.IConstructAtStartup, Catel.IoC.IInitializeAtStartup
+    {
+        public CommandContainerRegistration(string commandName, Catel.Windows.Input.InputGesture? inputGesture, Catel.MVVM.ICommandManager commandManager, System.IServiceProvider serviceProvider) { }
+        public void Initialize() { }
+    }
     public class CommandCreatedEventArgs : System.EventArgs
     {
         public CommandCreatedEventArgs(System.Windows.Input.ICommand command, string name) { }
@@ -411,6 +416,10 @@ namespace Catel.MVVM
         void RegisterChildViewModel(Catel.MVVM.IViewModel childViewModel);
         void SetParentViewModel(Catel.MVVM.IViewModel? parentViewModel);
         void UnregisterChildViewModel(Catel.MVVM.IViewModel childViewModel);
+    }
+    public static class IServiceCollectionExtensions
+    {
+        public static void AddCommandWithInputGesture(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Type containerType, string commandNameFieldName) { }
     }
     public interface ITaskProgressReport
     {
