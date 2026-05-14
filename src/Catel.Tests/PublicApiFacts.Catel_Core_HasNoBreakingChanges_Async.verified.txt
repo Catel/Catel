@@ -1894,6 +1894,11 @@ namespace Catel.IoC
         Catel.IoC.ServiceScope? GetScope(string id);
         bool RemoveScope(string id);
     }
+    public class InitializeAtStartup : Catel.IoC.IConstructAtStartup, Catel.IoC.IInitializeAtStartup
+    {
+        public InitializeAtStartup(System.Action action) { }
+        public void Initialize() { }
+    }
     public static class IoCContainer
     {
         public static System.IServiceProvider ServiceProvider { get; set; }
