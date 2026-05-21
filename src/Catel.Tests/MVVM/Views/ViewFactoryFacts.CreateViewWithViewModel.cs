@@ -58,10 +58,10 @@ public class ViewFactoryFacts
             DefaultConstructorCalled = true;
         }
 
-        public ViewWithObjectAndDefaultConstructors(object dataContext)
+        public ViewWithObjectAndDefaultConstructors(object value)
         {
             ObjectConstructorCalled = true;
-            DataContext = dataContext;
+            DataContext = value;
         }
 
         public bool DefaultConstructorCalled { get; }
@@ -76,10 +76,10 @@ public class ViewFactoryFacts
             DefaultConstructorCalled = true;
         }
 
-        public ViewWithIViewModelAndDefaultConstructors(IViewModel dataContext)
+        public ViewWithIViewModelAndDefaultConstructors(IViewModel viewModel)
         {
             ViewModelConstructorCalled = true;
-            DataContext = dataContext;
+            DataContext = viewModel;
         }
 
         public bool DefaultConstructorCalled { get; }

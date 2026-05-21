@@ -84,13 +84,13 @@ public class ViewFactory : IViewFactory
         // First, try to constructor directly with the data context
         if (dataContext is not null)
         {
-            var hasViewModelConstructor = true;
+            var shouldAttemptViewModelInjection = true;
             if (dataContext is IViewModel)
             {
-                hasViewModelConstructor = CanConstructUsingViewModelInjection(viewType);
+                shouldAttemptViewModelInjection = CanConstructUsingViewModelInjection(viewType);
             }
 
-            if (hasViewModelConstructor)
+            if (shouldAttemptViewModelInjection)
             {
                 try
                 {
