@@ -13,7 +13,7 @@ public class ViewFactoryFacts
 {
     [Test]
     [Apartment(ApartmentState.STA)]
-    public void CreateViewWithViewModel_Uses_Default_Constructor_When_First_Constructor_Parameter_Does_Not_Implement_IViewModel()
+    public void CreateViewWithViewModel_UsesDefaultConstructor_WhenNoViewModelConstructorExists()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -33,7 +33,7 @@ public class ViewFactoryFacts
 
     [Test]
     [Apartment(ApartmentState.STA)]
-    public void CreateViewWithViewModel_Uses_ViewModel_Constructor_When_First_Constructor_Parameter_Implements_IViewModel()
+    public void CreateViewWithViewModel_UsesViewModelConstructor_WhenAvailable()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
