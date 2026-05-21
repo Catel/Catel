@@ -1,16 +1,20 @@
 ﻿namespace Catel.MVVM.Views;
 
 using System;
+using System.Linq;
 using System.Windows;
+using Catel.Caching;
 using Catel.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Reflection;
 
 public class ViewFactory : IViewFactory
 {
     private readonly ILogger<ViewFactory> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly IViewModelLocator _viewModelLocator;
+    private readonly ICacheStorage<Type, bool> _viewModelConstructorInjectionCache = new CacheStorage<Type, bool>();
 
     public ViewFactory(ILogger<ViewFactory> logger, IServiceProvider serviceProvider, IViewModelLocator viewModelLocator)
     {
@@ -80,14 +84,22 @@ public class ViewFactory : IViewFactory
         // First, try to constructor directly with the data context
         if (dataContext is not null)
         {
-
-            try
+            var canConstructUsingViewModelInjection = true;
+            if (dataContext is IViewModel)
             {
-                view = ActivatorUtilities.CreateInstance(_serviceProvider, viewType, dataContext) as FrameworkElement;
+                canConstructUsingViewModelInjection = CanConstructUsingViewModelInjection(viewType);
             }
-            catch (Exception)
+
+            if (canConstructUsingViewModelInjection)
             {
-                // ignore
+                try
+                {
+                    view = ActivatorUtilities.CreateInstance(_serviceProvider, viewType, dataContext) as FrameworkElement;
+                }
+                catch (Exception)
+                {
+                    // ignore
+                }
             }
 
             if (view is not null)
@@ -114,5 +126,24 @@ public class ViewFactory : IViewFactory
         _logger.LogDebug("Constructed view using default constructor and setting DataContext afterwards");
 
         return view;
+    }
+
+    private bool CanConstructUsingViewModelInjection(Type viewType)
+    {
+        return _viewModelConstructorInjectionCache.GetFromCacheOrFetch(viewType, () =>
+        {
+            var constructors = viewType.GetConstructorsEx();
+
+            foreach (var constructor in constructors)
+            {
+                var firstParameter = constructor.GetParameters().FirstOrDefault();
+                if (firstParameter is not null && typeof(IViewModel).IsAssignableFrom(firstParameter.ParameterType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
     }
 }
