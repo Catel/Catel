@@ -469,7 +469,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
 
         if (InvalidateCommandsOnPropertyChanged)
         {
-            ViewModelCommandManager.InvalidateCommands();
+            InvalidateCommandsOnPropertyChangeIfRequired();
         }
     }
 
@@ -746,7 +746,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
 
         if (InvalidateCommandsOnPropertyChanged)
         {
-            ViewModelCommandManager.InvalidateCommands();
+            InvalidateCommandsOnPropertyChangeIfRequired();
         }
     }
 
