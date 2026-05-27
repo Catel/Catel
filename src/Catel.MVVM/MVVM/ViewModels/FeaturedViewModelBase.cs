@@ -467,10 +467,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
             Validate();
         }
 
-        if (InvalidateCommandsOnPropertyChanged)
-        {
-            InvalidateCommandsOnPropertyChangeIfRequired();
-        }
+        InvalidateCommandsOnPropertyChangeIfRequired();
     }
 
     /// <summary>
@@ -744,10 +741,7 @@ public abstract partial class FeaturedViewModelBase : NavigationViewModelBase, I
             }
         }
 
-        if (InvalidateCommandsOnPropertyChanged)
-        {
-            InvalidateCommandsOnPropertyChangeIfRequired();
-        }
+        InvalidateCommandsOnPropertyChangeIfRequired();
     }
 
     /// <summary>
