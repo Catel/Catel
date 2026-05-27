@@ -68,6 +68,7 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
             });
 
         InvalidateCommandsOnPropertyChanged = true;
+        AutomaticallyValidateOnPropertyChanged = false;
 
         _viewModelManager.RegisterViewModelInstance(this);
     }
@@ -328,6 +329,8 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
     {
         if (!IsInitializing && !IsInitialized)
         {
+            AutomaticallyValidateOnPropertyChanged = true;
+
             ((IFreezable)this).Unfreeze();
 
             IsInitializing = true;

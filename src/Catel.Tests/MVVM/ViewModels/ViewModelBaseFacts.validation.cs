@@ -32,6 +32,22 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
+    public async Task DelaysValidationUntilInitializeViewModelAsyncIsCalledAsync()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModel = new TestViewModelWithValidationTags(serviceProvider);
+
+        Assert.That(viewModel.HasErrors, Is.False);
+
+        await viewModel.InitializeViewModelAsync();
+
+        Assert.That(viewModel.HasErrors, Is.True);
+    }
+
+    [TestCase]
     public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
