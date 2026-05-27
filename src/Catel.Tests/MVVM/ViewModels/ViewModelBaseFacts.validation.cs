@@ -40,6 +40,7 @@ public partial class ViewModelBaseFacts
 
         var viewModel = new TestViewModelWithValidationTags(serviceProvider);
 
+        // Validation should be inactive before initialization
         Assert.That(viewModel.HasErrors, Is.False);
 
         await viewModel.InitializeViewModelAsync();
