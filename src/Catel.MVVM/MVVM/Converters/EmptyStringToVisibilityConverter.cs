@@ -12,24 +12,6 @@ using System.Windows;
 public partial class EmptyStringToCollapsingVisibilityConverter : VisibilityConverterBase
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="EmptyStringToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    public EmptyStringToCollapsingVisibilityConverter()
-        : base(Visibility.Collapsed)
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="EmptyStringToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visible should be returned.</param>
-    /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
-    internal EmptyStringToCollapsingVisibilityConverter(Visibility notVisibleVisibility)
-        : base(notVisibleVisibility)
-    {
-    }
-
-    /// <summary>
     /// Determines what value this converter should return.
     /// </summary>
     /// <param name="value">The value produced by the binding source.</param>
@@ -62,7 +44,7 @@ public class EmptyStringToHidingVisibilityConverter : EmptyStringToCollapsingVis
     /// Initializes a new instance of the <see cref="EmptyStringToHidingVisibilityConverter"/> class.
     /// </summary>
     public EmptyStringToHidingVisibilityConverter()
-        : base(Visibility.Hidden)
     {
+        NotVisibleVisibility = Visibility.Hidden;
     }
 }

@@ -10,23 +10,6 @@ using System.Windows;
 public partial class CollectionToCollapsingVisibilityConverter : VisibilityConverterBase
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="CollectionToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    public CollectionToCollapsingVisibilityConverter()
-        : this(Visibility.Collapsed)
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CollectionToCollapsingVisibilityConverter" /> class.
-    /// </summary>
-    /// <param name="visibility">The visibility.</param>
-    public CollectionToCollapsingVisibilityConverter(Visibility visibility)
-        : base(visibility)
-    {
-    }
-
-    /// <summary>
     /// Determines whether the specified value is visible.
     /// </summary>
     /// <param name="value">The value.</param>
@@ -81,7 +64,7 @@ public class CollectionToHidingVisibilityConverter : CollectionToCollapsingVisib
     /// Default constructor.
     /// </summary>
     public CollectionToHidingVisibilityConverter()
-        : base(Visibility.Hidden)
     {
+        NotVisibleVisibility = Visibility.Hidden;
     }
 }

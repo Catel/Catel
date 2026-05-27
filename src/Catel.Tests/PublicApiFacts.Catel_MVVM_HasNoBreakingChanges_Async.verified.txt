@@ -890,7 +890,6 @@ namespace Catel.MVVM.Converters
     public class CollectionToCollapsingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public CollectionToCollapsingVisibilityConverter() { }
-        public CollectionToCollapsingVisibilityConverter(System.Windows.Visibility visibility) { }
         protected override bool IsVisible(object? value, System.Type targetType, object? parameter) { }
     }
     public class CollectionToCountConverter : Catel.MVVM.Converters.ValueConverterBase
@@ -1109,8 +1108,11 @@ namespace Catel.MVVM.Converters
     }
     public abstract class VisibilityConverterBase : Catel.MVVM.Converters.ValueConverterBase
     {
+        protected VisibilityConverterBase() { }
+        [System.Obsolete("Use `Empty ctor, set visibility via property` instead. Will be removed in version" +
+            " 7.1.0.", true)]
         protected VisibilityConverterBase(System.Windows.Visibility notVisibleVisibility) { }
-        public System.Windows.Visibility NotVisibleVisibility { get; }
+        public System.Windows.Visibility NotVisibleVisibility { get; protected set; }
         protected override object? Convert(object? value, System.Type targetType, object? parameter) { }
         protected abstract bool IsVisible(object? value, System.Type targetType, object? parameter);
     }

@@ -14,6 +14,7 @@ public abstract class VisibilityConverterBase : ValueConverterBase
     /// </summary>
     /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visible should be returned.</param>
     /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
+    [ObsoleteEx(ReplacementTypeOrMember = "Empty ctor, set visibility via property", TreatAsErrorFromVersion = "7.0", RemoveInVersion = "7.1")]
     protected VisibilityConverterBase(Visibility notVisibleVisibility)
     {
         if (notVisibleVisibility == Visibility.Visible)
@@ -25,10 +26,18 @@ public abstract class VisibilityConverterBase : ValueConverterBase
     }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="VisibilityConverterBase"/> class.
+    /// </summary>
+    protected VisibilityConverterBase()
+    {
+        NotVisibleVisibility = Visibility.Collapsed;
+    }
+
+    /// <summary>
     /// Gets the <see cref="Visibility"/> state when not visible should be returned.
     /// </summary>
     /// <value>The not visible visibility.</value>
-    public Visibility NotVisibleVisibility { get; private set; }
+    public Visibility NotVisibleVisibility { get; protected set; }
     
     /// <summary>
     /// Determines what value this converter should return.

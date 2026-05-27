@@ -12,24 +12,6 @@ using System.Windows;
 public partial class ReferenceToCollapsingVisibilityConverter : VisibilityConverterBase
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReferenceToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    public ReferenceToCollapsingVisibilityConverter()
-        : base(Visibility.Collapsed)
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ReferenceToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visibible should be returned.</param>
-    /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
-    internal ReferenceToCollapsingVisibilityConverter(Visibility notVisibleVisibility)
-        : base(notVisibleVisibility)
-    {
-    }
-
-    /// <summary>
     /// Determines what value this converter should return.
     /// </summary>
     /// <param name="value">The value produced by the binding source.</param>
@@ -60,7 +42,7 @@ public class ReferenceToHidingVisibilityConverter : ReferenceToCollapsingVisibil
     /// Initializes a new instance of the <see cref="ReferenceToHidingVisibilityConverter"/> class.
     /// </summary>
     public ReferenceToHidingVisibilityConverter()
-        : base(Visibility.Hidden)
     {
+        NotVisibleVisibility = Visibility.Hidden;
     }
 }

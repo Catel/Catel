@@ -18,17 +18,6 @@ public partial class EnumToCollapsingVisibilityConverter : VisibilityConverterBa
     /// Initializes a new instance of the <see cref="EnumToCollapsingVisibilityConverter"/> class.
     /// </summary>
     public EnumToCollapsingVisibilityConverter()
-        : this(Visibility.Collapsed)
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="EnumToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visibible should be returned.</param>
-    /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
-    internal EnumToCollapsingVisibilityConverter(Visibility notVisibleVisibility)
-        : base(notVisibleVisibility)
     {
         SupportInversionUsingCommandParameter = false;
     }
@@ -113,7 +102,7 @@ public class EnumToHidingVisibilityConverter : EnumToCollapsingVisibilityConvert
     /// Initializes a new instance of the <see cref="EnumToHidingVisibilityConverter"/> class.
     /// </summary>
     public EnumToHidingVisibilityConverter()
-        : base(Visibility.Hidden)
     {
+        NotVisibleVisibility = Visibility.Hidden;
     }
 }

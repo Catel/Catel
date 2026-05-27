@@ -13,24 +13,6 @@ using Catel.Data;
 public partial class BooleanToCollapsingVisibilityConverter : VisibilityConverterBase
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="BooleanToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    public BooleanToCollapsingVisibilityConverter()
-        : base(Visibility.Collapsed)
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BooleanToCollapsingVisibilityConverter"/> class.
-    /// </summary>
-    /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visibible should be returned.</param>
-    /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
-    internal BooleanToCollapsingVisibilityConverter(Visibility notVisibleVisibility)
-        : base(notVisibleVisibility)
-    {
-    }
-
-    /// <summary>
     /// Determines what value this converter should return.
     /// </summary>
     /// <param name="value">The value produced by the binding source.</param>
@@ -93,7 +75,7 @@ public class BooleanToHidingVisibilityConverter : BooleanToCollapsingVisibilityC
     /// Default constructor.
     /// </summary>
     public BooleanToHidingVisibilityConverter()
-        : base(Visibility.Hidden)
     {
+        NotVisibleVisibility = Visibility.Hidden;
     }
 }
