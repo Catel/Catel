@@ -31,6 +31,7 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
     private string _title = string.Empty;
 
     private readonly IObjectIdGenerator<IViewModel, int> _objectIdGenerator;
+    private bool _invalidateCommandsWhenInitialized;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
@@ -257,10 +258,26 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
 
         base.OnPropertyChanged(e);
 
-        if (InvalidateCommandsOnPropertyChanged)
+        InvalidateCommandsOnPropertyChangeIfRequired();
+    }
+
+    /// <summary>
+    /// Invalidates commands based on the property changed behavior and initialization state.
+    /// </summary>
+    protected void InvalidateCommandsOnPropertyChangeIfRequired()
+    {
+        if (!InvalidateCommandsOnPropertyChanged)
         {
-            ViewModelCommandManager.InvalidateCommands();
+            return;
         }
+
+        if (!IsInitialized)
+        {
+            _invalidateCommandsWhenInitialized = true;
+            return;
+        }
+
+        ViewModelCommandManager.InvalidateCommands();
     }
 
     /// <summary>
@@ -342,6 +359,12 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
 
             IsInitializing = false;
             IsInitialized = true;
+
+            if (_invalidateCommandsWhenInitialized)
+            {
+                _invalidateCommandsWhenInitialized = false;
+                InvalidateCommandsOnPropertyChangeIfRequired();
+            }
         }
     }
 
