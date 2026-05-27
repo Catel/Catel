@@ -68,7 +68,8 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
             });
 
         InvalidateCommandsOnPropertyChanged = true;
-        // Delay automatic validation until InitializeViewModelAsync is called
+        
+        // #2547 Delay automatic validation until InitializeViewModelAsync is called
         AutomaticallyValidateOnPropertyChanged = false;
 
         _viewModelManager.RegisterViewModelInstance(this);
