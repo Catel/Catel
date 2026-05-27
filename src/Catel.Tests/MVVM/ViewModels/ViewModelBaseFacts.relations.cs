@@ -68,6 +68,9 @@ public partial class ViewModelBaseFacts
                 validatedEvent.Set();
             };
 
+            await viewModel.InitializeViewModelAsync();
+            await childViewModel.InitializeViewModelAsync();
+
             childViewModel.FirstName = string.Empty;
 
             validatedEvent.WaitOne(2000, false);
@@ -90,16 +93,16 @@ public partial class ViewModelBaseFacts
     /// being validated. Then, it unsubscribes the child view model by calling UnregisterChildViewModel.
     /// </summary>
     [TestCase]
-    public void RegisterChildViewModel_RemovedViaUnregisterChildViewModel()
+    public async Task RegisterChildViewModel_RemovedViaUnregisterChildViewModelAsync()
     {
         bool validationTriggered = false;
-        using (ManualResetEvent validatedEvent = new ManualResetEvent(false))
+        using (var validatedEvent = new ManualResetEvent(false))
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first_name";
             person.LastName = "last_name";
 
@@ -114,6 +117,9 @@ public partial class ViewModelBaseFacts
                 validationTriggered = true;
                 validatedEvent.Set();
             };
+
+            await viewModel.InitializeViewModelAsync();
+            await childViewModel.InitializeViewModelAsync();
 
             childViewModel.FirstName = string.Empty;
 
@@ -133,7 +139,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ChildViewModelUpdatesValidation()
+    public async Task ChildViewModelUpdatesValidation()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -144,6 +150,9 @@ public partial class ViewModelBaseFacts
 
         var viewModel = new TestFeaturedViewModel(serviceProvider);
         var childViewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
+        await childViewModel.InitializeViewModelAsync();
 
         ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
 

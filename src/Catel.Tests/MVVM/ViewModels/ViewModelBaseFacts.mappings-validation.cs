@@ -1,5 +1,7 @@
 ﻿namespace Catel.Tests.MVVM.ViewModels;
 
+using System.Threading.Tasks;
+using Catel.MVVM;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using TestClasses;
@@ -24,7 +26,7 @@ public partial class ViewModelBaseFacts
     }
 
     [Test]
-    public void Exposes_Validation_For_Validated_Model()
+    public async Task Exposes_Validation_For_Validated_Model()
     {
         // Test case for https://github.com/Catel/Catel/issues/1615
 
@@ -40,6 +42,8 @@ public partial class ViewModelBaseFacts
         var vm = new TestViewModelWithMappings(model, serviceProvider);
         vm.DeferValidationUntilFirstSaveCallWrapper = false;
 
+        await vm.InitializeViewModelAsync();
+
         Assert.That(vm.HasErrors, Is.True);
 
         vm.FirstNameAsTwoWay = "John";
@@ -49,13 +53,15 @@ public partial class ViewModelBaseFacts
     }
 
     [Test]
-    public void HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    public async Task HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_SuspendedAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var vm = new TestViewModelWithSuspendedModelValidation(new Person(), serviceProvider);
+
+        await vm.InitializeViewModelAsync();
 
         vm.Validate();
 
@@ -63,13 +69,15 @@ public partial class ViewModelBaseFacts
     }
 
     [Test]
-    public void HasErrors_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    public async Task HasErrors_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_SuspendedAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var vm = new TestViewModelWithEnabledModelValidation(new Person(), serviceProvider);
+
+        await vm.InitializeViewModelAsync();
 
         vm.Validate();
 
@@ -77,7 +85,7 @@ public partial class ViewModelBaseFacts
     }
 
     [Test]
-    public void HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    public async Task HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_SuspendedAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -85,19 +93,23 @@ public partial class ViewModelBaseFacts
 
         var vm = new TestViewModelWithSuspendedModelValidation(new Person(), serviceProvider);
 
+        await vm.InitializeViewModelAsync();
+
         vm.Validate();
 
         Assert.That(vm.HasWarnings, Is.False);
     }
 
     [Test]
-    public void HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Suspended()
+    public async Task HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_SuspendedAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var vm = new TestViewModelWithEnabledModelValidation(new Person(), serviceProvider);
+
+        await vm.InitializeViewModelAsync();
 
         vm.Validate();
 

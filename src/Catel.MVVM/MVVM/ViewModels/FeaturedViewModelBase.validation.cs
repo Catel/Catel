@@ -57,6 +57,11 @@ public partial class FeaturedViewModelBase
     /// </remarks>
     public override void Validate(bool force = false)
     {
+        if (!IsInitialized)
+        {
+            return;
+        }
+
         if (IsSaving && DeferValidationUntilFirstSaveCall)
         {
             DeferValidationUntilFirstSaveCall = false;

@@ -7,6 +7,7 @@ using Catel.Data;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using TestClasses;
+using static Catel.Tests.MVVM.ViewModels.ViewModelBaseFacts.DeferValidationUntilFirstSaveCallWithChildViewModels;
 
 public partial class ViewModelBaseFacts
 {
@@ -195,7 +196,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ViewModelWithViewModelToModelMappings_FieldErrors()
+    public async Task ViewModelWithViewModelToModelMappings_FieldErrorsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -203,6 +204,8 @@ public partial class ViewModelBaseFacts
 
         var person = new Person();
         var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
 
         var personAsError = (IDataErrorInfo)person;
         var viewModelAsError = (IDataErrorInfo)viewModel;
@@ -219,7 +222,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ViewModelWithViewModelToModelMappings_FieldWarnings()
+    public async Task ViewModelWithViewModelToModelMappings_FieldWarningsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -227,6 +230,8 @@ public partial class ViewModelBaseFacts
 
         var person = new Person();
         var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
 
         var personAsWarning = (IDataWarningInfo)person;
         var viewModelAsWarning = (IDataWarningInfo)viewModel;
@@ -250,7 +255,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ViewModelWithViewModelToModelMappings_BusinessErrors()
+    public async Task ViewModelWithViewModelToModelMappings_BusinessErrorsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -258,6 +263,8 @@ public partial class ViewModelBaseFacts
 
         var person = new Person();
         var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
 
         var personAsError = (IDataErrorInfo)person;
         var viewModelAsError = (IDataErrorInfo)viewModel;
@@ -275,7 +282,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ViewModelWithViewModelToModelMappings_BusinessWarnings()
+    public async Task ViewModelWithViewModelToModelMappings_BusinessWarningsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -283,6 +290,8 @@ public partial class ViewModelBaseFacts
 
         var person = new Person();
         var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
 
         var personAsWarning = (IDataWarningInfo)person;
         var viewModelAsWarning = (IDataWarningInfo)viewModel;
@@ -300,7 +309,7 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ViewModelWithViewModelToModelMappings_ValidateModelsOnInitialization()
+    public async Task ViewModelWithViewModelToModelMappings_ValidateModelsOnInitializationAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
@@ -308,6 +317,8 @@ public partial class ViewModelBaseFacts
 
         var person = new PersonWithDataAnnotations();
         var viewModel = new TestFeaturedViewModel(person, serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
 
         ((IValidatableModel)person).Validate(true);
 

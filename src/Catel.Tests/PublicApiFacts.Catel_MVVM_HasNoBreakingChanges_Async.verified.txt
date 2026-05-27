@@ -712,6 +712,7 @@ namespace Catel.MVVM
         protected virtual int GetObjectId(Catel.Services.IObjectIdGenerator<Catel.MVVM.IViewModel, int> objectIdGenerator) { }
         protected virtual System.Threading.Tasks.Task InitializeAsync() { }
         public System.Threading.Tasks.Task InitializeViewModelAsync() { }
+        protected void InvalidateCommandsOnPropertyChangeIfRequired() { }
         protected virtual System.Threading.Tasks.Task OnClosedAsync(bool? result) { }
         protected virtual System.Threading.Tasks.Task OnClosingAsync() { }
         protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }

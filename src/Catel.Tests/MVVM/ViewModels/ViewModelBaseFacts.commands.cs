@@ -136,6 +136,6 @@ public partial class ViewModelBaseFacts
 
         await viewModel.InitializeViewModelAsync();
 
-        Assert.That(canExecuteChangedTriggered, Is.False);
+        Assert.That(canExecuteChangedTriggered, Is.True);
     }
 }

@@ -2,11 +2,12 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-
+using System.Threading.Tasks;
 using Catel.Data;
 using Catel.MVVM;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using static Catel.Tests.MVVM.ViewModels.ViewModelBaseFacts.DeferValidationUntilFirstSaveCallWithChildViewModels;
 
 public class ViewModelExtensionsFacts
 {
@@ -31,13 +32,15 @@ public class ViewModelExtensionsFacts
         }
 
         [TestCase]
-        public void Returns_False_For_Not_Outdated_ValidationContext()
+        public async Task Returns_False_For_Not_Outdated_ValidationContextAsync()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var vm = new ValidatingViewModel(serviceProvider);
+
+            await vm.InitializeViewModelAsync();
 
             vm.FirstName = "some value";
 
@@ -48,13 +51,15 @@ public class ViewModelExtensionsFacts
         }
 
         [TestCase]
-        public void Returns_True_For_Outdated_ValidationContext()
+        public async Task Returns_True_For_Outdated_ValidationContextAsync()
         {
             var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
             using var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var vm = new ValidatingViewModel(serviceProvider);
+
+            await vm.InitializeViewModelAsync();
 
             vm.FirstName = "some value";
 

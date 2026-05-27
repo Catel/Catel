@@ -19,6 +19,8 @@ public partial class ViewModelBaseFacts
         var person = new Person();
         var vm = new TestFeaturedViewModel(person, serviceProvider);
 
+        await vm.InitializeViewModelAsync();
+
         vm.Validate();
 
         Assert.That(vm.HasErrors, Is.True);
@@ -49,13 +51,15 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
+    public async Task ModelValidation_NotifyDataErrorInfo_FieldErrorsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var testViewModel = new TestFeaturedViewModel(serviceProvider);
+
+        await testViewModel.InitializeViewModelAsync();
 
         Assert.That(testViewModel.HasErrors, Is.False);
 
@@ -74,13 +78,15 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ModelValidation_NotifyDataErrorInfo_BusinessErrors()
+    public async Task ModelValidation_NotifyDataErrorInfo_BusinessErrorsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var testViewModel = new TestFeaturedViewModel(serviceProvider);
+
+        await testViewModel.InitializeViewModelAsync();
 
         Assert.That(testViewModel.HasErrors, Is.False);
 
@@ -99,13 +105,16 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ModelValidation_NotifyDataWarningInfo_FieldWarnings()
+    public async Task ModelValidation_NotifyDataWarningInfo_FieldWarningsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var testViewModel = new TestFeaturedViewModel(serviceProvider);
+
+        await testViewModel.InitializeViewModelAsync();
+
         var validation = testViewModel;
 
         Assert.That(validation.HasWarnings, Is.False);
@@ -125,13 +134,16 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void ModelValidation_NotifyDataWarningInfo_BusinessWarnings()
+    public async Task ModelValidation_NotifyDataWarningInfo_BusinessWarningsAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var testViewModel = new TestFeaturedViewModel(serviceProvider);
+
+        await testViewModel.InitializeViewModelAsync();
+
         var validation = testViewModel;
 
         Assert.That(validation.HasWarnings, Is.False);
@@ -151,13 +163,16 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void GetValidationSummary_WithoutTagFiltering()
+    public async Task GetValidationSummary_WithoutTagFilteringAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var viewModel = new TestViewModelWithValidationTags(serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
+
         viewModel.Validate();
 
         var summary = viewModel.GetValidationSummary(true);
@@ -168,13 +183,16 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void GetValidationSummary_NullTag()
+    public async Task GetValidationSummary_NullTagAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var viewModel = new TestViewModelWithValidationTags(serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
+
         viewModel.Validate();
 
         var summary = viewModel.GetValidationSummary(true, null);
@@ -185,13 +203,16 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void GetValidationSummary_NonExistingTag()
+    public async Task GetValidationSummary_NonExistingTagAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var viewModel = new TestViewModelWithValidationTags(serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
+
         viewModel.Validate();
 
         var summary = viewModel.GetValidationSummary(true, "NonExistingTag");
@@ -202,13 +223,16 @@ public partial class ViewModelBaseFacts
     }
 
     [TestCase]
-    public void GetValidationSummary_ExistingTag()
+    public async Task GetValidationSummary_ExistingTagAsync()
     {
         var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
 
         using var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var viewModel = new TestViewModelWithValidationTags(serviceProvider);
+
+        await viewModel.InitializeViewModelAsync();
+
         viewModel.Validate();
 
         var summary = viewModel.GetValidationSummary(true, "PersonValidation");

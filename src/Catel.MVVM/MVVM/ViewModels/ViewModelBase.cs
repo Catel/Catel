@@ -31,7 +31,6 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
     private string _title = string.Empty;
 
     private readonly IObjectIdGenerator<IViewModel, int> _objectIdGenerator;
-    private bool _invalidateCommandsWhenInitialized;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
@@ -273,7 +272,6 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
 
         if (!IsInitialized)
         {
-            _invalidateCommandsWhenInitialized = true;
             return;
         }
 
@@ -360,11 +358,7 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
             IsInitializing = false;
             IsInitialized = true;
 
-            if (_invalidateCommandsWhenInitialized)
-            {
-                _invalidateCommandsWhenInitialized = false;
-                InvalidateCommandsOnPropertyChangeIfRequired();
-            }
+            Validate();
         }
     }
 
