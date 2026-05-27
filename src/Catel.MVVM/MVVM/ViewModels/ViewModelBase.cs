@@ -363,7 +363,7 @@ public abstract partial class ViewModelBase : ValidatableModelBase, IViewModel
             if (_invalidateCommandsWhenInitialized)
             {
                 _invalidateCommandsWhenInitialized = false;
-                ViewModelCommandManager.InvalidateCommands();
+                InvalidateCommandsOnPropertyChangeIfRequired();
             }
         }
     }

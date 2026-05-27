@@ -105,4 +105,37 @@ public partial class ViewModelBaseFacts
 
         Assert.That(canExecuteChangedTriggered, Is.True);
     }
+
+    [TestCase, RequiresThread(ApartmentState.STA)]
+    public async Task DeferredInvalidation_RespectsDisabledState_WhenDisabledBeforeInitialization()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        bool canExecuteChangedTriggered = false;
+
+        var viewModel = new TestFeaturedViewModel(new Person(), serviceProvider);
+        viewModel.SetInvalidateCommandsOnPropertyChanged(true);
+
+        ICatelCommand command = viewModel.GenerateData;
+
+        command.CanExecuteChanged += delegate
+        {
+            canExecuteChangedTriggered = true;
+        };
+
+        Assert.That(viewModel.GenerateData.CanExecute(null), Is.True);
+
+        viewModel.FirstName = "first name";
+        Assert.That(viewModel.GenerateData.CanExecute(null), Is.False);
+
+        Assert.That(canExecuteChangedTriggered, Is.False);
+
+        viewModel.SetInvalidateCommandsOnPropertyChanged(false);
+
+        await viewModel.InitializeViewModelAsync();
+
+        Assert.That(canExecuteChangedTriggered, Is.False);
+    }
 }
