@@ -11,8 +11,7 @@ using MVVM.Converters;
 [System.Windows.Data.ValueConversion(typeof(InfoBarMessageControlMode), typeof(object), ParameterType = typeof(InfoBarMessageControlMode))]
 public class InfoBarMessageControlVisibilityConverter : VisibilityConverterBase
 {
-    public InfoBarMessageControlVisibilityConverter() 
-        : base(Visibility.Collapsed)
+    public InfoBarMessageControlVisibilityConverter()
     {
     }
 

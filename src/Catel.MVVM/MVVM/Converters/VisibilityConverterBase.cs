@@ -12,22 +12,6 @@ public abstract class VisibilityConverterBase : ValueConverterBase
     /// <summary>
     /// Initializes a new instance of the <see cref="VisibilityConverterBase"/> class.
     /// </summary>
-    /// <param name="notVisibleVisibility">The <see cref="Visibility"/> state when not visible should be returned.</param>
-    /// <exception cref="ArgumentException">The <paramref name="notVisibleVisibility"/> is <see cref="Visibility.Visible"/>.</exception>
-    [ObsoleteEx(ReplacementTypeOrMember = "Empty ctor, set visibility via property", TreatAsErrorFromVersion = "7.0", RemoveInVersion = "7.1")]
-    protected VisibilityConverterBase(Visibility notVisibleVisibility)
-    {
-        if (notVisibleVisibility == Visibility.Visible)
-        {
-            throw new ArgumentException($"Visibility.Visible is not possible as not-visible option", "notVisibleVisibility");
-        }
-
-        NotVisibleVisibility = notVisibleVisibility;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="VisibilityConverterBase"/> class.
-    /// </summary>
     protected VisibilityConverterBase()
     {
         NotVisibleVisibility = Visibility.Collapsed;
@@ -79,8 +63,8 @@ public abstract class CollapsingVisibilityConverterBase : VisibilityConverterBas
     /// Initializes a new instance of the <see cref="CollapsingVisibilityConverterBase"/> class.
     /// </summary>
     protected CollapsingVisibilityConverterBase()
-        : base(Visibility.Collapsed)
     {
+        NotVisibleVisibility = Visibility.Collapsed;
     }
 }
 
@@ -95,7 +79,7 @@ public abstract class HidingVisibilityConverterBase : VisibilityConverterBase
     /// Initializes a new instance of the <see cref="HidingVisibilityConverterBase"/> class.
     /// </summary>
     protected HidingVisibilityConverterBase()
-        : base(Visibility.Hidden)
     {
+        NotVisibleVisibility = Visibility.Hidden;
     }
 }
