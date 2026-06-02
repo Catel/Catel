@@ -1980,6 +1980,8 @@ namespace Catel.Services
     }
     public static class UIVisualizerResultExtensions
     {
+        public static TViewModel GetRequiredViewModel<TViewModel>(this Catel.Services.UIVisualizerResult result)
+            where TViewModel :  class, Catel.MVVM.IViewModel { }
         public static TViewModel? GetViewModel<TViewModel>(this Catel.Services.UIVisualizerResult result)
             where TViewModel :  class, Catel.MVVM.IViewModel { }
     }
