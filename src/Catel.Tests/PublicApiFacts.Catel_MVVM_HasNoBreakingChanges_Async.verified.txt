@@ -740,7 +740,7 @@ namespace Catel.MVVM
     {
         public ViewModelFactory(Microsoft.Extensions.Logging.ILogger<Catel.MVVM.ViewModelFactory> logger, System.IServiceProvider serviceProvider) { }
         public virtual bool CanReuseViewModel(System.Type viewType, System.Type expectedViewModelType, System.Type actualViewModelType, Catel.MVVM.IViewModel? viewModelAsDataContext) { }
-        public Catel.MVVM.IViewModel? CreateViewModel(System.Type viewModelType, params object?[] args) { }
+        public virtual Catel.MVVM.IViewModel? CreateViewModel(System.Type viewModelType, params object?[] args) { }
         public virtual Catel.MVVM.IViewModel? CreateViewModel(System.Type viewModelType, object? dataContext) { }
         public virtual bool IsViewModelWithModelInjection(System.Type viewModelType) { }
     }
