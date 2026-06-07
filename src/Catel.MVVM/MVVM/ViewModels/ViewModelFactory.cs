@@ -31,7 +31,6 @@ public class ViewModelFactory : IViewModelFactory
     /// <exception cref="ArgumentNullException">The <paramref name="serviceProvider" /> is <c>null</c>.</exception>
     public ViewModelFactory(ILogger<ViewModelFactory> logger, IServiceProvider serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(serviceProvider);
         _logger = logger;
         _serviceProvider = serviceProvider;
     }
@@ -175,7 +174,7 @@ public class ViewModelFactory : IViewModelFactory
         {
             try
             {
-                viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, (object[])args) as IViewModel;
+               viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, (object[])args) as IViewModel;
             }
             catch (Exception)
             {
