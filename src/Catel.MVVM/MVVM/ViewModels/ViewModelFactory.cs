@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using Caching;
 using Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,7 @@ public class ViewModelFactory : IViewModelFactory
 
     private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
     private readonly ICacheStorage<Type, bool> _viewModelSupportsDependencyInjectionCache = new CacheStorage<Type, bool>();
+    private readonly ICacheStorage<(Type viewModelType, Type dataContextType), bool> _viewModelAcceptsAsModelCache = new CacheStorage<(Type, Type), bool>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
@@ -129,21 +131,21 @@ public class ViewModelFactory : IViewModelFactory
     /// </returns>
     protected virtual bool CanViewModelAcceptAsModel(Type viewModelType, Type dataContextType)
     {
-        var constructors = viewModelType.GetConstructorsEx();
-
-        foreach (var constructor in constructors)
+        return _viewModelAcceptsAsModelCache.GetFromCacheOrFetch((viewModelType, dataContextType), () =>
         {
-            var firstParameter = constructor.GetParameters().FirstOrDefault();
-            if (firstParameter is not null)
+            var constructors = viewModelType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var constructor in constructors)
             {
-                if (firstParameter.ParameterType.IsAssignableFrom(dataContextType))
+                var firstParameter = constructor.GetParameters().FirstOrDefault();
+                if (firstParameter is not null && firstParameter.ParameterType.IsAssignableFrom(dataContextType))
                 {
                     return true;
                 }
             }
-        }
 
-        return false;
+            return false;
+        });
     }
 
     /// <summary>
