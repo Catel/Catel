@@ -33,4 +33,66 @@ public partial class ViewModelFactoryFacts
 
         Assert.That(viewModel, Is.TypeOf<ViewModelFactoryTestViewModelWithOnlyDefaultConstructor>());
     }
+
+    [Test]
+    public void ViewModelFactory_CreateViewModel_Injects_Array_As_Single_Model_When_Constructor_Accepts_Array_Type()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModelFactory = new ViewModelFactory(new NullLogger<ViewModelFactory>(), serviceProvider);
+        var items = new[] { "a", "b", "c" };
+        var viewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryArrayModelTestViewModel), dataContext: items) as ViewModelFactoryArrayModelTestViewModel;
+
+        Assert.That(viewModel, Is.Not.Null);
+        Assert.That(viewModel!.Items, Is.SameAs(items));
+    }
+
+    [Test]
+    public void ViewModelFactory_CreateViewModel_Injects_Array_As_Single_Model_When_Constructor_Accepts_IReadOnlyList()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModelFactory = new ViewModelFactory(new NullLogger<ViewModelFactory>(), serviceProvider);
+        var items = new[] { "a", "b", "c" };
+        var viewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryReadOnlyListModelTestViewModel), dataContext: items) as ViewModelFactoryReadOnlyListModelTestViewModel;
+
+        Assert.That(viewModel, Is.Not.Null);
+        Assert.That(viewModel!.Items, Is.SameAs(items));
+    }
+
+    [Test]
+    public void ViewModelFactory_CreateViewModel_Injects_Array_As_Single_Model_When_Constructor_Accepts_IEnumerable()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModelFactory = new ViewModelFactory(new NullLogger<ViewModelFactory>(), serviceProvider);
+        var items = new[] { "a", "b", "c" };
+        var viewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryEnumerableModelTestViewModel), dataContext: items) as ViewModelFactoryEnumerableModelTestViewModel;
+
+        Assert.That(viewModel, Is.Not.Null);
+        Assert.That(viewModel!.Items, Is.SameAs(items));
+    }
+
+    [Test]
+    public void ViewModelFactory_CreateViewModel_Spreads_Object_Array_As_Multiple_Arguments_When_No_Constructor_Accepts_Array_Type()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModelFactory = new ViewModelFactory(new NullLogger<ViewModelFactory>(), serviceProvider);
+
+        // ViewModelFactoryTestViewModel has a constructor accepting (int, IServiceProvider), so passing
+        // new object[] { 42 } should still spread to a single int argument.
+        var viewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryTestViewModel), dataContext: new object[] { 42 }) as ViewModelFactoryTestViewModel;
+
+        Assert.That(viewModel, Is.Not.Null);
+        Assert.That(viewModel!.Integer, Is.EqualTo(42));
+    }
 }
