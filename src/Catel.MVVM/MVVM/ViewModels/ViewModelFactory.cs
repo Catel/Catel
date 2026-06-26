@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using Caching;
 using Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,7 @@ public class ViewModelFactory : IViewModelFactory
 
     private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
     private readonly ICacheStorage<Type, bool> _viewModelSupportsDependencyInjectionCache = new CacheStorage<Type, bool>();
+    private readonly ICacheStorage<(Type viewModelType, Type dataContextType), bool> _viewModelAcceptsAsModelCache = new CacheStorage<(Type, Type), bool>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
@@ -119,6 +121,34 @@ public class ViewModelFactory : IViewModelFactory
     }
 
     /// <summary>
+    /// Determines whether the specified view model can be constructed using the injected model as a single constructor argument.
+    /// This is used to distinguish between an array being passed as a single model versus an array of multiple constructor arguments.
+    /// </summary>
+    /// <param name="viewModelType">Type of the view model.</param>
+    /// <param name="dataContextType">The type of the data context to check.</param>
+    /// <returns>
+    ///   <c>true</c> if the view model has at least one constructor that accepts the data context type as its first parameter; otherwise, <c>false</c>.
+    /// </returns>
+    protected virtual bool CanViewModelAcceptAsModel(Type viewModelType, Type dataContextType)
+    {
+        return _viewModelAcceptsAsModelCache.GetFromCacheOrFetch((viewModelType, dataContextType), () =>
+        {
+            var constructors = viewModelType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var constructor in constructors)
+            {
+                var firstParameter = constructor.GetParameters().FirstOrDefault();
+                if (firstParameter is not null && firstParameter.ParameterType.IsAssignableFrom(dataContextType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
+    /// <summary>
     /// Creates a new view model.
     /// </summary>
     /// <param name="viewModelType">Type of the view model that needs to be created.</param>
@@ -135,7 +165,12 @@ public class ViewModelFactory : IViewModelFactory
 
         if (dataContext is object[] args)
         {
-            return CreateViewModel(viewModelType, args);
+            // If there is a constructor that accepts the array type directly (or a compatible collection type,
+            // e.g. T[] -> IReadOnlyList<T>), treat the array as a single model argument instead of
+            // spreading its elements as multiple constructor arguments.
+            return CanViewModelAcceptAsModel(viewModelType, dataContext.GetType())
+                ? CreateViewModel(viewModelType, new object?[] { dataContext })
+                : CreateViewModel(viewModelType, args);
         }
 
         return CreateViewModel(viewModelType, new object?[] { dataContext });
