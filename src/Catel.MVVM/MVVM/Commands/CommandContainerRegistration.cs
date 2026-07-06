@@ -56,7 +56,7 @@ public class CommandContainerRegistration : IInitializeAtStartup
                                     select type).FirstOrDefault();
         if (commandContainerType is null)
         {
-            Logger.LogDebug("Couldn't find command container '{CommandContainer}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
+            Logger.LogWarning("Couldn't find command container '{CommandContainer}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
             return;
         }
 
