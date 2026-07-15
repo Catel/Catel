@@ -27,13 +27,13 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.*" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net9.0')) ">
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.*" />
   </ItemGroup>
 
