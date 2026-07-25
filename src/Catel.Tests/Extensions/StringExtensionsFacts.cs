@@ -24,6 +24,7 @@ public class StringExtensionsFacts
     [TestCase("tesT\\*&$", "test", "", "", true)]
     [TestCase("this.hEllO something", "thishEllO-something", "-", "", false)]
     [TestCase("this.hEllO something", "thishello-something", "-", "", true)]
+    [TestCase("  this.hEllO something  ", "thishello-something", "-", "", true)]
     public void GetSlug(string input, string expectedOutput, string spaceReplacement = "", string dotReplacement = "", bool lowercase = true)
     {
         var output = input.GetSlug(spaceReplacement, dotReplacement, lowercase);

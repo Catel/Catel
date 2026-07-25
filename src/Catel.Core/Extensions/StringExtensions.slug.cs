@@ -35,6 +35,12 @@ public static partial class StringExtensions
 
         var output = input;
 
+        // Trim before applying the slug
+        output = output.Trim();
+
+        // First replace special characters without replacing spaces,
+        // then replace spaces with the space replacement since the replacement
+        // token can be a special character (e.g. '-')
         output = SlugRegex.Replace(output, string.Empty);
         output = WhiteSpaceRegex.Replace(output, spaceReplacement);
 
