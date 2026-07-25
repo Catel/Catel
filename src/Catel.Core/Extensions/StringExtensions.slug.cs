@@ -9,7 +9,7 @@ public static partial class StringExtensions
     /// <summary>
     /// The slug regex.
     /// </summary>
-    public static readonly Regex SlugRegex = new Regex(@"[^A-Za-z0-9_.]+");
+    public static readonly Regex SlugRegex = new Regex(@"[^A-Za-z0-9_.\s]+");
 
     /// <summary>
     /// The white space regex.
@@ -33,8 +33,10 @@ public static partial class StringExtensions
 
         input = input.RemoveDiacritics();
 
-        var output = WhiteSpaceRegex.Replace(input, spaceReplacement);
+        var output = input;
+
         output = SlugRegex.Replace(output, string.Empty);
+        output = WhiteSpaceRegex.Replace(output, spaceReplacement);
 
         if (makeLowercase)
         {

@@ -16,15 +16,17 @@ public class StringExtensionsFacts
         Assert.That(output, Is.EqualTo(expectedOutput));
     }
 
-    [TestCase("this.hEllO something", "thishEllOsomething", false)]
-    [TestCase("this.hEllO something", "thishellosomething", true)]
-    [TestCase("tesTß", "tesT", false)]
-    [TestCase("tesTß", "test", true)]
-    [TestCase("tesT\\*&$", "tesT", false)]
-    [TestCase("tesT\\*&$", "test", true)]
-    public void GetSlug(string input, string expectedOutput, bool lowercase)
+    [TestCase("this.hEllO something", "thishEllOsomething", "", "", false)]
+    [TestCase("this.hEllO something", "thishellosomething", "", "", true)]
+    [TestCase("tesTß", "tesT", "", "", false)]
+    [TestCase("tesTß", "test", "", "", true)]
+    [TestCase("tesT\\*&$", "tesT", "", "", false)]
+    [TestCase("tesT\\*&$", "test", "", "", true)]
+    [TestCase("this.hEllO something", "thishEllO-something", "-", "", false)]
+    [TestCase("this.hEllO something", "thishello-something", "-", "", true)]
+    public void GetSlug(string input, string expectedOutput, string spaceReplacement = "", string dotReplacement = "", bool lowercase = true)
     {
-        var output = input.GetSlug(makeLowercase: lowercase);
+        var output = input.GetSlug(spaceReplacement, dotReplacement, lowercase);
 
         Assert.That(output, Is.EqualTo(expectedOutput));
     }
