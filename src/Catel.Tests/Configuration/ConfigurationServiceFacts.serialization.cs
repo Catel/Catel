@@ -20,10 +20,16 @@ public partial class ConfigurationServiceFacts
             var appDataService = new AppDataService();
 
             var localConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.json");
-            File.Delete(localConfigurationFile);
+            if (File.Exists(localConfigurationFile))
+            {
+                File.Delete(localConfigurationFile);
+            }
 
             var roamingConfigurationFile = Path.Combine(appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.json");
-            File.Delete(roamingConfigurationFile);
+            if (File.Exists(roamingConfigurationFile))
+            {
+                File.Delete(roamingConfigurationFile);
+            }
         }
 
         private class SerializationConfigurationService : ConfigurationService
