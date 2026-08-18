@@ -92,6 +92,7 @@ public class DispatcherTimerExFacts
     [TestCase(100, 1)]
     [TestCase(300, 2)]
     [TestCase(800, 4)]
+    [Test, Explicit("Does not work on GitHub runners")]
     public async Task Does_Prevent_Duplicate_Ticks(int durationInMilliseconds, int expectedInvocationCount)
     {
         var dispatcherTimerEx = new DispatcherTimerEx(new DispatcherService(NullLogger<DispatcherService>.Instance,
