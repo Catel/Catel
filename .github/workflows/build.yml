@@ -29,6 +29,7 @@ jobs:
       AzureCodeSignTenantId: ''
       AzureCodeSignVaultName: ''
       CodeSignCertificateSubjectName: ''
+      NuGetRepositoryUrl: ''
       NuGetUser: ''
       SonarOrganization: ''
       SonarUrl: ''
@@ -115,6 +116,7 @@ jobs:
             AzureCodeSignClientId = "$($env:REPOSITORY_OWNER)-AzureCodeSignClientId"
             AzureCodeSignClientSecret = "$($env:REPOSITORY_OWNER)-AzureCodeSignClientSecret"
             CodeSignCertificateSubjectName = "$($env:REPOSITORY_OWNER)-CodeSignCertificateSubjectName"
+            NuGetRepositoryUrl = "$($env:REPOSITORY_OWNER)-NuGetRepositoryUrl"
             NuGetUser = "$($env:REPOSITORY_OWNER)-NuGetUser"
             SonarOrganization = "$($env:REPOSITORY_OWNER)-SonarOrganization"
             SonarUrl = "$($env:REPOSITORY_OWNER)-SonarUrl"
@@ -172,6 +174,7 @@ jobs:
             AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
             CodeSignCertificateSubjectName: ${{ env.CodeSignCertificateSubjectName }}
             IsCiBuild: false
+            NuGetRepositoryUrl: ${{ env.NuGetRepositoryUrl }}
             SonarOrganization: ${{ env.SonarOrganization }}
             SonarUrl: ${{ env.SonarUrl }}
             SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
